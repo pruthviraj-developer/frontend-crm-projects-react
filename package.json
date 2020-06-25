@@ -1,0 +1,17 @@
+{
+  "name": "hs",
+  "version": "1.0.0",
+  "description": "frontend code lives here",
+  "main": "index.js",
+  "author": "Rishikant Tiwari",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "lerna": "^3.22.1"
+  },
+  "workspaces": [
+    "packages/*",
+    "packages/react-lib/*",
+    "web-apps/*"
+  ]
+}
