@@ -2,7 +2,7 @@ import React from 'react';
 import { Thing2, Thing2Props } from '../src';
 
 export default {
-  title: 'React UI Components',
+  title: 'React UI Components 2',
 };
 
 // By passing optional props to this story, you can control the props of the component when

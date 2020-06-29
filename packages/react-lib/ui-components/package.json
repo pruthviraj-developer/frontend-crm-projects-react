@@ -42,6 +42,7 @@
     "@storybook/addon-docs": "^5.3.19",
     "@storybook/addon-info": "^5.3.19",
     "@storybook/addon-links": "^5.3.19",
+    "@storybook/addon-viewport": "^5.3.19",
     "@storybook/addons": "^5.3.19",
     "@storybook/react": "^5.3.19",
     "@types/react": "^16.9.38",
@@ -57,5 +58,9 @@
     "tsdx": "^0.13.2",
     "tslib": "^2.0.0",
     "typescript": "^3.9.5"
+  },
+  "dependencies": {
+    "@storybook/addon-actions": "^5.3.19",
+    "@storybook/addon-console": "^1.2.1"
   }
 }
