@@ -7,4 +7,6 @@ export default {
 
 // By passing optional props to this story, you can control the props of the component when
 // you consume the story in a test.
-export const ThingComponent2 = (props?: Partial<Thing2Props>) => <Thing2 {...props} />;
+export const ThingComponent2 = (props?: Partial<Thing2Props>) => (
+  <Thing2 {...props} />
+);
