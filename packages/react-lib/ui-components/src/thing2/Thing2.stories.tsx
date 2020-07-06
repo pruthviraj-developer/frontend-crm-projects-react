@@ -1,10 +1,12 @@
 import React from 'react';
-import { Thing, Props } from '../src';
+import { Thing2, Thing2Props } from './thing2';
 
 export default {
-  title: 'React UI Components',
+  title: 'React UI Components 2',
 };
 
 // By passing optional props to this story, you can control the props of the component when
 // you consume the story in a test.
-export const ThingComponent = (props?: Partial<Props>) => <Thing {...props} />;
+export const ThingComponent2 = (props?: Partial<Thing2Props>) => (
+  <Thing2 {...props} />
+);
