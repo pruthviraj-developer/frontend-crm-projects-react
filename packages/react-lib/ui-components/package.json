@@ -60,6 +60,8 @@
     "typescript": "^3.9.5"
   },
   "dependencies": {
+    "@hs/icons": "^0.1.0",
+    "@hs/utils": "^1.0.0",
     "@storybook/addon-actions": "^5.3.19",
     "@storybook/addon-console": "^1.2.1"
   }
