@@ -4,8 +4,9 @@ module.exports = {
     '@storybook/addon-links',
     '@storybook/addon-docs',
     '@storybook/addon-viewport/register',
+    '@storybook/addon-storysource',
   ],
-  webpackFinal: async (config) => {
+  webpackFinal: async config => {
     config.module.rules.push({
       test: /\.(ts|tsx)$/,
       use: [
