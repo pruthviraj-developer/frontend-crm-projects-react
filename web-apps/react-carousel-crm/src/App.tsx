@@ -1,7 +1,8 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { Thing2, Thing } from '@hs/ui-components';
+import { Thing2, Thing, TestButton } from '@hs/ui-components';
+
 function App() {
   return (
     <div className="App">
@@ -19,6 +20,7 @@ function App() {
 
         <Thing></Thing>
         <Thing2></Thing2>
+        <TestButton />
       </header>
     </div>
   );
