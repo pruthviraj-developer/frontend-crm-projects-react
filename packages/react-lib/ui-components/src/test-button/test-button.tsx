@@ -5,7 +5,7 @@ export interface ITestButton extends ButtonHTMLAttributes<HTMLButtonElement> {
   displayText?: string;
 }
 export const TestButtonStyled = styled.button`
-  background: pink;
+  background: red;
   width: 40px;
   height: 20px;
 `;
