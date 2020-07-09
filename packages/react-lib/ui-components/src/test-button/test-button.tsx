@@ -1,7 +1,9 @@
 import React, { FC, ButtonHTMLAttributes } from 'react';
 import styled from '@emotion/styled';
+import { AxisIcon } from '@hs/icons';
 
-export interface ITestButton extends ButtonHTMLAttributes<HTMLButtonElement> {
+export interface TestButtonProps
+  extends ButtonHTMLAttributes<HTMLButtonElement> {
   displayText?: string;
 }
 export const TestButtonStyled = styled.button`
@@ -10,6 +12,9 @@ export const TestButtonStyled = styled.button`
   height: 20px;
 `;
 
-export const TestButton: FC<ITestButton> = (props: ITestButton) => (
-  <TestButtonStyled {...props}>{props.displayText}</TestButtonStyled>
+export const TestButton: FC<TestButtonProps> = (props: TestButtonProps) => (
+  <TestButtonStyled {...props}>
+    {props.displayText}
+    <AxisIcon></AxisIcon>
+  </TestButtonStyled>
 );

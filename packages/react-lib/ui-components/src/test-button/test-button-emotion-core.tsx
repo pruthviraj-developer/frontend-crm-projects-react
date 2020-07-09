@@ -1,10 +1,12 @@
 import React, { FC, HTMLAttributes } from 'react';
 import styled from '@emotion/styled';
-export interface ITestButtonCore extends HTMLAttributes<HTMLDivElement> {
+export interface TestButtonCoreProps extends HTMLAttributes<HTMLDivElement> {
   displayText: string;
 }
 
-const TestButtonCore: FC<ITestButtonCore> = (props: ITestButtonCore) => {
+const TestButtonCore: FC<TestButtonCoreProps> = (
+  props: TestButtonCoreProps
+) => {
   return <div className={props.className}>{props.displayText}</div>;
 };
 
