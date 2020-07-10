@@ -2,6 +2,7 @@ module.exports = {
   addons: [
     '@storybook/addon-actions',
     '@storybook/addon-links',
+    '@storybook/addon-backgrounds/register',
     '@storybook/addon-docs',
     '@storybook/addon-viewport/register',
     '@storybook/addon-storysource',
