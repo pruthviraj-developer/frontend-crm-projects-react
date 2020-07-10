@@ -16,8 +16,8 @@
     "test": "tsdx test --passWithNoTests",
     "lint": "tsdx lint",
     "prepare": "tsdx build",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "storybook": "start-storybook -p 6006 -s public",
+    "build-storybook": "build-storybook -s public"
   },
   "peerDependencies": {
     "react": ">=16"
@@ -40,11 +40,13 @@
     "@babel/core": "^7.10.3",
     "@storybook/addon-actions": "^5.3.19",
     "@storybook/addon-backgrounds": "^5.3.19",
+    "@storybook/addon-console": "^1.2.1",
     "@storybook/addon-docs": "^5.3.19",
     "@storybook/addon-info": "^5.3.19",
     "@storybook/addon-links": "^5.3.19",
     "@storybook/addon-storysource": "^5.3.19",
     "@storybook/addon-viewport": "^5.3.19",
+    "@storybook/theming": "^5.3.19",
     "@storybook/addons": "^5.3.19",
     "@storybook/react": "^5.3.19",
     "@types/react": "^16.9.41",
@@ -65,9 +67,6 @@
     "@emotion/core": "^10.0.28",
     "@emotion/styled": "^10.0.27",
     "@hs/icons": "^1.0.0",
-    "@hs/utils": "^1.0.0",
-    "@storybook/addon-actions": "^5.3.19",
-    "@storybook/addon-console": "^1.2.1",
-    "@storybook/theming": "^5.3.19"
+    "@hs/utils": "^1.0.0"
   }
 }
