@@ -12,6 +12,8 @@
   <a aria-label="last commit" href="https://github.com/rtiwarihs/frontend-monorepo/commits/master">
     <img alt="" src="https://img.shields.io/github/last-commit/primer/css.svg">
   </a>
+  <a href="https://github.com/storybooks/storybook" target="_blank"><img src="https://raw.githubusercontent.com/storybooks/brand/master/badge/badge-storybook.svg"></a>
+
 </p>
 
 ## Node version
