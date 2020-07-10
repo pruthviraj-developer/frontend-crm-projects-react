@@ -63,9 +63,10 @@
   "dependencies": {
     "@emotion/core": "^10.0.28",
     "@emotion/styled": "^10.0.27",
-    "@hs/icons": "^0.1.0",
+    "@hs/icons": "^1.0.0",
     "@hs/utils": "^1.0.0",
     "@storybook/addon-actions": "^5.3.19",
-    "@storybook/addon-console": "^1.2.1"
+    "@storybook/addon-console": "^1.2.1",
+    "@storybook/theming": "^5.3.19"
   }
 }
