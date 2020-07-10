@@ -13,6 +13,7 @@ export default create({
   barSelectedColor: '#f1f1f5',
   barBg: '#ed54a4',
   brandTitle: 'HopScotch',
+  //   brandImage: 'http://crm.hopscotch.in/intranet/static/css/images/logo.png',
   brandImage:
-    'https://ik.imagekit.io/hopscotch/hopscotch-story-book-icon_Y2RUbc2p1.svg',
+    'https://static.hopscotch.in/hopscotch-story-book-icon_mJN5fuZyN.svg',
 });
