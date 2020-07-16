@@ -13,7 +13,7 @@ module.exports = {
         svgoConfig: {
           plugins: [
             { removeViewBox: false },
-            { removeAttrs: { attrs: 'g:(stroke|fill):((?!^none$).)*' } },
+            { removeAttrs: { attrs: 'g:(stroke):((?!^none$).)*' } },
           ],
         },
       }),
