@@ -58,17 +58,6 @@ const StyledIcon = styled(SvgIcon)`
   /* color: ${Colors.PINK[500]}; */
 `;
 
-const LeftNavBar: FC<LeftNavBarProps> = (props: LeftNavBarProps) => {
-  return (
-    <StyledLeftNavBar>
-      <LeftNavItem {...defaultItem}></LeftNavItem>
-      {props.navList?.map((item) => (
-        <LeftNavItem key={item.linkText} {...item}></LeftNavItem>
-      ))}
-    </StyledLeftNavBar>
-  );
-};
-
 const LeftNavItem: FC<LeftNavItemProps> = (props: LeftNavItemProps) => {
   return (
     <StyleLeftNavItem>
@@ -80,4 +69,13 @@ const LeftNavItem: FC<LeftNavItemProps> = (props: LeftNavItemProps) => {
   );
 };
 
-export default LeftNavBar;
+export const LeftNavBar: FC<LeftNavBarProps> = (props: LeftNavBarProps) => {
+  return (
+    <StyledLeftNavBar>
+      <LeftNavItem {...defaultItem}></LeftNavItem>
+      {props.navList?.map((item) => (
+        <LeftNavItem key={item.linkText} {...item}></LeftNavItem>
+      ))}
+    </StyledLeftNavBar>
+  );
+};
