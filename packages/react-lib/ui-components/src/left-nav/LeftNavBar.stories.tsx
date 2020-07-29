@@ -8,8 +8,8 @@ export default {
 };
 const navItem: LeftNavBarProps = {
   navList: [
-    { linkUrl: 'test-url', linkText: 'testText', icon: BackIcon },
-    { linkUrl: 'test-url2', linkText: 'testText2', icon: BackIcon },
+    { linkUrl: 'test-url', linkText: 'TestText', icon: BackIcon },
+    { linkUrl: 'test-url2', linkText: 'TestText2', icon: BackIcon },
   ],
 };
 // By passing optional props to this story, you can control the props of the component when

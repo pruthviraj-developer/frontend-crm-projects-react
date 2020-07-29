@@ -20,9 +20,7 @@ const StyledLeftNavBar = styled.div`
 `;
 
 const Link = styled.a`
-  outline: none;
   text-decoration: none;
-  color: ${Colors.PINK[500]};
 `;
 const LinkText = styled.div`
   font-weight: ${fontWeight.medium};
@@ -30,7 +28,6 @@ const LinkText = styled.div`
   text-align: center;
   margin-top: 7px;
   color: ${Colors.PINK[500]};
-  opacity: 0.72;
 `;
 
 const StyledIcon = styled(SvgIcon)`
@@ -49,6 +46,9 @@ const StyleLeftNavItem = styled.div`
     ${StyledIcon} {
       fill: white;
     }
+    ${LinkText} {
+      color: white;
+    }
   }
   &:focus {
     box-shadow: none;
@@ -60,7 +60,7 @@ const LeftNavItem: FC<LeftNavItemProps> = (props: LeftNavItemProps) => {
     <StyleLeftNavItem>
       <Link href={props.linkUrl} key={props.linkText}>
         <StyledIcon icon={props.icon} />
-        <LinkText>CRM</LinkText>
+        <LinkText>{props.linkText}</LinkText>
       </Link>
     </StyleLeftNavItem>
   );
