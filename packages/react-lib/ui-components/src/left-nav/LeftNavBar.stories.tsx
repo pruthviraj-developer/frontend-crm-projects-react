@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
-import LeftNavBar from './LeftNavBar';
-import { LeftNavBarProps } from './LeftNavBar.interface';
+import { LeftNavBar } from './LeftNavBar';
+import { LeftNavBarProps } from './ILeftNavBar';
 import { BackIcon } from '@hs/icons';
 
 export default {

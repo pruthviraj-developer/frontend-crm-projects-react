@@ -7,7 +7,7 @@ module.exports = {
     '@storybook/addon-viewport/register',
     '@storybook/addon-storysource',
   ],
-  webpackFinal: async config => {
+  webpackFinal: async (config) => {
     config.module.rules.push({
       test: /\.(ts|tsx)$/,
       use: [
@@ -19,6 +19,13 @@ module.exports = {
         },
         {
           loader: require.resolve('react-docgen-typescript-loader'),
+        },
+        {
+          loader: require.resolve('babel-loader'),
+          options: {
+            plugins: ['emotion'],
+            presets: [['react-app', { flow: false, typescript: true }]],
+          },
         },
       ],
     });

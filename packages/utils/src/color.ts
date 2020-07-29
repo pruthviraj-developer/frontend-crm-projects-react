@@ -11,7 +11,15 @@ export const tertiaryColor = {
 export const Colors = {
   BLACK: '#10161A',
   WHITE: '#FFFFFF',
-  GREY: { 500: '#3e4855' },
+  GREY_SHADE: {
+    400: '#e8eaee',
+    500: '#3e4855',
+  },
+  GREY_TINT: {
+    200: '#F7F8Fa',
+    300: '#EFF1F4',
+    500: '#DFE1E6',
+  },
   PINK: {
     400: '#F47CBB',
     500: '#ED54A4',

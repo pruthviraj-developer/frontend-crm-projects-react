@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import styled from '@emotion/styled';
 import { Colors, fontWeight } from '@hs/utils';
 import { BackIcon, SvgIcon } from '@hs/icons';
-import { LeftNavBarProps, LeftNavItemProps } from './LeftNavBar.interface';
+import { LeftNavBarProps, LeftNavItemProps } from './ILeftNavBar';
 
 const defaultItem: LeftNavItemProps = {
   linkUrl: '/intranet/welcome',
@@ -11,34 +11,14 @@ const defaultItem: LeftNavItemProps = {
 };
 
 const StyledLeftNavBar = styled.div`
-  /* display: flex;
-  flex-direction: row; */
+  display: flex;
+  flex-direction: column;
   width: 80px;
-  background-color: ${Colors.GREY[500]};
-  left: 0;
-  height: 150vh;
-  display: inline-block;
-  z-index: 100;
-  position: fixed;
-  padding-top: 20px;
+  background-color: ${Colors.GREY_SHADE[500]};
+  height: 100vh;
+  float: left;
 `;
 
-const StyleLeftNavItem = styled.div`
-  display: inline-block;
-  width: 80px;
-  cursor: pointer;
-  opacity: 0.72;
-  padding: 18px 8px;
-  :hover {
-    background-color: #2a3441;
-    opacity: 1;
-    color: ${Colors.PINK[400]};
-  }
-  &:focus {
-    box-shadow: none;
-    outline: none;
-  }
-`;
 const Link = styled.a`
   outline: none;
   text-decoration: none;
@@ -49,20 +29,37 @@ const LinkText = styled.div`
   font-size: 10px;
   text-align: center;
   margin-top: 7px;
-  color: white;
+  color: ${Colors.PINK[500]};
   opacity: 0.72;
 `;
 
 const StyledIcon = styled(SvgIcon)`
   margin: 0 20px;
-  /* color: ${Colors.PINK[500]}; */
+  fill: ${Colors.PINK[500]};
 `;
 
+const StyleLeftNavItem = styled.div`
+  cursor: pointer;
+  opacity: 0.72;
+  padding: 18px 8px;
+  color: ${Colors.PINK[500]};
+  :hover {
+    background-color: #2a3441;
+    opacity: 1;
+    ${StyledIcon} {
+      fill: white;
+    }
+  }
+  &:focus {
+    box-shadow: none;
+    outline: none;
+  }
+`;
 const LeftNavItem: FC<LeftNavItemProps> = (props: LeftNavItemProps) => {
   return (
     <StyleLeftNavItem>
       <Link href={props.linkUrl} key={props.linkText}>
-        <StyledIcon icon={props.icon} fill={Colors.PINK[400]} />
+        <StyledIcon icon={props.icon} />
         <LinkText>CRM</LinkText>
       </Link>
     </StyleLeftNavItem>
