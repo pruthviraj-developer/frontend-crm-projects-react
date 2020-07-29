@@ -12,8 +12,18 @@ module.exports = {
         typescript: true,
         svgoConfig: {
           plugins: [
-            { removeViewBox: false },
-            { removeAttrs: { attrs: 'g:(stroke|fill):((?!^none$).)*' } },
+            { removeViewBox: true },
+            { removeAttrs: { attrs: '(stroke|fill)' } },
+            { removeEmptyAttrs: true },
+            { mergePaths: true },
+            {
+              addAttributesToSVGElement: {
+                attributes: [
+                  { 'fill-rule': 'currentColor' },
+                  { 'aria-hidden': 'true' },
+                ],
+              },
+            },
           ],
         },
       }),
