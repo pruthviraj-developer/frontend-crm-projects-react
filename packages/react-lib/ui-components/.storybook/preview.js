@@ -1,7 +1,10 @@
-import { configure, addParameters } from '@storybook/react';
+import { configure, addParameters, addDecorator } from '@storybook/react';
 import '@storybook/addon-console';
 import { setConsoleOptions } from '@storybook/addon-console';
+import StoryRouter from 'storybook-react-router';
 import hsTheme from './hsTheme';
+
+addDecorator(StoryRouter());
 addParameters({
   options: {
     theme: hsTheme,
