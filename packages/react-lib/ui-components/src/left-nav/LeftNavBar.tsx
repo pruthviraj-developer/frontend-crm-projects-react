@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { NavLink } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { Colors, fontWeight } from '@hs/utils';
 import { BackIcon, SvgIcon } from '@hs/icons';
@@ -18,8 +19,11 @@ const StyledLeftNavBar = styled.div`
   height: 100vh;
   float: left;
 `;
-
-const Link = styled.a`
+const activeClassName = 'active';
+const StyledNavLink = styled(NavLink)`
+  &.${activeClassName} {
+    color: blue;
+  }
   text-decoration: none;
 `;
 const LinkText = styled.div`
@@ -35,7 +39,7 @@ const StyledIcon = styled(SvgIcon)`
   fill: ${Colors.PINK[500]};
 `;
 
-const StyleLeftNavItem = styled.div`
+const StyledLeftNavItem = styled.div`
   cursor: pointer;
   opacity: 0.72;
   padding: 18px 8px;
@@ -57,12 +61,16 @@ const StyleLeftNavItem = styled.div`
 `;
 const LeftNavItem: FC<LeftNavItemProps> = (props: LeftNavItemProps) => {
   return (
-    <StyleLeftNavItem>
-      <Link href={props.linkUrl} key={props.linkText}>
+    <StyledLeftNavItem>
+      <StyledNavLink
+        to={props.linkUrl}
+        key={props.linkText}
+        activeClassName="active"
+      >
         <StyledIcon icon={props.icon} />
         <LinkText>{props.linkText}</LinkText>
-      </Link>
-    </StyleLeftNavItem>
+      </StyledNavLink>
+    </StyledLeftNavItem>
   );
 };
 
