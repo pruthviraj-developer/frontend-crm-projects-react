@@ -1,7 +1,7 @@
 <h1 align="center">
   Icon Library
   <a  href ="/">
-  <img src="https://img.shields.io/badge/Icon-Package-ED54A4"> 
+  <img src="https://img.shields.io/badge/Package-@hs/icons-ED54A4"> 
   </a>
 </h1>
 
