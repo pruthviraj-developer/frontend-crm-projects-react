@@ -41,8 +41,6 @@ The compoenent using icon imports and live reloads whatever is in `/dist`, so if
 
 To do a one-off build, use  `yarn build`.
 
-To run tests, use `npm test` or `yarn test`.
-
 ## Configuration
 
 #### Setup Files
