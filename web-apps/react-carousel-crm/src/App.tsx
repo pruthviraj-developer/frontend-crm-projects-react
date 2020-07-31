@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { LeftNavBar, LeftNavBarProps } from '@hs/ui-components';
-import { DashBoardIcon, CreateIcon } from '@hs/icons';
+import { DashBoardIcon, CreateIcon, ArchiveIcon } from '@hs/icons';
 
 import './App.css';
 import DashBoard from './components/dashboard/DashBoard';
@@ -11,6 +11,7 @@ function App() {
     navList: [
       { linkUrl: 'dashboard', linkText: 'Dashboard', icon: DashBoardIcon },
       { linkUrl: 'create-carousel', linkText: 'Create', icon: CreateIcon },
+      { linkUrl: 'archivedlist', linkText: 'ArchivedLit', icon: ArchiveIcon },
     ],
   };
   return (
