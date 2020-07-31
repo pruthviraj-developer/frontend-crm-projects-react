@@ -29,6 +29,7 @@ The Repo is a collection of these packages, which can be composed together on de
 | [@hs/ui-components] | React components Library for building SPAs |
 | [@hs/stores]        | State management with Redux                |
 | [@hs/services]      | Server-side Api calls                      |
+| [@hs/icons]         | App Icons                     |
 | [web-apps]          | Microfrontend Apps using packages          |
 
 ##
@@ -36,4 +37,5 @@ The Repo is a collection of these packages, which can be composed together on de
 [@hs/ui-components]: https://github.com/rtiwarihs/frontend-monorepo/tree/master/packages/react-lib/ui-components
 [@hs/stores]: https://github.com/rtiwarihs/frontend-monorepo/tree/master/packages/stores
 [@hs/services]: https://github.com/rtiwarihs/frontend-monorepo/tree/master/packages/services
+[@hs/icons]: https://github.com/rtiwarihs/frontend-monorepo/tree/master/packages/icons
 [web-apps]: https://github.com/rtiwarihs/frontend-monorepo/tree/master/web-apps
