@@ -26,9 +26,9 @@
 
 ## Commands
 
-TSDX scaffolds Icon library inside `/src`
+To run/debug  Icon library
 
-The recommended workflow is to run TSDX in one terminal:
+The recommended workflow is to run below in one terminal:
 
 ```bash
 yarn start
@@ -41,22 +41,16 @@ The compoenent using icon imports and live reloads whatever is in `/dist`, so if
 
 To do a one-off build, use  `yarn build`.
 
-## Configuration
+## Usage
 
-#### Setup Files
+Install the package in your project or other package directory with:
 
-This is the folder structure we set up for you:
+```sh
+lerna add @hs/icons --scope=yourmodule
 
-```shell
-/src
-  index.tsx       # EDIT THIS
-/test
-  blah.test.tsx   # EDIT THIS
-.gitignore
-package.json
-README.md         # EDIT THIS
-tsconfig.json
 ```
+
+## Configuration
 
 ### Rollup
 
@@ -94,7 +88,3 @@ The default example imports and live reloads whatever is in `/dist`, so if you a
 ## Named Exports
 
 [always use named exports.](https://github.com/palmerhq/typescript#exports) Code split inside your React app instead of your React library.
-
-## USing SVGR
-
-Icon component is devlope using SVGR 
