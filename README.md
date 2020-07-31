@@ -29,7 +29,7 @@ The Repo is a collection of these packages, which can be composed together on de
 | [@hs/ui-components] | React components Library for building SPAs |
 | [@hs/stores]        | State management with Redux                |
 | [@hs/services]      | Server-side Api calls                      |
-| <a  href ="/https://github.com/rtiwarihs/frontend-monorepo/tree/master/packages/icons"><img src="https://img.shields.io/badge/Package-@hs/icons-ED54A4"></a>        | App Icons                     |
+| <a  href ="https://github.com/rtiwarihs/frontend-monorepo/tree/master/packages/icons"><img src="https://img.shields.io/badge/Package-@hs/icons-ED54A4"></a>        | App Icons                     |
 | [web-apps]          | Microfrontend Apps using packages          |
 
 ##
@@ -53,3 +53,5 @@ lerna bootstrap
 lerna start
 
 ```
+## React cheatsheet
+> If you’re new to TypeScript and React, checkout [this handy cheatsheet](https://github.com/sw-yx/react-typescript-cheatsheet/)
