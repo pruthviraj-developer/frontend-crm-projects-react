@@ -7,12 +7,6 @@
   <a aria-label="made with lerna" href="https://lerna.js.org/">
     <img alt="" src="https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg">
   </a>
-  <a aria-label="Size" href ="https://github.com/rtiwarihs/frontend-monorepo">
-    <img src="https://img.shields.io/github/size/webcaetano/craft/build/phaser-craft.min.js.svg">
-  </a>
-  <a aria-label="last commit" href="https://github.com/rtiwarihs/frontend-monorepo/commits/master">
-    <img alt="" src="https://img.shields.io/github/last-commit/primer/css.svg">
-  </a>
   <a href="https://github.com/storybooks/storybook" target="_blank"><img src="https://raw.githubusercontent.com/storybooks/brand/master/badge/badge-storybook.svg"></a>
 
 </p>
