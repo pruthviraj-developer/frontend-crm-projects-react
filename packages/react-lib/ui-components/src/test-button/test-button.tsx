@@ -1,6 +1,6 @@
 import React, { FC, ButtonHTMLAttributes } from 'react';
 import styled from '@emotion/styled';
-import { AxisIcon } from '@hs/icons';
+import { BackIcon } from '@hs/icons';
 
 export interface TestButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -15,6 +15,6 @@ export const TestButtonStyled = styled.button`
 export const TestButton: FC<TestButtonProps> = (props: TestButtonProps) => (
   <TestButtonStyled {...props}>
     {props.displayText}
-    <AxisIcon></AxisIcon>
+    <BackIcon></BackIcon>
   </TestButtonStyled>
 );
