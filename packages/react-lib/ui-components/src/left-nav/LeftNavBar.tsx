@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { NavLink } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { Colors, fontWeight } from '@hs/utils';
-import { BackIcon, SvgIcon } from '@hs/icons';
+import { SvgIcon, BackIcon } from '@hs/icons';
 import { LeftNavBarProps, LeftNavItemProps } from './ILeftNavBar';
 
 const defaultItem: LeftNavItemProps = {
@@ -19,58 +19,50 @@ const StyledLeftNavBar = styled.div`
   height: 100vh;
   float: left;
 `;
-const activeClassName = 'active';
-const StyledNavLink = styled(NavLink)`
-  &.${activeClassName} {
-    color: blue;
-  }
-  text-decoration: none;
-`;
 const LinkText = styled.div`
   font-weight: ${fontWeight.medium};
   font-size: 10px;
   text-align: center;
   margin-top: 7px;
-  color: ${Colors.PINK[500]};
+  color: white;
 `;
 
 const StyledIcon = styled(SvgIcon)`
   margin: 0 20px;
-  fill: ${Colors.PINK[500]};
+  fill: white;
 `;
-
-const StyledLeftNavItem = styled.div`
+const StyledNavLink = styled(NavLink)`
+  text-decoration: none;
   cursor: pointer;
   opacity: 0.72;
   padding: 18px 8px;
-  color: ${Colors.PINK[500]};
+  color: white;
   :hover {
-    background-color: #2a3441;
+    background-color: ${Colors.BLUE[500]};
+    opacity: 1;
+  }
+  &.active {
+    background-color: ${Colors.BLUE[500]};
     opacity: 1;
     ${StyledIcon} {
-      fill: white;
+      fill: ${Colors.PINK[500]};
     }
     ${LinkText} {
-      color: white;
+      color: ${Colors.PINK[500]};
     }
   }
-  &:focus {
-    box-shadow: none;
-    outline: none;
-  }
 `;
+
 const LeftNavItem: FC<LeftNavItemProps> = (props: LeftNavItemProps) => {
   return (
-    <StyledLeftNavItem>
-      <StyledNavLink
-        to={props.linkUrl}
-        key={props.linkText}
-        activeClassName="active"
-      >
-        <StyledIcon icon={props.icon} />
-        <LinkText>{props.linkText}</LinkText>
-      </StyledNavLink>
-    </StyledLeftNavItem>
+    <StyledNavLink
+      to={props.linkUrl}
+      key={props.linkText}
+      activeClassName={'active'}
+    >
+      <StyledIcon icon={props.icon} />
+      <LinkText>{props.linkText}</LinkText>
+    </StyledNavLink>
   );
 };
 

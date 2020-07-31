@@ -1,15 +1,15 @@
 import React, { FC } from 'react';
 import { LeftNavBar } from './LeftNavBar';
 import { LeftNavBarProps } from './ILeftNavBar';
-import { BackIcon } from '@hs/icons';
+import { CreateIcon, DashBoardIcon } from '@hs/icons';
 
 export default {
   title: 'Left Nav Bar component',
 };
 const navItem: LeftNavBarProps = {
   navList: [
-    { linkUrl: 'test-url', linkText: 'TestText', icon: BackIcon },
-    { linkUrl: 'test-url2', linkText: 'TestText2', icon: BackIcon },
+    { linkUrl: '/dashboard', linkText: 'DashBoard', icon: DashBoardIcon },
+    { linkUrl: '/create', linkText: 'Create', icon: CreateIcon },
   ],
 };
 // By passing optional props to this story, you can control the props of the component when
