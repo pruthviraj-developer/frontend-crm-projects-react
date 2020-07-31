@@ -1,4 +1,5 @@
-<h1 align="center">Frontend-monorepo</h1>
+<h1 align="center"> <a href = "https://github.com/hopscotchin"><img src= https://static.hopscotch.in/hopscotch-story-book-icon_mJN5fuZyN.svg></a>
+  </br> Frontend-monorepo</h1>
 
 <p align="center">The monorepo for developing components and web pages for CRM and Hopsctoch main site</p>
 
