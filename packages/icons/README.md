@@ -1,14 +1,32 @@
-# TSDX React User Guide
+<h1 align="center">
+  Icon Library
+  <a  href ="/">
+  <img src="https://img.shields.io/badge/Icon-Package-ED54A4"> 
+  </a>
+</h1>
 
-Congrats! You just saved yourself hours of work by bootstrapping this project with TSDX. Let’s get you oriented with what’s here and how to use it.
+<p align="center"> Icons for CRM and Hopsctoch main site</p>
 
-> This TSDX setup is meant for developing React components (not apps!) that can be published to NPM. If you’re looking to build an app, you should use `create-react-app`, `razzle`, `nextjs`, `gatsby`, or `react-static`.
+<p align="center">
+   <a  href ="https://tsdx.io/">
+  <img src="https://img.shields.io/badge/ScaffoldWith-TSDX-007ACC"> 
+  </a>
+    <a  href ="https://react-svgr.com/">
+  <img src="https://img.shields.io/badge/MadeWith-SVGR-ED54A4"> 
+  </a>
+  <a aria-label="Size" href ="https://github.com/rtiwarihs/frontend-monorepo">
+    <img src="https://img.shields.io/github/size/webcaetano/craft/build/phaser-craft.min.js.svg">
+  </a>
+  <a aria-label="last commit" href="https://github.com/rtiwarihs/frontend-monorepo/commits/master">
+    <img alt="" src="https://img.shields.io/github/last-commit/primer/css.svg">
+  </a>
+</p>
 
-> If you’re new to TypeScript and React, checkout [this handy cheatsheet](https://github.com/sw-yx/react-typescript-cheatsheet/)
+# Icon User Guide
 
 ## Commands
 
-TSDX scaffolds your new library inside `/src`, and also sets up a [Parcel-based](https://parceljs.org) playground for it inside `/example`.
+TSDX scaffolds Icon library inside `/src`
 
 The recommended workflow is to run TSDX in one terminal:
 
@@ -19,19 +37,13 @@ yarn start
 This builds to `/dist` and runs the project in watch mode so any edits you save inside `src` causes a rebuild to `/dist`.
 
 
-The default example imports and live reloads whatever is in `/dist`, so if you are seeing an out of date component, make sure TSDX is running in watch mode like we recommend above. **No symlinking required**, [we use Parcel's aliasing](https://github.com/palmerhq/tsdx/pull/88/files).
+The compoenent using icon imports and live reloads whatever is in `/dist`, so if you are seeing an out of date component, make sure TSDX is running in watch mode like we recommend above.
 
 To do a one-off build, use  `yarn build`.
 
 To run tests, use `npm test` or `yarn test`.
 
 ## Configuration
-
-Code quality is [set up for you](https://github.com/palmerhq/tsdx/pull/45/files) with `prettier`, `husky`, and `lint-staged`. Adjust the respective fields in `package.json` accordingly.
-
-### Jest
-
-Jest tests are set up to run with `npm test` or `yarn test`. This runs the test watcher (Jest) in an interactive mode. By default, runs tests related to files changed since the last commit.
 
 #### Setup Files
 
@@ -80,31 +92,11 @@ The appropriate paths are configured in `package.json` and `dist/index.js` accor
 
 The default example imports and live reloads whatever is in `/dist`, so if you are seeing an out of date component, make sure TSDX is running in watch mode like we recommend above. **No symlinking required**!
 
-## Deploying the Playground
-
-The Playground is just a simple [Parcel](https://parceljs.org) app, you can deploy it anywhere you would normally deploy that. Here are some guidelines for **manually** deploying with the Netlify CLI (`npm i -g netlify-cli`):
-
-```bash
-cd example # if not already in the example folder
-npm run build # builds to dist
-netlify deploy # deploy the dist folder
-```
-
-Alternatively, if you already have a git repo connected, you can set up continuous deployment with Netlify:
-
-```bash
-netlify init
-# build command: yarn build && cd example && yarn && yarn build
-# directory to deploy: example/dist
-# pick yes for netlify.toml
-```
 
 ## Named Exports
 
-Per Palmer Group guidelines, [always use named exports.](https://github.com/palmerhq/typescript#exports) Code split inside your React app instead of your React library.
+[always use named exports.](https://github.com/palmerhq/typescript#exports) Code split inside your React app instead of your React library.
 
-## Including Styles
+## USing SVGR
 
-There are many ways to ship styles, including with CSS-in-JS. TSDX has no opinion on this, configure how you like.
-
-For vanilla CSS, you can include it at the root directory and add it to the `files` section in your `package.json`, so that it can be imported separately by your users and run through their bundler's loader.
+Icon component is devlope using SVGR 
