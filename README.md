@@ -29,7 +29,7 @@ The Repo is a collection of these packages, which can be composed together on de
 | [@hs/ui-components] | React components Library for building SPAs |
 | [@hs/stores]        | State management with Redux                |
 | [@hs/services]      | Server-side Api calls                      |
-| [@hs/icons]         | App Icons                     |
+| <a  href ="/https://github.com/rtiwarihs/frontend-monorepo/tree/master/packages/icons"><img src="https://img.shields.io/badge/Package-@hs/icons-ED54A4"></a>        | App Icons                     |
 | [web-apps]          | Microfrontend Apps using packages          |
 
 ##
@@ -37,5 +37,19 @@ The Repo is a collection of these packages, which can be composed together on de
 [@hs/ui-components]: https://github.com/rtiwarihs/frontend-monorepo/tree/master/packages/react-lib/ui-components
 [@hs/stores]: https://github.com/rtiwarihs/frontend-monorepo/tree/master/packages/stores
 [@hs/services]: https://github.com/rtiwarihs/frontend-monorepo/tree/master/packages/services
-[@hs/icons]: https://github.com/rtiwarihs/frontend-monorepo/tree/master/packages/icons
 [web-apps]: https://github.com/rtiwarihs/frontend-monorepo/tree/master/web-apps
+
+
+## Usage
+
+To run all the packages <a href="https://lerna.js.org/">lerna</a> should be installed globally.
+After lerna install follow below commands
+
+```sh
+// To install package dependencies  
+lerna bootstrap
+
+// To start debugging all the packages 
+lerna start
+
+```
