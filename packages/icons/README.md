@@ -9,10 +9,10 @@
 
 <p align="center">
    <a  href ="https://tsdx.io/">
-  <img src="https://img.shields.io/badge/ScaffoldWith-TSDX-007ACC"> 
+  <img src="https://img.shields.io/badge/Scaffold%20With-TSDX-007ACC"> 
   </a>
     <a  href ="https://react-svgr.com/">
-  <img src="https://img.shields.io/badge/MadeWith-SVGR-ED54A4"> 
+  <img src="https://img.shields.io/badge/Made%20With-SVGR-ED54A4"> 
   </a>
   <a aria-label="Size" href ="https://github.com/rtiwarihs/frontend-monorepo">
     <img src="https://img.shields.io/github/size/webcaetano/craft/build/phaser-craft.min.js.svg">
