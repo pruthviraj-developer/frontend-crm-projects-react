@@ -1,13 +1,6 @@
-import React, { FC, ButtonHTMLAttributes } from 'react';
+import React, { FC } from 'react';
 import styled from '@emotion/styled';
-
-export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  value?: string;
-  fontSize?: string;
-  className?: 'primary' | 'secondary' | 'tertiary' | 'disabled';
-  disabled?: false | true;
-  onClick: (event: React.MouseEvent) => void;
-}
+import { ButtonProps } from './IButton';
 
 const defaultButton = `
   color:#ffffff;

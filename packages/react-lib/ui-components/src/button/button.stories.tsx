@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
-import { Button } from './button';
+import { Button } from './Button';
 
 export default {
-  title: 'Test Button',
+  title: 'Button',
 };
 
 const onClick = (event: React.MouseEvent) => {
@@ -31,9 +31,9 @@ const disabled = {
   className: 'disabled' as const,
   onClick: onClick,
 };
-export const PrimaryButtonComponent: FC = () => <Button {...props} />;
-export const SecondaryButtonComponent: FC = () => <Button {...secondary} />;
-export const TertiaryButtonComponent: FC = () => <Button {...tertiary} />;
-export const DisabledButtonComponent: FC = () => (
+export const PrimaryButton: FC = () => <Button {...props} />;
+export const SecondaryButton: FC = () => <Button {...secondary} />;
+export const TertiaryButton: FC = () => <Button {...tertiary} />;
+export const DisabledButton: FC = () => (
   <Button disabled={true} {...disabled} />
 );
