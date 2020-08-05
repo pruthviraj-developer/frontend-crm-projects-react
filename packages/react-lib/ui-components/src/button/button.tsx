@@ -4,8 +4,8 @@ import styled from '@emotion/styled';
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   value?: string;
   fontSize?: string;
-  className: 'primary' | 'secondary' | 'tertiary';
-  disabled?: false;
+  className?: 'primary' | 'secondary' | 'tertiary' | 'disabled';
+  disabled?: false | true;
   onClick: (event: React.MouseEvent) => void;
 }
 
@@ -31,14 +31,19 @@ const getClasses = {
     'background-color': '#ed54a4',
   },
   secondary: {
+    color: 'rgba(0, 0, 0, 0.74)',
+    border: '1px solid rgba(0, 0, 0, 0.74)',
     'background-color': '#eff1f4',
   },
   tertiary: {
+    color: 'rgba(0, 0, 0, 0.56)',
+    border: '1px solid rgba(0, 0, 0, 0.48)',
     'background-color': '#eff1f4',
-    border: '4px solid #ed54a4',
   },
   disabled: {
     opacity: '36%',
+    cursor: 'not-allowed',
+    'background-color': '#ed54a4',
   },
 };
 function getButtonStyle(props: ButtonProps) {
