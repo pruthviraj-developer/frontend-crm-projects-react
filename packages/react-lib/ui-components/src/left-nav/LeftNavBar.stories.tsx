@@ -4,7 +4,7 @@ import { LeftNavBarProps } from './ILeftNavBar';
 import { CreateIcon, DashBoardIcon } from '@hs/icons';
 
 export default {
-  title: 'Left Nav Bar component',
+  title: 'LeftNavBar',
 };
 const navItem: LeftNavBarProps = {
   navList: [
@@ -14,4 +14,4 @@ const navItem: LeftNavBarProps = {
 };
 // By passing optional props to this story, you can control the props of the component when
 // you consume the story in a test.
-export const LeftNavBarComponent: FC = () => <LeftNavBar {...navItem} />;
+export const LeftNavigationBar: FC = () => <LeftNavBar {...navItem} />;
