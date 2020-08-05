@@ -67,10 +67,10 @@ const LeftNavItem: FC<LeftNavItemProps> = (props: LeftNavItemProps) => {
 };
 
 export const LeftNavBar: FC<LeftNavBarProps> = (props: LeftNavBarProps) => {
+  const list = props['navList'] ? props['navList'] : [];
   return (
     <StyledLeftNavBar>
-      <LeftNavItem {...defaultItem}></LeftNavItem>
-      {props.navList?.map((item) => (
+      {[{ ...defaultItem }, ...list]?.map((item) => (
         <LeftNavItem key={item.linkText} {...item}></LeftNavItem>
       ))}
     </StyledLeftNavBar>
