@@ -55,7 +55,7 @@ const ImageUpload: FC<ImageUploadProps> = (props: ImageUploadProps) => {
   };
 
   const handleImageLoad = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const imageFile = event?.target?.files[0];
+    const imageFile = event.target.files?.[0];
     const imageObject = new window.Image();
     const imageUrl = URL.createObjectURL(imageFile);
     setImageUrl(imageUrl);
