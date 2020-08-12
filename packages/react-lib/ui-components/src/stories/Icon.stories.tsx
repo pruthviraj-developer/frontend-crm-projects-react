@@ -21,9 +21,9 @@ const StyledDisplay = styled.div`
 const IconArr = [ArchiveIcon, BackIcon, CreateIcon, DashBoardIcon, UploadIcon];
 export const HsCRMIcons: FC = () => (
   <StyledDisplay>
-    {IconArr.map((icon) => (
-      <SvgIcon icon={icon} height={30} width="30"></SvgIcon>
+    {IconArr.map((icon, idx) => (
+      <SvgIcon key={'icon' + idx} icon={icon} height={30} width="30"></SvgIcon>
     ))}
   </StyledDisplay>
 );
-console.log(IconArr);
+// console.log(IconArr);
