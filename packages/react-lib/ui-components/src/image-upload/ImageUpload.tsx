@@ -1,93 +1,108 @@
 import React, { FC, useState } from 'react';
 import styled from '@emotion/styled';
 import Message from '../message/Message';
-import { ImageUploadProps } from './IImageUpload';
 import { Colors } from '@hs/utils';
+import { UploadIcon, SvgIcon } from '@hs/icons';
+import ImageUploadCore from './ImageUploadCore';
+import { MessageProps } from 'message';
+import { ErrorsType, ImageUploadProps, ImageListType } from './IImageUpload';
 
-const StyledImageUpload = styled.div`
-  /* width: 500px; */
+const maxNumber = 69;
+const onChange = (imageList: ImageListType) => {
+  imageList;
+  // data for submit
+  // console.log(imageList);
+};
+
+const StyledImageUpload = styled.div<ImageUploadProps>`
+  display: 'flex';
+  justify-content: space-evenly;
+  flex-flow: column;
+  align-items: center;
+  background: ${Colors.GREY_TINT[500]};
+  height: ${(props) => props.previewHeight}px;
+  width: ${(props) => props.previewWidth}px;
+  :hover {
+    box-shadow: 0 0 0 1px #fff, 0 0 0 2px ${Colors.PINK[400]};
+  }
 `;
 const StyledImage = styled.img`
   border-radius: 5%;
   display: block;
 `;
-const StyledInput = styled.input`
-  border-bottom: 4px solid ${Colors.GREY_TINT[500]};
-  border-right: 4px solid ${Colors.GREY_SHADE[400]};
-  border-top: 1px solid ${Colors.GREY_SHADE[500]};
-  border-left: 1px solid ${Colors.GREY_SHADE[500]};
-  padding: 10px 0px;
-  margin: 15px;
-  width: 500px;
-  cursor: pointer;
+
+const StyledUploadMessage = styled.div<{ height: number; width: number }>`
+  display: flex;
+  justify-content: space-around;
+  flex-flow: column wrap;
+  align-items: center;
+  height: ${(props) => props.height}px;
+  width: ${(props) => props.width}px;
 `;
-const ImagePreview = styled.div`
-  text-align: center;
-  margin: 5px 15px;
-  height: 200px;
-  width: 500px;
-  border-left: 1px solid ${Colors.PINK[400]};
-  border-right: 1px solid ${Colors.PINK[400]};
-  border-top: 5px solid ${Colors.PINK[400]};
-  border-bottom: 5px solid ${Colors.PINK[400]};
-  img {
-    width: 100%;
-    height: 100%;
-  }
-`;
-
-const ImageUpload: FC<ImageUploadProps> = (props: ImageUploadProps) => {
-  const [imageUrl, setImageUrl] = useState('');
-  const [message, setMessage] = useState('');
-
-  const validateImage = (imageObj: HTMLImageElement) => {
-    let validationMessage = '';
-    if (props.maxWidth && imageObj.naturalWidth > props.maxWidth)
-      validationMessage = `Image Width ${imageObj.naturalWidth} is greater than ${props.maxWidth}`;
-    if (props.maxHeight && imageObj.naturalHeight > props.maxHeight)
-      validationMessage = `Image height ${imageObj.naturalHeight} is greater than ${props.maxHeight}`;
-    if (props.minWidth && imageObj.naturalWidth < props.minWidth)
-      validationMessage = `Image Width ${imageObj.naturalWidth} is less than ${props.minWidth}`;
-    if (props.minHeight && imageObj.naturalHeight < props.minHeight)
-      validationMessage = `Image height ${imageObj.naturalHeight} is less than ${props.minHeight}`;
-    setMessage(validationMessage);
-    if (validationMessage) setImageUrl('');
+const ImageUpload: FC<ImageUploadProps> = ({
+  previewHeight = 200,
+  previewWidth = 200,
+  resolutionHeight,
+  resolutionWidth,
+  resolutionValidationType,
+}: ImageUploadProps) => {
+  const [message, setmessage] = useState<MessageProps>({
+    messageType: 'info',
+    msg: 'Upload Your Image',
+  });
+  const onError = (errors: ErrorsType) => {
+    if (errors.resolution) {
+      setmessage({
+        messageType: 'error',
+        msg: `Please upload ${resolutionValidationType} ${resolutionHeight}X${resolutionWidth} Image`,
+        title: `Size Error`,
+      });
+    }
+    // console.log('Error', errors);
   };
-
-  const handleImageLoad = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const imageFile = event.target.files?.[0];
-    const imageObject = new window.Image();
-    const imageUrl = URL.createObjectURL(imageFile);
-    setImageUrl(imageUrl);
-
-    imageObject.onload = () => {
-      validateImage(imageObject);
-      URL.revokeObjectURL(imageUrl);
-    };
-    imageObject.src = imageUrl;
-  };
-
   return (
-    <StyledImageUpload color={'red'}>
-      <StyledInput
-        type="file"
-        accept="image/jpg,image/jpeg,image/png,image/gif"
-        onChange={handleImageLoad}
-      ></StyledInput>
-      <ImagePreview>
-        {imageUrl && <StyledImage src={imageUrl}></StyledImage>}
-        {message && (
-          <Message
-            messageType="error"
-            msg={message}
-            title="Size Error"
-          ></Message>
-        )}
-        {!imageUrl && !message && (
-          <Message messageType="info" msg={'Upload a image'} title=""></Message>
-        )}
-      </ImagePreview>
-    </StyledImageUpload>
+    <ImageUploadCore
+      multiple={false}
+      onChange={onChange}
+      maxNumber={maxNumber}
+      resolutionWidth={resolutionWidth}
+      resolutionHeight={resolutionHeight}
+      resolutionValidationType={resolutionValidationType}
+      onError={onError}
+    >
+      {({ imageList, onImageUpload, errors }) => (
+        <StyledImageUpload
+          previewHeight={previewHeight}
+          previewWidth={previewWidth}
+        >
+          {imageList.length > 0 && !errors.name ? (
+            imageList.map((image) => (
+              <StyledImage
+                onClick={image.onUpdate}
+                key={image.key}
+                src={image.dataURL}
+                height={previewHeight}
+                width={previewWidth}
+              ></StyledImage>
+            ))
+          ) : (
+            <StyledUploadMessage
+              height={previewHeight}
+              width={previewWidth}
+              onClick={onImageUpload}
+            >
+              <SvgIcon
+                icon={UploadIcon}
+                fill={Colors.PINK[500]}
+                width="50px"
+                height="50px"
+              />
+              <Message {...message}></Message>
+            </StyledUploadMessage>
+          )}
+        </StyledImageUpload>
+      )}
+    </ImageUploadCore>
   );
 };
 

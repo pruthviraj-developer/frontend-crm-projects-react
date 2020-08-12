@@ -39,7 +39,7 @@ const StyledMessage = styled.div<MessageProps>`
 const Message: FC<MessageProps> = (props: MessageProps) => {
   return (
     <StyledMessage {...props}>
-      <div>{props.title}</div>
+      <div>{props.title || ''}</div>
       <p>{props.msg}</p>
     </StyledMessage>
   );
