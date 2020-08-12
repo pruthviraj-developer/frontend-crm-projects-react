@@ -5,17 +5,19 @@ import StoryRouter from 'storybook-react-router';
 import hsTheme from './hsTheme';
 
 addDecorator(StoryRouter());
-addParameters({
-  options: {
+export const parameters = {
+  docs: {
     theme: hsTheme,
   },
-  backgrounds: [
-    { name: 'Hs-Content', value: '#f5f5f5', default: true },
-    { name: 'HS-Dark', value: '#3e4855' },
-    { name: 'HS-White', value: '#fff' },
-  ],
-});
-configure(require.context('../src/', true, /\.stories\.(ts|tsx)$/), module);
+  backgrounds: {
+    default: 'Hs-Content',
+    values: [
+      { name: 'Hs-Content', value: '#f5f5f5' },
+      { name: 'HS-Dark', value: '#3e4855' },
+      { name: 'HS-White', value: '#fff' },
+    ],
+  },
+};
 setConsoleOptions({
   panelExclude: [],
 });
