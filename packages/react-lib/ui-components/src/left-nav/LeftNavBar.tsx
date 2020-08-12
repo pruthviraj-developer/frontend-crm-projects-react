@@ -16,7 +16,7 @@ const StyledLeftNavBar = styled.div`
   flex-direction: column;
   width: 80px;
   background-color: ${Colors.GREY_SHADE[500]};
-  height: 100vh;
+  height: 95vh;
   float: left;
 `;
 const LinkText = styled.div`

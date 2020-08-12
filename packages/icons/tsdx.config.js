@@ -12,7 +12,7 @@ module.exports = {
         typescript: true,
         svgoConfig: {
           plugins: [
-            { removeViewBox: true },
+            { removeViewBox: false },
             { removeAttrs: { attrs: '(stroke|fill)' } },
             { removeEmptyAttrs: true },
             { mergePaths: true },

@@ -1,3 +1,5 @@
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
+const path = require('path');
 module.exports = {
   addons: [
     '@storybook/addon-actions',
@@ -9,7 +11,7 @@ module.exports = {
   ],
   webpackFinal: async (config) => {
     config.module.rules.push({
-      test: /\.(ts|tsx)$/,
+      test: /\.(ts|tsx|woff|woff2)$/,
       use: [
         {
           loader: require.resolve('ts-loader'),
@@ -31,7 +33,11 @@ module.exports = {
     });
 
     config.resolve.extensions.push('.ts', '.tsx');
-
+    config.resolve.plugins = [
+      new TsconfigPathsPlugin({
+        configFile: path.resolve(__dirname, '../tsconfig.json'),
+      }),
+    ];
     return config;
   },
 };
