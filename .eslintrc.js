@@ -68,7 +68,6 @@ module.exports = {
     'no-unsafe-finally': 2,
     'no-unsafe-negation': 2,
     'no-unused-labels': 2,
-    'no-unused-vars': 2,
     'no-useless-catch': 2,
     'no-useless-escape': 2,
     'no-with': 2,
@@ -82,5 +81,6 @@ module.exports = {
     browser: true,
     amd: true,
     node: true,
+    es6: true,
   },
 };

@@ -26,7 +26,7 @@ export interface ExportInterface {
   imageList: ImageListType;
   onImageUpload: () => void;
   onImageRemoveAll: () => void;
-  errors: Record<string, any>;
+  errors: Record<string, unknown>;
 }
 
 export type ErrorsType = {

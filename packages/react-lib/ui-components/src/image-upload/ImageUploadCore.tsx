@@ -26,7 +26,7 @@ const ImageUploadCore: React.FC<ImageUploadCoreProps> = ({
   resolutionHeight,
   resolutionValidationType,
   onError,
-}) => {
+}: ImageUploadCoreProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [imageList, setImageList] = useState(() => {
     let initImageList: Array<ImageType> = [];
@@ -47,6 +47,7 @@ const ImageUploadCore: React.FC<ImageUploadCoreProps> = ({
   const onStandardizeDataChange = (list: ImageListType): void => {
     if (onChange) {
       const sData: ImageListType = list.map(
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         ({ key, onUpdate, onRemove, ...restOfItem }) => ({
           ...restOfItem,
         })
@@ -155,7 +156,7 @@ const ImageUploadCore: React.FC<ImageUploadCoreProps> = ({
             newErrors.resolution = true;
             break;
           } else {
-            console.log('No Error', resolutionValidationType);
+            // console.log('No Error', resolutionValidationType);
           }
         }
       }
