@@ -13,7 +13,7 @@ module.exports = {
         svgoConfig: {
           plugins: [
             { removeViewBox: false },
-            { removeAttrs: { attrs: '(stroke|fill)' } },
+            // { removeAttrs: { attrs: '(stroke|fill)' } }, // enabling the default styles for the svg icons - uncomment this to improve the build performance and check the icons
             { removeEmptyAttrs: true },
             { mergePaths: true },
             {
