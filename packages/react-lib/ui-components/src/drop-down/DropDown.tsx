@@ -2,9 +2,8 @@ import React, { FC } from 'react';
 import styled from '@emotion/styled';
 import { css } from '@emotion/core';
 import { DropDownProps } from './IDropDown';
-import { useState } from 'react';
-import { useEffect } from 'react';
-import { useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import { Colors } from '@hs/utils';
 import {
   SelectedCircle,
   DeSelectedCircle,
@@ -19,22 +18,22 @@ const DropDownElement = styled.div`
 `;
 
 const activeStyles = ({ isActive }: { isActive: boolean }) => css`
-  ${isActive === true && `border-color: #a4a4a4;`}
+  ${isActive === true && `border-color: ${Colors.DARKGRAY};`}
 `;
 
 const CustomSizePicker = styled.div`
-  border: 1px solid #e6e6e6;
+  border: 1px solid ${Colors.MERCURY};
   border-radius: 4px;
   position: absolute;
   top: 0;
   left: 0;
-  background-color: #fff;
+  background-color: ${Colors.WHITE};
   width: 100%;
   ${activeStyles}
 `;
 
 const selectPreviewStyles = ({ isActive }: { isActive: boolean }) => css`
-  ${isActive === true && `border-bottom: 1px solid #a4a4a4`}
+  ${isActive === true && `border-bottom: 1px solid ${Colors.DARKGRAY}`}
 `;
 
 const SelectPreview = styled.div`
@@ -43,7 +42,7 @@ const SelectPreview = styled.div`
   margin: 0;
   padding: 16px;
   display: block;
-  color: #333;
+  color: ${Colors.GRAY20};
   background-position: 100%;
   background-origin: content-box;
   background-repeat: no-repeat;
@@ -53,7 +52,7 @@ const SelectPreview = styled.div`
 const SelectedElement = styled.div``;
 
 const PlaceHolder = styled.div`
-  color: #a4a4a4;
+  color: ${Colors.DARKGRAY};
 `;
 
 const OptionPreview = styled.div`
@@ -67,7 +66,7 @@ const OptionPreview = styled.div`
 `;
 
 const OptionSelected = ({ isSelected }: { isSelected: boolean }) => css`
-  ${isSelected === true && `background-color: #f9f9f9;`}
+  ${isSelected === true && `background-color: ${Colors.GRAY};`}
 `;
 
 const Option = styled.div`
@@ -75,7 +74,7 @@ const Option = styled.div`
   font-size: 14px;
   line-height: 16px;
   font-weight: 400;
-  border-bottom: 1px solid #e6e6e6;
+  border-bottom: 1px solid ${Colors.MERCURY};
   display: flex;
   justify-content: space-between;
   ${OptionSelected}

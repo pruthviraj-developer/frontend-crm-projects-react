@@ -11,6 +11,10 @@ export const tertiaryColor = {
 export const Colors = {
   BLACK: '#10161A',
   WHITE: '#FFFFFF',
+  GRAY: '#f9f9f9',
+  GRAY20: '#333333',
+  DARKGRAY: '#a4a4a4',
+  MERCURY: '#e6e6e6',
   GREEN: {},
   RED: {
     100: '#09ADE0',
