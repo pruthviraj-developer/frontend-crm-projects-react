@@ -14,6 +14,7 @@ import {
 
 const DropDownElement = styled.div`
   cursor: pointer;
+  width: inherit;
   position: relative;
 `;
 
@@ -24,9 +25,6 @@ const activeStyles = ({ isActive }: { isActive: boolean }) => css`
 const CustomSizePicker = styled.div`
   border: 1px solid ${Colors.MERCURY};
   border-radius: 4px;
-  position: absolute;
-  top: 0;
-  left: 0;
   background-color: ${Colors.WHITE};
   width: 100%;
   ${activeStyles}
@@ -56,13 +54,16 @@ const PlaceHolder = styled.div`
 `;
 
 const OptionPreview = styled.div`
-  max-height: 230px;
   display: block;
   width: 100%;
+  max-height: 250px;
+  overflow-y: scroll;
   border-bottom-right-radius: 4px;
   border-bottom-left-radius: 4px;
-  overflow: auto;
   box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.16);
+  position: absolute;
+  z-index: 1000;
+  background-color: ${Colors.WHITE};
 `;
 
 const OptionSelected = ({ isSelected }: { isSelected: boolean }) => css`
@@ -70,6 +71,7 @@ const OptionSelected = ({ isSelected }: { isSelected: boolean }) => css`
 `;
 
 const Option = styled.div`
+  color: ${Colors.GRAY20};
   padding: 16px;
   font-size: 14px;
   line-height: 16px;
@@ -80,7 +82,9 @@ const Option = styled.div`
   ${OptionSelected}
 `;
 
-const StyledIcon = styled(SvgIcon)``;
+const StyledIcon = styled(SvgIcon)`
+  min-width: 24px;
+`;
 
 const SpanElement = styled.span``;
 
@@ -223,7 +227,7 @@ const DropDown: FC<DropDownProps> = (props: DropDownProps) => {
             <PlaceHolder>{props.placeholder}</PlaceHolder>
           )}
         </SelectPreview>
-        <OptionPreview>{isActive && getOptions()}</OptionPreview>
+        {isActive && <OptionPreview>{getOptions()}</OptionPreview>}
       </CustomSizePicker>
     </DropDownElement>
   );
