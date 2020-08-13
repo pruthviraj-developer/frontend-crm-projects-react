@@ -5,7 +5,13 @@ import { DropDownProps } from './IDropDown';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { useRef } from 'react';
-import { SelectedCircle, DeSelectedCircle, SvgIcon } from '@hs/icons';
+import {
+  SelectedCircle,
+  DeSelectedCircle,
+  SvgIcon,
+  SelectedRectAngle,
+  DeSelectedRectAngle,
+} from '@hs/icons';
 
 const DropDownElement = styled.div`
   cursor: pointer;
@@ -86,7 +92,7 @@ const DropDown: FC<DropDownProps> = (props: DropDownProps) => {
   const [isActive, setIsActive] = useState(false);
   const [selectedElement, setSelectedElement] = useState(props.selectedObject);
   const [selectedElements, setSelectedElements] = useState(
-    props.selectedObjects
+    props.selectedObjects || []
   );
   const activeStatus = { isActive: isActive || false };
   const ref = useRef<HTMLDivElement>(null);
@@ -99,17 +105,24 @@ const DropDown: FC<DropDownProps> = (props: DropDownProps) => {
     }
   };
   const onSelect = (obj: Record<string, unknown>) => {
-    if (props.isMultiselect) {
-      const currentData = selectedElements || [];
-      const data = [...currentData, obj];
-      setSelectedElements(data);
-    } else {
-      setSelectedElement(obj);
-      if (props.onSingleSelect) {
-        props.onSingleSelect(obj);
-      }
-      setIsActive(false);
+    setSelectedElement(obj);
+    if (props.onSingleSelect) {
+      props.onSingleSelect(obj);
     }
+    setIsActive(false);
+  };
+
+  const onMultiSelect = (obj: Record<string, unknown>) => {
+    const currentData = selectedElements || [];
+    const index = currentData.findIndex((ele) => {
+      return ele[objKey] === obj[objKey];
+    });
+    if (index > -1) {
+      currentData.splice(index, 1);
+    } else {
+      currentData.push(obj);
+    }
+    setSelectedElements([...currentData]);
   };
   const updateSelectedValue = () => {
     let value;
@@ -135,7 +148,7 @@ const DropDown: FC<DropDownProps> = (props: DropDownProps) => {
   const selectedValue = updateSelectedValue();
   const checkIfSelected = (obj: Record<string, unknown>) => {
     const getValue = (sObj: Record<string, unknown>, state: string) => {
-      return sObj[state] ? sObj[state] : null;
+      return sObj && sObj[state] ? sObj[state] : null;
     };
     const selectedElementValue = getValue(
       selectedElement as Record<string, unknown>,
@@ -155,18 +168,41 @@ const DropDown: FC<DropDownProps> = (props: DropDownProps) => {
     }
     return obj[objKey] === selectedElementPropsValue;
   };
+  const checkIfMultiSelected = (obj: Record<string, unknown>) => {
+    if (selectedElements && selectedElements.length) {
+      const found = selectedElements.find((ele) => {
+        return ele[objKey] === obj[objKey];
+      });
+      return found ? true : false;
+    }
+    return false;
+  };
   const getOptions = () => {
     const list: Array<any> = [];
+    const isMultiselect = props.isMultiselect || false;
+    const iconsObject = isMultiselect
+      ? {
+          selected: SelectedRectAngle,
+          deselected: DeSelectedRectAngle,
+        }
+      : {
+          selected: SelectedCircle,
+          deselected: DeSelectedCircle,
+        };
     options.forEach((obj, index) => {
-      const isSelected = checkIfSelected(obj);
+      const isSelected = isMultiselect
+        ? checkIfMultiSelected(obj)
+        : checkIfSelected(obj);
       list.push(
         <Option
           isSelected={isSelected}
-          onClick={() => onSelect(obj)}
+          onClick={() => (isMultiselect ? onMultiSelect(obj) : onSelect(obj))}
           key={index}
         >
           <SpanElement>{obj[objName] || obj}</SpanElement>
-          <StyledIcon icon={isSelected ? SelectedCircle : DeSelectedCircle} />
+          <StyledIcon
+            icon={isSelected ? iconsObject.selected : iconsObject.deselected}
+          />
         </Option>
       );
     });

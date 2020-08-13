@@ -6,6 +6,8 @@ import ICArchive from './crm-icons/ic-archive.svg';
 import ICCloudUpload from './crm-icons/ic-cloud-upload.svg';
 import ICSelectedCircle from './crm-icons/ic-selected-circle.svg';
 import ICDeSelectedCircle from './crm-icons/ic-deselected-circle.svg';
+import ICSelectedRectAngle from './crm-icons/ic-selected-rectangle.svg';
+import ICDeSelectedRectAngle from './crm-icons/ic-deselected-rectangle.svg';
 
 export const CreateIcon = ICCreate;
 export const BackIcon = ICBack;
@@ -14,3 +16,5 @@ export const ArchiveIcon = ICArchive;
 export const UploadIcon = ICCloudUpload;
 export const SelectedCircle = ICSelectedCircle;
 export const DeSelectedCircle = ICDeSelectedCircle;
+export const SelectedRectAngle = ICSelectedRectAngle;
+export const DeSelectedRectAngle = ICDeSelectedRectAngle;
