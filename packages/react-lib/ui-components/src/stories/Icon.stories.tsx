@@ -8,6 +8,8 @@ import {
   UploadIcon,
   SelectedCircle,
   DeSelectedCircle,
+  SelectedRectAngle,
+  DeSelectedRectAngle,
 } from '@hs/icons';
 import styled from '@emotion/styled';
 
@@ -28,6 +30,8 @@ const IconArr = [
   UploadIcon,
   SelectedCircle,
   DeSelectedCircle,
+  SelectedRectAngle,
+  DeSelectedRectAngle,
 ];
 export const HsCRMIcons: FC = () => (
   <StyledDisplay>
