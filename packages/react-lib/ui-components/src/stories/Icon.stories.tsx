@@ -6,6 +6,8 @@ import {
   SvgIcon,
   DashBoardIcon,
   UploadIcon,
+  SelectedCircle,
+  DeSelectedCircle,
 } from '@hs/icons';
 import styled from '@emotion/styled';
 
@@ -18,7 +20,15 @@ const StyledDisplay = styled.div`
   flex-flow: row wrap;
   align-items: center;
 `;
-const IconArr = [ArchiveIcon, BackIcon, CreateIcon, DashBoardIcon, UploadIcon];
+const IconArr = [
+  ArchiveIcon,
+  BackIcon,
+  CreateIcon,
+  DashBoardIcon,
+  UploadIcon,
+  SelectedCircle,
+  DeSelectedCircle,
+];
 export const HsCRMIcons: FC = () => (
   <StyledDisplay>
     {IconArr.map((icon, idx) => (
