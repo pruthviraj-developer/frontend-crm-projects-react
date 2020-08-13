@@ -12,8 +12,8 @@ export const getBase64 = (file: File): Promise<string> => {
 export const checkResolution = (
   dataURL: string,
   resolutionValidationType: ResolutionValidationType = 'absolute',
-  resolutionWidth: number = 0,
-  resolutionHeight: number = 1
+  resolutionWidth = 0,
+  resolutionHeight = 1
 ): Promise<boolean> => {
   const image = new Image();
 
