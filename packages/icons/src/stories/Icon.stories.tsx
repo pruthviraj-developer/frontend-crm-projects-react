@@ -10,7 +10,7 @@ import {
   DeSelectedCircle,
   SelectedRectAngle,
   DeSelectedRectAngle,
-} from '@hs/icons';
+} from '../../dist/';
 import styled from '@emotion/styled';
 
 export default {
