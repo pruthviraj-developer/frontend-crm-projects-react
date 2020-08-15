@@ -1,7 +1,7 @@
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const path = require('path');
 module.exports = {
-  stories: ['../src/**/*.stories.@(ts|tsx)'],
+  stories: ['../packages/**/**/src/**/*.stories.@(ts|tsx)', '../packages/**/src/**/*.stories.@(ts|tsx)'],
   addons: [
     '@storybook/addon-actions',
     '@storybook/addon-links',
@@ -37,7 +37,7 @@ module.exports = {
     config.resolve.extensions.push('.ts', '.tsx');
     config.resolve.plugins = [
       new TsconfigPathsPlugin({
-        configFile: path.resolve(__dirname, '../tsconfig.json'),
+        configFile: path.resolve(__dirname, '../packages/react-lib/ui-components/tsconfig.json'),
       }),
     ];
     return config;

@@ -10,11 +10,11 @@ import {
   DeSelectedCircle,
   SelectedRectAngle,
   DeSelectedRectAngle,
-} from '@hs/icons';
+} from '../../dist/';
 import styled from '@emotion/styled';
 
 export default {
-  title: 'Icons',
+  title: 'Icons from Icon',
 };
 const StyledDisplay = styled.div`
   display: flex;
