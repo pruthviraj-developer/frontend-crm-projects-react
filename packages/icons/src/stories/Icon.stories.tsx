@@ -14,7 +14,7 @@ import {
 import styled from '@emotion/styled';
 
 export default {
-  title: 'Icons from Icon',
+  title: 'Icons',
 };
 const StyledDisplay = styled.div`
   display: flex;
