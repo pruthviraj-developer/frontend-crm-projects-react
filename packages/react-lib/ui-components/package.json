@@ -31,7 +31,7 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "name": "@hs/ui-components",
+  "name": "@hs/components",
   "author": "Rishikant Tiwari",
   "module": "dist/ui-components.esm.js",
   "devDependencies": {
@@ -42,6 +42,7 @@
     "babel-loader": "^8.1.0",
     "babel-plugin-emotion": "^10.0.33",
     "cross-env": "^7.0.2",
+    "eslint-config-react-app": "^5.2.1",
     "husky": "^4.2.5",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",

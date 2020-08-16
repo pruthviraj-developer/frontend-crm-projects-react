@@ -1,4 +1,5 @@
 export interface DropDownProps {
+  placeholder: string;
   showList?: false | true;
   isMultiselect?: boolean;
   selectedObject?: Record<string, unknown> | string;
@@ -7,7 +8,7 @@ export interface DropDownProps {
   onMultiSelect?: (event: Array<Record<string, unknown>>) => void;
   options?: Array<Record<string, unknown>> | Array<string>;
   disabled?: false | true;
-  placeholder: string;
   objName?: string;
   objKey?: string;
+  menuWidth?: number;
 }
