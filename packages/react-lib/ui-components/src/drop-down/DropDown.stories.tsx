@@ -5,11 +5,15 @@ export default {
   title: 'Drop  Down',
 };
 const onClickS = (value) => {
-  alert(value);
+  setTimeout(() => {
+    alert(value);
+  }, 1000);
 };
 
 const onClick = (value) => {
-  alert(value);
+  setTimeout(() => {
+    alert(value);
+  }, 1000);
 };
 
 const props = {

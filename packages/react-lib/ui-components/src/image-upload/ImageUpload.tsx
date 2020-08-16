@@ -9,7 +9,7 @@ import { ErrorsType, ImageUploadProps, ImageListType } from './IImageUpload';
 
 const maxNumber = 69;
 const onChange = (imageList: ImageListType) => {
-  imageList;
+  alert(imageList);
   // data for submit
   // console.log(imageList);
 };
@@ -48,7 +48,7 @@ const ImageUpload: FC<ImageUploadProps> = ({
 }: ImageUploadProps) => {
   const [message, setmessage] = useState<MessageProps>({
     messageType: 'info',
-    msg: 'Upload Your Image',
+    msg: 'Image Upload',
   });
   const onError = (errors: ErrorsType) => {
     if (errors.resolution) {

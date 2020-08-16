@@ -14,20 +14,15 @@ import {
 
 const DropDownElement = styled.div`
   cursor: pointer;
-  width: inherit;
+  /* width: inherit; */
   position: relative;
 `;
-
-const activeStyles = ({ isActive }: { isActive: boolean }) => css`
-  ${isActive === true && `border-color: ${Colors.DARKGRAY};`}
-`;
-
-const CustomSizePicker = styled.div`
+const CustomSizePicker = styled.div<{ isActive: boolean; menuWidth?: number }>`
   border: 1px solid ${Colors.MERCURY};
   border-radius: 4px;
   background-color: ${Colors.WHITE};
-  width: 100%;
-  ${activeStyles}
+  width: ${(props) => props.menuWidth}px;
+  border-color: ${(props) => (props.isActive ? Colors.DARKGRAY : 'inherit')};
 `;
 
 const selectPreviewStyles = ({ isActive }: { isActive: boolean }) => css`
@@ -219,7 +214,7 @@ const DropDown: FC<DropDownProps> = (props: DropDownProps) => {
   });
   return (
     <DropDownElement ref={ref}>
-      <CustomSizePicker isActive={isActive}>
+      <CustomSizePicker isActive={isActive} menuWidth={props.menuWidth}>
         <SelectPreview onClick={() => setIsActive(!isActive)} {...activeStatus}>
           {selectedValue ? (
             <SelectedElement>{selectedValue}</SelectedElement>
