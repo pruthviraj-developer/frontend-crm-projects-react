@@ -3,8 +3,10 @@ import '@storybook/addon-console';
 import { setConsoleOptions } from '@storybook/addon-console';
 import StoryRouter from 'storybook-react-router';
 import hsTheme from './hsTheme';
+import StylesDecorator from './styles-decorator';
 
 addDecorator(StoryRouter());
+addDecorator(StylesDecorator);
 export const parameters = {
   docs: {
     theme: hsTheme,

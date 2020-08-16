@@ -15,7 +15,17 @@ export const Colors = {
   GRAY20: '#333333',
   DARKGRAY: '#a4a4a4',
   MERCURY: '#e6e6e6',
-  GREEN: {},
+  GREEN: {
+    100: '#D1FCF4',
+    200: '#A2F9EA',
+    300: '#78F5E0',
+    400: '#56F0D6',
+    500: '#21ECCA',
+    600: '#00E0BB',
+    700: '#00CBA9',
+    800: '#00B092',
+    900: '#008E77',
+  },
   RED: {
     100: '#09ADE0',
     300: '#F9867B',
