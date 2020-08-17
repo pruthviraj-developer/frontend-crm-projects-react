@@ -4,9 +4,7 @@ import {
   CardHeader,
   CardContent,
   CardActionArea,
-  Box,
   Grid,
-  Button,
   Avatar,
   IconButton,
 } from '@material-ui/core';
@@ -23,16 +21,16 @@ const StyledCard = styled(Card)`
   max-width: 230px;
 `;
 const StyledFooter = styled.div`
-  flexgrow: 1;
   padding-left: 15px;
   padding-bottom: 15px;
   /* width: 230px; */
   background-color: ${Colors.GREY_SHADE[500]};
 `;
 const CarouselCard = ({
-  resolutionHeight,
-  resolutionWidth,
-  resolutionValidationType,
+  imageupload,
+  positionBox,
+  typeBox,
+  autoCopmpleOptions,
 }: CarouselCardProps) => {
   return (
     <StyledCard variant={'elevation'}>
@@ -48,26 +46,30 @@ const CarouselCard = ({
       />
       <CardContent>
         <CardActionArea>
-          <ImageUpload
-            resolutionHeight={resolutionHeight}
-            resolutionWidth={resolutionWidth}
-            resolutionValidationType={resolutionValidationType}
-          ></ImageUpload>
+          <ImageUpload {...imageupload}></ImageUpload>
         </CardActionArea>
       </CardContent>
       <MuiThemeProvider theme={DarkTheme}>
         <StyledFooter>
           <Grid container spacing={1}>
             <Grid item xs>
-              <SelectBox></SelectBox>
+              <SelectBox
+                placeholder={'Type'}
+                size={'small'}
+                {...typeBox}
+              ></SelectBox>
             </Grid>
             <Grid item xs>
-              <SelectBox></SelectBox>
+              <SelectBox
+                placeholder={'Positon'}
+                size={'small'}
+                {...positionBox}
+              ></SelectBox>
             </Grid>
           </Grid>
           <Grid container spacing={3}>
             <Grid item xs>
-              <AutoComplete></AutoComplete>
+              <AutoComplete {...autoCopmpleOptions}></AutoComplete>
             </Grid>
           </Grid>
         </StyledFooter>
