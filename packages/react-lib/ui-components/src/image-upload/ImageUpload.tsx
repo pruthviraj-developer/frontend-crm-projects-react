@@ -23,11 +23,12 @@ const StyledImageUpload = styled.div<ImageUploadProps>`
   height: ${(props) => props.previewHeight}px;
   width: ${(props) => props.previewWidth}px;
   :hover {
-    box-shadow: 0 0 0 1px #fff, 0 0 0 2px ${Colors.PINK[400]};
+    box-shadow: 0 0 0 1px ${Colors.PINK[400]}, 0 0 0 2px ${Colors.PINK[400]};
   }
 `;
 const StyledImage = styled.img`
-  border-radius: 5%;
+  /* border-radius: 5%; */
+  border
   display: block;
 `;
 
@@ -39,7 +40,7 @@ const StyledUploadMessage = styled.div<{ height: number; width: number }>`
   height: ${(props) => props.height}px;
   width: ${(props) => props.width}px;
 `;
-const ImageUpload: FC<ImageUploadProps> = ({
+export const ImageUpload: FC<ImageUploadProps> = ({
   previewHeight = 200,
   previewWidth = 200,
   resolutionHeight,
@@ -105,5 +106,3 @@ const ImageUpload: FC<ImageUploadProps> = ({
     </ImageUploadCore>
   );
 };
-
-export default ImageUpload;

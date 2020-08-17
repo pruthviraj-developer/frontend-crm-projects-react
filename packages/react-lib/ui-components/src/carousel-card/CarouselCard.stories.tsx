@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 import CarouselCard from './CarouselCard';
 import styled from '@emotion/styled';
-import CarouselCardMUI from './CarouselCardMUI';
 export default {
   title: 'Card',
 };
@@ -14,11 +13,7 @@ const StyledCardCntr = styled.div`
   /* width: 500px; */
   /* height: 500px; */
 `;
-export const CardMUI: FC = () => (
-  <StyledCardCntr>
-    <CarouselCardMUI />
-  </StyledCardCntr>
-);
+
 export const Card: FC = () => (
   <StyledCardCntr>
     <CarouselCard />

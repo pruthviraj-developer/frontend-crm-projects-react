@@ -1,5 +1,5 @@
 import React from 'react';
-import ImageUpload from './ImageUpload';
+import { ImageUpload } from './ImageUpload';
 import { FC } from 'react';
 import { ResolutionValidationType } from './IImageUpload';
 import { withKnobs, number, select } from '@storybook/addon-knobs';
