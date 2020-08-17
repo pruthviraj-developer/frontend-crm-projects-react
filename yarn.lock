@@ -3492,6 +3492,9 @@
     react-transition-group "^4.4.0"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> Table design changes
 "@material-ui/icons@^4.9.1":
   version "4.9.1"
   resolved "https://registry.yarnpkg.com/@material-ui/icons/-/icons-4.9.1.tgz#fdeadf8cb3d89208945b33dbc50c7c616d0bd665"
@@ -3499,6 +3502,7 @@
   dependencies:
     "@babel/runtime" "^7.4.4"
 
+<<<<<<< HEAD
 "@material-ui/lab@^4.0.0-alpha.56":
   version "4.0.0-alpha.56"
   resolved "https://registry.yarnpkg.com/@material-ui/lab/-/lab-4.0.0-alpha.56.tgz#ff63080949b55b40625e056bbda05e130d216d34"
@@ -3510,6 +3514,8 @@
     prop-types "^15.7.2"
     react-is "^16.8.0"
 =======
+=======
+>>>>>>> Table design changes
 "@material-ui/pickers@^3.2.2":
   version "3.2.10"
   resolved "https://registry.yarnpkg.com/@material-ui/pickers/-/pickers-3.2.10.tgz#19df024895876eb0ec7cd239bbaea595f703f0ae"
@@ -8478,10 +8484,14 @@ data-urls@^1.0.0, data-urls@^1.1.0:
     whatwg-url "^7.0.0"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 date-fns@^2.0.1, date-fns@^2.15.0:
 =======
 date-fns@^2.0.0-alpha.27:
 >>>>>>> Table design
+=======
+date-fns@^2.0.0-alpha.27, date-fns@^2.15.0:
+>>>>>>> Table design changes
   version "2.15.0"
   resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.15.0.tgz#424de6b3778e4e69d3ff27046ec136af58ae5d5f"
   integrity sha512-ZCPzAMJZn3rNUvvQIMlXhDr4A+Ar07eLeGsGREoWU19a3Pqf5oYa+ccd+B3F6XVtQY6HANMFdOQ8A+ipFnvJdQ==
