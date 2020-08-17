@@ -14,7 +14,6 @@ export const AutoCompleteGrouped = () => {
 
   return (
     <Autocomplete
-      id="auto-complete"
       options={options.sort(
         (a, b) => -b.firstLetter.localeCompare(a.firstLetter)
       )}
