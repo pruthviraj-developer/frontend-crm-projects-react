@@ -1,80 +1,77 @@
 import React from 'react';
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  CardActionArea,
+  Box,
+  Grid,
+  Button,
+  Avatar,
+  IconButton,
+} from '@material-ui/core';
 import styled from '@emotion/styled';
-import { Button } from '../button';
-import { Colors } from '@hs/utils';
-import ImageUploader from 'image-upload/ImageUpload';
-import DropDown from 'drop-down/DropDown';
+import { MuiThemeProvider } from '@material-ui/core/styles';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import { ImageUpload } from 'image-upload';
+import { CarouselCardProps } from './ICarouselCard';
+import { SelectBox } from 'select-box';
+import { AutoCompleteGrouped as AutoComplete } from 'auto-complete';
+import { DarkTheme, Colors } from '@hs/utils';
 
-const StyledCard = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  flex-flow: column;
-  /* align-items: center; */
-  height: 400px;
-  width: 200px;
-  padding: 10px;
-  border-radius: 5px;
-  background: ${Colors.GREY_TINT[200]};
-  position: relative;
-  box-shadow: 2.5px 2.5px 5px rgba(0, 0, 0, 0.5);
-  /* margin: 10px; */
+const StyledCard = styled(Card)`
+  max-width: 230px;
 `;
-const StyledBottomPanel = styled.div`
-  display: flex;
-  justify-content: space-evenly;
-  flex-flow: row wrap;
-  align-items: center;
-  background: #3e4855;
-  color: white;
-  width: 200px;
-  position: absolute;
-  bottom: 0;
-  height: 130px;
-  padding: 10px 10px;
-  margin-left: -10px;
-  border-bottom-left-radius: 2.5px;
-  border-bottom-right-radius: 2.5px;
+const StyledFooter = styled.div`
+  flexgrow: 1;
+  padding-left: 15px;
+  padding-bottom: 15px;
+  /* width: 230px; */
+  background-color: ${Colors.GREY_SHADE[500]};
 `;
-const onClickS = (value) => {
-  setTimeout(() => {
-    alert(value);
-  }, 1000);
-};
-const dropDownProps = {
-  showList: false,
-  isMultiselect: false,
-  selectedObjects: [{}],
-  onSingleSelect: onClickS,
-  //   onMultiSelect: onClick,
-  options: ['Test 1', 'Test 12', 'Test 13', 'Test 14', 'Test 5'],
-  disabled: false,
-  placeholder: 'Position',
-  menuWidth: 100,
-};
-
-const dropDownProps2 = {
-  ...dropDownProps,
-  menuWidth: 200,
-  placeholder: 'Select PLP',
-};
-
-const CarouselCard = () => {
+const CarouselCard = ({
+  resolutionHeight,
+  resolutionWidth,
+  resolutionValidationType,
+}: CarouselCardProps) => {
   return (
-    <StyledCard>
-      <DropDown {...dropDownProps2} />
-      <ImageUploader></ImageUploader>
-      <StyledBottomPanel>
-        <DropDown {...dropDownProps2} />
-        <DropDown {...dropDownProps} />
-        <Button
-          value="Remove"
-          className="primary"
-          onClick={() => {
-            // /console.log('Clicked');
-          }}
-        ></Button>
-        {/* <DropDown {...dropDownProps} /> */}
-      </StyledBottomPanel>
+    <StyledCard variant={'elevation'}>
+      <CardHeader
+        avatar={<Avatar>R</Avatar>}
+        action={
+          <IconButton>
+            <DeleteForeverIcon fontSize={'large'} />
+          </IconButton>
+        }
+        title="Shrimp and Chorizo Paella"
+        subheader="September 14, 2016"
+      />
+      <CardContent>
+        <CardActionArea>
+          <ImageUpload
+            resolutionHeight={resolutionHeight}
+            resolutionWidth={resolutionWidth}
+            resolutionValidationType={resolutionValidationType}
+          ></ImageUpload>
+        </CardActionArea>
+      </CardContent>
+      <MuiThemeProvider theme={DarkTheme}>
+        <StyledFooter>
+          <Grid container spacing={1}>
+            <Grid item xs>
+              <SelectBox></SelectBox>
+            </Grid>
+            <Grid item xs>
+              <SelectBox></SelectBox>
+            </Grid>
+          </Grid>
+          <Grid container spacing={3}>
+            <Grid item xs>
+              <AutoComplete></AutoComplete>
+            </Grid>
+          </Grid>
+        </StyledFooter>
+      </MuiThemeProvider>
     </StyledCard>
   );
 };

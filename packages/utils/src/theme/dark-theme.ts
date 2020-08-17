@@ -4,6 +4,7 @@ import { Colors } from '../color';
 //TODO Change colors
 export const DarkTheme = createMuiTheme({
   palette: {
+    type: 'dark',
     primary: {
       light: Colors.PINK[100],
       main: Colors.PINK[500],
@@ -14,7 +15,7 @@ export const DarkTheme = createMuiTheme({
       light: Colors.GREEN[100],
       main: Colors.GREEN[500],
       dark: Colors.GREEN[900],
-      contrastText: '#000',
+      contrastText: '#fff',
     },
   },
 });
