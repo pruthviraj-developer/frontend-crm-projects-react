@@ -2,32 +2,30 @@ import { FormControl, InputLabel, Select } from '@material-ui/core';
 import React, { useState } from 'react';
 import styled from '@emotion/styled';
 import { SelectBoxProps } from './IselectBox';
-import { Colors } from '@hs/utils';
 const StyledFormControl = styled(FormControl)`
   min-width: 110;
 `;
 
-export const SelectBox = (props: SelectBoxProps) => {
-  const [state, setState] = useState<{ value: SelectBoxProps['value'] }>({
-    value: props.value,
+export const SelectBox = ({
+  placeholder,
+  options,
+  selectedOption,
+  ...props
+}: SelectBoxProps) => {
+  const [state, setState] = useState<{ value: unknown }>({
+    value: selectedOption?.value,
   });
   const handleChange = (
     event: React.ChangeEvent<{ name?: string; value: unknown }>
   ) => {
-    const name = event.target.name as keyof typeof state;
     setState({
       ...state,
-      [name]: event.target.value,
+      value: event.target.value,
     });
   };
   return (
-    <StyledFormControl
-      variant={'outlined'}
-      margin={'normal'}
-      size={'small'}
-      color={'primary'}
-    >
-      <InputLabel htmlFor="outlined-select">Position</InputLabel>
+    <StyledFormControl variant={'outlined'} margin={'normal'} {...props}>
+      <InputLabel htmlFor="outlined-select">{placeholder}</InputLabel>
       <Select
         native
         value={state.value}
@@ -37,10 +35,11 @@ export const SelectBox = (props: SelectBoxProps) => {
           id: 'outlined-select',
         }}
       >
-        <option aria-label="None" value="" />
-        <option value={10}>Ten</option>
-        <option value={20}>Twenty</option>
-        <option value={30}>Thirty</option>
+        {options?.map((opt) => (
+          <option key={opt.name} value={opt.value}>
+            {opt.name}
+          </option>
+        ))}
       </Select>
     </StyledFormControl>
   );

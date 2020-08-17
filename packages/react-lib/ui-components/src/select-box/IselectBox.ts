@@ -1,5 +1,8 @@
-import { SelectProps } from '@material-ui/core';
+import { FormControlProps } from '@material-ui/core';
 
-export interface SelectBoxProps extends SelectProps {
-  list?: string;
+type SelectBoxOption = Record<'name' | 'value', string>;
+export interface SelectBoxProps extends FormControlProps {
+  placeholder: string;
+  options?: Array<SelectBoxOption>;
+  selectedOption?: SelectBoxOption;
 }
