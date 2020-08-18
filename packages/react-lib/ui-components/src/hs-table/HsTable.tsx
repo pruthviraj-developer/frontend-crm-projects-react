@@ -1,7 +1,7 @@
+/* eslint-disable no-use-before-define */
 import React, { FC } from 'react';
 import { forwardRef } from 'react';
 import MaterialTable from 'material-table';
-import { format } from 'date-fns';
 import {
   ChevronRight,
   ChevronLeft,
@@ -13,660 +13,94 @@ import {
 import DeleteForeverTwoToneIcon from '@material-ui/icons/DeleteForeverTwoTone';
 import FileCopyTwoToneIcon from '@material-ui/icons/FileCopyTwoTone';
 import PublishTwoToneIcon from '@material-ui/icons/PublishTwoTone';
-
-interface TableProps {
-  title?: string;
-}
+import { TableProps } from './IHsTable';
 
 export const HSTable: FC<TableProps> = (props: TableProps) => {
-  const [state, setState] = React.useState({
-    columns: [
-      { title: 'ID', field: 'id' },
-      { title: 'Title', field: 'title' },
-      {
-        title: 'Sorted By',
-        render: (rowData) => {
-          if (rowData && rowData.sorts && rowData.sorts.length) {
-            return rowData.sorts.join(',');
-          }
-          return '';
-        },
-      },
-      { title: 'Created By', field: 'createdBy' },
-      { title: 'Updated By', field: 'updatedBy' },
-      {
-        title: 'Created On',
-        render: (rowData) => {
-          if (rowData && rowData.createdOn) {
-            return format(new Date(rowData.createdOn), 'dd-MM-yy');
-          }
-          return 'NA';
-        },
-      },
-      {
-        title: 'Last updated',
-        render: (rowData) => {
-          if (rowData && rowData.updatedOn) {
-            return format(new Date(rowData.updatedOn), 'dd-MM-yy');
-          }
-          return 'NA';
-        },
-      },
-    ],
-    data: [
-      {
-        id: 1,
-        title: 'Non Hero Carousel',
-        birthYear: 1987,
-        birthCity: 63,
-        createdBy: 'info@nstechs.com',
-        updatedBy: 'ayesha.siddiqa@hopscotch.in',
-        updatedOn: '2020-08-17T17:15:17',
-        createdOn: '2020-08-11T15:44:07',
-        sorts: [
-          'Boy 0-1 years',
-          'Boy 1-6 years',
-          'Boy 6+ years',
-          'Girl 0-1 years',
-          'Girl 1-6 years',
-          'Girl 6+ years',
-          'Sale',
-          'All',
-        ],
-      },
-      {
-        id: 1,
-        title: 'Non Hero Carousel',
-        birthYear: 1987,
-        birthCity: 63,
-        createdBy: 'info@nstechs.com',
-        updatedBy: 'ayesha.siddiqa@hopscotch.in',
-        updatedOn: '2020-08-17T17:15:17',
-        createdOn: '2020-08-11T15:44:07',
-        sorts: [
-          'Boy 0-1 years',
-          'Boy 1-6 years',
-          'Boy 6+ years',
-          'Girl 0-1 years',
-          'Girl 1-6 years',
-          'Girl 6+ years',
-          'Sale',
-          'All',
-        ],
-      },
-      {
-        id: 1,
-        title: 'Non Hero Carousel',
-        birthYear: 1987,
-        birthCity: 63,
-        createdBy: 'info@nstechs.com',
-        updatedBy: 'ayesha.siddiqa@hopscotch.in',
-        updatedOn: '2020-08-17T17:15:17',
-        createdOn: '2020-08-11T15:44:07',
-        sorts: [
-          'Boy 0-1 years',
-          'Boy 1-6 years',
-          'Boy 6+ years',
-          'Girl 0-1 years',
-          'Girl 1-6 years',
-          'Girl 6+ years',
-          'Sale',
-          'All',
-        ],
-      },
-      {
-        id: 1,
-        title: 'Non Hero Carousel',
-        birthYear: 1987,
-        birthCity: 63,
-        createdBy: 'info@nstechs.com',
-        updatedBy: 'ayesha.siddiqa@hopscotch.in',
-        updatedOn: '2020-08-17T17:15:17',
-        createdOn: '2020-08-11T15:44:07',
-        sorts: [
-          'Boy 0-1 years',
-          'Boy 1-6 years',
-          'Boy 6+ years',
-          'Girl 0-1 years',
-          'Girl 1-6 years',
-          'Girl 6+ years',
-          'Sale',
-          'All',
-        ],
-      },
-      {
-        id: 1,
-        title: 'Non Hero Carousel',
-        birthYear: 1987,
-        birthCity: 63,
-        createdBy: 'info@nstechs.com',
-        updatedBy: 'ayesha.siddiqa@hopscotch.in',
-        updatedOn: '2020-08-17T17:15:17',
-        createdOn: '2020-08-11T15:44:07',
-        sorts: [
-          'Boy 0-1 years',
-          'Boy 1-6 years',
-          'Boy 6+ years',
-          'Girl 0-1 years',
-          'Girl 1-6 years',
-          'Girl 6+ years',
-          'Sale',
-          'All',
-        ],
-      },
-      {
-        id: 1,
-        title: 'Non Hero Carousel',
-        birthYear: 1987,
-        birthCity: 63,
-        createdBy: 'info@nstechs.com',
-        updatedBy: 'ayesha.siddiqa@hopscotch.in',
-        updatedOn: '2020-08-17T17:15:17',
-        createdOn: '2020-08-11T15:44:07',
-        sorts: [
-          'Boy 0-1 years',
-          'Boy 1-6 years',
-          'Boy 6+ years',
-          'Girl 0-1 years',
-          'Girl 1-6 years',
-          'Girl 6+ years',
-          'Sale',
-          'All',
-        ],
-      },
-      {
-        id: 1,
-        title: 'Non Hero Carousel',
-        birthYear: 1987,
-        birthCity: 63,
-        createdBy: 'info@nstechs.com',
-        updatedBy: 'ayesha.siddiqa@hopscotch.in',
-        updatedOn: '2020-08-17T17:15:17',
-        createdOn: '2020-08-11T15:44:07',
-        sorts: [
-          'Boy 0-1 years',
-          'Boy 1-6 years',
-          'Boy 6+ years',
-          'Girl 0-1 years',
-          'Girl 1-6 years',
-          'Girl 6+ years',
-          'Sale',
-          'All',
-        ],
-      },
-      {
-        id: 1,
-        title: 'Non Hero Carousel',
-        birthYear: 1987,
-        birthCity: 63,
-        createdBy: 'info@nstechs.com',
-        updatedBy: 'ayesha.siddiqa@hopscotch.in',
-        updatedOn: '2020-08-17T17:15:17',
-        createdOn: '2020-08-11T15:44:07',
-        sorts: [
-          'Boy 0-1 years',
-          'Boy 1-6 years',
-          'Boy 6+ years',
-          'Girl 0-1 years',
-          'Girl 1-6 years',
-          'Girl 6+ years',
-          'Sale',
-          'All',
-        ],
-      },
-      {
-        id: 1,
-        title: 'Non Hero Carousel',
-        birthYear: 1987,
-        birthCity: 63,
-        createdBy: 'info@nstechs.com',
-        updatedBy: 'ayesha.siddiqa@hopscotch.in',
-        updatedOn: '2020-08-17T17:15:17',
-        createdOn: '2020-08-11T15:44:07',
-        sorts: [
-          'Boy 0-1 years',
-          'Boy 1-6 years',
-          'Boy 6+ years',
-          'Girl 0-1 years',
-          'Girl 1-6 years',
-          'Girl 6+ years',
-          'Sale',
-          'All',
-        ],
-      },
-      {
-        id: 1,
-        title: 'Non Hero Carousel',
-        birthYear: 1987,
-        birthCity: 63,
-        createdBy: 'info@nstechs.com',
-        updatedBy: 'ayesha.siddiqa@hopscotch.in',
-        updatedOn: '2020-08-17T17:15:17',
-        createdOn: '2020-08-11T15:44:07',
-        sorts: [
-          'Boy 0-1 years',
-          'Boy 1-6 years',
-          'Boy 6+ years',
-          'Girl 0-1 years',
-          'Girl 1-6 years',
-          'Girl 6+ years',
-          'Sale',
-          'All',
-        ],
-      },
-      {
-        id: 1,
-        title: 'Non Hero Carousel',
-        birthYear: 1987,
-        birthCity: 63,
-        createdBy: 'info@nstechs.com',
-        updatedBy: 'ayesha.siddiqa@hopscotch.in',
-        updatedOn: '2020-08-17T17:15:17',
-        createdOn: '2020-08-11T15:44:07',
-        sorts: [
-          'Boy 0-1 years',
-          'Boy 1-6 years',
-          'Boy 6+ years',
-          'Girl 0-1 years',
-          'Girl 1-6 years',
-          'Girl 6+ years',
-          'Sale',
-          'All',
-        ],
-      },
-      {
-        id: 1,
-        title: 'Non Hero Carousel',
-        birthYear: 1987,
-        birthCity: 63,
-        createdBy: 'info@nstechs.com',
-        updatedBy: 'ayesha.siddiqa@hopscotch.in',
-        updatedOn: '2020-08-17T17:15:17',
-        createdOn: '2020-08-11T15:44:07',
-        sorts: [
-          'Boy 0-1 years',
-          'Boy 1-6 years',
-          'Boy 6+ years',
-          'Girl 0-1 years',
-          'Girl 1-6 years',
-          'Girl 6+ years',
-          'Sale',
-          'All',
-        ],
-      },
-      {
-        id: 1,
-        title: 'Non Hero Carousel',
-        birthYear: 1987,
-        birthCity: 63,
-        createdBy: 'info@nstechs.com',
-        updatedBy: 'ayesha.siddiqa@hopscotch.in',
-        updatedOn: '2020-08-17T17:15:17',
-        createdOn: '2020-08-11T15:44:07',
-        sorts: [
-          'Boy 0-1 years',
-          'Boy 1-6 years',
-          'Boy 6+ years',
-          'Girl 0-1 years',
-          'Girl 1-6 years',
-          'Girl 6+ years',
-          'Sale',
-          'All',
-        ],
-      },
-      {
-        id: 1,
-        title: 'Non Hero Carousel',
-        birthYear: 1987,
-        birthCity: 63,
-        createdBy: 'info@nstechs.com',
-        updatedBy: 'ayesha.siddiqa@hopscotch.in',
-        updatedOn: '2020-08-17T17:15:17',
-        createdOn: '2020-08-11T15:44:07',
-        sorts: [
-          'Boy 0-1 years',
-          'Boy 1-6 years',
-          'Boy 6+ years',
-          'Girl 0-1 years',
-          'Girl 1-6 years',
-          'Girl 6+ years',
-          'Sale',
-          'All',
-        ],
-      },
-      {
-        id: 1,
-        title: 'Non Hero Carousel',
-        birthYear: 1987,
-        birthCity: 63,
-        createdBy: 'info@nstechs.com',
-        updatedBy: 'ayesha.siddiqa@hopscotch.in',
-        updatedOn: '2020-08-17T17:15:17',
-        createdOn: '2020-08-11T15:44:07',
-        sorts: [
-          'Boy 0-1 years',
-          'Boy 1-6 years',
-          'Boy 6+ years',
-          'Girl 0-1 years',
-          'Girl 1-6 years',
-          'Girl 6+ years',
-          'Sale',
-          'All',
-        ],
-      },
-      {
-        id: 1,
-        title: 'Non Hero Carousel',
-        birthYear: 1987,
-        birthCity: 63,
-        createdBy: 'info@nstechs.com',
-        updatedBy: 'ayesha.siddiqa@hopscotch.in',
-        updatedOn: '2020-08-17T17:15:17',
-        createdOn: '2020-08-11T15:44:07',
-        sorts: [
-          'Boy 0-1 years',
-          'Boy 1-6 years',
-          'Boy 6+ years',
-          'Girl 0-1 years',
-          'Girl 1-6 years',
-          'Girl 6+ years',
-          'Sale',
-          'All',
-        ],
-      },
-      {
-        id: 1,
-        title: 'Non Hero Carousel',
-        birthYear: 1987,
-        birthCity: 63,
-        createdBy: 'info@nstechs.com',
-        updatedBy: 'ayesha.siddiqa@hopscotch.in',
-        updatedOn: '2020-08-17T17:15:17',
-        createdOn: '2020-08-11T15:44:07',
-        sorts: [
-          'Boy 0-1 years',
-          'Boy 1-6 years',
-          'Boy 6+ years',
-          'Girl 0-1 years',
-          'Girl 1-6 years',
-          'Girl 6+ years',
-          'Sale',
-          'All',
-        ],
-      },
-      {
-        id: 1,
-        title: 'Non Hero Carousel',
-        birthYear: 1987,
-        birthCity: 63,
-        createdBy: 'info@nstechs.com',
-        updatedBy: 'ayesha.siddiqa@hopscotch.in',
-        updatedOn: '2020-08-17T17:15:17',
-        createdOn: '2020-08-11T15:44:07',
-        sorts: [
-          'Boy 0-1 years',
-          'Boy 1-6 years',
-          'Boy 6+ years',
-          'Girl 0-1 years',
-          'Girl 1-6 years',
-          'Girl 6+ years',
-          'Sale',
-          'All',
-        ],
-      },
-      {
-        id: 1,
-        title: 'Non Hero Carousel',
-        birthYear: 1987,
-        birthCity: 63,
-        createdBy: 'info@nstechs.com',
-        updatedBy: 'ayesha.siddiqa@hopscotch.in',
-        updatedOn: '2020-08-17T17:15:17',
-        createdOn: '2020-08-11T15:44:07',
-        sorts: [
-          'Boy 0-1 years',
-          'Boy 1-6 years',
-          'Boy 6+ years',
-          'Girl 0-1 years',
-          'Girl 1-6 years',
-          'Girl 6+ years',
-          'Sale',
-          'All',
-        ],
-      },
-      {
-        id: 1,
-        title: 'Non Hero Carousel',
-        birthYear: 1987,
-        birthCity: 63,
-        createdBy: 'info@nstechs.com',
-        updatedBy: 'ayesha.siddiqa@hopscotch.in',
-        updatedOn: '2020-08-17T17:15:17',
-        createdOn: '2020-08-11T15:44:07',
-        sorts: [
-          'Boy 0-1 years',
-          'Boy 1-6 years',
-          'Boy 6+ years',
-          'Girl 0-1 years',
-          'Girl 1-6 years',
-          'Girl 6+ years',
-          'Sale',
-          'All',
-        ],
-      },
-      {
-        id: 1,
-        title: 'Non Hero Carousel',
-        birthYear: 1987,
-        birthCity: 63,
-        createdBy: 'info@nstechs.com',
-        updatedBy: 'ayesha.siddiqa@hopscotch.in',
-        updatedOn: '2020-08-17T17:15:17',
-        createdOn: '2020-08-11T15:44:07',
-        sorts: [
-          'Boy 0-1 years',
-          'Boy 1-6 years',
-          'Boy 6+ years',
-          'Girl 0-1 years',
-          'Girl 1-6 years',
-          'Girl 6+ years',
-          'Sale',
-          'All',
-        ],
-      },
-      {
-        id: 1,
-        title: 'Non Hero Carousel',
-        birthYear: 1987,
-        birthCity: 63,
-        createdBy: 'info@nstechs.com',
-        updatedBy: 'ayesha.siddiqa@hopscotch.in',
-        updatedOn: '2020-08-17T17:15:17',
-        createdOn: '2020-08-11T15:44:07',
-        sorts: [
-          'Boy 0-1 years',
-          'Boy 1-6 years',
-          'Boy 6+ years',
-          'Girl 0-1 years',
-          'Girl 1-6 years',
-          'Girl 6+ years',
-          'Sale',
-          'All',
-        ],
-      },
-      {
-        id: 1,
-        title: 'Non Hero Carousel',
-        birthYear: 1987,
-        birthCity: 63,
-        createdBy: 'info@nstechs.com',
-        updatedBy: 'ayesha.siddiqa@hopscotch.in',
-        updatedOn: '2020-08-17T17:15:17',
-        createdOn: '2020-08-11T15:44:07',
-        sorts: [
-          'Boy 0-1 years',
-          'Boy 1-6 years',
-          'Boy 6+ years',
-          'Girl 0-1 years',
-          'Girl 1-6 years',
-          'Girl 6+ years',
-          'Sale',
-          'All',
-        ],
-      },
-      {
-        id: 1,
-        title: 'Non Hero Carousel',
-        birthYear: 1987,
-        birthCity: 63,
-        createdBy: 'info@nstechs.com',
-        updatedBy: 'ayesha.siddiqa@hopscotch.in',
-        updatedOn: '2020-08-17T17:15:17',
-        createdOn: '2020-08-11T15:44:07',
-        sorts: [
-          'Boy 0-1 years',
-          'Boy 1-6 years',
-          'Boy 6+ years',
-          'Girl 0-1 years',
-          'Girl 1-6 years',
-          'Girl 6+ years',
-          'Sale',
-          'All',
-        ],
-      },
-      {
-        id: 1,
-        title: 'Non Hero Carousel',
-        birthYear: 1987,
-        birthCity: 63,
-        createdBy: 'info@nstechs.com',
-        updatedBy: 'ayesha.siddiqa@hopscotch.in',
-        updatedOn: '2020-08-17T17:15:17',
-        createdOn: '2020-08-11T15:44:07',
-        sorts: [
-          'Boy 0-1 years',
-          'Boy 1-6 years',
-          'Boy 6+ years',
-          'Girl 0-1 years',
-          'Girl 1-6 years',
-          'Girl 6+ years',
-          'Sale',
-          'All',
-        ],
-      },
-      {
-        id: 1,
-        title: 'Non Hero Carousel',
-        birthYear: 1987,
-        birthCity: 63,
-        createdBy: 'info@nstechs.com',
-        updatedBy: 'ayesha.siddiqa@hopscotch.in',
-        updatedOn: '2020-08-17T17:15:17',
-        createdOn: '2020-08-11T15:44:07',
-        sorts: [
-          'Boy 0-1 years',
-          'Boy 1-6 years',
-          'Boy 6+ years',
-          'Girl 0-1 years',
-          'Girl 1-6 years',
-          'Girl 6+ years',
-          'Sale',
-          'All',
-        ],
-      },
-      {
-        id: 1,
-        title: 'Non Hero Carousel',
-        birthYear: 1987,
-        birthCity: 63,
-        createdBy: 'info@nstechs.com',
-        updatedBy: 'ayesha.siddiqa@hopscotch.in',
-        updatedOn: '2020-08-17T17:15:17',
-        createdOn: '2020-08-11T15:44:07',
-        sorts: [
-          'Boy 0-1 years',
-          'Boy 1-6 years',
-          'Boy 6+ years',
-          'Girl 0-1 years',
-          'Girl 1-6 years',
-          'Girl 6+ years',
-          'Sale',
-          'All',
-        ],
-      },
-      {
-        id: 1,
-        title: 'Non Hero Carousel',
-        birthYear: 1987,
-        birthCity: 63,
-        createdBy: 'info@nstechs.com',
-        updatedBy: 'ayesha.siddiqa@hopscotch.in',
-        updatedOn: '2020-08-17T17:15:17',
-        createdOn: '2020-08-11T15:44:07',
-        sorts: [
-          'Boy 0-1 years',
-          'Boy 1-6 years',
-          'Boy 6+ years',
-          'Girl 0-1 years',
-          'Girl 1-6 years',
-          'Girl 6+ years',
-          'Sale',
-          'All',
-        ],
-      },
-    ],
-  });
+  const state = {
+    columns: props.columns,
+    data: props.data,
+  };
+
+  const DeleteFIcon = forwardRef((props, ref) => (
+    <DeleteForeverTwoToneIcon {...props} ref={ref} />
+  ));
+  DeleteFIcon.displayName = 'Delete';
+
+  const PublishTwoIcon = forwardRef((props, ref) => (
+    <PublishTwoToneIcon {...props} ref={ref} />
+  ));
+  PublishTwoIcon.displayName = 'Publish';
+
+  const FileCopyIcon = forwardRef((props, ref) => (
+    <FileCopyTwoToneIcon {...props} ref={ref} />
+  ));
+  FileCopyIcon.displayName = 'Copy';
+
+  const FirstPIcon = forwardRef((props, ref) => (
+    <FirstPage {...props} ref={ref} />
+  ));
+  FirstPIcon.displayName = 'FirstPage';
+
+  const LastPageIcon = forwardRef((props, ref) => (
+    <LastPage {...props} ref={ref} />
+  ));
+  LastPageIcon.displayName = 'LastPage';
+
+  const NextPageIcon = forwardRef((props, ref) => (
+    <ChevronRight {...props} ref={ref} />
+  ));
+  NextPageIcon.displayName = 'NextPage';
+
+  const PreviousPage = forwardRef((props, ref) => (
+    <ChevronLeft {...props} ref={ref} />
+  ));
+  PreviousPage.displayName = 'PreviousPage';
+
+  const SortArrow = forwardRef((props, ref) => (
+    <ArrowDownward {...props} ref={ref} />
+  ));
+  SortArrow.displayName = 'Sort';
 
   const tableIcons = {
-    DeleteForeverIcon: forwardRef((props, ref) => (
-      <DeleteForeverTwoToneIcon {...props} ref={ref} />
-    )),
-    PublishIcon: forwardRef((props, ref) => (
-      <PublishTwoToneIcon {...props} ref={ref} />
-    )),
-    Clone: forwardRef((props, ref) => (
-      <FileCopyTwoToneIcon {...props} ref={ref} />
-    )),
-    FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
-    LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
-    NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
-    PreviousPage: forwardRef((props, ref) => (
-      <ChevronLeft {...props} ref={ref} />
-    )),
-    SortArrow: forwardRef((props, ref) => (
-      <ArrowDownward {...props} ref={ref} />
-    )),
+    DeleteForeverIcon: DeleteFIcon,
+    PublishIcon: PublishTwoIcon,
+    Clone: FileCopyIcon,
+    FirstPage: FirstPIcon,
+    LastPage: LastPageIcon,
+    NextPage: NextPageIcon,
+    PreviousPage: PreviousPage,
+    SortArrow: SortArrow,
   };
   return (
     <MaterialTable
       options={{
         actionsColumnIndex: -1,
         search: false,
+        headerStyle: { fontSize: '12px', fontWeight: 'bold' },
       }}
       actions={[
         {
           icon: tableIcons.PublishIcon,
           tooltip: 'Publish',
-          onClick: (event) => alert('You want to add a new row'),
+          onClick: () => alert('You want to add a new row'),
         },
         {
           icon: tableIcons.Clone,
           tooltip: 'Clone',
-          onClick: (event) => alert('You want to add a new row'),
+          onClick: () => alert('You want to add a new row'),
         },
         {
           icon: tableIcons.DeleteForeverIcon,
           tooltip: 'Delete',
-          onClick: (event) => alert('You want to add a new row'),
+          onClick: () => alert('You want to add a new row'),
         },
       ]}
       icons={tableIcons}
       title={props.title}
       columns={state.columns}
       data={state.data}
-      onChangePage={(pageIndex, pageSize: number) => {
-        // this is a work-around, as I received two onChangePage event, the 2nd resetting the page number
-        console.log(pageIndex);
+      onChangePage={(pageNo: number, pageSize: number) => {
+        console.log(pageNo);
         console.log(pageSize);
       }}
     />
