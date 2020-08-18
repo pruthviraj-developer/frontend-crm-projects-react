@@ -11,7 +11,7 @@ const DashBoardWrapper = styled.div`
 const DashBoard: FC = () => {
   const [data, setTableData] = useState<Array<Record<string, string>>>([]);
   const [count, setCount] = useState<number>(0);
-  const [filterParams, setFilterParams] = useState<Record<string, unknown>>({ pageSize: 5, pageNo: 0 });
+  const [filterParams, setFilterParams] = useState<Record<string, unknown>>({ pageSize: 10, pageNo: 0 }); // page size should be size as rowsperpage
   useEffect(() => {
     carouselService
       .get({
@@ -87,7 +87,7 @@ const DashBoard: FC = () => {
     title: 'Table testing',
     count: count,
     columns: columns,
-    rowsPerPage: 10,
+    rowsPerPage: 10, // Should be same as page size
     rows: [...data],
     filterRowsPerPage: [10, 25, 50, 100],
     fetchTableData: getUpdatedTableData,
