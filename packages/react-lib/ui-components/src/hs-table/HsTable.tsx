@@ -1,4 +1,3 @@
-/* eslint-disable no-use-before-define */
 import React, { FC } from 'react';
 import { forwardRef } from 'react';
 import MaterialTable from 'material-table';
@@ -21,42 +20,42 @@ export const HSTable: FC<TableProps> = (props: TableProps) => {
     data: props.data,
   };
 
-  const DeleteFIcon = forwardRef((props, ref) => (
+  const DeleteFIcon = forwardRef((props: any, ref: any) => (
     <DeleteForeverTwoToneIcon {...props} ref={ref} />
   ));
   DeleteFIcon.displayName = 'Delete';
 
-  const PublishTwoIcon = forwardRef((props, ref) => (
+  const PublishTwoIcon = forwardRef((props: any, ref: any) => (
     <PublishTwoToneIcon {...props} ref={ref} />
   ));
   PublishTwoIcon.displayName = 'Publish';
 
-  const FileCopyIcon = forwardRef((props, ref) => (
+  const FileCopyIcon = forwardRef((props: any, ref: any) => (
     <FileCopyTwoToneIcon {...props} ref={ref} />
   ));
   FileCopyIcon.displayName = 'Copy';
 
-  const FirstPIcon = forwardRef((props, ref) => (
+  const FirstPIcon = forwardRef((props: any, ref: any) => (
     <FirstPage {...props} ref={ref} />
   ));
   FirstPIcon.displayName = 'FirstPage';
 
-  const LastPageIcon = forwardRef((props, ref) => (
+  const LastPageIcon = forwardRef((props: any, ref: any) => (
     <LastPage {...props} ref={ref} />
   ));
   LastPageIcon.displayName = 'LastPage';
 
-  const NextPageIcon = forwardRef((props, ref) => (
+  const NextPageIcon = forwardRef((props: any, ref: any) => (
     <ChevronRight {...props} ref={ref} />
   ));
   NextPageIcon.displayName = 'NextPage';
 
-  const PreviousPage = forwardRef((props, ref) => (
+  const PreviousPage = forwardRef((props: any, ref: any) => (
     <ChevronLeft {...props} ref={ref} />
   ));
   PreviousPage.displayName = 'PreviousPage';
 
-  const SortArrow = forwardRef((props, ref) => (
+  const SortArrow = forwardRef((props: any, ref: any) => (
     <ArrowDownward {...props} ref={ref} />
   ));
   SortArrow.displayName = 'Sort';
