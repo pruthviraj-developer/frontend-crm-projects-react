@@ -1,20 +1,11 @@
 import React from 'react';
-import { Card, CardHeader, CardContent, Button } from '@material-ui/core';
-import { CarouselCardPageProps } from './ICarouselCardPage';
+import { CarouselCard } from '@hs/components';
 
-export const CarouselCardPage = (props: CarouselCardPageProps) => {
+export const CarouselCardPage = () => {
+  // const [state, dispatch] = useReducer(reducer, initialState, init);
   return (
-    <Card>
-      <CardHeader title={'Test'}>
-        <Button variant="contained" color="primary" size={'large'}>
-          Test||{props.src}
-        </Button>
-      </CardHeader>
-      <CardContent>
-        <Button variant="contained" color="primary" size={'large'}>
-          Test
-        </Button>
-      </CardContent>
-    </Card>
+    <CarouselCard
+      autoCopmpleOptions={{ options: [{ name: 'Test1', value: 'value1' }] }}
+    ></CarouselCard>
   );
 };

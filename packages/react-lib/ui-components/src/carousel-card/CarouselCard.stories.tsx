@@ -1,6 +1,6 @@
 /* eslint-disable no-use-before-define */
 import React, { FC } from 'react';
-import CarouselCard from './CarouselCard';
+import { CarouselCard } from './CarouselCard';
 import styled from '@emotion/styled';
 import { AutoCompleteOption } from 'auto-complete/IAutoComplete';
 export default {

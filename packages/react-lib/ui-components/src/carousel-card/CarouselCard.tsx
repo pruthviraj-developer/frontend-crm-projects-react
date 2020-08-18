@@ -26,7 +26,7 @@ const StyledFooter = styled.div`
   /* width: 230px; */
   background-color: ${Colors.GREY_SHADE[500]};
 `;
-const CarouselCard = ({
+export const CarouselCard = ({
   imageupload,
   positionBox,
   typeBox,
@@ -77,5 +77,3 @@ const CarouselCard = ({
     </StyledCard>
   );
 };
-
-export default CarouselCard;

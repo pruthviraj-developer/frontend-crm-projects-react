@@ -3,7 +3,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import './date-picker.css';
 import styled from '@emotion/styled';
-import { format, isValid, subDays } from 'date-fns';
+import { isValid, subDays } from 'date-fns';
 
 interface Props {
   placeholder: string;
