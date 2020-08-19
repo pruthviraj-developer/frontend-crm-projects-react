@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import React, { FC, useState, useEffect } from 'react';
-import { HSTable, HsTableProps } from '@hs/components';
+import { HSTable, HsTableProps, HsSnackbar, HsSnackbarProps } from '@hs/components';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import PublishIcon from '@material-ui/icons/Publish';
@@ -13,7 +13,18 @@ const DashBoardWrapper = styled.div`
   margin-left: 5px;
 `;
 const DashBoard: FC = () => {
+  const onSnackBarClose = (open: any) => {
+    setSnackBarError({ ...HsSnackBarError, open });
+  };
+  const snackBarProps = {
+    open: false,
+    type: 'error' as const,
+    message: 'Test',
+    onSnackBarClose: onSnackBarClose,
+  };
   const [data, setTableData] = useState<Array<Record<string, string>>>([]);
+  const [HsSnackBarError, setSnackBarError] = useState<HsSnackbarProps>(snackBarProps);
+
   const [count, setCount] = useState<number>(0);
   const [filterParams, setFilterParams] = useState<Record<string, unknown>>({ pageSize: 10, pageNo: 0 }); // page size should be size as rowsperpage
   useEffect(() => {
@@ -31,6 +42,36 @@ const DashBoard: FC = () => {
   const getUpdatedTableData = (filters: Record<string, unknown>) => {
     setFilterParams(filters);
   };
+  const saveCloneData = (res: any) => {
+    const postData = { ...res, title: `Cloned ${res.title}` };
+    carouselService
+      .post({
+        url: 'carouselservice/carousel',
+        data: postData,
+      })
+      .then((responseData: any) => {
+        if (responseData.action === 'success') {
+          const obj = responseData.messageDetail;
+          setSnackBarError({
+            ...snackBarProps,
+            open: true,
+            type: 'success',
+            message: obj.message,
+          });
+        }
+      })
+      .catch((errorResponse: any) => {
+        const data: any = errorResponse && errorResponse.data ? errorResponse.data : errorResponse;
+        const obj = data && data.messageDetail ? data.messageDetail : {};
+        const type = obj.messageType ? obj.messageType.toLowerCase() : 'error';
+        setSnackBarError({
+          ...snackBarProps,
+          open: true,
+          type,
+          message: obj.message,
+        });
+      });
+  };
   const cloneAndCreate = (rowData: Record<string, unknown>) => {
     carouselService
       .get({
@@ -38,20 +79,19 @@ const DashBoard: FC = () => {
       })
       .then((res: any) => {
         delete res.id;
-        const postData = { ...res, title: `Cloned ${res.title}` };
-        carouselService
-          .post({
-            url: 'carouselservice/carousel',
-            data: postData,
-          })
-          .then((responseData: any) => {
-            if (responseData.action === 'success') {
-              setFilterParams({ pageSize: filterParams.pageSize, pageNo: 0 });
-            }
-          })
-          .catch((error: Error) => console.log('Reason for post failure', error.message));
+        saveCloneData(res);
       })
-      .catch((error: Error) => console.log('Reason of failure', error.message));
+      .catch((error: any) => {
+        const data: any = error.data;
+        const obj = data.messageDetail;
+        const type = obj.messageType ? obj.messageType.toLowerCase() : 'error';
+        setSnackBarError({
+          ...snackBarProps,
+          open: true,
+          type: type,
+          message: error.message,
+        });
+      });
   };
   const updateStatus = (rowData: Record<string, unknown>) => {
     if (rowData.type === 'clone') {
@@ -77,7 +117,17 @@ const DashBoard: FC = () => {
             setFilterParams({ ...filterParams });
           }
         })
-        .catch((error: Error) => console.log('Reason of failure', error.message));
+        .catch((error: Record<string, unknown>) => {
+          const data: any = error.data;
+          const obj = data.messageDetail;
+          const type = obj.messageType ? obj.messageType.toLowerCase() : 'error';
+          setSnackBarError({
+            ...snackBarProps,
+            open: true,
+            type,
+            message: obj.message,
+          });
+        });
     }
   };
   const action = (row: Record<string, unknown>) => {
@@ -202,6 +252,7 @@ const DashBoard: FC = () => {
     <DashBoardWrapper>
       <h1>DashBoard</h1>
       <HSTable {...TableData} />
+      {HsSnackBarError.open && <HsSnackbar {...HsSnackBarError} />}
     </DashBoardWrapper>
   );
 };

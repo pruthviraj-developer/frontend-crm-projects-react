@@ -3,3 +3,4 @@ export * from './button';
 export * from './image-upload';
 export * from './drop-down';
 export * from './hs-table';
+export * from './snack-bar';
