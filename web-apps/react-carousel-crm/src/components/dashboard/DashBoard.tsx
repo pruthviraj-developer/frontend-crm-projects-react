@@ -68,14 +68,14 @@ const DashBoard: FC = () => {
         })
         .catch((error: Error) => console.log('Reason of failure', error.message));
     } else {
-      const id = '';
       carouselService
-        .get({
-          url: `carouselservice/carousel/publish/${id}`,
+        .put({
+          url: `carouselservice/carousel/publish/${rowData.id}`,
         })
-        .then((res: any) => {
-          setTableData([...res.records]);
-          setCount(res.totalRecords);
+        .then((responseData: any) => {
+          if (responseData.action === 'success') {
+            setFilterParams({ ...filterParams });
+          }
         })
         .catch((error: Error) => console.log('Reason of failure', error.message));
     }
