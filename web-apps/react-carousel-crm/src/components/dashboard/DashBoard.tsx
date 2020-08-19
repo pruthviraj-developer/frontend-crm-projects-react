@@ -51,6 +51,7 @@ const DashBoard: FC = () => {
       })
       .then((responseData: any) => {
         if (responseData.action === 'success') {
+          setFilterParams({ ...filterParams });
           const obj = responseData.messageDetail;
           setSnackBarError({
             ...snackBarProps,
@@ -104,6 +105,13 @@ const DashBoard: FC = () => {
         .then((responseData: any) => {
           if (responseData.action === 'success') {
             setFilterParams({ ...filterParams });
+            const obj = responseData.messageDetail;
+            setSnackBarError({
+              ...snackBarProps,
+              open: true,
+              type: 'success',
+              message: obj.message,
+            });
           }
         })
         .catch((error: Error) => console.log('Reason of failure', error.message));
@@ -115,6 +123,13 @@ const DashBoard: FC = () => {
         .then((responseData: any) => {
           if (responseData.action === 'success') {
             setFilterParams({ ...filterParams });
+            const obj = responseData.messageDetail;
+            setSnackBarError({
+              ...snackBarProps,
+              open: true,
+              type: 'success',
+              message: obj.message,
+            });
           }
         })
         .catch((error: Record<string, unknown>) => {
