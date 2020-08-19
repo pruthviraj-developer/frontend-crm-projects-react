@@ -21,9 +21,9 @@ const StyledCardCntr = styled.div`
 const SelectPosTestData = {
   placeholder: 'Position',
   options: [
-    { name: '1', value: '1' },
-    { name: '2', value: '2' },
-    { name: '3', value: '3' },
+    { display: '1', value: '1' },
+    { display: '2', value: '2' },
+    { display: '3', value: '3' },
   ],
   selectedValue: 2,
 };
@@ -31,9 +31,9 @@ const SelectPosTestData = {
 const SelectTypeTestData = {
   placeholder: 'Position',
   options: [
-    { name: 'PLP', value: 'plp' },
-    { name: 'Special Page', value: 'sp' },
-    { name: 'Boutique', value: 'boutique' },
+    { display: 'PLP', value: 'plp' },
+    { display: 'Special Page', value: 'sp' },
+    { display: 'Boutique', value: 'boutique' },
   ],
   selectedValue: 'plp',
 };
@@ -46,6 +46,9 @@ export const Card: FC = () => (
       onDelete={action('on-delete')}
       positionBox={SelectPosTestData}
       typeBox={SelectTypeTestData}
+      type={'plp'}
+      cardId={'card1'}
+      onPositionChange={action('position-change')}
     />
   </StyledCardCntr>
 );

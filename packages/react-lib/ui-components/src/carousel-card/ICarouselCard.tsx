@@ -5,6 +5,7 @@ import {
   AutoCompleteOption,
 } from 'auto-complete/IAutoComplete';
 export interface CarouselCardProps {
+  cardId: string;
   tile_id?: number;
   image_url?: string;
   type: 'plp' | 'sp' | 'boutique';
@@ -14,7 +15,10 @@ export interface CarouselCardProps {
   positionBox?: SelectBoxProps;
   typeBox?: SelectBoxProps;
   autoCopmpleOptions: AutoCompleteProps<AutoCompleteOption>;
-  onDelete?: (position: number) => void;
+  onDelete?: (cardId: string) => void;
+  onPositionChange?: (
+    props: Record<'cardId' | 'position', number | string>
+  ) => void;
 }
 
 export interface CarouselCardState {

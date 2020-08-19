@@ -1,9 +1,12 @@
 import React from 'react';
 import styled from '@emotion/styled';
 import { CarouselCard } from '@hs/components';
-import { State, Action, Tile, ActionType } from './ICarouselCardPage';
+import { State, Action, Tile } from './ICarouselCardPage';
 import { Button, Grid } from '@material-ui/core';
 import { useReducer } from 'reinspect';
+
+let count = 1;
+const getCount = () => count++;
 
 const initialState: State = {
   imageWidth: 400,
@@ -21,9 +24,9 @@ const carouselPageReducer = (
   [type, payload]: Action<Tile>
 ): State => {
   switch (type) {
-    case ActionType.addTile:
+    case 'addTile':
       return { ...state, ...{ tiles: [...state.tiles, payload] } };
-    case ActionType.removeTile:
+    case 'removeTile':
       return {
         ...state,
         ...{
@@ -38,20 +41,40 @@ const carouselPageReducer = (
           ],
         },
       };
+    case 'changePosition':
+      return {
+        ...state,
+        ...{
+          tiles: [
+            ...state.tiles?.filter((tile) => tile.position < payload.position),
+            payload,
+            ...state.tiles
+              ?.filter(
+                (tile) =>
+                  tile.position >= payload.position &&
+                  tile.cardId != payload.cardId
+              )
+              ?.map((tile) => ({
+                ...tile,
+                ...{ position: tile.position + 1 },
+              })),
+          ],
+        },
+      };
   }
   return state;
 };
 const getPostionOptions = (length: number) => {
-  const options: Array<Record<'name' | 'value', string | number>> = [];
+  const options: Array<Record<'display' | 'value', string | number>> = [];
   for (let index = 0; index < length; index++) {
-    options.push({ name: index + 1, value: index + 1 });
+    options.push({ display: index + 1, value: index + 1 });
   }
   return options;
 };
 const getTileTypeOptions = () => [
-  { name: 'PLP', value: 'plp' },
-  { name: 'Special Page', value: 'sp' },
-  { name: 'Boutique', value: 'boutique' },
+  { display: 'PLP', value: 'plp' },
+  { display: 'Special Page', value: 'sp' },
+  { display: 'Boutique', value: 'boutique' },
 ];
 export const CarouselCardPage = () => {
   const [state, dispatch] = useReducer(
@@ -63,13 +86,34 @@ export const CarouselCardPage = () => {
 
   const handleTileAdd = () => {
     dispatch([
-      ActionType.addTile,
-      { type: 'plp', position: state.tiles.length + 1 },
+      'addTile',
+      {
+        type: 'plp',
+        position: state.tiles.length + 1,
+        cardId: 'card' + getCount(),
+      },
     ]);
   };
-  const handleTileRemove = (index: number) => {
-    dispatch([ActionType.removeTile, state.tiles?.[index - 1]]);
+  const handleTileRemove = (cardId: string) => {
+    dispatch([
+      'removeTile',
+      state.tiles.filter((tile) => tile.cardId == cardId)[0],
+    ]);
   };
+
+  const handlePositionChange = ({
+    cardId,
+    position,
+  }: Record<'cardId' | 'position', number | string>) => {
+    dispatch([
+      'changePosition',
+      {
+        ...state.tiles.filter((tile) => tile.cardId == cardId)[0],
+        ...{ position: position as number },
+      },
+    ]);
+  };
+
   return (
     <StyledCarouselPage>
       <Grid container direction="row" spacing={3}>
@@ -92,6 +136,8 @@ export const CarouselCardPage = () => {
                 options: [],
               }}
               onDelete={handleTileRemove}
+              cardId={tile.cardId}
+              onPositionChange={handlePositionChange}
             ></CarouselCard>
           </Grid>
         ))}

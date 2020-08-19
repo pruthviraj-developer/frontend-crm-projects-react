@@ -1,20 +1,20 @@
+import { CarouselCardProps } from '@hs/components';
+
 export interface CarouselCardPageProps {
   imagesrc?: string;
 }
 
-export enum ActionType {
-  addTile = 'addTile',
-  removeTile = 'removeTile',
-}
+export type ActionType = 'addTile' | 'removeTile' | 'changePosition';
 
-export type Action<T> = [ActionType.addTile, T] | [ActionType.removeTile, T];
+export type Action<T> = [ActionType, T];
 
 export interface Tile {
   tile_id?: number;
   image_url?: string;
-  type?: 'plp' | 'sp' | 'botique';
+  type: CarouselCardProps['type'];
   type_id?: number;
   position: number;
+  cardId: string;
 }
 export interface State {
   imageWidth?: number;

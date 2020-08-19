@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef } from 'react';
 import {
   Card,
   CardHeader,
@@ -12,7 +12,7 @@ import styled from '@emotion/styled';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import { ImageUpload } from 'image-upload';
-import { CarouselCardProps, CarouselCardState } from './ICarouselCard';
+import { CarouselCardProps } from './ICarouselCard';
 import { SelectBox } from 'select-box';
 import { AutoCompleteGrouped as AutoComplete } from 'auto-complete';
 import { DarkTheme, Colors } from '@hs/utils';
@@ -33,15 +33,28 @@ export const CarouselCard = ({
   autoCopmpleOptions,
   ...props
 }: CarouselCardProps) => {
-  const [state, setstate] = useState<CarouselCardState>({
-    type: props.type,
-    type_id: props.type_id,
-    position: props.position,
-    image_url: props.image_url,
-  });
-
+  // const [state, setstate] = useState<CarouselCardState>({
+  //   type: props.type,
+  //   type_id: props.type_id,
+  //   position: props.position,
+  //   image_url: props.image_url,
+  // });
+  const cardIdRef = useRef('');
+  const getCardId = () => {
+    if (cardIdRef.current == '') {
+      cardIdRef.current = props.cardId;
+    }
+    return cardIdRef.current;
+  };
   const handleDelete = () => {
-    if (props.onDelete) props.onDelete(props.position);
+    if (props.onDelete) props.onDelete(getCardId());
+  };
+  const handlePositionChange = (position) => {
+    if (props.onPositionChange)
+      props.onPositionChange({
+        cardId: getCardId(),
+        position: position,
+      });
   };
   // const handleChange = () => {};
   return (
@@ -53,7 +66,7 @@ export const CarouselCard = ({
             <DeleteForeverIcon fontSize={'large'} />
           </IconButton>
         }
-        title="Shrimp and Chorizo Paella"
+        title={props.cardId}
         subheader="September 14, 2016"
       />
       <CardContent>
@@ -76,6 +89,7 @@ export const CarouselCard = ({
                 placeholder={'Positon'}
                 size={'small'}
                 {...positionBox}
+                onChange={handlePositionChange}
               ></SelectBox>
             </Grid>
           </Grid>
