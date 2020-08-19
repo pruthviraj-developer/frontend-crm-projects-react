@@ -50,7 +50,13 @@ export const HSTable: FC<HsTableProps> = (props: HsTableProps) => {
             <TableHead>
               <TableRow>
                 {columns.map((column: any, index) => (
-                  <TableCell key={index} style={{ minWidth: column.minWidth }}>
+                  <TableCell
+                    key={index}
+                    style={{
+                      minWidth: column.minWidth ? column.minWidth : 'auto',
+                      maxWidth: column.width ? column.width : 'auto',
+                    }}
+                  >
                     {column.label}
                   </TableCell>
                 ))}
@@ -60,13 +66,38 @@ export const HSTable: FC<HsTableProps> = (props: HsTableProps) => {
               {rows.map((row, index) => {
                 return (
                   <TableRow hover role="checkbox" tabIndex={-1} key={index}>
-                    {columns.map((column: any) => {
-                      const value = row[column.id];
-                      return (
-                        <TableCell key={column.id}>
-                          {column.render ? column.render(value) : value}
-                        </TableCell>
-                      );
+                    {columns.map((column: any, index) => {
+                      if (column.id) {
+                        const value = row[column.id];
+                        return (
+                          <TableCell
+                            key={column.id}
+                            style={{
+                              minWidth: column.minWidth
+                                ? column.minWidth
+                                : 'auto',
+                              maxWidth: column.width ? column.width : 'auto',
+                            }}
+                          >
+                            {column.render ? column.render(value) : value}
+                          </TableCell>
+                        );
+                      } else {
+                        return (
+                          <TableCell
+                            key={index}
+                            style={{
+                              minWidth: column.minWidth
+                                ? column.minWidth
+                                : 'auto',
+                              maxWidth: column.width ? column.width : 'auto',
+                              width: column.width ? column.width : 'auto',
+                            }}
+                          >
+                            {column.render(props, row)}
+                          </TableCell>
+                        );
+                      }
                     })}
                   </TableRow>
                 );

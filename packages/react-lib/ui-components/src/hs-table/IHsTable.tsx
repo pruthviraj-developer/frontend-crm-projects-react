@@ -6,4 +6,5 @@ export interface HsTableProps {
   rows: Array<Record<string, unknown>>;
   filterRowsPerPage: Array<number>;
   fetchTableData: (event: Record<string, unknown>) => void;
+  action?: (event: Record<string, unknown>) => void;
 }

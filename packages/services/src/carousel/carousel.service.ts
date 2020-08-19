@@ -14,12 +14,16 @@ const deleteApi = ({ url, params, data }: IHttpService): AxiosPromise<any> => {
 const patch = ({ url, params, data }: IHttpService): AxiosPromise<any> => {
   return httpService.patch({ url, params, data });
 };
+const put = ({ url, params, data }: IHttpService): AxiosPromise<any> => {
+  return httpService.put({ url, params, data });
+};
 const fileUpload = ({ url, params, data }: IHttpService) => {
   return httpService.fileUpload({ url, params, data });
 };
 export const carouselService = {
   get,
   post,
+  put,
   delete: deleteApi,
   patch,
   fileUpload,

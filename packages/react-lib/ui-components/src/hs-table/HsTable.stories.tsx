@@ -2,6 +2,10 @@ import React, { FC } from 'react';
 import { HSTable } from './HsTable';
 import { format } from 'date-fns';
 import { HsTableProps } from './IHsTable';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import FileCopyIcon from '@material-ui/icons/FileCopy';
+import PublishIcon from '@material-ui/icons/Publish';
+import { IconButton } from '@material-ui/core';
 export default {
   title: 'Tables',
 };
@@ -10,12 +14,18 @@ const getUpdatedTableData = (filters: Record<string, unknown>) => {
   alert(filters);
 };
 
+const action = (row: Record<string, unknown>) => {
+  alert(row);
+  console.log(row);
+};
+
 const columns = [
   { id: 'id', label: 'Id', minWidth: 20 },
   { id: 'title', label: 'Title' },
   {
     id: 'sorts',
     label: 'Sorted By',
+    width: 100,
     render: (sorts) => {
       if (sorts && sorts.length) {
         return sorts.join(' ,');
@@ -43,7 +53,7 @@ const columns = [
       return '--';
     },
   },
-  { id: 'createdBy', label: 'Created By' },
+  { id: 'createdBy', label: 'Created By', width: 50 },
   { id: 'updatedBy', label: 'Updated By' },
   {
     id: 'createdOn',
@@ -61,6 +71,51 @@ const columns = [
     render: (data) => {
       if (data) {
         return format(new Date(data), 'dd-MM-yy');
+      }
+      return '--';
+    },
+  },
+  {
+    label: 'Action',
+    render: (props, data) => {
+      if (data) {
+        return (
+          <div style={{ display: 'flex' }}>
+            <IconButton
+              color="primary"
+              aria-label="Publish"
+              onClick={() => {
+                if (props) {
+                  props.action({ row: data, type: 'publish' });
+                }
+              }}
+            >
+              <PublishIcon />
+            </IconButton>
+            <IconButton
+              color="primary"
+              aria-label="Copy"
+              onClick={() => {
+                if (props) {
+                  props.action({ row: data, type: 'copy' });
+                }
+              }}
+            >
+              <FileCopyIcon />
+            </IconButton>
+            <IconButton
+              color="primary"
+              aria-label="Delete"
+              onClick={() => {
+                if (props) {
+                  props.action({ row: data, type: 'delete' });
+                }
+              }}
+            >
+              <DeleteForeverIcon />
+            </IconButton>
+          </div>
+        );
       }
       return '--';
     },
@@ -113,6 +168,7 @@ const TableData: HsTableProps = {
   rowsPerPage: 10,
   filterRowsPerPage: [10, 25, 50, 100],
   fetchTableData: getUpdatedTableData,
+  action: action,
 };
 
 export const TableComponent: FC = () => <HSTable {...TableData} />;
