@@ -55,6 +55,8 @@ export const HSTable: FC<HsTableProps> = (props: HsTableProps) => {
                     style={{
                       minWidth: column.minWidth ? column.minWidth : 'auto',
                       maxWidth: column.width ? column.width : 'auto',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
                     }}
                   >
                     {column.label}
@@ -72,11 +74,15 @@ export const HSTable: FC<HsTableProps> = (props: HsTableProps) => {
                         return (
                           <TableCell
                             key={column.id}
+                            title={column.render ? column.render(value) : value}
                             style={{
                               minWidth: column.minWidth
                                 ? column.minWidth
                                 : 'auto',
                               maxWidth: column.width ? column.width : 'auto',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              padding: '16px 10px',
                             }}
                           >
                             {column.render ? column.render(value) : value}
@@ -91,7 +97,9 @@ export const HSTable: FC<HsTableProps> = (props: HsTableProps) => {
                                 ? column.minWidth
                                 : 'auto',
                               maxWidth: column.width ? column.width : 'auto',
-                              width: column.width ? column.width : 'auto',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              padding: '16px 10px',
                             }}
                           >
                             {column.render(props, row)}

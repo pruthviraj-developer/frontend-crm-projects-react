@@ -10,7 +10,7 @@ import styled from '@emotion/styled';
 import { carouselService } from '@hs/services';
 
 const DashBoardWrapper = styled.div`
-  margin-left: 15px;
+  margin-left: 5px;
 `;
 const DashBoard: FC = () => {
   const [data, setTableData] = useState<Array<Record<string, string>>>([]);
@@ -84,8 +84,8 @@ const DashBoard: FC = () => {
     updateStatus(row);
   };
   const columns = [
-    { id: 'id', label: 'Id', minWidth: 20 },
-    { id: 'title', label: 'Title' },
+    { id: 'id', label: 'Id' },
+    { id: 'title', label: 'Title', width: 100 },
     {
       id: 'sorts',
       label: 'Sorted By',
@@ -117,8 +117,8 @@ const DashBoard: FC = () => {
         return '--';
       },
     },
-    { id: 'createdBy', label: 'Created By', width: 50 },
-    { id: 'updatedBy', label: 'Updated By' },
+    { id: 'createdBy', label: 'Created By', width: 200 },
+    { id: 'updatedBy', label: 'Updated By', width: 200 },
     {
       id: 'createdOn',
       label: 'Created On',
