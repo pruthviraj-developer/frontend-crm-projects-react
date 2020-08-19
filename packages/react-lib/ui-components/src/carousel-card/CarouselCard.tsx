@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Card,
   CardHeader,
@@ -12,7 +12,7 @@ import styled from '@emotion/styled';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import { ImageUpload } from 'image-upload';
-import { CarouselCardProps } from './ICarouselCard';
+import { CarouselCardProps, CarouselCardState } from './ICarouselCard';
 import { SelectBox } from 'select-box';
 import { AutoCompleteGrouped as AutoComplete } from 'auto-complete';
 import { DarkTheme, Colors } from '@hs/utils';
@@ -31,13 +31,25 @@ export const CarouselCard = ({
   positionBox,
   typeBox,
   autoCopmpleOptions,
+  ...props
 }: CarouselCardProps) => {
+  const [state, setstate] = useState<CarouselCardState>({
+    type: props.type,
+    type_id: props.type_id,
+    position: props.position,
+    image_url: props.image_url,
+  });
+
+  const handleDelete = () => {
+    if (props.onDelete) props.onDelete(props.position);
+  };
+  // const handleChange = () => {};
   return (
     <StyledCard variant={'elevation'}>
       <CardHeader
-        avatar={<Avatar>R</Avatar>}
+        avatar={<Avatar>R+{props.position}</Avatar>}
         action={
-          <IconButton>
+          <IconButton onClick={handleDelete}>
             <DeleteForeverIcon fontSize={'large'} />
           </IconButton>
         }

@@ -9,11 +9,11 @@ const StyledFormControl = styled(FormControl)`
 export const SelectBox = ({
   placeholder,
   options,
-  selectedOption,
+  selectedValue,
   ...props
 }: SelectBoxProps) => {
   const [state, setState] = useState<{ value: unknown }>({
-    value: selectedOption?.value,
+    value: selectedValue,
   });
   const handleChange = (
     event: React.ChangeEvent<{ name?: string; value: unknown }>

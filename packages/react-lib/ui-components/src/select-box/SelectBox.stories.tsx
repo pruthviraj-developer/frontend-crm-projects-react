@@ -12,7 +12,7 @@ const SelectTestData: SelectBoxProps = {
     { name: '2', value: '2' },
     { name: '3', value: '3' },
   ],
-  selectedOption: { name: '2', value: '2' },
+  selectedValue: 2,
 };
 export const SelectBoxComponent: FC = () => (
   <SelectBox {...SelectTestData}></SelectBox>

@@ -8,8 +8,9 @@ import { MessageProps } from 'message';
 import { ErrorsType, ImageUploadProps, ImageListType } from './IImageUpload';
 
 const maxNumber = 69;
-const onChange = (imageList: ImageListType) => {
-  alert(imageList);
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const onChange = (_imageList: ImageListType) => {
+  // alert(imageList);
   // data for submit
   // console.log(imageList);
 };
@@ -28,7 +29,6 @@ const StyledImageUpload = styled.div<ImageUploadProps>`
 `;
 const StyledImage = styled.img`
   /* border-radius: 5%; */
-  border
   display: block;
 `;
 

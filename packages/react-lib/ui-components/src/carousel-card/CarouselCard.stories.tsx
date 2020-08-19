@@ -3,6 +3,8 @@ import React, { FC } from 'react';
 import { CarouselCard } from './CarouselCard';
 import styled from '@emotion/styled';
 import { AutoCompleteOption } from 'auto-complete/IAutoComplete';
+import { action } from '@storybook/addon-actions';
+
 export default {
   title: 'Card',
 };
@@ -16,9 +18,35 @@ const StyledCardCntr = styled.div`
   /* height: 500px; */
 `;
 
+const SelectPosTestData = {
+  placeholder: 'Position',
+  options: [
+    { name: '1', value: '1' },
+    { name: '2', value: '2' },
+    { name: '3', value: '3' },
+  ],
+  selectedValue: 2,
+};
+
+const SelectTypeTestData = {
+  placeholder: 'Position',
+  options: [
+    { name: 'PLP', value: 'plp' },
+    { name: 'Special Page', value: 'sp' },
+    { name: 'Boutique', value: 'boutique' },
+  ],
+  selectedValue: 'plp',
+};
+
 export const Card: FC = () => (
   <StyledCardCntr>
-    <CarouselCard autoCopmpleOptions={autoCopmpleOptions} />
+    <CarouselCard
+      autoCopmpleOptions={autoCopmpleOptions}
+      position={1}
+      onDelete={action('on-delete')}
+      positionBox={SelectPosTestData}
+      typeBox={SelectTypeTestData}
+    />
   </StyledCardCntr>
 );
 // export const MultipleCard: FC = () => (
