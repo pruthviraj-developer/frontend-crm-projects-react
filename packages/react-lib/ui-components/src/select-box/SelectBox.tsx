@@ -9,19 +9,19 @@ const StyledFormControl = styled(FormControl)`
 export const SelectBox = ({
   placeholder,
   options,
-  selectedOption,
+  selectedValue,
+  onChange,
   ...props
 }: SelectBoxProps) => {
   const [state, setState] = useState<{ value: unknown }>({
-    value: selectedOption?.value,
+    value: selectedValue,
   });
-  const handleChange = (
-    event: React.ChangeEvent<{ name?: string; value: unknown }>
-  ) => {
+  const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setState({
       ...state,
       value: event.target.value,
     });
+    if (onChange) onChange(event.target.value);
   };
   return (
     <StyledFormControl variant={'outlined'} margin={'normal'} {...props}>
@@ -33,11 +33,12 @@ export const SelectBox = ({
         label="Position"
         inputProps={{
           id: 'outlined-select',
+          name: 'name',
         }}
       >
-        {options?.map((opt) => (
-          <option key={opt.name} value={opt.value}>
-            {opt.name}
+        {options?.map((opt, index) => (
+          <option key={opt.display + index.toString()} value={opt.value}>
+            {opt.display}
           </option>
         ))}
       </Select>

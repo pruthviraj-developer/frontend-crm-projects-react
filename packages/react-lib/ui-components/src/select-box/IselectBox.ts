@@ -1,8 +1,9 @@
 import { FormControlProps } from '@material-ui/core';
 
-type SelectBoxOption = Record<'name' | 'value', string>;
+type SelectBoxOption = Record<'display' | 'value', string | number>;
 export interface SelectBoxProps extends FormControlProps {
   placeholder: string;
   options?: Array<SelectBoxOption>;
-  selectedOption?: SelectBoxOption;
+  selectedValue?: SelectBoxOption['value'];
+  onChange?: (value: unknown) => void;
 }
