@@ -9,16 +9,17 @@ export type ActionType = 'addTile' | 'removeTile' | 'changePosition';
 export type Action<T> = [ActionType, T];
 
 export interface Tile {
-  tile_id?: number;
-  image_url?: string;
-  type: CarouselCardProps['type'];
-  type_id?: number;
+  id?: string;
+  imageId?: string;
+  imageUrl?: string;
+  type: 'plp' | 'sp' | 'boutique';
+  actionId?: string;
   position: number;
-  cardId: string;
+  width?: number;
+  height?: number;
 }
 export interface State {
   imageWidth?: number;
   imageHeight?: number;
   tiles: Array<Tile>;
-  addEnable: boolean;
 }

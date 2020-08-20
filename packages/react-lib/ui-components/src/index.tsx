@@ -3,6 +3,6 @@ export * from './button';
 export * from './image-upload';
 export * from './drop-down';
 // export * from './date-picker';
-export * from './carousel-card';
+// export * from './carousel-card';
 export * from './auto-complete';
 export * from './select-box';
