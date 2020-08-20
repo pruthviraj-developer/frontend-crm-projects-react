@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import { LeftNavBar, LeftNavBarProps } from '@hs/ui-components';
+import { LeftNavBar, LeftNavBarProps } from '@hs/components';
 import { DashBoardIcon, CreateIcon, ArchiveIcon } from '@hs/icons';
 
 import './App.css';

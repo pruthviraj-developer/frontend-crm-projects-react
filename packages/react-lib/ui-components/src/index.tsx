@@ -6,3 +6,5 @@ export * from './drop-down';
 // export * from './carousel-card';
 export * from './auto-complete';
 export * from './select-box';
+export * from './hs-table';
+export * from './snack-bar';

@@ -72,6 +72,16 @@ const deleteApi = ({ url, params, data }: IHttpService) => {
   };
   return processRequest(reqConfig);
 };
+const put = ({ url, params, data }: IHttpService) => {
+  const reqConfig: AxiosRequestConfig = {
+    method: 'put',
+    url,
+    headers: { ...httpHeaders },
+    params,
+    data,
+  };
+  return processRequest(reqConfig);
+};
 const patch = ({ url, params, data }: IHttpService) => {
   const reqConfig: AxiosRequestConfig = {
     method: 'patch',
@@ -92,4 +102,11 @@ const fileUpload = ({ url, params, data }: IHttpService) => {
   };
   return processRequest(reqConfig);
 };
-export const httpService = { get, post, delete: deleteApi, patch, fileUpload };
+export const httpService = {
+  get,
+  post,
+  put,
+  delete: deleteApi,
+  patch,
+  fileUpload,
+};
