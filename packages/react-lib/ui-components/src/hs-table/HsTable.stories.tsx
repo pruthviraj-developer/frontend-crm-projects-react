@@ -6,6 +6,7 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import PublishIcon from '@material-ui/icons/Publish';
 import { IconButton } from '@material-ui/core';
+import { action } from '@storybook/addon-actions';
 export default {
   title: 'Tables',
 };
@@ -14,10 +15,10 @@ const getUpdatedTableData = (filters: Record<string, unknown>) => {
   alert(filters);
 };
 
-const action = (row: Record<string, unknown>) => {
-  alert(row);
-  console.log(row);
-};
+// const action = (row: Record<string, unknown>) => {
+//   alert(row);
+//   console.log(row);
+// };
 
 const columns = [
   { id: 'id', label: 'Id', minWidth: 20 },
@@ -168,7 +169,7 @@ const TableData: HsTableProps = {
   rowsPerPage: 10,
   filterRowsPerPage: [10, 25, 50, 100],
   fetchTableData: getUpdatedTableData,
-  action: action,
+  action: action('table-action'),
 };
 
 export const TableComponent: FC = () => <HSTable {...TableData} />;

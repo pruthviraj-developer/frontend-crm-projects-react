@@ -1,2 +1,2 @@
-export * from './HSTable';
-export * from './IHSTable';
+export * from './HsTable';
+export * from './IHsTable';
