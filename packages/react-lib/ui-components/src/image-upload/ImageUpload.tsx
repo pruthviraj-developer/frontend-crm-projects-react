@@ -5,7 +5,7 @@ import { Colors } from '@hs/utils';
 import { UploadIcon, SvgIcon } from '@hs/icons';
 import ImageUploadCore from './ImageUploadCore';
 import { MessageProps } from 'message';
-import { ErrorsType, ImageUploadProps, ImageListType } from './IImageUpload';
+import { ErrorsType, ImageUploadProps } from './IImageUpload';
 
 const maxNumber = 69;
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
