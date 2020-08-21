@@ -3,7 +3,7 @@ export interface typeobject {
   name?: string;
 }
 
-export interface State {
+export interface CreateCarouselPageState {
   title: string;
   type: typeobject;
   sort: [];
@@ -11,4 +11,8 @@ export interface State {
   platform: [];
   start_date: Date;
   end_date: Date;
+}
+
+export interface CreateCarouselProps {
+  action?: (event: Record<string, unknown>) => void;
 }
