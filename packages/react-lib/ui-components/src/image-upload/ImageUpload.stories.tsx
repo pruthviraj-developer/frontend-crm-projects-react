@@ -1,9 +1,10 @@
 import React from 'react';
 import { ImageUpload } from './ImageUpload';
 import { FC } from 'react';
-import { ResolutionValidationType } from './IImageUpload';
+import { ResolutionValidationType, ImageListType } from './IImageUpload';
 import { withKnobs, number, select } from '@storybook/addon-knobs';
 import { action } from '@storybook/addon-actions';
+import { carouselService } from '@hs/services';
 
 export default {
   title: 'Image Uploader',
@@ -17,6 +18,17 @@ const resValType: Record<string, ResolutionValidationType> = {
   ratio: 'ratio',
 };
 
+const handleChange = async (value: ImageListType) => {
+  try {
+    //https://qastatic.hopscotch.in/fstatic/boutique/banner/202008/1308f9cb-8f13-4151-8cda-48be32ded77d_full.jpg
+    const res = await carouselService.imageUpload({
+      file: value[0].file,
+    });
+    action('image-upload')(res);
+  } catch (err) {
+    action('image-error')(err);
+  }
+};
 export const ImageUploader: FC = () => {
   const previewHeight = number('previewHeight', 200);
   const previewWidth = number('previewWidth', 200);
@@ -36,7 +48,7 @@ export const ImageUploader: FC = () => {
         resolutionHeight,
         resolutionWidth,
         resolutionValidationType,
-        onChange: action('image-upload'),
+        onChange: handleChange,
       }}
     />
   );

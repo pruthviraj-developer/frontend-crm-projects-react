@@ -1,6 +1,6 @@
 export interface ImageType {
   dataURL: string;
-  file?: File;
+  file: File;
   key?: string;
   onUpdate?: () => void;
   onRemove?: () => void;

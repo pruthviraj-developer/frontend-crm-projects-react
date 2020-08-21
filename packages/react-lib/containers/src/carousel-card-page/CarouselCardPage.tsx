@@ -21,8 +21,8 @@ import {
 import { Formik, Field, Form, ErrorMessage, FieldArray } from 'formik';
 import { DarkTheme } from '@hs/utils';
 import { TextField } from 'formik-material-ui';
-import { Autocomplete } from 'formik-material-ui-lab';
-import { ImageUpload } from '@hs/components';
+import { ImageUpload, ImageListType } from '@hs/components';
+import { carouselService } from '@hs/services';
 
 let count = 0;
 const getCount = () => ++count;
@@ -62,7 +62,7 @@ export const CarouselCardPage = () => {
           }, 400);
         }}
       >
-        {({ values, isSubmitting }) => (
+        {({ values, isSubmitting, setFieldValue }) => (
           <Form>
             <FieldArray name="tiles">
               {({ remove, push }) => (
@@ -87,7 +87,28 @@ export const CarouselCardPage = () => {
                             />
                             <CardContent>
                               <CardActionArea>
-                                <ImageUpload></ImageUpload>
+                                <Field
+                                  id={`image.${index}`}
+                                  component={ImageUpload}
+                                  name={`tiles.${index}.imageUrl`}
+                                  value={tile.imageUrl}
+                                  onChange={async (value: ImageListType) => {
+                                    try {
+                                      const res = await carouselService.imageUpload(
+                                        { file: value[0].file }
+                                      );
+                                      setFieldValue(
+                                        `tiles.${index}.imageUrl`,
+                                        res.imageResponse.imageUrl
+                                      );
+                                    } catch (err) {
+                                      setFieldValue(
+                                        `tiles.${index}.imageUrl`,
+                                        undefined
+                                      );
+                                    }
+                                  }}
+                                ></Field>
                               </CardActionArea>
                             </CardContent>
                             <MuiThemeProvider theme={DarkTheme}>
