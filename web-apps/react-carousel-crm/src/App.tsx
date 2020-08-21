@@ -17,7 +17,7 @@ function App() {
 
   return (
     <div className="App">
-      <Router>
+      <Router basename="/react-monorepo/PageCarousel">
         <LeftNavBar {...navItems}></LeftNavBar>
         <Switch>
           <Route path="/dashboard">
