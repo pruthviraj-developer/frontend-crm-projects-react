@@ -8,12 +8,14 @@ import { LightTheme } from '@hs/utils';
 import './App.css';
 import DashBoard from './components/dashboard/DashBoard';
 import CarouselCreator from './components/creator/CarouselCreator';
+import { ImageUploadTest } from './components/imageupload/ImageUploadTest';
 function App() {
   const navItems: LeftNavBarProps = {
     navList: [
       { linkUrl: 'dashboard', linkText: 'Dashboard', icon: DashBoardIcon },
       { linkUrl: 'create-carousel', linkText: 'Create', icon: CreateIcon },
       { linkUrl: 'archivedlist', linkText: 'ArchivedLit', icon: ArchiveIcon },
+      { linkUrl: 'imageupload', linkText: 'ImageUpload', icon: ArchiveIcon },
     ],
   };
 
@@ -32,6 +34,12 @@ function App() {
               </Route>
               <Route path="/edit-carousel/:id">
                 <CarouselCreator />
+              </Route>
+              <Route path="/archivedlist">
+                <DashBoard />
+              </Route>
+              <Route path="/imageupload">
+                <ImageUploadTest />
               </Route>
             </Switch>
           </Router>
