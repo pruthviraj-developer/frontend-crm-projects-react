@@ -2,9 +2,9 @@
 const { createProxyMiddleware } = require('http-proxy-middleware');
 module.exports = function (app) {
   app.use(
-    '/react-monorepo/PageCarousel/carouselservice',
+    '/react-monorepo/PageCarousel/api/',
     createProxyMiddleware({
-      pathRewrite: { '^/react-monorepo/PageCarousel': '' },
+      pathRewrite: { '^/react-monorepo/PageCarousel/api': '' },
       target: 'http://qa.hopscotch.in',
       secure: false,
       changeOrigin: true,
