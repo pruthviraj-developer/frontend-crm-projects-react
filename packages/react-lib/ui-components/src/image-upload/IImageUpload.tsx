@@ -44,4 +44,5 @@ export interface ImageUploadProps {
   resolutionWidth?: number;
   resolutionHeight?: number;
   resolutionValidationType?: ResolutionValidationType;
+  onChange?: (value: ImageListType) => void;
 }
