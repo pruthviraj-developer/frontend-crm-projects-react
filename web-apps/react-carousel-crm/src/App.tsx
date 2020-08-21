@@ -9,6 +9,7 @@ import './App.css';
 import DashBoard from './components/dashboard/DashBoard';
 import CarouselCreator from './components/creator/CarouselCreator';
 import { ImageUploadTest } from './components/imageupload/ImageUploadTest';
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 function App() {
   const navItems: LeftNavBarProps = {
     navList: [
