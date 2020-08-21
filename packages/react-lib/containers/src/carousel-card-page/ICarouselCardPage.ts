@@ -1,5 +1,3 @@
-import { CarouselCardProps } from '@hs/components';
-
 export interface CarouselCardPageProps {
   imagesrc?: string;
 }

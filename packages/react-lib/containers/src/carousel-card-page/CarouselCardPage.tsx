@@ -18,7 +18,7 @@ import {
   StyledCard,
   StyledFooter,
 } from './StyledCarouselCardPage';
-import { Formik, Field, Form, ErrorMessage, FieldArray } from 'formik';
+import { Formik, Field, Form, FieldArray } from 'formik';
 import { DarkTheme } from '@hs/utils';
 import { TextField } from 'formik-material-ui';
 import { ImageUpload, ImageListType } from '@hs/components';

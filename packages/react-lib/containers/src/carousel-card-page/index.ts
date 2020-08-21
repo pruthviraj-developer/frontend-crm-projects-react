@@ -1,2 +1,2 @@
 export * from './CarouselCardPage';
-export * from '/ICarouselCardPage';
+export * from './ICarouselCardPage';
