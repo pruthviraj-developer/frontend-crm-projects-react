@@ -26,6 +26,9 @@ function App() {
           <Route path="/create-carousel">
             <CarouselCreator />
           </Route>
+          <Route path="/edit-carousel/:id">
+            <CarouselCreator />
+          </Route>
         </Switch>
       </Router>
     </div>
