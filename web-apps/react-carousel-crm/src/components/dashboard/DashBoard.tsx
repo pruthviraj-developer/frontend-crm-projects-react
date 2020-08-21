@@ -30,7 +30,7 @@ const DashBoard: FC = () => {
   useEffect(() => {
     carouselService
       .get({
-        url: 'carouselservice/carousel/list',
+        url: 'api/carouselservice/carousel/list',
         params: filterParams,
       })
       .then((res: any) => {
