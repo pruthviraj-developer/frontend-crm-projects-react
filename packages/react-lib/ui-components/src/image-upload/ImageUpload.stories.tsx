@@ -3,6 +3,7 @@ import { ImageUpload } from './ImageUpload';
 import { FC } from 'react';
 import { ResolutionValidationType } from './IImageUpload';
 import { withKnobs, number, select } from '@storybook/addon-knobs';
+import { action } from '@storybook/addon-actions';
 
 export default {
   title: 'Image Uploader',
@@ -35,6 +36,7 @@ export const ImageUploader: FC = () => {
         resolutionHeight,
         resolutionWidth,
         resolutionValidationType,
+        onChange: action('image-upload'),
       }}
     />
   );

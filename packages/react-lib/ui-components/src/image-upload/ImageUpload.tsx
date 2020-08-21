@@ -9,13 +9,16 @@ import { ErrorsType, ImageUploadProps, ImageListType } from './IImageUpload';
 
 const maxNumber = 69;
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const onChange = (_imageList: ImageListType) => {
-  // alert(imageList);
-  // data for submit
-  // console.log(imageList);
-};
+// const onChange = (_imageList: ImageListType) => {
+//   // alert(imageList);
+//   // data for submit
+//   // console.log(imageList);
+// };
 
-const StyledImageUpload = styled.div<ImageUploadProps>`
+const StyledImageUpload = styled.div<{
+  previewHeight: number;
+  previewWidth: number;
+}>`
   display: 'flex';
   justify-content: space-evenly;
   flex-flow: column;
@@ -46,6 +49,7 @@ export const ImageUpload: FC<ImageUploadProps> = ({
   resolutionHeight,
   resolutionWidth,
   resolutionValidationType,
+  onChange,
 }: ImageUploadProps) => {
   const [message, setmessage] = useState<MessageProps>({
     messageType: 'info',

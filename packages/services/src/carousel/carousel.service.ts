@@ -17,14 +17,25 @@ const patch = ({ url, params, data }: IHttpService): AxiosPromise<any> => {
 const put = ({ url, params, data }: IHttpService): AxiosPromise<any> => {
   return httpService.put({ url, params, data });
 };
-const fileUpload = ({ url, params, data }: IHttpService) => {
-  return httpService.fileUpload({ url, params, data });
+
+type CarouselImageUpload = {
+  file: File;
+  maxHeight?: number;
+  maxWidth?: number;
 };
+
+const imageUpload = ({ file }: CarouselImageUpload) => {
+  const url = `api/intranet/boutique_banner/upload/cutout=Y?imageType=bannerImage`;
+  const data = new FormData();
+  data.append('imageFile', file);
+  return httpService.fileUpload({ url, data });
+};
+
 export const carouselService = {
   get,
   post,
   put,
   delete: deleteApi,
   patch,
-  fileUpload,
+  imageUpload,
 };
