@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { Formik, Form, Field } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { Autocomplete, AutocompleteRenderInputParams } from 'formik-material-ui-lab';
@@ -34,7 +34,7 @@ const initialValues: State = {
 };
 
 const CarouselCreator: FC = () => {
-  let sorts: Array<string> = [];
+  const loading = true;
   const params = useParams();
   const platform = [
     { key: 'IOS', name: 'IOS' },
@@ -46,6 +46,7 @@ const CarouselCreator: FC = () => {
     { key: 3, name: '3' },
     { key: 4, name: '4' },
   ];
+  const [sorts, setSortingList] = useState<Array<string>>([]);
   const onSnackBarClose = (open: any) => {
     setSnackBarError({ ...HsSnackBarError, open });
   };
@@ -56,18 +57,34 @@ const CarouselCreator: FC = () => {
     onSnackBarClose: onSnackBarClose,
   };
   const [HsSnackBarError, setSnackBarError] = useState<HsSnackbarProps>(snackBarProps);
-  const getSortList = () => {
-    createService
-      .get({
-        url: '/carouselservice/carousel/setup',
-      })
-      .then((res: any) => {
-        sorts = res;
-      })
-      .catch((error: Error) => {
-        console.log('Reason of failure', error.message);
-      });
-  };
+  // const getSortList = () => {
+  //   createService
+  //     .get({
+  //       url: '/carouselservice/carousel/setup',
+  //     })
+  //     .then((res: any) => {
+  //       return res;
+  //     })
+  //     .catch(() => {
+  //       return [];
+  //     });
+  // };
+
+  useEffect(() => {
+    async function loadJson() {
+      const response = await fetch('/carouselservice/carousel/setup');
+      if (response.status == 200) {
+        const json = await response.json();
+        setSortingList(json);
+        return;
+      }
+      const error: any = response;
+      throw new Error(error);
+    }
+    loadJson().catch((error: Error) => {
+      console.error(error);
+    });
+  }, [loading]);
 
   const showStatus = (responseData: any) => {
     if (responseData.action === 'success') {
@@ -90,7 +107,6 @@ const CarouselCreator: FC = () => {
       });
     }
   };
-  getSortList();
   return (
     <div className="create-form">
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
