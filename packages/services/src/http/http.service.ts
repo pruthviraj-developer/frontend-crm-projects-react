@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig, AxiosPromise, AxiosError } from 'axios';
+import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 export const httpHeaders = {
   'api-version': 'v1.8',
   'client-auth-method': 'v1',
@@ -14,9 +14,9 @@ type IHttpService = Pick<AxiosRequestConfig, 'url' | 'data' | 'params'>;
 const handleUnauthorised = () => {
   window.location.href = '/intranet/login';
 };
-const processRequest = (
+const processRequest = <P = any>(
   requestConfig: AxiosRequestConfig
-): AxiosPromise<any> => {
+): Promise<P> => {
   return axios(requestConfig)
     .then(function (response) {
       if (
@@ -92,7 +92,7 @@ const patch = ({ url, params, data }: IHttpService) => {
   };
   return processRequest(reqConfig);
 };
-const fileUpload = ({ url, params, data }: IHttpService) => {
+const fileUpload = <T>({ url, params, data }: IHttpService): Promise<T> => {
   const reqConfig: AxiosRequestConfig = {
     method: 'post',
     url,
@@ -100,7 +100,7 @@ const fileUpload = ({ url, params, data }: IHttpService) => {
     params,
     data,
   };
-  return processRequest(reqConfig);
+  return processRequest<T>(reqConfig);
 };
 export const httpService = {
   get,

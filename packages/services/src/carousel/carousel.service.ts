@@ -1,5 +1,6 @@
 import { httpService } from '../http';
 import { AxiosPromise, AxiosRequestConfig } from 'axios';
+import { ImageUploadRes } from './Icarousel.service';
 
 type IHttpService = Pick<AxiosRequestConfig, 'url' | 'data' | 'params'>;
 const get = ({ url, params }: IHttpService): AxiosPromise<any> => {
@@ -24,11 +25,13 @@ type CarouselImageUpload = {
   maxWidth?: number;
 };
 
-const imageUpload = ({ file }: CarouselImageUpload) => {
+const imageUpload = ({
+  file,
+}: CarouselImageUpload): Promise<ImageUploadRes> => {
   const url = `api/intranet/boutique_banner/upload/cutout=Y?imageType=bannerImage`;
   const data = new FormData();
   data.append('imageFile', file);
-  return httpService.fileUpload({ url, data });
+  return httpService.fileUpload<ImageUploadRes>({ url, data });
 };
 
 export const carouselService = {
