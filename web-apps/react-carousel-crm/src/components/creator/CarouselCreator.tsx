@@ -3,7 +3,8 @@ import { CreateCarouselPage } from '@hs/containers';
 
 const CarouselCreator: FC = () => {
   const onSubmit = (data: any) => {
-    console.log(data);
+    // console.log(data);
+    alert(data);
   };
   const props = {
     action: onSubmit,

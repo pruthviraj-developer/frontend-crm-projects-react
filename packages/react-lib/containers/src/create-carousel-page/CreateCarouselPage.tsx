@@ -5,7 +5,6 @@ import {
   Autocomplete,
   AutocompleteRenderInputParams,
 } from 'formik-material-ui-lab';
-import Box from '@material-ui/core/Box';
 import {
   Button,
   LinearProgress,
@@ -180,7 +179,7 @@ export const CreateCarouselPage: FC<CreateCarouselProps> = (
           }, 500);
         }}
       >
-        {({ values, isSubmitting, setFieldValue, touched, errors }) => (
+        {({ values, isSubmitting, touched, errors }) => (
           <Form>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <StyledCreateCarouselPage>
