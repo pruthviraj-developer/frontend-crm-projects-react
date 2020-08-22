@@ -1,28 +1,13 @@
 import { httpService } from '../http';
-import { AxiosPromise, AxiosRequestConfig } from 'axios';
-import { ImageUploadRes } from './Icarousel.service';
+import {
+  ImageUploadRes,
+  SortList,
+  CarouselImageUpload,
+} from './Icarousel.service';
 
-type IHttpService = Pick<AxiosRequestConfig, 'url' | 'data' | 'params'>;
-const get = ({ url, params }: IHttpService): AxiosPromise<any> => {
-  return httpService.get({ url, params });
-};
-const post = ({ url, params, data }: IHttpService): AxiosPromise<any> => {
-  return httpService.post({ url, params, data });
-};
-const deleteApi = ({ url, params, data }: IHttpService): AxiosPromise<any> => {
-  return httpService.delete({ url, params, data });
-};
-const patch = ({ url, params, data }: IHttpService): AxiosPromise<any> => {
-  return httpService.patch({ url, params, data });
-};
-const put = ({ url, params, data }: IHttpService): AxiosPromise<any> => {
-  return httpService.put({ url, params, data });
-};
-
-type CarouselImageUpload = {
-  file: File;
-  maxHeight?: number;
-  maxWidth?: number;
+const getSortList = (): Promise<SortList> => {
+  const url = 'api/carouselservice/carousel/setup';
+  return httpService.get<SortList>({ url });
 };
 
 const imageUpload = ({
@@ -35,10 +20,6 @@ const imageUpload = ({
 };
 
 export const carouselService = {
-  get,
-  post,
-  put,
-  delete: deleteApi,
-  patch,
+  getSortList,
   imageUpload,
 };

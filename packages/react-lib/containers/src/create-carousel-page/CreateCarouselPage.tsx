@@ -1,26 +1,40 @@
 import React, { FC, useState, useEffect } from 'react';
 import { Formik, Form, Field } from 'formik';
-import { TextField } from 'formik-material-ui';
+import { TextField, Select } from 'formik-material-ui';
 import {
   Autocomplete,
   AutocompleteRenderInputParams,
 } from 'formik-material-ui-lab';
-import MuiTextField from '@material-ui/core/TextField';
 import Box from '@material-ui/core/Box';
-import { Button, LinearProgress } from '@material-ui/core';
+import {
+  Button,
+  LinearProgress,
+  MenuItem,
+  FormControl,
+  Chip,
+  TextField as MuiTextField,
+  InputLabel,
+  CardContent,
+  Grid,
+} from '@material-ui/core';
 import { DateTimePicker } from 'formik-material-ui-pickers';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import { HsSnackbar, HsSnackbarProps } from '@hs/components';
 import { format } from 'date-fns';
-import { createService } from '@hs/services';
+import { createService, carouselService, SortList } from '@hs/services';
 import {
   CreateCarouselPageState,
   CreateCarouselProps,
 } from './ICreateCarouselPage';
+import {
+  StyledCreateCarouselPage,
+  StyledCard,
+  StyledChips,
+} from './StyledCreateCarouselPage';
 interface Values {
   title: string;
-  type: string;
+  carouselType: string;
   sort: string;
   position: string;
   platform: string;
@@ -30,30 +44,42 @@ interface Values {
 
 const initialValues: CreateCarouselPageState = {
   title: '',
-  type: {},
+  carouselType: '',
   sort: [],
   position: '',
   platform: [],
   start_date: new Date(),
   end_date: new Date(),
 };
+const platformOptions = () =>
+  [
+    { display: 'IOS', value: 'IOS' },
+    { display: 'ANDROID', value: 'ANDROID' },
+  ].map((item) => (
+    <MenuItem key={item.value} value={item.value}>
+      {item.display}
+    </MenuItem>
+  ));
+
+const carouselTypesOptions = () =>
+  [
+    { display: '1', value: '1' },
+    { display: '2', value: '2' },
+    { display: '3', value: '3' },
+    { display: '4', value: '4' },
+  ].map((item) => (
+    <MenuItem key={item.value} value={item.value}>
+      {item.display}
+    </MenuItem>
+  ));
 
 export const CreateCarouselPage: FC<CreateCarouselProps> = (
   props: CreateCarouselProps
 ) => {
-  const loading = true;
+  const [sorts, setSortingList] = useState<SortList>([]);
+  const loading = sorts.length == 0;
   // const params = useParams();
-  const platform = [
-    { key: 'IOS', name: 'IOS' },
-    { key: 'ANDROID', name: 'ANDROID' },
-  ];
-  const carouselTypes = [
-    { key: 1, name: '1' },
-    { key: 2, name: '2' },
-    { key: 3, name: '3' },
-    { key: 4, name: '4' },
-  ];
-  const [sorts, setSortingList] = useState<Array<string>>([]);
+
   const onSnackBarClose = (open: any) => {
     setSnackBarError({ ...HsSnackBarError, open });
   };
@@ -68,19 +94,17 @@ export const CreateCarouselPage: FC<CreateCarouselProps> = (
   );
 
   useEffect(() => {
-    async function loadJson() {
-      const response = await fetch('api/carouselservice/carousel/setup');
-      if (response.status == 200) {
-        const json = await response.json();
-        setSortingList(json);
-        return;
+    (async () => {
+      try {
+        // console.log('Called');
+        const sortList = await carouselService.getSortList();
+        // console.log('sortList', sortList);
+        setSortingList(sortList);
+      } catch (error) {
+        setSortingList([]);
+        // console.error('error', error);
       }
-      const error: any = response;
-      throw new Error(error);
-    }
-    loadJson().catch((error: Error) => {
-      console.error(error);
-    });
+    })();
   }, [loading]);
 
   const showStatus = (responseData: any) => {
@@ -107,176 +131,193 @@ export const CreateCarouselPage: FC<CreateCarouselProps> = (
   };
   return (
     <div className="create-form">
-      <MuiPickersUtilsProvider utils={DateFnsUtils}>
-        <Formik
-          initialValues={initialValues}
-          validate={(values) => {
-            const errors: Partial<Values> = {};
-            if (!values.title) {
-              errors.title = 'Title is required';
+      <Formik
+        initialValues={initialValues}
+        validate={(values) => {
+          const errors: Partial<Values> = {};
+          if (!values.title) {
+            errors.title = 'Title is required';
+          }
+          if (!values.position) {
+            errors.position = 'Position is required';
+          }
+          if (!values.carouselType) {
+            errors.carouselType = 'Carousel type is required';
+          }
+          if (!(values.platform && values.platform.length)) {
+            errors.platform = 'Platform is required';
+          }
+          if (!(values.sort && values.sort.length)) {
+            errors.sort = 'Sort is required';
+          }
+          return errors;
+        }}
+        onSubmit={(values, { setSubmitting }) => {
+          setTimeout(() => {
+            setSubmitting(false);
+            // const carouselType = values.type.key;
+            const postData = {
+              ...values,
+              start_date: format(values.start_date, "yyyy-MM-dd'T'hh:mm:ss"),
+              end_date: format(values.end_date, "yyyy-MM-dd'T'hh:mm:ss"),
+              platform: values.platform.map((data) => data['key']),
+              sort: values.sort.map((data) => data['id']),
+            };
+            if (props.action) {
+              props.action(postData);
             }
-            if (!values.position) {
-              errors.position = 'Position is required';
-            }
-            if (!(values.type && values.type.key)) {
-              errors.type = 'Carousel type is required';
-            }
-            if (!(values.platform && values.platform.length)) {
-              errors.platform = 'Platform is required';
-            }
-            if (!(values.sort && values.sort.length)) {
-              errors.sort = 'Sort is required';
-            }
-            return errors;
-          }}
-          onSubmit={(values, { setSubmitting }) => {
-            setTimeout(() => {
-              setSubmitting(false);
-              const type = values.type.key;
-              const postData = {
-                ...values,
-                start_date: format(values.start_date, "yyyy-MM-dd'T'hh:mm:ss"),
-                end_date: format(values.end_date, "yyyy-MM-dd'T'hh:mm:ss"),
-                platform: values.platform.map((data) => data['key']),
-                sort: values.sort.map((data) => data['id']),
-                type: type,
-              };
-              if (props.action) {
-                props.action(postData);
-              }
-              createService
-                .post({
-                  url: 'api/carouselservice/pagecarousel',
-                  data: postData,
-                })
-                .then((res: any) => {
-                  showStatus(res);
-                })
-                .catch((error: Error) => {
-                  showStatus(error);
-                });
-            }, 500);
-          }}
-          render={({ submitForm, isSubmitting, touched, errors }) => (
-            <Form>
-              <Box margin={1}>
-                <Field
-                  component={TextField}
-                  style={{ width: 350 }}
-                  name="title"
-                  type="text"
-                  label="Carousel Title"
-                />
-              </Box>
-              <Box margin={1}>
-                <Field
-                  component={TextField}
-                  style={{ width: 350 }}
-                  name="position"
-                  type="text"
-                  label="Position"
-                />
-              </Box>
-              <Box margin={1}>
-                <Field
-                  required
-                  single
-                  name="type"
-                  variant="standard"
-                  helperText="Please select type"
-                  component={Autocomplete}
-                  options={carouselTypes}
-                  getOptionLabel={(option: any) =>
-                    option.name ? option.name : option
-                  }
-                  style={{ width: 350 }}
-                  renderInput={(params: AutocompleteRenderInputParams) => (
-                    <MuiTextField
-                      {...params}
-                      label="Carousel Type"
-                      variant="outlined"
-                    />
-                  )}
-                />
-              </Box>
-              <Box margin={1}>
-                <Field
-                  multiple
-                  name="platform"
-                  label="Select Platform"
-                  variant="standard"
-                  helperText="Please select platform"
-                  component={Autocomplete}
-                  options={platform}
-                  getOptionLabel={(option: any) =>
-                    option.name ? option.name : option
-                  }
-                  style={{ width: 350 }}
-                  renderInput={(params: AutocompleteRenderInputParams) => (
-                    <MuiTextField
-                      {...params}
-                      error={touched['platform'] && !!errors['platform']}
-                      helperText={touched['platform'] && errors['platform']}
-                      label="Platform"
-                      variant="outlined"
-                    />
-                  )}
-                />
-              </Box>
-              <Box margin={1}>
-                <Field
-                  multiple
-                  name="sort"
-                  label="Select Sort"
-                  variant="standard"
-                  helperText="Please select sort"
-                  component={Autocomplete}
-                  options={sorts}
-                  getOptionLabel={(option: any) =>
-                    option.value ? option.value : option
-                  }
-                  style={{ width: 350 }}
-                  renderInput={(params: AutocompleteRenderInputParams) => (
-                    <MuiTextField
-                      {...params}
-                      error={touched['sort'] && !!errors['sort']}
-                      helperText={touched['sort'] && errors['sort']}
-                      label="Sort"
-                      variant="outlined"
-                    />
-                  )}
-                />
-              </Box>
-              {isSubmitting && <LinearProgress />}
-              <Box margin={1}>
-                <Field
-                  component={DateTimePicker}
-                  style={{ width: 350 }}
-                  name="start_date"
-                  label="Start Date"
-                />
-              </Box>
-              <Box margin={1}>
-                <Field
-                  component={DateTimePicker}
-                  style={{ width: 350 }}
-                  name="end_date"
-                  label="End Date"
-                />
-              </Box>
-              <Button
-                variant="contained"
-                color="primary"
-                type="submit"
-                disabled={isSubmitting}
-                onClick={submitForm}
-              >
-                Submit
-              </Button>
-            </Form>
-          )}
-        />
-      </MuiPickersUtilsProvider>
+            createService
+              .post({
+                url: 'api/carouselservice/pagecarousel',
+                data: postData,
+              })
+              .then((res: any) => {
+                showStatus(res);
+              })
+              .catch((error: Error) => {
+                showStatus(error);
+              });
+          }, 500);
+        }}
+      >
+        {({ values, isSubmitting, setFieldValue, touched, errors }) => (
+          <Form>
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <StyledCreateCarouselPage>
+                <StyledCard variant="outlined" raised>
+                  <CardContent>
+                    <Grid
+                      container
+                      direction="column"
+                      justify="center"
+                      spacing={3}
+                    >
+                      <Grid item xs>
+                        <Field
+                          component={TextField}
+                          fullWidth
+                          name="title"
+                          type="text"
+                          label="Carousel Title"
+                          variant={'outlined'}
+                          // helperText="Enter Title"
+                        />
+                      </Grid>
+                      <Grid item xs>
+                        <Field
+                          component={TextField}
+                          fullWidth
+                          name="position"
+                          type="text"
+                          label="Position"
+                          variant={'outlined'}
+                        />
+                      </Grid>
+                      <Grid item xs>
+                        <Field
+                          component={TextField}
+                          type="text"
+                          name="carouselType"
+                          label="Carousel Type"
+                          // helperText="Please select type"
+                          select
+                          inputProps={{
+                            id: 'ol-select-type',
+                          }}
+                          variant={'outlined'}
+                          fullWidth
+                        >
+                          {carouselTypesOptions()}
+                        </Field>
+                      </Grid>
+                      <Grid item xs>
+                        <FormControl variant={'outlined'} fullWidth>
+                          <InputLabel htmlFor="ol-select-type">
+                            platform
+                          </InputLabel>
+                          <Field
+                            component={Select}
+                            multiple
+                            name="platform"
+                            label="Platform"
+                            // helperText="Please select type"
+                            inputProps={{
+                              id: 'ol-select-type',
+                            }}
+                            variant={'outlined'}
+                            renderValue={(selected: string[]) => (
+                              <StyledChips>
+                                {(selected as string[]).map((value) => (
+                                  <Chip key={value} label={value} />
+                                ))}
+                              </StyledChips>
+                            )}
+                          >
+                            {platformOptions()}
+                          </Field>
+                        </FormControl>
+                      </Grid>
+                      <Grid item xs>
+                        <Field
+                          multiple
+                          name="sort"
+                          label="Select Sort"
+                          variant="standard"
+                          // helperText="Please select sort"
+                          component={Autocomplete}
+                          options={sorts}
+                          getOptionLabel={(option: any) =>
+                            option.value ? option.value : ''
+                          }
+                          // style={{ width: 350 }}
+                          renderInput={(
+                            params: AutocompleteRenderInputParams
+                          ) => (
+                            <MuiTextField
+                              {...params}
+                              error={touched['sort'] && !!errors['sort']}
+                              helperText={touched['sort'] && errors['sort']}
+                              label="Sort"
+                              variant="outlined"
+                            />
+                          )}
+                        />
+                      </Grid>
+                      {isSubmitting && <LinearProgress />}
+                      <Grid item xs>
+                        <Field
+                          component={DateTimePicker}
+                          fullWidth
+                          name="start_date"
+                          label="Start Date"
+                        />
+                      </Grid>
+                      <Grid item xs>
+                        <Field
+                          component={DateTimePicker}
+                          fullWidth
+                          name="end_date"
+                          label="End Date"
+                        />
+                      </Grid>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        type="submit"
+                        disabled={isSubmitting}
+                        // onClick={submitForm}
+                      >
+                        Submit
+                      </Button>
+                    </Grid>
+                  </CardContent>
+                </StyledCard>
+              </StyledCreateCarouselPage>
+            </MuiPickersUtilsProvider>
+            <pre>{JSON.stringify(values, null, 4)}</pre>
+          </Form>
+        )}
+      </Formik>
       {HsSnackBarError.open && <HsSnackbar {...HsSnackBarError} />}
     </div>
   );

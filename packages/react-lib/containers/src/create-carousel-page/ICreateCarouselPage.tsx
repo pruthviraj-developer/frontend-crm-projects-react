@@ -5,7 +5,7 @@ export interface typeobject {
 
 export interface CreateCarouselPageState {
   title: string;
-  type: typeobject;
+  carouselType: string;
   sort: [];
   position: '';
   platform: [];

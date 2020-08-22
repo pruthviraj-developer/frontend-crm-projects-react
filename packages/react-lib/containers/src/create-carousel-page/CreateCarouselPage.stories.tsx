@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import CreateCarouselPage from './CreateCarouselPage';
+import { CreateCarouselPage } from './CreateCarouselPage';
 import { CreateCarouselProps } from './ICreateCarouselPage';
 import { action } from '@storybook/addon-actions';
 export default {

@@ -43,7 +43,7 @@ const processRequest = <P = any>(
       }
     });
 };
-const get = ({ url, params }: IHttpService) => {
+const get = <T>({ url, params }: IHttpService): Promise<T> => {
   const reqConfig: AxiosRequestConfig = {
     method: 'get',
     url,

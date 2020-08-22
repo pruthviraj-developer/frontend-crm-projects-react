@@ -21,3 +21,11 @@ export interface ImageUploadRes {
   action: string;
   imageURLPrefix: string;
 }
+
+export type SortList = Array<{ id: number; value: string }>;
+
+export interface CarouselImageUpload {
+  file: File;
+  maxHeight?: number;
+  maxWidth?: number;
+}
