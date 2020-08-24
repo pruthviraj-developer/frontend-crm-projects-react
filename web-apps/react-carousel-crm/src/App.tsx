@@ -16,7 +16,6 @@ function App() {
       { linkUrl: 'dashboard', linkText: 'Dashboard', icon: DashBoardIcon },
       { linkUrl: 'create-carousel', linkText: 'Create', icon: CreateIcon },
       { linkUrl: 'archivedlist', linkText: 'ArchivedLit', icon: ArchiveIcon },
-      { linkUrl: 'imageupload', linkText: 'ImageUpload', icon: ArchiveIcon },
     ],
   };
 
@@ -38,9 +37,6 @@ function App() {
               </Route>
               <Route path="/archivedlist">
                 <DashBoard />
-              </Route>
-              <Route path="/imageupload">
-                <ImageUploadTest />
               </Route>
             </Switch>
           </Router>
