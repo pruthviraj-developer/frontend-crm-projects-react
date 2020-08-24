@@ -1,5 +1,5 @@
-import React from 'react';
-import { State } from './ICarouselCardPage';
+import React, { useState, useEffect } from 'react';
+import { State, ListType, Tile, ListOption } from './ICarouselCardPage';
 import {
   Button,
   CardHeader,
@@ -10,9 +10,14 @@ import {
   IconButton,
   MenuItem,
   Box,
+  TextField as MuiTextField,
 } from '@material-ui/core';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import {
+  Autocomplete,
+  AutocompleteRenderInputParams,
+} from 'formik-material-ui-lab';
 import {
   StyledCarouselPage,
   StyledCard,
@@ -22,18 +27,20 @@ import { Formik, Field, Form, FieldArray } from 'formik';
 import { DarkTheme } from '@hs/utils';
 import { TextField } from 'formik-material-ui';
 import { ImageUpload, ImageListType } from '@hs/components';
-import { carouselService } from '@hs/services';
+import { carouselService, productListService } from '@hs/services';
 
 let count = 0;
 const getCount = () => ++count;
 
 const initialValues: State = {
-  imageWidth: 400,
-  imageHeight: 500,
+  tileHeight: 400,
+  tileWidth: 500,
   tiles: [
     {
       type: 'plp',
       position: getCount(),
+      actionId: '11233',
+      actionName: 'TEST123 - 11233',
       imageUrl:
         'https://static.hopscotch.in/fstatic/product/202008/067483ca-5952-48fa-863c-f341687d0d9b_full.jpg?version=1597741405901',
     },
@@ -65,6 +72,59 @@ const getTileTypeOptions = () =>
   ));
 
 export const CarouselCardPage = () => {
+  const [plpList, setPlpList] = useState<ListType>([]);
+  const [spList, setSpList] = useState<ListType>([]);
+  const [boutiqueList, setBoutiqueList] = useState<ListType>([]);
+  const isPlpLoading = plpList.length === 0;
+  const getOptions = (optionType: Tile['type'] = 'plp') => {
+    if (optionType == 'plp') return plpList;
+    else if (optionType == 'sp') return spList;
+    else if (optionType == 'boutique') return boutiqueList;
+    return [];
+  };
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const plpList = await productListService.getPlpList();
+        setPlpList(plpList);
+      } catch (error) {
+        setPlpList([]);
+      }
+    })();
+    return () => {
+      setPlpList([isPlpLoading]);
+    };
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const plpList = await productListService.getSpList();
+        setSpList(plpList);
+      } catch (error) {
+        setSpList([]);
+      }
+    })();
+    return () => {
+      setSpList([]);
+    };
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const boutiqueList = await productListService.getBoutiqueList();
+        setBoutiqueList(boutiqueList);
+      } catch (error) {
+        setBoutiqueList([]);
+      }
+    })();
+    return () => {
+      setBoutiqueList([]);
+    };
+  }, []);
+
   return (
     <>
       <Formik
@@ -76,7 +136,7 @@ export const CarouselCardPage = () => {
           }, 400);
         }}
       >
-        {({ values, isSubmitting, setFieldValue }) => (
+        {({ values, touched, isSubmitting, setFieldValue }) => (
           <Form>
             <FieldArray name="tiles">
               {({ remove, push }) => (
@@ -90,14 +150,22 @@ export const CarouselCardPage = () => {
                             variant={'elevation'}
                           >
                             <CardHeader
-                              avatar={<Avatar>R+{tile.position}</Avatar>}
+                              avatar={<Avatar>T{tile.position}</Avatar>}
                               action={
-                                <IconButton onClick={() => remove(index)}>
+                                <IconButton
+                                  onClick={() => {
+                                    remove(index);
+                                    if (values.tiles.length == 1) {
+                                      setFieldValue('tileHeight', undefined);
+                                      setFieldValue('tileWidth', undefined);
+                                    }
+                                  }}
+                                >
                                   <DeleteForeverIcon fontSize={'large'} />
                                 </IconButton>
                               }
-                              title={'C' + index}
-                              subheader="September 14, 2016"
+                              title={'Image'}
+                              subheader={`Supported ${values.tileHeight}X${values.tileWidth}`}
                             />
                             <CardContent>
                               <CardActionArea>
@@ -105,7 +173,9 @@ export const CarouselCardPage = () => {
                                   id={`image.${index}`}
                                   component={ImageUpload}
                                   name={`tiles.${index}.imageUrl`}
-                                  // value={tile.imageUrl}
+                                  resolutionHeight={values.tileHeight}
+                                  resolutionWidth={values.tileWidth}
+                                  resolutionValidationType={'absolute'}
                                   imageUrl={tile.imageUrl}
                                   onChange={async (value: ImageListType) => {
                                     try {
@@ -116,6 +186,16 @@ export const CarouselCardPage = () => {
                                         `tiles.${index}.imageUrl`,
                                         `https://${res.imageURLPrefix}/fstatic${res.imageResponse.imageUrl}?version=${res.imageResponse.version}`
                                       );
+                                      if (values.tiles.length == 1) {
+                                        setFieldValue(
+                                          'tileHeight',
+                                          res.imageResponse.imageAreas[0].height
+                                        );
+                                        setFieldValue(
+                                          'tileWidth',
+                                          res.imageResponse.imageAreas[0].width
+                                        );
+                                      }
                                     } catch (err) {
                                       setFieldValue(
                                         `tiles.${index}.imageUrl`,
@@ -158,6 +238,67 @@ export const CarouselCardPage = () => {
                                     >
                                       {getPostionOptions()}
                                     </Field>
+                                  </Grid>
+                                  <Grid item xs>
+                                    <Field
+                                      name={`tiles.${index}.actionObj`}
+                                      variant="standard"
+                                      // helperText="Please select sort"
+                                      // defaultValue={{
+                                      //   name: values.tiles[index].actionName,
+                                      //   value: values.tiles[index].actionId,
+                                      // }}
+                                      value={
+                                        values.tiles[index].actionId
+                                          ? {
+                                              name:
+                                                values.tiles[index].actionName,
+                                              value:
+                                                values.tiles[index].actionId,
+                                            }
+                                          : null
+                                      }
+                                      component={Autocomplete}
+                                      getOptionSelected={(
+                                        option: ListOption,
+                                        selectedValue: ListOption
+                                      ) => option.value == selectedValue.value}
+                                      options={getOptions(
+                                        values.tiles[index].type
+                                      )}
+                                      getOptionLabel={(option: ListOption) =>
+                                        option.name ? option.name : ''
+                                      }
+                                      loading={isPlpLoading}
+                                      onChange={(
+                                        _evt: React.ChangeEvent,
+                                        actionvalue: ListOption
+                                      ) => {
+                                        setFieldValue(
+                                          `tiles.${index}.actionId`,
+                                          actionvalue.value
+                                        );
+                                        setFieldValue(
+                                          `tiles.${index}.actionName`,
+                                          actionvalue.name
+                                        );
+                                      }}
+                                      renderInput={(
+                                        params: AutocompleteRenderInputParams
+                                      ) => (
+                                        <MuiTextField
+                                          {...params}
+                                          // error={
+                                          //   touched['sort'] && !!errors['sort']
+                                          // }
+                                          // helperText={
+                                          //   touched['sort'] && errors['sort']
+                                          // }
+                                          label={`Select ${values.tiles[index].type}`}
+                                          variant="outlined"
+                                        />
+                                      )}
+                                    />
                                   </Grid>
                                 </Grid>
                               </StyledFooter>

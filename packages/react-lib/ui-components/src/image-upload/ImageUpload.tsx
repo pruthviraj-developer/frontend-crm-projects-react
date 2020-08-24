@@ -44,6 +44,9 @@ export const ImageUpload: FC<ImageUploadProps> = ({
       });
     }
   };
+  const getResolutionValidationType = () =>
+    resolutionWidth ? resolutionValidationType : undefined;
+
   return (
     <ImageUploadCore
       multiple={false}
@@ -54,7 +57,7 @@ export const ImageUpload: FC<ImageUploadProps> = ({
       maxNumber={maxNumber}
       resolutionWidth={resolutionWidth}
       resolutionHeight={resolutionHeight}
-      resolutionValidationType={resolutionValidationType}
+      resolutionValidationType={getResolutionValidationType()}
       onError={onError}
     >
       {({ onImageUpload, errors }) => (

@@ -159,7 +159,7 @@ export const CreateCarouselPage: FC<CreateCarouselProps> = (
               ...values,
               start_date: format(values.start_date, "yyyy-MM-dd'T'hh:mm:ss"),
               end_date: format(values.end_date, "yyyy-MM-dd'T'hh:mm:ss"),
-              platform: values.platform.map((data) => data['key']),
+              // platform: values.platform.map((data) => data['key']),
               sort: values.sort.map((data) => data['id']),
             };
             if (props.action) {
