@@ -13,7 +13,6 @@ export const StyledCard = styled(Card)`
   padding: 16;
 `;
 export const StyledFooter = styled.div`
-  padding-left: 15px;
-  padding-bottom: 15px;
+  padding: 15px;
   background-color: ${Colors.GREY_SHADE[500]};
 `;

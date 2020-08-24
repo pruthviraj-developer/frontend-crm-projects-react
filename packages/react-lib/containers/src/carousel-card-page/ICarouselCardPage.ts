@@ -12,5 +12,3 @@ export interface State {
   tileWidth?: number;
   tiles: Tile[];
 }
-export type ListType = ListOption[];
-export type ListOption = Record<'name' | 'value', string | number>;

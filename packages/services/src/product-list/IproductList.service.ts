@@ -1,1 +1,5 @@
-export type List = Record<'name' | 'value', string | number>[];
+export type List = ListOption[];
+export interface ListOption {
+  name: string;
+  value: string | number | undefined;
+}
