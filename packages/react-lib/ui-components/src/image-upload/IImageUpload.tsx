@@ -1,6 +1,6 @@
 export interface ImageType {
   dataURL: string;
-  file?: File;
+  file: File;
   key?: string;
   onUpdate?: () => void;
   onRemove?: () => void;
@@ -44,4 +44,6 @@ export interface ImageUploadProps {
   resolutionWidth?: number;
   resolutionHeight?: number;
   resolutionValidationType?: ResolutionValidationType;
+  imageUrl?: string;
+  onChange?: (value: ImageListType) => void;
 }

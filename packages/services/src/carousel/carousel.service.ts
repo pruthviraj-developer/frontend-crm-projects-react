@@ -1,30 +1,63 @@
 import { httpService } from '../http';
-import { AxiosPromise, AxiosRequestConfig } from 'axios';
+import {
+  ImageUploadRes,
+  SortList,
+  CarouselImageUpload,
+  CloneHeroCarouselWithId,
+  tableData,
+  CloneHeroCarousel,
+  NonHeroCarousel,
+} from './Icarousel.service';
 
-type IHttpService = Pick<AxiosRequestConfig, 'url' | 'data' | 'params'>;
-const get = ({ url, params }: IHttpService): AxiosPromise<any> => {
-  return httpService.get({ url, params });
+const getSortList = (): Promise<SortList> => {
+  const url = 'api/carouselservice/carousel/setup';
+  return httpService.get<SortList>({ url });
 };
-const post = ({ url, params, data }: IHttpService): AxiosPromise<any> => {
-  return httpService.post({ url, params, data });
+
+const getTableData = (): Promise<tableData> => {
+  const url = 'api/carouselservice/carousel/list';
+  return httpService.get<tableData>({ url });
 };
-const deleteApi = ({ url, params, data }: IHttpService): AxiosPromise<any> => {
-  return httpService.delete({ url, params, data });
+
+const getNonHeroCarouselData = (
+  id: string
+): Promise<CloneHeroCarouselWithId> => {
+  const url = `api/carouselservice/carousel/${id}`;
+  return httpService.get<CloneHeroCarouselWithId>({ url });
 };
-const patch = ({ url, params, data }: IHttpService): AxiosPromise<any> => {
-  return httpService.patch({ url, params, data });
+
+const deleteNonHeroCarouselData = (id: string): Promise<NonHeroCarousel> => {
+  const url = `api/carouselservice/carousel/${id}`;
+  return httpService.delete<NonHeroCarousel>({ url });
 };
-const put = ({ url, params, data }: IHttpService): AxiosPromise<any> => {
-  return httpService.put({ url, params, data });
+
+const updateNonHeroCarouselData = (id: string): Promise<NonHeroCarousel> => {
+  const url = `api/carouselservice/carousel/publish/${id}`;
+  return httpService.put<NonHeroCarousel>({ url });
 };
-const fileUpload = ({ url, params, data }: IHttpService) => {
-  return httpService.fileUpload({ url, params, data });
+
+const createNonHeroCarousel = (
+  data: CloneHeroCarousel
+): Promise<NonHeroCarousel> => {
+  const url = 'api/carouselservice/carousel';
+  return httpService.post<NonHeroCarousel>({ url, data });
 };
+
+const imageUpload = ({
+  file,
+}: CarouselImageUpload): Promise<ImageUploadRes> => {
+  const url = `api/intranet/boutique_banner/upload/cutout=Y?imageType=bannerImage`;
+  const data = new FormData();
+  data.append('imageFile', file);
+  return httpService.fileUpload<ImageUploadRes>({ url, data });
+};
+
 export const carouselService = {
-  get,
-  post,
-  put,
-  delete: deleteApi,
-  patch,
-  fileUpload,
+  createNonHeroCarousel,
+  deleteNonHeroCarouselData,
+  getSortList,
+  getNonHeroCarouselData,
+  getTableData,
+  imageUpload,
+  updateNonHeroCarouselData,
 };

@@ -1,25 +1,16 @@
-import { CarouselCardProps } from '@hs/components';
-
-export interface CarouselCardPageProps {
-  imagesrc?: string;
-}
-
-export type ActionType = 'addTile' | 'removeTile' | 'changePosition';
-
-export type Action<T> = [ActionType, T];
-
 export interface Tile {
   id?: string;
   imageId?: string;
   imageUrl?: string;
   type: 'plp' | 'sp' | 'boutique';
+  actionName?: string;
   actionId?: string;
   position: number;
-  width?: number;
-  height?: number;
 }
 export interface State {
-  imageWidth?: number;
-  imageHeight?: number;
-  tiles: Array<Tile>;
+  tileHeight?: number;
+  tileWidth?: number;
+  tiles: Tile[];
 }
+export type ListType = ListOption[];
+export type ListOption = Record<'name' | 'value', string | number>;

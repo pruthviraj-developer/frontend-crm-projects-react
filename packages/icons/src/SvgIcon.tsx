@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-interface SVGIconProps extends React.SVGProps<SVGSVGElement> {
+export interface SVGIconProps extends React.SVGProps<SVGSVGElement> {
   icon: React.FC<React.SVGProps<SVGSVGElement>>;
 }
 
