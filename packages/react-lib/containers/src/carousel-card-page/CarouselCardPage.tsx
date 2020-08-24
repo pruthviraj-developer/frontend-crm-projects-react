@@ -30,7 +30,20 @@ const getCount = () => ++count;
 const initialValues: State = {
   imageWidth: 400,
   imageHeight: 500,
-  tiles: [],
+  tiles: [
+    {
+      type: 'plp',
+      position: getCount(),
+      imageUrl:
+        'https://static.hopscotch.in/fstatic/product/202008/067483ca-5952-48fa-863c-f341687d0d9b_full.jpg?version=1597741405901',
+    },
+    {
+      type: 'plp',
+      position: getCount(),
+      imageUrl:
+        'https://static.hopscotch.in/fstatic/product/202008/3d3e3f8c-33a9-415d-a092-9623e7e05ca6_full.jpg?version=1597741411488',
+    },
+  ],
 };
 const getPostionOptions = () => {
   const options = [...new Array(count)].map((_, index) => (
@@ -50,6 +63,7 @@ const getTileTypeOptions = () =>
       {item.display}
     </MenuItem>
   ));
+
 export const CarouselCardPage = () => {
   return (
     <>
@@ -91,7 +105,8 @@ export const CarouselCardPage = () => {
                                   id={`image.${index}`}
                                   component={ImageUpload}
                                   name={`tiles.${index}.imageUrl`}
-                                  value={tile.imageUrl}
+                                  // value={tile.imageUrl}
+                                  imageUrl={tile.imageUrl}
                                   onChange={async (value: ImageListType) => {
                                     try {
                                       const res = await carouselService.imageUpload(
@@ -99,7 +114,7 @@ export const CarouselCardPage = () => {
                                       );
                                       setFieldValue(
                                         `tiles.${index}.imageUrl`,
-                                        res.imageResponse.imageUrl
+                                        `https://${res.imageURLPrefix}/fstatic${res.imageResponse.imageUrl}?version=${res.imageResponse.version}`
                                       );
                                     } catch (err) {
                                       setFieldValue(
