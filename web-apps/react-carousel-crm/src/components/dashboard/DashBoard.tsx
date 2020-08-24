@@ -38,7 +38,16 @@ const DashBoard: FC = () => {
       } catch (error) {
         setTableData({});
         setCount(0);
-        // console.error('error', error);
+        let message = 'Try Later';
+        if (error.action === 'failure') {
+          message = error.messageDetail.message;
+        }
+        setSnackBarError({
+          ...snackBarProps,
+          open: true,
+          type: 'error',
+          message: message,
+        });
       }
     })();
   }, [filterParams]);
@@ -50,11 +59,28 @@ const DashBoard: FC = () => {
     const postData = { ...res, title: `Cloned ${res.title}` };
     (async () => {
       try {
-        await carouselService.createNonHeroCarousel(postData);
+        const response = await carouselService.createNonHeroCarousel(postData);
         setFilterParams({ ...filterParams });
+        if (response.action === 'success') {
+          setSnackBarError({
+            ...snackBarProps,
+            open: true,
+            type: 'success',
+            message: response.messageDetail ? response.messageDetail.message : 'Refresh the Page to see the status',
+          });
+        }
       } catch (error) {
         setCount(0);
-        // console.error('error', error);
+        let message = 'Try Later';
+        if (error.action === 'failure') {
+          message = error.messageDetail.message;
+        }
+        setSnackBarError({
+          ...snackBarProps,
+          open: true,
+          type: 'error',
+          message: message,
+        });
       }
     })();
   };
@@ -64,8 +90,18 @@ const DashBoard: FC = () => {
         const res = await carouselService.getNonHeroCarouselData(rowData.id);
         delete res['id'];
         saveCloneData(res);
-      } catch (error) {
-        console.log(error);
+      } catch (responseError) {
+        const error = responseError.data || responseError;
+        let message = 'Try Later';
+        if (error.action === 'failure') {
+          message = error.messageDetail.message;
+        }
+        setSnackBarError({
+          ...snackBarProps,
+          open: true,
+          type: 'error',
+          message: message,
+        });
       }
     })();
   };
@@ -74,75 +110,57 @@ const DashBoard: FC = () => {
     if (rowData.type === 'clone') {
       cloneAndCreate(rowData);
     } else if (rowData.type === 'delete') {
-      // carouselService
-      //   .delete({
-      //     url: `carouselservice/carousel/${rowData.id}`,
-      //   })
-      //   .then((responseData: any) => {
-      //     if (responseData.action === 'success') {
-      //       setFilterParams({ ...filterParams });
-      //       const obj = responseData.messageDetail;
-      //       setSnackBarError({
-      //         ...snackBarProps,
-      //         open: true,
-      //         type: 'success',
-      //         message: obj.message,
-      //       });
-      //     }
-      //   })
-      //   .catch((error: Error) => console.log('Reason of failure', error.message));
       (async () => {
         try {
           const res = await carouselService.deleteNonHeroCarouselData(rowData.id);
-          console.log(res);
-          // if (res.action === 'success') {
-          //   setFilterParams({ ...filterParams });
-          //   const obj = res.messageDetail;
-          //   setSnackBarError({
-          //     ...snackBarProps,
-          //     open: true,
-          //     type: 'success',
-          //     message: obj.message,
-          //   });
-          // }
+          const message = res.messageDetail ? res.messageDetail.message : 'Refresh the Page to see the status';
+          if (res.action === 'success') {
+            setFilterParams({ ...filterParams });
+            setSnackBarError({
+              ...snackBarProps,
+              open: true,
+              type: 'success',
+              message: message,
+            });
+          } else {
+            setSnackBarError({
+              ...snackBarProps,
+              open: true,
+              type: 'error',
+              message: message,
+            });
+          }
         } catch (error) {
-          console.log(error);
+          const data = error.data || error;
+          let message = 'Try Later';
+          if (data.action === 'failure') {
+            message = data.messageDetail.message;
+          }
+          setSnackBarError({
+            ...snackBarProps,
+            open: true,
+            type: 'error',
+            message: message,
+          });
         }
       })();
     } else {
-      // carouselService
-      //   .put({
-      //     url: `carouselservice/carousel/publish/${rowData.id}`,
-      //   })
-      //   .then((responseData: any) => {
-      //     if (responseData.action === 'success') {
-      //       setFilterParams({ ...filterParams });
-      //       const obj = responseData.messageDetail;
-      //       setSnackBarError({
-      //         ...snackBarProps,
-      //         open: true,
-      //         type: 'success',
-      //         message: obj.message,
-      //       });
-      //     }
-      //   })
-      //   .catch((error: Record<string, unknown>) => {
-      //     const data: any = error.data;
-      //     const obj = data.messageDetail;
-      //     const type = obj.messageType ? obj.messageType.toLowerCase() : 'error';
-      //     setSnackBarError({
-      //       ...snackBarProps,
-      //       open: true,
-      //       type,
-      //       message: obj.message,
-      //     });
-      //   });
       (async () => {
         try {
           const res = await carouselService.updateNonHeroCarouselData(rowData.id);
           console.log(res);
         } catch (error) {
-          console.log(error);
+          const data = error.data || error;
+          let message = 'Try Later';
+          if (data.action === 'failure') {
+            message = data.messageDetail.message;
+          }
+          setSnackBarError({
+            ...snackBarProps,
+            open: true,
+            type: 'error',
+            message: message,
+          });
         }
       })();
     }

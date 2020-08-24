@@ -22,24 +22,24 @@ const getTableData = (): Promise<tableData> => {
 const getNonHeroCarouselData = (
   id: string
 ): Promise<CloneHeroCarouselWithId> => {
-  const url = `carouselservice/carousel/${id}`;
+  const url = `api/carouselservice/carousel/${id}`;
   return httpService.get<CloneHeroCarouselWithId>({ url });
 };
 
 const deleteNonHeroCarouselData = (id: string): Promise<NonHeroCarousel> => {
-  const url = `carouselservice/carousel/${id}`;
+  const url = `api/carouselservice/carousel/${id}`;
   return httpService.delete<NonHeroCarousel>({ url });
 };
 
 const updateNonHeroCarouselData = (id: string): Promise<NonHeroCarousel> => {
-  const url = `carouselservice/carousel/${id}`;
+  const url = `api/carouselservice/carousel/publish/${id}`;
   return httpService.put<NonHeroCarousel>({ url });
 };
 
 const createNonHeroCarousel = (
   data: CloneHeroCarousel
 ): Promise<NonHeroCarousel> => {
-  const url = 'api/carouselservice/carousel/list';
+  const url = 'api/carouselservice/carousel';
   return httpService.post<NonHeroCarousel>({ url, data });
 };
 
