@@ -11,7 +11,7 @@ import { carouselService, tableData, CloneHeroCarouselWithId } from '@hs/service
 import { tableList } from '@hs/services';
 
 const DashBoardWrapper = styled.div`
-  margin-left: 5px;
+  margin-left: 90px;
 `;
 const DashBoard: FC = () => {
   const onSnackBarClose = (open: boolean) => {
