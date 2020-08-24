@@ -52,7 +52,7 @@ const get = <T>({ url, params }: IHttpService): Promise<T> => {
   };
   return processRequest(reqConfig);
 };
-const post = ({ url, params, data }: IHttpService) => {
+const post = <T>({ url, params, data }: IHttpService): Promise<T> => {
   const reqConfig: AxiosRequestConfig = {
     method: 'post',
     url,
@@ -62,7 +62,7 @@ const post = ({ url, params, data }: IHttpService) => {
   };
   return processRequest(reqConfig);
 };
-const deleteApi = ({ url, params, data }: IHttpService) => {
+const deleteApi = <T>({ url, params, data }: IHttpService): Promise<T> => {
   const reqConfig: AxiosRequestConfig = {
     method: 'delete',
     url,
@@ -72,7 +72,7 @@ const deleteApi = ({ url, params, data }: IHttpService) => {
   };
   return processRequest(reqConfig);
 };
-const put = ({ url, params, data }: IHttpService) => {
+const put = <T>({ url, params, data }: IHttpService): Promise<T> => {
   const reqConfig: AxiosRequestConfig = {
     method: 'put',
     url,
