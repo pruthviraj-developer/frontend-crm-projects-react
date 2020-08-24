@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { State, ListType, Tile, ListOption } from './ICarouselCardPage';
+import { State, Tile } from './ICarouselCardPage';
 import {
   Button,
   CardHeader,
@@ -27,7 +27,12 @@ import { Formik, Field, Form, FieldArray } from 'formik';
 import { DarkTheme } from '@hs/utils';
 import { TextField } from 'formik-material-ui';
 import { ImageUpload, ImageListType } from '@hs/components';
-import { carouselService, productListService } from '@hs/services';
+import {
+  carouselService,
+  productListService,
+  List,
+  ListOption,
+} from '@hs/services';
 
 let count = 0;
 const getCount = () => ++count;
@@ -72,9 +77,9 @@ const getTileTypeOptions = () =>
   ));
 
 export const CarouselCardPage = () => {
-  const [plpList, setPlpList] = useState<ListType>([]);
-  const [spList, setSpList] = useState<ListType>([]);
-  const [boutiqueList, setBoutiqueList] = useState<ListType>([]);
+  const [plpList, setPlpList] = useState<List>([]);
+  const [spList, setSpList] = useState<List>([]);
+  const [boutiqueList, setBoutiqueList] = useState<List>([]);
   const isPlpLoading = plpList.length === 0;
   const getOptions = (optionType: Tile['type'] = 'plp') => {
     if (optionType == 'plp') return plpList;
@@ -93,7 +98,7 @@ export const CarouselCardPage = () => {
       }
     })();
     return () => {
-      setPlpList([isPlpLoading]);
+      setPlpList([]);
     };
   }, []);
 
@@ -136,7 +141,7 @@ export const CarouselCardPage = () => {
           }, 400);
         }}
       >
-        {({ values, touched, isSubmitting, setFieldValue }) => (
+        {({ values, isSubmitting, setFieldValue }) => (
           <Form>
             <FieldArray name="tiles">
               {({ remove, push }) => (
@@ -220,6 +225,22 @@ export const CarouselCardPage = () => {
                                         id: 'outlined-select',
                                       }}
                                       variant={'outlined'}
+                                      onChange={(
+                                        evt: React.ChangeEvent<HTMLInputElement>
+                                      ) => {
+                                        setFieldValue(
+                                          `tiles.${index}.type`,
+                                          evt.target ? evt.target.value : ''
+                                        );
+                                        setFieldValue(
+                                          `tiles.${index}.actionId`,
+                                          ''
+                                        );
+                                        setFieldValue(
+                                          `tiles.${index}.actionName`,
+                                          ''
+                                        );
+                                      }}
                                     >
                                       {getTileTypeOptions()}
                                     </Field>
@@ -262,7 +283,7 @@ export const CarouselCardPage = () => {
                                       getOptionSelected={(
                                         option: ListOption,
                                         selectedValue: ListOption
-                                      ) => option.value == selectedValue.value}
+                                      ) => option.value == selectedValue?.value}
                                       options={getOptions(
                                         values.tiles[index].type
                                       )}
@@ -276,11 +297,11 @@ export const CarouselCardPage = () => {
                                       ) => {
                                         setFieldValue(
                                           `tiles.${index}.actionId`,
-                                          actionvalue.value
+                                          actionvalue?.value
                                         );
                                         setFieldValue(
                                           `tiles.${index}.actionName`,
-                                          actionvalue.name
+                                          actionvalue?.name
                                         );
                                       }}
                                       renderInput={(
