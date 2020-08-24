@@ -7,6 +7,7 @@ import FileCopyIcon from '@material-ui/icons/FileCopy';
 import PublishIcon from '@material-ui/icons/Publish';
 import { IconButton } from '@material-ui/core';
 import { action } from '@storybook/addon-actions';
+import { tableList } from '@hs/services';
 export default {
   title: 'Tables',
 };
@@ -123,6 +124,7 @@ const columns = [
   },
 ];
 function createData(
+  index,
   title,
   code,
   createdOn,
@@ -133,7 +135,7 @@ function createData(
 ) {
   const density = population / size;
   return {
-    id: 1,
+    id: index,
     title,
     sorts: [title, code],
     createdOn,
@@ -147,9 +149,10 @@ function createData(
     updatedBy: createdBy,
   };
 }
-const rows: Array<Record<string, string>> = [];
+const rows: Array<tableList> = [];
 for (let index = 0; index < 55; index++) {
-  const data: Record<string, string> = createData(
+  const data: tableList = createData(
+    index + 1,
     'India',
     'IN',
     '2020-08-17T12:19:00',

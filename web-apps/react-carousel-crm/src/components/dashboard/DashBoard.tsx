@@ -286,7 +286,7 @@ const DashBoard: FC = () => {
   };
   return (
     <DashBoardWrapper>
-      <h1>DashBoard</h1>
+      <h1>Page Carousel DashBoard</h1>
       <HSTable {...TableData} />
       {HsSnackBarError.open && <HsSnackbar {...HsSnackBarError} />}
     </DashBoardWrapper>
