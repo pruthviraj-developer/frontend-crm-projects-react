@@ -1,14 +1,15 @@
 import React, { FC } from 'react';
-import { CreateCarouselPage } from '@hs/containers';
+import { CreateNonCarouselPage, CreateCarouselProps } from '@hs/containers';
 
 const CarouselCreator: FC = () => {
   const onSubmit = (data: any) => {
-    // console.log(data);
     alert(data);
+    console.log(data);
   };
-  const props = {
+
+  const props: CreateCarouselProps = {
     action: onSubmit,
   };
-  return <CreateCarouselPage {...props} />;
+  return <CreateNonCarouselPage {...props} />;
 };
 export default CarouselCreator;

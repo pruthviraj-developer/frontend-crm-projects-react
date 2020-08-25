@@ -15,5 +15,5 @@ export const StyledChips = styled.div`
 `;
 export const StyledCard = styled(Card)`
   max-width: 250px;
-  margin-left: 90px;
+  margin-left: 15px;
 `;
