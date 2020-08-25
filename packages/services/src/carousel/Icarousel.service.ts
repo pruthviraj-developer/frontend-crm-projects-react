@@ -22,8 +22,6 @@ export interface ImageUploadRes {
   imageURLPrefix: string;
 }
 
-export type SortList = Array<{ id: number; value: string }>;
-
 export interface CarouselImageUpload {
   file: File;
   maxHeight?: number;
@@ -97,3 +95,15 @@ export type CloneHeroCarouselWithId = {
 };
 
 export type tableParams = { pageSize: number; pageNo: number };
+
+export type SortList = SortListOption[];
+export interface SortListOption {
+  id: string | number;
+  value: string | number | undefined;
+}
+
+export type List = ListOption[];
+export interface ListOption {
+  id: string;
+  name: string | number | undefined;
+}

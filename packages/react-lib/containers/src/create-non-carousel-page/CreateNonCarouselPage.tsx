@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState } from 'react';
 import { Formik, Form, Field, FieldArray } from 'formik';
 import { TextField, Select } from 'formik-material-ui';
 import { MuiThemeProvider } from '@material-ui/core/styles';
@@ -30,22 +30,23 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import DateFnsUtils from '@date-io/date-fns';
 import { HsSnackbar, HsSnackbarProps } from '@hs/components';
 import { format } from 'date-fns';
-import { createService, carouselService, SortList } from '@hs/services';
-import { productListService, List, ListOption } from '@hs/services';
+import {
+  createService,
+  carouselService,
+  SortListOption,
+  ListOption,
+} from '@hs/services';
 import { CreateCarouselProps } from './../create-carousel-page';
 import { CreateCarouselPageState } from './ICreateCarouselPage';
 import {
   StyledCreateCarouselPage,
   StyledCard,
   StyledChips,
-} from './StyledCreateCarouselPage';
-import {
   StyledCarouselPage,
   StyledCarouselCard,
   StyledFooter,
-} from './StyledCarouselCardPage';
-
-import { Tile } from 'carousel-card-page';
+} from './StyledCreateNonCarouselPage';
+import { useGetCarouselList } from './CreateNonCarouselHooks';
 interface Values {
   title: string;
   carouselType: string;
@@ -130,9 +131,7 @@ const getTileTypeOptions = () =>
 export const CreateNonCarouselPage: FC<CreateCarouselProps> = (
   props: CreateCarouselProps
 ) => {
-  const [sorts, setSortingList] = useState<SortList>([]);
-  const loading = sorts.length == 0;
-  const onSnackBarClose = (open: any) => {
+  const onSnackBarClose = (open: boolean) => {
     setSnackBarError({ ...HsSnackBarError, open });
   };
   const snackBarProps = {
@@ -145,72 +144,7 @@ export const CreateNonCarouselPage: FC<CreateCarouselProps> = (
     snackBarProps
   );
 
-  const [plpList, setPlpList] = useState<List>([]);
-  const [spList, setSpList] = useState<List>([]);
-  const [boutiqueList, setBoutiqueList] = useState<List>([]);
-  const isPlpLoading = plpList.length === 0;
-  const getOptions = (optionType: Tile['type'] = 'plp') => {
-    if (optionType == 'plp') return plpList;
-    else if (optionType == 'sp') return spList;
-    else if (optionType == 'boutique') return boutiqueList;
-    return [];
-  };
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const plpList = await productListService.getPlpList();
-        setPlpList(plpList);
-      } catch (error) {
-        setPlpList([]);
-      }
-    })();
-    return () => {
-      setPlpList([]);
-    };
-  }, []);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const plpList = await productListService.getSpList();
-        setSpList(plpList);
-      } catch (error) {
-        setSpList([]);
-      }
-    })();
-    return () => {
-      setSpList([]);
-    };
-  }, []);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const boutiqueList = await productListService.getBoutiqueList();
-        setBoutiqueList(boutiqueList);
-      } catch (error) {
-        setBoutiqueList([]);
-      }
-    })();
-    return () => {
-      setBoutiqueList([]);
-    };
-  }, []);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        // console.log('Called');
-        const sortList = await carouselService.getSortList();
-        // console.log('sortList', sortList);
-        setSortingList(sortList);
-      } catch (error) {
-        setSortingList([]);
-        // console.error('error', error);
-      }
-    })();
-  }, [loading]);
+  const listData = useGetCarouselList();
 
   const showStatus = (responseData: any) => {
     if (responseData.action === 'success') {
@@ -370,8 +304,9 @@ export const CreateNonCarouselPage: FC<CreateCarouselProps> = (
                               variant="standard"
                               // helperText="Please select sort"
                               component={Autocomplete}
-                              options={sorts}
-                              getOptionLabel={(option: any) =>
+                              options={listData['sortList'].list}
+                              loading={listData['sortList'].isLoading}
+                              getOptionLabel={(option: SortListOption) =>
                                 option.value ? option.value : ''
                               }
                               // style={{ width: 350 }}
@@ -552,7 +487,7 @@ export const CreateNonCarouselPage: FC<CreateCarouselProps> = (
                                                     name:
                                                       values.tiles[index]
                                                         .actionName,
-                                                    value:
+                                                    id:
                                                       values.tiles[index]
                                                         .actionId,
                                                   }
@@ -562,26 +497,27 @@ export const CreateNonCarouselPage: FC<CreateCarouselProps> = (
                                             getOptionSelected={(
                                               option: ListOption,
                                               selectedValue: ListOption
-                                            ) =>
-                                              option.value ==
-                                              selectedValue?.value
+                                            ) => option.id == selectedValue?.id}
+                                            options={
+                                              listData[values.tiles[index].type]
+                                                .list
                                             }
-                                            options={getOptions(
-                                              values.tiles[index].type
-                                            )}
                                             getOptionLabel={(
                                               option: ListOption
                                             ) =>
                                               option.name ? option.name : ''
                                             }
-                                            loading={isPlpLoading}
+                                            loading={
+                                              listData[values.tiles[index].type]
+                                                .isLoading
+                                            }
                                             onChange={(
                                               _evt: React.ChangeEvent,
                                               actionvalue: ListOption
                                             ) => {
                                               setFieldValue(
                                                 `tiles.${index}.actionId`,
-                                                actionvalue?.value
+                                                actionvalue?.id
                                               );
                                               setFieldValue(
                                                 `tiles.${index}.actionName`,

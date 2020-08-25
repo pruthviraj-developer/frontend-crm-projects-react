@@ -8,12 +8,8 @@ import {
   tableParams,
   CloneHeroCarousel,
   NonHeroCarousel,
+  List,
 } from './Icarousel.service';
-
-const getSortList = (): Promise<SortList> => {
-  const url = 'api/carouselservice/carousel/setup';
-  return httpService.get<SortList>({ url });
-};
 
 const getTableData = (params: tableParams): Promise<tableData> => {
   const url = 'api/carouselservice/carousel/list';
@@ -53,6 +49,28 @@ const imageUpload = ({
   return httpService.fileUpload<ImageUploadRes>({ url, data });
 };
 
+const getSortList = (): Promise<SortList> => {
+  const url = 'api/carouselservice/carousel/setup';
+  return httpService.get<SortList>({ url });
+};
+
+const getPlpList = (): Promise<List> => {
+  const url = 'api/carouselservice/fetchlist';
+  const params = { type: 'plp' };
+  return httpService.get<List>({ url, params });
+};
+
+const getSpList = (): Promise<List> => {
+  const url = 'api/carouselservice/fetchlist';
+  const params = { type: 'sp' };
+  return httpService.get<List>({ url, params });
+};
+const getBoutiqueList = (): Promise<List> => {
+  const url = 'api/carouselservice/fetchlist';
+  const params = { type: 'boutique' };
+  return httpService.get<List>({ url, params });
+};
+
 export const carouselService = {
   createNonHeroCarousel,
   deleteNonHeroCarouselData,
@@ -61,4 +79,7 @@ export const carouselService = {
   getTableData,
   imageUpload,
   updateNonHeroCarouselData,
+  getPlpList,
+  getSpList,
+  getBoutiqueList,
 };
