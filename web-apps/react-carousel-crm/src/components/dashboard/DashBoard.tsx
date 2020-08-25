@@ -8,7 +8,7 @@ import { IconButton } from '@material-ui/core';
 import { format } from 'date-fns';
 import styled from '@emotion/styled';
 import { carouselService, tableData, CloneHeroCarouselWithId } from '@hs/services';
-import { tableList } from '@hs/services';
+import { tableList, tableParams } from '@hs/services';
 
 const DashBoardWrapper = styled.div`
   margin-left: 90px;
@@ -26,12 +26,12 @@ const DashBoard: FC = () => {
   const [data, setTableData] = useState<tableData>({});
   const [HsSnackBarError, setSnackBarError] = useState<HsSnackbarProps>(snackBarProps);
   const [count, setCount] = useState<number>(0);
-  const [filterParams, setFilterParams] = useState<Record<string, unknown>>({ pageSize: 10, pageNo: 0 }); // page size should be size as rowsperpage
+  const [filterParams, setFilterParams] = useState<tableParams>({ pageSize: 10, pageNo: 0 }); // page size should be size as rowsperpage
   useEffect(() => {
     (async () => {
       try {
         // console.log('Called');
-        const tableData = await carouselService.getTableData();
+        const tableData = await carouselService.getTableData(filterParams);
         // console.log('sortList', sortList);
         setTableData(tableData);
         setCount(tableData.totalRecords || 0);
@@ -52,7 +52,7 @@ const DashBoard: FC = () => {
     })();
   }, [filterParams]);
 
-  const getUpdatedTableData = (filters: Record<string, unknown>) => {
+  const getUpdatedTableData = (filters: tableParams) => {
     setFilterParams(filters);
   };
   const saveCloneData = (res: any) => {

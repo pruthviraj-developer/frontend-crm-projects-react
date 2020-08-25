@@ -95,3 +95,5 @@ export type CloneHeroCarouselWithId = {
   id: string;
   type: string;
 };
+
+export type tableParams = { pageSize: number; pageNo: number };

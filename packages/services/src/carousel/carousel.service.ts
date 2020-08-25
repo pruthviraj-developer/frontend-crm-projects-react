@@ -5,6 +5,7 @@ import {
   CarouselImageUpload,
   CloneHeroCarouselWithId,
   tableData,
+  tableParams,
   CloneHeroCarousel,
   NonHeroCarousel,
 } from './Icarousel.service';
@@ -14,9 +15,9 @@ const getSortList = (): Promise<SortList> => {
   return httpService.get<SortList>({ url });
 };
 
-const getTableData = (): Promise<tableData> => {
+const getTableData = (params: tableParams): Promise<tableData> => {
   const url = 'api/carouselservice/carousel/list';
-  return httpService.get<tableData>({ url });
+  return httpService.get({ url, params });
 };
 
 const getNonHeroCarouselData = (
