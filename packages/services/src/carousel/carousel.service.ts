@@ -1,3 +1,4 @@
+import { AxiosRequestConfig } from 'axios';
 import { httpService } from '../http';
 import {
   ImageUploadRes,
@@ -5,18 +6,20 @@ import {
   CarouselImageUpload,
   CloneHeroCarouselWithId,
   tableData,
+  tableParams,
   CloneHeroCarousel,
   NonHeroCarousel,
 } from './Icarousel.service';
 
-const getSortList = (): Promise<SortList> => {
+type IHttpService = Pick<AxiosRequestConfig, 'url' | 'data' | 'params'>;
+const getSortList = ({ params }: IHttpService): Promise<SortList> => {
   const url = 'api/carouselservice/carousel/setup';
-  return httpService.get<SortList>({ url });
+  return httpService.get<SortList>({ url, params });
 };
 
-const getTableData = (): Promise<tableData> => {
+const getTableData = (params: tableParams): Promise<tableData> => {
   const url = 'api/carouselservice/carousel/list';
-  return httpService.get<tableData>({ url });
+  return httpService.get({ url, params });
 };
 
 const getNonHeroCarouselData = (
