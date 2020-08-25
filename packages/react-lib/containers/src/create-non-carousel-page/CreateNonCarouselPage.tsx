@@ -23,6 +23,7 @@ import {
   Avatar,
   IconButton,
   Box,
+  FormHelperText,
 } from '@material-ui/core';
 import { DateTimePicker } from 'formik-material-ui-pickers';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
@@ -47,6 +48,7 @@ import {
   StyledFooter,
 } from './StyledCreateNonCarouselPage';
 import { useGetCarouselList } from './CreateNonCarouselHooks';
+import { CarouselFormValidation } from './CreateNonCarouselValidation';
 interface Values {
   title: string;
   carouselType: string;
@@ -56,9 +58,6 @@ interface Values {
   start_date: string;
   end_date: string;
 }
-
-let count = 0;
-const getCount = () => ++count;
 
 const initialValues: CreateCarouselPageState = {
   title: '',
@@ -73,7 +72,7 @@ const initialValues: CreateCarouselPageState = {
   tiles: [
     {
       type: 'plp',
-      position: getCount(),
+      position: 1,
       actionId: '11233',
       actionName: 'TEST123 - 11233',
       imageUrl:
@@ -81,7 +80,7 @@ const initialValues: CreateCarouselPageState = {
     },
     {
       type: 'plp',
-      position: getCount(),
+      position: 2,
       imageUrl:
         'https://static.hopscotch.in/fstatic/product/202008/3d3e3f8c-33a9-415d-a092-9623e7e05ca6_full.jpg?version=1597741411488',
     },
@@ -109,7 +108,7 @@ const carouselTypesOptions = () =>
     </MenuItem>
   ));
 
-const getPostionOptions = () => {
+const getPostionOptions = (count = 1) => {
   const options = [...new Array(count)].map((_, index) => (
     <MenuItem key={'position' + index.toString()} value={index + 1}>
       {index + 1}
@@ -172,25 +171,7 @@ export const CreateNonCarouselPage: FC<CreateCarouselProps> = (
     <div className="create-form">
       <Formik
         initialValues={initialValues}
-        validate={(values) => {
-          const errors: Partial<Values> = {};
-          if (!values.title) {
-            errors.title = 'Title is required';
-          }
-          if (!values.position) {
-            errors.position = 'Position is required';
-          }
-          if (!values.carouselType) {
-            errors.carouselType = 'Carousel type is required';
-          }
-          if (!(values.platform && values.platform.length)) {
-            errors.platform = 'Platform is required';
-          }
-          if (!(values.sort && values.sort.length)) {
-            errors.sort = 'Sort is required';
-          }
-          return errors;
-        }}
+        validationSchema={CarouselFormValidation}
         onSubmit={(values, { setSubmitting }) => {
           setTimeout(() => {
             setSubmitting(false);
@@ -217,7 +198,15 @@ export const CreateNonCarouselPage: FC<CreateCarouselProps> = (
           }, 500);
         }}
       >
-        {({ values, isSubmitting, setFieldValue, touched, errors }) => (
+        {({
+          values,
+          isSubmitting,
+          setFieldValue,
+          touched,
+          errors,
+          isValid,
+          dirty,
+        }) => (
           <Form>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <Grid container direction="row" justify="center" spacing={5}>
@@ -280,6 +269,9 @@ export const CreateNonCarouselPage: FC<CreateCarouselProps> = (
                                 name="platform"
                                 label="Platform"
                                 // helperText="Please select type"
+                                error={
+                                  touched['platform'] && !!errors['platform']
+                                }
                                 inputProps={{
                                   id: 'ol-select-type',
                                 }}
@@ -294,6 +286,9 @@ export const CreateNonCarouselPage: FC<CreateCarouselProps> = (
                               >
                                 {platformOptions()}
                               </Field>
+                              <FormHelperText error>
+                                {errors['platform']}
+                              </FormHelperText>
                             </FormControl>
                           </Grid>
                           <Grid item xs>
@@ -315,7 +310,6 @@ export const CreateNonCarouselPage: FC<CreateCarouselProps> = (
                               ) => (
                                 <MuiTextField
                                   {...params}
-                                  error={touched['sort'] && !!errors['sort']}
                                   helperText={touched['sort'] && errors['sort']}
                                   label="Sort"
                                   variant="outlined"
@@ -347,7 +341,7 @@ export const CreateNonCarouselPage: FC<CreateCarouselProps> = (
                 </Grid>
                 <Grid item xs={9}>
                   <FieldArray name="tiles">
-                    {({ remove, push }) => (
+                    {({ remove, push, move }) => (
                       <StyledCarouselPage>
                         <Grid container direction="row" spacing={2}>
                           {values.tiles.length > 0 &&
@@ -389,7 +383,10 @@ export const CreateNonCarouselPage: FC<CreateCarouselProps> = (
                                         name={`tiles.${index}.imageUrl`}
                                         resolutionHeight={values.tileHeight}
                                         resolutionWidth={values.tileWidth}
-                                        resolutionValidationType={'absolute'}
+                                        resolutionValidationType={(() =>
+                                          values.tiles.length > 1
+                                            ? 'absolute'
+                                            : '')()}
                                         imageUrl={tile.imageUrl}
                                         onChange={async (
                                           value: ImageListType
@@ -468,13 +465,30 @@ export const CreateNonCarouselPage: FC<CreateCarouselProps> = (
                                             type="text"
                                             name={`tiles.${index}.position`}
                                             label="Position"
+                                            value={index + 1}
                                             select
                                             inputProps={{
                                               id: 'outlined-select',
                                             }}
+                                            disabled={!isValid}
                                             variant={'outlined'}
+                                            onChange={(
+                                              evt: React.ChangeEvent<
+                                                HTMLLIElement
+                                              >
+                                            ) => {
+                                              move(index, evt.target.value - 1);
+                                              setFieldValue(
+                                                `tiles.${
+                                                  evt.target.value - 1
+                                                }.position`,
+                                                evt.target.value
+                                              );
+                                            }}
                                           >
-                                            {getPostionOptions()}
+                                            {getPostionOptions(
+                                              values.tiles.length
+                                            )}
                                           </Field>
                                         </Grid>
                                         <Grid item xs>
@@ -551,13 +565,12 @@ export const CreateNonCarouselPage: FC<CreateCarouselProps> = (
                             <Button
                               color={'primary'}
                               variant={'contained'}
-                              disabled={isSubmitting}
+                              disabled={isSubmitting || !isValid}
                               size={'large'}
                               onClick={() =>
                                 push({
                                   type: 'plp',
-                                  position: getCount(),
-                                  id: null,
+                                  position: values.tiles.length + 1,
                                 })
                               }
                             >
@@ -574,7 +587,7 @@ export const CreateNonCarouselPage: FC<CreateCarouselProps> = (
                 <Button
                   color={'primary'}
                   variant={'contained'}
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || !isValid || !dirty}
                   size={'large'}
                   type="submit"
                 >
@@ -582,6 +595,7 @@ export const CreateNonCarouselPage: FC<CreateCarouselProps> = (
                 </Button>
               </Box>
             </MuiPickersUtilsProvider>
+            <pre>{JSON.stringify(values, null, 4)}</pre>
           </Form>
         )}
       </Formik>

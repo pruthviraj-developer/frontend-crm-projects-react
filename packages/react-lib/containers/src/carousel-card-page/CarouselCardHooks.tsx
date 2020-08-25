@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { productListService, List } from '@hs/services';
+import { carouselService, List } from '@hs/services';
 
 export const useGetList = (api: () => Promise<List>) => {
   const [list, setList] = useState<List>([]);
@@ -25,10 +25,10 @@ export const useGetList = (api: () => Promise<List>) => {
 };
 
 export const useGetCarouselList = () => {
-  const [plpList, isPlpLoading] = useGetList(productListService.getPlpList);
-  const [spList, isSpLoading] = useGetList(productListService.getSpList);
+  const [plpList, isPlpLoading] = useGetList(carouselService.getPlpList);
+  const [spList, isSpLoading] = useGetList(carouselService.getSpList);
   const [boutiqueList, isBoutiqueLoading] = useGetList(
-    productListService.getBoutiqueList
+    carouselService.getBoutiqueList
   );
 
   const data = {
