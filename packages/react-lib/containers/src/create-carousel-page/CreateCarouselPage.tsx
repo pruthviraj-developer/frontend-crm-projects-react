@@ -79,7 +79,7 @@ export const CreateCarouselPage: FC<CreateCarouselProps> = (
   const loading = sorts.length == 0;
   // const params = useParams();
 
-  const onSnackBarClose = (open: any) => {
+  const onSnackBarClose = (open: boolean) => {
     setSnackBarError({ ...HsSnackBarError, open });
   };
   const snackBarProps = {

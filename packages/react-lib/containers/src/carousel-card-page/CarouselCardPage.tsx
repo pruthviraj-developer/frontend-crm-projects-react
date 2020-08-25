@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { State, Tile } from './ICarouselCardPage';
+import React from 'react';
+import { State } from './ICarouselCardPage';
 import {
   Button,
   CardHeader,
@@ -27,12 +27,8 @@ import { Formik, Field, Form, FieldArray } from 'formik';
 import { DarkTheme } from '@hs/utils';
 import { TextField } from 'formik-material-ui';
 import { ImageUpload, ImageListType } from '@hs/components';
-import {
-  carouselService,
-  productListService,
-  List,
-  ListOption,
-} from '@hs/services';
+import { carouselService, ListOption } from '@hs/services';
+import { useGetCarouselList } from './CarouselCardHooks';
 
 let count = 0;
 const getCount = () => ++count;
@@ -77,59 +73,7 @@ const getTileTypeOptions = () =>
   ));
 
 export const CarouselCardPage = () => {
-  const [plpList, setPlpList] = useState<List>([]);
-  const [spList, setSpList] = useState<List>([]);
-  const [boutiqueList, setBoutiqueList] = useState<List>([]);
-  const isPlpLoading = plpList.length === 0;
-  const getOptions = (optionType: Tile['type'] = 'plp') => {
-    if (optionType == 'plp') return plpList;
-    else if (optionType == 'sp') return spList;
-    else if (optionType == 'boutique') return boutiqueList;
-    return [];
-  };
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const plpList = await productListService.getPlpList();
-        setPlpList(plpList);
-      } catch (error) {
-        setPlpList([]);
-      }
-    })();
-    return () => {
-      setPlpList([]);
-    };
-  }, []);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const plpList = await productListService.getSpList();
-        setSpList(plpList);
-      } catch (error) {
-        setSpList([]);
-      }
-    })();
-    return () => {
-      setSpList([]);
-    };
-  }, []);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const boutiqueList = await productListService.getBoutiqueList();
-        setBoutiqueList(boutiqueList);
-      } catch (error) {
-        setBoutiqueList([]);
-      }
-    })();
-    return () => {
-      setBoutiqueList([]);
-    };
-  }, []);
-
+  const listData = useGetCarouselList();
   return (
     <>
       <Formik
@@ -284,13 +228,16 @@ export const CarouselCardPage = () => {
                                         option: ListOption,
                                         selectedValue: ListOption
                                       ) => option.value == selectedValue?.value}
-                                      options={getOptions(
-                                        values.tiles[index].type
-                                      )}
+                                      options={
+                                        listData[values.tiles[index].type].list
+                                      }
                                       getOptionLabel={(option: ListOption) =>
                                         option.name ? option.name : ''
                                       }
-                                      loading={isPlpLoading}
+                                      loading={
+                                        listData[values.tiles[index].type]
+                                          .isLoading
+                                      }
                                       onChange={(
                                         _evt: React.ChangeEvent,
                                         actionvalue: ListOption
