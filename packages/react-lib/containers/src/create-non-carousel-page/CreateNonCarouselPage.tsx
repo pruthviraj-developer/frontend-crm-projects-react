@@ -49,16 +49,6 @@ import {
 } from './StyledCreateNonCarouselPage';
 import { useGetCarouselList } from './CreateNonCarouselHooks';
 import { CarouselFormValidation } from './CreateNonCarouselValidation';
-interface Values {
-  title: string;
-  carouselType: string;
-  sort: string;
-  position: string;
-  platform: string;
-  start_date: string;
-  end_date: string;
-}
-
 const initialValues: CreateCarouselPageState = {
   title: '',
   carouselType: '',

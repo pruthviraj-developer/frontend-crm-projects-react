@@ -9,6 +9,7 @@ import { format } from 'date-fns';
 import styled from '@emotion/styled';
 import { carouselService, tableData, CloneHeroCarouselWithId } from '@hs/services';
 import { tableList, tableParams } from '@hs/services';
+import { NavLink } from 'react-router-dom';
 
 const DashBoardWrapper = styled.div`
   margin-left: 90px;
@@ -170,7 +171,21 @@ const DashBoard: FC = () => {
   };
   const columns = [
     { id: 'id', label: 'Id' },
-    { id: 'title', label: 'Title', width: 100 },
+    {
+      id: 'title',
+      label: 'Title',
+      width: 100,
+      render: (props: any, data: any) => {
+        if (props || data) {
+          return (
+            <>
+              <NavLink to={{ pathname: `/edit-carousel/${data.id}` }}>{data.title}</NavLink>
+            </>
+          );
+        }
+        return '--';
+      },
+    },
     {
       id: 'sorts',
       label: 'Sorted By',
