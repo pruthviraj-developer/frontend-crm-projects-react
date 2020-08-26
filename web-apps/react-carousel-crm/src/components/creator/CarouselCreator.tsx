@@ -21,7 +21,7 @@ const CarouselCreator: FC = () => {
       <Route path="/create-carousel">
         <StyledCreateorWrapper>
           <h1>Create Page Carousel</h1>
-          <CreateNonCarouselPage {...props} />
+          <CreateNonCarouselPage {...props} carouselId={''} />
         </StyledCreateorWrapper>
       </Route>
       <Route path="/edit-carousel/:id">

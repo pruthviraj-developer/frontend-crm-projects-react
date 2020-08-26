@@ -5,7 +5,7 @@ export const CarouselFormValidation = Yup.object().shape({
   position: Yup.number().required('Position is required'),
   carouselType: Yup.number().required('Carousel type is required'),
   platform: Yup.array().of(Yup.string()).required('Platform is required'),
-  sort: Yup.array().required('Sort is required'),
+  sorts: Yup.array().required('Sort is required'),
   tileHeight: Yup.number(),
   tileWidth: Yup.number(),
   //   startDate: Yup.date().required('Start date is required'),

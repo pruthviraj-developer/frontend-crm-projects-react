@@ -11,7 +11,6 @@ import {
 import {
   Button,
   LinearProgress,
-  MenuItem,
   FormControl,
   Chip,
   TextField as MuiTextField,
@@ -47,88 +46,37 @@ import {
 } from './StyledCreateNonCarouselPage';
 import { useGetCarouselList } from './CreateNonCarouselHooks';
 import { CarouselFormValidation } from './CreateNonCarouselValidation';
+import {
+  carouselTypesOptions,
+  platformOptions,
+  getTileTypeOptions,
+  getPostionOptions,
+} from './CreateNonCarouselMenu';
 
-let initialValues: CreateNonCarouselPageState = {
+const initialValues: CreateNonCarouselPageState = {
   title: '',
   carouselType: '',
-  sort: [],
+  sorts: [],
   position: '',
   platform: [],
   start_date: new Date(),
   end_date: new Date(),
-  tileHeight: 400,
-  tileWidth: 500,
-  tiles: [
-    {
-      type: 'plp',
-      position: 1,
-      actionId: '11233',
-      actionName: 'TEST123 - 11233',
-      imageUrl:
-        'https://static.hopscotch.in/fstatic/product/202008/067483ca-5952-48fa-863c-f341687d0d9b_full.jpg?version=1597741405901',
-    },
-    {
-      type: 'plp',
-      position: 2,
-      imageUrl:
-        'https://static.hopscotch.in/fstatic/product/202008/3d3e3f8c-33a9-415d-a092-9623e7e05ca6_full.jpg?version=1597741411488',
-    },
-  ],
+  tiles: [],
 };
-const platformOptions = () =>
-  [
-    { display: 'IOS', value: 'IOS' },
-    { display: 'ANDROID', value: 'ANDROID' },
-  ].map((item) => (
-    <MenuItem key={item.value} value={item.value}>
-      {item.display}
-    </MenuItem>
-  ));
-
-const carouselTypesOptions = () =>
-  [
-    { display: '1', value: '1' },
-    { display: '2', value: '2' },
-    { display: '3', value: '3' },
-    { display: '4', value: '4' },
-  ].map((item) => (
-    <MenuItem key={item.value} value={item.value}>
-      {item.display}
-    </MenuItem>
-  ));
-
-const getPostionOptions = (count = 1) =>
-  Array.from({ length: count }, (_v, i) => ++i).map((value) => (
-    <MenuItem key={'position' + value.toString()} value={value}>
-      {value}
-    </MenuItem>
-  ));
-const getTileTypeOptions = () =>
-  [
-    { display: 'PLP', value: 'plp' },
-    { display: 'Special Page', value: 'sp' },
-    { display: 'Boutique', value: 'boutique' },
-  ].map((item) => (
-    <MenuItem key={item.value} value={item.value}>
-      {item.display}
-    </MenuItem>
-  ));
-
+const snackBarProps: Pick<HsSnackbarProps, 'open' | 'type' | 'message'> = {
+  open: false,
+  type: 'error' as const,
+  message: 'Test',
+};
 export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
   props: CreateNonCarouselProps
 ) => {
+  const [data, setData] = useState(initialValues);
+  const [snackBarError, setSnackBarError] = useState(snackBarProps);
+
   const onSnackBarClose = (open: boolean) => {
-    setSnackBarError({ ...HsSnackBarError, open });
+    setSnackBarError({ ...snackBarError, open });
   };
-  const snackBarProps = {
-    open: false,
-    type: 'error' as const,
-    message: 'Test',
-    onSnackBarClose: onSnackBarClose,
-  };
-  const [HsSnackBarError, setSnackBarError] = useState<HsSnackbarProps>(
-    snackBarProps
-  );
 
   const listData = useGetCarouselList();
 
@@ -136,10 +84,10 @@ export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
     (async () => {
       try {
         if (props.carouselId) {
-          const carouselData = await carouselService.getNonHeroCarouselData(
-            props.carouselId
-          );
-          initialValues = { ...initialValues, ...carouselData };
+          const carouselData = await carouselService.getNonHeroCarouselData<
+            CreateNonCarouselPageState
+          >(props.carouselId);
+          setData(carouselData);
         }
       } catch (error) {
         const errorResponse = error.data || error;
@@ -148,7 +96,6 @@ export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
           message = errorResponse.messageDetail.message;
         }
         setSnackBarError({
-          ...snackBarProps,
           open: true,
           type: 'error',
           message: message,
@@ -161,7 +108,6 @@ export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
     if (responseData.action === 'success') {
       const obj = responseData.messageDetail;
       setSnackBarError({
-        ...snackBarProps,
         open: true,
         type: 'success',
         message: obj.message,
@@ -172,7 +118,6 @@ export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
       const obj = data && data.messageDetail ? data.messageDetail : {};
       const type = obj.messageType ? obj.messageType.toLowerCase() : 'error';
       setSnackBarError({
-        ...snackBarProps,
         open: true,
         type,
         message: obj.message,
@@ -183,7 +128,7 @@ export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
     <div className="create-form">
       <Formik
         enableReinitialize={true}
-        initialValues={initialValues}
+        initialValues={data}
         validationSchema={CarouselFormValidation}
         onSubmit={(values, { setSubmitting }) => {
           setTimeout(() => {
@@ -192,7 +137,7 @@ export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
               ...values,
               start_date: format(values.start_date, "yyyy-MM-dd'T'hh:mm:ss"),
               end_date: format(values.end_date, "yyyy-MM-dd'T'hh:mm:ss"),
-              sort: values.sort.map((data) => data['id']),
+              sorts: values.sorts.map((data) => data['id']),
             };
             if (props.action) {
               props.action(postData);
@@ -305,7 +250,7 @@ export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
                             <Grid item xs>
                               <Field
                                 multiple
-                                name="sort"
+                                name="sorts"
                                 label="Select Sort"
                                 variant="standard"
                                 // helperText="Please select sort"
@@ -322,7 +267,7 @@ export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
                                   <MuiTextField
                                     {...params}
                                     helperText={
-                                      touched['sort'] && errors['sort']
+                                      touched['sorts'] && errors['sorts']
                                     }
                                     label="Sort"
                                     variant="outlined"
@@ -622,7 +567,14 @@ export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
           </Form>
         )}
       </Formik>
-      {HsSnackBarError.open && <HsSnackbar {...HsSnackBarError} />}
+      {snackBarError.open && (
+        <HsSnackbar
+          onSnackBarClose={onSnackBarClose}
+          open={snackBarError.open}
+          type={snackBarError.type}
+          message={snackBarError.message}
+        />
+      )}
     </div>
   );
 };

@@ -16,7 +16,7 @@ export interface Tile {
 export interface CreateNonCarouselPageState {
   title: string;
   carouselType: string;
-  sort: [];
+  sorts: [];
   position: '';
   platform: [];
   start_date: Date;

@@ -88,7 +88,7 @@ const DashBoard: FC = () => {
   const cloneAndCreate = (rowData: CloneHeroCarouselWithId) => {
     (async () => {
       try {
-        const res = await carouselService.getNonHeroCarouselData(rowData.id);
+        const res = await carouselService.getNonHeroCarouselData<CloneHeroCarouselWithId>(rowData.id);
         delete res['id'];
         saveCloneData(res);
       } catch (responseError) {
