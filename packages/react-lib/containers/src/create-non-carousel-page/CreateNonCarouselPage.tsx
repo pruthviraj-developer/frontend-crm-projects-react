@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { Formik, Form, Field, FieldArray } from 'formik';
 import { TextField, Select } from 'formik-material-ui';
 import { MuiThemeProvider } from '@material-ui/core/styles';
@@ -31,6 +31,7 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import DateFnsUtils from '@date-io/date-fns';
 import { HsSnackbar, HsSnackbarProps } from '@hs/components';
 import { format } from 'date-fns';
+import { useParams } from 'react-router-dom';
 import {
   createService,
   carouselService,
@@ -50,7 +51,7 @@ import {
 } from './StyledCreateNonCarouselPage';
 import { useGetCarouselList } from './CreateNonCarouselHooks';
 import { CarouselFormValidation } from './CreateNonCarouselValidation';
-const initialValues: CreateCarouselPageState = {
+let initialValues: CreateCarouselPageState = {
   title: '',
   carouselType: '',
   sort: [],
@@ -133,6 +134,32 @@ export const CreateNonCarouselPage: FC<CreateCarouselProps> = (
   );
 
   const listData = useGetCarouselList();
+  const params: any = useParams();
+  const getCarouselData = (id: string) => {
+    useEffect(() => {
+      (async () => {
+        try {
+          const carouselData = await carouselService.getNonHeroCarouselData(id);
+          initialValues = { ...initialValues, ...carouselData };
+        } catch (error) {
+          const errorResponse = error.data || error;
+          let message = 'Try Later';
+          if (errorResponse.action === 'failure') {
+            message = errorResponse.messageDetail.message;
+          }
+          setSnackBarError({
+            ...snackBarProps,
+            open: true,
+            type: 'error',
+            message: message,
+          });
+        }
+      })();
+    }, [1]);
+  };
+  if (params.id) {
+    getCarouselData(params.id);
+  }
 
   const showStatus = (responseData: any) => {
     if (responseData.action === 'success') {
@@ -159,6 +186,7 @@ export const CreateNonCarouselPage: FC<CreateCarouselProps> = (
   return (
     <div className="create-form">
       <Formik
+        enableReinitialize={true}
         initialValues={initialValues}
         validationSchema={CarouselFormValidation}
         onSubmit={(values, { setSubmitting }) => {
