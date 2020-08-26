@@ -43,9 +43,10 @@ import {
   StyledCreateCarouselPage,
   StyledCard,
   StyledChips,
-  StyledCarouselPage,
+  StyledCarouselCardPage,
   StyledCarouselCard,
   StyledFooter,
+  StyledCreateNonHeroCarouselPage,
 } from './StyledCreateNonCarouselPage';
 import { useGetCarouselList } from './CreateNonCarouselHooks';
 import { CarouselFormValidation } from './CreateNonCarouselValidation';
@@ -98,14 +99,12 @@ const carouselTypesOptions = () =>
     </MenuItem>
   ));
 
-const getPostionOptions = (count = 1) => {
-  const options = [...new Array(count)].map((_, index) => (
-    <MenuItem key={'position' + index.toString()} value={index + 1}>
-      {index + 1}
+const getPostionOptions = (count = 1) =>
+  Array.from({ length: count }, (_v, i) => ++i).map((value) => (
+    <MenuItem key={'position' + value.toString()} value={value}>
+      {value}
     </MenuItem>
   ));
-  return options;
-};
 const getTileTypeOptions = () =>
   [
     { display: 'PLP', value: 'plp' },
@@ -199,380 +198,393 @@ export const CreateNonCarouselPage: FC<CreateCarouselProps> = (
         }) => (
           <Form>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
-              <Grid container direction="row" justify="center" spacing={5}>
-                <Grid item xs={3}>
-                  <StyledCreateCarouselPage>
-                    <StyledCard variant="outlined" raised>
-                      <CardContent>
-                        <Grid
-                          container
-                          direction="column"
-                          justify="center"
-                          spacing={3}
-                        >
-                          <Grid item xs>
-                            <Field
-                              component={TextField}
-                              fullWidth
-                              name="title"
-                              type="text"
-                              label="Carousel Title"
-                              variant={'outlined'}
-                              // helperText="Enter Title"
-                            />
-                          </Grid>
-                          <Grid item xs>
-                            <Field
-                              component={TextField}
-                              fullWidth
-                              name="position"
-                              type="text"
-                              label="Position"
-                              variant={'outlined'}
-                            />
-                          </Grid>
-                          <Grid item xs>
-                            <Field
-                              component={TextField}
-                              type="text"
-                              name="carouselType"
-                              label="Carousel Type"
-                              // helperText="Please select type"
-                              select
-                              inputProps={{
-                                id: 'ol-select-type',
-                              }}
-                              variant={'outlined'}
-                              fullWidth
-                            >
-                              {carouselTypesOptions()}
-                            </Field>
-                          </Grid>
-                          <Grid item xs>
-                            <FormControl variant={'outlined'} fullWidth>
-                              <InputLabel htmlFor="ol-select-type">
-                                platform
-                              </InputLabel>
+              <StyledCreateNonHeroCarouselPage>
+                <Grid container spacing={2}>
+                  <Grid item xs={3}>
+                    <StyledCreateCarouselPage>
+                      <StyledCard variant="outlined" raised>
+                        <CardContent>
+                          <Grid
+                            container
+                            direction="column"
+                            justify="center"
+                            spacing={3}
+                          >
+                            <Grid item xs>
                               <Field
-                                component={Select}
-                                multiple
-                                name="platform"
-                                label="Platform"
+                                component={TextField}
+                                fullWidth
+                                name="title"
+                                type="text"
+                                label="Carousel Title"
+                                variant={'outlined'}
+                                // helperText="Enter Title"
+                              />
+                            </Grid>
+                            <Grid item xs>
+                              <Field
+                                component={TextField}
+                                fullWidth
+                                name="position"
+                                type="text"
+                                label="Position"
+                                variant={'outlined'}
+                              />
+                            </Grid>
+                            <Grid item xs>
+                              <Field
+                                component={TextField}
+                                type="text"
+                                name="carouselType"
+                                label="Carousel Type"
                                 // helperText="Please select type"
-                                error={
-                                  touched['platform'] && !!errors['platform']
-                                }
+                                select
                                 inputProps={{
                                   id: 'ol-select-type',
                                 }}
                                 variant={'outlined'}
-                                renderValue={(selected: string[]) => (
-                                  <StyledChips>
-                                    {(selected as string[]).map((value) => (
-                                      <Chip key={value} label={value} />
-                                    ))}
-                                  </StyledChips>
-                                )}
+                                fullWidth
                               >
-                                {platformOptions()}
+                                {carouselTypesOptions()}
                               </Field>
-                              <FormHelperText error>
-                                {errors['platform']}
-                              </FormHelperText>
-                            </FormControl>
-                          </Grid>
-                          <Grid item xs>
-                            <Field
-                              multiple
-                              name="sort"
-                              label="Select Sort"
-                              variant="standard"
-                              // helperText="Please select sort"
-                              component={Autocomplete}
-                              options={listData['sortList'].list}
-                              loading={listData['sortList'].isLoading}
-                              getOptionLabel={(option: SortListOption) =>
-                                option.value ? option.value : ''
-                              }
-                              // style={{ width: 350 }}
-                              renderInput={(
-                                params: AutocompleteRenderInputParams
-                              ) => (
-                                <MuiTextField
-                                  {...params}
-                                  helperText={touched['sort'] && errors['sort']}
-                                  label="Sort"
-                                  variant="outlined"
-                                />
-                              )}
-                            />
-                          </Grid>
-                          {isSubmitting && <LinearProgress />}
-                          <Grid item xs>
-                            <Field
-                              component={DateTimePicker}
-                              fullWidth
-                              name="start_date"
-                              label="Start Date"
-                            />
-                          </Grid>
-                          <Grid item xs>
-                            <Field
-                              component={DateTimePicker}
-                              fullWidth
-                              name="end_date"
-                              label="End Date"
-                            />
-                          </Grid>
-                        </Grid>
-                      </CardContent>
-                    </StyledCard>
-                  </StyledCreateCarouselPage>
-                </Grid>
-                <Grid item xs={9}>
-                  <FieldArray name="tiles">
-                    {({ remove, push, move }) => (
-                      <StyledCarouselPage>
-                        <Grid container direction="row" spacing={2}>
-                          {values.tiles.length > 0 &&
-                            values.tiles.map((tile, index) => (
-                              <Grid item xs={3} key={'CarouselTile' + index}>
-                                <StyledCarouselCard
-                                  key={'card' + index}
-                                  variant={'elevation'}
+                            </Grid>
+                            <Grid item xs>
+                              <FormControl variant={'outlined'} fullWidth>
+                                <InputLabel htmlFor="ol-select-type">
+                                  platform
+                                </InputLabel>
+                                <Field
+                                  component={Select}
+                                  multiple
+                                  name="platform"
+                                  label="Platform"
+                                  // helperText="Please select type"
+                                  error={
+                                    touched['platform'] && !!errors['platform']
+                                  }
+                                  inputProps={{
+                                    id: 'ol-select-type',
+                                  }}
+                                  variant={'outlined'}
+                                  renderValue={(selected: string[]) => (
+                                    <StyledChips>
+                                      {(selected as string[]).map((value) => (
+                                        <Chip key={value} label={value} />
+                                      ))}
+                                    </StyledChips>
+                                  )}
                                 >
-                                  <CardHeader
-                                    avatar={<Avatar>T{tile.position}</Avatar>}
-                                    action={
-                                      <IconButton
-                                        onClick={() => {
-                                          remove(index);
-                                          if (values.tiles.length == 1) {
-                                            setFieldValue(
-                                              'tileHeight',
-                                              undefined
-                                            );
-                                            setFieldValue(
-                                              'tileWidth',
-                                              undefined
-                                            );
-                                          }
-                                        }}
-                                      >
-                                        <DeleteForeverIcon fontSize={'large'} />
-                                      </IconButton>
+                                  {platformOptions()}
+                                </Field>
+                                <FormHelperText error>
+                                  {errors['platform']}
+                                </FormHelperText>
+                              </FormControl>
+                            </Grid>
+                            <Grid item xs>
+                              <Field
+                                multiple
+                                name="sort"
+                                label="Select Sort"
+                                variant="standard"
+                                // helperText="Please select sort"
+                                component={Autocomplete}
+                                options={listData['sortList'].list}
+                                loading={listData['sortList'].isLoading}
+                                getOptionLabel={(option: SortListOption) =>
+                                  option.value ? option.value : ''
+                                }
+                                // style={{ width: 350 }}
+                                renderInput={(
+                                  params: AutocompleteRenderInputParams
+                                ) => (
+                                  <MuiTextField
+                                    {...params}
+                                    helperText={
+                                      touched['sort'] && errors['sort']
                                     }
-                                    title={'Image'}
-                                    subheader={`Supported ${values.tileHeight}X${values.tileWidth}`}
+                                    label="Sort"
+                                    variant="outlined"
                                   />
-                                  <CardContent>
-                                    <CardActionArea>
-                                      <Field
-                                        id={`image.${index}`}
-                                        component={ImageUpload}
-                                        name={`tiles.${index}.imageUrl`}
-                                        resolutionHeight={values.tileHeight}
-                                        resolutionWidth={values.tileWidth}
-                                        resolutionValidationType={(() =>
-                                          values.tiles.length > 1
-                                            ? 'absolute'
-                                            : '')()}
-                                        imageUrl={tile.imageUrl}
-                                        onChange={async (
-                                          value: ImageListType
-                                        ) => {
-                                          try {
-                                            const res = await carouselService.imageUpload(
-                                              { file: value[0].file }
-                                            );
-                                            setFieldValue(
-                                              `tiles.${index}.imageUrl`,
-                                              `https://${res.imageURLPrefix}/fstatic${res.imageResponse.imageUrl}?version=${res.imageResponse.version}`
-                                            );
+                                )}
+                              />
+                            </Grid>
+                            {isSubmitting && <LinearProgress />}
+                            <Grid item xs>
+                              <Field
+                                component={DateTimePicker}
+                                fullWidth
+                                name="start_date"
+                                label="Start Date"
+                              />
+                            </Grid>
+                            <Grid item xs>
+                              <Field
+                                component={DateTimePicker}
+                                fullWidth
+                                name="end_date"
+                                label="End Date"
+                              />
+                            </Grid>
+                          </Grid>
+                        </CardContent>
+                      </StyledCard>
+                    </StyledCreateCarouselPage>
+                  </Grid>
+                  <Grid item xs={9}>
+                    <FieldArray name="tiles">
+                      {({ remove, push, move }) => (
+                        <StyledCarouselCardPage>
+                          <Grid container spacing={3}>
+                            {values.tiles.length > 0 &&
+                              values.tiles.map((tile, index) => (
+                                <Grid item xs={3} key={'CarouselTile' + index}>
+                                  <StyledCarouselCard
+                                    key={'card' + index}
+                                    variant={'elevation'}
+                                  >
+                                    <CardHeader
+                                      avatar={<Avatar>T{tile.position}</Avatar>}
+                                      action={
+                                        <IconButton
+                                          onClick={() => {
+                                            remove(index);
                                             if (values.tiles.length == 1) {
                                               setFieldValue(
                                                 'tileHeight',
-                                                res.imageResponse.imageAreas[0]
-                                                  .height
+                                                undefined
                                               );
                                               setFieldValue(
                                                 'tileWidth',
-                                                res.imageResponse.imageAreas[0]
-                                                  .width
+                                                undefined
                                               );
                                             }
-                                          } catch (err) {
-                                            setFieldValue(
-                                              `tiles.${index}.imageUrl`,
-                                              undefined
-                                            );
-                                          }
-                                        }}
-                                      ></Field>
-                                    </CardActionArea>
-                                  </CardContent>
-                                  <MuiThemeProvider theme={DarkTheme}>
-                                    <StyledFooter>
-                                      <Grid container spacing={1}>
-                                        <Grid item xs>
-                                          <Field
-                                            component={TextField}
-                                            type="text"
-                                            name={`tiles.${index}.type`}
-                                            label="Type"
-                                            select
-                                            inputProps={{
-                                              id: 'outlined-select',
-                                            }}
-                                            variant={'outlined'}
-                                            onChange={(
-                                              evt: React.ChangeEvent<
-                                                HTMLInputElement
-                                              >
-                                            ) => {
-                                              setFieldValue(
-                                                `tiles.${index}.type`,
-                                                evt.target
-                                                  ? evt.target.value
-                                                  : ''
-                                              );
-                                              setFieldValue(
-                                                `tiles.${index}.actionId`,
-                                                ''
-                                              );
-                                              setFieldValue(
-                                                `tiles.${index}.actionName`,
-                                                ''
-                                              );
-                                            }}
-                                          >
-                                            {getTileTypeOptions()}
-                                          </Field>
-                                        </Grid>
-                                        <Grid item xs>
-                                          <Field
-                                            component={TextField}
-                                            type="text"
-                                            name={`tiles.${index}.position`}
-                                            label="Position"
-                                            value={index + 1}
-                                            select
-                                            inputProps={{
-                                              id: 'outlined-select',
-                                            }}
-                                            disabled={!isValid}
-                                            variant={'outlined'}
-                                            onChange={(
-                                              evt: React.ChangeEvent<
-                                                HTMLLIElement
-                                              >
-                                            ) => {
-                                              move(index, evt.target.value - 1);
-                                              setFieldValue(
-                                                `tiles.${
-                                                  evt.target.value - 1
-                                                }.position`,
-                                                evt.target.value
-                                              );
-                                            }}
-                                          >
-                                            {getPostionOptions(
-                                              values.tiles.length
-                                            )}
-                                          </Field>
-                                        </Grid>
-                                        <Grid item xs>
-                                          <Field
-                                            name={`tiles.${index}.actionObj`}
-                                            variant="standard"
-                                            value={
-                                              values.tiles[index].actionId
-                                                ? {
-                                                    name:
-                                                      values.tiles[index]
-                                                        .actionName,
-                                                    id:
-                                                      values.tiles[index]
-                                                        .actionId,
-                                                  }
-                                                : null
-                                            }
-                                            component={Autocomplete}
-                                            getOptionSelected={(
-                                              option: ListOption,
-                                              selectedValue: ListOption
-                                            ) => option.id == selectedValue?.id}
-                                            options={
-                                              listData[values.tiles[index].type]
-                                                .list
-                                            }
-                                            getOptionLabel={(
-                                              option: ListOption
-                                            ) =>
-                                              option.name ? option.name : ''
-                                            }
-                                            loading={
-                                              listData[values.tiles[index].type]
-                                                .isLoading
-                                            }
-                                            onChange={(
-                                              _evt: React.ChangeEvent,
-                                              actionvalue: ListOption
-                                            ) => {
-                                              setFieldValue(
-                                                `tiles.${index}.actionId`,
-                                                actionvalue?.id
-                                              );
-                                              setFieldValue(
-                                                `tiles.${index}.actionName`,
-                                                actionvalue?.name
-                                              );
-                                            }}
-                                            renderInput={(
-                                              params: AutocompleteRenderInputParams
-                                            ) => (
-                                              <MuiTextField
-                                                {...params}
-                                                // error={
-                                                //   touched['sort'] && !!errors['sort']
-                                                // }
-                                                // helperText={
-                                                //   touched['sort'] && errors['sort']
-                                                // }
-                                                label={`Select ${values.tiles[index].type}`}
-                                                variant="outlined"
-                                              />
-                                            )}
+                                          }}
+                                        >
+                                          <DeleteForeverIcon
+                                            fontSize={'large'}
                                           />
+                                        </IconButton>
+                                      }
+                                      title={'Image'}
+                                      subheader={`Supported ${values.tileHeight}X${values.tileWidth}`}
+                                    />
+                                    <CardContent>
+                                      <CardActionArea>
+                                        <Field
+                                          id={`image.${index}`}
+                                          component={ImageUpload}
+                                          name={`tiles.${index}.imageUrl`}
+                                          resolutionHeight={values.tileHeight}
+                                          resolutionWidth={values.tileWidth}
+                                          resolutionValidationType={(() =>
+                                            values.tiles.length > 1
+                                              ? 'absolute'
+                                              : '')()}
+                                          imageUrl={tile.imageUrl}
+                                          onChange={async (
+                                            value: ImageListType
+                                          ) => {
+                                            try {
+                                              const res = await carouselService.imageUpload(
+                                                { file: value[0].file }
+                                              );
+                                              setFieldValue(
+                                                `tiles.${index}.imageUrl`,
+                                                `https://${res.imageURLPrefix}/fstatic${res.imageResponse.imageUrl}?version=${res.imageResponse.version}`
+                                              );
+                                              if (values.tiles.length == 1) {
+                                                setFieldValue(
+                                                  'tileHeight',
+                                                  res.imageResponse
+                                                    .imageAreas[0].height
+                                                );
+                                                setFieldValue(
+                                                  'tileWidth',
+                                                  res.imageResponse
+                                                    .imageAreas[0].width
+                                                );
+                                              }
+                                            } catch (err) {
+                                              setFieldValue(
+                                                `tiles.${index}.imageUrl`,
+                                                undefined
+                                              );
+                                            }
+                                          }}
+                                        ></Field>
+                                      </CardActionArea>
+                                    </CardContent>
+                                    <MuiThemeProvider theme={DarkTheme}>
+                                      <StyledFooter>
+                                        <Grid container spacing={1}>
+                                          <Grid item xs>
+                                            <Field
+                                              component={TextField}
+                                              type="text"
+                                              name={`tiles.${index}.type`}
+                                              label="Type"
+                                              select
+                                              inputProps={{
+                                                id: 'outlined-select',
+                                              }}
+                                              variant={'outlined'}
+                                              onChange={(
+                                                evt: React.ChangeEvent<
+                                                  HTMLInputElement
+                                                >
+                                              ) => {
+                                                setFieldValue(
+                                                  `tiles.${index}.type`,
+                                                  evt.target
+                                                    ? evt.target.value
+                                                    : ''
+                                                );
+                                                setFieldValue(
+                                                  `tiles.${index}.actionId`,
+                                                  ''
+                                                );
+                                                setFieldValue(
+                                                  `tiles.${index}.actionName`,
+                                                  ''
+                                                );
+                                              }}
+                                            >
+                                              {getTileTypeOptions()}
+                                            </Field>
+                                          </Grid>
+                                          <Grid item xs>
+                                            <Field
+                                              component={TextField}
+                                              type="text"
+                                              name={`tiles.${index}.position`}
+                                              label="Position"
+                                              value={index + 1}
+                                              select
+                                              inputProps={{
+                                                id: 'outlined-select',
+                                              }}
+                                              disabled={!isValid}
+                                              variant={'outlined'}
+                                              onChange={(
+                                                evt: React.ChangeEvent<
+                                                  HTMLLIElement
+                                                >
+                                              ) => {
+                                                move(
+                                                  index,
+                                                  evt.target.value - 1
+                                                );
+                                                setFieldValue(
+                                                  `tiles.${
+                                                    evt.target.value - 1
+                                                  }.position`,
+                                                  evt.target.value
+                                                );
+                                              }}
+                                            >
+                                              {getPostionOptions(
+                                                values.tiles.length
+                                              )}
+                                            </Field>
+                                          </Grid>
+                                          <Grid item xs>
+                                            <Field
+                                              name={`tiles.${index}.actionObj`}
+                                              variant="standard"
+                                              value={
+                                                values.tiles[index].actionId
+                                                  ? {
+                                                      name:
+                                                        values.tiles[index]
+                                                          .actionName,
+                                                      id:
+                                                        values.tiles[index]
+                                                          .actionId,
+                                                    }
+                                                  : null
+                                              }
+                                              component={Autocomplete}
+                                              getOptionSelected={(
+                                                option: ListOption,
+                                                selectedValue: ListOption
+                                              ) =>
+                                                option.id == selectedValue?.id
+                                              }
+                                              options={
+                                                listData[
+                                                  values.tiles[index].type
+                                                ].list
+                                              }
+                                              getOptionLabel={(
+                                                option: ListOption
+                                              ) =>
+                                                option.name ? option.name : ''
+                                              }
+                                              loading={
+                                                listData[
+                                                  values.tiles[index].type
+                                                ].isLoading
+                                              }
+                                              onChange={(
+                                                _evt: React.ChangeEvent,
+                                                actionvalue: ListOption
+                                              ) => {
+                                                setFieldValue(
+                                                  `tiles.${index}.actionId`,
+                                                  actionvalue?.id
+                                                );
+                                                setFieldValue(
+                                                  `tiles.${index}.actionName`,
+                                                  actionvalue?.name
+                                                );
+                                              }}
+                                              renderInput={(
+                                                params: AutocompleteRenderInputParams
+                                              ) => (
+                                                <MuiTextField
+                                                  {...params}
+                                                  // error={
+                                                  //   touched['sort'] && !!errors['sort']
+                                                  // }
+                                                  // helperText={
+                                                  //   touched['sort'] && errors['sort']
+                                                  // }
+                                                  label={`Select ${values.tiles[index].type}`}
+                                                  variant="outlined"
+                                                />
+                                              )}
+                                            />
+                                          </Grid>
                                         </Grid>
-                                      </Grid>
-                                    </StyledFooter>
-                                  </MuiThemeProvider>
-                                </StyledCarouselCard>
-                              </Grid>
-                            ))}
-                          <Grid item xs={2}>
-                            <Button
-                              color={'primary'}
-                              variant={'contained'}
-                              disabled={isSubmitting || !isValid}
-                              size={'large'}
-                              onClick={() =>
-                                push({
-                                  type: 'plp',
-                                  position: values.tiles.length + 1,
-                                })
-                              }
-                            >
-                              Add Tile
-                            </Button>
+                                      </StyledFooter>
+                                    </MuiThemeProvider>
+                                  </StyledCarouselCard>
+                                </Grid>
+                              ))}
+                            <Grid item xs={2}>
+                              <Button
+                                color={'primary'}
+                                variant={'contained'}
+                                disabled={isSubmitting || !isValid}
+                                size={'large'}
+                                onClick={() =>
+                                  push({
+                                    type: 'plp',
+                                    position: values.tiles.length + 1,
+                                  })
+                                }
+                              >
+                                Add Tile
+                              </Button>
+                            </Grid>
                           </Grid>
-                        </Grid>
-                      </StyledCarouselPage>
-                    )}
-                  </FieldArray>
+                        </StyledCarouselCardPage>
+                      )}
+                    </FieldArray>
+                  </Grid>
                 </Grid>
-              </Grid>
+              </StyledCreateNonHeroCarouselPage>
               <Box margin={3}>
                 <Button
                   color={'primary'}

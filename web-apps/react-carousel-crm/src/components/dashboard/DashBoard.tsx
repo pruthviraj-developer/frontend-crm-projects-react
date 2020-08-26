@@ -51,7 +51,7 @@ const DashBoard: FC = () => {
         });
       }
     })();
-  }, [filterParams]);
+  }, [filterParams, snackBarProps]);
 
   const getUpdatedTableData = (filters: tableParams) => {
     setFilterParams(filters);
@@ -176,7 +176,7 @@ const DashBoard: FC = () => {
       label: 'Title',
       width: 100,
       render: (props: any, data: any) => {
-        if (props || data) {
+        if (data) {
           return (
             <>
               <NavLink to={{ pathname: `/edit-carousel/${data.id}` }}>{data.title}</NavLink>

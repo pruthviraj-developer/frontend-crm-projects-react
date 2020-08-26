@@ -7,6 +7,13 @@ export const StyledCreateCarouselPage = styled.div`
     flex-grow: 1;
   }
 `;
+
+export const StyledCreateNonHeroCarouselPage = styled.div`
+  .MuiGrid-root {
+    flex-grow: 1;
+  }
+`;
+
 export const StyledChips = styled.div`
   display: 'flex';
   flex-wrap: 'wrap';
@@ -19,14 +26,14 @@ export const StyledCard = styled(Card)`
   margin-left: 15px;
 `;
 
-export const StyledCarouselPage = styled.div`
+export const StyledCarouselCardPage = styled.div`
   .MuiGrid-root {
     flex-grow: 1;
   }
 `;
 
 export const StyledCarouselCard = styled(Card)`
-  max-width: 230px;
+  min-width: 230px;
   padding: 16;
 `;
 export const StyledFooter = styled.div`
