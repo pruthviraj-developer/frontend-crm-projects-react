@@ -8,6 +8,7 @@ import PublishIcon from '@material-ui/icons/Publish';
 import { IconButton } from '@material-ui/core';
 import { action } from '@storybook/addon-actions';
 import { tableList } from '@hs/services';
+import { NavLink } from 'react-router-dom';
 export default {
   title: 'Tables',
 };
@@ -23,7 +24,22 @@ const getUpdatedTableData = (filters: Record<string, unknown>) => {
 
 const columns = [
   { id: 'id', label: 'Id', minWidth: 20 },
-  { id: 'title', label: 'Title' },
+  {
+    id: 'title',
+    label: 'Title',
+    render: (props, data: Record<string, unknown>) => {
+      if (data) {
+        return (
+          <>
+            <NavLink to={{ pathname: `/edit-carousel/${data.id}` }}>
+              {data.title}
+            </NavLink>
+          </>
+        );
+      }
+      return '--';
+    },
+  },
   {
     id: 'sorts',
     label: 'Sorted By',

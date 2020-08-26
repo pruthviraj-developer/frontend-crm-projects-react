@@ -75,7 +75,9 @@ export const HSTable: FC<HsTableProps> = (props: HsTableProps) => {
                         return (
                           <TableCell
                             key={column.id}
-                            title={column.render ? column.render(value) : value}
+                            title={
+                              column.render ? column.render(value, row) : value
+                            }
                             style={{
                               minWidth: column.minWidth
                                 ? column.minWidth
@@ -86,7 +88,7 @@ export const HSTable: FC<HsTableProps> = (props: HsTableProps) => {
                               padding: '16px 10px',
                             }}
                           >
-                            {column.render ? column.render(value) : value}
+                            {column.render ? column.render(value, row) : value}
                           </TableCell>
                         );
                       } else {
