@@ -13,7 +13,7 @@ export interface Tile {
   position: number;
 }
 
-export interface CreateCarouselPageState {
+export interface CreateNonCarouselPageState {
   title: string;
   carouselType: string;
   sort: [];
@@ -26,6 +26,7 @@ export interface CreateCarouselPageState {
   tiles: Tile[];
 }
 
-export interface CreateCarouselProps {
+export interface CreateNonCarouselProps {
   action?: (event: Record<string, unknown>) => void;
+  carouselId?: string;
 }

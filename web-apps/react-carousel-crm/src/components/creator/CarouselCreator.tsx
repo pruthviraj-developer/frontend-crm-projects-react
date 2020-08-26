@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
-import { CreateNonCarouselPage, CreateCarouselProps } from '@hs/containers';
+import { CreateNonCarouselPage, CreateNonCarouselProps } from '@hs/containers';
 import styled from '@emotion/styled';
+import { Switch, Route, useParams } from 'react-router-dom';
 
 const StyledCreateorWrapper = styled.div`
   margin-left: 90px;
@@ -11,15 +12,25 @@ const CarouselCreator: FC = () => {
     alert(data);
     console.log(data);
   };
-
-  const props: CreateCarouselProps = {
+  const params = useParams<{ id: string }>();
+  const props: CreateNonCarouselProps = {
     action: onSubmit,
   };
   return (
-    <StyledCreateorWrapper>
-      <h1>Create Page Carousel</h1>
-      <CreateNonCarouselPage {...props} />
-    </StyledCreateorWrapper>
+    <Switch>
+      <Route path="/create-carousel">
+        <StyledCreateorWrapper>
+          <h1>Create Page Carousel</h1>
+          <CreateNonCarouselPage {...props} />
+        </StyledCreateorWrapper>
+      </Route>
+      <Route path="/edit-carousel/:id">
+        <StyledCreateorWrapper>
+          <h1>Edit Page Carousel</h1>
+          <CreateNonCarouselPage {...props} carouselId={params.id} />
+        </StyledCreateorWrapper>
+      </Route>
+    </Switch>
   );
 };
 export default CarouselCreator;

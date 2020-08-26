@@ -51,7 +51,7 @@ const DashBoard: FC = () => {
         });
       }
     })();
-  }, [filterParams, snackBarProps]);
+  }, [filterParams]);
 
   const getUpdatedTableData = (filters: tableParams) => {
     setFilterParams(filters);

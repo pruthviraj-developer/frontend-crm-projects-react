@@ -12,9 +12,9 @@ import CarouselCreator from './components/creator/CarouselCreator';
 function App() {
   const navItems: LeftNavBarProps = {
     navList: [
-      { linkUrl: 'dashboard', linkText: 'Dashboard', icon: DashBoardIcon },
-      { linkUrl: 'create-carousel', linkText: 'Create', icon: CreateIcon },
-      { linkUrl: 'archivedlist', linkText: 'ArchivedLit', icon: ArchiveIcon },
+      { linkUrl: '/dashboard', linkText: 'Dashboard', icon: DashBoardIcon },
+      { linkUrl: '/create-carousel', linkText: 'Create', icon: CreateIcon },
+      { linkUrl: '/archivedlist', linkText: 'ArchivedLit', icon: ArchiveIcon },
     ],
   };
 

@@ -31,15 +31,11 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import DateFnsUtils from '@date-io/date-fns';
 import { HsSnackbar, HsSnackbarProps } from '@hs/components';
 import { format } from 'date-fns';
-import { useParams } from 'react-router-dom';
+import { carouselService, SortListOption, ListOption } from '@hs/services';
 import {
-  createService,
-  carouselService,
-  SortListOption,
-  ListOption,
-} from '@hs/services';
-import { CreateCarouselProps } from './../create-carousel-page';
-import { CreateCarouselPageState } from './ICreateCarouselPage';
+  CreateNonCarouselPageState,
+  CreateNonCarouselProps,
+} from './ICreateNonCarouselPage';
 import {
   StyledCreateCarouselPage,
   StyledCard,
@@ -51,7 +47,8 @@ import {
 } from './StyledCreateNonCarouselPage';
 import { useGetCarouselList } from './CreateNonCarouselHooks';
 import { CarouselFormValidation } from './CreateNonCarouselValidation';
-let initialValues: CreateCarouselPageState = {
+
+let initialValues: CreateNonCarouselPageState = {
   title: '',
   carouselType: '',
   sort: [],
@@ -117,8 +114,8 @@ const getTileTypeOptions = () =>
     </MenuItem>
   ));
 
-export const CreateNonCarouselPage: FC<CreateCarouselProps> = (
-  props: CreateCarouselProps
+export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
+  props: CreateNonCarouselProps
 ) => {
   const onSnackBarClose = (open: boolean) => {
     setSnackBarError({ ...HsSnackBarError, open });
@@ -134,32 +131,31 @@ export const CreateNonCarouselPage: FC<CreateCarouselProps> = (
   );
 
   const listData = useGetCarouselList();
-  const params: any = useParams();
-  const getCarouselData = (id: string) => {
-    useEffect(() => {
-      (async () => {
-        try {
-          const carouselData = await carouselService.getNonHeroCarouselData(id);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        if (props.carouselId) {
+          const carouselData = await carouselService.getNonHeroCarouselData(
+            props.carouselId
+          );
           initialValues = { ...initialValues, ...carouselData };
-        } catch (error) {
-          const errorResponse = error.data || error;
-          let message = 'Try Later';
-          if (errorResponse.action === 'failure') {
-            message = errorResponse.messageDetail.message;
-          }
-          setSnackBarError({
-            ...snackBarProps,
-            open: true,
-            type: 'error',
-            message: message,
-          });
         }
-      })();
-    }, [1]);
-  };
-  if (params.id) {
-    getCarouselData(params.id);
-  }
+      } catch (error) {
+        const errorResponse = error.data || error;
+        let message = 'Try Later';
+        if (errorResponse.action === 'failure') {
+          message = errorResponse.messageDetail.message;
+        }
+        setSnackBarError({
+          ...snackBarProps,
+          open: true,
+          type: 'error',
+          message: message,
+        });
+      }
+    })();
+  }, [props.carouselId]);
 
   const showStatus = (responseData: any) => {
     if (responseData.action === 'success') {
@@ -201,11 +197,8 @@ export const CreateNonCarouselPage: FC<CreateCarouselProps> = (
             if (props.action) {
               props.action(postData);
             }
-            createService
-              .post({
-                url: 'api/carouselservice/pagecarousel',
-                data: postData,
-              })
+            carouselService
+              .postPageCarousel<typeof postData, any>(postData)
               .then((res: any) => {
                 showStatus(res);
               })
