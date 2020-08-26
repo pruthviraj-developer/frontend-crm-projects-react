@@ -176,7 +176,7 @@ const DashBoard: FC = () => {
       label: 'Title',
       width: 100,
       render: (props: any, data: any) => {
-        if (data) {
+        if (props || data) {
           return (
             <>
               <NavLink to={{ pathname: `/edit-carousel/${data.id}` }}>{data.title}</NavLink>

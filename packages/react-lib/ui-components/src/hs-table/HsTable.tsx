@@ -10,9 +10,6 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import styled from '@emotion/styled';
 
-const HsTableTitle = styled.h5`
-  text-align: left;
-`;
 const StyledHsTable = styled(Paper)`
   width: '100%';
 `;
@@ -44,7 +41,6 @@ export const HSTable: FC<HsTableProps> = (props: HsTableProps) => {
 
   return (
     <div>
-      <HsTableTitle>{props.title}</HsTableTitle>
       <StyledHsTable>
         <StyledTableContainer>
           <Table stickyHeader>
