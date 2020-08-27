@@ -10,7 +10,6 @@ import {
 } from 'formik-material-ui-lab';
 import {
   Button,
-  LinearProgress,
   FormControl,
   Chip,
   TextField as MuiTextField,
@@ -88,6 +87,8 @@ export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
             CreateNonCarouselPageState
           >(props.carouselId);
           setData(carouselData);
+        } else {
+          setData(initialValues);
         }
       } catch (error) {
         const errorResponse = error.data || error;
@@ -275,7 +276,6 @@ export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
                                 )}
                               />
                             </Grid>
-                            {isSubmitting && <LinearProgress />}
                             <Grid item xs>
                               <Field
                                 component={DateTimePicker}

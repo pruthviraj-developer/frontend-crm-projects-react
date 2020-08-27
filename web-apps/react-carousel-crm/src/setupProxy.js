@@ -11,7 +11,7 @@ module.exports = function (app) {
     }),
   );
   app.use(
-    '/react-monorepo/PageCarousel/edit-carousel/api',
+    '/react-monorepo/PageCarousel/edit-carousel/api/',
     createProxyMiddleware({
       pathRewrite: { '^/react-monorepo/PageCarousel/edit-carousel/api': '' },
       target: 'http://qa.hopscotch.in',
