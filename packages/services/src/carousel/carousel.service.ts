@@ -47,7 +47,7 @@ const imageUpload = ({
 };
 
 const getSortList = (): Promise<SortList> => {
-  const url = '/api/carouselservice/carousel/setup';
+  const url = 'api/carouselservice/carousel/setup';
   return httpService.get<SortList>({ url });
 };
 

@@ -14,18 +14,25 @@ import { NavLink } from 'react-router-dom';
 const DashBoardWrapper = styled.div`
   margin-left: 90px;
 `;
+
+const snackBarProps: Pick<HsSnackbarProps, 'open' | 'type' | 'message'> = {
+  open: false,
+  type: 'error' as const,
+  message: 'Test',
+};
+
 const DashBoard: FC = () => {
   const onSnackBarClose = (open: boolean) => {
-    setSnackBarError({ ...HsSnackBarError, open });
+    setSnackBarError({ ...snackBarError, open });
   };
-  const snackBarProps = {
-    open: false,
-    type: 'error' as const,
-    message: 'Test',
-    onSnackBarClose: onSnackBarClose,
-  };
+  // const snackBarProps = {
+  //   open: false,
+  //   type: 'error' as const,
+  //   message: 'Test',
+  //   onSnackBarClose: onSnackBarClose,
+  // };
   const [data, setTableData] = useState<tableData>({});
-  const [HsSnackBarError, setSnackBarError] = useState<HsSnackbarProps>(snackBarProps);
+  const [snackBarError, setSnackBarError] = useState(snackBarProps);
   const [count, setCount] = useState<number>(0);
   const [filterParams, setFilterParams] = useState<tableParams>({ pageSize: 10, pageNo: 0 }); // page size should be size as rowsperpage
   useEffect(() => {
@@ -44,7 +51,6 @@ const DashBoard: FC = () => {
           message = error.messageDetail.message;
         }
         setSnackBarError({
-          ...snackBarProps,
           open: true,
           type: 'error',
           message: message,
@@ -64,7 +70,6 @@ const DashBoard: FC = () => {
         setFilterParams({ ...filterParams });
         if (response.action === 'success') {
           setSnackBarError({
-            ...snackBarProps,
             open: true,
             type: 'success',
             message: response.messageDetail ? response.messageDetail.message : 'Refresh the Page to see the status',
@@ -77,7 +82,6 @@ const DashBoard: FC = () => {
           message = error.messageDetail.message;
         }
         setSnackBarError({
-          ...snackBarProps,
           open: true,
           type: 'error',
           message: message,
@@ -98,7 +102,6 @@ const DashBoard: FC = () => {
           message = error.messageDetail.message;
         }
         setSnackBarError({
-          ...snackBarProps,
           open: true,
           type: 'error',
           message: message,
@@ -118,14 +121,12 @@ const DashBoard: FC = () => {
           if (res.action === 'success') {
             setFilterParams({ ...filterParams });
             setSnackBarError({
-              ...snackBarProps,
               open: true,
               type: 'success',
               message: message,
             });
           } else {
             setSnackBarError({
-              ...snackBarProps,
               open: true,
               type: 'error',
               message: message,
@@ -315,7 +316,7 @@ const DashBoard: FC = () => {
     <DashBoardWrapper>
       <h1>Page Carousel DashBoard</h1>
       <HSTable {...TableData} />
-      {HsSnackBarError.open && <HsSnackbar {...HsSnackBarError} />}
+      {snackBarError.open && <HsSnackbar {...snackBarError} onSnackBarClose={onSnackBarClose} />}
     </DashBoardWrapper>
   );
 };
