@@ -1,4 +1,4 @@
-import { tableList } from '@hs/services';
+import { tableList, tableParams } from '@hs/services';
 export interface HsTableProps {
   title: string;
   count: number;
@@ -6,6 +6,6 @@ export interface HsTableProps {
   rowsPerPage: number;
   rows: Array<tableList>;
   filterRowsPerPage: Array<number>;
-  fetchTableData: (event: Record<string, unknown>) => void;
+  fetchTableData: (event: tableParams) => void;
   action?: (event: Record<string, unknown>) => void;
 }

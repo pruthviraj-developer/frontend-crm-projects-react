@@ -8,7 +8,8 @@ import { IconButton } from '@material-ui/core';
 import { format } from 'date-fns';
 import styled from '@emotion/styled';
 import { carouselService, tableData, CloneHeroCarouselWithId } from '@hs/services';
-import { tableList } from '@hs/services';
+import { tableList, tableParams } from '@hs/services';
+import { NavLink } from 'react-router-dom';
 
 const DashBoardWrapper = styled.div`
   margin-left: 90px;
@@ -26,12 +27,12 @@ const DashBoard: FC = () => {
   const [data, setTableData] = useState<tableData>({});
   const [HsSnackBarError, setSnackBarError] = useState<HsSnackbarProps>(snackBarProps);
   const [count, setCount] = useState<number>(0);
-  const [filterParams, setFilterParams] = useState<Record<string, unknown>>({ pageSize: 10, pageNo: 0 }); // page size should be size as rowsperpage
+  const [filterParams, setFilterParams] = useState<tableParams>({ pageSize: 10, pageNo: 0 }); // page size should be size as rowsperpage
   useEffect(() => {
     (async () => {
       try {
         // console.log('Called');
-        const tableData = await carouselService.getTableData();
+        const tableData = await carouselService.getTableData(filterParams);
         // console.log('sortList', sortList);
         setTableData(tableData);
         setCount(tableData.totalRecords || 0);
@@ -52,7 +53,7 @@ const DashBoard: FC = () => {
     })();
   }, [filterParams]);
 
-  const getUpdatedTableData = (filters: Record<string, unknown>) => {
+  const getUpdatedTableData = (filters: tableParams) => {
     setFilterParams(filters);
   };
   const saveCloneData = (res: any) => {
@@ -87,7 +88,7 @@ const DashBoard: FC = () => {
   const cloneAndCreate = (rowData: CloneHeroCarouselWithId) => {
     (async () => {
       try {
-        const res = await carouselService.getNonHeroCarouselData(rowData.id);
+        const res = await carouselService.getNonHeroCarouselData<CloneHeroCarouselWithId>(rowData.id);
         delete res['id'];
         saveCloneData(res);
       } catch (responseError) {
@@ -149,6 +150,18 @@ const DashBoard: FC = () => {
         try {
           const res = await carouselService.updateNonHeroCarouselData(rowData.id);
           console.log(res);
+          if (res.action === 'success') {
+            const message = res.messageDetail ? res.messageDetail.message : 'Published successfully';
+            setFilterParams({ ...filterParams });
+            setSnackBarError({
+              ...snackBarProps,
+              open: true,
+              type: 'success',
+              message: message,
+            });
+          } else {
+            throw res;
+          }
         } catch (error) {
           const data = error.data || error;
           let message = 'Try Later';
@@ -170,7 +183,21 @@ const DashBoard: FC = () => {
   };
   const columns = [
     { id: 'id', label: 'Id' },
-    { id: 'title', label: 'Title', width: 100 },
+    {
+      id: 'title',
+      label: 'Title',
+      width: 100,
+      render: (props: any, data: any) => {
+        if (props || data) {
+          return (
+            <>
+              <NavLink to={{ pathname: `/edit-carousel/${data.id}` }}>{data.title}</NavLink>
+            </>
+          );
+        }
+        return '--';
+      },
+    },
     {
       id: 'sorts',
       label: 'Sorted By',
@@ -286,7 +313,7 @@ const DashBoard: FC = () => {
   };
   return (
     <DashBoardWrapper>
-      <h1>DashBoard</h1>
+      <h1>Page Carousel DashBoard</h1>
       <HSTable {...TableData} />
       {HsSnackBarError.open && <HsSnackbar {...HsSnackBarError} />}
     </DashBoardWrapper>

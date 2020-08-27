@@ -10,4 +10,13 @@ module.exports = function (app) {
       changeOrigin: true,
     }),
   );
+  app.use(
+    '/react-monorepo/PageCarousel/edit-carousel/api/',
+    createProxyMiddleware({
+      pathRewrite: { '^/react-monorepo/PageCarousel/edit-carousel/api': '' },
+      target: 'http://qa.hopscotch.in',
+      secure: false,
+      changeOrigin: true,
+    }),
+  );
 };

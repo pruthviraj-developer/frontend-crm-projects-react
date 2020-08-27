@@ -1,6 +1,5 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { HsTableProps } from './IHsTable';
-import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -11,23 +10,22 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import styled from '@emotion/styled';
 
-const HsTableTitle = styled.h5`
-  text-align: left;
+const StyledHsTable = styled(Paper)`
+  width: '100%';
+`;
+const StyledTableContainer = styled(TableContainer)`
+  max-height: 80vh;
 `;
 export const HSTable: FC<HsTableProps> = (props: HsTableProps) => {
-  const useStyles = makeStyles({
-    root: {
-      width: '100%',
-    },
-    container: {
-      maxHeight: 440,
-    },
-  });
   const columns = props.columns;
   const rows = props.rows;
-  const classes = useStyles();
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(props.rowsPerPage);
+  const [rowsPerPage, setRowsPerPage] = React.useState(() => props.rowsPerPage);
+
+  useEffect(() => {
+    setRowsPerPage(props.rowsPerPage);
+  }, [props.rowsPerPage]);
+
   const handleChangePage = (event, newPage) => {
     if (event) {
       setPage(newPage);
@@ -43,10 +41,9 @@ export const HSTable: FC<HsTableProps> = (props: HsTableProps) => {
 
   return (
     <div>
-      <HsTableTitle>{props.title}</HsTableTitle>
-      <Paper className={classes.root}>
-        <TableContainer className={classes.container}>
-          <Table stickyHeader aria-label="sticky table">
+      <StyledHsTable>
+        <StyledTableContainer>
+          <Table stickyHeader>
             <TableHead>
               <TableRow>
                 {columns.map((column: any, index) => (
@@ -74,7 +71,9 @@ export const HSTable: FC<HsTableProps> = (props: HsTableProps) => {
                         return (
                           <TableCell
                             key={column.id}
-                            title={column.render ? column.render(value) : value}
+                            title={
+                              column.render ? column.render(value, row) : value
+                            }
                             style={{
                               minWidth: column.minWidth
                                 ? column.minWidth
@@ -85,7 +84,7 @@ export const HSTable: FC<HsTableProps> = (props: HsTableProps) => {
                               padding: '16px 10px',
                             }}
                           >
-                            {column.render ? column.render(value) : value}
+                            {column.render ? column.render(value, row) : value}
                           </TableCell>
                         );
                       } else {
@@ -112,7 +111,7 @@ export const HSTable: FC<HsTableProps> = (props: HsTableProps) => {
               })}
             </TableBody>
           </Table>
-        </TableContainer>
+        </StyledTableContainer>
         <TablePagination
           rowsPerPageOptions={props.filterRowsPerPage}
           component="div"
@@ -122,7 +121,7 @@ export const HSTable: FC<HsTableProps> = (props: HsTableProps) => {
           onChangePage={handleChangePage}
           onChangeRowsPerPage={handleChangeRowsPerPage}
         />
-      </Paper>
+      </StyledHsTable>
     </div>
   );
 };
