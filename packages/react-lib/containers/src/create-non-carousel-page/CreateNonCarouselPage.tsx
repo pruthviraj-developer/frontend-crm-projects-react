@@ -139,6 +139,10 @@ export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
               startDate: format(values.startDate, "yyyy-MM-dd'T'hh:mm:ss"),
               endDate: format(values.endDate, "yyyy-MM-dd'T'hh:mm:ss"),
               sorts: values.sorts.map((data) => data['id']),
+              tiles: [...values.tiles].map((tile, index) => ({
+                ...tile,
+                position: index + 1,
+              })),
             };
             if (props.action) {
               props.action(postData);
