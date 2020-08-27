@@ -1,4 +1,5 @@
 import React, { FC, useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Formik, Form, Field, FieldArray } from 'formik';
 import { TextField, Select } from 'formik-material-ui';
 import { MuiThemeProvider } from '@material-ui/core/styles';
@@ -72,7 +73,7 @@ export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
 ) => {
   const [data, setData] = useState(initialValues);
   const [snackBarError, setSnackBarError] = useState(snackBarProps);
-
+  const history = useHistory();
   const onSnackBarClose = (open: boolean) => {
     setSnackBarError({ ...snackBarError, open });
   };
@@ -175,6 +176,9 @@ export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
               .postPageCarousel<typeof postData, any>(postData)
               .then((res: any) => {
                 showStatus(res);
+                if (res.action === 'success') {
+                  history.push('/dashboard');
+                }
               })
               .catch((error: Error) => {
                 showStatus(error);
