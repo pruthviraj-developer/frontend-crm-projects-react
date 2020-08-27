@@ -21,12 +21,12 @@ const getNonHeroCarouselData = <R>(id: string): Promise<R> => {
 };
 
 const deleteNonHeroCarouselData = (id: string): Promise<NonHeroCarousel> => {
-  const url = `api/carouselservice/carousel/${id}`;
+  const url = `api/carouselservice/pagecarousel/${id}`;
   return httpService.delete<NonHeroCarousel>({ url });
 };
 
 const updateNonHeroCarouselData = (id: string): Promise<NonHeroCarousel> => {
-  const url = `api/carouselservice/carousel/publish/${id}`;
+  const url = `api/carouselservice/pagecarousel/publish/${id}`;
   return httpService.put<NonHeroCarousel>({ url });
 };
 
