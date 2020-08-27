@@ -19,8 +19,8 @@ export interface CreateNonCarouselPageState {
   sorts: [];
   position: '';
   platform: [];
-  start_date: Date;
-  end_date: Date;
+  startDate: Date;
+  endDate: Date;
   tileHeight?: number;
   tileWidth?: number;
   tiles: Tile[];

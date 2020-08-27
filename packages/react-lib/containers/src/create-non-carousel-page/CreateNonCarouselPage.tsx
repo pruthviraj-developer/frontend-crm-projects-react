@@ -59,8 +59,8 @@ const initialValues: CreateNonCarouselPageState = {
   sorts: [],
   position: '',
   platform: [],
-  start_date: new Date(),
-  end_date: new Date(),
+  startDate: new Date(),
+  endDate: new Date(),
   tiles: [],
 };
 const snackBarProps: Pick<HsSnackbarProps, 'open' | 'type' | 'message'> = {
@@ -135,8 +135,8 @@ export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
             setSubmitting(false);
             const postData = {
               ...values,
-              start_date: format(values.start_date, "yyyy-MM-dd'T'hh:mm:ss"),
-              end_date: format(values.end_date, "yyyy-MM-dd'T'hh:mm:ss"),
+              startDate: format(values.startDate, "yyyy-MM-dd'T'hh:mm:ss"),
+              endDate: format(values.endDate, "yyyy-MM-dd'T'hh:mm:ss"),
               sorts: values.sorts.map((data) => data['id']),
             };
             if (props.action) {
@@ -280,7 +280,7 @@ export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
                               <Field
                                 component={DateTimePicker}
                                 fullWidth
-                                name="start_date"
+                                name="startDate"
                                 label="Start Date"
                               />
                             </Grid>
@@ -288,7 +288,7 @@ export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
                               <Field
                                 component={DateTimePicker}
                                 fullWidth
-                                name="end_date"
+                                name="endDate"
                                 label="End Date"
                               />
                             </Grid>

@@ -9,8 +9,8 @@ const StyledCreateorWrapper = styled.div`
 `;
 const CarouselCreator: FC = () => {
   const onSubmit = (data: any) => {
-    alert(data);
-    console.log(data);
+    // alert(data);
+    // console.log(data);
   };
   const params = useParams<{ id: string }>();
   const props: CreateNonCarouselProps = {
