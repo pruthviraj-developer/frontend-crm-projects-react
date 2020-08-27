@@ -1,4 +1,5 @@
 import React, { FC, useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Formik, Form, Field, FieldArray } from 'formik';
 import { TextField, Select } from 'formik-material-ui';
 import { MuiThemeProvider } from '@material-ui/core/styles';
@@ -72,12 +73,22 @@ export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
 ) => {
   const [data, setData] = useState(initialValues);
   const [snackBarError, setSnackBarError] = useState(snackBarProps);
-
+  const history = useHistory();
   const onSnackBarClose = (open: boolean) => {
     setSnackBarError({ ...snackBarError, open });
   };
 
   const listData = useGetCarouselList();
+
+  const setSortingList = (sorts: any = []) => {
+    const sortList: any = listData['sortList'].list;
+    if (sortList && sortList.length && sorts.length) {
+      const selectedSorts = sortList.filter((data: any) => {
+        if (sorts.includes(data.id)) return data;
+      });
+      setData({ ...data, sorts: selectedSorts });
+    }
+  };
 
   useEffect(() => {
     (async () => {
@@ -87,6 +98,7 @@ export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
             CreateNonCarouselPageState
           >(props.carouselId);
           setData(carouselData);
+          setSortingList(carouselData.sorts);
         } else {
           setData(initialValues);
         }
@@ -104,6 +116,10 @@ export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
       }
     })();
   }, [props.carouselId]);
+
+  useEffect(() => {
+    setSortingList(data.sorts);
+  }, [listData['sortList'].list]);
 
   const showStatus = (responseData: any) => {
     if (responseData.action === 'success') {
@@ -134,10 +150,19 @@ export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
         onSubmit={(values, { setSubmitting }) => {
           setTimeout(() => {
             setSubmitting(false);
+            let startDate: any = values.startDate;
+            let endDate: any = values.endDate;
+
+            if (typeof startDate === 'object') {
+              startDate = format(values.startDate, "yyyy-MM-dd'T'hh:mm:ss");
+            }
+            if (typeof endDate === 'object') {
+              endDate = format(values.endDate, "yyyy-MM-dd'T'hh:mm:ss");
+            }
             const postData = {
               ...values,
-              startDate: format(values.startDate, "yyyy-MM-dd'T'hh:mm:ss"),
-              endDate: format(values.endDate, "yyyy-MM-dd'T'hh:mm:ss"),
+              startDate: startDate,
+              endDate: endDate,
               sorts: values.sorts.map((data) => data['id']),
               tiles: [...values.tiles].map((tile, index) => ({
                 ...tile,
@@ -151,6 +176,9 @@ export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
               .postPageCarousel<typeof postData, any>(postData)
               .then((res: any) => {
                 showStatus(res);
+                if (res.action === 'success') {
+                  history.push('/dashboard');
+                }
               })
               .catch((error: Error) => {
                 showStatus(error);
