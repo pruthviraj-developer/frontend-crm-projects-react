@@ -79,6 +79,16 @@ export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
 
   const listData = useGetCarouselList();
 
+  const setSortingList = (sorts: any = []) => {
+    const sortList: any = listData['sortList'].list;
+    if (sortList && sortList.length && sorts.length) {
+      const selectedSorts = sortList.filter((data: any) => {
+        if (sorts.includes(data.id)) return data;
+      });
+      setData({ ...data, sorts: selectedSorts });
+    }
+  };
+
   useEffect(() => {
     (async () => {
       try {
@@ -87,6 +97,7 @@ export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
             CreateNonCarouselPageState
           >(props.carouselId);
           setData(carouselData);
+          setSortingList(carouselData.sorts);
         } else {
           setData(initialValues);
         }
@@ -104,6 +115,10 @@ export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
       }
     })();
   }, [props.carouselId]);
+
+  useEffect(() => {
+    setSortingList(data.sorts);
+  }, [listData['sortList'].list]);
 
   const showStatus = (responseData: any) => {
     if (responseData.action === 'success') {
