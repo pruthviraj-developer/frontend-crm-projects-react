@@ -150,6 +150,18 @@ const DashBoard: FC = () => {
         try {
           const res = await carouselService.updateNonHeroCarouselData(rowData.id);
           console.log(res);
+          if (res.action === 'success') {
+            const message = res.messageDetail ? res.messageDetail.message : 'Published successfully';
+            setFilterParams({ ...filterParams });
+            setSnackBarError({
+              ...snackBarProps,
+              open: true,
+              type: 'success',
+              message: message,
+            });
+          } else {
+            throw res;
+          }
         } catch (error) {
           const data = error.data || error;
           let message = 'Try Later';
