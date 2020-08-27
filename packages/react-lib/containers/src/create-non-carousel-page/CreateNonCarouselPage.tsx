@@ -134,10 +134,19 @@ export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
         onSubmit={(values, { setSubmitting }) => {
           setTimeout(() => {
             setSubmitting(false);
+            let startDate: any = values.startDate;
+            let endDate: any = values.endDate;
+
+            if (typeof startDate === 'object') {
+              startDate = format(values.startDate, "yyyy-MM-dd'T'hh:mm:ss");
+            }
+            if (typeof endDate === 'object') {
+              endDate = format(values.endDate, "yyyy-MM-dd'T'hh:mm:ss");
+            }
             const postData = {
               ...values,
-              startDate: format(values.startDate, "yyyy-MM-dd'T'hh:mm:ss"),
-              endDate: format(values.endDate, "yyyy-MM-dd'T'hh:mm:ss"),
+              startDate: startDate,
+              endDate: endDate,
               sorts: values.sorts.map((data) => data['id']),
               tiles: [...values.tiles].map((tile, index) => ({
                 ...tile,
