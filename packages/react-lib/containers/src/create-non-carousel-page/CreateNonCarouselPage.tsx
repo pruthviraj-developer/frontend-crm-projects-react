@@ -204,7 +204,7 @@ export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
           isValid,
           dirty,
         }) => (
-          <Form>
+          <Form autoComplete="off">
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <StyledCreateNonHeroCarouselPage>
                 <Grid container spacing={2}>
