@@ -159,6 +159,15 @@ export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
             if (typeof endDate === 'object') {
               endDate = format(values.endDate, "yyyy-MM-dd'T'hh:mm:ss");
             }
+
+            if (values.tiles.length < 5) {
+              setSnackBarError({
+                open: true,
+                type: 'error',
+                message: 'Please add minimum 5 tiles',
+              });
+              return;
+            }
             const postData = {
               ...values,
               startDate: startDate,

@@ -9,7 +9,7 @@ import { format } from 'date-fns';
 import styled from '@emotion/styled';
 import { carouselService, tableData, CloneHeroCarouselWithId } from '@hs/services';
 import { tableList, tableParams } from '@hs/services';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 
 const DashBoardWrapper = styled.div`
   margin-left: 90px;
@@ -31,6 +31,7 @@ const DashBoard: FC = () => {
   //   message: 'Test',
   //   onSnackBarClose: onSnackBarClose,
   // };
+  const location = useLocation();
   const [data, setTableData] = useState<tableData>({});
   const [snackBarError, setSnackBarError] = useState(snackBarProps);
   const [count, setCount] = useState<number>(0);
@@ -38,9 +39,12 @@ const DashBoard: FC = () => {
   useEffect(() => {
     (async () => {
       try {
-        // console.log('Called');
-        const tableData = await carouselService.getTableData(filterParams);
-        // console.log('sortList', sortList);
+        let tableData: any = { totalRecords: 0 };
+        if (location.pathname === '/dashboard') {
+          tableData = await carouselService.getTableData(filterParams);
+        } else {
+          tableData = await carouselService.getArchivedTableData(filterParams);
+        }
         setTableData(tableData);
         setCount(tableData.totalRecords || 0);
       } catch (error) {
@@ -57,7 +61,7 @@ const DashBoard: FC = () => {
         });
       }
     })();
-  }, [filterParams]);
+  }, [filterParams, location]);
 
   const getUpdatedTableData = (filters: tableParams) => {
     setFilterParams(filters);

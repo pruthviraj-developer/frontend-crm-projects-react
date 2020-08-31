@@ -15,6 +15,11 @@ const getTableData = (params: tableParams): Promise<tableData> => {
   return httpService.get({ url, params });
 };
 
+const getArchivedTableData = (params: tableParams): Promise<tableData> => {
+  const url = 'api/carouselservice/pagecarousel/archivedList';
+  return httpService.get({ url, params });
+};
+
 const getNonHeroCarouselData = <R>(id: string): Promise<R> => {
   const url = `api/carouselservice/pagecarousel/${id}`;
   return httpService.get<R>({ url });
@@ -77,6 +82,7 @@ export const carouselService = {
   deleteNonHeroCarouselData,
   getSortList,
   getNonHeroCarouselData,
+  getArchivedTableData,
   getTableData,
   imageUpload,
   updateNonHeroCarouselData,
