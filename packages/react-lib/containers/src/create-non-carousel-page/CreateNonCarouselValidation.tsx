@@ -1,15 +1,30 @@
 import * as Yup from 'yup';
 
 export const CarouselFormValidation = Yup.object().shape({
-  title: Yup.string().required('YUP Title is required'),
+  title: Yup.string()
+    .max(20, "Title can't be more than 20 characters")
+    .required('Title is required'),
   position: Yup.number().required('Position is required'),
   carouselType: Yup.number().required('Carousel type is required'),
   platform: Yup.array().of(Yup.string()).required('Platform is required'),
   sorts: Yup.array().required('Sort is required'),
   tileHeight: Yup.number(),
   tileWidth: Yup.number(),
-  startDate: Yup.date().required('Start date is required'),
-  endDate: Yup.date().required('End date is required'),
+  startDate: Yup.date()
+    .min(new Date(), 'Start date cannot be less than current time')
+    .required('Start date is required'),
+
+  endDate: Yup.date()
+    .required('End date is required')
+    .when(
+      'startDate',
+      (startDate: any, schema: any) =>
+        startDate &&
+        schema.min(
+          new Date(startDate),
+          'End date should be greater than start date'
+        )
+    ),
   tiles: Yup.array()
     .of(
       Yup.object().shape({
