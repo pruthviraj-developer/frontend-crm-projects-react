@@ -80,16 +80,6 @@ export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
 
   const listData = useGetCarouselList();
 
-  const setSortingList = (sorts: any = []) => {
-    const sortList: any = listData['sortList'].list;
-    if (sortList && sortList.length && sorts.length) {
-      const selectedSorts = sortList.filter((data: any) => {
-        if (sorts.includes(data.id)) return data;
-      });
-      setData({ ...data, sorts: selectedSorts });
-    }
-  };
-
   useEffect(() => {
     (async () => {
       try {
@@ -98,7 +88,6 @@ export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
             CreateNonCarouselPageState
           >(props.carouselId);
           setData(carouselData);
-          setSortingList(carouselData.sorts);
         } else {
           setData(initialValues);
         }
@@ -116,10 +105,6 @@ export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
       }
     })();
   }, [props.carouselId]);
-
-  useEffect(() => {
-    setSortingList(data.sorts);
-  }, [listData['sortList'].list]);
 
   const showStatus = (responseData: any) => {
     if (responseData.action === 'success') {
@@ -172,7 +157,6 @@ export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
               ...values,
               startDate: startDate,
               endDate: endDate,
-              sorts: values.sorts.map((data) => data['id']),
               tiles: [...values.tiles].map((tile, index) => ({
                 ...tile,
                 position: index + 1,
@@ -295,14 +279,16 @@ export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
                                 name="sorts"
                                 label="Select Sort"
                                 variant="standard"
-                                // helperText="Please select sort"
                                 component={Autocomplete}
                                 options={listData['sortList'].list}
                                 loading={listData['sortList'].isLoading}
+                                getOptionSelected={(
+                                  option: ListOption,
+                                  selectedValue: ListOption
+                                ) => option.id == selectedValue?.id}
                                 getOptionLabel={(option: SortListOption) =>
-                                  option.value ? option.value : ''
+                                  option.value ? option.value : option.name
                                 }
-                                // style={{ width: 350 }}
                                 renderInput={(
                                   params: AutocompleteRenderInputParams
                                 ) => (
