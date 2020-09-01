@@ -145,11 +145,44 @@ export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
               endDate = format(values.endDate, "yyyy-MM-dd'T'hh:mm:ss");
             }
 
-            if (values.tiles.length < 5) {
+            const carouselType = values.carouselType;
+            const tilesLength = values.tiles.length;
+            let errorMessage;
+            switch (carouselType) {
+              case '1':
+                if (tilesLength < 3) {
+                  errorMessage = 3;
+                }
+
+                break;
+              case '2':
+                if (tilesLength < 5) {
+                  errorMessage = 5;
+                }
+
+                break;
+              case '3':
+                if (tilesLength < 7) {
+                  errorMessage = 7;
+                }
+                break;
+              case '4':
+                if (tilesLength < 9) {
+                  errorMessage = 9;
+                }
+
+                break;
+              case '5':
+                if (tilesLength < 11) {
+                  errorMessage = 11;
+                }
+                break;
+            }
+            if (errorMessage) {
               setSnackBarError({
                 open: true,
                 type: 'error',
-                message: 'Please add minimum 5 tiles',
+                message: `Please add minimum ${errorMessage} tiles`,
               });
               return;
             }

@@ -38,7 +38,7 @@ const updateNonHeroCarouselData = (id: string): Promise<NonHeroCarousel> => {
 const createNonHeroCarousel = (
   data: CloneHeroCarousel
 ): Promise<NonHeroCarousel> => {
-  const url = 'api/carouselservice/carousel';
+  const url = 'api/carouselservice/pagecarousel';
   return httpService.post<NonHeroCarousel>({ url, data });
 };
 
