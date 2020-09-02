@@ -10,9 +10,7 @@ export const CarouselFormValidation = Yup.object().shape({
   sorts: Yup.array().required('Sort is required'),
   tileHeight: Yup.number(),
   tileWidth: Yup.number(),
-  startDate: Yup.date()
-    .min(new Date(), 'Start date cannot be less than current time')
-    .required('Start date is required'),
+  startDate: Yup.date().required('Start date is required'),
 
   endDate: Yup.date()
     .required('End date is required')
