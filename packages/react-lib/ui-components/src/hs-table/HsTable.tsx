@@ -15,6 +15,9 @@ const StyledHsTable = styled(Paper)`
 `;
 const StyledTableContainer = styled(TableContainer)`
   max-height: 80vh;
+  .MuiTableCell-root {
+    font-size: 1.2rem;
+  }
 `;
 export const HSTable: FC<HsTableProps> = (props: HsTableProps) => {
   const columns = props.columns;
