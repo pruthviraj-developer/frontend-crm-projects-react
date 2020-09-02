@@ -100,6 +100,8 @@ const columns = [
         return (
           <div style={{ display: 'flex' }}>
             <IconButton
+              style={{ margin: '0 5px' }}
+              title="Publish"
               color="primary"
               aria-label="Publish"
               onClick={() => {
@@ -111,6 +113,8 @@ const columns = [
               <PublishIcon />
             </IconButton>
             <IconButton
+              style={{ margin: '0 5px' }}
+              title="Copy"
               color="primary"
               aria-label="Copy"
               onClick={() => {
@@ -122,6 +126,8 @@ const columns = [
               <FileCopyIcon />
             </IconButton>
             <IconButton
+              style={{ margin: '0 5px' }}
+              title="Delete"
               color="primary"
               aria-label="Delete"
               onClick={() => {

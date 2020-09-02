@@ -17,6 +17,7 @@ export const carouselTypesOptions = () =>
     { display: '2', value: '2' },
     { display: '3', value: '3' },
     { display: '4', value: '4' },
+    { display: '5', value: '5' },
   ].map((item) => (
     <MenuItem key={item.value} value={item.value}>
       {item.display}

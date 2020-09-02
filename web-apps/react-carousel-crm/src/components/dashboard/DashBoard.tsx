@@ -263,9 +263,10 @@ const DashBoard: FC = () => {
           return (
             <div style={{ display: 'flex' }}>
               <IconButton
+                style={{ marginLeft: '5px', padding: '6px' }}
+                title="Publish"
                 color="primary"
                 aria-label="Publish"
-                style={{ padding: 0 }}
                 onClick={() => {
                   if (props) {
                     props.action({ ...data, type: 'publish' });
@@ -275,9 +276,10 @@ const DashBoard: FC = () => {
                 <PublishIcon />
               </IconButton>
               <IconButton
+                style={{ marginLeft: '5px', padding: '6px' }}
+                title="Copy"
                 color="primary"
                 aria-label="clone"
-                style={{ padding: 0 }}
                 onClick={() => {
                   if (props) {
                     props.action({ ...data, type: 'clone' });
@@ -287,9 +289,10 @@ const DashBoard: FC = () => {
                 <FileCopyIcon />
               </IconButton>
               <IconButton
+                style={{ marginLeft: '5px', padding: '6px' }}
+                title="Delete"
                 color="primary"
                 aria-label="Delete"
-                style={{ padding: 0 }}
                 onClick={() => {
                   if (props) {
                     props.action({ ...data, type: 'delete' });

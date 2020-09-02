@@ -100,6 +100,7 @@ export type SortList = SortListOption[];
 export interface SortListOption {
   id: string | number;
   value: string | number | undefined;
+  name: string | number | undefined;
 }
 
 export type List = ListOption[];
