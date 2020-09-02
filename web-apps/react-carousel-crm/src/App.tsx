@@ -3,11 +3,12 @@ import { ThemeProvider } from 'emotion-theming';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import { LeftNavBar, LeftNavBarProps } from '@hs/components';
-import { DashBoardIcon, CreateIcon, ArchiveIcon } from '@hs/icons';
+import { DashBoardIcon, CreateIcon, ArchiveIcon, FAQIcon } from '@hs/icons';
 import { LightTheme } from '@hs/utils';
 import './App.css';
 import DashBoard from './components/dashboard/DashBoard';
 import CarouselCreator from './components/creator/CarouselCreator';
+import { FAQScreen } from './components/faq-section/FAQScreen';
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 function App() {
   const navItems: LeftNavBarProps = {
@@ -15,6 +16,7 @@ function App() {
       { linkUrl: '/dashboard', linkText: 'Dashboard', icon: DashBoardIcon },
       { linkUrl: '/create-carousel', linkText: 'Create', icon: CreateIcon },
       { linkUrl: '/archivedlist', linkText: 'ArchivedLit', icon: ArchiveIcon },
+      { linkUrl: '/faq', linkText: 'FAQ', icon: FAQIcon },
     ],
   };
 
@@ -37,6 +39,9 @@ function App() {
               </Route>
               <Route path="/archivedlist">
                 <DashBoard />
+              </Route>
+              <Route path="/faq">
+                <FAQScreen />
               </Route>
             </Switch>
           </Router>

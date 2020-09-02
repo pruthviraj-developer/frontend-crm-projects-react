@@ -1,12 +1,12 @@
 import React, { FC } from 'react';
-import { CreateCarouselProps } from './ICreateCarouselPage';
+import { CreateNonCarouselProps } from './ICreateNonCarouselPage';
 import { action } from '@storybook/addon-actions';
 import { CreateNonCarouselPage } from './CreateNonCarouselPage';
 export default {
   title: 'Create Non Hero Carousel Page',
 };
 
-const props: CreateCarouselProps = {
+const props: CreateNonCarouselProps = {
   action: action('table-action'),
 };
 
