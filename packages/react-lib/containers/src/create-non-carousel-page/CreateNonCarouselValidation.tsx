@@ -11,7 +11,10 @@ export const CarouselFormValidation = Yup.object().shape({
   tileHeight: Yup.number(),
   tileWidth: Yup.number(),
   startDate: Yup.date()
-    .min(new Date(), 'Start date cannot be less than current time')
+    .min(
+      new Date(new Date().valueOf() - 1000),
+      'Start date cannot be less than current time'
+    )
     .required('Start date is required'),
 
   endDate: Yup.date()
@@ -21,7 +24,7 @@ export const CarouselFormValidation = Yup.object().shape({
       (startDate: any, schema: any) =>
         startDate &&
         schema.min(
-          new Date(startDate),
+          new Date(new Date(startDate).valueOf() + 1000),
           'End date should be greater than start date'
         )
     ),
