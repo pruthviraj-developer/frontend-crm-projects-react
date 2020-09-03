@@ -10,6 +10,7 @@ import styled from '@emotion/styled';
 import { carouselService, tableData, CloneHeroCarouselWithId } from '@hs/services';
 import { tableList, tableParams } from '@hs/services';
 import { NavLink, useLocation } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 const DashBoardWrapper = styled.div`
   margin-left: 90px;
@@ -31,6 +32,7 @@ const DashBoard: FC = () => {
   //   message: 'Test',
   //   onSnackBarClose: onSnackBarClose,
   // };
+  const history = useHistory();
   const location = useLocation();
   const [data, setTableData] = useState<tableData>({});
   const [snackBarError, setSnackBarError] = useState(snackBarProps);
@@ -71,13 +73,16 @@ const DashBoard: FC = () => {
     (async () => {
       try {
         const response = await carouselService.createNonHeroCarousel(postData);
-        setFilterParams({ ...filterParams });
         if (response.action === 'success') {
           setSnackBarError({
             open: true,
             type: 'success',
             message: response.messageDetail ? response.messageDetail.message : 'Refresh the Page to see the status',
           });
+          const value = response.messageDetail ? response.messageDetail.value : undefined;
+          if (value) {
+            history.push(`edit-carousel/${value}`);
+          }
         }
       } catch (error) {
         setCount(0);
