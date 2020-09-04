@@ -139,10 +139,10 @@ export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
             let endDate: any = values.endDate;
 
             if (typeof startDate === 'object') {
-              startDate = format(values.startDate, "yyyy-MM-dd'T'hh:mm:ss");
+              startDate = format(values.startDate, "yyyy-MM-dd'T'HH:mm:ss");
             }
             if (typeof endDate === 'object') {
-              endDate = format(values.endDate, "yyyy-MM-dd'T'hh:mm:ss");
+              endDate = format(values.endDate, "yyyy-MM-dd'T'HH:mm:ss");
             }
 
             const carouselType = values.carouselType;
