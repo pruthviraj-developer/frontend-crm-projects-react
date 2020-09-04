@@ -340,6 +340,7 @@ export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
                               <Field
                                 component={DateTimePicker}
                                 fullWidth
+                                ampm={false}
                                 name="startDate"
                                 label="Start Date"
                               />
@@ -348,6 +349,7 @@ export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
                               <Field
                                 component={DateTimePicker}
                                 fullWidth
+                                ampm={false}
                                 name="endDate"
                                 label="End Date"
                               />
