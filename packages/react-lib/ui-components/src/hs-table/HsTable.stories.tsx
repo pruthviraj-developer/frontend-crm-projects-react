@@ -27,7 +27,10 @@ const columns = [
   {
     id: 'title',
     label: 'Title',
-    render: (props, data: Record<string, unknown>) => {
+    render: (props: any, data: any, isTitle?: boolean) => {
+      if (isTitle) {
+        return data.title;
+      }
       if (data) {
         return (
           <>

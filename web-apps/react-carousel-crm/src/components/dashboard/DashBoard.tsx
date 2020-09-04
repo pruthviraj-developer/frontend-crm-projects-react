@@ -197,7 +197,10 @@ const DashBoard: FC = () => {
       id: 'title',
       label: 'Title',
       width: 100,
-      render: (props: any, data: any) => {
+      render: (props: any, data: any, isTitle?: boolean) => {
+        if (isTitle) {
+          return data.title;
+        }
         if (props || data) {
           return (
             <>
