@@ -594,7 +594,11 @@ export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
                               <Button
                                 color={'primary'}
                                 variant={'contained'}
-                                disabled={isSubmitting || !isValid}
+                                disabled={
+                                  isSubmitting ||
+                                  (!isValid && values.tiles.length > 0) ||
+                                  (values.tiles.length === 12 ? true : false)
+                                }
                                 size={'large'}
                                 onClick={() =>
                                   push({
