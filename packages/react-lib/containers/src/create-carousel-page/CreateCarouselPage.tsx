@@ -21,7 +21,7 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import { HsSnackbar, HsSnackbarProps } from '@hs/components';
 import { format } from 'date-fns';
-import { createService, carouselService, SortList } from '@hs/services';
+import { carouselService, SortList } from '@hs/services';
 import {
   CreateCarouselPageState,
   CreateCarouselProps,
@@ -193,17 +193,6 @@ export const CreateCarouselPage: FC<CreateCarouselProps> = (
             if (props.action) {
               props.action(postData);
             }
-            createService
-              .post({
-                url: 'api/carouselservice/pagecarousel',
-                data: postData,
-              })
-              .then((res: any) => {
-                showStatus(res);
-              })
-              .catch((error: Error) => {
-                showStatus(error);
-              });
           }, 500);
         }}
       >
