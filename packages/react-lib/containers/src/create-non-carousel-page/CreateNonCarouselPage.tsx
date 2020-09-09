@@ -629,7 +629,7 @@ export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
                 </Button>
               </Box>
             </MuiPickersUtilsProvider>
-            <pre>{JSON.stringify(values, null, 4)}</pre>
+            {/* <pre>{JSON.stringify(values, null, 4)}</pre> */}
           </Form>
         )}
       </Formik>
