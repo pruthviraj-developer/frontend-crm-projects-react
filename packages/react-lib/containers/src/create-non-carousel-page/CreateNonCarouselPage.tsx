@@ -87,7 +87,10 @@ export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
           const carouselData = await carouselService.getNonHeroCarouselData<
             CreateNonCarouselPageState
           >(props.carouselId);
-          setData(carouselData);
+          const title = carouselData.title
+            ? carouselData.title.substr(0, 20)
+            : '';
+          setData({ ...carouselData, title });
         } else {
           setData(initialValues);
         }
