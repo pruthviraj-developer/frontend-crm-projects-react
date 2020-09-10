@@ -1,14 +1,14 @@
 import React from 'react';
 import { MenuItem } from '@material-ui/core';
-
+import { StyledMenuItem } from './StyledCreateNonCarouselPage';
 export const platformOptions = () =>
   [
     { display: 'IOS', value: 'IOS' },
     { display: 'ANDROID', value: 'ANDROID' },
   ].map((item) => (
-    <MenuItem key={item.value} value={item.value}>
+    <StyledMenuItem key={item.value} value={item.value}>
       {item.display}
-    </MenuItem>
+    </StyledMenuItem>
   ));
 
 export const carouselTypesOptions = () =>
@@ -24,7 +24,7 @@ export const carouselTypesOptions = () =>
     </MenuItem>
   ));
 
-export const getPostionOptions = (count = 1) =>
+export const getPositionOptions = (count = 1) =>
   Array.from({ length: count }, (_v, i) => ++i).map((value) => (
     <MenuItem key={'position' + value.toString()} value={value}>
       {value}

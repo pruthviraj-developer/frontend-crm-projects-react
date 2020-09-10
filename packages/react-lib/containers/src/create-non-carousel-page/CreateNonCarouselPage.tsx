@@ -50,7 +50,7 @@ import {
   carouselTypesOptions,
   platformOptions,
   getTileTypeOptions,
-  getPostionOptions,
+  getPositionOptions,
 } from './CreateNonCarouselMenu';
 
 const initialValues: CreateNonCarouselPageState = {
@@ -511,7 +511,7 @@ export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
                                                 );
                                               }}
                                             >
-                                              {getPostionOptions(
+                                              {getPositionOptions(
                                                 values.tiles.length
                                               )}
                                             </Field>
