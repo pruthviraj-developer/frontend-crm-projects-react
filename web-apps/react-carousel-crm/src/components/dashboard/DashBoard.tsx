@@ -372,8 +372,8 @@ const DashBoard: FC = () => {
   return (
     <DashBoardWrapper>
       <h1>Page Carousel DashBoard</h1>
-      {count && <HSTable {...TableData} />}
-      {!count && <h5> Loading or no data</h5>}
+      {count > 0 && <HSTable {...TableData} />}
+      {count === 0 && <h5> Loading or no data</h5>}
       {snackBarError.open && <HsSnackbar {...snackBarError} onSnackBarClose={onSnackBarClose} />}
     </DashBoardWrapper>
   );
