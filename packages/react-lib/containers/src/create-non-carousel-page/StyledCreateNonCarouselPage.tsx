@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { Card } from '@material-ui/core';
+import { Card, MenuItem } from '@material-ui/core';
 import { Colors } from '@hs/utils';
 
 export const StyledCreateCarouselPage = styled.div`
@@ -39,4 +39,10 @@ export const StyledCarouselCard = styled(Card)`
 export const StyledFooter = styled.div`
   padding: 15px;
   background-color: ${Colors.GREY_SHADE[500]};
+`;
+export const StyledMenuItem = styled(MenuItem)`
+  &.MuiMenuItem-root.Mui-selected {
+    background-color: ${Colors.PINK[400]};
+    color: white;
+  }
 `;
