@@ -38,6 +38,7 @@ const DashBoard: FC = () => {
   const [data, setTableData] = useState<tableData>({});
   const [snackBarError, setSnackBarError] = useState(snackBarProps);
   const [count, setCount] = useState<number>(0);
+  const [isUrlChanged, setUrlChanged] = useState<number>(0);
   const [filterParams, setFilterParams] = useState<tableParams>({ pageSize: 10, pageNo: 0 }); // page size should be size as rowsperpage
   const onSnackBarClose = (open: boolean) => {
     setSnackBarError({ ...snackBarError, open });
@@ -75,10 +76,12 @@ const DashBoard: FC = () => {
   }, [filterParams]);
 
   useEffect(() => {
-    if (count) {
+    if (isUrlChanged) {
       setTableData({});
       setCount(0);
       setFilterParams({ pageSize: 10, pageNo: 0 });
+    } else {
+      setUrlChanged(1);
     }
   }, [location]);
 
