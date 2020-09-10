@@ -27,9 +27,6 @@ const snackBarProps: Pick<HsSnackbarProps, 'open' | 'type' | 'message'> = {
 };
 
 const DashBoard: FC = () => {
-  const onSnackBarClose = (open: boolean) => {
-    setSnackBarError({ ...snackBarError, open });
-  };
   // const snackBarProps = {
   //   open: false,
   //   type: 'error' as const,
@@ -42,14 +39,18 @@ const DashBoard: FC = () => {
   const [snackBarError, setSnackBarError] = useState(snackBarProps);
   const [count, setCount] = useState<number>(0);
   const [filterParams, setFilterParams] = useState<tableParams>({ pageSize: 10, pageNo: 0 }); // page size should be size as rowsperpage
-  useEffect(() => {
+  const onSnackBarClose = (open: boolean) => {
+    setSnackBarError({ ...snackBarError, open });
+  };
+  const geTableData = () => {
     (async () => {
       try {
         let tableData: any = { totalRecords: 0 };
+        const params = { ...filterParams, pageNo: filterParams.pageNo + 1 };
         if (location.pathname === '/dashboard') {
-          tableData = await carouselService.getTableData(filterParams);
+          tableData = await carouselService.getTableData(params);
         } else {
-          tableData = await carouselService.getArchivedTableData(filterParams);
+          tableData = await carouselService.getArchivedTableData(params);
         }
         setTableData(tableData);
         setCount(tableData.totalRecords || 0);
@@ -67,7 +68,19 @@ const DashBoard: FC = () => {
         });
       }
     })();
-  }, [filterParams, location]);
+  };
+
+  useEffect(() => {
+    geTableData();
+  }, [filterParams]);
+
+  useEffect(() => {
+    if (count) {
+      setTableData({});
+      setCount(0);
+      setFilterParams({ pageSize: 10, pageNo: 0 });
+    }
+  }, [location]);
 
   const getUpdatedTableData = (filters: tableParams) => {
     setFilterParams(filters);
@@ -359,7 +372,8 @@ const DashBoard: FC = () => {
   return (
     <DashBoardWrapper>
       <h1>Page Carousel DashBoard</h1>
-      <HSTable {...TableData} />
+      {count && <HSTable {...TableData} />}
+      {!count && <h5> Loading or no data</h5>}
       {snackBarError.open && <HsSnackbar {...snackBarError} onSnackBarClose={onSnackBarClose} />}
     </DashBoardWrapper>
   );
