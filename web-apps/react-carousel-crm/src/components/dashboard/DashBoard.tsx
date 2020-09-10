@@ -11,9 +11,13 @@ import { carouselService, tableData, CloneHeroCarouselWithId } from '@hs/service
 import { tableList, tableParams } from '@hs/services';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
-
+import { SelectedCircle, SvgIcon } from '@hs/icons';
 const DashBoardWrapper = styled.div`
   margin-left: 90px;
+`;
+
+const StyledIcon = styled(SvgIcon)`
+  min-width: 24px;
 `;
 
 const snackBarProps: Pick<HsSnackbarProps, 'open' | 'type' | 'message'> = {
@@ -192,7 +196,32 @@ const DashBoard: FC = () => {
     updateStatus(row);
   };
   const columns = [
-    { id: 'id', label: 'Id' },
+    {
+      id: 'id',
+      label: 'Id',
+      render: (value: any, rowData: any, isTitle?: boolean) => {
+        if (isTitle) {
+          return value;
+        }
+        if (rowData) {
+          return (
+            <>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                }}
+              >
+                {value}
+                {rowData.active && <StyledIcon icon={SelectedCircle} />}
+              </div>
+            </>
+          );
+        }
+        return '--';
+      },
+    },
     {
       id: 'title',
       label: 'Title',
