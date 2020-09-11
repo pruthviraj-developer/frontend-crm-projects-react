@@ -42,7 +42,10 @@ export const StyledFooter = styled.div`
 `;
 export const StyledMenuItem = styled(MenuItem)`
   &.MuiMenuItem-root.Mui-selected {
-    background-color: ${Colors.PINK[400]};
+    background-color: ${Colors.PINK[500]};
     color: white;
+  }
+  &.MuiMenuItem-root.Mui-selected:hover {
+    background-color: ${Colors.PINK[300]};
   }
 `;

@@ -4,8 +4,8 @@
 
 | Plateforms | Support | Version |
 | ---------- | ------- | ------- |
-| IOS        | ✔       | 3.2.X   |
-| Android    | ✔       | 3.2.x   |
+| IOS        | ✔       | 3.2     |
+| Android    | ✔       | 3.2     |
 | Web        | ✘       | -       |
 | mWeb       | ✘       | -       |
 
