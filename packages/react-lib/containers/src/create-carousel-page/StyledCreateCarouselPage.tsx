@@ -14,7 +14,6 @@ export const StyledChips = styled.div`
   }
 `;
 export const StyledCard = styled(Card)`
-  max-width: 200px;
-  /* padding: 16; */
-  background-color: '#DFE1E6';
+  max-width: 250px;
+  margin-left: 90px;
 `;

@@ -10,6 +10,8 @@ const StyledLeftNavBar = styled.div`
   background-color: ${Colors.GREY_SHADE[500]};
   height: 100vh;
   float: left;
+  position: fixed;
+  z-index: 100;
 `;
 const LinkText = styled.div`
   font-weight: ${fontWeight.medium};

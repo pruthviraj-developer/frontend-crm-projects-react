@@ -24,14 +24,18 @@ export const ImageUpload: FC<ImageUploadProps> = ({
   onChange,
   imageUrl = '',
 }: ImageUploadProps) => {
-  const [message, setmessage] = useState<MessageProps>({
+  const initMessage: MessageProps = {
     messageType: 'info',
     msg: 'Image Upload',
-  });
+  };
+  const [message, setmessage] = useState<MessageProps>(initMessage);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setLoading(false);
+    if (imageUrl != '') {
+      setLoading(false);
+      setmessage(initMessage);
+    }
   }, [imageUrl]);
 
   const onError = (errors: ErrorsType) => {

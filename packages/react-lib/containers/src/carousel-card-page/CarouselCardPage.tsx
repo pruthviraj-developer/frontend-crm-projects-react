@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { State, Tile } from './ICarouselCardPage';
+import React from 'react';
+import { State } from './ICarouselCardPage';
 import {
   Button,
   CardHeader,
@@ -27,15 +27,12 @@ import { Formik, Field, Form, FieldArray } from 'formik';
 import { DarkTheme } from '@hs/utils';
 import { TextField } from 'formik-material-ui';
 import { ImageUpload, ImageListType } from '@hs/components';
-import {
-  carouselService,
-  productListService,
-  List,
-  ListOption,
-} from '@hs/services';
+import { carouselService, ListOption } from '@hs/services';
+import { useGetCarouselList } from './CarouselCardHooks';
+import { CardPageValidation } from './CarouselCardValidation';
 
-let count = 0;
-const getCount = () => ++count;
+// let count = 0;
+// const getCount = () => ++count;
 
 const initialValues: State = {
   tileHeight: 400,
@@ -43,7 +40,7 @@ const initialValues: State = {
   tiles: [
     {
       type: 'plp',
-      position: getCount(),
+      position: 1,
       actionId: '11233',
       actionName: 'TEST123 - 11233',
       imageUrl:
@@ -51,13 +48,13 @@ const initialValues: State = {
     },
     {
       type: 'plp',
-      position: getCount(),
+      position: 2,
       imageUrl:
         'https://static.hopscotch.in/fstatic/product/202008/3d3e3f8c-33a9-415d-a092-9623e7e05ca6_full.jpg?version=1597741411488',
     },
   ],
 };
-const getPostionOptions = () => {
+const getPostionOptions = (count = 1) => {
   const options = [...new Array(count)].map((_, index) => (
     <MenuItem key={'position' + index.toString()} value={index + 1}>
       {index + 1}
@@ -77,63 +74,12 @@ const getTileTypeOptions = () =>
   ));
 
 export const CarouselCardPage = () => {
-  const [plpList, setPlpList] = useState<List>([]);
-  const [spList, setSpList] = useState<List>([]);
-  const [boutiqueList, setBoutiqueList] = useState<List>([]);
-  const isPlpLoading = plpList.length === 0;
-  const getOptions = (optionType: Tile['type'] = 'plp') => {
-    if (optionType == 'plp') return plpList;
-    else if (optionType == 'sp') return spList;
-    else if (optionType == 'boutique') return boutiqueList;
-    return [];
-  };
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const plpList = await productListService.getPlpList();
-        setPlpList(plpList);
-      } catch (error) {
-        setPlpList([]);
-      }
-    })();
-    return () => {
-      setPlpList([]);
-    };
-  }, []);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const plpList = await productListService.getSpList();
-        setSpList(plpList);
-      } catch (error) {
-        setSpList([]);
-      }
-    })();
-    return () => {
-      setSpList([]);
-    };
-  }, []);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const boutiqueList = await productListService.getBoutiqueList();
-        setBoutiqueList(boutiqueList);
-      } catch (error) {
-        setBoutiqueList([]);
-      }
-    })();
-    return () => {
-      setBoutiqueList([]);
-    };
-  }, []);
-
+  const listData = useGetCarouselList();
   return (
     <>
       <Formik
         initialValues={initialValues}
+        validationSchema={CardPageValidation}
         onSubmit={(values, { setSubmitting }) => {
           setTimeout(() => {
             alert(JSON.stringify(values, null, 2));
@@ -141,10 +87,10 @@ export const CarouselCardPage = () => {
           }, 400);
         }}
       >
-        {({ values, isSubmitting, setFieldValue }) => (
+        {({ values, isSubmitting, setFieldValue, isValid }) => (
           <Form>
             <FieldArray name="tiles">
-              {({ remove, push }) => (
+              {({ remove, push, move }) => (
                 <StyledCarouselPage>
                   <Grid container direction="row" spacing={2}>
                     {values.tiles.length > 0 &&
@@ -180,7 +126,10 @@ export const CarouselCardPage = () => {
                                   name={`tiles.${index}.imageUrl`}
                                   resolutionHeight={values.tileHeight}
                                   resolutionWidth={values.tileWidth}
-                                  resolutionValidationType={'absolute'}
+                                  resolutionValidationType={(() =>
+                                    values.tiles.length > 1
+                                      ? 'absolute'
+                                      : '')()}
                                   imageUrl={tile.imageUrl}
                                   onChange={async (value: ImageListType) => {
                                     try {
@@ -251,13 +200,30 @@ export const CarouselCardPage = () => {
                                       type="text"
                                       name={`tiles.${index}.position`}
                                       label="Position"
+                                      value={index + 1}
                                       select
                                       inputProps={{
                                         id: 'outlined-select',
                                       }}
+                                      disabled={!isValid}
                                       variant={'outlined'}
+                                      onChange={(
+                                        evt: React.ChangeEvent<HTMLLIElement>
+                                      ) => {
+                                        // setFieldValue(
+                                        //   `tiles.${index}.position`,
+                                        //   evt.target.value
+                                        // );
+                                        move(index, evt.target.value - 1);
+                                        setFieldValue(
+                                          `tiles.${
+                                            evt.target.value - 1
+                                          }.position`,
+                                          evt.target.value
+                                        );
+                                      }}
                                     >
-                                      {getPostionOptions()}
+                                      {getPostionOptions(values.tiles.length)}
                                     </Field>
                                   </Grid>
                                   <Grid item xs>
@@ -274,8 +240,7 @@ export const CarouselCardPage = () => {
                                           ? {
                                               name:
                                                 values.tiles[index].actionName,
-                                              value:
-                                                values.tiles[index].actionId,
+                                              id: values.tiles[index].actionId,
                                             }
                                           : null
                                       }
@@ -283,21 +248,24 @@ export const CarouselCardPage = () => {
                                       getOptionSelected={(
                                         option: ListOption,
                                         selectedValue: ListOption
-                                      ) => option.value == selectedValue?.value}
-                                      options={getOptions(
-                                        values.tiles[index].type
-                                      )}
+                                      ) => option.id == selectedValue?.id}
+                                      options={
+                                        listData[values.tiles[index].type].list
+                                      }
                                       getOptionLabel={(option: ListOption) =>
                                         option.name ? option.name : ''
                                       }
-                                      loading={isPlpLoading}
+                                      loading={
+                                        listData[values.tiles[index].type]
+                                          .isLoading
+                                      }
                                       onChange={(
                                         _evt: React.ChangeEvent,
                                         actionvalue: ListOption
                                       ) => {
                                         setFieldValue(
                                           `tiles.${index}.actionId`,
-                                          actionvalue?.value
+                                          actionvalue?.id
                                         );
                                         setFieldValue(
                                           `tiles.${index}.actionName`,
@@ -331,13 +299,12 @@ export const CarouselCardPage = () => {
                       <Button
                         color={'primary'}
                         variant={'contained'}
-                        disabled={isSubmitting}
+                        disabled={isSubmitting || !isValid}
                         size={'large'}
                         onClick={() =>
                           push({
                             type: 'plp',
-                            position: getCount(),
-                            id: null,
+                            position: values.tiles.length + 1,
                           })
                         }
                       >

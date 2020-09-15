@@ -8,31 +8,51 @@ import { IconButton } from '@material-ui/core';
 import { format } from 'date-fns';
 import styled from '@emotion/styled';
 import { carouselService, tableData, CloneHeroCarouselWithId } from '@hs/services';
-import { tableList } from '@hs/services';
-
+import { tableList, tableParams } from '@hs/services';
+import { NavLink, useLocation } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+import { SelectedCircle, SvgIcon } from '@hs/icons';
 const DashBoardWrapper = styled.div`
-  margin-left: 5px;
+  margin-left: 90px;
 `;
+
+const StyledIcon = styled(SvgIcon)`
+  min-width: 24px;
+`;
+
+const snackBarProps: Pick<HsSnackbarProps, 'open' | 'type' | 'message'> = {
+  open: false,
+  type: 'error' as const,
+  message: 'Test',
+};
+
 const DashBoard: FC = () => {
-  const onSnackBarClose = (open: boolean) => {
-    setSnackBarError({ ...HsSnackBarError, open });
-  };
-  const snackBarProps = {
-    open: false,
-    type: 'error' as const,
-    message: 'Test',
-    onSnackBarClose: onSnackBarClose,
-  };
+  // const snackBarProps = {
+  //   open: false,
+  //   type: 'error' as const,
+  //   message: 'Test',
+  //   onSnackBarClose: onSnackBarClose,
+  // };
+  const history = useHistory();
+  const location = useLocation();
   const [data, setTableData] = useState<tableData>({});
-  const [HsSnackBarError, setSnackBarError] = useState<HsSnackbarProps>(snackBarProps);
+  const [snackBarError, setSnackBarError] = useState(snackBarProps);
   const [count, setCount] = useState<number>(0);
-  const [filterParams, setFilterParams] = useState<Record<string, unknown>>({ pageSize: 10, pageNo: 0 }); // page size should be size as rowsperpage
-  useEffect(() => {
+  const [isUrlChanged, setUrlChanged] = useState<number>(0);
+  const [filterParams, setFilterParams] = useState<tableParams>({ pageSize: 10, pageNo: 0 }); // page size should be size as rowsperpage
+  const onSnackBarClose = (open: boolean) => {
+    setSnackBarError({ ...snackBarError, open });
+  };
+  const geTableData = () => {
     (async () => {
       try {
-        // console.log('Called');
-        const tableData = await carouselService.getTableData();
-        // console.log('sortList', sortList);
+        let tableData: any = { totalRecords: 0 };
+        const params = { ...filterParams, pageNo: filterParams.pageNo + 1 };
+        if (location.pathname === '/dashboard') {
+          tableData = await carouselService.getTableData(params);
+        } else {
+          tableData = await carouselService.getArchivedTableData(params);
+        }
         setTableData(tableData);
         setCount(tableData.totalRecords || 0);
       } catch (error) {
@@ -43,16 +63,29 @@ const DashBoard: FC = () => {
           message = error.messageDetail.message;
         }
         setSnackBarError({
-          ...snackBarProps,
           open: true,
           type: 'error',
           message: message,
         });
       }
     })();
+  };
+
+  useEffect(() => {
+    geTableData();
   }, [filterParams]);
 
-  const getUpdatedTableData = (filters: Record<string, unknown>) => {
+  useEffect(() => {
+    if (isUrlChanged) {
+      setTableData({});
+      setCount(0);
+      setFilterParams({ pageSize: 10, pageNo: 0 });
+    } else {
+      setUrlChanged(1);
+    }
+  }, [location]);
+
+  const getUpdatedTableData = (filters: tableParams) => {
     setFilterParams(filters);
   };
   const saveCloneData = (res: any) => {
@@ -60,14 +93,16 @@ const DashBoard: FC = () => {
     (async () => {
       try {
         const response = await carouselService.createNonHeroCarousel(postData);
-        setFilterParams({ ...filterParams });
         if (response.action === 'success') {
           setSnackBarError({
-            ...snackBarProps,
             open: true,
             type: 'success',
             message: response.messageDetail ? response.messageDetail.message : 'Refresh the Page to see the status',
           });
+          const value = response.messageDetail ? response.messageDetail.value : undefined;
+          if (value) {
+            history.push(`edit-carousel/${value}`);
+          }
         }
       } catch (error) {
         setCount(0);
@@ -76,7 +111,6 @@ const DashBoard: FC = () => {
           message = error.messageDetail.message;
         }
         setSnackBarError({
-          ...snackBarProps,
           open: true,
           type: 'error',
           message: message,
@@ -87,7 +121,7 @@ const DashBoard: FC = () => {
   const cloneAndCreate = (rowData: CloneHeroCarouselWithId) => {
     (async () => {
       try {
-        const res = await carouselService.getNonHeroCarouselData(rowData.id);
+        const res = await carouselService.getNonHeroCarouselData<CloneHeroCarouselWithId>(rowData.id);
         delete res['id'];
         saveCloneData(res);
       } catch (responseError) {
@@ -97,7 +131,6 @@ const DashBoard: FC = () => {
           message = error.messageDetail.message;
         }
         setSnackBarError({
-          ...snackBarProps,
           open: true,
           type: 'error',
           message: message,
@@ -117,14 +150,12 @@ const DashBoard: FC = () => {
           if (res.action === 'success') {
             setFilterParams({ ...filterParams });
             setSnackBarError({
-              ...snackBarProps,
               open: true,
               type: 'success',
               message: message,
             });
           } else {
             setSnackBarError({
-              ...snackBarProps,
               open: true,
               type: 'error',
               message: message,
@@ -149,6 +180,18 @@ const DashBoard: FC = () => {
         try {
           const res = await carouselService.updateNonHeroCarouselData(rowData.id);
           console.log(res);
+          if (res.action === 'success') {
+            const message = res.messageDetail ? res.messageDetail.message : 'Published successfully';
+            setFilterParams({ ...filterParams });
+            setSnackBarError({
+              ...snackBarProps,
+              open: true,
+              type: 'success',
+              message: message,
+            });
+          } else {
+            throw res;
+          }
         } catch (error) {
           const data = error.data || error;
           let message = 'Try Later';
@@ -169,8 +212,50 @@ const DashBoard: FC = () => {
     updateStatus(row);
   };
   const columns = [
-    { id: 'id', label: 'Id' },
-    { id: 'title', label: 'Title', width: 100 },
+    {
+      id: 'id',
+      label: 'Id',
+      render: (value: any, rowData: any, isTitle?: boolean) => {
+        if (isTitle) {
+          return value;
+        }
+        if (rowData) {
+          return (
+            <>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                }}
+              >
+                {value}
+                {rowData.active && <StyledIcon icon={SelectedCircle} />}
+              </div>
+            </>
+          );
+        }
+        return '--';
+      },
+    },
+    {
+      id: 'title',
+      label: 'Title',
+      width: 100,
+      render: (props: any, data: any, isTitle?: boolean) => {
+        if (isTitle) {
+          return data.title;
+        }
+        if (props || data) {
+          return (
+            <>
+              <NavLink to={{ pathname: `/edit-carousel/${data.id}` }}>{data.title}</NavLink>
+            </>
+          );
+        }
+        return '--';
+      },
+    },
     {
       id: 'sorts',
       label: 'Sorted By',
@@ -231,9 +316,10 @@ const DashBoard: FC = () => {
           return (
             <div style={{ display: 'flex' }}>
               <IconButton
+                style={{ marginLeft: '5px', padding: '6px' }}
+                title="Publish"
                 color="primary"
                 aria-label="Publish"
-                style={{ padding: 0 }}
                 onClick={() => {
                   if (props) {
                     props.action({ ...data, type: 'publish' });
@@ -243,9 +329,10 @@ const DashBoard: FC = () => {
                 <PublishIcon />
               </IconButton>
               <IconButton
+                style={{ marginLeft: '5px', padding: '6px' }}
+                title="Copy"
                 color="primary"
                 aria-label="clone"
-                style={{ padding: 0 }}
                 onClick={() => {
                   if (props) {
                     props.action({ ...data, type: 'clone' });
@@ -255,9 +342,10 @@ const DashBoard: FC = () => {
                 <FileCopyIcon />
               </IconButton>
               <IconButton
+                style={{ marginLeft: '5px', padding: '6px' }}
+                title="Delete"
                 color="primary"
                 aria-label="Delete"
-                style={{ padding: 0 }}
                 onClick={() => {
                   if (props) {
                     props.action({ ...data, type: 'delete' });
@@ -286,9 +374,10 @@ const DashBoard: FC = () => {
   };
   return (
     <DashBoardWrapper>
-      <h1>DashBoard</h1>
-      <HSTable {...TableData} />
-      {HsSnackBarError.open && <HsSnackbar {...HsSnackBarError} />}
+      <h1>Page Carousel DashBoard</h1>
+      {count > 0 && <HSTable {...TableData} />}
+      {count === 0 && <h5> Loading or no data</h5>}
+      {snackBarError.open && <HsSnackbar {...snackBarError} onSnackBarClose={onSnackBarClose} />}
     </DashBoardWrapper>
   );
 };

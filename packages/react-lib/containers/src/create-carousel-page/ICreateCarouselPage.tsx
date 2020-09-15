@@ -15,4 +15,5 @@ export interface CreateCarouselPageState {
 
 export interface CreateCarouselProps {
   action?: (event: Record<string, unknown>) => void;
+  carouselId?: number;
 }

@@ -21,7 +21,7 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import { HsSnackbar, HsSnackbarProps } from '@hs/components';
 import { format } from 'date-fns';
-import { createService, carouselService, SortList } from '@hs/services';
+import { carouselService, SortList } from '@hs/services';
 import {
   CreateCarouselPageState,
   CreateCarouselProps,
@@ -31,6 +31,7 @@ import {
   StyledCard,
   StyledChips,
 } from './StyledCreateCarouselPage';
+import { useParams } from 'react-router-dom';
 interface Values {
   title: string;
   carouselType: string;
@@ -41,7 +42,7 @@ interface Values {
   end_date: string;
 }
 
-const initialValues: CreateCarouselPageState = {
+let initialValues: CreateCarouselPageState = {
   title: '',
   carouselType: '',
   sort: [],
@@ -77,9 +78,9 @@ export const CreateCarouselPage: FC<CreateCarouselProps> = (
 ) => {
   const [sorts, setSortingList] = useState<SortList>([]);
   const loading = sorts.length == 0;
-  // const params = useParams();
+  const params: any = useParams();
 
-  const onSnackBarClose = (open: any) => {
+  const onSnackBarClose = (open: boolean) => {
     setSnackBarError({ ...HsSnackBarError, open });
   };
   const snackBarProps = {
@@ -91,6 +92,32 @@ export const CreateCarouselPage: FC<CreateCarouselProps> = (
   const [HsSnackBarError, setSnackBarError] = useState<HsSnackbarProps>(
     snackBarProps
   );
+
+  const getCarouselData = (id: string) => {
+    useEffect(() => {
+      (async () => {
+        try {
+          const carouselData = await carouselService.getNonHeroCarouselData(id);
+          initialValues = { ...initialValues, ...carouselData };
+        } catch (error) {
+          const errorResponse = error.data || error;
+          let message = 'Try Later';
+          if (errorResponse.action === 'failure') {
+            message = errorResponse.messageDetail.message;
+          }
+          setSnackBarError({
+            ...snackBarProps,
+            open: true,
+            type: 'error',
+            message: message,
+          });
+        }
+      })();
+    }, [1]);
+  };
+  if (params.id) {
+    getCarouselData(params.id);
+  }
 
   useEffect(() => {
     (async () => {
@@ -131,6 +158,7 @@ export const CreateCarouselPage: FC<CreateCarouselProps> = (
   return (
     <div className="create-form">
       <Formik
+        enableReinitialize={true}
         initialValues={initialValues}
         validate={(values) => {
           const errors: Partial<Values> = {};
@@ -165,17 +193,6 @@ export const CreateCarouselPage: FC<CreateCarouselProps> = (
             if (props.action) {
               props.action(postData);
             }
-            createService
-              .post({
-                url: 'api/carouselservice/pagecarousel',
-                data: postData,
-              })
-              .then((res: any) => {
-                showStatus(res);
-              })
-              .catch((error: Error) => {
-                showStatus(error);
-              });
           }, 500);
         }}
       >
