@@ -20,7 +20,8 @@
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",
-    "typescript": "~3.7.2"
+    "typescript": "~3.7.2",
+    "webpack-dev-server": "^3.11.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -64,8 +65,7 @@
     "http-proxy-middleware": "^1.0.5",
     "husky": "^4.3.0",
     "lint-staged": "^10.4.0",
-    "prettier": "^2.1.2",
-    "webpack-dev-server": "^3.11.0"
+    "prettier": "^2.1.2"
   },
   "homepage": "/react-monorepo/sos"
 }
