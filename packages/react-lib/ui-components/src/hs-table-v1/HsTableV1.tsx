@@ -83,7 +83,7 @@ export const HSTableV1: FC<HsTablePropsV1> = (props: HsTablePropsV1) => {
             style={{
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'space-between',
+              paddingLeft: '10px',
             }}
           >
             {getRowData(row, column)}
