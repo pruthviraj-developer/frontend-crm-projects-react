@@ -6,7 +6,7 @@ import { LeftNavBar, LeftNavBarProps } from '@hs/components';
 import { DashBoardIcon } from '@hs/icons';
 import { LightTheme } from '@hs/utils';
 import './App.css';
-import DashBoard from './components/dashboard/DashboardV1';
+import DashBoard from './components/dashboard/Dashboard';
 
 function App() {
   const navItems: LeftNavBarProps = {
