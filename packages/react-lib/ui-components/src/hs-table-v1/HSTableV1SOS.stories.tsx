@@ -24,9 +24,9 @@ const dropDownMenu = (rowData, data) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = (row?: Record<any, unknown>) => {
+  const handleClose = (row?: Record<string, unknown>) => {
     if (row) {
-      // console.log(rowData,row);
+      action(rowData, row);
     }
     setAnchorEl(null);
   };
@@ -86,7 +86,8 @@ const cancelButton = (rowData, data) => {
         color="primary"
         aria-label="Delete"
         onClick={() => {
-          // console.log({ row: rowData, type: data.action_value });
+          const obj: any = { row: rowData, type: data.action_value };
+          action(obj);
         }}
       >
         <CancelIcon />
@@ -95,14 +96,14 @@ const cancelButton = (rowData, data) => {
   );
 };
 
-const generateActionColumns = (data) => {
+const generateActionColumns = (data: Record<string, string>) => {
   const dataList: any = [];
   const actionList = (data && data.availableActions) || null;
   if (!actionList || !actionList.length) {
     return '--';
   }
   for (let index = 0; index < actionList.length; index++) {
-    const element = actionList[index];
+    const element: any = actionList[index];
     const type = element.action_type && element.action_type.toLowerCase();
     if (type == 'extend') {
       dataList.push(dropDownMenu(data, element));
@@ -141,7 +142,7 @@ const columns = [
   { id: 'buyerEmail', label: 'Buyer Email' },
   {
     label: 'Action',
-    render: (props, data) => {
+    render: (data) => {
       if (data) {
         return (
           <div style={{ display: 'flex' }}>{generateActionColumns(data)}</div>
