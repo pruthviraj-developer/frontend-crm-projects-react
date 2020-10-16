@@ -4,10 +4,19 @@ module.exports = function (app) {
   app.use(
     '/crm-api/',
     createProxyMiddleware({
-      pathRewrite: { '^/crm-api': '' },
-      target: 'http://qa.hopscotch.in',
+      pathRewrite: { '^/crm-api/': '' },
+      target: 'http://crm.qa.hopscotch.in',
       secure: false,
       changeOrigin: true,
     }),
   );
+  // app.use(
+  //   '/react-monorepo/sos/intranet/',
+  //   createProxyMiddleware({
+  //     pathRewrite: { '^/react-monorepo/sos/intranet': '/intranet' },
+  //     target: 'http://qa.hopscotch.in',
+  //     secure: false,
+  //     changeOrigin: true,
+  //   }),
+  // );
 };

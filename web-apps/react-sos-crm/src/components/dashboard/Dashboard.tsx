@@ -11,7 +11,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 
 import { HSTableV1, HsTableProps, HsSnackbar, HsSnackbarProps } from '@hs/components';
-import { carouselService } from '@hs/services';
+import { sosService } from '@hs/services';
 import { tableParams } from '@hs/services';
 
 const DashBoardWrapper = styled.div`
@@ -250,11 +250,8 @@ const DashBoard: FC = () => {
       try {
         let tableData: any = { totalRecords: 0 };
         const params = { ...filterParams, pageNo: filterParams.pageNo + 1 };
-        if (pathName === '/dashboard') {
-          tableData = await carouselService.getTableData(params);
-        } else {
-          tableData = await carouselService.getArchivedTableData(params);
-        }
+        tableData = await sosService.getTableData(params);
+        console.log(tableData);
         //setTableData(tableData);
         setCount(tableData.totalRecords || 0);
       } catch (error) {
