@@ -17,7 +17,7 @@ function App() {
     <div className="App">
       <ThemeProvider theme={LightTheme}>
         <MuiThemeProvider theme={LightTheme}>
-          <Router basename="/react-monorepo/sos">
+          <Router basename="/react-monorepo/merch">
             <LeftNavBar {...navItems}></LeftNavBar>
             <Switch>
               <Redirect exact from="/" to="/dashboard" />

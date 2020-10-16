@@ -11,8 +11,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 
 import { HSTableV1, HsTableProps, HsSnackbar, HsSnackbarProps } from '@hs/components';
-import { sosService } from '@hs/services';
-import { tableParams } from '@hs/services';
+import { sosService, sosTableData, sosErrorMessage, sosTableParams, tableParams, updateSosParams } from '@hs/services';
 
 const DashBoardWrapper = styled.div`
   margin-left: 90px;
@@ -28,21 +27,61 @@ const DashBoard: FC = () => {
   const location = useLocation();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [snackBarError, setSnackBarError] = useState(snackBarProps);
-  const [count, setCount] = useState<number>(111);
-  const [filterParams, setFilterParams] = useState<tableParams>({ pageSize: 10, pageNo: 0 }); // page size should be size as rowsperpage
+  const [sosData, setTableData] = useState<sosTableData>({});
+  const [count, setCount] = useState<number>(0);
+  const [status, setStatus] = useState<string>('Loading');
+  const [filterParams, setFilterParams] = useState<sosTableParams>({ pageSize: 10, pageNum: 0 });
   const pathName = location.pathname;
   const onSnackBarClose = (open: boolean) => {
     setSnackBarError({ ...snackBarError, open });
+  };
+
+  const updateSos = (data: Record<string, string>) => {
+    let postData: updateSosParams = {};
+    ['sosId', 'country', 'status', 'expiryTime', 'actionType', 'actionValue'].forEach((key: string) => {
+      const value: string = data && data[key];
+      postData = { ...postData, [key]: value };
+    });
+    (async () => {
+      const showError = (error: sosErrorMessage) => {
+        let message = 'Try Later';
+        const status = error.status && error.status.toLowerCase();
+        if (status === 'failure') {
+          message = error.errorMessage;
+        }
+        setSnackBarError({
+          open: true,
+          type: 'error',
+          message: message,
+        });
+      };
+      try {
+        const response = await sosService.updateSos(postData);
+        const status = response.status && response.status.toLowerCase();
+        if (status === 'success') {
+          setSnackBarError({
+            open: true,
+            type: 'success',
+            message: response.messageDetail ? response.messageDetail.message : 'Updated successfully',
+          });
+          setFilterParams({ ...filterParams });
+        } else {
+          showError(response);
+        }
+      } catch (error) {
+        showError(error);
+      }
+    })();
   };
 
   const dropDownMenu = (rowData: Record<string, unknown>, data: Record<string, unknown>) => {
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
       setAnchorEl(event.currentTarget);
     };
-
     const handleClose = (row?: Record<any, unknown>) => {
-      if (row) {
-        // console.log(rowData,row);
+      if (row && row.actionType) {
+        const postData: any = { ...rowData, ...row };
+        updateSos(postData);
       }
       setAnchorEl(null);
     };
@@ -70,7 +109,7 @@ const DashBoard: FC = () => {
               <MenuItem
                 key={index}
                 onClick={() => {
-                  handleClose({ type: 'extend', value });
+                  handleClose({ actionType: 'extend', actionValue: value });
                 }}
               >
                 {' '}
@@ -83,9 +122,9 @@ const DashBoard: FC = () => {
     );
   };
 
-  const cancelButton = (rowData: Record<string, unknown>, data: Record<string, unknown>) => {
-    const actionValue: any = data && data['action_value'];
-    if (!data || !actionValue) {
+  const cancelButton = (rowData: Record<string, unknown>, data: Record<string, string>) => {
+    const value: string = data && data['action_value'];
+    if (!data || !value) {
       return '';
     }
     return (
@@ -96,7 +135,12 @@ const DashBoard: FC = () => {
           color="primary"
           aria-label="Delete"
           onClick={() => {
-            // console.log({ row: rowData, type: data.action_value });
+            const postData: Record<string, string> = {
+              ...rowData,
+              actionType: data.action_value,
+              actionValue: value.toLowerCase(),
+            };
+            updateSos(postData);
           }}
         >
           <CancelIcon />
@@ -105,9 +149,9 @@ const DashBoard: FC = () => {
     );
   };
 
-  const generateActionColumns = (data: Record<string, unknown>) => {
+  const generateActionColumns = (data: Record<string, string>) => {
     const dataList: any = [];
-    const actionList: any = (data && data.availableActions) || null;
+    const actionList: any = data && data.availableActions;
     if (!actionList || !actionList.length) {
       return '--';
     }
@@ -124,7 +168,7 @@ const DashBoard: FC = () => {
   };
 
   const getUpdatedTableData = (filters: tableParams) => {
-    setFilterParams(filters);
+    setFilterParams({ pageSize: filters.pageSize, pageNum: filters.pageNo });
   };
 
   const columns = [
@@ -155,7 +199,7 @@ const DashBoard: FC = () => {
     { id: 'buyerEmail', label: 'Buyer Email' },
     {
       label: 'Action',
-      render: (props: Record<string, unknown>, data: Record<string, unknown>) => {
+      render: (props: Record<string, unknown>, data: Record<string, string>) => {
         if (props && data) {
           return <div style={{ display: 'flex' }}>{generateActionColumns(data)}</div>;
         }
@@ -164,99 +208,38 @@ const DashBoard: FC = () => {
     },
   ];
 
-  const tdata: any = [
-    {
-      sosId: 1,
-      country: 'India',
-      vendorName: 'Akash Singhi',
-      buyerEmail: 'ngwms_receiving@hopscotch.in',
-      status: 'SHIPPING',
-      expiryTime: '2020-01-09T18:04:00',
-      isFirstSOS: 1,
-      configuration: 'Out-Right/Random-Received/India',
-      availableActions: [
-        {
-          action_type: 'EXTEND',
-          action_value: '24,48',
-        },
-      ],
-    },
-    {
-      sosId: 2,
-      country: 'India',
-      vendorName: 'Akash Singhi',
-      buyerEmail: 'ngwms_receiving@hopscotch.in',
-      status: 'SHIPPING',
-      expiryTime: '2020-02-09T18:04:00',
-      isFirstSOS: 1,
-      configuration: 'Out-Right/Random-Received/India',
-      availableActions: [
-        {
-          action_type: 'CANCEL',
-          action_value: 'Cancel',
-        },
-      ],
-    },
-    {
-      sosId: 3,
-      country: 'India',
-      vendorName: 'Akash Singhi',
-      buyerEmail: 'ngwms_receiving@hopscotch.in',
-      status: 'SHIPPING',
-      expiryTime: '2020-03-09T18:04:00',
-      isFirstSOS: 1,
-      configuration: 'Out-Right/Random-Received/India',
-      availableActions: [
-        {
-          action_type: 'EXTEND',
-          action_value: '24,48',
-        },
-        {
-          action_type: 'CANCEL',
-          action_value: 'Cancel',
-        },
-      ],
-    },
-    {
-      sosId: 4,
-      country: 'India',
-      vendorName: 'Akash Singhi',
-      buyerEmail: 'ngwms_receiving@hopscotch.in',
-      status: 'SHIPPING',
-      expiryTime: '2020-04-09T18:04:00',
-      isFirstSOS: 1,
-      configuration: 'Out-Right/Random-Received/India',
-      availableActions: [
-        {
-          action_type: 'EXTEND',
-          action_value: '24,48',
-        },
-      ],
-    },
-  ];
-
   const TableData: HsTableProps = {
-    title: 'Table testing',
-    count: 250,
+    title: 'Sos Dashboard',
+    count: count,
     columns: columns,
-    rows: [...tdata],
+    rows: (sosData && sosData.records) || [],
     rowsPerPage: 10,
     filterRowsPerPage: [10, 25, 50, 100],
     fetchTableData: getUpdatedTableData,
   };
 
   useEffect(() => {
+    const showNoDataMessage = () => {
+      setCount(0);
+      setStatus('No data');
+    };
     (async () => {
       try {
         let tableData: any = { totalRecords: 0 };
-        const params = { ...filterParams, pageNo: filterParams.pageNo + 1 };
+        const params = { ...filterParams, pageNum: filterParams.pageNum + 1 };
         tableData = await sosService.getTableData(params);
-        console.log(tableData);
-        //setTableData(tableData);
-        setCount(tableData.totalRecords || 0);
+        if (tableData && tableData.totalRecords) {
+          setTableData(tableData);
+          setCount(tableData.totalRecords);
+        } else {
+          showNoDataMessage();
+        }
       } catch (error) {
         let message = 'Try Later';
-        if (error.action === 'failure') {
+        const errorStatus = error.status && error.status.toLowerCase;
+        const status = (errorStatus && errorStatus()) || null;
+        showNoDataMessage();
+        if (status === 'failure') {
           message = error.messageDetail.message;
         }
         setSnackBarError({
@@ -272,7 +255,7 @@ const DashBoard: FC = () => {
     <DashBoardWrapper>
       <h1>SOS DashBoard</h1>
       {count > 0 && <HSTableV1 {...TableData} />}
-      {count === 0 && <h5> Loading or no data</h5>}
+      {count === 0 && <h5> {status}</h5>}
       {snackBarError.open && <HsSnackbar {...snackBarError} onSnackBarClose={onSnackBarClose} />}
     </DashBoardWrapper>
   );

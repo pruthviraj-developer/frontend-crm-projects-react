@@ -4,7 +4,9 @@ module.exports = function (app) {
   app.use(
     '/crm-api/',
     createProxyMiddleware({
-      pathRewrite: { '^/crm-api/': '' },
+      pathRewrite: function (path) {
+        return path.replace('/crm-api', '');
+      },
       target: 'http://crm.qa.hopscotch.in',
       secure: false,
       changeOrigin: true,
