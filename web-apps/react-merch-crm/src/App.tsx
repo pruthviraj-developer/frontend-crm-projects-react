@@ -10,7 +10,7 @@ import DashBoard from './components/dashboard/Dashboard';
 
 function App() {
   const navItems: LeftNavBarProps = {
-    navList: [{ linkUrl: '/dashboard', linkText: 'Dashboard', icon: DashBoardIcon }],
+    navList: [{ linkUrl: '/sosdashboard', linkText: 'SOS Dashboard', icon: DashBoardIcon }],
   };
 
   return (
@@ -20,8 +20,8 @@ function App() {
           <Router basename="/react-monorepo/merch">
             <LeftNavBar {...navItems}></LeftNavBar>
             <Switch>
-              <Redirect exact from="/" to="/dashboard" />
-              <Route path="/dashboard">
+              <Redirect exact from="/" to="/sosdashboard" />
+              <Route path="/sosdashboard">
                 <DashBoard />
               </Route>
             </Switch>
