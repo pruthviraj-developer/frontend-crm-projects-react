@@ -8,5 +8,6 @@ export * from './auto-complete';
 export * from './select-box';
 export * from './hs-table';
 export * from './hs-table-v1';
+export * from './hs-table-v2';
 export * from './snack-bar';
 export * from './md-viewer';

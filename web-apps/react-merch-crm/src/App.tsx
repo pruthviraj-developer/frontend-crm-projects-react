@@ -1,16 +1,20 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { ThemeProvider } from 'emotion-theming';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
-import { LeftNavBar, LeftNavBarProps } from '@hs/components';
 import { DashBoardIcon } from '@hs/icons';
 import { LightTheme } from '@hs/utils';
 import './App.css';
 import DashBoard from './components/dashboard/Dashboard';
+import Merchandisers from './components/merchandisers/Merchandisers';
+import { LeftNavBar, LeftNavBarProps } from '@hs/components';
 
-function App() {
+const App: FC = () => {
   const navItems: LeftNavBarProps = {
-    navList: [{ linkUrl: '/sosdashboard', linkText: 'SOS Dashboard', icon: DashBoardIcon }],
+    navList: [
+      { linkUrl: '/sosdashboard', linkText: 'SOS Dashboard', icon: DashBoardIcon },
+      { linkUrl: '/merchandisers', linkText: 'Merchandisers', icon: DashBoardIcon },
+    ],
   };
 
   return (
@@ -24,12 +28,15 @@ function App() {
               <Route path="/sosdashboard">
                 <DashBoard />
               </Route>
+              <Route path="/merchandisers">
+                <Merchandisers />
+              </Route>
             </Switch>
           </Router>
         </MuiThemeProvider>
       </ThemeProvider>
     </div>
   );
-}
+};
 
 export default App;

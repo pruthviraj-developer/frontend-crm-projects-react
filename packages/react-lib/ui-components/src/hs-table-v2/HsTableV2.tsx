@@ -8,6 +8,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
 import { HsTableV2Props, tableRowsV2 } from './IHsTableV2';
 
 const StyledHsTable = styled(Paper)`
@@ -33,9 +34,13 @@ const generateRow = (row: tableRowsV2) => {
       <TableCell> {row.status}</TableCell>
       <TableCell>{row.priority}</TableCell>
       {row.rowSpan && (
-        <TableCell rowSpan={row.rowSpan}>Select Action</TableCell>
+        <TableCell rowSpan={row.rowSpan}>
+          <Button variant="contained">Select Action</Button>
+        </TableCell>
       )}
-      <TableCell>Export</TableCell>
+      <TableCell>
+        <Button variant="contained">Export</Button>
+      </TableCell>
     </>
   );
 };
@@ -55,7 +60,7 @@ export const HSTableV2: FC<HsTableV2Props> = (props: HsTableV2Props) => {
           >
             <TableHead>
               <TableRow>
-                {columns.map((column: any, index) => (
+                {columns.map((column: string, index: number) => (
                   <TableCell key={index}>{column}</TableCell>
                 ))}
                 <TableCell></TableCell>
