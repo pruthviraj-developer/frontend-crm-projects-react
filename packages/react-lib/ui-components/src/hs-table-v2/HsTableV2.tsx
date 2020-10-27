@@ -21,26 +21,43 @@ const StyledTableContainer = styled(TableContainer)`
   }
 `;
 
+const border2Px = '2px solid rgba(224, 224, 224, 1)';
 const useStyles = makeStyles({
   table: {
     minWidth: 700,
+    border: border2Px,
+  },
+  rowBorder: {
+    borderTop: border2Px,
   },
 });
 
 const generateRow = (row: tableRowsV2) => {
+  const classes = useStyles();
   return (
     <>
-      <TableCell> {row.pid_count} </TableCell>
-      <TableCell> {row.status}</TableCell>
-      <TableCell>{row.priority}</TableCell>
+      <TableCell className={row.rowSpan ? classes.rowBorder : ''}>
+        {' '}
+        {row.pid_count}{' '}
+      </TableCell>
+      <TableCell className={row.rowSpan ? classes.rowBorder : ''}>
+        {' '}
+        {row.status}
+      </TableCell>
+      <TableCell className={row.rowSpan ? classes.rowBorder : ''}>
+        {row.priority}
+      </TableCell>
       {row.rowSpan && (
-        <TableCell rowSpan={row.rowSpan}>
+        <TableCell
+          className={row.rowSpan ? classes.rowBorder : ''}
+          rowSpan={row.rowSpan}
+        >
           <Button color="primary" variant="contained">
             Select Action
           </Button>
         </TableCell>
       )}
-      <TableCell>
+      <TableCell className={row.rowSpan ? classes.rowBorder : ''}>
         <Button color="primary" variant="contained">
           Export
         </Button>
