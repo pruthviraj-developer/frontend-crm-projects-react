@@ -18,3 +18,14 @@ export interface merchandisersFiltersObject {
   genders?: defaultFilterObject[];
   vendor_id?: defaultFilterObject[];
 }
+
+interface merchandisersRowObject {
+  pid_count: number;
+  status: string;
+  priority: string;
+  rowSpan?: number;
+}
+
+export interface merchandisersArrayObject {
+  product_detail: merchandisersRowObject[];
+}

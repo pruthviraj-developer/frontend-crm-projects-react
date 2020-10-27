@@ -1,15 +1,17 @@
 import { httpService } from '../http';
-import { tableRowsV2 } from '@hs/components';
-import { merchandisersFiltersObject } from './Imerchandisers.service';
+import {
+  merchandisersArrayObject,
+  merchandisersFiltersObject,
+} from './Imerchandisers.service';
 
-const getTableData = (): Promise<tableRowsV2> => {
-  const url = '/crm-api/intranet/procurement/sosdashboard/get';
-  return httpService.post({ url });
+const getTableData = (): Promise<merchandisersArrayObject> => {
+  const url = '/crm-api/v1/sos/merchplatform/dashboard';
+  return httpService.get({ url });
 };
 
 const getFiltersData = (): Promise<merchandisersFiltersObject> => {
-  const url = '/crm-api/assortment-plan-api/util/filters';
-  return httpService.post({ url });
+  const url = '/crm-api/v1/sos/merchplatform/filters';
+  return httpService.get({ url });
 };
 
 export const merchandisersService = {

@@ -292,99 +292,95 @@ const Merchandisers: FC = () => {
           message: message,
         });
       };
-      const rowData: Array<tableRowsV2> = [
-        {
-          pid_count: '200',
-          status: 'pending_confirmation',
-          priority: 'delayed',
-        },
-        {
-          pid_count: '200',
-          status: 'pending_confirmation',
-          priority: 'due',
-        },
-        {
-          pid_count: '200',
-          status: 'pending',
-          priority: 'due',
-        },
-        {
-          pid_count: '200',
-          status: 'pending_confirmation',
-          priority: 'delayed',
-        },
-        {
-          pid_count: '200',
-          status: 'pending_confirmation',
-          priority: 'due',
-        },
-        {
-          pid_count: '200',
-          status: 'pending_confirmation',
-          priority: 'delayed',
-        },
-        {
-          pid_count: '200',
-          status: 'pending_confirmation',
-          priority: 'due',
-        },
-        {
-          pid_count: '201',
-          status: 'fulfillable',
-          priority: 'delayed',
-        },
-        {
-          pid_count: '201',
-          status: 'fulfillable',
-          priority: 'due',
-        },
-        {
-          pid_count: '202',
-          status: 'non_fulfillable',
-          priority: 'delayed',
-        },
-        {
-          pid_count: '202',
-          status: 'non_fulfillable',
-          priority: 'due',
-        },
-        {
-          pid_count: '201',
-          status: 'fulfillable',
-          priority: 'delayed',
-        },
-        {
-          pid_count: '201',
-          status: 'fulfillable',
-          priority: 'due',
-        },
-      ];
+      // const rowData: Array<tableRowsV2> = [
+      //   {
+      //     pid_count: '200',
+      //     status: 'pending_confirmation',
+      //     priority: 'delayed',
+      //   },
+      //   {
+      //     pid_count: '200',
+      //     status: 'pending_confirmation',
+      //     priority: 'due',
+      //   },
+      //   {
+      //     pid_count: '200',
+      //     status: 'pending',
+      //     priority: 'due',
+      //   },
+      //   {
+      //     pid_count: '200',
+      //     status: 'pending_confirmation',
+      //     priority: 'delayed',
+      //   },
+      //   {
+      //     pid_count: '200',
+      //     status: 'pending_confirmation',
+      //     priority: 'due',
+      //   },
+      //   {
+      //     pid_count: '200',
+      //     status: 'pending_confirmation',
+      //     priority: 'delayed',
+      //   },
+      //   {
+      //     pid_count: '200',
+      //     status: 'pending_confirmation',
+      //     priority: 'due',
+      //   },
+      //   {
+      //     pid_count: '201',
+      //     status: 'fulfillable',
+      //     priority: 'delayed',
+      //   },
+      //   {
+      //     pid_count: '201',
+      //     status: 'fulfillable',
+      //     priority: 'due',
+      //   },
+      //   {
+      //     pid_count: '202',
+      //     status: 'non_fulfillable',
+      //     priority: 'delayed',
+      //   },
+      //   {
+      //     pid_count: '202',
+      //     status: 'non_fulfillable',
+      //     priority: 'due',
+      //   },
+      //   {
+      //     pid_count: '201',
+      //     status: 'fulfillable',
+      //     priority: 'delayed',
+      //   },
+      //   {
+      //     pid_count: '201',
+      //     status: 'fulfillable',
+      //     priority: 'due',
+      //   },
+      // ];
       try {
         const response = await merchandisersService.getTableData();
-        const status = response.status && response.status.toLowerCase();
-        if (status === 'success') {
-          setMerchandisersData(rowData);
-          setCount(1);
+        const productDetails = response && response.product_detail;
+        if (productDetails) {
+          setMerchandisersData(productDetails);
+          setCount(productDetails.length);
         } else {
-          setMerchandisersData(rowData);
+          setMerchandisersData([]);
           setStatus('No Data');
         }
       } catch (error) {
         showError(error);
         setStatus('No Data');
-        setMerchandisersData(rowData);
       }
       try {
         const response = await merchandisersService.getFiltersData();
-        // const status = response.status && response.status.toLowerCase();
-        const status = 'success';
-        if (status === 'success') {
+        if (response) {
           setMerchandisersFiltersData(response);
         } else {
           showError({
             status: 'failure',
             errorMessage: 'Filters not available',
-            messageDetail: { messageUIType: 'error', message: 'error', actionText: 'error', value: 'error' },
           });
         }
       } catch (error) {
