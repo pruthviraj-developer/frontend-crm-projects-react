@@ -7,12 +7,15 @@ import { Autocomplete, AutocompleteRenderInputParams } from 'formik-material-ui-
 import { TextField as MuiTextField, Grid, Card, CardContent, makeStyles } from '@material-ui/core';
 
 import { HsSnackbar, HsSnackbarProps, HSTableV2, HsTableV2Props, tableRowsV2 } from '@hs/components';
+import { merchandisersService, merchandisersFiltersObject } from '@hs/services';
+import { apiErrorMessage } from '@hs/utils';
 
 interface formFilters {
   country: [];
   gender: [];
-  vender_id: [];
-  category_id: [];
+  vender: [];
+  category: [];
+  bdm: [];
 }
 
 const useStyles = makeStyles({
@@ -39,79 +42,15 @@ const snackBarProps: Pick<HsSnackbarProps, 'open' | 'type' | 'message'> = {
 };
 
 const Merchandisers: FC = () => {
-  const initialValues: formFilters = { country: [], gender: [], vender_id: [], category_id: [] };
+  const initialValues: formFilters = { country: [], gender: [], vender: [], category: [], bdm: [] };
   const [snackBarError, setSnackBarError] = useState(snackBarProps);
   const [count, setCount] = useState<number>(1);
   const [status, setStatus] = useState<string>('Loading');
+  const [merchandisersData, setMerchandisersData] = useState<Array<tableRowsV2>>([]);
+  const [merchandisersFiltersData, setMerchandisersFiltersData] = useState<merchandisersFiltersObject>({});
   const formatedJsonObject: Record<string, Record<string, number>> = {};
   const tableColumns: Array<string> = ["PID's", 'Status', 'Priority', 'Action'];
-  const rowData: Array<tableRowsV2> = [
-    {
-      pid_count: '200',
-      status: 'pending_confirmation',
-      priority: 'delayed',
-    },
-    {
-      pid_count: '200',
-      status: 'pending_confirmation',
-      priority: 'due',
-    },
-    {
-      pid_count: '200',
-      status: 'pending',
-      priority: 'due',
-    },
-    {
-      pid_count: '200',
-      status: 'pending_confirmation',
-      priority: 'delayed',
-    },
-    {
-      pid_count: '200',
-      status: 'pending_confirmation',
-      priority: 'due',
-    },
-    {
-      pid_count: '200',
-      status: 'pending_confirmation',
-      priority: 'delayed',
-    },
-    {
-      pid_count: '200',
-      status: 'pending_confirmation',
-      priority: 'due',
-    },
-    {
-      pid_count: '201',
-      status: 'fulfillable',
-      priority: 'delayed',
-    },
-    {
-      pid_count: '201',
-      status: 'fulfillable',
-      priority: 'due',
-    },
-    {
-      pid_count: '202',
-      status: 'non_fulfillable',
-      priority: 'delayed',
-    },
-    {
-      pid_count: '202',
-      status: 'non_fulfillable',
-      priority: 'due',
-    },
-    {
-      pid_count: '201',
-      status: 'fulfillable',
-      priority: 'delayed',
-    },
-    {
-      pid_count: '201',
-      status: 'fulfillable',
-      priority: 'due',
-    },
-  ];
+  const classes = useStyles();
   const onSnackBarClose = (open: boolean) => {
     setSnackBarError({ ...snackBarError, open });
   };
@@ -124,7 +63,8 @@ const Merchandisers: FC = () => {
     }
     return 0;
   };
-  const tableRows: Array<tableRowsV2> = rowData.sort(compare);
+  const tableRows: Array<tableRowsV2> = merchandisersData.sort(compare);
+
   tableRows.forEach((element, index) => {
     if (formatedJsonObject[element.status]) {
       formatedJsonObject[element.status]['count'] += 1;
@@ -337,13 +277,121 @@ const Merchandisers: FC = () => {
     },
   ];
 
-  const classes = useStyles();
+  const bdm = merchandisersFiltersData.bdm ? merchandisersFiltersData.bdm : [];
   useEffect(function () {
-    setTimeout(() => {
-      setCount(1);
-      setStatus('Loading');
-    }, 0);
-  });
+    (async () => {
+      const showError = (error: apiErrorMessage) => {
+        let message = 'Try Later';
+        const status = error.status && error.status.toLowerCase();
+        if (status === 'failure') {
+          message = error.errorMessage;
+        }
+        setSnackBarError({
+          open: true,
+          type: 'error',
+          message: message,
+        });
+      };
+      const rowData: Array<tableRowsV2> = [
+        {
+          pid_count: '200',
+          status: 'pending_confirmation',
+          priority: 'delayed',
+        },
+        {
+          pid_count: '200',
+          status: 'pending_confirmation',
+          priority: 'due',
+        },
+        {
+          pid_count: '200',
+          status: 'pending',
+          priority: 'due',
+        },
+        {
+          pid_count: '200',
+          status: 'pending_confirmation',
+          priority: 'delayed',
+        },
+        {
+          pid_count: '200',
+          status: 'pending_confirmation',
+          priority: 'due',
+        },
+        {
+          pid_count: '200',
+          status: 'pending_confirmation',
+          priority: 'delayed',
+        },
+        {
+          pid_count: '200',
+          status: 'pending_confirmation',
+          priority: 'due',
+        },
+        {
+          pid_count: '201',
+          status: 'fulfillable',
+          priority: 'delayed',
+        },
+        {
+          pid_count: '201',
+          status: 'fulfillable',
+          priority: 'due',
+        },
+        {
+          pid_count: '202',
+          status: 'non_fulfillable',
+          priority: 'delayed',
+        },
+        {
+          pid_count: '202',
+          status: 'non_fulfillable',
+          priority: 'due',
+        },
+        {
+          pid_count: '201',
+          status: 'fulfillable',
+          priority: 'delayed',
+        },
+        {
+          pid_count: '201',
+          status: 'fulfillable',
+          priority: 'due',
+        },
+      ];
+      try {
+        const response = await merchandisersService.getTableData();
+        const status = response.status && response.status.toLowerCase();
+        if (status === 'success') {
+          setMerchandisersData(rowData);
+          setCount(1);
+        } else {
+          setMerchandisersData(rowData);
+          setStatus('No Data');
+        }
+      } catch (error) {
+        showError(error);
+        setStatus('No Data');
+        setMerchandisersData(rowData);
+      }
+      try {
+        const response = await merchandisersService.getFiltersData();
+        // const status = response.status && response.status.toLowerCase();
+        const status = 'success';
+        if (status === 'success') {
+          setMerchandisersFiltersData(response);
+        } else {
+          showError({
+            status: 'failure',
+            errorMessage: 'Filters not available',
+            messageDetail: { messageUIType: 'error', message: 'error', actionText: 'error', value: 'error' },
+          });
+        }
+      } catch (error) {
+        showError(error);
+      }
+    })();
+  }, []);
 
   return (
     <DashBoardWrapper>
@@ -410,7 +458,7 @@ const Merchandisers: FC = () => {
                     <Grid item xs>
                       <Field
                         multiple
-                        name="category_id"
+                        name="category"
                         label="Select Category"
                         variant="standard"
                         component={Autocomplete}
@@ -418,6 +466,20 @@ const Merchandisers: FC = () => {
                         getOptionLabel={(option: Record<string, unknown>) => (option.value ? option.value : '')}
                         renderInput={(params: AutocompleteRenderInputParams) => (
                           <MuiTextField {...params} label="Category" variant="outlined" />
+                        )}
+                      />
+                    </Grid>
+                    <Grid item xs>
+                      <Field
+                        multiple
+                        name="bdm"
+                        label="Select Bdm"
+                        variant="standard"
+                        component={Autocomplete}
+                        options={bdm}
+                        getOptionLabel={(option: Record<string, unknown>) => (option.value ? option.value : '')}
+                        renderInput={(params: AutocompleteRenderInputParams) => (
+                          <MuiTextField {...params} label="Bdm" variant="outlined" />
                         )}
                       />
                     </Grid>

@@ -32,8 +32,7 @@ const useStyles = makeStyles({
   },
 });
 
-const generateRow = (row: tableRowsV2) => {
-  const classes = useStyles();
+const generateRow = (row: tableRowsV2, classes: Record<string, string>) => {
   return (
     <>
       <TableCell className={row.rowSpan ? classes.rowBorder : ''}>
@@ -89,7 +88,7 @@ export const HSTableV2: FC<HsTableV2Props> = (props: HsTableV2Props) => {
             </TableHead>
             <TableBody>
               {rows.map((row: tableRowsV2, index: number) => (
-                <TableRow key={index}>{generateRow(row)}</TableRow>
+                <TableRow key={index}>{generateRow(row, classes)}</TableRow>
               ))}
             </TableBody>
           </Table>
