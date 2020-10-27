@@ -10,3 +10,4 @@ export * from './hs-table';
 export * from './hs-table-v1';
 export * from './snack-bar';
 export * from './md-viewer';
+export * from './file-upload';

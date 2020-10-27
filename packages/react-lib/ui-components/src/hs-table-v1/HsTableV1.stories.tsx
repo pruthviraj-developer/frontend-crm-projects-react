@@ -12,7 +12,7 @@ import styled from '@emotion/styled';
 import { SelectedCircle, SvgIcon } from '@hs/icons';
 
 export default {
-  title: 'Tables',
+  title: 'TablesV1',
 };
 
 const getUpdatedTableData = (filters: Record<string, unknown>) => {
