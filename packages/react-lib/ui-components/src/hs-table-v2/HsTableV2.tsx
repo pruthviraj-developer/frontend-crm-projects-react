@@ -35,11 +35,15 @@ const generateRow = (row: tableRowsV2) => {
       <TableCell>{row.priority}</TableCell>
       {row.rowSpan && (
         <TableCell rowSpan={row.rowSpan}>
-          <Button variant="contained">Select Action</Button>
+          <Button color="primary" variant="contained">
+            Select Action
+          </Button>
         </TableCell>
       )}
       <TableCell>
-        <Button variant="contained">Export</Button>
+        <Button color="primary" variant="contained">
+          Export
+        </Button>
       </TableCell>
     </>
   );
