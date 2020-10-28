@@ -1,16 +1,16 @@
 import { httpService } from '../http';
 import {
-  merchandisersArrayObject,
+  merchandisersDataObject,
   merchandisersFiltersObject,
 } from './Imerchandisers.service';
 
-const getTableData = (): Promise<merchandisersArrayObject> => {
-  const url = '/crm-api/v1/sos/merchplatform/dashboard';
+const getTableData = (): Promise<merchandisersDataObject> => {
+  const url = '/v1/sos/merchplatform/dashboard';
   return httpService.get({ url });
 };
 
 const getFiltersData = (): Promise<merchandisersFiltersObject> => {
-  const url = '/crm-api/v1/sos/merchplatform/filters';
+  const url = '/v1/sos/merchplatform/filters';
   return httpService.get({ url });
 };
 

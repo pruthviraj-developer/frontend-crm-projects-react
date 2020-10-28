@@ -14,7 +14,7 @@ export interface merchandisersFiltersObject {
   status?: defaultFilterObject[];
   brand_id?: defaultFilterObject[];
   bdm?: defaultFilterObject[];
-  countries?: defaultFilterObject[];
+  country?: defaultFilterObject[];
   genders?: defaultFilterObject[];
   vendor_id?: defaultFilterObject[];
 }
@@ -26,6 +26,10 @@ interface merchandisersRowObject {
   rowSpan?: number;
 }
 
-export interface merchandisersArrayObject {
+interface merchandisersArrayObject {
   product_detail: merchandisersRowObject[];
+}
+
+export interface merchandisersDataObject {
+  data: merchandisersArrayObject;
 }

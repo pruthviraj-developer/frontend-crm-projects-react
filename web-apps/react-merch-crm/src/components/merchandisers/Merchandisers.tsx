@@ -85,199 +85,6 @@ const Merchandisers: FC = () => {
     rows: tableRows,
   };
 
-  const countries = [
-    {
-      key: 'INDIA',
-      value: 'India',
-      second: 'India',
-      first: 'INDIA',
-    },
-    {
-      key: 'CHINA',
-      value: 'China',
-      second: 'China',
-      first: 'CHINA',
-    },
-    {
-      key: 'US',
-      value: 'US',
-      second: 'US',
-      first: 'US',
-    },
-  ];
-
-  const genders = [
-    {
-      key: 'GIRL',
-      value: 'Girl',
-      second: 'Girl',
-      first: 'GIRL',
-    },
-    {
-      key: 'BOY',
-      value: 'Boy',
-      second: 'Boy',
-      first: 'BOY',
-    },
-  ];
-
-  const vendor_id = [
-    {
-      key: 12332,
-      value: ' Luzi 璐兹',
-      second: ' Luzi 璐兹',
-      first: 12332,
-    },
-    {
-      key: 13941,
-      value: '(SZY)东莞市三只羊服饰有限公司',
-      second: '(SZY)东莞市三只羊服饰有限公司',
-      first: 13941,
-    },
-    {
-      key: 12841,
-      value: '(YWNR)义乌能尔贸易有限公司',
-      second: '(YWNR)义乌能尔贸易有限公司',
-      first: 12841,
-    },
-    {
-      key: 13472,
-      value: '123',
-      second: '123',
-      first: 13472,
-    },
-    {
-      key: 13283,
-      value: '123jia',
-      second: '123jia',
-      first: 13283,
-    },
-    {
-      key: 11987,
-      value: '1908 E-Ventures.com',
-      second: '1908 E-Ventures.com',
-      first: 11987,
-    },
-    {
-      key: 11343,
-      value: '2 Hype Inc.',
-      second: '2 Hype Inc.',
-      first: 11343,
-    },
-    {
-      key: 10992,
-      value: '2 Kool 4 Skool Pty Ltd',
-      second: '2 Kool 4 Skool Pty Ltd',
-      first: 10992,
-    },
-    {
-      key: 10889,
-      value: '21 Trends Private Limited',
-      second: '21 Trends Private Limited',
-      first: 10889,
-    },
-    {
-      key: 10159,
-      value: '21 Trends Private Limited_old',
-      second: '21 Trends Private Limited_old',
-      first: 10159,
-    },
-    {
-      key: 12391,
-      value: '27 kids 邦业制衣厂',
-      second: '27 kids 邦业制衣厂',
-      first: 12391,
-    },
-    {
-      key: 13114,
-      value: '2AM by Anjali and Meha',
-      second: '2AM by Anjali and Meha',
-      first: 13114,
-    },
-    {
-      key: 10770,
-      value: '3 Green Moms',
-      second: '3 Green Moms',
-      first: 10770,
-    },
-  ];
-
-  const category_id = [
-    {
-      key: 367,
-      value: 'Accessories - Children',
-      second: 'Accessories - Children',
-      first: 367,
-    },
-    {
-      key: 377,
-      value: 'Accessories - Men',
-      second: 'Accessories - Men',
-      first: 377,
-    },
-    {
-      key: 364,
-      value: 'Accessories - Women',
-      second: 'Accessories - Women',
-      first: 364,
-    },
-    {
-      key: 373,
-      value: 'Apparel - Children',
-      second: 'Apparel - Children',
-      first: 373,
-    },
-    {
-      key: 376,
-      value: 'Apparel - Men',
-      second: 'Apparel - Men',
-      first: 376,
-    },
-    {
-      key: 368,
-      value: 'Apparel - Women',
-      second: 'Apparel - Women',
-      first: 368,
-    },
-    {
-      key: 873,
-      value: 'Baby Care',
-      second: 'Baby Care',
-      first: 873,
-    },
-    {
-      key: 826,
-      value: 'Bags & Luggage Women',
-      second: 'Bags & Luggage Women',
-      first: 826,
-    },
-    {
-      key: 883,
-      value: 'Body & Face Care',
-      second: 'Body & Face Care',
-      first: 883,
-    },
-    {
-      key: 851,
-      value: 'Books',
-      second: 'Books',
-      first: 851,
-    },
-    {
-      key: 795,
-      value: 'Cosmetics',
-      second: 'Cosmetics',
-      first: 795,
-    },
-    {
-      key: 794,
-      value: 'Electronics',
-      second: 'Electronics',
-      first: 794,
-    },
-  ];
-
-  const bdm = merchandisersFiltersData.bdm ? merchandisersFiltersData.bdm : [];
   useEffect(function () {
     (async () => {
       const showError = (error: apiErrorMessage) => {
@@ -292,77 +99,11 @@ const Merchandisers: FC = () => {
           message: message,
         });
       };
-      // const rowData: Array<tableRowsV2> = [
-      //   {
-      //     pid_count: '200',
-      //     status: 'pending_confirmation',
-      //     priority: 'delayed',
-      //   },
-      //   {
-      //     pid_count: '200',
-      //     status: 'pending_confirmation',
-      //     priority: 'due',
-      //   },
-      //   {
-      //     pid_count: '200',
-      //     status: 'pending',
-      //     priority: 'due',
-      //   },
-      //   {
-      //     pid_count: '200',
-      //     status: 'pending_confirmation',
-      //     priority: 'delayed',
-      //   },
-      //   {
-      //     pid_count: '200',
-      //     status: 'pending_confirmation',
-      //     priority: 'due',
-      //   },
-      //   {
-      //     pid_count: '200',
-      //     status: 'pending_confirmation',
-      //     priority: 'delayed',
-      //   },
-      //   {
-      //     pid_count: '200',
-      //     status: 'pending_confirmation',
-      //     priority: 'due',
-      //   },
-      //   {
-      //     pid_count: '201',
-      //     status: 'fulfillable',
-      //     priority: 'delayed',
-      //   },
-      //   {
-      //     pid_count: '201',
-      //     status: 'fulfillable',
-      //     priority: 'due',
-      //   },
-      //   {
-      //     pid_count: '202',
-      //     status: 'non_fulfillable',
-      //     priority: 'delayed',
-      //   },
-      //   {
-      //     pid_count: '202',
-      //     status: 'non_fulfillable',
-      //     priority: 'due',
-      //   },
-      //   {
-      //     pid_count: '201',
-      //     status: 'fulfillable',
-      //     priority: 'delayed',
-      //   },
-      //   {
-      //     pid_count: '201',
-      //     status: 'fulfillable',
-      //     priority: 'due',
-      //   },
-      // ];
       try {
         const response = await merchandisersService.getTableData();
-        const productDetails = response && response.product_detail;
-        if (productDetails) {
+        const responseData = response ? response.data : { product_detail: [] };
+        const productDetails = responseData.product_detail;
+        if (productDetails.length) {
           setMerchandisersData(productDetails);
           setCount(productDetails.length);
         } else {
@@ -416,7 +157,7 @@ const Merchandisers: FC = () => {
                         name="country"
                         variant="standard"
                         component={Autocomplete}
-                        options={countries}
+                        options={merchandisersFiltersData.country || []}
                         getOptionLabel={(option: Record<string, unknown>) => (option.value ? option.value : '')}
                         renderInput={(params: AutocompleteRenderInputParams) => (
                           <MuiTextField {...params} label="Select Country" variant="outlined" />
@@ -430,7 +171,7 @@ const Merchandisers: FC = () => {
                         label="Select Gender"
                         variant="standard"
                         component={Autocomplete}
-                        options={genders}
+                        options={merchandisersFiltersData.gender || []}
                         getOptionLabel={(option: Record<string, unknown>) => (option.value ? option.value : '')}
                         renderInput={(params: AutocompleteRenderInputParams) => (
                           <MuiTextField {...params} label="Gender" variant="outlined" />
@@ -444,7 +185,7 @@ const Merchandisers: FC = () => {
                         label="Select Vender"
                         variant="standard"
                         component={Autocomplete}
-                        options={vendor_id}
+                        options={merchandisersFiltersData.vendor_id || []}
                         getOptionLabel={(option: Record<string, unknown>) => (option.value ? option.value : '')}
                         renderInput={(params: AutocompleteRenderInputParams) => (
                           <MuiTextField {...params} label="Vender" variant="outlined" />
@@ -458,7 +199,7 @@ const Merchandisers: FC = () => {
                         label="Select Category"
                         variant="standard"
                         component={Autocomplete}
-                        options={category_id}
+                        options={merchandisersFiltersData.category_id || []}
                         getOptionLabel={(option: Record<string, unknown>) => (option.value ? option.value : '')}
                         renderInput={(params: AutocompleteRenderInputParams) => (
                           <MuiTextField {...params} label="Category" variant="outlined" />
@@ -472,7 +213,7 @@ const Merchandisers: FC = () => {
                         label="Select Bdm"
                         variant="standard"
                         component={Autocomplete}
-                        options={bdm}
+                        options={merchandisersFiltersData.bdm || []}
                         getOptionLabel={(option: Record<string, unknown>) => (option.value ? option.value : '')}
                         renderInput={(params: AutocompleteRenderInputParams) => (
                           <MuiTextField {...params} label="Bdm" variant="outlined" />
