@@ -121,20 +121,40 @@ const Merchandisers: FC = () => {
     ));
   };
 
+  const showError = (error: apiErrorMessage) => {
+    let message = 'Try Later';
+    const status = error.status && error.status.toLowerCase();
+    if (status === 'failure') {
+      message = error.errorMessage;
+    }
+    setSnackBarError({
+      open: true,
+      type: 'error',
+      message: message,
+    });
+  };
+
+  const getSubCategories = (id: string) => {
+    (async () => {
+      try {
+        const caterogies = await merchandisersService.getSubCategories({ 'category-id': id });
+        if (caterogies) {
+          setMerchandisersFiltersData({ ...merchandisersFiltersData, sub_category_ids: caterogies });
+          setInitialValues({ ...initialValues, category_id: id, sub_category_ids: [], product_class_ids: [] });
+        } else {
+          showError({
+            status: 'failure',
+            errorMessage: 'Filters not available',
+          });
+        }
+      } catch (error) {
+        showError(error);
+      }
+    })();
+  };
+
   useEffect(function () {
     (async () => {
-      const showError = (error: apiErrorMessage) => {
-        let message = 'Try Later';
-        const status = error.status && error.status.toLowerCase();
-        if (status === 'failure') {
-          message = error.errorMessage;
-        }
-        setSnackBarError({
-          open: true,
-          type: 'error',
-          message: message,
-        });
-      };
       try {
         const response = await merchandisersService.getTableData();
         const responseData = response ? response.data : { product_detail: [] };
@@ -336,7 +356,9 @@ const Merchandisers: FC = () => {
                         value={values.category_id ? values.category_id : ''}
                         select
                         onChange={(evt: React.ChangeEvent<HTMLInputElement>) => {
-                          setInitialValues({ ...initialValues, category_id: evt.target.value });
+                          const id = evt.target.value;
+                          setInitialValues({ ...initialValues, category_id: id });
+                          getSubCategories(id);
                         }}
                         inputProps={{
                           id: 'outlined-select',

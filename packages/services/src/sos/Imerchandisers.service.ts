@@ -18,6 +18,7 @@ export interface merchandisersFiltersObject {
   genders?: merchandisersDropDownObject[];
   vendor_id?: merchandisersDropDownObject[];
   sourcing_stage?: merchandisersDropDownObject[];
+  sub_category_ids?: merchandisersDropDownObject[];
 }
 
 interface merchandisersRowObject {
