@@ -4,9 +4,8 @@ import { FileListType, FileUpload } from '@hs/components';
 import { Button, Grid, MenuItem, Paper } from '@material-ui/core';
 import { StyledUploadForm } from './StyledFileUploadPage';
 import { TextField } from 'formik-material-ui';
-
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-
+import { FileUploadPageProps, FileUploadState } from './IFileUploadPage';
+import { FileUploadPageValidation } from './FileUploadPageValidation';
 const carouselTypesOptions = () =>
   [
     { display: 'NonProcHighreturn due to quality and sizing', value: '1' },
@@ -17,23 +16,27 @@ const carouselTypesOptions = () =>
     </MenuItem>
   ));
 
-export const FileUploadPage = () => (
+const initialValues: FileUploadState = {
+  file: undefined,
+  reason: '',
+  remark: '',
+};
+export const FileUploadPage = ({
+  acceptType,
+  onSubmit,
+}: FileUploadPageProps) => (
   <Paper>
-    <h1>Sign Up</h1>
     <Formik
-      initialValues={{
-        reason: '',
-        remark: '',
-      }}
-      onSubmit={async (values) => {
-        await sleep(500);
-        alert(JSON.stringify(values, null, 2));
+      validationSchema={FileUploadPageValidation}
+      initialValues={initialValues}
+      onSubmit={(values) => {
+        if (onSubmit) onSubmit(values);
       }}
     >
       {({ isSubmitting, isValid, dirty, setFieldValue, values }) => (
-        <Form>
+        <Form autoComplete="off">
           <Grid container spacing={1} justify="center">
-            <StyledUploadForm>
+            <StyledUploadForm elevation={3}>
               <Grid container direction="column" justify="center" spacing={3}>
                 <Grid item xs>
                   <Field
@@ -67,14 +70,15 @@ export const FileUploadPage = () => (
               <Field
                 id={`file-upload`}
                 component={FileUpload}
-                name={`fileObj`}
+                name={`file`}
                 onChange={(value: FileListType) => {
                   try {
-                    setFieldValue(`fileObj`, value[0]);
+                    setFieldValue(`file`, value[0]);
                   } catch (err) {
-                    setFieldValue(`fileObj`, null);
+                    setFieldValue(`file`, null);
                   }
                 }}
+                acceptType={acceptType}
               ></Field>
             </Grid>
             <Grid item xs={6}>

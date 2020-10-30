@@ -7,5 +7,5 @@ export const StyledFileUpload = styled(Paper)`
 `;
 
 export const StyledPaper = styled(Paper)`
-  justify-content: 'center';
+  justify-content: 'start';
 `;

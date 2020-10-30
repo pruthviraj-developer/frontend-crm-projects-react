@@ -9,6 +9,7 @@ import ICDeSelectedCircle from './crm-icons/ic-deselected-circle.svg';
 import ICSelectedRectAngle from './crm-icons/ic-selected-rectangle.svg';
 import ICDeSelectedRectAngle from './crm-icons/ic-deselected-rectangle.svg';
 import ICFAQ from './crm-icons/ic-faq.svg';
+import ICNonProc from './crm-icons/ic-non-proc.svg';
 
 export const CreateIcon = ICCreate;
 export const BackIcon = ICBack;
@@ -20,3 +21,4 @@ export const DeSelectedCircle = ICDeSelectedCircle;
 export const SelectedRectAngle = ICSelectedRectAngle;
 export const DeSelectedRectAngle = ICDeSelectedRectAngle;
 export const FAQIcon = ICFAQ;
+export const NonProcIcon = ICNonProc;

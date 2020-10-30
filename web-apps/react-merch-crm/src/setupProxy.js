@@ -22,6 +22,15 @@ module.exports = function (app) {
     }),
   );
 
+  app.use(
+    '/markstatus/',
+    createProxyMiddleware({
+      target: 'http://procurement-service.qa.hs.internal:9011/',
+      secure: false,
+      changeOrigin: true,
+    }),
+  );
+
   // http://procurement-service.qa.hs.internal:9011/v1/sos/merchplatform/filters
 
   // app.use(
