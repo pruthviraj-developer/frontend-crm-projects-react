@@ -1,4 +1,4 @@
-interface defaultFilterObject {
+export interface merchandisersDropDownObject {
   key: number;
   value: string;
   second: string;
@@ -6,17 +6,19 @@ interface defaultFilterObject {
 }
 
 export interface merchandisersFiltersObject {
-  bucket?: defaultFilterObject[];
-  category_id?: defaultFilterObject[];
-  gender?: defaultFilterObject[];
-  plc?: defaultFilterObject[];
-  age?: defaultFilterObject[];
-  status?: defaultFilterObject[];
-  brand_id?: defaultFilterObject[];
-  bdm?: defaultFilterObject[];
-  country?: defaultFilterObject[];
-  genders?: defaultFilterObject[];
-  vendor_id?: defaultFilterObject[];
+  bucket?: merchandisersDropDownObject[];
+  category_id?: merchandisersDropDownObject[];
+  gender?: merchandisersDropDownObject[];
+  plc?: merchandisersDropDownObject[];
+  age?: merchandisersDropDownObject[];
+  status?: merchandisersDropDownObject[];
+  brand_id?: merchandisersDropDownObject[];
+  bdm?: merchandisersDropDownObject[];
+  country?: merchandisersDropDownObject[];
+  genders?: merchandisersDropDownObject[];
+  vendor_id?: merchandisersDropDownObject[];
+  sourcing_stage?: merchandisersDropDownObject[];
+  sub_category_ids?: merchandisersDropDownObject[];
 }
 
 interface merchandisersRowObject {
