@@ -1,33 +1,24 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { Formik, Field, Form } from 'formik';
 import { FileListType, FileUpload } from '@hs/components';
 import { Button, Grid, MenuItem, Paper } from '@material-ui/core';
 import { StyledUploadSideBar } from './StyledFileUploadPage';
 import { TextField } from 'formik-material-ui';
-import { FileUploadPageProps, FileUploadState } from './IFileUploadPage';
-import { FileUploadPageValidation } from './FileUploadPageValidation';
-const carouselTypesOptions = () =>
-  [
-    { display: 'NonProcHighreturn due to quality and sizing', value: '1' },
-    { display: 'NonProcHighreturn due to other reason', value: '2' },
-  ].map((item) => (
-    <MenuItem key={item.value} value={item.value}>
-      {item.display}
-    </MenuItem>
-  ));
+import {
+  FileUploadPageProps,
+  FileUploadSideBarOption,
+} from './IFileUploadPage';
 
-const initialValues: FileUploadState = {
-  file: undefined,
-  reason: '',
-  remark: '',
-};
-export const FileUploadPage = ({
+export const FileUploadPage: FC<FileUploadPageProps> = ({
   acceptType,
   onSubmit,
+  sideBar,
+  validationSchema,
+  initialValues,
 }: FileUploadPageProps) => (
   <Paper>
     <Formik
-      validationSchema={FileUploadPageValidation}
+      validationSchema={validationSchema}
       initialValues={initialValues}
       onSubmit={(values) => {
         if (onSubmit) onSubmit(values);
@@ -38,32 +29,46 @@ export const FileUploadPage = ({
           <Grid container spacing={1} justify="center">
             <StyledUploadSideBar elevation={3}>
               <Grid container direction="column" justify="center" spacing={3}>
-                <Grid item xs>
-                  <Field
-                    component={TextField}
-                    type="text"
-                    name="reason"
-                    label="Reason"
-                    select
-                    inputProps={{
-                      id: 'ol-select-type',
-                    }}
-                    variant={'outlined'}
-                    fullWidth
-                  >
-                    {carouselTypesOptions()}
-                  </Field>
-                </Grid>
-                <Grid item xs>
-                  <Field
-                    component={TextField}
-                    type="text"
-                    name="remark"
-                    label="Remark"
-                    variant={'outlined'}
-                    fullWidth
-                  ></Field>
-                </Grid>
+                {sideBar &&
+                  sideBar.map((sideBarOption: FileUploadSideBarOption) => {
+                    if (sideBarOption.isSelect) {
+                      return (
+                        <Grid item xs key={sideBarOption.name}>
+                          <Field
+                            component={TextField}
+                            type="text"
+                            name={sideBarOption.name}
+                            label={sideBarOption.label}
+                            select
+                            inputProps={{
+                              id: 'ol-select-type',
+                            }}
+                            variant={'outlined'}
+                            fullWidth
+                          >
+                            {sideBarOption?.options?.map((item) => (
+                              <MenuItem key={item.value} value={item.value}>
+                                {item.display}
+                              </MenuItem>
+                            ))}
+                          </Field>
+                        </Grid>
+                      );
+                    } else {
+                      return (
+                        <Grid item xs key={sideBarOption.name}>
+                          <Field
+                            component={TextField}
+                            type="text"
+                            name={sideBarOption.name}
+                            label={sideBarOption.label}
+                            variant={'outlined'}
+                            fullWidth
+                          ></Field>
+                        </Grid>
+                      );
+                    }
+                  })}
               </Grid>
             </StyledUploadSideBar>
             <Grid item xs={7}>
