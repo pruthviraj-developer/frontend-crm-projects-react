@@ -23,8 +23,8 @@ interface formFilters {
   age: string | null;
   country: string | null;
   category_id: string | null;
-  sub_category_ids?: [];
-  product_class_ids?: [];
+  sub_category_ids?: Array<merchandisersDropDownObject>;
+  product_class_ids?: Array<merchandisersDropDownObject>;
   vendor_id: merchandisersDropDownObject | null;
   brand_id: merchandisersDropDownObject | null;
   gender: string | null;
@@ -67,6 +67,7 @@ const Merchandisers: FC = () => {
     brand_id: null,
     gender: null,
     bdm_id: null,
+    sub_category_ids: [],
   });
 
   const values = initialValues;
@@ -135,22 +136,33 @@ const Merchandisers: FC = () => {
   };
 
   const getSubCategories = (id: string) => {
+    const setValues = (overWriteValues: Record<string, unknown>) => {
+      setInitialValues({ ...initialValues, ...overWriteValues, category_id: id });
+    };
     (async () => {
       try {
         const caterogies = await merchandisersService.getSubCategories({ 'category-id': id });
         if (caterogies) {
           setMerchandisersFiltersData({ ...merchandisersFiltersData, sub_category_ids: caterogies });
-          setInitialValues({ ...initialValues, category_id: id, sub_category_ids: [], product_class_ids: [] });
+          setValues({ sub_category_ids: [], product_class_ids: [] });
         } else {
           showError({
             status: 'failure',
-            errorMessage: 'Filters not available',
+            errorMessage: 'Sub Categories not available',
           });
+          setValues({});
         }
       } catch (error) {
         showError(error);
       }
     })();
+  };
+
+  const onSubCategoryChange = (event: merchandisersDropDownObject, values: Array<merchandisersDropDownObject>) => {
+    if (event) {
+      const sub_category_ids: Array<merchandisersDropDownObject> = [...values];
+      setInitialValues({ ...initialValues, sub_category_ids: sub_category_ids });
+    }
   };
 
   useEffect(function () {
@@ -199,7 +211,6 @@ const Merchandisers: FC = () => {
             initialValues={values}
             onSubmit={(values, { setSubmitting }) => {
               setSubmitting(false);
-              // console.log(values);
             }}
           >
             {/* {({ values, isSubmitting, touched, errors }) => ( */}
@@ -356,9 +367,7 @@ const Merchandisers: FC = () => {
                         value={values.category_id ? values.category_id : ''}
                         select
                         onChange={(evt: React.ChangeEvent<HTMLInputElement>) => {
-                          const id = evt.target.value;
-                          setInitialValues({ ...initialValues, category_id: id });
-                          getSubCategories(id);
+                          getSubCategories(evt.target.value);
                         }}
                         inputProps={{
                           id: 'outlined-select',
@@ -369,73 +378,20 @@ const Merchandisers: FC = () => {
                       </Field>
                     </Grid>
 
-                    {/* 
-                    <Grid item xs>
+                    <Grid item className={classes.textFieldWidth}>
                       <Field
-                        name="gender"
-                        label="Gender"
-                        variant="standard"
+                        multiple
+                        name="sub_category_ids"
                         component={Autocomplete}
-                        options={merchandisersFiltersData.gender || []}
+                        options={merchandisersFiltersData.sub_category_ids || []}
+                        onChange={onSubCategoryChange}
+                        defaultValue={initialValues.sub_category_ids}
                         getOptionLabel={(option: Record<string, unknown>) => (option.value ? option.value : '')}
                         renderInput={(params: AutocompleteRenderInputParams) => (
-                          <MuiTextField {...params} label="Gender" variant="outlined" />
+                          <MuiTextField {...params} label="Select Sub Categorys" variant="outlined" />
                         )}
                       />
                     </Grid>
-                    <Grid item xs>
-                      <Field
-                        name="vendor_id"
-                        label="Vender"
-                        variant="standard"
-                        component={Autocomplete}
-                        options={merchandisersFiltersData.vendor_id || []}
-                        getOptionLabel={(option: Record<string, unknown>) => (option.value ? option.value : '')}
-                        renderInput={(params: AutocompleteRenderInputParams) => (
-                          <MuiTextField {...params} label="Vender" variant="outlined" />
-                        )}
-                      />
-                    </Grid>
-                    <Grid item xs>
-                      <Field
-                        name="brand_id"
-                        label="Brand"
-                        variant="standard"
-                        component={Autocomplete}
-                        options={merchandisersFiltersData.brand_id || []}
-                        getOptionLabel={(option: Record<string, unknown>) => (option.value ? option.value : '')}
-                        renderInput={(params: AutocompleteRenderInputParams) => (
-                          <MuiTextField {...params} label="Brand" variant="outlined" />
-                        )}
-                      />
-                    </Grid>
-                    <Grid item xs>
-                      <Field
-                        name="bdm_id"
-                        label="Bdm"
-                        variant="standard"
-                        component={Autocomplete}
-                        options={merchandisersFiltersData.bdm || []}
-                        getOptionLabel={(option: Record<string, unknown>) => (option.value ? option.value : '')}
-                        renderInput={(params: AutocompleteRenderInputParams) => (
-                          <MuiTextField {...params} label="Bdm" variant="outlined" />
-                        )}
-                      />
-                    </Grid>
-                    <Grid item xs>
-                      <Field
-                        name="category_id"
-                        label="Category"
-                        variant="standard"
-                        component={Autocomplete}
-                        options={merchandisersFiltersData.category_id || []}
-                        getOptionLabel={(option: Record<string, unknown>) => (option.value ? option.value : '')}
-                        renderInput={(params: AutocompleteRenderInputParams) => (
-                          <MuiTextField {...params} label="Category" variant="outlined" />
-                        )}
-                      />
-                    </Grid>
-                     */}
                     <Grid item xs>
                       <Button color={'primary'} variant={'contained'} size={'large'} type="submit">
                         Submit
