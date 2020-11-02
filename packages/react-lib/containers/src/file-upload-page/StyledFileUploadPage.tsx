@@ -8,7 +8,7 @@ export const StyledFileUploadPage = styled.div`
   }
 `;
 
-export const StyledUploadForm = styled(Paper)`
+export const StyledUploadSideBar = styled(Paper)`
   width: 300px;
   padding: 16px;
   margin: 20px;

@@ -2,7 +2,7 @@ import React from 'react';
 import { Formik, Field, Form } from 'formik';
 import { FileListType, FileUpload } from '@hs/components';
 import { Button, Grid, MenuItem, Paper } from '@material-ui/core';
-import { StyledUploadForm } from './StyledFileUploadPage';
+import { StyledUploadSideBar } from './StyledFileUploadPage';
 import { TextField } from 'formik-material-ui';
 import { FileUploadPageProps, FileUploadState } from './IFileUploadPage';
 import { FileUploadPageValidation } from './FileUploadPageValidation';
@@ -36,7 +36,7 @@ export const FileUploadPage = ({
       {({ isSubmitting, isValid, dirty, setFieldValue, values }) => (
         <Form autoComplete="off">
           <Grid container spacing={1} justify="center">
-            <StyledUploadForm elevation={3}>
+            <StyledUploadSideBar elevation={3}>
               <Grid container direction="column" justify="center" spacing={3}>
                 <Grid item xs>
                   <Field
@@ -65,7 +65,7 @@ export const FileUploadPage = ({
                   ></Field>
                 </Grid>
               </Grid>
-            </StyledUploadForm>
+            </StyledUploadSideBar>
             <Grid item xs={7}>
               <Field
                 id={`file-upload`}
