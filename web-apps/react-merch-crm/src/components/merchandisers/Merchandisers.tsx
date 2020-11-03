@@ -23,8 +23,8 @@ interface formFilters {
   age: string | null;
   country: string | null;
   category_id: string | null;
-  sub_category_ids?: Array<merchandisersDropDownObject>;
-  product_class_ids?: Array<merchandisersDropDownObject>;
+  sub_category_ids: Array<merchandisersDropDownObject>;
+  product_class_ids: Array<merchandisersDropDownObject>;
   vendor_id: merchandisersDropDownObject | null;
   brand_id: merchandisersDropDownObject | null;
   gender: string | null;
@@ -68,12 +68,13 @@ const Merchandisers: FC = () => {
     gender: null,
     bdm_id: null,
     sub_category_ids: [],
+    product_class_ids: [],
   });
 
   const values = initialValues;
 
   const [snackBarError, setSnackBarError] = useState(snackBarProps);
-  const [count, setCount] = useState<number>(1);
+  const [count, setCount] = useState<number>(0);
   const [status, setStatus] = useState<string>('Loading');
   const [merchandisersData, setMerchandisersData] = useState<Array<tableRowsV2>>([]);
   const [merchandisersFiltersData, setMerchandisersFiltersData] = useState<merchandisersFiltersObject>({});
@@ -124,9 +125,11 @@ const Merchandisers: FC = () => {
 
   const showError = (error: apiErrorMessage) => {
     let message = 'Try Later';
-    const status = error.status && error.status.toLowerCase();
-    if (status === 'failure') {
+    const errorStatus = error.status && error.status.toLowerCase;
+    if (errorStatus && errorStatus() === 'failure') {
       message = error.errorMessage;
+    } else if (error.error) {
+      message = error.error;
     }
     setSnackBarError({
       open: true,
@@ -161,12 +164,37 @@ const Merchandisers: FC = () => {
   const onSubCategoryChange = (event: merchandisersDropDownObject, values: Array<merchandisersDropDownObject>) => {
     if (event) {
       const sub_category_ids: Array<merchandisersDropDownObject> = [...values];
-      setInitialValues({ ...initialValues, sub_category_ids: sub_category_ids });
+      const setValues = (overWriteValues: Record<string, unknown>) => {
+        setInitialValues({ ...initialValues, ...overWriteValues, sub_category_ids: sub_category_ids });
+      };
+      (async () => {
+        try {
+          const subCategory = sub_category_ids.map((obj) => obj.key);
+          const productTypes = await merchandisersService.getProductTypes({ 'sub-category-ids': subCategory });
+          if (productTypes) {
+            setMerchandisersFiltersData({ ...merchandisersFiltersData, product_class_ids: productTypes });
+            setValues({ product_class_ids: [] });
+          } else {
+            showError({
+              status: 'failure',
+              errorMessage: 'Product types not available',
+            });
+            setValues({});
+          }
+        } catch (error) {
+          showError(error);
+        }
+      })();
     }
   };
 
   useEffect(function () {
     (async () => {
+      const setErrorMessage = () => {
+        setMerchandisersData([]);
+        setStatus('No Data');
+        setCount(0);
+      };
       try {
         const response = await merchandisersService.getTableData();
         const responseData = response ? response.data : { product_detail: [] };
@@ -175,12 +203,11 @@ const Merchandisers: FC = () => {
           setMerchandisersData(productDetails);
           setCount(productDetails.length);
         } else {
-          setMerchandisersData([]);
-          setStatus('No Data');
+          setErrorMessage();
         }
       } catch (error) {
-        showError(error);
-        setStatus('No Data');
+        showError(error.data);
+        setErrorMessage();
       }
       try {
         const response = await merchandisersService.getFiltersData();
@@ -193,7 +220,7 @@ const Merchandisers: FC = () => {
           });
         }
       } catch (error) {
-        showError(error);
+        showError(error.data);
       }
     })();
   }, []);
@@ -209,8 +236,20 @@ const Merchandisers: FC = () => {
           <Formik
             enableReinitialize={true}
             initialValues={values}
-            onSubmit={(values, { setSubmitting }) => {
+            onSubmit={(values: formFilters, { setSubmitting }) => {
               setSubmitting(false);
+              const postObject: Record<string, unknown> = { ...values };
+              if (values.brand_id) {
+                postObject.brand_id = values.brand_id.key;
+              }
+              if (values.vendor_id) {
+                postObject.vendor_id = values.vendor_id.key;
+              }
+              if (postObject['sub_category_ids']) {
+                postObject['sub_category_ids'] = values['sub_category_ids'].map(
+                  (obj: merchandisersDropDownObject) => obj.key,
+                );
+              }
             }}
           >
             {/* {({ values, isSubmitting, touched, errors }) => ( */}
@@ -332,6 +371,11 @@ const Merchandisers: FC = () => {
                           option: merchandisersDropDownObject,
                           selectedValue: merchandisersDropDownObject,
                         ) => option.key === selectedValue?.key}
+                        onChange={(evt: React.ChangeEvent<HTMLInputElement>, values: merchandisersDropDownObject) => {
+                          if (evt) {
+                            setInitialValues({ ...initialValues, vendor_id: values });
+                          }
+                        }}
                         options={merchandisersFiltersData.vendor_id || []}
                         getOptionLabel={(option: Record<string, unknown>) => (option.value ? option.value : '')}
                         renderInput={(params: AutocompleteRenderInputParams) => (
@@ -349,6 +393,11 @@ const Merchandisers: FC = () => {
                           option: merchandisersDropDownObject,
                           selectedValue: merchandisersDropDownObject,
                         ) => option.key === selectedValue?.key}
+                        onChange={(evt: React.ChangeEvent<HTMLInputElement>, values: merchandisersDropDownObject) => {
+                          if (evt) {
+                            setInitialValues({ ...initialValues, brand_id: values });
+                          }
+                        }}
                         options={merchandisersFiltersData.brand_id || []}
                         getOptionLabel={(option: Record<string, unknown>) => (option.value ? option.value : '')}
                         renderInput={(params: AutocompleteRenderInputParams) => (
@@ -389,6 +438,20 @@ const Merchandisers: FC = () => {
                         getOptionLabel={(option: Record<string, unknown>) => (option.value ? option.value : '')}
                         renderInput={(params: AutocompleteRenderInputParams) => (
                           <MuiTextField {...params} label="Select Sub Categorys" variant="outlined" />
+                        )}
+                      />
+                    </Grid>
+
+                    <Grid item className={classes.textFieldWidth}>
+                      <Field
+                        multiple
+                        name="product_class_ids"
+                        component={Autocomplete}
+                        options={merchandisersFiltersData.product_class_ids || []}
+                        defaultValue={initialValues.product_class_ids}
+                        getOptionLabel={(option: Record<string, unknown>) => (option.value ? option.value : '')}
+                        renderInput={(params: AutocompleteRenderInputParams) => (
+                          <MuiTextField {...params} label="Select Product Type" variant="outlined" />
                         )}
                       />
                     </Grid>
