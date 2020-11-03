@@ -18,6 +18,9 @@ import {
 import { HsSnackbar, HsSnackbarProps, HSTableV2, HsTableV2Props, tableRowsV2 } from '@hs/components';
 import { merchandisersService, merchandisersFiltersObject, merchandisersDropDownObject } from '@hs/services';
 import { apiErrorMessage } from '@hs/utils';
+import { DateTimePicker } from 'formik-material-ui-pickers';
+import DateFnsUtils from '@date-io/date-fns';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 
 interface formFilters {
   age: string | null;
@@ -29,8 +32,9 @@ interface formFilters {
   brand_id: merchandisersDropDownObject | null;
   gender: string | null;
   status: string | null;
-  bdm_id: string | null;
   sourcing_stage: string | null;
+  start_date: Date | null;
+  end_date: Date | null;
 }
 
 const useStyles = makeStyles({
@@ -66,9 +70,10 @@ const Merchandisers: FC = () => {
     vendor_id: null,
     brand_id: null,
     gender: null,
-    bdm_id: null,
     sub_category_ids: [],
     product_class_ids: [],
+    start_date: null,
+    end_date: null,
   });
 
   const values = initialValues;
@@ -252,221 +257,255 @@ const Merchandisers: FC = () => {
                   (obj: merchandisersDropDownObject) => obj.key,
                 );
               }
+              if (postObject['product_class_ids']) {
+                postObject['product_class_ids'] = values['product_class_ids'].map(
+                  (obj: merchandisersDropDownObject) => obj.key,
+                );
+              }
             }}
           >
             {/* {({ values, isSubmitting, touched, errors }) => ( */}
             {({ values }) => (
               <Form autoComplete="off">
-                <CardContent>
-                  <FiltersTitle>Filters</FiltersTitle>
-                  <Grid container direction="column" justify="center" spacing={1}>
-                    <Grid item className={classes.textFieldWidth}>
-                      <Field
-                        component={TextField}
-                        type="text"
-                        name="country"
-                        label="Country"
-                        fullWidth
-                        value={values.country ? values.country : ''}
-                        select
-                        onChange={(evt: React.ChangeEvent<HTMLInputElement>) => {
-                          setInitialValues({ ...initialValues, country: evt.target.value });
-                        }}
-                        inputProps={{
-                          id: 'outlined-select',
-                        }}
-                        variant={'outlined'}
-                      >
-                        {getFiltersDropDownValues(merchandisersFiltersData.country || [])}
-                      </Field>
-                    </Grid>
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <CardContent>
+                    <FiltersTitle>Filters</FiltersTitle>
+                    <Grid container direction="column" justify="center" spacing={1}>
+                      <Grid item className={classes.textFieldWidth}>
+                        <Field
+                          component={TextField}
+                          type="text"
+                          name="country"
+                          label="Country"
+                          fullWidth
+                          value={values.country ? values.country : ''}
+                          select
+                          onChange={(evt: React.ChangeEvent<HTMLInputElement>) => {
+                            setInitialValues({ ...initialValues, country: evt.target.value });
+                          }}
+                          inputProps={{
+                            id: 'outlined-select',
+                          }}
+                          variant={'outlined'}
+                        >
+                          {getFiltersDropDownValues(merchandisersFiltersData.country || [])}
+                        </Field>
+                      </Grid>
 
-                    <Grid item>
-                      <Field
-                        component={TextField}
-                        type="text"
-                        name="gender"
-                        label="Gender"
-                        fullWidth
-                        value={values.gender ? values.gender : ''}
-                        select
-                        onChange={(evt: React.ChangeEvent<HTMLInputElement>) => {
-                          setInitialValues({ ...initialValues, gender: evt.target.value });
-                        }}
-                        inputProps={{
-                          id: 'outlined-select',
-                        }}
-                        variant={'outlined'}
-                      >
-                        {getFiltersDropDownValues(merchandisersFiltersData.gender || [])}
-                      </Field>
-                    </Grid>
+                      <Grid item>
+                        <Field
+                          component={TextField}
+                          type="text"
+                          name="gender"
+                          label="Gender"
+                          fullWidth
+                          value={values.gender ? values.gender : ''}
+                          select
+                          onChange={(evt: React.ChangeEvent<HTMLInputElement>) => {
+                            setInitialValues({ ...initialValues, gender: evt.target.value });
+                          }}
+                          inputProps={{
+                            id: 'outlined-select',
+                          }}
+                          variant={'outlined'}
+                        >
+                          {getFiltersDropDownValues(merchandisersFiltersData.gender || [])}
+                        </Field>
+                      </Grid>
 
-                    <Grid item>
-                      <Field
-                        component={TextField}
-                        type="text"
-                        name="age"
-                        label="Age"
-                        fullWidth
-                        value={values.age ? values.age : ''}
-                        select
-                        onChange={(evt: React.ChangeEvent<HTMLInputElement>) => {
-                          setInitialValues({ ...initialValues, age: evt.target.value });
-                        }}
-                        inputProps={{
-                          id: 'outlined-select',
-                        }}
-                        variant={'outlined'}
-                      >
-                        {getFiltersDropDownValues(merchandisersFiltersData.age || [])}
-                      </Field>
-                    </Grid>
+                      <Grid item>
+                        <Field
+                          component={TextField}
+                          type="text"
+                          name="age"
+                          label="Age"
+                          fullWidth
+                          value={values.age ? values.age : ''}
+                          select
+                          onChange={(evt: React.ChangeEvent<HTMLInputElement>) => {
+                            setInitialValues({ ...initialValues, age: evt.target.value });
+                          }}
+                          inputProps={{
+                            id: 'outlined-select',
+                          }}
+                          variant={'outlined'}
+                        >
+                          {getFiltersDropDownValues(merchandisersFiltersData.age || [])}
+                        </Field>
+                      </Grid>
 
-                    <Grid item>
-                      <Field
-                        component={TextField}
-                        type="text"
-                        name="status"
-                        label="status"
-                        fullWidth
-                        value={values.status ? values.status : ''}
-                        select
-                        onChange={(evt: React.ChangeEvent<HTMLInputElement>) => {
-                          setInitialValues({ ...initialValues, status: evt.target.value });
-                        }}
-                        inputProps={{
-                          id: 'outlined-select',
-                        }}
-                        variant={'outlined'}
-                      >
-                        {getFiltersDropDownValues(merchandisersFiltersData.status || [])}
-                      </Field>
-                    </Grid>
+                      <Grid item>
+                        <Field
+                          component={TextField}
+                          type="text"
+                          name="status"
+                          label="status"
+                          fullWidth
+                          value={values.status ? values.status : ''}
+                          select
+                          onChange={(evt: React.ChangeEvent<HTMLInputElement>) => {
+                            setInitialValues({ ...initialValues, status: evt.target.value });
+                          }}
+                          inputProps={{
+                            id: 'outlined-select',
+                          }}
+                          variant={'outlined'}
+                        >
+                          {getFiltersDropDownValues(merchandisersFiltersData.status || [])}
+                        </Field>
+                      </Grid>
 
-                    <Grid item>
-                      <Field
-                        component={TextField}
-                        type="text"
-                        name="sourcing_stage"
-                        label="Sourcing Stage"
-                        fullWidth
-                        value={values.sourcing_stage ? values.sourcing_stage : ''}
-                        select
-                        onChange={(evt: React.ChangeEvent<HTMLInputElement>) => {
-                          setInitialValues({ ...initialValues, sourcing_stage: evt.target.value });
-                        }}
-                        inputProps={{
-                          id: 'outlined-select',
-                        }}
-                        variant={'outlined'}
-                      >
-                        {getFiltersDropDownValues(merchandisersFiltersData.sourcing_stage || [])}
-                      </Field>
-                    </Grid>
-                    <Grid item className={classes.textFieldWidth}>
-                      <Field
-                        name="vendor_id"
-                        variant="standard"
-                        component={Autocomplete}
-                        getOptionSelected={(
-                          option: merchandisersDropDownObject,
-                          selectedValue: merchandisersDropDownObject,
-                        ) => option.key === selectedValue?.key}
-                        onChange={(evt: React.ChangeEvent<HTMLInputElement>, values: merchandisersDropDownObject) => {
-                          if (evt) {
-                            setInitialValues({ ...initialValues, vendor_id: values });
-                          }
-                        }}
-                        options={merchandisersFiltersData.vendor_id || []}
-                        getOptionLabel={(option: Record<string, unknown>) => (option.value ? option.value : '')}
-                        renderInput={(params: AutocompleteRenderInputParams) => (
-                          <MuiTextField {...params} label="Select Vender" variant="outlined" />
-                        )}
-                      />
-                    </Grid>
+                      <Grid item>
+                        <Field
+                          component={TextField}
+                          type="text"
+                          name="sourcing_stage"
+                          label="Sourcing Stage"
+                          fullWidth
+                          value={values.sourcing_stage ? values.sourcing_stage : ''}
+                          select
+                          onChange={(evt: React.ChangeEvent<HTMLInputElement>) => {
+                            setInitialValues({ ...initialValues, sourcing_stage: evt.target.value });
+                          }}
+                          inputProps={{
+                            id: 'outlined-select',
+                          }}
+                          variant={'outlined'}
+                        >
+                          {getFiltersDropDownValues(merchandisersFiltersData.sourcing_stage || [])}
+                        </Field>
+                      </Grid>
+                      <Grid item className={classes.textFieldWidth}>
+                        <Field
+                          name="vendor_id"
+                          variant="standard"
+                          component={Autocomplete}
+                          getOptionSelected={(
+                            option: merchandisersDropDownObject,
+                            selectedValue: merchandisersDropDownObject,
+                          ) => option.key === selectedValue?.key}
+                          onChange={(evt: React.ChangeEvent<HTMLInputElement>, values: merchandisersDropDownObject) => {
+                            if (evt) {
+                              setInitialValues({ ...initialValues, vendor_id: values });
+                            }
+                          }}
+                          options={merchandisersFiltersData.vendor_id || []}
+                          getOptionLabel={(option: Record<string, unknown>) => (option.value ? option.value : '')}
+                          renderInput={(params: AutocompleteRenderInputParams) => (
+                            <MuiTextField {...params} label="Select Vender" variant="outlined" />
+                          )}
+                        />
+                      </Grid>
 
-                    <Grid item className={classes.textFieldWidth}>
-                      <Field
-                        name="brand_id"
-                        variant="standard"
-                        component={Autocomplete}
-                        getOptionSelected={(
-                          option: merchandisersDropDownObject,
-                          selectedValue: merchandisersDropDownObject,
-                        ) => option.key === selectedValue?.key}
-                        onChange={(evt: React.ChangeEvent<HTMLInputElement>, values: merchandisersDropDownObject) => {
-                          if (evt) {
-                            setInitialValues({ ...initialValues, brand_id: values });
-                          }
-                        }}
-                        options={merchandisersFiltersData.brand_id || []}
-                        getOptionLabel={(option: Record<string, unknown>) => (option.value ? option.value : '')}
-                        renderInput={(params: AutocompleteRenderInputParams) => (
-                          <MuiTextField {...params} label="Select Brand" variant="outlined" />
-                        )}
-                      />
-                    </Grid>
+                      <Grid item className={classes.textFieldWidth}>
+                        <Field
+                          name="brand_id"
+                          variant="standard"
+                          component={Autocomplete}
+                          getOptionSelected={(
+                            option: merchandisersDropDownObject,
+                            selectedValue: merchandisersDropDownObject,
+                          ) => option.key === selectedValue?.key}
+                          onChange={(evt: React.ChangeEvent<HTMLInputElement>, values: merchandisersDropDownObject) => {
+                            if (evt) {
+                              setInitialValues({ ...initialValues, brand_id: values });
+                            }
+                          }}
+                          options={merchandisersFiltersData.brand_id || []}
+                          getOptionLabel={(option: Record<string, unknown>) => (option.value ? option.value : '')}
+                          renderInput={(params: AutocompleteRenderInputParams) => (
+                            <MuiTextField {...params} label="Select Brand" variant="outlined" />
+                          )}
+                        />
+                      </Grid>
 
-                    <Grid item>
-                      <Field
-                        component={TextField}
-                        type="text"
-                        name="category_id"
-                        label="Category Id"
-                        fullWidth
-                        value={values.category_id ? values.category_id : ''}
-                        select
-                        onChange={(evt: React.ChangeEvent<HTMLInputElement>) => {
-                          getSubCategories(evt.target.value);
-                        }}
-                        inputProps={{
-                          id: 'outlined-select',
-                        }}
-                        variant={'outlined'}
-                      >
-                        {getFiltersDropDownValues(merchandisersFiltersData.category_id || [])}
-                      </Field>
-                    </Grid>
+                      <Grid item>
+                        <Field
+                          component={TextField}
+                          type="text"
+                          name="category_id"
+                          label="Category Id"
+                          fullWidth
+                          value={values.category_id ? values.category_id : ''}
+                          select
+                          onChange={(evt: React.ChangeEvent<HTMLInputElement>) => {
+                            getSubCategories(evt.target.value);
+                          }}
+                          inputProps={{
+                            id: 'outlined-select',
+                          }}
+                          variant={'outlined'}
+                        >
+                          {getFiltersDropDownValues(merchandisersFiltersData.category_id || [])}
+                        </Field>
+                      </Grid>
 
-                    <Grid item className={classes.textFieldWidth}>
-                      <Field
-                        multiple
-                        name="sub_category_ids"
-                        component={Autocomplete}
-                        options={merchandisersFiltersData.sub_category_ids || []}
-                        onChange={onSubCategoryChange}
-                        defaultValue={initialValues.sub_category_ids}
-                        getOptionLabel={(option: Record<string, unknown>) => (option.value ? option.value : '')}
-                        renderInput={(params: AutocompleteRenderInputParams) => (
-                          <MuiTextField {...params} label="Select Sub Categorys" variant="outlined" />
-                        )}
-                      />
-                    </Grid>
+                      <Grid item className={classes.textFieldWidth}>
+                        <Field
+                          multiple
+                          name="sub_category_ids"
+                          component={Autocomplete}
+                          options={merchandisersFiltersData.sub_category_ids || []}
+                          onChange={onSubCategoryChange}
+                          defaultValue={initialValues.sub_category_ids}
+                          getOptionLabel={(option: Record<string, unknown>) => (option.value ? option.value : '')}
+                          renderInput={(params: AutocompleteRenderInputParams) => (
+                            <MuiTextField {...params} label="Select Sub Categorys" variant="outlined" />
+                          )}
+                        />
+                      </Grid>
 
-                    <Grid item className={classes.textFieldWidth}>
-                      <Field
-                        multiple
-                        name="product_class_ids"
-                        component={Autocomplete}
-                        options={merchandisersFiltersData.product_class_ids || []}
-                        onChange={(event: merchandisersDropDownObject, values: Array<merchandisersDropDownObject>) => {
-                          setInitialValues({ ...initialValues, product_class_ids: values });
-                        }}
-                        defaultValue={initialValues.product_class_ids}
-                        getOptionLabel={(option: Record<string, unknown>) => (option.value ? option.value : '')}
-                        renderInput={(params: AutocompleteRenderInputParams) => (
-                          <MuiTextField {...params} label="Select Product Type" variant="outlined" />
-                        )}
-                      />
+                      <Grid item className={classes.textFieldWidth}>
+                        <Field
+                          multiple
+                          name="product_class_ids"
+                          component={Autocomplete}
+                          options={merchandisersFiltersData.product_class_ids || []}
+                          onChange={(
+                            event: merchandisersDropDownObject,
+                            values: Array<merchandisersDropDownObject>,
+                          ) => {
+                            setInitialValues({ ...initialValues, product_class_ids: values });
+                          }}
+                          defaultValue={initialValues.product_class_ids}
+                          getOptionLabel={(option: Record<string, unknown>) => (option.value ? option.value : '')}
+                          renderInput={(params: AutocompleteRenderInputParams) => (
+                            <MuiTextField {...params} label="Select Product Type" variant="outlined" />
+                          )}
+                        />
+                      </Grid>
+                      <Grid item xs>
+                        <Field
+                          component={DateTimePicker}
+                          onChange={(event: Date) => {
+                            setInitialValues({ ...initialValues, start_date: event });
+                          }}
+                          fullWidth
+                          ampm={false}
+                          name="start_date"
+                          label="Start Date"
+                        />
+                      </Grid>
+                      <Grid item xs>
+                        <Field
+                          component={DateTimePicker}
+                          onChange={(event: Date) => {
+                            setInitialValues({ ...initialValues, end_date: event });
+                          }}
+                          fullWidth
+                          ampm={false}
+                          name="end_date"
+                          label="End Date"
+                        />
+                      </Grid>
+                      <Grid item xs>
+                        <Button color={'primary'} variant={'contained'} size={'large'} type="submit">
+                          Submit
+                        </Button>
+                      </Grid>
                     </Grid>
-                    <Grid item xs>
-                      <Button color={'primary'} variant={'contained'} size={'large'} type="submit">
-                        Submit
-                      </Button>
-                    </Grid>
-                  </Grid>
-                </CardContent>
+                  </CardContent>
+                </MuiPickersUtilsProvider>
               </Form>
             )}
           </Formik>
