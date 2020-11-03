@@ -22,8 +22,18 @@ const getSubCategories = (params: {
   return httpService.get({ url, params });
 };
 
+const getProductTypes = (params: {
+  'sub-category-ids': Array<number>;
+}): Promise<Array<merchandisersDropDownObject>> => {
+  const url = `v1/merchplatform/product-type?sub-category-ids=[${params[
+    'sub-category-ids'
+  ].join(',')}]`;
+  return httpService.get({ url, params });
+};
+
 export const merchandisersService = {
   getTableData,
   getFiltersData,
+  getProductTypes,
   getSubCategories,
 };

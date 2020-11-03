@@ -19,6 +19,7 @@ export interface merchandisersFiltersObject {
   vendor_id?: merchandisersDropDownObject[];
   sourcing_stage?: merchandisersDropDownObject[];
   sub_category_ids?: merchandisersDropDownObject[];
+  product_class_ids?: merchandisersDropDownObject[];
 }
 
 interface merchandisersRowObject {
