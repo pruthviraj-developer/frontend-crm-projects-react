@@ -32,43 +32,48 @@ const useStyles = makeStyles({
   },
 });
 
-const generateRow = (row: tableRowsV2, classes: Record<string, string>) => {
-  return (
-    <>
-      <TableCell className={row.rowSpan ? classes.rowBorder : ''}>
-        {' '}
-        {row.pid_count}{' '}
-      </TableCell>
-      <TableCell className={row.rowSpan ? classes.rowBorder : ''}>
-        {' '}
-        {row.status}
-      </TableCell>
-      <TableCell className={row.rowSpan ? classes.rowBorder : ''}>
-        {row.priority}
-      </TableCell>
-      {row.rowSpan && (
-        <TableCell
-          className={row.rowSpan ? classes.rowBorder : ''}
-          rowSpan={row.rowSpan}
-        >
-          <Button color="primary" variant="contained">
-            Select Action
-          </Button>
-        </TableCell>
-      )}
-      <TableCell className={row.rowSpan ? classes.rowBorder : ''}>
-        <Button color="primary" variant="contained">
-          Export
-        </Button>
-      </TableCell>
-    </>
-  );
-};
-
 export const HSTableV2: FC<HsTableV2Props> = (props: HsTableV2Props) => {
   const columns = props.columns;
   const rows = props.rows;
   const classes = useStyles();
+  const generateRow = (row: tableRowsV2, classes: Record<string, string>) => {
+    return (
+      <>
+        <TableCell className={row.rowSpan ? classes.rowBorder : ''}>
+          {' '}
+          {row.pid_count}{' '}
+        </TableCell>
+        <TableCell className={row.rowSpan ? classes.rowBorder : ''}>
+          {' '}
+          {row.status}
+        </TableCell>
+        <TableCell className={row.rowSpan ? classes.rowBorder : ''}>
+          {row.priority}
+        </TableCell>
+        {row.rowSpan && (
+          <TableCell
+            className={row.rowSpan ? classes.rowBorder : ''}
+            rowSpan={row.rowSpan}
+          >
+            <Button color="primary" variant="contained">
+              Select Action
+            </Button>
+          </TableCell>
+        )}
+        <TableCell className={row.rowSpan ? classes.rowBorder : ''}>
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={() => {
+              props.exportColumn(row);
+            }}
+          >
+            Export
+          </Button>
+        </TableCell>
+      </>
+    );
+  };
   return (
     <StyledHsTable>
       <StyledTableContainer>

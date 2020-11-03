@@ -76,7 +76,9 @@ const rowData: Array<tableRowsV2> = [
     priority: 'due',
   },
 ];
-
+const exportColumn = (data) => {
+  // console.log(data);
+};
 function compare(a, b) {
   if (a.status < b.status) {
     return -1;
@@ -106,6 +108,7 @@ action(`${tableRows}`);
 const tableDataV2: HsTableV2Props = {
   columns: tableColumns,
   rows: tableRows,
+  exportColumn: exportColumn,
 };
 
 export const Tablev3Component: FC = () => <HSTableV2 {...tableDataV2} />;

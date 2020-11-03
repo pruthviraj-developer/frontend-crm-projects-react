@@ -100,6 +100,42 @@ const Merchandisers: FC = () => {
   };
   const tableRows: Array<tableRowsV2> = merchandisersData.sort(compare);
 
+  const getFormatedFilters = () => {
+    const postObject: Record<string, unknown> = { ...values };
+    if (values.brand_id) {
+      postObject.brand_id = values.brand_id.key;
+    }
+    if (values.vendor_id) {
+      postObject.vendor_id = values.vendor_id.key;
+    }
+    if (values['sub_category_ids'].length) {
+      postObject['sub_category_ids'] = values['sub_category_ids'].map((obj: merchandisersDropDownObject) => obj.key);
+    } else {
+      delete postObject['sub_category_ids'];
+    }
+    if (values['product_class_ids'].length) {
+      postObject['product_class_ids'] = values['product_class_ids'].map((obj: merchandisersDropDownObject) => obj.key);
+    } else {
+      delete postObject['product_class_ids'];
+    }
+    return postObject;
+  };
+
+  const exportColumn = (row: tableRowsV2) => {
+    const filteredValues: Record<string, unknown> = getFormatedFilters();
+    const filters = Object.entries(filteredValues).reduce((obj: Record<string, unknown>, entry) => {
+      const [key, value] = entry;
+      if (value && value !== null) {
+        obj[key] = value;
+      }
+      return obj;
+    }, {});
+    if (row && filters) {
+      // console.log(row);
+      // console.log(filters);
+    }
+  };
+
   tableRows.forEach((element, index) => {
     if (formatedJsonObject[element.status]) {
       formatedJsonObject[element.status]['count'] += 1;
@@ -118,6 +154,7 @@ const Merchandisers: FC = () => {
   const tableDataV2: HsTableV2Props = {
     columns: tableColumns,
     rows: tableRows,
+    exportColumn: exportColumn,
   };
 
   const getFiltersDropDownValues = (list: Array<merchandisersDropDownObject>) => {
@@ -245,26 +282,8 @@ const Merchandisers: FC = () => {
             initialValues={values}
             onSubmit={(values: formFilters, { setSubmitting }) => {
               setSubmitting(false);
-              const postObject: Record<string, unknown> = { ...values };
-              if (values.brand_id) {
-                postObject.brand_id = values.brand_id.key;
-              }
-              if (values.vendor_id) {
-                postObject.vendor_id = values.vendor_id.key;
-              }
-              if (postObject['sub_category_ids']) {
-                postObject['sub_category_ids'] = values['sub_category_ids'].map(
-                  (obj: merchandisersDropDownObject) => obj.key,
-                );
-              }
-              if (postObject['product_class_ids']) {
-                postObject['product_class_ids'] = values['product_class_ids'].map(
-                  (obj: merchandisersDropDownObject) => obj.key,
-                );
-              }
             }}
           >
-            {/* {({ values, isSubmitting, touched, errors }) => ( */}
             {({ values }) => (
               <Form autoComplete="off">
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
