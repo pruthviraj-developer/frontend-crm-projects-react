@@ -18,17 +18,17 @@ const getFiltersData = (): Promise<merchandisersFiltersObject> => {
 const getSubCategories = (params: {
   'category-id': string;
 }): Promise<Array<merchandisersDropDownObject>> => {
-  const url = '/v1/sub-category';
+  const url = '/v1/merchplatform/sub-category';
   return httpService.get({ url, params });
 };
 
 const getProductTypes = (params: {
   'sub-category-ids': Array<number>;
 }): Promise<Array<merchandisersDropDownObject>> => {
-  const url = `v1/merchplatform/product-type?sub-category-ids=[${params[
+  const url = `/v1/merchplatform/product-type?sub-category-ids=[${params[
     'sub-category-ids'
   ].join(',')}]`;
-  return httpService.get({ url, params });
+  return httpService.get({ url });
 };
 
 export const merchandisersService = {

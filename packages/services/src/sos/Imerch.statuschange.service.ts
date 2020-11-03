@@ -1,5 +1,5 @@
 export interface MerchStatusChangeType {
-  file: string | Blob;
+  file?: string | Blob;
   params: NonProcParam;
 }
 

@@ -125,10 +125,12 @@ const Merchandisers: FC = () => {
 
   const showError = (error: apiErrorMessage) => {
     let message = 'Try Later';
-    const errorStatus = error.status && error.status.toLowerCase;
-    if (errorStatus && errorStatus() === 'failure') {
-      message = error.errorMessage;
-    } else if (error.error) {
+    if (error && error.status) {
+      const errorStatus = error.status.toLowerCase;
+      if (errorStatus && errorStatus() === 'failure') {
+        message = error.errorMessage;
+      }
+    } else if (error && error.error) {
       message = error.error;
     }
     setSnackBarError({
@@ -448,6 +450,9 @@ const Merchandisers: FC = () => {
                         name="product_class_ids"
                         component={Autocomplete}
                         options={merchandisersFiltersData.product_class_ids || []}
+                        onChange={(event: merchandisersDropDownObject, values: Array<merchandisersDropDownObject>) => {
+                          setInitialValues({ ...initialValues, product_class_ids: values });
+                        }}
                         defaultValue={initialValues.product_class_ids}
                         getOptionLabel={(option: Record<string, unknown>) => (option.value ? option.value : '')}
                         renderInput={(params: AutocompleteRenderInputParams) => (

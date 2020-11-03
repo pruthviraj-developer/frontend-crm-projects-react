@@ -14,7 +14,7 @@ module.exports = function (app) {
   );
 
   app.use(
-    '/v1/sos/',
+    '/v1/merchplatform/',
     createProxyMiddleware({
       target: 'http://procurement-service.qa.hs.internal:9011/',
       secure: false,

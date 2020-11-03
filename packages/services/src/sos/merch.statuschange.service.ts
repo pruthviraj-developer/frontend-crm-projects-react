@@ -7,7 +7,9 @@ const markNonProcurable = ({
 }: MerchStatusChangeType): Promise<any> => {
   const url = `/markstatus/statusupdate`;
   const data = new FormData();
-  data.append('file', file);
+  if (file) {
+    data.append('file', file);
+  }
   return httpService.fileUpload<any>({ url, data, params });
 };
 
