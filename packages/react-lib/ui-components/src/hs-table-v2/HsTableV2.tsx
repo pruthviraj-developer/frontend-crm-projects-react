@@ -10,6 +10,10 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import { HsTableV2Props, tableRowsV2 } from './IHsTableV2';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+import { useHistory } from 'react-router-dom';
 
 const StyledHsTable = styled(Paper)`
   width: '100%';
@@ -36,6 +40,7 @@ export const HSTableV2: FC<HsTableV2Props> = (props: HsTableV2Props) => {
   const columns = props.columns;
   const rows = props.rows;
   const classes = useStyles();
+  const history = useHistory();
   const generateRow = (row: tableRowsV2, classes: Record<string, string>) => {
     return (
       <>
@@ -55,9 +60,18 @@ export const HSTableV2: FC<HsTableV2Props> = (props: HsTableV2Props) => {
             className={row.rowSpan ? classes.rowBorder : ''}
             rowSpan={row.rowSpan}
           >
-            <Button color="primary" variant="contained">
-              Select Action
-            </Button>
+            <PopupState variant="popover" popupId="demo-popup-menu">
+              {(popupState) => (
+                <React.Fragment>
+                  <Button variant="contained"  color="primary"  {...bindTrigger(popupState)}>
+                    Select Action
+                  </Button>
+                  <Menu {...bindMenu(popupState)}>
+                    <MenuItem onClick={()=>{ popupState.close(); history.push('/mark-non-procurable');}}>Mark non-procurable</MenuItem>
+                  </Menu>
+                </React.Fragment>
+              )}
+            </PopupState>
           </TableCell>
         )}
         <TableCell className={row.rowSpan ? classes.rowBorder : ''}>

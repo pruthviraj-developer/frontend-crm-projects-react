@@ -20,6 +20,7 @@ module.exports = {
   ],
   rules: {
     '@typescript-eslint/explicit-function-return-type': 'off',
+    '@typescript-eslint/camelcase': 'off',
     'constructor-super': 2,
     'for-direction': 2,
     'getter-return': 2,
