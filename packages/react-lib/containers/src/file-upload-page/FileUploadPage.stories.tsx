@@ -42,6 +42,7 @@ export const FileUploadScreen: FC = () => (
   <FileUploadPage
     acceptType={['xlsx']}
     onSubmit={action('onSubmit')}
+    onExport={action('onExport')}
     sideBar={[reasonSideBarOption, remarkSideBarOption]}
     validationSchema={FileUploadPageValidation}
     initialValues={initialValues}

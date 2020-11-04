@@ -9,6 +9,8 @@ import DashBoard from './components/dashboard/Dashboard';
 import Merchandisers from './components/merchandisers/Merchandisers';
 import { LeftNavBar, LeftNavBarProps } from '@hs/components';
 import { NonProcurable } from './components/upload-screens/NonProcurable';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const App: FC = () => {
   const navItems: LeftNavBarProps = {
@@ -40,6 +42,7 @@ const App: FC = () => {
           </Router>
         </MuiThemeProvider>
       </ThemeProvider>
+      <ToastContainer />
     </div>
   );
 };

@@ -8,10 +8,16 @@ import {
   FileUploadPageProps,
   FileUploadSideBarOption,
 } from './IFileUploadPage';
+import styled from '@emotion/styled';
+
+const ButtonWithMargin = styled.div`
+  margin-top: 25px;
+`;
 
 export const FileUploadPage: FC<FileUploadPageProps> = ({
   acceptType,
   onSubmit,
+  onExport,
   sideBar,
   validationSchema,
   initialValues,
@@ -71,20 +77,37 @@ export const FileUploadPage: FC<FileUploadPageProps> = ({
                   })}
               </Grid>
             </StyledUploadSideBar>
-            <Grid item xs={7}>
-              <Field
-                id={`file-upload`}
-                component={FileUpload}
-                name={`file`}
-                onChange={(value: FileListType) => {
-                  try {
-                    setFieldValue(`file`, value[0]);
-                  } catch (err) {
-                    setFieldValue(`file`, null);
-                  }
-                }}
-                acceptType={acceptType}
-              ></Field>
+            <Grid item xs={8}>
+              <Grid item>
+                <Field
+                  id={`file-upload`}
+                  component={FileUpload}
+                  name={`file`}
+                  onChange={(value: FileListType) => {
+                    try {
+                      setFieldValue(`file`, value[0]);
+                    } catch (err) {
+                      setFieldValue(`file`, null);
+                    }
+                  }}
+                  acceptType={acceptType}
+                ></Field>
+              </Grid>
+              <Grid item>
+                <ButtonWithMargin>
+                  <Button
+                    color={'primary'}
+                    variant={'contained'}
+                    size={'large'}
+                    type="button"
+                    onClick={() => {
+                      if (onExport) onExport();
+                    }}
+                  >
+                    Export
+                  </Button>
+                </ButtonWithMargin>
+              </Grid>
             </Grid>
             <Grid item xs={6}>
               <Button

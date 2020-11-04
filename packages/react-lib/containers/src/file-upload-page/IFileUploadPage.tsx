@@ -6,6 +6,7 @@ export interface FileUploadPageProps {
   multiple?: boolean;
   acceptType?: Array<string>;
   onSubmit?: (values: FileUploadState) => void;
+  onExport?: () => void;
   sideBar?: FileUploadSideBarOption[];
   validationSchema?: unknown;
 }

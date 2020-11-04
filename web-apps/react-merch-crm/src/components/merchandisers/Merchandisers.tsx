@@ -22,7 +22,7 @@ import { DateTimePicker } from 'formik-material-ui-pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 
-interface formFilters {
+interface FormFilters {
   age: string | null;
   country: string | null;
   category_id: string | null;
@@ -61,7 +61,7 @@ const snackBarProps: Pick<HsSnackbarProps, 'open' | 'type' | 'message'> = {
 };
 
 const Merchandisers: FC = () => {
-  const [initialValues, setInitialValues] = useState<formFilters>({
+  const [initialValues, setInitialValues] = useState<FormFilters>({
     age: null,
     country: null,
     status: null,
@@ -135,7 +135,6 @@ const Merchandisers: FC = () => {
       // console.log(filters);
     }
   };
-
   tableRows.forEach((element, index) => {
     if (formatedJsonObject[element.status]) {
       formatedJsonObject[element.status]['count'] += 1;
@@ -280,7 +279,7 @@ const Merchandisers: FC = () => {
           <Formik
             enableReinitialize={true}
             initialValues={values}
-            onSubmit={(values: formFilters, { setSubmitting }) => {
+            onSubmit={(values: FormFilters, { setSubmitting }) => {
               setSubmitting(false);
             }}
           >

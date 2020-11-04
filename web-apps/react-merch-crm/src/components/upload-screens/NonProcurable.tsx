@@ -3,6 +3,7 @@ import styled from '@emotion/styled';
 import { FileUploadPage, FileUploadState, FileUploadSideBarOption } from '@hs/containers';
 import { merchStatusChangeService } from '@hs/services';
 import * as Yup from 'yup';
+import { toast } from 'react-toastify';
 
 const StyledCntnr = styled.div`
   margin-left: 90px;
@@ -46,12 +47,18 @@ export const NonProcurable: FC = () => {
       params: { remark: values.remark, reason: values.reason },
     });
   };
+  const onExport = () => {
+    // console.log('Test')
+  };
+  toast('🦄 Wow so easy!');
+  toast('🦄 Wow so easy!');
   return (
     <StyledCntnr>
       <h1>Mark NonProcurable</h1>
       <FileUploadPage
         acceptType={['xlsx']}
         onSubmit={onSubmit}
+        onExport={onExport}
         sideBar={[reasonSideBarOption, remarkSideBarOption]}
         validationSchema={NonProcurableValidation}
         initialValues={initialValues}
