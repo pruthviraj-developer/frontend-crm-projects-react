@@ -5,3 +5,7 @@ export interface ReasonList {
 }
 
 export type ListType = FileUploadListOption[];
+
+export interface InstockList {
+  inStockList: ListType;
+}

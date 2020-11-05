@@ -8,7 +8,7 @@ import './App.css';
 import DashBoard from './components/dashboard/Dashboard';
 import Merchandisers from './components/merchandisers/Merchandisers';
 import { LeftNavBar, LeftNavBarProps } from '@hs/components';
-import { NonProcurable } from './components/upload-screens/NonProcurable';
+import { NonProcurable, NonProcurableCurrentVendor } from './components/upload-screens';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -18,6 +18,11 @@ const App: FC = () => {
       { linkUrl: '/sosdashboard', linkText: 'SOS Dashboard', icon: DashBoardIcon },
       { linkUrl: '/merchandisers', linkText: 'Merchandisers', icon: DashBoardIcon },
       { linkUrl: '/mark-non-procurable', linkText: 'Mark Non-procurable', icon: NonProcIcon },
+      {
+        linkUrl: '/mark-non-procurable-current-vendor',
+        linkText: 'Mark current vendor Non-procurable',
+        icon: NonProcIcon,
+      },
     ],
   };
 
@@ -37,6 +42,9 @@ const App: FC = () => {
               </Route>
               <Route path="/mark-non-procurable">
                 <NonProcurable />
+              </Route>
+              <Route path="/mark-non-procurable-current-vendor">
+                <NonProcurableCurrentVendor />
               </Route>
             </Switch>
           </Router>

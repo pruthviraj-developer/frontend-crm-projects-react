@@ -9,6 +9,7 @@ import {
   FileUploadSideBarOption,
 } from './IFileUploadPage';
 import styled from '@emotion/styled';
+import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 
 const ButtonWithMargin = styled.div`
   margin-top: 25px;
@@ -100,11 +101,12 @@ export const FileUploadPage: FC<FileUploadPageProps> = ({
                     variant={'contained'}
                     size={'large'}
                     type="button"
+                    startIcon={<CloudDownloadIcon />}
                     onClick={() => {
                       if (onExport) onExport();
                     }}
                   >
-                    Export
+                    Download Template
                   </Button>
                 </ButtonWithMargin>
               </Grid>

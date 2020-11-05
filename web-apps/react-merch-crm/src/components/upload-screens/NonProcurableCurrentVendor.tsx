@@ -4,7 +4,7 @@ import { FileUploadPage, FileUploadState, FileUploadSideBarOption } from '@hs/co
 import { merchStatusChangeService } from '@hs/services';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
-import { ReasonList, ListType } from './IUploadScreens';
+import { InstockList, ListType } from './IUploadScreens';
 
 const StyledCntnr = styled.div`
   margin-left: 90px;
@@ -19,34 +19,35 @@ const StyledCntnr = styled.div`
 
 const reasonSideBarOption: FileUploadSideBarOption = {
   isSelect: true,
-  name: 'reason',
-  label: 'Reason',
+  name: 'fulfillmentstatus',
+  label: 'Fulfillment Status',
 };
 
-// const remarkSideBarOption: FileUploadSideBarOption = {
-//   isSelect: false,
-//   name: 'remark',
-//   label: 'Remark',
-// };
+const remarkSideBarOption: FileUploadSideBarOption = {
+  isSelect: false,
+  name: 'remark',
+  label: 'Remark',
+};
 
 const initialValues = {
   file: undefined,
-  reason: '',
+  fulfillmentstatus: '',
+  remark: '',
 };
 
 const NonProcurableValidation = Yup.object().shape({
   file: Yup.mixed().required('Please upload a file'),
-  reason: Yup.string().required('Reason is required'),
+  fulfillmentstatus: Yup.string().required('Fulfillment Status is required'),
 });
 
-export const NonProcurable: FC = () => {
+export const NonProcurableCurrentVendor: FC = () => {
   const [list, setList] = useState<ListType>(([] as unknown) as ListType);
 
   useEffect(() => {
     (async () => {
       try {
-        const list = await merchStatusChangeService.getReasonList<ReasonList>();
-        setList(list.reasonList);
+        const list = await merchStatusChangeService.getInstockList<InstockList>();
+        setList(list.inStockList);
       } catch (error) {
         setList(([] as unknown) as ListType);
       }
@@ -57,9 +58,9 @@ export const NonProcurable: FC = () => {
   }, []);
   const onSubmit = async (values: FileUploadState) => {
     try {
-      const res = await merchStatusChangeService.markNonProcurable({
+      const res = await merchStatusChangeService.markNonProcCurrentVendor({
         file: values.file?.file,
-        params: { reason: values.reason },
+        params: { fulfillmentstatus: values.fulfillmentstatus, remark: values.remark },
       });
       toast(res);
     } catch (error) {
@@ -73,12 +74,12 @@ export const NonProcurable: FC = () => {
   // toast('🦄 Wow so easy!');
   return (
     <StyledCntnr>
-      <h1>Mark NonProcurable</h1>
+      <h1>Mark Current Vendor NonProcurable</h1>
       <FileUploadPage
         acceptType={['xlsx']}
         onSubmit={onSubmit}
         onExport={onExport}
-        sideBar={[{ ...reasonSideBarOption, options: list }]}
+        sideBar={[{ ...reasonSideBarOption, options: list }, remarkSideBarOption]}
         validationSchema={NonProcurableValidation}
         initialValues={initialValues}
       ></FileUploadPage>
