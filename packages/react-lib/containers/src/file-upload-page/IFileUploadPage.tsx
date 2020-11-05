@@ -15,12 +15,12 @@ export interface FileUploadSideBarOption {
   isSelect?: boolean;
   name: string;
   label: string;
-  options?: Option[];
+  options?: FileUploadListOption[];
 }
 
-interface Option {
+export interface FileUploadListOption {
   display: string;
-  value: string;
+  id: string | number;
 }
 export interface FileUploadState extends FormikValues {
   file?: FileType;

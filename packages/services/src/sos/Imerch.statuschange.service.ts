@@ -4,6 +4,6 @@ export interface MerchStatusChangeType {
 }
 
 export interface NonProcParam {
-  remark: string;
+  // remark: string;
   reason: string;
 }

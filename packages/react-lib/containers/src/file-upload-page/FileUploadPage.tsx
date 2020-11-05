@@ -53,7 +53,7 @@ export const FileUploadPage: FC<FileUploadPageProps> = ({
                             fullWidth
                           >
                             {sideBarOption?.options?.map((item) => (
-                              <MenuItem key={item.value} value={item.value}>
+                              <MenuItem key={item.id} value={item.id}>
                                 {item.display}
                               </MenuItem>
                             ))}
