@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect } from 'react';
 import styled from '@emotion/styled';
-import { FileUploadPage, FileUploadState, FileUploadSideBarOption } from '@hs/containers';
+import { FileUploadPage, FileUploadState, FileUploadSideBarOption, SubmitHelper } from '@hs/containers';
 import { merchStatusChangeService } from '@hs/services';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
@@ -56,15 +56,19 @@ export const NonProcurableCurrentVendor: FC = () => {
       setList(([] as unknown) as ListType);
     };
   }, []);
-  const onSubmit = async (values: FileUploadState) => {
+  const onSubmit = async (values: FileUploadState, { setSubmitting, setErrors, resetForm }: SubmitHelper) => {
     try {
       const res = await merchStatusChangeService.markNonProcCurrentVendor({
         file: values.file?.file,
         params: { fulfillmentstatus: values.fulfillmentstatus, remark: values.remark },
       });
-      toast(res);
+      toast.success(res.message);
+      setSubmitting(false);
+      resetForm({ values: { ...initialValues, resetInput: true } });
     } catch (error) {
-      toast(error.data.data.message);
+      setErrors({ submit: error.data.data.message });
+      setSubmitting(false);
+      toast.error(error.data.data.message);
     }
   };
   const onExport = () => {

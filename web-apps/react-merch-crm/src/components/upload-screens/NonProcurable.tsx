@@ -63,6 +63,7 @@ export const NonProcurable: FC = () => {
         params: { reasonId: values.reasonId },
       });
       toast.success(res.message);
+      setSubmitting(false);
       resetForm({ values: { ...initialValues, resetInput: true } });
     } catch (error) {
       setSubmitting(false);

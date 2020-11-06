@@ -12,7 +12,7 @@ import styled from '@emotion/styled';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 
 const ButtonWithMargin = styled.div`
-  margin-top: 25px;
+  margin-bottom: 25px;
 `;
 
 export const FileUploadPage: FC<FileUploadPageProps> = ({
@@ -78,22 +78,6 @@ export const FileUploadPage: FC<FileUploadPageProps> = ({
             </StyledUploadSideBar>
             <Grid item xs={8}>
               <Grid item>
-                <Field
-                  id={`file-upload`}
-                  component={FileUpload}
-                  name={`file`}
-                  onChange={(value: FileListType) => {
-                    try {
-                      setFieldValue(`file`, value[0]);
-                    } catch (err) {
-                      setFieldValue(`file`, undefined);
-                    }
-                  }}
-                  reset={values.resetInput && !dirty}
-                  acceptType={acceptType}
-                ></Field>
-              </Grid>
-              <Grid item>
                 <ButtonWithMargin>
                   <Button
                     color={'primary'}
@@ -108,6 +92,22 @@ export const FileUploadPage: FC<FileUploadPageProps> = ({
                     Download Template
                   </Button>
                 </ButtonWithMargin>
+              </Grid>
+              <Grid item>
+                <Field
+                  id={`file-upload`}
+                  component={FileUpload}
+                  name={`file`}
+                  onChange={(value: FileListType) => {
+                    try {
+                      setFieldValue(`file`, value[0]);
+                    } catch (err) {
+                      setFieldValue(`file`, undefined);
+                    }
+                  }}
+                  reset={values.resetInput && !dirty}
+                  acceptType={acceptType}
+                ></Field>
               </Grid>
             </Grid>
             <Grid item xs={6}>
