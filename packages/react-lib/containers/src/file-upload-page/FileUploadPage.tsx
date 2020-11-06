@@ -27,9 +27,7 @@ export const FileUploadPage: FC<FileUploadPageProps> = ({
     <Formik
       validationSchema={validationSchema}
       initialValues={initialValues}
-      onSubmit={(values) => {
-        if (onSubmit) onSubmit(values);
-      }}
+      onSubmit={onSubmit}
     >
       {({ isSubmitting, isValid, dirty, setFieldValue, values }) => (
         <Form autoComplete="off">
@@ -88,9 +86,10 @@ export const FileUploadPage: FC<FileUploadPageProps> = ({
                     try {
                       setFieldValue(`file`, value[0]);
                     } catch (err) {
-                      setFieldValue(`file`, null);
+                      setFieldValue(`file`, undefined);
                     }
                   }}
+                  reset={values.resetInput && !dirty}
                   acceptType={acceptType}
                 ></Field>
               </Grid>

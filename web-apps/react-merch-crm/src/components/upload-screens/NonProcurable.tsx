@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect } from 'react';
 import styled from '@emotion/styled';
-import { FileUploadPage, FileUploadState, FileUploadSideBarOption } from '@hs/containers';
+import { FileUploadPage, FileUploadState, FileUploadSideBarOption, SubmitHelper } from '@hs/containers';
 import { merchStatusChangeService } from '@hs/services';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
@@ -19,7 +19,7 @@ const StyledCntnr = styled.div`
 
 const reasonSideBarOption: FileUploadSideBarOption = {
   isSelect: true,
-  name: 'reason',
+  name: 'reasonId',
   label: 'Reason',
 };
 
@@ -31,12 +31,13 @@ const reasonSideBarOption: FileUploadSideBarOption = {
 
 const initialValues = {
   file: undefined,
-  reason: '',
+  reasonId: '',
+  resetInput: false,
 };
 
 const NonProcurableValidation = Yup.object().shape({
   file: Yup.mixed().required('Please upload a file'),
-  reason: Yup.string().required('Reason is required'),
+  reasonId: Yup.string().required('Reason is required'),
 });
 
 export const NonProcurable: FC = () => {
@@ -55,15 +56,18 @@ export const NonProcurable: FC = () => {
       setList(([] as unknown) as ListType);
     };
   }, []);
-  const onSubmit = async (values: FileUploadState) => {
+  const onSubmit = async (values: FileUploadState, { setSubmitting, setErrors, resetForm }: SubmitHelper) => {
     try {
       const res = await merchStatusChangeService.markNonProcurable({
         file: values.file?.file,
-        params: { reason: values.reason },
+        params: { reasonId: values.reasonId },
       });
-      toast(res);
+      toast.success(res.message);
+      resetForm({ values: { ...initialValues, resetInput: true } });
     } catch (error) {
-      toast(error.data.data.message);
+      setSubmitting(false);
+      setErrors({ submit: error.data.data.message });
+      toast.error(error.data.data.message);
     }
   };
   const onExport = () => {

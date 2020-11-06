@@ -1,5 +1,5 @@
 import { Button, Grid } from '@material-ui/core';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { getBase64 } from './FileValidation';
 import {
   FileListType,
@@ -21,9 +21,14 @@ export const FileUpload = ({
   maxNumber,
   maxFileSize,
   onChange,
+  reset = false,
 }: FileUploadProps) => {
   const [fileList, setFileList] = useState<FileListType>([]);
   const [, setErrors] = useState<ErrorsType>({ ...defaultErrors });
+
+  useEffect(() => {
+    if (reset) setFileList([]);
+  }, [reset]);
   const acceptString =
     acceptType && acceptType.length > 0
       ? acceptType.map((item) => `.${item}`).join(', ')
@@ -58,11 +63,6 @@ export const FileUpload = ({
         const { file } = fileList[i];
 
         if (file) {
-          const fileType: string = file.type;
-          if (!fileType.includes('image')) {
-            newErrors.acceptType = true;
-            break;
-          }
           if (maxFileSize) {
             if (file.size > maxFileSize) {
               newErrors.maxFileSize = true;

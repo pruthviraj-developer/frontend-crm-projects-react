@@ -4,6 +4,7 @@ export interface FileUploadProps {
   maxNumber?: number;
   maxFileSize?: number;
   onChange?: (value: FileListType) => void;
+  reset?: boolean;
 }
 
 export type sizeValidationType = 'absolute' | 'less' | 'more';

@@ -1,11 +1,16 @@
 import { FileType } from '@hs/components';
-import { FormikValues } from 'formik';
+import { FormikHelpers, FormikValues } from 'formik';
+
+export type SubmitHelper = FormikHelpers<FileUploadState>;
 
 export interface FileUploadPageProps {
   initialValues: FileUploadState;
   multiple?: boolean;
   acceptType?: Array<string>;
-  onSubmit?: (values: FileUploadState) => void;
+  onSubmit: (
+    values: FileUploadState,
+    { setSubmitting, setErrors, setStatus, resetForm }: SubmitHelper
+  ) => void;
   onExport?: () => void;
   sideBar?: FileUploadSideBarOption[];
   validationSchema?: unknown;
@@ -24,4 +29,5 @@ export interface FileUploadListOption {
 }
 export interface FileUploadState extends FormikValues {
   file?: FileType;
+  resetInput?: boolean;
 }
