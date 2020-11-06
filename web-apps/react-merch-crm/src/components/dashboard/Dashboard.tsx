@@ -10,30 +10,28 @@ import { IconButton } from '@material-ui/core';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 
-import { HSTableV1, HsTableProps, HsSnackbar, HsSnackbarProps } from '@hs/components';
+import { HSTableV1, HsTableProps } from '@hs/components';
 import { sosService, sosTableData, sosErrorMessage, sosTableParams, tableParams, updateSosParams } from '@hs/services';
+import { toast } from 'react-toastify';
 
 const DashBoardWrapper = styled.div`
   margin-left: 90px;
 `;
 
-const snackBarProps: Pick<HsSnackbarProps, 'open' | 'type' | 'message'> = {
-  open: false,
-  type: 'error' as const,
-  message: 'Test',
-};
-
 const DashBoard: FC = () => {
   const location = useLocation();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [snackBarError, setSnackBarError] = useState(snackBarProps);
   const [sosData, setTableData] = useState<sosTableData>({});
   const [count, setCount] = useState<number>(0);
   const [status, setStatus] = useState<string>('Loading');
   const [filterParams, setFilterParams] = useState<sosTableParams>({ pageSize: 10, pageNum: 0 });
   const pathName = location.pathname;
-  const onSnackBarClose = (open: boolean) => {
-    setSnackBarError({ ...snackBarError, open });
+  const setToaster = (toasterType: Record<string, string>) => {
+    if (toasterType.type === 'error') {
+      toast.error(toasterType.message);
+    } else {
+      toast(toasterType.message);
+    }
   };
 
   const updateSos = (data: Record<string, string>) => {
@@ -49,8 +47,7 @@ const DashBoard: FC = () => {
         if (status === 'failure') {
           message = error.errorMessage;
         }
-        setSnackBarError({
-          open: true,
+        setToaster({
           type: 'error',
           message: message,
         });
@@ -59,9 +56,7 @@ const DashBoard: FC = () => {
         const response = await sosService.updateSos(postData);
         const status = response.status && response.status.toLowerCase();
         if (status === 'success') {
-          setSnackBarError({
-            open: true,
-            type: 'success',
+          setToaster({
             message: response.messageDetail ? response.messageDetail.message : 'Updated successfully',
           });
           setFilterParams({ ...filterParams });
@@ -74,13 +69,13 @@ const DashBoard: FC = () => {
     })();
   };
 
-  const dropDownMenu = (rowData: Record<string, unknown>, data: Record<string, unknown>) => {
+  const dropDownMenu = (rowData: Record<string, string>, data: Record<string, unknown>) => {
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
       setAnchorEl(event.currentTarget);
     };
-    const handleClose = (row?: Record<any, unknown>) => {
+    const handleClose = (row: Record<string, string>) => {
       if (row && row.actionType) {
-        const postData: any = { ...rowData, ...row };
+        const postData: Record<string, string> = { ...rowData, ...row };
         updateSos(postData);
       }
       setAnchorEl(null);
@@ -242,8 +237,7 @@ const DashBoard: FC = () => {
         if (status === 'failure') {
           message = error.messageDetail.message;
         }
-        setSnackBarError({
-          open: true,
+        setToaster({
           type: 'error',
           message: message,
         });
@@ -256,7 +250,6 @@ const DashBoard: FC = () => {
       <h1>SOS DashBoard</h1>
       {count > 0 && <HSTableV1 {...TableData} />}
       {count === 0 && <h5> {status}</h5>}
-      {snackBarError.open && <HsSnackbar {...snackBarError} onSnackBarClose={onSnackBarClose} />}
     </DashBoardWrapper>
   );
 };

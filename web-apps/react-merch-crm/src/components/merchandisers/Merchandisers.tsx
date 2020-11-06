@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
-import { FC, useState } from 'react';
+import { FC, useState, useCallback } from 'react';
 import styled from '@emotion/styled';
 import { Formik, Form, Field } from 'formik';
 import { Autocomplete, AutocompleteRenderInputParams } from 'formik-material-ui-lab';
-
+import { toast } from 'react-toastify';
 import {
   TextField,
   TextField as MuiTextField,
@@ -15,10 +15,10 @@ import {
   MenuItem,
 } from '@material-ui/core';
 
-import { HsSnackbar, HsSnackbarProps, HSTableV2, HsTableV2Props, tableRowsV2 } from '@hs/components';
+import { HSTableV2, HsTableV2Props, tableRowsV2 } from '@hs/components';
 import { merchandisersService, merchandisersFiltersObject, merchandisersDropDownObject } from '@hs/services';
 import { apiErrorMessage } from '@hs/utils';
-import { DateTimePicker } from 'formik-material-ui-pickers';
+import { DatePicker } from 'formik-material-ui-pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 
@@ -54,12 +54,6 @@ const StyledCard = styled(Card)``;
 const FiltersTitle = styled.h5`
   margin-top: 0px;
 `;
-const snackBarProps: Pick<HsSnackbarProps, 'open' | 'type' | 'message'> = {
-  open: false,
-  type: 'error' as const,
-  message: 'Test',
-};
-
 const Merchandisers: FC = () => {
   const [initialValues, setInitialValues] = useState<FormFilters>({
     age: null,
@@ -78,7 +72,6 @@ const Merchandisers: FC = () => {
 
   const values = initialValues;
 
-  const [snackBarError, setSnackBarError] = useState(snackBarProps);
   const [count, setCount] = useState<number>(0);
   const [status, setStatus] = useState<string>('Loading');
   const [merchandisersData, setMerchandisersData] = useState<Array<tableRowsV2>>([]);
@@ -86,9 +79,14 @@ const Merchandisers: FC = () => {
   const formatedJsonObject: Record<string, Record<string, number>> = {};
   const tableColumns: Array<string> = ["PID's", 'Status', 'Priority', 'Action'];
   const classes = useStyles();
-  const onSnackBarClose = (open: boolean) => {
-    setSnackBarError({ ...snackBarError, open });
+  const setToaster = (toasterType: Record<string, string>) => {
+    if (toasterType.type === 'error') {
+      toast.error(toasterType.message);
+    } else {
+      toast(toasterType.message);
+    }
   };
+
   const compare = (a: tableRowsV2, b: tableRowsV2): number => {
     if (a.status < b.status) {
       return -1;
@@ -164,23 +162,6 @@ const Merchandisers: FC = () => {
     ));
   };
 
-  const showError = (error: apiErrorMessage) => {
-    let message = 'Try Later';
-    if (error && error.status) {
-      const errorStatus = error.status.toLowerCase;
-      if (errorStatus && errorStatus() === 'failure') {
-        message = error.errorMessage;
-      }
-    } else if (error && error.error) {
-      message = error.error;
-    }
-    setSnackBarError({
-      open: true,
-      type: 'error',
-      message: message,
-    });
-  };
-
   const getSubCategories = (id: string) => {
     const setValues = (overWriteValues: Record<string, unknown>) => {
       setInitialValues({ ...initialValues, ...overWriteValues, category_id: id });
@@ -231,47 +212,65 @@ const Merchandisers: FC = () => {
     }
   };
 
-  useEffect(function () {
-    (async () => {
-      const setErrorMessage = () => {
-        setMerchandisersData([]);
-        setStatus('No Data');
-        setCount(0);
-      };
-      try {
-        const response = await merchandisersService.getTableData();
-        const responseData = response ? response.data : { product_detail: [] };
-        const productDetails = responseData.product_detail;
-        if (productDetails.length) {
-          setMerchandisersData(productDetails);
-          setCount(productDetails.length);
-        } else {
+  const showError = useCallback((error: apiErrorMessage) => {
+    let message = 'Try Later';
+    if (error && error.status) {
+      const errorStatus = error.status.toLowerCase;
+      if (errorStatus && errorStatus() === 'failure') {
+        message = error.errorMessage;
+      }
+    } else if (error && error.error) {
+      message = error.error;
+    }
+    return setToaster({
+      type: 'error',
+      message: message,
+    });
+  }, []);
+
+  useEffect(
+    function () {
+      (async () => {
+        const setErrorMessage = () => {
+          setMerchandisersData([]);
+          setStatus('No Data');
+          setCount(0);
+        };
+        try {
+          const response = await merchandisersService.getTableData();
+          const responseData = response ? response.data : { product_detail: [] };
+          const productDetails = responseData.product_detail;
+          if (productDetails.length) {
+            setMerchandisersData(productDetails);
+            setCount(productDetails.length);
+          } else {
+            setErrorMessage();
+          }
+        } catch (error) {
+          showError(error.data);
           setErrorMessage();
         }
-      } catch (error) {
-        showError(error.data);
-        setErrorMessage();
-      }
-      try {
-        const response = await merchandisersService.getFiltersData();
-        if (response) {
-          setMerchandisersFiltersData(response);
-        } else {
-          showError({
-            status: 'failure',
-            errorMessage: 'Filters not available',
-          });
+        try {
+          const response = await merchandisersService.getFiltersData();
+          if (response) {
+            setMerchandisersFiltersData(response);
+          } else {
+            showError({
+              status: 'failure',
+              errorMessage: 'Filters not available',
+            });
+          }
+        } catch (error) {
+          showError(error.data);
         }
-      } catch (error) {
-        showError(error.data);
-      }
-    })();
-  }, []);
+      })();
+    },
+    [showError],
+  );
 
   return (
     <DashBoardWrapper>
       <h1>Merchandisers DashBoard</h1>
-      {snackBarError.open && <HsSnackbar {...snackBarError} onSnackBarClose={onSnackBarClose} />}
       <DashBoard>
         {count > 0 && <HSTableV2 {...tableDataV2} />}
         {count === 0 && <h5> {status}</h5>}
@@ -494,7 +493,8 @@ const Merchandisers: FC = () => {
                       </Grid>
                       <Grid item xs>
                         <Field
-                          component={DateTimePicker}
+                          component={DatePicker}
+                          format="dd/MM/yyyy"
                           onChange={(event: Date) => {
                             setInitialValues({ ...initialValues, start_date: event });
                           }}
@@ -506,7 +506,8 @@ const Merchandisers: FC = () => {
                       </Grid>
                       <Grid item xs>
                         <Field
-                          component={DateTimePicker}
+                          component={DatePicker}
+                          format="dd/MM/yyyy"
                           onChange={(event: Date) => {
                             setInitialValues({ ...initialValues, end_date: event });
                           }}
