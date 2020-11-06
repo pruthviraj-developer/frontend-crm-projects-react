@@ -36,3 +36,33 @@ interface merchandisersArrayObject {
 export interface merchandisersDataObject {
   data: merchandisersArrayObject;
 }
+
+export interface merchandisersFormFilters {
+  age: string | null;
+  country: string | null;
+  category_id: string | null;
+  sub_category_ids: Array<merchandisersDropDownObject>;
+  product_class_ids: Array<merchandisersDropDownObject>;
+  vendor_id: merchandisersDropDownObject | null;
+  brand_id: merchandisersDropDownObject | null;
+  gender: string | null;
+  status: string | null;
+  sourcing_stage: string | null;
+  start_date: Date | null;
+  end_date: Date | null;
+}
+
+export interface merchandisersExcelForm {
+  age?: string;
+  country?: string;
+  sourcing_stage?: string;
+  category_id?: number;
+  vendor_id?: number;
+  brand_id?: number;
+  gender?: string;
+  sub_category_ids?: number[] | null;
+  product_class_ids?: number[] | null;
+  start_date?: string;
+  end_date?: string;
+  status_type?: string;
+}

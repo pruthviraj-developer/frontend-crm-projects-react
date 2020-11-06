@@ -4,38 +4,21 @@ import styled from '@emotion/styled';
 import { Formik, Form, Field } from 'formik';
 import { Autocomplete, AutocompleteRenderInputParams } from 'formik-material-ui-lab';
 import { toast } from 'react-toastify';
-import {
-  TextField,
-  TextField as MuiTextField,
-  Grid,
-  Card,
-  CardContent,
-  makeStyles,
-  Button,
-  MenuItem,
-} from '@material-ui/core';
+import { TextField, TextField as MuiTextField, Grid, Card, CardContent, makeStyles, MenuItem } from '@material-ui/core';
 
 import { HSTableV2, HsTableV2Props, tableRowsV2 } from '@hs/components';
-import { merchandisersService, merchandisersFiltersObject, merchandisersDropDownObject } from '@hs/services';
+import {
+  merchandisersService,
+  merchandisersFiltersObject,
+  merchandisersDropDownObject,
+  merchandisersFormFilters,
+  merchandisersExcelForm,
+} from '@hs/services';
 import { apiErrorMessage } from '@hs/utils';
 import { DatePicker } from 'formik-material-ui-pickers';
+import { format } from 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-
-interface FormFilters {
-  age: string | null;
-  country: string | null;
-  category_id: string | null;
-  sub_category_ids: Array<merchandisersDropDownObject>;
-  product_class_ids: Array<merchandisersDropDownObject>;
-  vendor_id: merchandisersDropDownObject | null;
-  brand_id: merchandisersDropDownObject | null;
-  gender: string | null;
-  status: string | null;
-  sourcing_stage: string | null;
-  start_date: Date | null;
-  end_date: Date | null;
-}
 
 const useStyles = makeStyles({
   textFieldWidth: {
@@ -55,7 +38,7 @@ const FiltersTitle = styled.h5`
   margin-top: 0px;
 `;
 const Merchandisers: FC = () => {
-  const [initialValues, setInitialValues] = useState<FormFilters>({
+  const [initialValues, setInitialValues] = useState<merchandisersFormFilters>({
     age: null,
     country: null,
     status: null,
@@ -121,17 +104,38 @@ const Merchandisers: FC = () => {
 
   const exportColumn = (row: tableRowsV2) => {
     const filteredValues: Record<string, unknown> = getFormatedFilters();
-    const filters = Object.entries(filteredValues).reduce((obj: Record<string, unknown>, entry) => {
+    const filters: any = Object.entries(filteredValues).reduce((obj: Record<string, unknown>, entry) => {
       const [key, value] = entry;
       if (value && value !== null) {
         obj[key] = value;
       }
       return obj;
     }, {});
-    if (row && filters) {
-      // console.log(row);
-      // console.log(filters);
-    }
+    (async () => {
+      try {
+        const params: merchandisersExcelForm = { ...filters, status_type: row.status };
+        if (filters.start_date) {
+          params.start_date = format(new Date(filters.start_date), 'yyyy-MM-dd');
+        }
+        if (filters.end_date) {
+          params.end_date = format(new Date(filters.end_date), 'yyyy-MM-dd');
+        }
+        const template = await merchandisersService.downloadTemplate(params);
+        if (template) {
+          showError({
+            status: 'failure',
+            errorMessage: 'Error Downloading the template',
+          });
+        } else {
+          showError({
+            status: 'failure',
+            errorMessage: 'Error Downloading the template',
+          });
+        }
+      } catch (error) {
+        showError(error.data);
+      }
+    })();
   };
   tableRows.forEach((element, index) => {
     if (formatedJsonObject[element.status]) {
@@ -214,9 +218,9 @@ const Merchandisers: FC = () => {
 
   const showError = useCallback((error: apiErrorMessage) => {
     let message = 'Try Later';
-    if (error && error.status) {
-      const errorStatus = error.status.toLowerCase;
-      if (errorStatus && errorStatus() === 'failure') {
+    const errorStatus = error && error.status;
+    if (errorStatus) {
+      if (errorStatus.toLowerCase && errorStatus.toLowerCase() === 'failure') {
         message = error.errorMessage;
       }
     } else if (error && error.error) {
@@ -278,7 +282,7 @@ const Merchandisers: FC = () => {
           <Formik
             enableReinitialize={true}
             initialValues={values}
-            onSubmit={(values: FormFilters, { setSubmitting }) => {
+            onSubmit={(values: merchandisersFormFilters, { setSubmitting }) => {
               setSubmitting(false);
             }}
           >
@@ -516,11 +520,6 @@ const Merchandisers: FC = () => {
                           name="end_date"
                           label="End Date"
                         />
-                      </Grid>
-                      <Grid item xs>
-                        <Button color={'primary'} variant={'contained'} size={'large'} type="submit">
-                          Submit
-                        </Button>
                       </Grid>
                     </Grid>
                   </CardContent>
