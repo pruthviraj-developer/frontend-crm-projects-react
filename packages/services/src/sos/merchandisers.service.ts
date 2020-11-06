@@ -3,6 +3,7 @@ import {
   merchandisersDataObject,
   merchandisersDropDownObject,
   merchandisersFiltersObject,
+  merchandisersExcelForm,
 } from './Imerchandisers.service';
 
 const getTableData = (): Promise<merchandisersDataObject> => {
@@ -31,9 +32,17 @@ const getProductTypes = (params: {
   return httpService.get({ url });
 };
 
+const downloadTemplate = (
+  data: merchandisersExcelForm
+): Promise<Array<merchandisersDropDownObject>> => {
+  const url = '/v1/merchplatform/api/merchplatform/export';
+  return httpService.post({ url, data });
+};
+
 export const merchandisersService = {
   getTableData,
   getFiltersData,
   getProductTypes,
   getSubCategories,
+  downloadTemplate,
 };

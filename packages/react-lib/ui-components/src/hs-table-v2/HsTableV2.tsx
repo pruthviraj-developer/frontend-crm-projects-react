@@ -63,11 +63,30 @@ export const HSTableV2: FC<HsTableV2Props> = (props: HsTableV2Props) => {
             <PopupState variant="popover" popupId="demo-popup-menu">
               {(popupState) => (
                 <React.Fragment>
-                  <Button variant="contained"  color="primary"  {...bindTrigger(popupState)}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    {...bindTrigger(popupState)}
+                  >
                     Select Action
                   </Button>
                   <Menu {...bindMenu(popupState)}>
-                    <MenuItem onClick={()=>{ popupState.close(); history.push('/mark-non-procurable');}}>Mark non-procurable</MenuItem>
+                    <MenuItem
+                      onClick={() => {
+                        popupState.close();
+                        history.push('/mark-non-procurable');
+                      }}
+                    >
+                      Mark non-procurable
+                    </MenuItem>
+                    <MenuItem
+                      onClick={() => {
+                        popupState.close();
+                        history.push('/mark-non-procurable-current-vendor');
+                      }}
+                    >
+                      Mark Vendor non-procurable
+                    </MenuItem>
                   </Menu>
                 </React.Fragment>
               )}
