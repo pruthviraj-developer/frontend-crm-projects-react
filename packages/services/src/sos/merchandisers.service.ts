@@ -35,8 +35,8 @@ const getProductTypes = (params: {
 const downloadTemplate = (
   data: merchandisersExcelForm
 ): Promise<Array<merchandisersDropDownObject>> => {
-  const url = '/v1/merchplatform/api/merchplatform/export';
-  return httpService.post({ url, data });
+  const url = '/v1/merchplatform/export';
+  return httpService.post<Array<merchandisersDropDownObject>>({ url, data });
 };
 
 export const merchandisersService = {

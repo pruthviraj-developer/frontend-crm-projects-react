@@ -133,7 +133,8 @@ const Merchandisers: FC = () => {
           });
         }
       } catch (error) {
-        showError(error.data);
+        const errorObject = error.error || {};
+        showError(errorObject);
       }
     })();
   };
@@ -225,6 +226,8 @@ const Merchandisers: FC = () => {
       }
     } else if (error && error.error) {
       message = error.error;
+    } else if (error && error.message) {
+      message = error.message;
     }
     return setToaster({
       type: 'error',

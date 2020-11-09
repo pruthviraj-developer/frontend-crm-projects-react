@@ -39,6 +39,10 @@ const processRequest = <P = any>(
         handleUnauthorised();
         return Promise.reject(error);
       } else {
+        const errorMessage = error.response?.data;
+        if (errorMessage) {
+          return Promise.reject(errorMessage);
+        }
         return Promise.reject(error);
       }
     });

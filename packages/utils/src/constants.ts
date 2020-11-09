@@ -15,6 +15,7 @@ export interface apiErrorMessageDetail {
 export interface apiErrorMessage {
   status: string;
   messageDetail?: apiErrorMessageDetail;
+  message?: string;
   errorMessage: string;
   error?: string;
 }
