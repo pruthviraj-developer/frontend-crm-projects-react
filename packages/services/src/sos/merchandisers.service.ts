@@ -4,6 +4,9 @@ import {
   merchandisersDropDownObject,
   merchandisersFiltersObject,
   merchandisersExcelForm,
+  downloadTemplateObject,
+  downloadTemplateUrlObject,
+  downloadTemplateUrlObjectKey,
 } from './Imerchandisers.service';
 
 const getTableData = (): Promise<merchandisersDataObject> => {
@@ -34,15 +37,23 @@ const getProductTypes = (params: {
 
 const downloadTemplate = (
   data: merchandisersExcelForm
-): Promise<Array<merchandisersDropDownObject>> => {
+): Promise<downloadTemplateObject> => {
   const url = '/v1/merchplatform/export';
-  return httpService.post<Array<merchandisersDropDownObject>>({ url, data });
+  return httpService.post<downloadTemplateObject>({ url, data });
+};
+
+const getTemplateDownloadLink = (
+  params: downloadTemplateUrlObjectKey
+): Promise<downloadTemplateUrlObject> => {
+  const url = '/crm-api/intranet/propodownload/getsheet';
+  return httpService.get<downloadTemplateUrlObject>({ url, params });
 };
 
 export const merchandisersService = {
   getTableData,
   getFiltersData,
   getProductTypes,
+  getTemplateDownloadLink,
   getSubCategories,
   downloadTemplate,
 };

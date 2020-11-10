@@ -104,7 +104,7 @@ const Merchandisers: FC = () => {
 
   const exportColumn = (row: tableRowsV2) => {
     const filteredValues: Record<string, unknown> = getFormatedFilters();
-    const filters: any = Object.entries(filteredValues).reduce((obj: Record<string, unknown>, entry) => {
+    const filters = Object.entries(filteredValues).reduce((obj: Record<string, unknown>, entry) => {
       const [key, value] = entry;
       if (value && value !== null) {
         obj[key] = value;
@@ -120,17 +120,23 @@ const Merchandisers: FC = () => {
         if (filters.end_date) {
           params.end_date = format(new Date(filters.end_date), 'yyyy-MM-dd');
         }
-        const template = await merchandisersService.downloadTemplate(params);
-        if (template) {
-          showError({
-            status: 'failure',
-            errorMessage: 'Error Downloading the template',
-          });
+        const response = await merchandisersService.downloadTemplate(params);
+        const templateDetails = response && response.data;
+        if (templateDetails.sheetKey) {
+          try {
+            const templateObject = await merchandisersService.getTemplateDownloadLink({
+              sheetKey: templateDetails.sheetKey,
+            });
+            if (templateObject.isAvailable) {
+              window.open(templateObject.url);
+            } else {
+              toast.warn('Template does not exist.');
+            }
+          } catch (e) {
+            toast.error('Error getting template url');
+          }
         } else {
-          showError({
-            status: 'failure',
-            errorMessage: 'Error Downloading the template',
-          });
+          toast.warn('Template does not exist.');
         }
       } catch (error) {
         const errorObject = error.error || {};

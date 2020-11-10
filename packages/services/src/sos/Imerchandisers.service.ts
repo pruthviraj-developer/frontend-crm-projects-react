@@ -66,3 +66,16 @@ export interface merchandisersExcelForm {
   end_date?: string;
   status_type?: string;
 }
+
+export interface downloadTemplateUrlObjectKey {
+  sheetKey: string;
+}
+
+export interface downloadTemplateObject {
+  data: downloadTemplateUrlObjectKey;
+}
+
+export interface downloadTemplateUrlObject {
+  isAvailable: boolean;
+  url: string;
+}
