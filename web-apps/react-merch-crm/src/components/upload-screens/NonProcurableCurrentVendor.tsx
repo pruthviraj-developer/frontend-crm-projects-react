@@ -62,7 +62,12 @@ export const NonProcurableCurrentVendor: FC = () => {
         file: values.file?.file,
         params: { fulfillmentstatus: values.fulfillmentstatus, remark: values.remark },
       });
-      toast.success(res.message);
+      if (res.success) {
+        toast.success(res.message);
+      } else {
+        toast.error(res.message);
+        if (res.errors) res.errors.map((err: string, index: number) => toast.error(err, { delay: 400 * (index + 1) }));
+      }
       setSubmitting(false);
       resetForm({ values: { ...initialValues, resetInput: true } });
     } catch (error) {
