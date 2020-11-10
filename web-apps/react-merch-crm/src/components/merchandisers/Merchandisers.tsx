@@ -114,11 +114,11 @@ const Merchandisers: FC = () => {
     (async () => {
       try {
         const params: merchandisersExcelForm = { ...filters, status_type: row.status };
-        if (filters.start_date) {
-          params.start_date = format(new Date(filters.start_date), 'yyyy-MM-dd');
+        if (params.start_date) {
+          params.start_date = format(new Date(params.start_date), 'yyyy-MM-dd');
         }
-        if (filters.end_date) {
-          params.end_date = format(new Date(filters.end_date), 'yyyy-MM-dd');
+        if (params.end_date) {
+          params.end_date = format(new Date(params.end_date), 'yyyy-MM-dd');
         }
         const response = await merchandisersService.downloadTemplate(params);
         const templateDetails = response && response.data;
