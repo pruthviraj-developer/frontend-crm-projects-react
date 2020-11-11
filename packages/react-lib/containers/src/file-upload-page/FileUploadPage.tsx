@@ -122,7 +122,7 @@ export const FileUploadPage: FC<FileUploadPageProps> = ({
               </Button>
             </Grid>
           </Grid>
-          <pre>{JSON.stringify(values, null, 4)}</pre>
+          {/* <pre>{JSON.stringify(values, null, 4)}</pre> */}
         </Form>
       )}
     </Formik>
