@@ -10,26 +10,26 @@ import {
 } from './Imerchandisers.service';
 
 const getTableData = (): Promise<merchandisersDataObject> => {
-  const url = '/v1/merchplatform/dashboard';
+  const url = '/crm-api/intranet/merchplatform/dashboard';
   return httpService.get({ url });
 };
 
 const getFiltersData = (): Promise<merchandisersFiltersObject> => {
-  const url = '/v1/merchplatform/filters';
+  const url = '/crm-api/intranet/merchplatform/filters';
   return httpService.get({ url });
 };
 
 const getSubCategories = (params: {
   'category-id': string;
 }): Promise<Array<merchandisersDropDownObject>> => {
-  const url = '/v1/merchplatform/sub-category';
+  const url = '/crm-api/intranet/merchplatform/sub-category';
   return httpService.get({ url, params });
 };
 
 const getProductTypes = (params: {
   'sub-category-ids': Array<number>;
 }): Promise<Array<merchandisersDropDownObject>> => {
-  const url = `/v1/merchplatform/product-type?sub-category-ids=[${params[
+  const url = `/crm-api/intranet/merchplatform/product-type?sub-category-ids=[${params[
     'sub-category-ids'
   ].join(',')}]`;
   return httpService.get({ url });
@@ -38,7 +38,7 @@ const getProductTypes = (params: {
 const downloadTemplate = (
   data: merchandisersExcelForm
 ): Promise<downloadTemplateObject> => {
-  const url = '/v1/merchplatform/export';
+  const url = '/crm-api/intranet/merchplatform/export';
   return httpService.post<downloadTemplateObject>({ url, data });
 };
 

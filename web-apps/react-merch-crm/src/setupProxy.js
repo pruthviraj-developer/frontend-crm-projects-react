@@ -13,14 +13,14 @@ module.exports = function (app) {
     }),
   );
 
-  app.use(
-    '/v1/merchplatform/',
-    createProxyMiddleware({
-      target: 'http://procurement-service.qa.hs.internal:9011/',
-      secure: false,
-      changeOrigin: true,
-    }),
-  );
+  // app.use(
+  //   '/v1/merchplatform/',
+  //   createProxyMiddleware({
+  //     target: 'http://procurement-service.qa.hs.internal:9011/',
+  //     secure: false,
+  //     changeOrigin: true,
+  //   }),
+  // );
 
   // app.use(
   //   '/markstatus/',
