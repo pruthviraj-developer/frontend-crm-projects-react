@@ -1,6 +1,9 @@
 import { httpService } from '../http';
 import { MerchStatusChangeType } from './Imerch.statuschange.service';
-
+import {
+  downloadTemplateUrlObject,
+  downloadTemplateUrlObjectKey,
+} from './Imerchandisers.service';
 const markNonProcurable = ({
   file,
   params,
@@ -35,9 +38,17 @@ const getInstockList = <T>(): Promise<T> => {
   return httpService.get<T>({ url });
 };
 
+const getTemplateDownloadLink = (
+  params: downloadTemplateUrlObjectKey
+): Promise<downloadTemplateUrlObject> => {
+  const url = '/crm-api/intranet/merchplatform/downloadexcel';
+  return httpService.get<downloadTemplateUrlObject>({ url, params });
+};
+
 export const merchStatusChangeService = {
   markNonProcurable,
   markNonProcCurrentVendor,
   getReasonList,
   getInstockList,
+  getTemplateDownloadLink,
 };

@@ -76,8 +76,19 @@ export const NonProcurableCurrentVendor: FC = () => {
       toast.error(error.data.data.message);
     }
   };
-  const onExport = () => {
-    // console.log('Test')
+  const onExport = async () => {
+    const res = await merchStatusChangeService.getTemplateDownloadLink({
+      sheetKey: 'nonproc-current-vendor',
+    });
+    try {
+      if (res.isAvailable) {
+        window.open(res.url);
+      } else {
+        toast.warn('Template does not exist.');
+      }
+    } catch (e) {
+      toast.error('Error getting template url');
+    }
   };
   // toast('🦄 Wow so easy!');
   // toast('🦄 Wow so easy!');
