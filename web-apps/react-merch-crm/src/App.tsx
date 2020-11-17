@@ -2,13 +2,13 @@ import React, { FC } from 'react';
 import { ThemeProvider } from 'emotion-theming';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
-import { DashBoardIcon, NonProcIcon } from '@hs/icons';
+import { DashBoardIcon, NonProcIcon, TransferIcon } from '@hs/icons';
 import { LightTheme } from '@hs/utils';
 import './App.css';
 import DashBoard from './components/dashboard/Dashboard';
 import Merchandisers from './components/merchandisers/Merchandisers';
 import { LeftNavBar, LeftNavBarProps } from '@hs/components';
-import { NonProcurable, NonProcurableCurrentVendor } from './components/upload-screens';
+import { NonProcurable, NonProcurableCurrentVendor, TransferVendor } from './components/upload-screens';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -23,6 +23,7 @@ const App: FC = () => {
         linkText: 'Mark current vendor Non-procurable',
         icon: NonProcIcon,
       },
+      { linkUrl: '/transfer-vendor', linkText: 'Transfer Vendor', icon: TransferIcon },
     ],
   };
 
@@ -45,6 +46,9 @@ const App: FC = () => {
               </Route>
               <Route path="/mark-non-procurable-current-vendor">
                 <NonProcurableCurrentVendor />
+              </Route>
+              <Route path="/transfer-vendor">
+                <TransferVendor />
               </Route>
             </Switch>
           </Router>
