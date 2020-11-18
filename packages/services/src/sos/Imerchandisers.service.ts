@@ -52,7 +52,7 @@ export interface merchandisersFormFilters {
   end_date: Date | null;
 }
 
-export interface merchandisersExcelForm {
+export interface merchandisersOptionalFormFilters {
   age?: string;
   country?: string;
   sourcing_stage?: string;

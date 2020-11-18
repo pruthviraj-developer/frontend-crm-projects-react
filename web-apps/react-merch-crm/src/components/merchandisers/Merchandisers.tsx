@@ -12,7 +12,7 @@ import {
   merchandisersFiltersObject,
   merchandisersDropDownObject,
   merchandisersFormFilters,
-  merchandisersExcelForm,
+  merchandisersOptionalFormFilters,
 } from '@hs/services';
 import { apiErrorMessage } from '@hs/utils';
 import { DatePicker } from 'formik-material-ui-pickers';
@@ -81,46 +81,58 @@ const Merchandisers: FC = () => {
   };
   const tableRows: Array<tableRowsV2> = merchandisersData.sort(compare);
 
-  const getFormatedFilters = () => {
-    const postObject: Record<string, unknown> = { ...values };
-    if (values.brand_id) {
-      postObject.brand_id = values.brand_id.key;
+  const getFormatedFilters = (data?: merchandisersFormFilters) => {
+    const postObject: merchandisersFormFilters = data ? { ...data } : { ...values };
+    const editedObject: Record<string, unknown> = { ...postObject };
+    if (postObject.brand_id) {
+      editedObject.brand_id = postObject.brand_id.key;
     }
-    if (values.vendor_id) {
-      postObject.vendor_id = values.vendor_id.key;
+    if (postObject.vendor_id) {
+      editedObject.vendor_id = postObject.vendor_id.key;
     }
-    if (values['sub_category_ids'].length) {
-      postObject['sub_category_ids'] = values['sub_category_ids'].map((obj: merchandisersDropDownObject) => obj.key);
+    if (postObject['sub_category_ids'].length) {
+      editedObject['sub_category_ids'] = postObject['sub_category_ids'].map(
+        (obj: merchandisersDropDownObject) => obj.key,
+      );
     } else {
-      delete postObject['sub_category_ids'];
+      delete editedObject['sub_category_ids'];
     }
-    if (values['product_class_ids'].length) {
-      postObject['product_class_ids'] = values['product_class_ids'].map((obj: merchandisersDropDownObject) => obj.key);
+    if (postObject['product_class_ids'].length) {
+      editedObject['product_class_ids'] = postObject['product_class_ids'].map(
+        (obj: merchandisersDropDownObject) => obj.key,
+      );
     } else {
-      delete postObject['product_class_ids'];
+      delete editedObject['product_class_ids'];
     }
-    return postObject;
+    return editedObject;
+  };
+
+  const getFilteredNonNullValues = (filteredValues: merchandisersOptionalFormFilters) => {
+    const filters: merchandisersOptionalFormFilters = Object.entries(filteredValues).reduce(
+      (obj: Record<string, unknown>, entry) => {
+        const [key, value] = entry;
+        if (value && value !== null) {
+          obj[key] = value;
+        }
+        return obj;
+      },
+      {},
+    );
+    if (filters.start_date) {
+      filters.start_date = format(new Date(filters.start_date), 'yyyy-MM-dd');
+    }
+    if (filters.end_date) {
+      filters.end_date = format(new Date(filters.end_date), 'yyyy-MM-dd');
+    }
+    return filters;
   };
 
   const exportColumn = (row: tableRowsV2) => {
     const filteredValues: Record<string, unknown> = getFormatedFilters();
-    const filters = Object.entries(filteredValues).reduce((obj: Record<string, unknown>, entry) => {
-      const [key, value] = entry;
-      if (value && value !== null) {
-        obj[key] = value;
-      }
-      return obj;
-    }, {});
     (async () => {
       try {
-        const params: merchandisersExcelForm = { ...filters, status_type: row.status };
-        if (params.start_date) {
-          params.start_date = format(new Date(params.start_date), 'yyyy-MM-dd');
-        }
-        if (params.end_date) {
-          params.end_date = format(new Date(params.end_date), 'yyyy-MM-dd');
-        }
-        const response = await merchandisersService.downloadTemplate(params);
+        const params = getFilteredNonNullValues(filteredValues);
+        const response = await merchandisersService.downloadTemplate({ ...params, status_type: row.status });
         const templateDetails = response && response.data;
         if (templateDetails.sheetKey) {
           try {
@@ -144,6 +156,7 @@ const Merchandisers: FC = () => {
       }
     })();
   };
+
   tableRows.forEach((element, index) => {
     if (formatedJsonObject[element.status]) {
       formatedJsonObject[element.status]['count'] += 1;
@@ -175,7 +188,9 @@ const Merchandisers: FC = () => {
 
   const getSubCategories = (id: string) => {
     const setValues = (overWriteValues: Record<string, unknown>) => {
-      setInitialValues({ ...initialValues, ...overWriteValues, category_id: id });
+      const values = { ...initialValues, ...overWriteValues, category_id: id };
+      setInitialValues(values);
+      getTableDataWithFilters(values);
     };
     (async () => {
       try {
@@ -200,7 +215,9 @@ const Merchandisers: FC = () => {
     if (event) {
       const sub_category_ids: Array<merchandisersDropDownObject> = [...values];
       const setValues = (overWriteValues: Record<string, unknown>) => {
-        setInitialValues({ ...initialValues, ...overWriteValues, sub_category_ids: sub_category_ids });
+        const values = { ...initialValues, ...overWriteValues, sub_category_ids: sub_category_ids };
+        setInitialValues(values);
+        getTableDataWithFilters(values);
       };
       (async () => {
         try {
@@ -240,6 +257,32 @@ const Merchandisers: FC = () => {
       message: message,
     });
   }, []);
+
+  const getTableDataWithFilters = (data: merchandisersFormFilters) => {
+    (async () => {
+      const filteredValues: merchandisersOptionalFormFilters = getFormatedFilters(data);
+      const setErrorMessage = () => {
+        setMerchandisersData([]);
+        setStatus('No Data');
+        setCount(0);
+      };
+      try {
+        const params = getFilteredNonNullValues(filteredValues);
+        const response = await merchandisersService.getTableDataWithFilters(params);
+        const responseData = response ? response.data : { product_detail: [] };
+        const productDetails = responseData.product_detail;
+        if (productDetails.length) {
+          setMerchandisersData(productDetails);
+          setCount(productDetails.length);
+        } else {
+          setErrorMessage();
+        }
+      } catch (error) {
+        showError(error.data);
+        setErrorMessage();
+      }
+    })();
+  };
 
   useEffect(
     function () {
@@ -311,7 +354,9 @@ const Merchandisers: FC = () => {
                           value={values.country ? values.country : ''}
                           select
                           onChange={(evt: React.ChangeEvent<HTMLInputElement>) => {
-                            setInitialValues({ ...initialValues, country: evt.target.value });
+                            const selectedValues = { ...initialValues, country: evt.target.value };
+                            setInitialValues(selectedValues);
+                            getTableDataWithFilters(selectedValues);
                           }}
                           inputProps={{
                             id: 'outlined-select',
@@ -332,7 +377,9 @@ const Merchandisers: FC = () => {
                           value={values.gender ? values.gender : ''}
                           select
                           onChange={(evt: React.ChangeEvent<HTMLInputElement>) => {
-                            setInitialValues({ ...initialValues, gender: evt.target.value });
+                            const selectedValues = { ...initialValues, gender: evt.target.value };
+                            setInitialValues(selectedValues);
+                            getTableDataWithFilters(selectedValues);
                           }}
                           inputProps={{
                             id: 'outlined-select',
@@ -353,7 +400,9 @@ const Merchandisers: FC = () => {
                           value={values.age ? values.age : ''}
                           select
                           onChange={(evt: React.ChangeEvent<HTMLInputElement>) => {
-                            setInitialValues({ ...initialValues, age: evt.target.value });
+                            const selectedValues = { ...initialValues, age: evt.target.value };
+                            setInitialValues(selectedValues);
+                            getTableDataWithFilters(selectedValues);
                           }}
                           inputProps={{
                             id: 'outlined-select',
@@ -368,34 +417,15 @@ const Merchandisers: FC = () => {
                         <Field
                           component={TextField}
                           type="text"
-                          name="status"
-                          label="status"
-                          fullWidth
-                          value={values.status ? values.status : ''}
-                          select
-                          onChange={(evt: React.ChangeEvent<HTMLInputElement>) => {
-                            setInitialValues({ ...initialValues, status: evt.target.value });
-                          }}
-                          inputProps={{
-                            id: 'outlined-select',
-                          }}
-                          variant={'outlined'}
-                        >
-                          {getFiltersDropDownValues(merchandisersFiltersData.status || [])}
-                        </Field>
-                      </Grid>
-
-                      <Grid item>
-                        <Field
-                          component={TextField}
-                          type="text"
                           name="sourcing_stage"
                           label="Sourcing Stage"
                           fullWidth
                           value={values.sourcing_stage ? values.sourcing_stage : ''}
                           select
                           onChange={(evt: React.ChangeEvent<HTMLInputElement>) => {
-                            setInitialValues({ ...initialValues, sourcing_stage: evt.target.value });
+                            const selectedValues = { ...initialValues, sourcing_stage: evt.target.value };
+                            setInitialValues(selectedValues);
+                            getTableDataWithFilters(selectedValues);
                           }}
                           inputProps={{
                             id: 'outlined-select',
@@ -416,7 +446,9 @@ const Merchandisers: FC = () => {
                           ) => option.key === selectedValue?.key}
                           onChange={(evt: React.ChangeEvent<HTMLInputElement>, values: merchandisersDropDownObject) => {
                             if (evt) {
-                              setInitialValues({ ...initialValues, vendor_id: values });
+                              const selectedValues = { ...initialValues, vendor_id: values };
+                              setInitialValues(selectedValues);
+                              getTableDataWithFilters(selectedValues);
                             }
                           }}
                           options={merchandisersFiltersData.vendor_id || []}
@@ -438,7 +470,9 @@ const Merchandisers: FC = () => {
                           ) => option.key === selectedValue?.key}
                           onChange={(evt: React.ChangeEvent<HTMLInputElement>, values: merchandisersDropDownObject) => {
                             if (evt) {
-                              setInitialValues({ ...initialValues, brand_id: values });
+                              const selectedValues = { ...initialValues, brand_id: values };
+                              setInitialValues(selectedValues);
+                              getTableDataWithFilters(selectedValues);
                             }
                           }}
                           options={merchandisersFiltersData.brand_id || []}
@@ -495,7 +529,9 @@ const Merchandisers: FC = () => {
                             event: merchandisersDropDownObject,
                             values: Array<merchandisersDropDownObject>,
                           ) => {
-                            setInitialValues({ ...initialValues, product_class_ids: values });
+                            const selectedValues = { ...initialValues, product_class_ids: values };
+                            setInitialValues(selectedValues);
+                            getTableDataWithFilters(selectedValues);
                           }}
                           defaultValue={initialValues.product_class_ids}
                           getOptionLabel={(option: Record<string, unknown>) => (option.value ? option.value : '')}
@@ -509,7 +545,9 @@ const Merchandisers: FC = () => {
                           component={DatePicker}
                           format="dd/MM/yyyy"
                           onChange={(event: Date) => {
-                            setInitialValues({ ...initialValues, start_date: event });
+                            const selectedValues = { ...initialValues, start_date: event };
+                            setInitialValues(selectedValues);
+                            getTableDataWithFilters(selectedValues);
                           }}
                           fullWidth
                           ampm={false}
@@ -522,7 +560,9 @@ const Merchandisers: FC = () => {
                           component={DatePicker}
                           format="dd/MM/yyyy"
                           onChange={(event: Date) => {
-                            setInitialValues({ ...initialValues, end_date: event });
+                            const selectedValues = { ...initialValues, end_date: event };
+                            setInitialValues(selectedValues);
+                            getTableDataWithFilters(selectedValues);
                           }}
                           fullWidth
                           ampm={false}

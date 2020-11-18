@@ -3,7 +3,7 @@ import {
   merchandisersDataObject,
   merchandisersDropDownObject,
   merchandisersFiltersObject,
-  merchandisersExcelForm,
+  merchandisersOptionalFormFilters,
   downloadTemplateObject,
   downloadTemplateUrlObject,
   downloadTemplateUrlObjectKey,
@@ -12,6 +12,13 @@ import {
 const getTableData = (): Promise<merchandisersDataObject> => {
   const url = '/crm-api/intranet/merchplatform/dashboard';
   return httpService.get({ url });
+};
+
+const getTableDataWithFilters = (
+  data: merchandisersOptionalFormFilters
+): Promise<merchandisersDataObject> => {
+  const url = '/crm-api/intranet/merchplatform/summary';
+  return httpService.post({ url, data });
 };
 
 const getFiltersData = (): Promise<merchandisersFiltersObject> => {
@@ -36,7 +43,7 @@ const getProductTypes = (params: {
 };
 
 const downloadTemplate = (
-  data: merchandisersExcelForm
+  data: merchandisersOptionalFormFilters
 ): Promise<downloadTemplateObject> => {
   const url = '/crm-api/intranet/merchplatform/export';
   return httpService.post<downloadTemplateObject>({ url, data });
@@ -51,6 +58,7 @@ const getTemplateDownloadLink = (
 
 export const merchandisersService = {
   getTableData,
+  getTableDataWithFilters,
   getFiltersData,
   getProductTypes,
   getTemplateDownloadLink,
