@@ -78,7 +78,7 @@ export const TransferVendor: FC = () => {
   };
   const onExport = async () => {
     const res = await merchStatusChangeService.getTemplateDownloadLink({
-      sheetKey: 'nonproc',
+      sheetKey: 'transfer-vendor',
     });
     try {
       if (res.isAvailable) {
