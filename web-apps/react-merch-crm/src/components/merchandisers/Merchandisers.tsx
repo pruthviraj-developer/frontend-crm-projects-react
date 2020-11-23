@@ -132,6 +132,24 @@ const Merchandisers: FC = () => {
     return editedObject;
   };
 
+  const showError = useCallback((error: apiErrorMessage) => {
+    let message = 'Try Later';
+    const errorStatus = error && error.status;
+    if (errorStatus) {
+      if (errorStatus.toLowerCase && errorStatus.toLowerCase() === 'failure') {
+        message = error.errorMessage;
+      }
+    } else if (error && error.error) {
+      message = error.error;
+    } else if (error && error.message) {
+      message = error.message;
+    }
+    return setToaster({
+      type: 'error',
+      message: message,
+    });
+  }, []);
+
   const getDashboardTableData = useCallback(() => {
     (async () => {
       const setErrorMessage = () => {
@@ -154,7 +172,7 @@ const Merchandisers: FC = () => {
         setErrorMessage();
       }
     })();
-  }, []);
+  }, [showError]);
 
   const getFilteredNonNullValues = (filteredValues: merchandisersOptionalFormFilters) => {
     const filters: merchandisersOptionalFormFilters = Object.entries(filteredValues).reduce(
@@ -288,24 +306,6 @@ const Merchandisers: FC = () => {
       })();
     }
   };
-
-  const showError = useCallback((error: apiErrorMessage) => {
-    let message = 'Try Later';
-    const errorStatus = error && error.status;
-    if (errorStatus) {
-      if (errorStatus.toLowerCase && errorStatus.toLowerCase() === 'failure') {
-        message = error.errorMessage;
-      }
-    } else if (error && error.error) {
-      message = error.error;
-    } else if (error && error.message) {
-      message = error.message;
-    }
-    return setToaster({
-      type: 'error',
-      message: message,
-    });
-  }, []);
 
   const getTableDataWithFilters = (data: merchandisersFormFilters) => {
     (async () => {
