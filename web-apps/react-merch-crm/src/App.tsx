@@ -20,10 +20,10 @@ const App: FC = () => {
       { linkUrl: '/mark-non-procurable', linkText: 'Mark Non-procurable', icon: NonProcIcon },
       {
         linkUrl: '/mark-non-procurable-current-vendor',
-        linkText: 'Mark current vendor Non-procurable',
+        linkText: 'Modify Fulfillment status',
         icon: NonProcIcon,
       },
-      { linkUrl: '/transfer-vendor', linkText: 'Transfer Vendor', icon: TransferIcon },
+      { linkUrl: '/transfer-vendor', linkText: 'Transfer PID', icon: TransferIcon },
     ],
   };
 
