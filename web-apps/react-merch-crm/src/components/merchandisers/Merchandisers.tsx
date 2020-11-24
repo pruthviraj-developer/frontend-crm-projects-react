@@ -385,6 +385,7 @@ const Merchandisers: FC = () => {
                         <Grid item className={classes.textFieldWidth}>
                           <Field
                             component={TextField}
+                            required
                             type="text"
                             name="country"
                             label="Sourcing Country"
