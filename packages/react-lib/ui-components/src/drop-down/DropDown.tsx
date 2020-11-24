@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import styled from '@emotion/styled';
-import { css } from '@emotion/core';
+import css from '@emotion/css';
 import { DropDownProps } from './IDropDown';
 import { useState, useRef, useEffect } from 'react';
 import { Colors } from '@hs/utils';
