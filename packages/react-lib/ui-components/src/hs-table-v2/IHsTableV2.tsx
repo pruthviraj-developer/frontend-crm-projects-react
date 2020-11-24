@@ -8,5 +8,6 @@ export type tableRowsV2 = {
 export interface HsTableV2Props {
   columns: Array<string>;
   rows: Array<tableRowsV2>;
+  disableExport?: boolean;
   exportColumn: (event: tableRowsV2) => void;
 }

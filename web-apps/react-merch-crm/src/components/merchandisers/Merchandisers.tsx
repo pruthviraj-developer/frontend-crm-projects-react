@@ -77,7 +77,7 @@ const defaultFilterValues = {
 };
 const Merchandisers: FC = () => {
   const [initialValues, setInitialValues] = useState<merchandisersFormFilters>(defaultFilterValues);
-
+  const [disableExport, setDisableExport] = useState<boolean>(true);
   const values = initialValues;
 
   const [count, setCount] = useState<number>(0);
@@ -242,6 +242,7 @@ const Merchandisers: FC = () => {
   const tableDataV2: HsTableV2Props = {
     columns: tableColumns,
     rows: tableRows,
+    disableExport: disableExport,
     exportColumn: exportColumn,
   };
 
@@ -335,6 +336,7 @@ const Merchandisers: FC = () => {
 
   const clearFilters = () => {
     setInitialValues(defaultFilterValues);
+    setDisableExport(true);
     getDashboardTableData();
   };
   useEffect(
@@ -393,6 +395,7 @@ const Merchandisers: FC = () => {
                               const selectedValues = { ...initialValues, country: evt.target.value };
                               setInitialValues(selectedValues);
                               getTableDataWithFilters(selectedValues);
+                              setDisableExport(false);
                             }}
                             inputProps={{
                               id: 'outlined-select',

@@ -97,6 +97,7 @@ export const HSTableV2: FC<HsTableV2Props> = (props: HsTableV2Props) => {
           <Button
             color="primary"
             variant="contained"
+            disabled={props.disableExport}
             onClick={() => {
               props.exportColumn(row);
             }}
