@@ -78,22 +78,6 @@ export const FileUploadPage: FC<FileUploadPageProps> = ({
             </StyledUploadSideBar>
             <Grid item xs={8}>
               <Grid item>
-                <ButtonWithMargin>
-                  <Button
-                    color={'primary'}
-                    variant={'contained'}
-                    size={'large'}
-                    type="button"
-                    startIcon={<CloudDownloadIcon />}
-                    onClick={() => {
-                      if (onExport) onExport();
-                    }}
-                  >
-                    Download Template
-                  </Button>
-                </ButtonWithMargin>
-              </Grid>
-              <Grid item>
                 <Field
                   id={`file-upload`}
                   component={FileUpload}
@@ -108,6 +92,21 @@ export const FileUploadPage: FC<FileUploadPageProps> = ({
                   reset={values.resetInput && !dirty}
                   acceptType={acceptType}
                 ></Field>
+              </Grid>
+              <Grid item>
+                <ButtonWithMargin>
+                  <Button
+                    color={'primary'}
+                    size={'large'}
+                    type="button"
+                    startIcon={<CloudDownloadIcon />}
+                    onClick={() => {
+                      if (onExport) onExport();
+                    }}
+                  >
+                    Download Template
+                  </Button>
+                </ButtonWithMargin>
               </Grid>
             </Grid>
             <Grid item xs={6}>
