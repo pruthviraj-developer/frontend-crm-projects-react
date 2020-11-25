@@ -1,19 +1,18 @@
 import React, { FC } from 'react';
 import { Formik, Field, Form } from 'formik';
 import { FileListType, FileUpload } from '@hs/components';
-import { Button, Grid, MenuItem, Paper } from '@material-ui/core';
-import { StyledUploadSideBar } from './StyledFileUploadPage';
+import { Button, Grid, MenuItem } from '@material-ui/core';
+import {
+  StyledUploadCntnr,
+  StyledUploadSideBar,
+  StyledTemplateButton,
+} from './StyledFileUploadPage';
 import { TextField } from 'formik-material-ui';
 import {
   FileUploadPageProps,
   FileUploadSideBarOption,
 } from './IFileUploadPage';
-import styled from '@emotion/styled';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
-
-const ButtonWithMargin = styled.div`
-  margin-bottom: 25px;
-`;
 
 export const FileUploadPage: FC<FileUploadPageProps> = ({
   acceptType,
@@ -23,7 +22,7 @@ export const FileUploadPage: FC<FileUploadPageProps> = ({
   validationSchema,
   initialValues,
 }: FileUploadPageProps) => (
-  <Paper>
+  <StyledUploadCntnr>
     <Formik
       validationSchema={validationSchema}
       initialValues={initialValues}
@@ -77,36 +76,38 @@ export const FileUploadPage: FC<FileUploadPageProps> = ({
               </Grid>
             </StyledUploadSideBar>
             <Grid item xs={8}>
-              <Grid item>
-                <Field
-                  id={`file-upload`}
-                  component={FileUpload}
-                  name={`file`}
-                  onChange={(value: FileListType) => {
-                    try {
-                      setFieldValue(`file`, value[0]);
-                    } catch (err) {
-                      setFieldValue(`file`, undefined);
-                    }
-                  }}
-                  reset={values.resetInput && !dirty}
-                  acceptType={acceptType}
-                ></Field>
-              </Grid>
-              <Grid item>
-                <ButtonWithMargin>
-                  <Button
-                    color={'primary'}
-                    size={'large'}
-                    type="button"
-                    startIcon={<CloudDownloadIcon />}
-                    onClick={() => {
-                      if (onExport) onExport();
+              <Grid container direction="column" justify="center">
+                <Grid item>
+                  <Field
+                    id={`file-upload`}
+                    component={FileUpload}
+                    name={`file`}
+                    onChange={(value: FileListType) => {
+                      try {
+                        setFieldValue(`file`, value[0]);
+                      } catch (err) {
+                        setFieldValue(`file`, undefined);
+                      }
                     }}
-                  >
-                    Download Template
-                  </Button>
-                </ButtonWithMargin>
+                    reset={values.resetInput && !dirty}
+                    acceptType={acceptType}
+                  ></Field>
+                </Grid>
+                <Grid item xs={12}>
+                  <StyledTemplateButton>
+                    <Button
+                      color={'primary'}
+                      size={'large'}
+                      type="button"
+                      startIcon={<CloudDownloadIcon />}
+                      onClick={() => {
+                        if (onExport) onExport();
+                      }}
+                    >
+                      Download Template
+                    </Button>
+                  </StyledTemplateButton>
+                </Grid>
               </Grid>
             </Grid>
             <Grid item xs={6}>
@@ -125,5 +126,5 @@ export const FileUploadPage: FC<FileUploadPageProps> = ({
         </Form>
       )}
     </Formik>
-  </Paper>
+  </StyledUploadCntnr>
 );

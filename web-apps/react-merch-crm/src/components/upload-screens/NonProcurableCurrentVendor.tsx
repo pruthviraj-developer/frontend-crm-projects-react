@@ -94,7 +94,7 @@ export const NonProcurableCurrentVendor: FC = () => {
   // toast('🦄 Wow so easy!');
   return (
     <StyledCntnr>
-      <h1>Mark Current Vendor NonProcurable</h1>
+      <h1>Modify Fulfillment status</h1>
       <FileUploadPage
         acceptType={['xlsx']}
         onSubmit={onSubmit}

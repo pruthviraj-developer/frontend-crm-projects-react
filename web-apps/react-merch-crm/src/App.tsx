@@ -19,11 +19,11 @@ const App: FC = () => {
       { linkUrl: '/merchandisers', linkText: 'Merchandisers', icon: DashBoardIcon },
       { linkUrl: '/mark-non-procurable', linkText: 'Mark Non-procurable', icon: NonProcIcon },
       {
-        linkUrl: '/mark-non-procurable-current-vendor',
+        linkUrl: '/modify-fulfillment-status',
         linkText: 'Modify Fulfillment status',
         icon: NonProcIcon,
       },
-      { linkUrl: '/transfer-vendor', linkText: 'Transfer PID', icon: TransferIcon },
+      { linkUrl: '/transfer-pid', linkText: 'Transfer PID', icon: TransferIcon },
     ],
   };
 
@@ -44,10 +44,10 @@ const App: FC = () => {
               <Route path="/mark-non-procurable">
                 <NonProcurable />
               </Route>
-              <Route path="/mark-non-procurable-current-vendor">
+              <Route path="/modify-fulfillment-status">
                 <NonProcurableCurrentVendor />
               </Route>
-              <Route path="/transfer-vendor">
+              <Route path="/transfer-pid">
                 <TransferVendor />
               </Route>
             </Switch>

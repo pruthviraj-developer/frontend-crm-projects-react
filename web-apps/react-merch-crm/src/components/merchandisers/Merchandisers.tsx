@@ -363,7 +363,7 @@ const Merchandisers: FC = () => {
 
   return (
     <DashBoardWrapper>
-      <h1>Mark Non-Procurable</h1>
+      <h1>Merchandisers DashBoard</h1>
       <DashBoard>
         {count > 0 && <HSTableV2 {...tableDataV2} />}
         {count === 0 && <h5> {status}</h5>}

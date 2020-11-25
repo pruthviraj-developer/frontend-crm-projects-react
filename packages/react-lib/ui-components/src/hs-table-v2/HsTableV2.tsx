@@ -82,10 +82,10 @@ export const HSTableV2: FC<HsTableV2Props> = (props: HsTableV2Props) => {
                     <MenuItem
                       onClick={() => {
                         popupState.close();
-                        history.push('/mark-non-procurable-current-vendor');
+                        history.push('/modify-fulfillment-status');
                       }}
                     >
-                      Mark Vendor non-procurable
+                      Modify Fulfillment status
                     </MenuItem>
                   </Menu>
                 </React.Fragment>
