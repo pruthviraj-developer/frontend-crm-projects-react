@@ -1,8 +1,8 @@
 export interface merchandisersDropDownObject {
-  key: number;
+  key: number | string;
   value: string;
   second: string;
-  first: number;
+  first: number | string;
 }
 
 export interface merchandisersFiltersObject {

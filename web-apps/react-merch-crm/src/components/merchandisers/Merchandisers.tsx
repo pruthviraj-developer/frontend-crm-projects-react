@@ -246,8 +246,9 @@ const Merchandisers: FC = () => {
     exportColumn: exportColumn,
   };
 
-  const getFiltersDropDownValues = (list: Array<merchandisersDropDownObject>) => {
-    return list.map((item: merchandisersDropDownObject) => (
+  const getFiltersDropDownValues = (list: Array<merchandisersDropDownObject>, isNoneRequired = true) => {
+    const optionList = isNoneRequired ? [{ key: '', value: 'None', second: '', first: '' }, ...list] : list;
+    return optionList.map((item: merchandisersDropDownObject) => (
       <MenuItem key={item.key} value={item.key}>
         {item.value}
       </MenuItem>
@@ -403,7 +404,7 @@ const Merchandisers: FC = () => {
                             }}
                             variant={'outlined'}
                           >
-                            {getFiltersDropDownValues(merchandisersFiltersData.country || [])}
+                            {getFiltersDropDownValues(merchandisersFiltersData.country || [], false)}
                           </Field>
                         </Grid>
                       </Paper>

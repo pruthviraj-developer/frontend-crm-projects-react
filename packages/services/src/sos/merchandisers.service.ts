@@ -11,35 +11,35 @@ import {
 
 const getTableData = (): Promise<merchandisersDataObject> => {
   const url = '/crm-api/intranet/merchplatform/dashboard';
-  return httpService.get({ url });
+  return httpService.get<merchandisersDataObject>({ url });
 };
 
 const getTableDataWithFilters = (
   data: merchandisersOptionalFormFilters
 ): Promise<merchandisersDataObject> => {
   const url = '/crm-api/intranet/merchplatform/summary';
-  return httpService.post({ url, data });
+  return httpService.post<merchandisersDataObject>({ url, data });
 };
 
 const getFiltersData = (): Promise<merchandisersFiltersObject> => {
   const url = '/crm-api/intranet/merchplatform/filters';
-  return httpService.get({ url });
+  return httpService.get<merchandisersFiltersObject>({ url });
 };
 
 const getSubCategories = (params: {
   'category-id': string;
 }): Promise<Array<merchandisersDropDownObject>> => {
   const url = '/crm-api/intranet/merchplatform/sub-category';
-  return httpService.get({ url, params });
+  return httpService.get<Array<merchandisersDropDownObject>>({ url, params });
 };
 
 const getProductTypes = (params: {
-  'sub-category-ids': Array<number>;
+  'sub-category-ids': Array<number | string>;
 }): Promise<Array<merchandisersDropDownObject>> => {
   const url = `/crm-api/intranet/merchplatform/product-type?sub-category-ids=[${params[
     'sub-category-ids'
   ].join(',')}]`;
-  return httpService.get({ url });
+  return httpService.get<Array<merchandisersDropDownObject>>({ url });
 };
 
 const downloadTemplate = (
