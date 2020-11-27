@@ -53,7 +53,10 @@ const DashBoard = styled.div`
   display: flex;
   justify-content: space-evenly;
 `;
-const StyledCard = styled(Card)``;
+const StyledCard = styled(Card)`
+  min-width: 450px;
+  max-width: 450px;
+`;
 const FiltersTitle = styled.h5`
   margin-top: 0px;
 `;
@@ -247,7 +250,11 @@ const Merchandisers: FC = () => {
   };
 
   const getFiltersDropDownValues = (list: Array<merchandisersDropDownObject>, isNoneRequired = true) => {
-    const optionList = isNoneRequired ? [{ key: '', value: 'None', second: '', first: '' }, ...list] : list;
+    const withOptions: Array<merchandisersDropDownObject> = [
+      { key: '', value: 'None', second: '', first: '' },
+      ...list,
+    ];
+    const optionList = isNoneRequired ? withOptions : list;
     return optionList.map((item: merchandisersDropDownObject) => (
       <MenuItem key={item.key} value={item.key}>
         {item.value}
@@ -261,33 +268,42 @@ const Merchandisers: FC = () => {
       setInitialValues(values);
       getTableDataWithFilters(values);
     };
-    (async () => {
-      try {
-        const caterogies = await merchandisersService.getSubCategories({ 'category-id': id });
-        if (caterogies) {
-          setMerchandisersFiltersData({ ...merchandisersFiltersData, sub_category_ids: caterogies });
-          setValues({ sub_category_ids: [], product_class_ids: [] });
-        } else {
-          showError({
-            status: 'failure',
-            errorMessage: 'Sub Categories not available',
-          });
-          setValues({});
+    if (id) {
+      (async () => {
+        try {
+          const caterogies = await merchandisersService.getSubCategories({ 'category-id': id });
+          if (caterogies) {
+            setMerchandisersFiltersData({
+              ...merchandisersFiltersData,
+              sub_category_ids: caterogies,
+              product_class_ids: [],
+            });
+            setValues({ sub_category_ids: [], product_class_ids: [] });
+          } else {
+            showError({
+              status: 'failure',
+              errorMessage: 'Sub Categories not available',
+            });
+            setValues({});
+          }
+        } catch (error) {
+          showError(error);
         }
-      } catch (error) {
-        showError(error);
-      }
-    })();
+      })();
+    } else {
+      setMerchandisersFiltersData({ ...merchandisersFiltersData, sub_category_ids: [], product_class_ids: [] });
+      setValues({ sub_category_ids: [], product_class_ids: [] });
+    }
   };
 
   const onSubCategoryChange = (event: merchandisersDropDownObject, values: Array<merchandisersDropDownObject>) => {
-    if (event) {
-      const sub_category_ids: Array<merchandisersDropDownObject> = [...values];
-      const setValues = (overWriteValues: Record<string, unknown>) => {
-        const values = { ...initialValues, ...overWriteValues, sub_category_ids: sub_category_ids };
-        setInitialValues(values);
-        getTableDataWithFilters(values);
-      };
+    const sub_category_ids: Array<merchandisersDropDownObject> = [...values];
+    const setValues = (overWriteValues: Record<string, unknown>) => {
+      const values = { ...initialValues, ...overWriteValues, sub_category_ids: sub_category_ids };
+      setInitialValues(values);
+      getTableDataWithFilters(values);
+    };
+    if (event && values.length) {
       (async () => {
         try {
           const subCategory = sub_category_ids.map((obj) => obj.key);
@@ -306,33 +322,40 @@ const Merchandisers: FC = () => {
           showError(error);
         }
       })();
+    } else {
+      setMerchandisersFiltersData({ ...merchandisersFiltersData, product_class_ids: [] });
+      setValues({ product_class_ids: [] });
     }
   };
 
   const getTableDataWithFilters = (data: merchandisersFormFilters) => {
-    (async () => {
-      const filteredValues: merchandisersOptionalFormFilters = getFormatedFilters(data);
-      const setErrorMessage = () => {
-        setMerchandisersData([]);
-        setStatus('No Data');
-        setCount(0);
-      };
-      try {
-        const params = getFilteredNonNullValues(filteredValues);
-        const response = await merchandisersService.getTableDataWithFilters(params);
-        const responseData = response ? response.data : { product_detail: [] };
-        const productDetails = responseData.product_detail;
-        if (productDetails.length) {
-          setMerchandisersData(productDetails);
-          setCount(productDetails.length);
-        } else {
+    const filteredValues: merchandisersOptionalFormFilters = getFormatedFilters(data);
+    const params = getFilteredNonNullValues(filteredValues) || {};
+    if (Object.keys(params).length) {
+      (async () => {
+        const setErrorMessage = () => {
+          setMerchandisersData([]);
+          setStatus('No Data');
+          setCount(0);
+        };
+        try {
+          const response = await merchandisersService.getTableDataWithFilters(params);
+          const responseData = response ? response.data : { product_detail: [] };
+          const productDetails = responseData.product_detail;
+          if (productDetails.length) {
+            setMerchandisersData(productDetails);
+            setCount(productDetails.length);
+          } else {
+            setErrorMessage();
+          }
+        } catch (error) {
+          showError(error.data);
           setErrorMessage();
         }
-      } catch (error) {
-        showError(error.data);
-        setErrorMessage();
-      }
-    })();
+      })();
+    } else {
+      getDashboardTableData();
+    }
   };
 
   const clearFilters = () => {

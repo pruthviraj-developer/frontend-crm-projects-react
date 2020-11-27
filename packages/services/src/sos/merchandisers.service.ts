@@ -34,7 +34,7 @@ const getSubCategories = (params: {
 };
 
 const getProductTypes = (params: {
-  'sub-category-ids': Array<number | string>;
+  'sub-category-ids': Array<number | string | undefined>;
 }): Promise<Array<merchandisersDropDownObject>> => {
   const url = `/crm-api/intranet/merchplatform/product-type?sub-category-ids=[${params[
     'sub-category-ids'

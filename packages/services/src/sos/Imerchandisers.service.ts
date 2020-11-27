@@ -1,6 +1,6 @@
 export interface merchandisersDropDownObject {
-  key: number | string;
-  value: string;
+  key: number | string | undefined;
+  value: number | string | undefined;
   second: string;
   first: number | string;
 }
