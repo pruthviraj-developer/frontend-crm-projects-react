@@ -17,9 +17,6 @@
     "lint": "tsdx lint",
     "prepare": "tsdx build"
   },
-  "peerDependencies": {
-    "react": ">=16"
-  },
   "husky": {
     "hooks": {
       "pre-commit": "tsdx lint"
@@ -37,15 +34,15 @@
   "devDependencies": {
     "@babel/core": "^7.10.3",
     "@hs/services": "^1.0.0",
-    "@types/react": "^16.9.41",
+    "@types/react": "16.9.56",
     "@types/react-datepicker": "^3.1.1",
-    "@types/react-dom": "^16.9.8",
-    "@types/react-router-dom": "^5.1.5",
+    "@types/react-dom": "16.9.9",
+    "@types/react-router-dom": "5.1.4",
     "babel-loader": "^8.1.0",
     "babel-plugin-emotion": "^10.0.33",
     "cross-env": "^7.0.2",
     "eslint-config-react-app": "^5.2.1",
-    "husky": "^4.2.5",
+    "husky": "4.3.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
@@ -54,8 +51,8 @@
     "typescript": "^3.9.7"
   },
   "dependencies": {
-    "@emotion/core": "^10.0.28",
-    "@emotion/styled": "^10.0.27",
+    "@emotion/react": "11.0.0",
+    "@emotion/styled": "11.0.0",
     "@hs/icons": "^1.0.0",
     "@hs/utils": "^1.0.0",
     "@material-ui/core": "^4.11.0",
