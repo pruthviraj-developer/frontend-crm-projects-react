@@ -1,5 +1,5 @@
-import styled from '@emotion/styled';
-import { NavLink } from 'react-router-dom';
+import styled, { StyledComponent } from '@emotion/styled';
+import { NavLink, NavLinkProps } from 'react-router-dom';
 import { Colors, fontWeight } from '@hs/utils';
 import { SvgIcon } from '@hs/icons';
 
@@ -25,7 +25,7 @@ const StyledIcon = styled(SvgIcon)`
   margin: 0 20px;
   fill: white;
 `;
-const StyledNavLink = styled(NavLink)`
+const StyledNavLink: StyledComponent<NavLinkProps<unknown>> = styled(NavLink)`
   text-decoration: none;
   cursor: pointer;
   opacity: 0.72;

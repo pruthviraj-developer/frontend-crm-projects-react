@@ -229,7 +229,7 @@ const DashBoard: FC = () => {
                   justifyContent: 'space-between',
                 }}
               >
-                {value}
+                <NavLink to={{ pathname: `/edit-carousel/${rowData.id}` }}> {value}</NavLink>
                 {rowData.active && <StyledIcon icon={SelectedCircle} />}
               </div>
             </>
