@@ -39,6 +39,7 @@ const vendorSideBarOption: FileUploadSideBarOption = {
   type: 'autocomplete',
   name: 'vendorId',
   label: 'Vendor',
+  resetField: 'brandId',
 };
 
 const initialValues = {

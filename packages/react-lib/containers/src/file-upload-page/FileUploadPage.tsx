@@ -58,20 +58,27 @@ export const FileUploadPage: FC<FileUploadPageProps> = ({
                               values: FileUploadListOption
                             ) => {
                               if (evt) {
+                                if (sideBarOption.resetField) {
+                                  setFieldValue(sideBarOption.resetField, null);
+                                }
+                                setFieldValue(
+                                  sideBarOption.name,
+                                  values || null
+                                );
                                 onDropDownChange &&
                                   onDropDownChange({
                                     name: sideBarOption.label,
                                     values: values,
                                   });
-                                setFieldValue(
-                                  sideBarOption.name,
-                                  values || null
-                                );
                               }
                             }}
                             getOptionLabel={(option: FileUploadListOption) =>
                               option.display || ''
                             }
+                            getOptionSelected={(
+                              option: FileUploadListOption,
+                              selectedValue: FileUploadListOption
+                            ) => option.id == selectedValue?.id || {}}
                             options={sideBarOption?.options || []}
                             renderInput={(
                               params: AutocompleteRenderInputParams
