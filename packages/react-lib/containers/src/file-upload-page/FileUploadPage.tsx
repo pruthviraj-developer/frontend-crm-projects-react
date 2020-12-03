@@ -1,7 +1,12 @@
 import React, { FC } from 'react';
 import { Formik, Field, Form } from 'formik';
 import { FileListType, FileUpload } from '@hs/components';
-import { Button, Grid, MenuItem, TextField as MuiTextField } from '@material-ui/core';
+import {
+  Button,
+  Grid,
+  MenuItem,
+  TextField as MuiTextField,
+} from '@material-ui/core';
 import {
   StyledUploadCntnr,
   StyledUploadSideBar,
@@ -11,10 +16,13 @@ import { TextField } from 'formik-material-ui';
 import {
   FileUploadPageProps,
   FileUploadSideBarOption,
-  FileUploadListOption
+  FileUploadListOption,
 } from './IFileUploadPage';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
-import { Autocomplete, AutocompleteRenderInputParams } from 'formik-material-ui-lab';
+import {
+  Autocomplete,
+  AutocompleteRenderInputParams,
+} from 'formik-material-ui-lab';
 
 export const FileUploadPage: FC<FileUploadPageProps> = ({
   acceptType,
@@ -38,71 +46,84 @@ export const FileUploadPage: FC<FileUploadPageProps> = ({
               <Grid container direction="column" justify="center" spacing={3}>
                 {sideBar &&
                   sideBar.map((sideBarOption: FileUploadSideBarOption) => {
-                        if (sideBarOption.type === 'autocomplete'){
-                          return (
-                           <Grid item xs key={sideBarOption.name}>
-                              <Field
-                                name={sideBarOption.name}
-                                variant="standard"
-                                component={Autocomplete}
-                                onChange={(
-                                  evt: React.ChangeEvent<HTMLInputElement>,
-                                  values: FileUploadListOption,
-                                ) => {
-                                  if (evt) {
-                                    onDropDownChange && onDropDownChange({name:sideBarOption.label,values:values});
-                                  }
-                                }}
-                                getOptionLabel={(option:FileUploadListOption) =>
-                                  option.display
-                                }
-                                options={sideBarOption?.options || []}
-                                renderInput={(params: AutocompleteRenderInputParams) => (
-                                  <MuiTextField {...params} label={sideBarOption.label} variant="outlined" />
-                                )}
-                              />
-                           </Grid>
-                          )
-                        }
-                        else if(sideBarOption.type === 'select'){
-                          return (
-                            <Grid item xs key={sideBarOption.name}>
-                                <Field
-                                  component={TextField}
-                                  type="text"
-                                  name={sideBarOption.name}
-                                  label={sideBarOption.label}
-                                  select
-                                  inputProps={{
-                                    id: 'ol-select-type',
-                                  }}
-                                  variant={'outlined'}
-                                  fullWidth
-                                >
-                                  {sideBarOption?.options?.map((item) => (
-                                    <MenuItem key={item.id} value={item.id}>
-                                      {item.display}
-                                    </MenuItem>
-                                  ))}
-                                </Field>
-                              </Grid>
-                            )
-                          } 
-                        else {
-                          return (
-                            <Grid item xs key={sideBarOption.name}>
-                              <Field
-                                component={TextField}
-                                type="text"
+                    if (sideBarOption.type === 'autocomplete') {
+                      return (
+                        <Grid item xs key={sideBarOption.name}>
+                          <Field
+                            name={sideBarOption.name}
+                            variant="standard"
+                            component={Autocomplete}
+                            onChange={(
+                              evt: React.ChangeEvent<HTMLInputElement>,
+                              values: FileUploadListOption
+                            ) => {
+                              if (evt) {
+                                onDropDownChange &&
+                                  onDropDownChange({
+                                    name: sideBarOption.label,
+                                    values: values,
+                                  });
+                                setFieldValue(
+                                  sideBarOption.name,
+                                  values || null
+                                );
+                              }
+                            }}
+                            getOptionLabel={(option: FileUploadListOption) =>
+                              option.display || ''
+                            }
+                            options={sideBarOption?.options || []}
+                            renderInput={(
+                              params: AutocompleteRenderInputParams
+                            ) => (
+                              <MuiTextField
+                                {...params}
                                 name={sideBarOption.name}
                                 label={sideBarOption.label}
-                                variant={'outlined'}
-                                fullWidth
-                              ></Field>
-                            </Grid>
-                          )
-                        }
-                })}
+                                variant="outlined"
+                              />
+                            )}
+                          />
+                        </Grid>
+                      );
+                    } else if (sideBarOption.type === 'select') {
+                      return (
+                        <Grid item xs key={sideBarOption.name}>
+                          <Field
+                            component={TextField}
+                            type="text"
+                            name={sideBarOption.name}
+                            label={sideBarOption.label}
+                            select
+                            inputProps={{
+                              id: 'ol-select-type',
+                            }}
+                            variant={'outlined'}
+                            fullWidth
+                          >
+                            {sideBarOption?.options?.map((item) => (
+                              <MenuItem key={item.id} value={item.id}>
+                                {item.display}
+                              </MenuItem>
+                            ))}
+                          </Field>
+                        </Grid>
+                      );
+                    } else {
+                      return (
+                        <Grid item xs key={sideBarOption.name}>
+                          <Field
+                            component={TextField}
+                            type="text"
+                            name={sideBarOption.name}
+                            label={sideBarOption.label}
+                            variant={'outlined'}
+                            fullWidth
+                          ></Field>
+                        </Grid>
+                      );
+                    }
+                  })}
               </Grid>
             </StyledUploadSideBar>
             <Grid item xs={8}>

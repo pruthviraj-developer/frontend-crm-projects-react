@@ -1,6 +1,12 @@
 import React, { FC, useState, useEffect } from 'react';
 import styled from '@emotion/styled';
-import { FileUploadPage, FileUploadState, FileUploadSideBarOption, DropDownValuesWithType, SubmitHelper } from '@hs/containers';
+import {
+  FileUploadPage,
+  FileUploadState,
+  FileUploadSideBarOption,
+  DropDownValuesWithType,
+  SubmitHelper,
+} from '@hs/containers';
 import { merchStatusChangeService } from '@hs/services';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
@@ -23,6 +29,12 @@ const brandSideBarOption: FileUploadSideBarOption = {
   label: 'Brand',
 };
 
+const currencySideBarOption: FileUploadSideBarOption = {
+  type: 'select',
+  name: 'currency',
+  label: 'Currency',
+};
+
 const vendorSideBarOption: FileUploadSideBarOption = {
   type: 'autocomplete',
   name: 'vendorId',
@@ -31,19 +43,26 @@ const vendorSideBarOption: FileUploadSideBarOption = {
 
 const initialValues = {
   file: undefined,
-  reasonId: '',
+  vendorId: '',
+  brandId: '',
+  currency: '',
   resetInput: false,
 };
 
 const TransferVendorValidation = Yup.object().shape({
   file: Yup.mixed().required('Please upload a file'),
-  reasonId: Yup.string().required('Reason is required'),
+  vendorId: Yup.string().required('Vendor is required'),
+  brandId: Yup.string().required('Brand is required'),
+  currency: Yup.string().required('Currency is required'),
 });
 
 export const TransferVendor: FC = () => {
   const [brandsList, setBrandsList] = useState<ListType>(([] as unknown) as ListType);
   const [vendorList, setVendorList] = useState<ListType>(([] as unknown) as ListType);
-
+  const currencyList = [
+    { id: 'in', display: 'Indian' },
+    { id: 'cny', display: 'Chinese' },
+  ];
   useEffect(() => {
     (async () => {
       try {
@@ -57,12 +76,12 @@ export const TransferVendor: FC = () => {
       setVendorList(([] as unknown) as ListType);
     };
   }, []);
-  
+
   const onSubmit = async (values: FileUploadState, { setSubmitting, setErrors, resetForm }: SubmitHelper) => {
     try {
       const res = await merchStatusChangeService.markNonProcurable({
         file: values.file?.file,
-        params: { reasonId: values.reasonId },
+        params: { vendorId: values.vendorId.id, brandId: values.brandId.id, currency: values.currency },
       });
       if (res.success) {
         toast.success(res.message);
@@ -94,13 +113,11 @@ export const TransferVendor: FC = () => {
     }
   };
 
-  const onDropDownChange = (obj:DropDownValuesWithType) => {
-    console.log(obj);
-    debugger;
-    if(obj.name === 'Vendor'){
+  const onDropDownChange = (obj: DropDownValuesWithType) => {
+    if (obj.name === 'Vendor') {
       (async () => {
         try {
-          const list = await merchStatusChangeService.getBrandsList<BrandList>({ vendorId: obj.values.id});
+          const list = await merchStatusChangeService.getBrandsList<BrandList>({ vendorId: obj.values.id });
           setBrandsList(list.brandList);
         } catch (error) {
           setBrandsList(([] as unknown) as ListType);
@@ -117,7 +134,11 @@ export const TransferVendor: FC = () => {
         onSubmit={onSubmit}
         onExport={onExport}
         onDropDownChange={onDropDownChange}
-        sideBar={[{ ...vendorSideBarOption, options: vendorList },{ ...brandSideBarOption, options: brandsList }]} 
+        sideBar={[
+          { ...vendorSideBarOption, options: vendorList },
+          { ...brandSideBarOption, options: brandsList },
+          { ...currencySideBarOption, options: currencyList },
+        ]}
         validationSchema={TransferVendorValidation}
         initialValues={initialValues}
       ></FileUploadPage>

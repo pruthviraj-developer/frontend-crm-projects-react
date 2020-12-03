@@ -4,7 +4,10 @@ export interface MerchStatusChangeType {
 }
 
 export interface NonProcParam {
-  reasonId: string;
+  vendorId?: string;
+  brandId?: string;
+  reasonId?: string;
+  currency?: string;
 }
 
 export interface NonProcCurrentVendorParam {
