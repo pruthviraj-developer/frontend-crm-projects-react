@@ -3,6 +3,12 @@ import { FormikHelpers, FormikValues } from 'formik';
 
 export type SubmitHelper = FormikHelpers<FileUploadState>;
 
+export interface DropDownValuesWithType {
+  name: string,
+  values: FileUploadListOption
+}
+
+
 export interface FileUploadPageProps {
   initialValues: FileUploadState;
   multiple?: boolean;
@@ -12,6 +18,7 @@ export interface FileUploadPageProps {
     { setSubmitting, setErrors, setStatus, resetForm }: SubmitHelper
   ) => void;
   onExport?: () => void;
+  onDropDownChange?: (obj:DropDownValuesWithType) => void;
   sideBar?: FileUploadSideBarOption[];
   validationSchema?: unknown;
 }
@@ -20,6 +27,7 @@ export interface FileUploadSideBarOption {
   isSelect?: boolean;
   name: string;
   label: string;
+  type: string;
   options?: FileUploadListOption[];
 }
 

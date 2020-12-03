@@ -21,6 +21,7 @@ const reasonSideBarOption: FileUploadSideBarOption = {
   isSelect: true,
   name: 'reasonId',
   label: 'Reason',
+  type:'select',
 };
 
 // const remarkSideBarOption: FileUploadSideBarOption = {

@@ -18,13 +18,13 @@ const StyledCntnr = styled.div`
 // ];
 
 const reasonSideBarOption: FileUploadSideBarOption = {
-  isSelect: true,
+  type: 'select',
   name: 'fulfillmentstatus',
   label: 'Fulfillment Status',
 };
 
 const remarkSideBarOption: FileUploadSideBarOption = {
-  isSelect: false,
+  type: 'input',
   name: 'remark',
   label: 'Remark',
 };

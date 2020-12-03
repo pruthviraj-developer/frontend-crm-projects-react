@@ -75,6 +75,10 @@ export interface downloadTemplateObject {
   data: downloadTemplateUrlObjectKey;
 }
 
+export interface brandIdparams {
+  vendorId: string | number
+}
+
 export interface downloadTemplateUrlObject {
   isAvailable: boolean;
   url: string;

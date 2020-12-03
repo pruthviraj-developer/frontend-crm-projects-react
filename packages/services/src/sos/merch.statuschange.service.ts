@@ -3,6 +3,7 @@ import { MerchStatusChangeType } from './Imerch.statuschange.service';
 import {
   downloadTemplateUrlObject,
   downloadTemplateUrlObjectKey,
+  brandIdparams
 } from './Imerchandisers.service';
 const markNonProcurable = ({
   file,
@@ -33,6 +34,17 @@ const getReasonList = <T>(): Promise<T> => {
   return httpService.get<T>({ url });
 };
 
+
+const getVendorList = <T>(): Promise<T> => {
+  const url = '/crm-api/intranet/getvendor';
+  return httpService.get<T>({ url });
+};
+
+const getBrandsList = <T>(params:brandIdparams): Promise<T> => {
+  const url = '/crm-api/intranet/getbrandbyvendor';
+  return httpService.get<T>({ url, params });
+};
+
 const getInstockList = <T>(): Promise<T> => {
   const url = '/crm-api/intranet/getinstocklist';
   return httpService.get<T>({ url });
@@ -49,6 +61,8 @@ export const merchStatusChangeService = {
   markNonProcurable,
   markNonProcCurrentVendor,
   getReasonList,
+  getVendorList,
+  getBrandsList,
   getInstockList,
   getTemplateDownloadLink,
 };

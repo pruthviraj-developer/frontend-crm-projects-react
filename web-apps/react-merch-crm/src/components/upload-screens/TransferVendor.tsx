@@ -1,10 +1,10 @@
 import React, { FC, useState, useEffect } from 'react';
 import styled from '@emotion/styled';
-import { FileUploadPage, FileUploadState, FileUploadSideBarOption, SubmitHelper } from '@hs/containers';
+import { FileUploadPage, FileUploadState, FileUploadSideBarOption, DropDownValuesWithType, SubmitHelper } from '@hs/containers';
 import { merchStatusChangeService } from '@hs/services';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
-import { ReasonList, ListType } from './IUploadScreens';
+import { VendorList, ListType, BrandList } from './IUploadScreens';
 
 const StyledCntnr = styled.div`
   margin-left: 90px;
@@ -17,17 +17,17 @@ const StyledCntnr = styled.div`
 //   { display: 'NonProcHighreturn111 due to other reason', id: 3 },
 // ];
 
-const reasonSideBarOption: FileUploadSideBarOption = {
-  isSelect: true,
-  name: 'reasonId',
-  label: 'Reason',
+const brandSideBarOption: FileUploadSideBarOption = {
+  type: 'autocomplete',
+  name: 'brandId',
+  label: 'Brand',
 };
 
-// const remarkSideBarOption: FileUploadSideBarOption = {
-//   isSelect: false,
-//   name: 'remark',
-//   label: 'Remark',
-// };
+const vendorSideBarOption: FileUploadSideBarOption = {
+  type: 'autocomplete',
+  name: 'vendorId',
+  label: 'Vendor',
+};
 
 const initialValues = {
   file: undefined,
@@ -41,21 +41,23 @@ const TransferVendorValidation = Yup.object().shape({
 });
 
 export const TransferVendor: FC = () => {
-  const [list, setList] = useState<ListType>(([] as unknown) as ListType);
+  const [brandsList, setBrandsList] = useState<ListType>(([] as unknown) as ListType);
+  const [vendorList, setVendorList] = useState<ListType>(([] as unknown) as ListType);
 
   useEffect(() => {
     (async () => {
       try {
-        const list = await merchStatusChangeService.getReasonList<ReasonList>();
-        setList(list.reasonList);
+        const list = await merchStatusChangeService.getVendorList<VendorList>();
+        setVendorList(list.vendorList);
       } catch (error) {
-        setList(([] as unknown) as ListType);
+        setVendorList(([] as unknown) as ListType);
       }
     })();
     return () => {
-      setList(([] as unknown) as ListType);
+      setVendorList(([] as unknown) as ListType);
     };
   }, []);
+  
   const onSubmit = async (values: FileUploadState, { setSubmitting, setErrors, resetForm }: SubmitHelper) => {
     try {
       const res = await merchStatusChangeService.markNonProcurable({
@@ -76,6 +78,7 @@ export const TransferVendor: FC = () => {
       toast.error(error.data.data.message);
     }
   };
+
   const onExport = async () => {
     const res = await merchStatusChangeService.getTemplateDownloadLink({
       sheetKey: 'transfer-vendor',
@@ -90,8 +93,22 @@ export const TransferVendor: FC = () => {
       toast.error('Error getting template url');
     }
   };
-  // toast('🦄 Wow so easy!');
-  // toast('🦄 Wow so easy!');
+
+  const onDropDownChange = (obj:DropDownValuesWithType) => {
+    console.log(obj);
+    debugger;
+    if(obj.name === 'Vendor'){
+      (async () => {
+        try {
+          const list = await merchStatusChangeService.getBrandsList<BrandList>({ vendorId: obj.values.id});
+          setBrandsList(list.brandList);
+        } catch (error) {
+          setBrandsList(([] as unknown) as ListType);
+        }
+      })();
+    }
+  };
+
   return (
     <StyledCntnr>
       <h1>Transfer Vendor</h1>
@@ -99,7 +116,8 @@ export const TransferVendor: FC = () => {
         acceptType={['xlsx']}
         onSubmit={onSubmit}
         onExport={onExport}
-        sideBar={[{ ...reasonSideBarOption, options: list }]}
+        onDropDownChange={onDropDownChange}
+        sideBar={[{ ...vendorSideBarOption, options: vendorList },{ ...brandSideBarOption, options: brandsList }]} 
         validationSchema={TransferVendorValidation}
         initialValues={initialValues}
       ></FileUploadPage>
