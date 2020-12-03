@@ -56,7 +56,7 @@ const TransferVendorValidation = Yup.object().shape({
   currency: Yup.string().required('Currency is required'),
 });
 
-export const TransferVendor: FC = () => {
+export const TransferVendorWithRevisedData: FC = () => {
   const [brandsList, setBrandsList] = useState<ListType>(([] as unknown) as ListType);
   const [vendorList, setVendorList] = useState<ListType>(([] as unknown) as ListType);
   const currencyList = [
@@ -79,7 +79,7 @@ export const TransferVendor: FC = () => {
 
   const onSubmit = async (values: FileUploadState, { setSubmitting, setErrors, resetForm }: SubmitHelper) => {
     try {
-      const res = await merchStatusChangeService.markNonProcurable({
+      const res = await merchStatusChangeService.markNonProcurableWithRivisedData({
         file: values.file?.file,
         params: { vendorId: values.vendorId.id, brandId: values.brandId.id, currency: values.currency },
       });
@@ -128,7 +128,7 @@ export const TransferVendor: FC = () => {
 
   return (
     <StyledCntnr>
-      <h1>Transfer Vendor</h1>
+      <h1>Transfer Vendor With Revised PIDS</h1>
       <FileUploadPage
         acceptType={['xlsx']}
         onSubmit={onSubmit}

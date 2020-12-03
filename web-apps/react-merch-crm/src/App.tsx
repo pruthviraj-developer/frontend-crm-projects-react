@@ -8,7 +8,12 @@ import './App.css';
 import DashBoard from './components/dashboard/Dashboard';
 import Merchandisers from './components/merchandisers/Merchandisers';
 import { LeftNavBar, LeftNavBarProps } from '@hs/components';
-import { NonProcurable, NonProcurableCurrentVendor, TransferVendor } from './components/upload-screens';
+import {
+  NonProcurable,
+  NonProcurableCurrentVendor,
+  TransferVendor,
+  TransferVendorWithRevisedData,
+} from './components/upload-screens';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -24,6 +29,7 @@ const App: FC = () => {
         icon: NonProcIcon,
       },
       { linkUrl: '/transfer-pid', linkText: 'Transfer PID', icon: TransferIcon },
+      { linkUrl: '/transfer-revised-pids', linkText: 'Transfer Revised PIDS', icon: TransferIcon },
     ],
   };
 
@@ -49,6 +55,9 @@ const App: FC = () => {
               </Route>
               <Route path="/transfer-pid">
                 <TransferVendor />
+              </Route>
+              <Route path="/transfer-revised-pids">
+                <TransferVendorWithRevisedData />
               </Route>
             </Switch>
           </Router>
