@@ -454,7 +454,7 @@ const Merchandisers: FC = () => {
                             options={merchandisersFiltersData.vendor_id || []}
                             getOptionLabel={(option: Record<string, unknown>) => (option.value ? option.value : '')}
                             renderInput={(params: AutocompleteRenderInputParams) => (
-                              <MuiTextField {...params} label="Vender" variant="outlined" />
+                              <MuiTextField {...params} label="Vendor" variant="outlined" />
                             )}
                           />
                         </Grid>
