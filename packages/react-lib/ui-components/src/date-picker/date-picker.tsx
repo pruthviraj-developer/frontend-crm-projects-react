@@ -5,7 +5,7 @@ import './date-picker.css';
 import styled from '@emotion/styled';
 import { isValid, subDays } from 'date-fns';
 
-interface Props {
+export interface Props {
   placeholder: string;
   dateFormat: string;
   isEndDate?: string;

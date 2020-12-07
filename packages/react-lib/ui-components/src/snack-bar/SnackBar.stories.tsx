@@ -4,6 +4,7 @@ import { HsSnackbar } from './SnackBar';
 import { action } from '@storybook/addon-actions';
 export default {
   title: 'Snack Bar',
+  component: HsSnackbar,
 };
 const props = {
   open: true,

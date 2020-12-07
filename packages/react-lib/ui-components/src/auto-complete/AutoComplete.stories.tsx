@@ -3,6 +3,7 @@ import { AutoCompleteGrouped } from './AutoCompleteGrouped';
 import { AutoCompleteOption } from './IAutoComplete';
 export default {
   title: 'Auto Complete',
+  component: AutoCompleteGrouped,
 };
 
 export const AutoCompleteComponent: FC = () => (

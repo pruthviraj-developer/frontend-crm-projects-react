@@ -4,6 +4,7 @@ import { action } from '@storybook/addon-actions';
 import { CreateNonCarouselPage } from './CreateNonCarouselPage';
 export default {
   title: 'Create Non Hero Carousel Page',
+  component: CreateNonCarouselPage,
 };
 
 const props: CreateNonCarouselProps = {
