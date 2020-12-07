@@ -9,5 +9,6 @@ const props = {
 
 export default {
   title: 'Date Picker',
+  component: DatePickerComponent,
 };
 export const DateSelector: FC = () => <DatePickerComponent {...props} />;

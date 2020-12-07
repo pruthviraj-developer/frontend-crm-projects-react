@@ -15,6 +15,7 @@ import styled from '@emotion/styled';
 
 export default {
   title: 'Icons',
+  component: SvgIcon,
 };
 const StyledDisplay = styled.div`
   display: flex;

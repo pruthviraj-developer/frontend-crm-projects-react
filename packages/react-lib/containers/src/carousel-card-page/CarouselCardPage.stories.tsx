@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { CarouselCardPage } from './CarouselCardPage';
 export default {
   title: 'Carousel Card',
+  component: CarouselCardPage,
 };
 
 // By passing optional props to this story, you can control the props of the component when

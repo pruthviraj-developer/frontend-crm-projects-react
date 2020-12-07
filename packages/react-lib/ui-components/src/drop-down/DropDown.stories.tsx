@@ -3,6 +3,7 @@ import DropDown from './DropDown';
 
 export default {
   title: 'Drop  Down',
+  component: DropDown,
 };
 const onClickS = (value) => {
   setTimeout(() => {

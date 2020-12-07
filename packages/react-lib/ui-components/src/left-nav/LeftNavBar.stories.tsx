@@ -5,6 +5,7 @@ import { CreateIcon, DashBoardIcon } from '@hs/icons';
 
 export default {
   title: 'LeftNavBar',
+  component: LeftNavBar,
 };
 const navItem: LeftNavBarProps = {
   navList: [

@@ -10,7 +10,8 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 
 export default {
-  title: 'Tables',
+  title: 'Tables V1 SOS',
+  component: HSTableV1,
 };
 
 const getUpdatedTableData = (filters: Record<string, unknown>) => {

@@ -7,8 +7,9 @@ import { action } from '@storybook/addon-actions';
 import { carouselService } from '@hs/services';
 
 export default {
-  title: 'Image Uploader',
+  title: 'Image Upload',
   decorators: [withKnobs],
+  component: ImageUpload,
 };
 
 const resValType: Record<string, ResolutionValidationType> = {

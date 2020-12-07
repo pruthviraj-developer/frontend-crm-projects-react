@@ -4,6 +4,7 @@ import { SelectBoxProps } from './IselectBox';
 import { action } from '@storybook/addon-actions';
 export default {
   title: 'Select Box',
+  component: SelectBox,
 };
 
 const SelectTestData: SelectBoxProps = {
