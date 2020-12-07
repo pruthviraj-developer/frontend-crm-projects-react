@@ -58,7 +58,7 @@ export const NonProcurableCurrentVendor: FC = () => {
   }, []);
   const onSubmit = async (values: FileUploadState, { setSubmitting, setErrors, resetForm }: SubmitHelper) => {
     try {
-      const res = await merchStatusChangeService.markNonProcCurrentVendor({
+      const res = await merchStatusChangeService.updateFulfilmentStatus({
         file: values.file?.file,
         params: { fulfillmentstatus: values.fulfillmentstatus, remark: values.remark },
       });

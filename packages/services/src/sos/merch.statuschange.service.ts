@@ -9,6 +9,18 @@ const markNonProcurable = ({
   file,
   params,
 }: MerchStatusChangeType): Promise<any> => {
+  const url = `/crm-api/intranet/nonproc`;
+  const data = new FormData();
+  if (file) {
+    data.append('file', file);
+  }
+  return httpService.fileUpload<any>({ url, data, params });
+};
+
+const transferToVendor = ({
+  file,
+  params,
+}: MerchStatusChangeType): Promise<any> => {
   const url = `/crm-api/intranet/tranfertovendor`;
   const data = new FormData();
   if (file) {
@@ -17,11 +29,23 @@ const markNonProcurable = ({
   return httpService.fileUpload<any>({ url, data, params });
 };
 
-const markNonProcurableWithRivisedData = ({
+const transferToVendorWithRevisedData = ({
   file,
   params,
 }: MerchStatusChangeType): Promise<any> => {
   const url = `/crm-api/intranet/tranferwithreviseddata`;
+  const data = new FormData();
+  if (file) {
+    data.append('file', file);
+  }
+  return httpService.fileUpload<any>({ url, data, params });
+};
+
+const updateFulfilmentStatus = ({
+  file,
+  params,
+}: MerchStatusChangeType): Promise<any> => {
+  const url = `/crm-api/intranet/nonproc/currentvendor`;
   const data = new FormData();
   if (file) {
     data.append('file', file);
@@ -70,8 +94,10 @@ const getTemplateDownloadLink = (
 
 export const merchStatusChangeService = {
   markNonProcurable,
-  markNonProcurableWithRivisedData,
   markNonProcCurrentVendor,
+  updateFulfilmentStatus,
+  transferToVendor,
+  transferToVendorWithRevisedData,
   getReasonList,
   getVendorList,
   getBrandsList,

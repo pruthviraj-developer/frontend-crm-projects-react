@@ -79,7 +79,7 @@ export const TransferVendor: FC = () => {
 
   const onSubmit = async (values: FileUploadState, { setSubmitting, setErrors, resetForm }: SubmitHelper) => {
     try {
-      const res = await merchStatusChangeService.markNonProcurable({
+      const res = await merchStatusChangeService.transferToVendor({
         file: values.file?.file,
         params: { vendorId: values.vendorId.id, brandId: values.brandId.id, currency: values.currency },
       });
