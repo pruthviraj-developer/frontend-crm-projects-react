@@ -13,6 +13,7 @@ import { SelectedCircle, SvgIcon } from '@hs/icons';
 
 export default {
   title: 'Tables',
+  component: HSTable,
 };
 
 const getUpdatedTableData = (filters: Record<string, unknown>) => {

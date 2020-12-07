@@ -3,6 +3,7 @@ import React, { FC } from 'react';
 import { FileUpload } from './FileUpload';
 export default {
   title: 'File upload Component',
+  component: FileUpload,
 };
 
 // By passing optional props to this story, you can control the props of the component when

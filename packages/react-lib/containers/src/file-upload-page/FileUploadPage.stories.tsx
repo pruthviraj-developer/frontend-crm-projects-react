@@ -6,6 +6,7 @@ import * as Yup from 'yup';
 
 export default {
   title: 'File upload Screen',
+  component: FileUploadPage,
 };
 
 const reasonOptions = [

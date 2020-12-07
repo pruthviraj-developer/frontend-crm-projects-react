@@ -4,7 +4,8 @@ import { HsTableV2Props, tableRowsV2 } from './IHsTableV2';
 import { action } from '@storybook/addon-actions';
 
 export default {
-  title: 'Tables',
+  title: 'Tables V2',
+  component: HSTableV2,
 };
 
 const formatedJsonObject = {};

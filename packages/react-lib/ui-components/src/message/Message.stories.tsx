@@ -4,6 +4,7 @@ import { MessageProps } from './IMessage';
 
 export default {
   title: 'Message',
+  component: Message,
 };
 
 const error: MessageProps = {

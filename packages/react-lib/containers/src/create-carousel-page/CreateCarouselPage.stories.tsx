@@ -4,6 +4,7 @@ import { CreateCarouselProps } from './ICreateCarouselPage';
 import { action } from '@storybook/addon-actions';
 export default {
   title: 'Create Carousel Page',
+  component: CreateCarouselPage,
 };
 
 const props: CreateCarouselProps = {

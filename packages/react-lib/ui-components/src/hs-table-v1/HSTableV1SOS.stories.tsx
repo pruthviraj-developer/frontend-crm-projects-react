@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase */
 import React, { FC } from 'react';
 import { HSTableV1 } from './HsTableV1';
 import { HsTablePropsV1 } from './IHsTableV1';
@@ -12,6 +11,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 
 export default {
   title: 'Tables V1 SOS',
+  component: HSTableV1,
 };
 
 const getUpdatedTableData = (filters: Record<string, unknown>) => {

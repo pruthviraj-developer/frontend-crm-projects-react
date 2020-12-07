@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import { HSTableV1 } from './HsTableV1';
+import { format } from 'date-fns';
 import { HsTablePropsV1 } from './IHsTableV1';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
@@ -7,9 +8,12 @@ import PublishIcon from '@material-ui/icons/Publish';
 import { IconButton } from '@material-ui/core';
 import { action } from '@storybook/addon-actions';
 import { NavLink } from 'react-router-dom';
+import styled from '@emotion/styled';
+import { SelectedCircle, SvgIcon } from '@hs/icons';
 
 export default {
-  title: 'TablesV1',
+  title: 'Tables V1',
+  component: HSTableV1,
 };
 
 const getUpdatedTableData = (filters: Record<string, unknown>) => {
@@ -20,6 +24,10 @@ const getUpdatedTableData = (filters: Record<string, unknown>) => {
 //   alert(row);
 //   console.log(row);
 // };
+
+const StyledIcon = styled(SvgIcon)`
+  min-width: 24px;
+`;
 
 const columns = [
   {
@@ -132,8 +140,33 @@ const columns = [
     },
   },
 ];
-
-const data: Array<Record<string,unknown>> = [
+function createData(
+  index,
+  title,
+  code,
+  createdOn,
+  updatedOn,
+  createdBy,
+  population,
+  size
+) {
+  const density = population / size;
+  return {
+    id: index,
+    title,
+    sorts: [title, code],
+    createdOn,
+    updatedOn,
+    createdBy,
+    population,
+    size,
+    density,
+    startDate: createdOn,
+    endDate: createdOn,
+    updatedBy: createdBy,
+  };
+}
+const data: any = [
   {
     id: 209,
     title: 'Demo-Test-01',

@@ -4,14 +4,15 @@ module.exports = {
   stories: ['../packages/**/**/src/**/*.stories.@(ts|tsx)', '../packages/**/src/**/*.stories.@(ts|tsx)'],
   addons: [
     '@storybook/preset-create-react-app',
-    '@storybook/addon-actions',
-    '@storybook/addon-links',
-    '@storybook/addon-backgrounds/register',
+    '@storybook/addon-actions/register',
+    '@storybook/addon-links/register',
+    '@storybook/addon-backgrounds',
     '@storybook/addon-docs',
     '@storybook/addon-viewport/register',
     '@storybook/addon-storysource',
-    '@storybook/addon-knobs',
+    '@storybook/addon-knobs/register',
   ],
+
   webpackFinal: async (config) => {
     config.module.rules.push({
       test: /\.(ts|tsx|woff|woff2)$/,
