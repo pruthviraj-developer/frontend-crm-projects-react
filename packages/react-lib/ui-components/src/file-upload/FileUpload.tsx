@@ -1,5 +1,5 @@
 import { Button, Grid } from '@material-ui/core';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { getBase64 } from './FileValidation';
 import {
   FileListType,
@@ -25,9 +25,14 @@ export const FileUpload = ({
 }: FileUploadProps) => {
   const [fileList, setFileList] = useState<FileListType>([]);
   const [, setErrors] = useState<ErrorsType>({ ...defaultErrors });
+  const inputFileEle = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (reset) setFileList([]);
+    if (reset) {
+      setFileList([]);
+      const input = inputFileEle.current;
+      if (input) input.value = '';
+    }
   }, [reset]);
   const acceptString =
     acceptType && acceptType.length > 0
@@ -118,6 +123,7 @@ export const FileUpload = ({
             onChange={onInputChange}
             style={{ display: 'none' }}
             id="file-upload-input"
+            ref={inputFileEle}
           />
           <label htmlFor="file-upload-input">
             <Button
