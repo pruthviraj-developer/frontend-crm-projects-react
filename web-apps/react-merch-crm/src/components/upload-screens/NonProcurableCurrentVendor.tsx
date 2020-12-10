@@ -20,7 +20,7 @@ const StyledCntnr = styled.div`
 const reasonSideBarOption: FileUploadSideBarOption = {
   type: 'select',
   name: 'fulfillmentstatus',
-  label: 'Fulfillment Status',
+  label: 'Fulfilment Status',
 };
 
 const remarkSideBarOption: FileUploadSideBarOption = {
@@ -37,7 +37,7 @@ const initialValues = {
 
 const NonProcurableValidation = Yup.object().shape({
   file: Yup.mixed().required('Please upload a file'),
-  fulfillmentstatus: Yup.string().required('Fulfillment Status is required'),
+  fulfillmentstatus: Yup.string().required('Fulfilment Status is required'),
 });
 
 export const NonProcurableCurrentVendor: FC = () => {
@@ -94,7 +94,7 @@ export const NonProcurableCurrentVendor: FC = () => {
   // toast('🦄 Wow so easy!');
   return (
     <StyledCntnr>
-      <h1>Modify Fulfillment status</h1>
+      <h1>Modify Fulfilment status</h1>
       <FileUploadPage
         acceptType={['xlsx']}
         onSubmit={onSubmit}
