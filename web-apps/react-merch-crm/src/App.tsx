@@ -24,8 +24,8 @@ const App: FC = () => {
       { linkUrl: '/merchandisers', linkText: 'Merchandisers', icon: DashBoardIcon },
       { linkUrl: '/mark-non-procurable', linkText: 'Mark Non-procurable', icon: NonProcIcon },
       {
-        linkUrl: '/modify-fulfillment-status',
-        linkText: 'Modify Fulfillment status',
+        linkUrl: '/modify-fulfilment-status',
+        linkText: 'Modify Fulfilment status',
         icon: NonProcIcon,
       },
       { linkUrl: '/transfer-pid', linkText: 'Transfer PID', icon: TransferIcon },
@@ -50,7 +50,7 @@ const App: FC = () => {
               <Route path="/mark-non-procurable">
                 <NonProcurable />
               </Route>
-              <Route path="/modify-fulfillment-status">
+              <Route path="/modify-fulfilment-status">
                 <NonProcurableCurrentVendor />
               </Route>
               <Route path="/transfer-pid">
