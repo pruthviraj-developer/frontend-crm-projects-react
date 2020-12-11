@@ -28,8 +28,8 @@ const App: FC = () => {
         linkText: 'Modify Fulfilment status',
         icon: NonProcIcon,
       },
-      { linkUrl: '/transfer-pid', linkText: 'Transfer PID', icon: TransferIcon },
-      { linkUrl: '/transfer-revised-pids', linkText: 'Transfer Revised PIDS', icon: TransferIcon },
+      { linkUrl: '/transfer-pid', linkText: 'Transfer PID : No Modification', icon: TransferIcon },
+      { linkUrl: '/transfer-revised-pids', linkText: 'Transfer PID : Modify Details', icon: TransferIcon },
     ],
   };
 

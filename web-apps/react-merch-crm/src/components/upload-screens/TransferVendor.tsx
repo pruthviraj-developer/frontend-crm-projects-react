@@ -128,7 +128,7 @@ export const TransferVendor: FC = () => {
 
   return (
     <StyledCntnr>
-      <h1>Transfer Vendor</h1>
+      <h1>Transfer PID to New Vendor: No Details Modification</h1>
       <FileUploadPage
         acceptType={['xlsx']}
         onSubmit={onSubmit}
