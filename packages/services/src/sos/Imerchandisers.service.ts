@@ -17,7 +17,6 @@ export interface merchandisersFiltersObject {
   country?: merchandisersDropDownObject[];
   genders?: merchandisersDropDownObject[];
   vendor_id?: merchandisersDropDownObject[];
-  sourcing_stage?: merchandisersDropDownObject[];
   sub_category_ids?: merchandisersDropDownObject[];
   product_class_ids?: merchandisersDropDownObject[];
 }
@@ -47,7 +46,6 @@ export interface merchandisersFormFilters {
   brand_id: merchandisersDropDownObject | null;
   gender: string | null;
   status: string | null;
-  sourcing_stage: string | null;
   start_date: Date | null;
   end_date: Date | null;
 }
@@ -55,7 +53,6 @@ export interface merchandisersFormFilters {
 export interface merchandisersOptionalFormFilters {
   age?: string;
   country?: string;
-  sourcing_stage?: string;
   category_id?: number;
   vendor_id?: number;
   brand_id?: number;
@@ -76,7 +73,7 @@ export interface downloadTemplateObject {
 }
 
 export interface brandIdparams {
-  vendorId: string | number
+  vendorId: string | number;
 }
 
 export interface downloadTemplateUrlObject {

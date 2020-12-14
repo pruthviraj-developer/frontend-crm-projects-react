@@ -68,7 +68,6 @@ const defaultFilterValues = {
   age: null,
   country: null,
   status: null,
-  sourcing_stage: null,
   category_id: null,
   vendor_id: null,
   brand_id: null,
@@ -583,30 +582,6 @@ const Merchandisers: FC = () => {
                             variant={'outlined'}
                           >
                             {getFiltersDropDownValues(merchandisersFiltersData.age || [])}
-                          </Field>
-                        </Grid>
-                      </Paper>
-                      <Paper variant="outlined" className={classes.filtersPadding}>
-                        <Grid item>
-                          <Field
-                            component={TextField}
-                            type="text"
-                            name="sourcing_stage"
-                            label="Sourcing Stage"
-                            fullWidth
-                            value={values.sourcing_stage ? values.sourcing_stage : ''}
-                            select
-                            onChange={(evt: React.ChangeEvent<HTMLInputElement>) => {
-                              const selectedValues = { ...initialValues, sourcing_stage: evt.target.value };
-                              setInitialValues(selectedValues);
-                              getTableDataWithFilters(selectedValues);
-                            }}
-                            inputProps={{
-                              id: 'outlined-select',
-                            }}
-                            variant={'outlined'}
-                          >
-                            {getFiltersDropDownValues(merchandisersFiltersData.sourcing_stage || [])}
                           </Field>
                         </Grid>
                       </Paper>
