@@ -62,6 +62,7 @@ export interface merchandisersOptionalFormFilters {
   start_date?: string;
   end_date?: string;
   status_type?: string;
+  export_type?: string;
 }
 
 export interface downloadTemplateUrlObjectKey {

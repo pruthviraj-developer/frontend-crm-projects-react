@@ -201,7 +201,11 @@ const Merchandisers: FC = () => {
     (async () => {
       try {
         const params = getFilteredNonNullValues(filteredValues);
-        const response = await merchandisersService.downloadTemplate({ ...params, status_type: row.status });
+        const response = await merchandisersService.downloadTemplate({
+          ...params,
+          status_type: row.status,
+          export_type: row.priority,
+        });
         const templateDetails = response && response.data;
         if (templateDetails.sheetKey) {
           try {
