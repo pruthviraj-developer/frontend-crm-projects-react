@@ -36,9 +36,13 @@ const useStyles = makeStyles({
   },
 });
 
-export const HSTableV2: FC<HsTableV2Props> = (props: HsTableV2Props) => {
-  const columns = props.columns;
-  const rows = props.rows;
+export const HSTableV2: FC<HsTableV2Props> = ({
+  rows,
+  columns,
+  disableExport,
+  exportColumn,
+  tableActions,
+}: HsTableV2Props) => {
   const classes = useStyles();
   const history = useHistory();
   const generateRow = (row: tableRowsV2, classes: Record<string, string>) => {
@@ -71,22 +75,17 @@ export const HSTableV2: FC<HsTableV2Props> = (props: HsTableV2Props) => {
                     Select Action
                   </Button>
                   <Menu {...bindMenu(popupState)}>
-                    <MenuItem
-                      onClick={() => {
-                        popupState.close();
-                        history.push('/mark-non-procurable');
-                      }}
-                    >
-                      Mark non-procurable
-                    </MenuItem>
-                    <MenuItem
-                      onClick={() => {
-                        popupState.close();
-                        history.push('/modify-fulfillment-status');
-                      }}
-                    >
-                      Modify Fulfillment status
-                    </MenuItem>
+                    {tableActions?.map((action, index) => (
+                      <MenuItem
+                        key={action.display + index}
+                        onClick={() => {
+                          popupState.close();
+                          history.push(action.url);
+                        }}
+                      >
+                        {action.display}.
+                      </MenuItem>
+                    ))}
                   </Menu>
                 </React.Fragment>
               )}
@@ -97,9 +96,9 @@ export const HSTableV2: FC<HsTableV2Props> = (props: HsTableV2Props) => {
           <Button
             color="primary"
             variant="contained"
-            disabled={!row.pid_count || props.disableExport}
+            disabled={!row.pid_count || disableExport}
             onClick={() => {
-              props.exportColumn(row);
+              exportColumn(row);
             }}
           >
             Export

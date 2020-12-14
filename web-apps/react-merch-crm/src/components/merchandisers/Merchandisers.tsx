@@ -16,7 +16,7 @@ import {
   Button,
 } from '@material-ui/core';
 
-import { HSTableV2, HsTableV2Props, tableRowsV2 } from '@hs/components';
+import { HSTableV2, HsTableV2Props, tableRowsV2, TableAction } from '@hs/components';
 import {
   merchandisersService,
   merchandisersFiltersObject,
@@ -77,6 +77,57 @@ const defaultFilterValues = {
   start_date: null,
   end_date: null,
 };
+const tableColumns: Array<string> = ["PID's", 'Status', 'Priority', 'Action'];
+const tableActions: Array<TableAction> = [
+  { display: 'Mark Non-procurable', url: '/mark-non-procurable' },
+  { display: 'Modify Fulfilment status', url: '/modify-fulfilment-status' },
+  { display: 'Transfer PID : No Modification', url: '/transfer-pid' },
+  { display: 'Transfer PID : Modify Details', url: '/transfer-revised-pids' },
+];
+const compare = (a: tableRowsV2, b: tableRowsV2): number => {
+  if (a.status < b.status) {
+    return -1;
+  }
+  if (a.status > b.status) {
+    return 1;
+  }
+  return 0;
+};
+
+const setToaster = (toasterType: Record<string, string>) => {
+  if (toasterType.type === 'error') {
+    toast.error(toasterType.message);
+  } else {
+    toast(toasterType.message);
+  }
+};
+
+const getFormatedFilters = (values: merchandisersFormFilters, data?: merchandisersFormFilters) => {
+  const postObject: merchandisersFormFilters = data ? { ...data } : { ...values };
+  const editedObject: Record<string, unknown> = { ...postObject };
+  if (postObject.brand_id) {
+    editedObject.brand_id = postObject.brand_id.key;
+  }
+  if (postObject.vendor_id) {
+    editedObject.vendor_id = postObject.vendor_id.key;
+  }
+  if (postObject['sub_category_ids'].length) {
+    editedObject['sub_category_ids'] = postObject['sub_category_ids'].map(
+      (obj: merchandisersDropDownObject) => obj.key,
+    );
+  } else {
+    delete editedObject['sub_category_ids'];
+  }
+  if (postObject['product_class_ids'].length) {
+    editedObject['product_class_ids'] = postObject['product_class_ids'].map(
+      (obj: merchandisersDropDownObject) => obj.key,
+    );
+  } else {
+    delete editedObject['product_class_ids'];
+  }
+  return editedObject;
+};
+
 const Merchandisers: FC = () => {
   const [initialValues, setInitialValues] = useState<merchandisersFormFilters>(defaultFilterValues);
   const [disableExport, setDisableExport] = useState<boolean>(true);
@@ -87,52 +138,10 @@ const Merchandisers: FC = () => {
   const [merchandisersData, setMerchandisersData] = useState<Array<tableRowsV2>>([]);
   const [merchandisersFiltersData, setMerchandisersFiltersData] = useState<merchandisersFiltersObject>({});
   const formatedJsonObject: Record<string, Record<string, number>> = {};
-  const tableColumns: Array<string> = ["PID's", 'Status', 'Priority', 'Action'];
+
   const classes = useStyles();
-  const setToaster = (toasterType: Record<string, string>) => {
-    if (toasterType.type === 'error') {
-      toast.error(toasterType.message);
-    } else {
-      toast(toasterType.message);
-    }
-  };
 
-  const compare = (a: tableRowsV2, b: tableRowsV2): number => {
-    if (a.status < b.status) {
-      return -1;
-    }
-    if (a.status > b.status) {
-      return 1;
-    }
-    return 0;
-  };
   const tableRows: Array<tableRowsV2> = merchandisersData.sort(compare);
-
-  const getFormatedFilters = (data?: merchandisersFormFilters) => {
-    const postObject: merchandisersFormFilters = data ? { ...data } : { ...values };
-    const editedObject: Record<string, unknown> = { ...postObject };
-    if (postObject.brand_id) {
-      editedObject.brand_id = postObject.brand_id.key;
-    }
-    if (postObject.vendor_id) {
-      editedObject.vendor_id = postObject.vendor_id.key;
-    }
-    if (postObject['sub_category_ids'].length) {
-      editedObject['sub_category_ids'] = postObject['sub_category_ids'].map(
-        (obj: merchandisersDropDownObject) => obj.key,
-      );
-    } else {
-      delete editedObject['sub_category_ids'];
-    }
-    if (postObject['product_class_ids'].length) {
-      editedObject['product_class_ids'] = postObject['product_class_ids'].map(
-        (obj: merchandisersDropDownObject) => obj.key,
-      );
-    } else {
-      delete editedObject['product_class_ids'];
-    }
-    return editedObject;
-  };
 
   const showError = useCallback((error: apiErrorMessage) => {
     let message = 'Try Later';
@@ -197,7 +206,7 @@ const Merchandisers: FC = () => {
   };
 
   const exportColumn = (row: tableRowsV2) => {
-    const filteredValues: Record<string, unknown> = getFormatedFilters();
+    const filteredValues: Record<string, unknown> = getFormatedFilters(values);
     (async () => {
       try {
         const params = getFilteredNonNullValues(filteredValues);
@@ -250,6 +259,7 @@ const Merchandisers: FC = () => {
     rows: tableRows,
     disableExport: disableExport,
     exportColumn: exportColumn,
+    tableActions: tableActions,
   };
 
   const getFiltersDropDownValues = (list: Array<merchandisersDropDownObject>, isNoneRequired = true) => {
@@ -332,7 +342,7 @@ const Merchandisers: FC = () => {
   };
 
   const getTableDataWithFilters = (data: merchandisersFormFilters) => {
-    const filteredValues: merchandisersOptionalFormFilters = getFormatedFilters(data);
+    const filteredValues: merchandisersOptionalFormFilters = getFormatedFilters(values, data);
     const params = getFilteredNonNullValues(filteredValues) || {};
     if (Object.keys(params).length) {
       (async () => {
