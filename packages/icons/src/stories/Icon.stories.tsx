@@ -10,6 +10,7 @@ import {
   DeSelectedCircle,
   SelectedRectAngle,
   DeSelectedRectAngle,
+  NonProcIcon,
 } from '../../dist/';
 import styled from '@emotion/styled';
 
@@ -33,6 +34,7 @@ const IconArr = [
   DeSelectedCircle,
   SelectedRectAngle,
   DeSelectedRectAngle,
+  NonProcIcon,
 ];
 export const HsCRMIcons: FC = () => (
   <StyledDisplay>

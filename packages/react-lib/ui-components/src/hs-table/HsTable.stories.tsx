@@ -180,32 +180,6 @@ const columns = [
     },
   },
 ];
-function createData(
-  index,
-  title,
-  code,
-  createdOn,
-  updatedOn,
-  createdBy,
-  population,
-  size
-) {
-  const density = population / size;
-  return {
-    id: index,
-    title,
-    sorts: [title, code],
-    createdOn,
-    updatedOn,
-    createdBy,
-    population,
-    size,
-    density,
-    startDate: createdOn,
-    endDate: createdOn,
-    updatedBy: createdBy,
-  };
-}
 const data: any = [
   {
     id: 209,

@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState, useEffect, useCallback } from 'react';
 import { HSTable, HsTableProps, HsSnackbar, HsSnackbarProps } from '@hs/components';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
@@ -43,7 +43,7 @@ const DashBoard: FC = () => {
   const onSnackBarClose = (open: boolean) => {
     setSnackBarError({ ...snackBarError, open });
   };
-  const geTableData = () => {
+  const geTableData = useCallback(() => {
     (async () => {
       try {
         let tableData: any = { totalRecords: 0 };
@@ -69,7 +69,7 @@ const DashBoard: FC = () => {
         });
       }
     })();
-  };
+  }, []);
 
   useEffect(() => {
     geTableData();
