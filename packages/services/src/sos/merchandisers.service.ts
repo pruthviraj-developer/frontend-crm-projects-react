@@ -50,10 +50,19 @@ const downloadTemplate = (
 };
 
 const getTemplateDownloadLink = (
-  params: downloadTemplateUrlObjectKey
+  params: downloadTemplateUrlObjectKey,
+  delay = 1
 ): Promise<downloadTemplateUrlObject> => {
   const url = '/crm-api/intranet/propodownload/getsheet';
-  return httpService.get<downloadTemplateUrlObject>({ url, params });
+  return httpService
+    .get<downloadTemplateUrlObject>({ url, params })
+    .then(async (response) => {
+      if (!response.isAvailable && delay < 7) {
+        await new Promise((resolve) => setTimeout(resolve, delay * 1000));
+        return await getTemplateDownloadLink(params, delay + 2);
+      }
+      return response;
+    });
 };
 
 export const merchandisersService = {
