@@ -100,7 +100,7 @@ export const TransferVendor: FC = () => {
 
   const onExport = async () => {
     const res = await merchStatusChangeService.getTemplateDownloadLink({
-      sheetKey: 'transfer-vendor',
+      sheetKey: 'transfer-by-pid',
     });
     try {
       if (res.isAvailable) {
