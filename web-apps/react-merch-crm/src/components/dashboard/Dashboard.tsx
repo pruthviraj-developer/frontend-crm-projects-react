@@ -36,7 +36,7 @@ const DashBoard: FC = () => {
 
   const updateSos = (data: Record<string, string>) => {
     let postData: updateSosParams = {};
-    ['sosId', 'country', 'status', 'expiryTime', 'actionType', 'actionValue'].forEach((key: string) => {
+    ['sosId', 'country', 'status', 'expiryTime', 'action_type', 'action_value'].forEach((key: string) => {
       const value: string = data && data[key];
       postData = { ...postData, [key]: value };
     });
@@ -74,7 +74,7 @@ const DashBoard: FC = () => {
       setAnchorEl(event.currentTarget);
     };
     const handleClose = (row: Record<string, string>) => {
-      if (row && row.actionType) {
+      if (row && row.action_type) {
         const postData: Record<string, string> = { ...rowData, ...row };
         updateSos(postData);
       }
@@ -104,7 +104,7 @@ const DashBoard: FC = () => {
               <MenuItem
                 key={index}
                 onClick={() => {
-                  handleClose({ actionType: 'extend', actionValue: value });
+                  handleClose({ action_type: 'extend', action_value: value });
                 }}
               >
                 {' '}
@@ -132,8 +132,8 @@ const DashBoard: FC = () => {
           onClick={() => {
             const postData: Record<string, string> = {
               ...rowData,
-              actionType: data.action_value,
-              actionValue: value.toLowerCase(),
+              action_type: data.action_value.toLowerCase(),
+              action_value: value.toLowerCase(),
             };
             updateSos(postData);
           }}
@@ -188,7 +188,6 @@ const DashBoard: FC = () => {
     {
       id: 'expiryTime',
       label: 'Expiry Time',
-      withDate: true,
       render: true,
     },
     { id: 'buyerEmail', label: 'Buyer Email' },
