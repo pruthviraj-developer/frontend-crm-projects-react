@@ -29,11 +29,13 @@ export interface FileUploadSideBarOption {
   type?: string;
   resetField?: string;
   options?: FileUploadListOption[];
+  key?: string;
 }
 
 export interface FileUploadListOption {
   display: string;
   id: string | number;
+  currencyCode?: string;
 }
 export interface FileUploadState extends FormikValues {
   file?: FileType;

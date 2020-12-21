@@ -34,10 +34,16 @@ export interface sosErrorMessageDetail {
   backgroundApi?: string;
 }
 
+interface errorObject {
+  field: string;
+  message: string;
+}
+
 export interface sosErrorMessage {
   status: string;
   messageDetail: sosErrorMessageDetail;
   errorMessage: string;
+  field_errors?: errorObject[];
 }
 
 export interface sosFilterParams {
@@ -47,12 +53,12 @@ export interface sosFilterParams {
 }
 
 export type updateSosParams = {
-  sosId?: number;
+  sos_id?: string;
   country?: string;
   status?: string;
-  expiryTime?: Date;
-  actionType?: string;
-  actionValue?: number;
+  expiry_time?: string;
+  action_type?: string;
+  action_value?: number;
 };
 
 export type sosTableParams = { pageSize: number; pageNum: number };

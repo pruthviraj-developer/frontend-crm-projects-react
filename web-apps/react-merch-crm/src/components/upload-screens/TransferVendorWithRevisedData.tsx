@@ -10,7 +10,7 @@ import {
 import { merchStatusChangeService } from '@hs/services';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
-import { VendorList, ListType, BrandList } from './IUploadScreens';
+import { VendorList, CurrencyList, ListType, BrandList } from './IUploadScreens';
 
 const StyledCntnr = styled.div`
   margin-left: 90px;
@@ -30,6 +30,7 @@ const brandSideBarOption: FileUploadSideBarOption = {
 };
 
 const currencySideBarOption: FileUploadSideBarOption = {
+  type: 'autocomplete',
   name: 'currency',
   label: 'Currency',
 };
@@ -59,10 +60,7 @@ const TransferVendorValidation = Yup.object().shape({
 export const TransferVendorWithRevisedData: FC = () => {
   const [brandsList, setBrandsList] = useState<ListType>(([] as unknown) as ListType);
   const [vendorList, setVendorList] = useState<ListType>(([] as unknown) as ListType);
-  const currencyList = [
-    { id: 'in', display: 'Indian' },
-    { id: 'cny', display: 'Chinese' },
-  ];
+  const [currencyList, setCurrencyList] = useState<ListType>(([] as unknown) as ListType);
   useEffect(() => {
     (async () => {
       try {
@@ -71,9 +69,16 @@ export const TransferVendorWithRevisedData: FC = () => {
       } catch (error) {
         setVendorList(([] as unknown) as ListType);
       }
+      try {
+        const list = await merchStatusChangeService.getCurrencyList<CurrencyList>();
+        setCurrencyList(list.currencyList);
+      } catch (error) {
+        setCurrencyList(([] as unknown) as ListType);
+      }
     })();
     return () => {
       setVendorList(([] as unknown) as ListType);
+      setCurrencyList(([] as unknown) as ListType);
     };
   }, []);
 
@@ -81,7 +86,7 @@ export const TransferVendorWithRevisedData: FC = () => {
     try {
       const res = await merchStatusChangeService.transferToVendorWithRevisedData({
         file: values.file?.file,
-        params: { vendorId: values.vendorId.id, brandId: values.brandId.id, currency: values.currency },
+        params: { vendorId: values.vendorId.id, brandId: values.brandId.id, currency: values.currency.currencyCode },
       });
       if (res.success) {
         toast.success(res.message);

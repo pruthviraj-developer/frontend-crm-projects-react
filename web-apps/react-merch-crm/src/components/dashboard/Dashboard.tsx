@@ -36,16 +36,27 @@ const DashBoard: FC = () => {
 
   const updateSos = (data: Record<string, string>) => {
     let postData: updateSosParams = {};
-    ['sosId', 'country', 'status', 'expiryTime', 'action_type', 'action_value'].forEach((key: string) => {
+    ['country', 'status', 'action_type', 'action_value'].forEach((key: string) => {
       const value: string = data && data[key];
       postData = { ...postData, [key]: value };
     });
+    postData['sos_id'] = data['sosId'];
+    postData['expiry_time'] = data['expiryTime'];
     (async () => {
       const showError = (error: sosErrorMessage) => {
         let message = 'Try Later';
         const status = error.status && error.status.toLowerCase();
         if (status === 'failure') {
           message = error.errorMessage;
+        } else if (error.field_errors) {
+          for (let index = 0; index < error.field_errors.length; index++) {
+            const element = error.field_errors[index];
+            setToaster({
+              type: 'error',
+              message: element.message,
+            });
+          }
+          return;
         }
         setToaster({
           type: 'error',
@@ -54,10 +65,9 @@ const DashBoard: FC = () => {
       };
       try {
         const response = await sosService.updateSos(postData);
-        const status = response.status && response.status.toLowerCase();
-        if (status === 'success') {
+        if (!response) {
           setToaster({
-            message: response.messageDetail ? response.messageDetail.message : 'Updated successfully',
+            message: 'Updated successfully',
           });
           setFilterParams({ ...filterParams });
         } else {

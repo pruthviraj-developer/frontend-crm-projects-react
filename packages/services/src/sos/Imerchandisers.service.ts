@@ -74,7 +74,7 @@ export interface downloadTemplateObject {
 }
 
 export interface brandIdparams {
-  vendorId: string | number;
+  vendorId?: string | number;
 }
 
 export interface downloadTemplateUrlObject {
