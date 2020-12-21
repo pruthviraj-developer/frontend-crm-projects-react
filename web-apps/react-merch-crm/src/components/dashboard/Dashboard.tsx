@@ -65,7 +65,8 @@ const DashBoard: FC = () => {
       };
       try {
         const response = await sosService.updateSos(postData);
-        if (!response) {
+        const status = response.status || '';
+        if (status.toLowerCase() === 'success') {
           setToaster({
             message: 'Updated successfully',
           });
