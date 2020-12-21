@@ -85,6 +85,11 @@ const getInstockList = <T>(): Promise<T> => {
   return httpService.get<T>({ url });
 };
 
+const getCurrencyList = <T>(): Promise<T> => {
+  const url = '/crm-api/intranet/getcurrencylist';
+  return httpService.get<T>({ url });
+};
+
 const getTemplateDownloadLink = (
   params: downloadTemplateUrlObjectKey
 ): Promise<downloadTemplateUrlObject> => {
@@ -98,6 +103,7 @@ export const merchStatusChangeService = {
   updateFulfilmentStatus,
   transferToVendor,
   transferToVendorWithRevisedData,
+  getCurrencyList,
   getReasonList,
   getVendorList,
   getBrandsList,

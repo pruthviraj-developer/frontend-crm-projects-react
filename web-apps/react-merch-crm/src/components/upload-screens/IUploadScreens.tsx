@@ -1,5 +1,11 @@
 import { FileUploadListOption } from '@hs/containers';
 
+interface currency {
+  currencyCode: string;
+  display: string;
+  id: string;
+}
+
 export type ListType = FileUploadListOption[];
 
 export interface ReasonList {
@@ -8,6 +14,10 @@ export interface ReasonList {
 
 export interface VendorList {
   vendorList: ListType;
+}
+
+export interface CurrencyList {
+  currencyList: currency[];
 }
 
 export interface BrandList {
