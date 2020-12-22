@@ -40,6 +40,7 @@ const DashBoard: FC = () => {
   const [count, setCount] = useState<number>(0);
   const [sosPopup, showSosPopup] = useState<boolean>(false);
   const [cancelSosObject, setCancelSosObject] = useState<Record<string, string>>({});
+  const [extendSosObject, setExtendSosObject] = useState<Record<string, string>>({});
   const [status, setStatus] = useState<string>('Loading');
   const [filterParams, setFilterParams] = useState<sosTableParams>({ pageSize: 10, pageNum: 0 });
   const pathName = location.pathname;
@@ -114,10 +115,11 @@ const DashBoard: FC = () => {
   const dropDownMenu = (rowData: Record<string, string>, data: Record<string, unknown>) => {
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
       setAnchorEl(event.currentTarget);
+      setExtendSosObject(rowData);
     };
     const handleClose = (row: Record<string, string>) => {
       if (row && row.action_type) {
-        const postData: Record<string, string> = { ...rowData, ...row };
+        const postData: Record<string, string> = { ...extendSosObject, ...row };
         updateSos(postData);
       }
       setAnchorEl(null);
