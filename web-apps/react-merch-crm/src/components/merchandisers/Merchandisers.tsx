@@ -33,7 +33,7 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 const useStyles = makeStyles({
   textFieldWidth: {
     minWidth: 250,
-    margin: '5px 0',
+    margin: '8px 0',
   },
   filtersPadding: {
     padding: '10px 20px',
@@ -68,6 +68,7 @@ const defaultFilterValues = {
   age: null,
   country: null,
   status: null,
+  bdm_id: null,
   category_id: null,
   vendor_id: null,
   brand_id: null,
@@ -107,6 +108,12 @@ const getFormatedFilters = (values: merchandisersFormFilters, data?: merchandise
   const editedObject: Record<string, unknown> = { ...postObject };
   if (postObject.brand_id) {
     editedObject.brand_id = postObject.brand_id.key;
+  }
+  if (postObject.bdm_id) {
+    editedObject.bdm_id = postObject.bdm_id.key;
+  }
+  if (postObject.country) {
+    editedObject.country = postObject.country.key;
   }
   if (postObject.vendor_id) {
     editedObject.vendor_id = postObject.vendor_id.key;
@@ -421,27 +428,65 @@ const Merchandisers: FC = () => {
                       <Paper variant="outlined" className={classes.filtersPadding}>
                         <Grid item className={classes.textFieldWidth}>
                           <Field
-                            component={TextField}
-                            required
-                            type="text"
                             name="country"
-                            label="Sourcing Country"
-                            fullWidth
-                            value={values.country ? values.country : ''}
-                            select
-                            onChange={(evt: React.ChangeEvent<HTMLInputElement>) => {
-                              const selectedValues = { ...initialValues, country: evt.target.value };
-                              setInitialValues(selectedValues);
-                              getTableDataWithFilters(selectedValues);
-                              setDisableExport(false);
+                            variant="standard"
+                            component={Autocomplete}
+                            getOptionSelected={(
+                              option: merchandisersDropDownObject,
+                              selectedValue: merchandisersDropDownObject,
+                            ) => option.key === selectedValue?.key}
+                            onChange={(
+                              evt: React.ChangeEvent<HTMLInputElement>,
+                              values: merchandisersDropDownObject,
+                            ) => {
+                              if (evt) {
+                                const selectedValues = { ...initialValues, country: values };
+                                setInitialValues(selectedValues);
+                                getTableDataWithFilters(selectedValues);
+                                if (values || initialValues.bdm_id) {
+                                  setDisableExport(false);
+                                } else {
+                                  setDisableExport(true);
+                                }
+                              }
                             }}
-                            inputProps={{
-                              id: 'outlined-select',
+                            options={merchandisersFiltersData.country || []}
+                            getOptionLabel={(option: Record<string, unknown>) => (option.value ? option.value : '')}
+                            renderInput={(params: AutocompleteRenderInputParams) => (
+                              <MuiTextField {...params} label="Sourcing Country" variant="outlined" />
+                            )}
+                          />
+                        </Grid>
+                        <Grid item className={classes.textFieldWidth}>
+                          <Field
+                            name="bdm_id"
+                            variant="standard"
+                            component={Autocomplete}
+                            getOptionSelected={(
+                              option: merchandisersDropDownObject,
+                              selectedValue: merchandisersDropDownObject,
+                            ) => option.key === selectedValue?.key}
+                            onChange={(
+                              evt: React.ChangeEvent<HTMLInputElement>,
+                              values: merchandisersDropDownObject,
+                            ) => {
+                              if (evt) {
+                                const selectedValues = { ...initialValues, bdm_id: values };
+                                setInitialValues(selectedValues);
+                                getTableDataWithFilters(selectedValues);
+                                if (values || initialValues.country) {
+                                  setDisableExport(false);
+                                } else {
+                                  setDisableExport(true);
+                                }
+                              }
                             }}
-                            variant={'outlined'}
-                          >
-                            {getFiltersDropDownValues(merchandisersFiltersData.country || [], false)}
-                          </Field>
+                            options={merchandisersFiltersData.bdm || []}
+                            getOptionLabel={(option: Record<string, unknown>) => (option.value ? option.value : '')}
+                            renderInput={(params: AutocompleteRenderInputParams) => (
+                              <MuiTextField {...params} label="Bdm" variant="outlined" />
+                            )}
+                          />
                         </Grid>
                       </Paper>
                       <Paper variant="outlined" className={classes.filtersPadding}>
