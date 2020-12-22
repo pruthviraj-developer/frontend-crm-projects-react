@@ -38,10 +38,11 @@ export interface merchandisersDataObject {
 
 export interface merchandisersFormFilters {
   age: string | null;
-  country: string | null;
   category_id: string | null;
   sub_category_ids: Array<merchandisersDropDownObject>;
   product_class_ids: Array<merchandisersDropDownObject>;
+  bdm_id: merchandisersDropDownObject | null;
+  country: merchandisersDropDownObject | null;
   vendor_id: merchandisersDropDownObject | null;
   brand_id: merchandisersDropDownObject | null;
   gender: string | null;
