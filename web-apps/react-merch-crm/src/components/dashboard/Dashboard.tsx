@@ -5,7 +5,15 @@ import styled from '@emotion/styled';
 
 import CancelIcon from '@material-ui/icons/Cancel';
 import ExposureIcon from '@material-ui/icons/Exposure';
-import { IconButton } from '@material-ui/core';
+import { IconButton, Button } from '@material-ui/core';
+
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Slide from '@material-ui/core/Slide';
+import { TransitionProps } from '@material-ui/core/transitions';
 
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -18,11 +26,21 @@ const DashBoardWrapper = styled.div`
   margin-left: 90px;
 `;
 
+const Transition = React.forwardRef(function Transition(
+  props: TransitionProps & { children?: React.ReactElement<any, any> },
+  ref: React.Ref<unknown>,
+) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
 const DashBoard: FC = () => {
   const location = useLocation();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [sosData, setTableData] = useState<sosTableData>({});
   const [count, setCount] = useState<number>(0);
+  const [sosPopup, showSosPopup] = useState<boolean>(false);
+  const [cancelSosObject, setCancelSosObject] = useState<Record<string, string>>({});
+  const [extendSosObject, setExtendSosObject] = useState<Record<string, string>>({});
   const [status, setStatus] = useState<string>('Loading');
   const [filterParams, setFilterParams] = useState<sosTableParams>({ pageSize: 10, pageNum: 0 });
   const pathName = location.pathname;
@@ -32,6 +50,20 @@ const DashBoard: FC = () => {
     } else {
       toast(toasterType.message);
     }
+  };
+
+  const handleSosPopupClose = () => {
+    showSosPopup(false);
+  };
+
+  const handleSosPopupCloseSuccess = () => {
+    updateSos(cancelSosObject);
+    showSosPopup(false);
+  };
+
+  const autoCancelSosPopup = (data: Record<string, string>) => {
+    setCancelSosObject(data);
+    showSosPopup(true);
   };
 
   const updateSos = (data: Record<string, string>) => {
@@ -83,10 +115,11 @@ const DashBoard: FC = () => {
   const dropDownMenu = (rowData: Record<string, string>, data: Record<string, unknown>) => {
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
       setAnchorEl(event.currentTarget);
+      setExtendSosObject(rowData);
     };
     const handleClose = (row: Record<string, string>) => {
       if (row && row.action_type) {
-        const postData: Record<string, string> = { ...rowData, ...row };
+        const postData: Record<string, string> = { ...extendSosObject, ...row };
         updateSos(postData);
       }
       setAnchorEl(null);
@@ -146,7 +179,7 @@ const DashBoard: FC = () => {
               action_type: data.action_value.toLowerCase(),
               action_value: value.toLowerCase(),
             };
-            updateSos(postData);
+            autoCancelSosPopup(postData);
           }}
         >
           <CancelIcon />
@@ -260,6 +293,29 @@ const DashBoard: FC = () => {
       <h1>SOS DashBoard</h1>
       {count > 0 && <HSTableV1 {...TableData} />}
       {count === 0 && <h5> {status}</h5>}
+      <Dialog
+        open={sosPopup}
+        TransitionComponent={Transition}
+        keepMounted
+        onClose={handleSosPopupClose}
+        aria-labelledby="alert-dialog-slide-title"
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle id="alert-dialog-slide-title">{'Cancel SOS'}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description">
+            <h2>Do you want to cancel the SOS?</h2>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button variant="contained" color="primary" onClick={handleSosPopupClose}>
+            No
+          </Button>
+          <Button variant="contained" color="primary" onClick={handleSosPopupCloseSuccess}>
+            Yes
+          </Button>
+        </DialogActions>
+      </Dialog>
     </DashBoardWrapper>
   );
 };
