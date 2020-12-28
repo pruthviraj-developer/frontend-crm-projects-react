@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { HSTableV2 } from './HsTableV2';
 import { HsTableV2Props, tableRowsV2 } from './IHsTableV2';
 import { action } from '@storybook/addon-actions';
+import { Story } from '@storybook/react/types-6-0';
 
 export default {
   title: 'Tables V2',
@@ -112,4 +113,7 @@ const tableDataV2: HsTableV2Props = {
   exportColumn: exportColumn,
 };
 
-export const Tablev3Component: FC = () => <HSTableV2 {...tableDataV2} />;
+const Template: Story<HsTableV2Props> = (args) => <HSTableV2 {...args} />;
+
+export const TableV3Component = Template.bind({});
+TableV3Component.args = tableDataV2;

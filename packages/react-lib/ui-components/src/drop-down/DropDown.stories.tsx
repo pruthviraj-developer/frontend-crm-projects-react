@@ -1,5 +1,7 @@
+import { Story } from '@storybook/react/types-6-0';
 import React, { FC } from 'react';
 import DropDown from './DropDown';
+import { DropDownProps } from './IDropDown';
 
 export default {
   title: 'Drop  Down',
@@ -47,5 +49,10 @@ const propsobj = {
   objName: 'name',
   objKey: 'value',
 };
+const Template: Story<DropDownProps> = (args) => <DropDown {...args} />;
+
+export const DropDownComponent = Template.bind({});
+DropDownComponent.args = props;
+
 export const DropDownAsString: FC = () => <DropDown {...props} />;
 export const DropDownAsList: FC = () => <DropDown {...propsobj} />;
