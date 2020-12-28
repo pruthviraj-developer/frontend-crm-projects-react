@@ -1,5 +1,6 @@
+import { Story } from '@storybook/react/types-6-0';
 import React, { FC } from 'react';
-import { DatePickerComponent } from './date-picker';
+import { DatePickerComponent, Props } from './date-picker';
 
 const props = {
   placeholder: 'Enter Date',
@@ -11,4 +12,12 @@ export default {
   title: 'Date Picker',
   component: DatePickerComponent,
 };
-export const DateSelector: FC = () => <DatePickerComponent {...props} />;
+
+const DatePicketTemplate: Story<Props> = (args) => (
+  <DatePickerComponent {...args} />
+);
+
+export const DateSelector = DatePicketTemplate.bind({});
+DateSelector.args = {
+  ...props,
+};

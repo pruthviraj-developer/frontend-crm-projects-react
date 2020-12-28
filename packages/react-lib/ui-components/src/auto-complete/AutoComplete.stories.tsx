@@ -1,14 +1,16 @@
+import { Story } from '@storybook/react/types-6-0';
 import React, { FC } from 'react';
 import { AutoCompleteGrouped } from './AutoCompleteGrouped';
-import { AutoCompleteOption } from './IAutoComplete';
+import { AutoCompleteOption, AutoCompleteProps } from './IAutoComplete';
 export default {
   title: 'Auto Complete',
   component: AutoCompleteGrouped,
 };
 
-export const AutoCompleteComponent: FC = () => (
-  <AutoCompleteGrouped options={OptionTestData}></AutoCompleteGrouped>
+const Template: Story<AutoCompleteProps<AutoCompleteOption>> = (args) => (
+  <AutoCompleteGrouped {...args} />
 );
+export const AutoCompleteComponent = Template.bind({});
 
 const OptionTestData: Array<AutoCompleteOption> = [
   { name: 'The Shawshank Redemption', value: 1994 },
@@ -116,3 +118,7 @@ const OptionTestData: Array<AutoCompleteOption> = [
   { name: '3 Idiots', value: 2009 },
   { name: 'Monty Python and the Holy Grail', value: 1975 },
 ];
+
+AutoCompleteComponent.args = {
+  options: OptionTestData,
+};

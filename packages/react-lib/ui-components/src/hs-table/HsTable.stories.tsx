@@ -10,6 +10,7 @@ import { action } from '@storybook/addon-actions';
 import { NavLink } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { SelectedCircle, SvgIcon } from '@hs/icons';
+import { Story } from '@storybook/react/types-6-0';
 
 export default {
   title: 'Tables',
@@ -265,4 +266,7 @@ const TableData: HsTableProps = {
   action: action('table-action'),
 };
 
-export const TableComponent: FC = () => <HSTable {...TableData} />;
+const Template: Story<HsTableProps> = (args) => <HSTable {...args} />;
+
+export const TableComponent = Template.bind({});
+TableComponent.args = TableData;

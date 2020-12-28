@@ -8,6 +8,7 @@ import { action } from '@storybook/addon-actions';
 
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import { Story } from '@storybook/react/types-6-0';
 
 export default {
   title: 'Tables V1 SOS',
@@ -238,4 +239,7 @@ const TableData: HsTablePropsV1 = {
   action: action('table-action'),
 };
 
-export const TableSOSComponent: FC = () => <HSTableV1 {...TableData} />;
+const Template: Story<HsTablePropsV1> = (args) => <HSTableV1 {...args} />;
+
+export const TableSOSComponent = Template.bind({});
+TableSOSComponent.args = TableData;

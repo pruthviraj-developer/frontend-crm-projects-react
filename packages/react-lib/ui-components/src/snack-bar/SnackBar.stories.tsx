@@ -1,22 +1,19 @@
 import React from 'react';
-import { FC } from 'react';
 import { HsSnackbar } from './SnackBar';
 import { action } from '@storybook/addon-actions';
+import { HsSnackbarProps } from './ISnackBar';
+import { Story } from '@storybook/react/types-6-0';
 export default {
   title: 'Snack Bar',
   component: HsSnackbar,
 };
-const props = {
+const successProps = {
   open: true,
   message: 'Test the toaster',
   type: 'success' as const,
   onSnackBarClose: action('onSnackBarClose'),
 };
-const propss = {
-  open: true,
-  message: 'Test the toaster',
-  type: 'warning' as const,
-  onSnackBarClose: action('onSnackBarClose'),
-};
-export const SnackbarSuccess: FC = () => <HsSnackbar {...props} />;
-export const SnackbarError: FC = () => <HsSnackbar {...propss} />;
+
+const Template: Story<HsSnackbarProps> = (args) => <HsSnackbar {...args} />;
+export const SnackbarComponent = Template.bind({});
+SnackbarComponent.args = successProps;
