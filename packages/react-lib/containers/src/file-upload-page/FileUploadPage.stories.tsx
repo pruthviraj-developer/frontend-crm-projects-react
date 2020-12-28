@@ -2,11 +2,13 @@ import React, { FC } from 'react';
 import { FileUploadPage } from './FileUploadPage';
 import { action } from '@storybook/addon-actions';
 import {
+  FileUploadPageProps,
   FileUploadSideBarOption,
   FileUploadState,
   SubmitHelper,
 } from './IFileUploadPage';
 import * as Yup from 'yup';
+import { Story } from '@storybook/react/types-6-0';
 
 export default {
   title: 'File upload Screen',
@@ -51,13 +53,17 @@ const onSubmit = (
   setSubmitting(false);
   resetForm({ values: { ...initialValues, resetInput: true } });
 };
-export const FileUploadScreen: FC = () => (
-  <FileUploadPage
-    acceptType={['xlsx']}
-    onSubmit={onSubmit}
-    onExport={action('onExport')}
-    sideBar={[reasonSideBarOption, remarkSideBarOption]}
-    validationSchema={FileUploadPageValidation}
-    initialValues={initialValues}
-  ></FileUploadPage>
+
+const Template: Story<FileUploadPageProps> = (args) => (
+  <FileUploadPage {...args} />
 );
+
+export const FileUploadScreen = Template.bind({});
+FileUploadScreen.args = {
+  acceptType: ['xlsx'],
+  onSubmit,
+  onExport: action('onExport'),
+  sideBar: [reasonSideBarOption, remarkSideBarOption],
+  validationSchema: FileUploadPageValidation,
+  initialValues,
+};
