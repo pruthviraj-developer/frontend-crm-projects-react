@@ -22,40 +22,31 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ImportExportIcon from '@material-ui/icons/ImportExport';
+import { SelectableTableProps } from './ISelectableTable';
 
-interface Data {
-  calories: number;
-  carbs: number;
-  fat: number;
-  name: string;
-  protein: number;
+type Order = 'asc' | 'desc';
+
+interface HeadCell {
+  disablePadding: boolean;
+  id: any;
+  label: string;
 }
 
-function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number
-): Data {
-  return { name, calories, fat, carbs, protein };
+interface EnhancedTableProps {
+  classes: ReturnType<typeof useStyles>;
+  numSelected: number;
+  onRequestSort: (event: React.MouseEvent<unknown>, property: string) => void;
+  onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  order: Order;
+  orderBy: string;
+  rowCount: number;
 }
 
-const rows = [
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Donut', 452, 25.0, 51, 4.9),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-  createData('Honeycomb', 408, 3.2, 87, 6.5),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Jelly Bean', 375, 0.0, 94, 0.0),
-  createData('KitKat', 518, 26.0, 65, 7.0),
-  createData('Lollipop', 392, 0.2, 98, 0.0),
-  createData('Marshmallow', 318, 0, 81, 2.0),
-  createData('Nougat', 360, 19.0, 9, 37.0),
-  createData('Oreo', 437, 18.0, 63, 4.0),
-];
+interface EnhancedTableToolbarProps {
+  numSelected: number;
+}
+
+let headCells: HeadCell[] = [];
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -66,8 +57,6 @@ function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   }
   return 0;
 }
-
-type Order = 'asc' | 'desc';
 
 function getComparator<Key extends keyof any>(
   order: Order,
@@ -91,33 +80,6 @@ function stableSort<T>(array: T[], comparator: (a: T, b: T) => number) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-interface HeadCell {
-  disablePadding: boolean;
-  id: keyof Data;
-  label: string;
-}
-
-const headCells: HeadCell[] = [
-  { id: 'name', disablePadding: false, label: 'Name' },
-  { id: 'calories', disablePadding: false, label: 'Calories' },
-  { id: 'fat', disablePadding: false, label: 'Fat (g)' },
-  { id: 'carbs', disablePadding: false, label: 'Carbs (g)' },
-  { id: 'protein', disablePadding: false, label: 'Protein (g)' },
-];
-const rowKeys = ['name', 'calories', 'fat', 'carbs', 'protein'];
-interface EnhancedTableProps {
-  classes: ReturnType<typeof useStyles>;
-  numSelected: number;
-  onRequestSort: (
-    event: React.MouseEvent<unknown>,
-    property: keyof Data
-  ) => void;
-  onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  order: Order;
-  orderBy: string;
-  rowCount: number;
-}
-
 function EnhancedTableHead(props: EnhancedTableProps) {
   const {
     classes,
@@ -128,9 +90,10 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     rowCount,
     onRequestSort,
   } = props;
-  const createSortHandler = (property: keyof Data) => (
+  const createSortHandler = (property: string) => (
     event: React.MouseEvent<unknown>
   ) => {
+    headCells = [];
     onRequestSort(event, property);
   };
 
@@ -141,8 +104,11 @@ function EnhancedTableHead(props: EnhancedTableProps) {
           <Checkbox
             indeterminate={numSelected > 0 && numSelected < rowCount}
             checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{ 'aria-label': 'select all desserts' }}
+            onChange={(evt: React.ChangeEvent<HTMLInputElement>) => {
+              headCells = [];
+              onSelectAllClick(evt);
+            }}
+            inputProps={{ 'aria-label': 'select all' }}
           />
         </TableCell>
         {headCells.map((headCell) => (
@@ -192,10 +158,6 @@ const useToolbarStyles = makeStyles((theme: Theme) =>
     },
   })
 );
-
-interface EnhancedTableToolbarProps {
-  numSelected: number;
-}
 
 const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
   const classes = useToolbarStyles();
@@ -273,17 +235,35 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const HsSelectableTable: FC = () => {
+const createHeadCells = (rowKeys, columns) => {
+  for (let index = 0; index < rowKeys.length; index++) {
+    headCells.push({
+      id: rowKeys[index],
+      disablePadding: false,
+      label: columns[index],
+    });
+  }
+};
+
+export const HsSelectableTable: FC<SelectableTableProps> = ({
+  rows,
+  rowKeys,
+  columns,
+  sortingId,
+  fetchTableData,
+}: SelectableTableProps) => {
   const classes = useStyles();
   const [order, setOrder] = useState<Order>('asc');
-  const [orderBy, setOrderBy] = useState<keyof Data>('calories');
+  const [orderBy, setOrderBy] = useState<string>(
+    sortingId || (rowKeys && rowKeys[0])
+  );
   const [selected, setSelected] = useState<string[]>([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-
+  const totalRows = rows || [];
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
-    property: keyof Data
+    property: string
   ) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -291,8 +271,9 @@ export const HsSelectableTable: FC = () => {
   };
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
+    headCells = [];
     if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.name);
+      const newSelecteds = totalRows.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -315,19 +296,25 @@ export const HsSelectableTable: FC = () => {
         selected.slice(selectedIndex + 1)
       );
     }
-
+    headCells = [];
     setSelected(newSelected);
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
+    headCells = [];
     setPage(newPage);
+    fetchTableData &&
+      fetchTableData({ pageSize: rowsPerPage, pageNo: newPage });
   };
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
+    headCells = [];
+    const rowsPerPage = parseInt(event.target.value, 10);
     setPage(0);
+    setRowsPerPage(rowsPerPage);
+    fetchTableData && fetchTableData({ pageSize: rowsPerPage, pageNo: 0 });
   };
 
   const generateRow = (row) => {
@@ -341,12 +328,10 @@ export const HsSelectableTable: FC = () => {
       </>
     );
   };
-
   const isSelected = (name: string) => selected.indexOf(name) !== -1;
-
   const emptyRows =
-    rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
-
+    rowsPerPage - Math.min(rowsPerPage, totalRows.length - page * rowsPerPage);
+  createHeadCells(rowKeys, columns);
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
@@ -365,13 +350,15 @@ export const HsSelectableTable: FC = () => {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={rows.length}
+              rowCount={totalRows.length}
             />
             <TableBody>
-              {stableSort(rows, getComparator(order, orderBy))
+              {stableSort(totalRows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  const isItemSelected = isSelected(row.name);
+                .map((row: Record<string, string>, index) => {
+                  const isItemSelected = sortingId
+                    ? isSelected(row[sortingId])
+                    : false;
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
@@ -405,7 +392,7 @@ export const HsSelectableTable: FC = () => {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={rows.length}
+          count={totalRows.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onChangePage={handleChangePage}
