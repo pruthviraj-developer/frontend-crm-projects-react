@@ -18,4 +18,19 @@ export const DarkTheme = createMuiTheme({
       contrastText: '#fff',
     },
   },
+  typography: {
+    fontFamily: [
+      'Averta',
+      '-apple-system',
+      'BlinkMacSystemFont',
+      '"Segoe UI"',
+      'Roboto',
+      '"Helvetica Neue"',
+      'Arial',
+      'sans-serif',
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(','),
+  },
 });
