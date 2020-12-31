@@ -35,14 +35,18 @@ const Transition = React.forwardRef(function Transition(
 });
 
 const useStyles = makeStyles({
+  cancelpopup: {
+    padding: '8px',
+  },
   popuptitle: {
     textAlign: 'center',
     fontWeight: 'bold',
     fontSize: '16px',
     display: 'block',
   },
-  flexcenter: {
+  actionbuttons: {
     justifyContent: 'center',
+    padding: '0 16px 16px',
   },
 });
 
@@ -147,9 +151,9 @@ const DashBoard: FC = () => {
       <span>
         <IconButton
           style={{ margin: '0 5px' }}
-          title="Extend"
+          title="Extend Deadline"
           color="primary"
-          aria-label="Extend"
+          aria-label="Extend Deadline"
           aria-controls="simple-menu"
           aria-haspopup="true"
           onClick={handleClick}
@@ -184,9 +188,9 @@ const DashBoard: FC = () => {
       <span>
         <IconButton
           style={{ margin: '0 5px' }}
-          title="Delete"
+          title="Cancel SOS"
           color="primary"
-          aria-label="Delete"
+          aria-label="Cancel SOS"
           onClick={() => {
             const postData: Record<string, string> = {
               ...rowData,
@@ -314,16 +318,17 @@ const DashBoard: FC = () => {
         onClose={handleSosPopupClose}
         aria-labelledby="alert-dialog-slide-title"
         aria-describedby="alert-dialog-slide-description"
+        className={classes.cancelpopup}
       >
-        <DialogTitle id="alert-dialog-slide-title">
+        <DialogTitle id="alert-dialog-slide-title" style={{ padding: '16px 24px 0 24px' }}>
           <span className={classes.popuptitle}>Cancel SOS</span>
         </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-slide-description">
+        <DialogContent style={{ padding: '0px 24px 10px' }}>
+          <DialogContentText style={{ marginBottom: '0' }} id="alert-dialog-slide-description">
             <h2>Do you want to cancel the SOS?</h2>
           </DialogContentText>
         </DialogContent>
-        <DialogActions className={classes.flexcenter}>
+        <DialogActions className={classes.actionbuttons}>
           <Button variant="contained" color="primary" onClick={handleSosPopupClose}>
             No
           </Button>
