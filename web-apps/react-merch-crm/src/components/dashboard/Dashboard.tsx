@@ -1,5 +1,6 @@
 import React from 'react';
 import { FC, useState, useEffect } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import { useLocation } from 'react-router-dom';
 import styled from '@emotion/styled';
 
@@ -33,6 +34,22 @@ const Transition = React.forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
+const useStyles = makeStyles({
+  cancelpopup: {
+    padding: '8px',
+  },
+  popuptitle: {
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: '16px',
+    display: 'block',
+  },
+  actionbuttons: {
+    justifyContent: 'center',
+    padding: '0 16px 16px',
+  },
+});
+
 const DashBoard: FC = () => {
   const location = useLocation();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -44,6 +61,7 @@ const DashBoard: FC = () => {
   const [status, setStatus] = useState<string>('Loading');
   const [filterParams, setFilterParams] = useState<sosTableParams>({ pageSize: 10, pageNum: 0 });
   const pathName = location.pathname;
+  const classes = useStyles();
   const setToaster = (toasterType: Record<string, string>) => {
     if (toasterType.type === 'error') {
       toast.error(toasterType.message);
@@ -133,9 +151,9 @@ const DashBoard: FC = () => {
       <span>
         <IconButton
           style={{ margin: '0 5px' }}
-          title="Extend"
+          title="Extend Deadline"
           color="primary"
-          aria-label="Extend"
+          aria-label="Extend Deadline"
           aria-controls="simple-menu"
           aria-haspopup="true"
           onClick={handleClick}
@@ -170,9 +188,9 @@ const DashBoard: FC = () => {
       <span>
         <IconButton
           style={{ margin: '0 5px' }}
-          title="Delete"
+          title="Cancel SOS"
           color="primary"
-          aria-label="Delete"
+          aria-label="Cancel SOS"
           onClick={() => {
             const postData: Record<string, string> = {
               ...rowData,
@@ -231,7 +249,7 @@ const DashBoard: FC = () => {
     },
     {
       id: 'expiryTime',
-      label: 'Expiry Time',
+      label: 'Expiry Time(IST)',
       render: true,
     },
     { id: 'buyerEmail', label: 'Buyer Email' },
@@ -300,14 +318,17 @@ const DashBoard: FC = () => {
         onClose={handleSosPopupClose}
         aria-labelledby="alert-dialog-slide-title"
         aria-describedby="alert-dialog-slide-description"
+        className={classes.cancelpopup}
       >
-        <DialogTitle id="alert-dialog-slide-title">{'Cancel SOS'}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-slide-description">
+        <DialogTitle id="alert-dialog-slide-title" style={{ padding: '16px 24px 0 24px' }}>
+          <span className={classes.popuptitle}>Cancel SOS</span>
+        </DialogTitle>
+        <DialogContent style={{ padding: '0px 24px 10px' }}>
+          <DialogContentText style={{ marginBottom: '0' }} id="alert-dialog-slide-description">
             <h2>Do you want to cancel the SOS?</h2>
           </DialogContentText>
         </DialogContent>
-        <DialogActions>
+        <DialogActions className={classes.actionbuttons}>
           <Button variant="contained" color="primary" onClick={handleSosPopupClose}>
             No
           </Button>

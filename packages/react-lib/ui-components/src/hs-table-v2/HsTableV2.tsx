@@ -119,7 +119,9 @@ export const HSTableV2: FC<HsTableV2Props> = ({
             <TableHead>
               <TableRow>
                 {columns.map((column: string, index: number) => (
-                  <TableCell key={index}>{column}</TableCell>
+                  <TableCell key={index} style={{ fontWeight: 'bold' }}>
+                    {column}
+                  </TableCell>
                 ))}
                 <TableCell></TableCell>
               </TableRow>
