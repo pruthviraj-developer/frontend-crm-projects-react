@@ -21,6 +21,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
+import FilterListIcon from '@material-ui/icons/FilterList';
 import ImportExportIcon from '@material-ui/icons/ImportExport';
 import { SelectableTableProps } from './ISelectableTable';
 
@@ -200,6 +201,11 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
           >
             Select Rows
           </Typography>
+          <Tooltip title="Filter list">
+            <IconButton aria-label="filter list">
+              <FilterListIcon />
+            </IconButton>
+          </Tooltip>
         </>
       )}
     </Toolbar>
