@@ -109,6 +109,7 @@ export const HSTableV1: FC<HsTablePropsV1> = (props: HsTablePropsV1) => {
                       maxWidth: column.width ? column.width : 'auto',
                       overflow: 'hidden',
                       textOverflow: 'ellipsis',
+                      fontWeight: 'bold',
                     }}
                   >
                     {column.label}

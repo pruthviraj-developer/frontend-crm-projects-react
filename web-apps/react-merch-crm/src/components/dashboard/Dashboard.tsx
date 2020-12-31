@@ -1,5 +1,6 @@
 import React from 'react';
 import { FC, useState, useEffect } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import { useLocation } from 'react-router-dom';
 import styled from '@emotion/styled';
 
@@ -33,6 +34,18 @@ const Transition = React.forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
+const useStyles = makeStyles({
+  popuptitle: {
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: '16px',
+    display: 'block',
+  },
+  flexcenter: {
+    justifyContent: 'center',
+  },
+});
+
 const DashBoard: FC = () => {
   const location = useLocation();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -44,6 +57,7 @@ const DashBoard: FC = () => {
   const [status, setStatus] = useState<string>('Loading');
   const [filterParams, setFilterParams] = useState<sosTableParams>({ pageSize: 10, pageNum: 0 });
   const pathName = location.pathname;
+  const classes = useStyles();
   const setToaster = (toasterType: Record<string, string>) => {
     if (toasterType.type === 'error') {
       toast.error(toasterType.message);
@@ -231,7 +245,7 @@ const DashBoard: FC = () => {
     },
     {
       id: 'expiryTime',
-      label: 'Expiry Time',
+      label: 'Expiry Time(IST)',
       render: true,
     },
     { id: 'buyerEmail', label: 'Buyer Email' },
@@ -301,13 +315,15 @@ const DashBoard: FC = () => {
         aria-labelledby="alert-dialog-slide-title"
         aria-describedby="alert-dialog-slide-description"
       >
-        <DialogTitle id="alert-dialog-slide-title">{'Cancel SOS'}</DialogTitle>
+        <DialogTitle id="alert-dialog-slide-title">
+          <span className={classes.popuptitle}>Cancel SOS</span>
+        </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-slide-description">
             <h2>Do you want to cancel the SOS?</h2>
           </DialogContentText>
         </DialogContent>
-        <DialogActions>
+        <DialogActions className={classes.flexcenter}>
           <Button variant="contained" color="primary" onClick={handleSosPopupClose}>
             No
           </Button>

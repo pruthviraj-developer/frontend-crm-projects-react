@@ -137,7 +137,7 @@ const columns = [
   },
   {
     id: 'expiryTime',
-    label: 'Expiry Time',
+    label: 'Expiry Time(IST)',
     withDate: true,
     render: true,
   },
