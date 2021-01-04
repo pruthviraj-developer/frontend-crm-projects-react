@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
   "license": "MIT",
-  "main": "dist/index.js",
+  "main": "dist/utils.esm.js",
   "typings": "dist/index.d.ts",
   "files": [
     "dist",
@@ -11,11 +11,11 @@
     "node": ">=12"
   },
   "scripts": {
-    "start": "cross-env NODE_ENV=development tsdx watch --verbose",
-    "build": "tsdx build",
+    "start": "cross-env NODE_ENV=development tsdx watch --format esm --verbose",
+    "build": "tsdx build --format esm",
     "test": "tsdx test",
     "lint": "tsdx lint",
-    "prepare": "tsdx build"
+    "prepare": "tsdx build --format esm"
   },
   "peerDependencies": {},
   "husky": {
