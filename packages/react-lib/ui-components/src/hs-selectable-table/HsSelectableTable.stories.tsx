@@ -35,6 +35,7 @@ const data: SelectableTableProps = {
     { name: 'Oreo', calories: 437, fat: 18, carbs: 63, protein: 4 },
   ],
   sortingId: 'name',
+  selectId: 'name',
   fetchTableData: fetchTableData,
 };
 

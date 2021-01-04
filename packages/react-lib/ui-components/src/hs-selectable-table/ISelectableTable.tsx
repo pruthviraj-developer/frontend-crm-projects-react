@@ -14,4 +14,5 @@ export interface SelectableTableProps {
   fetchTableData: (event: tableParams) => void;
   tableActions?: TableAction[];
   sortingId?: string;
+  selectId?: string;
 }

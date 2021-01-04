@@ -41,6 +41,7 @@ interface EnhancedTableProps {
   order: Order;
   orderBy: string;
   rowCount: number;
+  rowsPerPage: number;
 }
 
 interface EnhancedTableToolbarProps {
@@ -89,6 +90,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     orderBy,
     numSelected,
     rowCount,
+    rowsPerPage,
     onRequestSort,
   } = props;
   const createSortHandler = (property: string) => (
@@ -104,7 +106,11 @@ function EnhancedTableHead(props: EnhancedTableProps) {
         <TableCell padding="checkbox">
           <Checkbox
             indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
+            checked={
+              rowCount > 0 &&
+              (numSelected === rowsPerPage ||
+                numSelected === rowCount % rowsPerPage)
+            }
             onChange={(evt: React.ChangeEvent<HTMLInputElement>) => {
               headCells = [];
               onSelectAllClick(evt);
@@ -256,6 +262,7 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
   rowKeys,
   columns,
   sortingId,
+  selectId,
   fetchTableData,
 }: SelectableTableProps) => {
   const classes = useStyles();
@@ -263,7 +270,9 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
   const [orderBy, setOrderBy] = useState<string>(
     sortingId || (rowKeys && rowKeys[0])
   );
-  const [selected, setSelected] = useState<string[]>([]);
+  const [selected, setSelected] = useState<(string | Record<string, string>)[]>(
+    []
+  );
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const totalRows = rows || [];
@@ -279,7 +288,18 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     headCells = [];
     if (event.target.checked) {
-      const newSelecteds = totalRows.map((n) => n.name);
+      const currentIndex = page * rowsPerPage;
+      const newSelecteds: (string | Record<string, string>)[] = [];
+      for (
+        let index = currentIndex;
+        index < currentIndex + rowsPerPage;
+        index++
+      ) {
+        const element = totalRows[index];
+        if (element) {
+          newSelecteds.push(selectId ? element[selectId] : element);
+        }
+      }
       setSelected(newSelecteds);
       return;
     }
@@ -288,7 +308,7 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
 
   const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
     const selectedIndex = selected.indexOf(name);
-    let newSelected: string[] = [];
+    let newSelected: (string | Record<string, string>)[] = [];
 
     if (selectedIndex === -1) {
       newSelected = newSelected.concat(selected, name);
@@ -308,6 +328,7 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
 
   const handleChangePage = (event: unknown, newPage: number) => {
     headCells = [];
+    setSelected([]);
     setPage(newPage);
     fetchTableData &&
       fetchTableData({ pageSize: rowsPerPage, pageNo: newPage });
@@ -317,6 +338,7 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     headCells = [];
+    setSelected([]);
     const rowsPerPage = parseInt(event.target.value, 10);
     setPage(0);
     setRowsPerPage(rowsPerPage);
@@ -357,6 +379,7 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
               rowCount={totalRows.length}
+              rowsPerPage={rowsPerPage}
             />
             <TableBody>
               {stableSort(totalRows, getComparator(order, orderBy))
