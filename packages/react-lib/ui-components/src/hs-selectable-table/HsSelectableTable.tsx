@@ -432,7 +432,9 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
                 })}
               {emptyRows > 0 && (
                 <TableRow style={{ height: 53 * emptyRows }}>
-                  <TableCell colSpan={6} />
+                  <TableCell colSpan={rowKeys.length} rowSpan={rowKeys.length}>
+                    <h1>Data not available</h1>
+                  </TableCell>
                 </TableRow>
               )}
             </TableBody>
