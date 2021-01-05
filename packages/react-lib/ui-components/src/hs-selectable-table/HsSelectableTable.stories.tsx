@@ -10,6 +10,12 @@ export default {
 const fetchTableData = (e) => {
   action(e);
 };
+const deleteColumn = (e) => {
+  action(e);
+};
+const exportColumn = (e) => {
+  action(e);
+};
 const data: SelectableTableProps = {
   columns: ['Name', 'Calories', 'Fat', 'Cards', 'Protein'],
   rowKeys: ['name', 'calories', 'fat', 'carbs', 'protein'],
@@ -37,6 +43,8 @@ const data: SelectableTableProps = {
   sortingId: 'name',
   selectId: 'name',
   fetchTableData: fetchTableData,
+  deleteColumn: deleteColumn,
+  exportColumn: exportColumn,
 };
 
 export const HsSelectableTableComponent: FC = () => (

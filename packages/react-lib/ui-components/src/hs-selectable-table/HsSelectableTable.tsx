@@ -26,7 +26,7 @@ import ImportExportIcon from '@material-ui/icons/ImportExport';
 import { SelectableTableProps } from './ISelectableTable';
 
 type Order = 'asc' | 'desc';
-
+let sortedRows: any = [];
 interface HeadCell {
   disablePadding: boolean;
   id: any;
@@ -39,13 +39,16 @@ interface EnhancedTableProps {
   onRequestSort: (event: React.MouseEvent<unknown>, property: string) => void;
   onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
   order: Order;
-  orderBy: string;
+  orderBy: string | number;
   rowCount: number;
   rowsPerPage: number;
 }
 
 interface EnhancedTableToolbarProps {
   numSelected: number;
+  rowsSelected: (string | Record<string, string>)[];
+  deleteColumn?: (event: (string | Record<string, string>)[]) => void;
+  exportColumn?: (event: (string | Record<string, string>)[]) => void;
 }
 
 let headCells: HeadCell[] = [];
@@ -79,7 +82,9 @@ function stableSort<T>(array: T[], comparator: (a: T, b: T) => number) {
     if (order !== 0) return order;
     return a[1] - b[1];
   });
-  return stabilizedThis.map((el) => el[0]);
+  const stabilized = stabilizedThis.map((el) => el[0]);
+  sortedRows = stabilized;
+  return stabilized;
 }
 
 function EnhancedTableHead(props: EnhancedTableProps) {
@@ -168,8 +173,13 @@ const useToolbarStyles = makeStyles((theme: Theme) =>
 
 const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
   const classes = useToolbarStyles();
-  const { numSelected } = props;
-
+  const { numSelected, rowsSelected } = props;
+  const deleteSelected = (e) => {
+    props.deleteColumn && props.deleteColumn(rowsSelected);
+  };
+  const exportSelected = (e) => {
+    props.exportColumn && props.exportColumn(rowsSelected);
+  };
   return (
     <Toolbar
       className={clsx(classes.root, {
@@ -186,12 +196,12 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
           >
             {numSelected} selected
           </Typography>
-          <Tooltip title="Delete">
+          <Tooltip title="Delete" onClick={deleteSelected}>
             <IconButton aria-label="delete">
               <DeleteIcon />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Import/Export">
+          <Tooltip title="Import/Export" onClick={exportSelected}>
             <IconButton aria-label="ImportExport">
               <ImportExportIcon />
             </IconButton>
@@ -232,6 +242,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     tableHead: {
       fontSize: 12,
+      fontWeight: 'bold',
     },
     visuallyHidden: {
       border: 0,
@@ -264,10 +275,12 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
   sortingId,
   selectId,
   fetchTableData,
+  deleteColumn,
+  exportColumn,
 }: SelectableTableProps) => {
   const classes = useStyles();
   const [order, setOrder] = useState<Order>('asc');
-  const [orderBy, setOrderBy] = useState<string>(
+  const [orderBy, setOrderBy] = useState<string | number>(
     sortingId || (rowKeys && rowKeys[0])
   );
   const [selected, setSelected] = useState<(string | Record<string, string>)[]>(
@@ -283,6 +296,7 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
+    setSelected([]);
   };
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -295,7 +309,7 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
         index < currentIndex + rowsPerPage;
         index++
       ) {
-        const element = totalRows[index];
+        const element = sortedRows[index];
         if (element) {
           newSelecteds.push(selectId ? element[selectId] : element);
         }
@@ -306,8 +320,8 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
     setSelected([]);
   };
 
-  const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event: React.MouseEvent<unknown>, name: any) => {
+    const selectedIndex: number = selected.indexOf(name);
     let newSelected: (string | Record<string, string>)[] = [];
 
     if (selectedIndex === -1) {
@@ -356,14 +370,20 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
       </>
     );
   };
-  const isSelected = (name: string) => selected.indexOf(name) !== -1;
+  const isSelected: any = (name: string | Record<string, string>) =>
+    selected.indexOf(name) !== -1;
   const emptyRows =
     rowsPerPage - Math.min(rowsPerPage, totalRows.length - page * rowsPerPage);
   createHeadCells(rowKeys, columns);
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <EnhancedTableToolbar
+          numSelected={selected.length}
+          rowsSelected={selected}
+          deleteColumn={deleteColumn}
+          exportColumn={exportColumn}
+        />
         <TableContainer>
           <Table
             className={classes.table}
@@ -384,7 +404,7 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
             <TableBody>
               {stableSort(totalRows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row: Record<string, string>, index) => {
+                .map((row: Record<string, string | number>, index) => {
                   const isItemSelected = sortingId
                     ? isSelected(row[sortingId])
                     : false;

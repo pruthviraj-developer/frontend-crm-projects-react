@@ -10,7 +10,8 @@ export interface SelectableTableProps {
   rows: Array<Record<string, string>>;
   rowKeys: Array<string>;
   disableExport?: boolean;
-  exportColumn?: (event: Record<string, string>) => void;
+  deleteColumn?: (event: (string | Record<string, string>)[]) => void;
+  exportColumn?: (event: (string | Record<string, string>)[]) => void;
   fetchTableData: (event: tableParams) => void;
   tableActions?: TableAction[];
   sortingId?: string;
