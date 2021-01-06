@@ -27,6 +27,7 @@ import { SelectableTableProps } from './ISelectableTable';
 
 type Order = 'asc' | 'desc';
 let sortedRows: any = [];
+
 interface HeadCell {
   disablePadding: boolean;
   id: any;
@@ -42,6 +43,7 @@ interface EnhancedTableProps {
   orderBy: string | number;
   rowCount: number;
   rowsPerPage: number;
+  sorting?: boolean;
 }
 
 interface EnhancedTableToolbarProps {
@@ -53,41 +55,7 @@ interface EnhancedTableToolbarProps {
 
 let headCells: HeadCell[] = [];
 
-function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
-
-function getComparator<Key extends keyof any>(
-  order: Order,
-  orderBy: Key
-): (
-  a: { [key in Key]: number | string },
-  b: { [key in Key]: number | string }
-) => number {
-  return order === 'desc'
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-function stableSort<T>(array: T[], comparator: (a: T, b: T) => number) {
-  const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) return order;
-    return a[1] - b[1];
-  });
-  const stabilized = stabilizedThis.map((el) => el[0]);
-  sortedRows = stabilized;
-  return stabilized;
-}
-
-function EnhancedTableHead(props: EnhancedTableProps) {
+const EnhancedTableHead = (props: EnhancedTableProps) => {
   const {
     classes,
     onSelectAllClick,
@@ -97,12 +65,15 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     rowCount,
     rowsPerPage,
     onRequestSort,
+    sorting,
   } = props;
   const createSortHandler = (property: string) => (
     event: React.MouseEvent<unknown>
   ) => {
-    headCells = [];
-    onRequestSort(event, property);
+    if (sorting) {
+      headCells = [];
+      onRequestSort(event, property);
+    }
   };
 
   return (
@@ -131,9 +102,11 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             className={classes.tableHead}
           >
             <TableSortLabel
-              active={orderBy === headCell.id}
+              active={sorting && orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : 'asc'}
               onClick={createSortHandler(headCell.id)}
+              hideSortIcon={!sorting}
+              style={{ cursor: 'default' || (sorting && 'pointer') }}
             >
               {headCell.label}
               {orderBy === headCell.id ? (
@@ -147,7 +120,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
       </TableRow>
     </TableHead>
   );
-}
+};
 
 const useToolbarStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -241,8 +214,17 @@ const useStyles = makeStyles((theme: Theme) =>
       minWidth: 750,
     },
     tableHead: {
-      fontSize: 12,
+      fontSize: 14,
       fontWeight: 'bold',
+    },
+    tableRow: {
+      fontSize: 12,
+    },
+    caption: {
+      fontSize: 14,
+    },
+    toolbar: {
+      fontSize: 14,
     },
     visuallyHidden: {
       border: 0,
@@ -275,9 +257,12 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
   columns,
   sortingId,
   selectId,
+  sorting,
   fetchTableData,
   deleteColumn,
   exportColumn,
+  stableSort,
+  getComparator,
 }: SelectableTableProps) => {
   const classes = useStyles();
   const [order, setOrder] = useState<Order>('asc');
@@ -364,13 +349,21 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
     return (
       <>
         {rowKeys.map((name: string, index: number) => (
-          <TableCell align="left" key={index}>
+          <TableCell align="left" key={index} className={classes.tableRow}>
             {row[name]}
           </TableCell>
         ))}
       </>
     );
   };
+
+  const sortData = () => {
+    sortedRows =
+      stableSort &&
+      stableSort(totalRows, getComparator && getComparator(order, orderBy));
+    return sortedRows;
+  };
+
   const isSelected: any = (name: string | Record<string, string>) =>
     selected.indexOf(name) !== -1;
   const emptyRows =
@@ -401,9 +394,10 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
               onRequestSort={handleRequestSort}
               rowCount={totalRows.length}
               rowsPerPage={rowsPerPage}
+              sorting={sorting}
             />
             <TableBody>
-              {stableSort(totalRows, getComparator(order, orderBy))
+              {sortData()
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row: Record<string, string | number>, index) => {
                   const isItemSelected = sortingId
@@ -431,7 +425,7 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
                     </TableRow>
                   );
                 })}
-              {emptyRows > 0 && (
+              {totalRows.length === 0 && (
                 <TableRow style={{ height: 53 * emptyRows }}>
                   <TableCell colSpan={rowKeys.length} rowSpan={rowKeys.length}>
                     <h1>Data not available</h1>
@@ -449,6 +443,10 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
           page={page}
           onChangePage={handleChangePage}
           onChangeRowsPerPage={handleChangeRowsPerPage}
+          classes={{
+            toolbar: classes.toolbar,
+            caption: classes.caption,
+          }}
         />
       </Paper>
     </div>

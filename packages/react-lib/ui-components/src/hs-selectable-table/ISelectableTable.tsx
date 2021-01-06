@@ -13,7 +13,10 @@ export interface SelectableTableProps {
   deleteColumn?: (event: (string | Record<string, string>)[]) => void;
   exportColumn?: (event: (string | Record<string, string>)[]) => void;
   fetchTableData: (event: tableParams) => void;
+  stableSort?: (array: any, comparator: any) => number;
+  getComparator?: (a: any, b: any) => any;
   tableActions?: TableAction[];
   sortingId?: string;
   selectId?: string;
+  sorting?: boolean;
 }
