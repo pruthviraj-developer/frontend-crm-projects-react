@@ -259,6 +259,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const createHeadCells = (rowKeys, columns) => {
+  headCells = [];
   for (let index = 0; index < rowKeys.length; index++) {
     headCells.push({
       id: rowKeys[index],
