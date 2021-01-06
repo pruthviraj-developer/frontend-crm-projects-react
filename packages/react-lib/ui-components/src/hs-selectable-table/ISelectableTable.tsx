@@ -14,6 +14,7 @@ export interface SelectableTableProps {
   exportColumn?: (event: (string | Record<string, string>)[]) => void;
   fetchTableData: (event: tableParams) => void;
   stableSort?: (array: any, comparator: any) => number;
+  onSort?: (a: any, b: any) => void;
   getComparator?: (a: any, b: any) => any;
   tableActions?: TableAction[];
   sortingId?: string;

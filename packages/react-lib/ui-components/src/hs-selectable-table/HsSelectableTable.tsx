@@ -26,7 +26,7 @@ import ImportExportIcon from '@material-ui/icons/ImportExport';
 import { SelectableTableProps } from './ISelectableTable';
 
 type Order = 'asc' | 'desc';
-let sortedRows: any = [];
+let sortedRows: Array<Record<string, string>> = [];
 
 interface HeadCell {
   disablePadding: boolean;
@@ -263,6 +263,7 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
   exportColumn,
   stableSort,
   getComparator,
+  onSort,
 }: SelectableTableProps) => {
   const classes = useStyles();
   const [order, setOrder] = useState<Order>('asc');
@@ -280,11 +281,12 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
     property: string
   ) => {
     const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
+    const sortingOrder = isAsc ? 'desc' : 'asc';
+    setOrder(sortingOrder);
     setOrderBy(property);
+    onSort && onSort(sortingOrder, property);
     setSelected([]);
   };
-
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     headCells = [];
     if (event.target.checked) {

@@ -16,6 +16,9 @@ const deleteColumn = (e) => {
 const exportColumn = (e) => {
   action(e);
 };
+const onSort = (sortingOrder, sortBy) => {
+  action(sortingOrder, sortBy);
+};
 const descendingComparator = (a, b, orderBy) => {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -65,12 +68,13 @@ const data: SelectableTableProps = {
   ],
   sortingId: 'name',
   selectId: 'name',
-  sorting: true,
+  sorting: false,
   fetchTableData: fetchTableData,
   deleteColumn: deleteColumn,
   exportColumn: exportColumn,
   stableSort: stableSort,
   getComparator: getComparator,
+  onSort: onSort,
 };
 
 export const HsSelectableTableComponent: FC = () => (
