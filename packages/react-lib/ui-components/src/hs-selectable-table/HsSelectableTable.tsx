@@ -284,7 +284,13 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
     const sortingOrder = isAsc ? 'desc' : 'asc';
     setOrder(sortingOrder);
     setOrderBy(property);
-    onSort && onSort(sortingOrder, property);
+    onSort &&
+      onSort({
+        order: sortingOrder,
+        orderBy: property,
+        pageSize: rowsPerPage,
+        pageNo: page,
+      });
     setSelected([]);
   };
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -333,7 +339,12 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
     setSelected([]);
     setPage(newPage);
     fetchTableData &&
-      fetchTableData({ pageSize: rowsPerPage, pageNo: newPage });
+      fetchTableData({
+        order,
+        orderBy,
+        pageSize: rowsPerPage,
+        pageNo: newPage,
+      });
   };
 
   const handleChangeRowsPerPage = (
@@ -344,7 +355,8 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
     const rowsPerPage = parseInt(event.target.value, 10);
     setPage(0);
     setRowsPerPage(rowsPerPage);
-    fetchTableData && fetchTableData({ pageSize: rowsPerPage, pageNo: 0 });
+    fetchTableData &&
+      fetchTableData({ order, orderBy, pageSize: rowsPerPage, pageNo: 0 });
   };
 
   const generateRow = (row) => {

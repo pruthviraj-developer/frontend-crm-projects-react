@@ -68,7 +68,7 @@ const data: SelectableTableProps = {
   ],
   sortingId: 'name',
   selectId: 'name',
-  sorting: false,
+  sorting: true,
   fetchTableData: fetchTableData,
   deleteColumn: deleteColumn,
   exportColumn: exportColumn,

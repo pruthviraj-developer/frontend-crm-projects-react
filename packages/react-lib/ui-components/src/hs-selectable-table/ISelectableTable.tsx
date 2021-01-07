@@ -1,8 +1,13 @@
-import { tableParams } from '@hs/services';
-
 export interface TableAction {
   url: string;
   display: string;
+}
+
+interface filterQueryParams {
+  order: string;
+  orderBy: string | number;
+  pageSize: number;
+  pageNo: number;
 }
 
 export interface SelectableTableProps {
@@ -12,9 +17,9 @@ export interface SelectableTableProps {
   disableExport?: boolean;
   deleteColumn?: (event: (string | Record<string, string>)[]) => void;
   exportColumn?: (event: (string | Record<string, string>)[]) => void;
-  fetchTableData: (event: tableParams) => void;
+  fetchTableData: (event: filterQueryParams) => void;
   stableSort?: (array: any, comparator: any) => number;
-  onSort?: (a: any, b: any) => void;
+  onSort?: (event: filterQueryParams) => void;
   getComparator?: (a: any, b: any) => any;
   tableActions?: TableAction[];
   sortingId?: string;
