@@ -81,7 +81,7 @@ const defaultFilterValues = {
 const tableColumns: Array<string> = ["PID's", 'Status', 'Priority', 'Action'];
 const tableActions: Array<TableAction> = [
   { display: 'Mark Non-procurable', url: '/mark-non-procurable' },
-  { display: 'Modify Fulfillment status', url: '/modify-fulfillment-status' },
+  { display: 'Modify Fulfillment Status', url: '/modify-fulfillment-status' },
   { display: 'Transfer PID : No Modification', url: '/transfer-pid' },
   { display: 'Transfer PID : Modify Details', url: '/transfer-revised-pids' },
 ];
