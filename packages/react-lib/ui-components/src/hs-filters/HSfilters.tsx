@@ -1,17 +1,23 @@
 import React, { FC, useState } from 'react';
-import { Formik } from 'formik';
+import { Formik, Field, Form } from 'formik';
+import {
+  Autocomplete,
+  AutocompleteRenderInputParams,
+} from 'formik-material-ui-lab';
 import clsx from 'clsx';
-import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
-import Button from '@material-ui/core/Button';
-import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
-import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+
+import {
+  TextField,
+  TextField as MuiTextField,
+  Grid,
+  makeStyles,
+  MenuItem,
+  Paper,
+  Button,
+} from '@material-ui/core';
+
+import { FileUploadSideBarOption } from './IFilters';
 
 const useStyles = makeStyles({
   list: {
@@ -22,10 +28,7 @@ const useStyles = makeStyles({
   },
 });
 
-
-const initialValues = {
-  title: ''
-};
+const initialValues = {};
 export const HsFilters: FC = () => {
   const classes = useStyles();
   const [state, setState] = useState({
@@ -36,48 +39,161 @@ export const HsFilters: FC = () => {
   });
   const [filtersData, setFiltersData] = useState(initialValues);
   const toggleDrawer = (anchor, open) => (event) => {
-    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+    if (
+      event.type === 'keydown' &&
+      (event.key === 'Tab' || event.key === 'Shift')
+    ) {
       return;
     }
 
     setState({ ...state, [anchor]: open });
   };
 
+  const reasonOptions = [
+    { display: 'Non due to quality and sizing', value: '1kjh', id: '1' },
+    { display: 'Proc high return due to other reason', value: 'lkj2', id: '2' },
+  ];
+
+  const reasonSideBarOption: FileUploadSideBarOption = {
+    isSelect: true,
+    name: 'sreason',
+    label: 'mReason',
+    options: reasonOptions,
+    type: 'select',
+  };
+
+  const testFieldSideBarOption: FileUploadSideBarOption = {
+    isSelect: true,
+    name: 'treason',
+    label: 'Text Field Reason',
+  };
+
+  const autoSideBarOption: FileUploadSideBarOption = {
+    isSelect: true,
+    name: 'areason',
+    label: 'Auto Reason',
+    options: reasonOptions,
+    type: 'autocomplete',
+  };
+  const sideBar = [
+    autoSideBarOption,
+    reasonSideBarOption,
+    testFieldSideBarOption,
+  ];
   const list = (anchor) => (
     <div
       className={clsx(classes.list, {
         [classes.fullList]: anchor === 'top' || anchor === 'bottom',
       })}
       role="presentation"
-      onClick={toggleDrawer(anchor, false)}
-      onKeyDown={toggleDrawer(anchor, false)}
+      style={{ width: '500px', margin: '10px' }}
+      // onClick={toggleDrawer(anchor, false)}
+      // onKeyDown={toggleDrawer(anchor, false)}
     >
-      {/* <List>
-        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-      </List> */}
-      {/* <Divider /> */}
-      <Formik enableReinitialize={true}
-      initialValues={filtersData}
-      onSubmit={(values, { setSubmitting }) => {
-        console.log(values);
-        setTimeout(() => {
-          setSubmitting(false);
-        },0);
-      }}
+      <Formik
+        enableReinitialize={true}
+        initialValues={filtersData}
+        onSubmit={(values, { setSubmitting }) => {
+          setTimeout(() => {
+            setSubmitting(false);
+          }, 0);
+        }}
       >
-        {({
-        }) => (
-          <form autoComplete="off">
-            {/* <pre>{JSON.stringify(values, null, 4)}</pre> */}
-          </form>
+        {({ values, errors, setFieldValue, touched }) => (
+          <Form autoComplete="off">
+            <Grid container direction="column" justify="center" spacing={1}>
+              <Paper variant="outlined" style={{ padding: '10px 20px' }}>
+                <pre>{JSON.stringify(values, null, 4)}</pre>
+                <Grid container direction="column" justify="center" spacing={3}>
+                  {sideBar &&
+                    sideBar.map((sideBarOption: FileUploadSideBarOption) => {
+                      if (sideBarOption.type === 'autocomplete') {
+                        return (
+                          <Grid item xs>
+                            <Field
+                              multiple
+                              variant="standard"
+                              name={sideBarOption.name}
+                              label={sideBarOption.label}
+                              component={Autocomplete}
+                              options={sideBarOption.options || []}
+                              getOptionLabel={(option) =>
+                                option.display ? option.display : ''
+                              }
+                              renderInput={(
+                                params: AutocompleteRenderInputParams
+                              ) => (
+                                <MuiTextField
+                                  {...params}
+                                  error={touched['sort'] && !!errors['sort']}
+                                  helperText={touched['sort'] && errors['sort']}
+                                  label={sideBarOption.label}
+                                  variant="outlined"
+                                />
+                              )}
+                            />
+                          </Grid>
+                        );
+                      } else if (sideBarOption.type === 'select') {
+                        return (
+                          <Grid item xs>
+                            <Field
+                              select
+                              variant={'outlined'}
+                              name={sideBarOption.name}
+                              label={sideBarOption.label}
+                              component={TextField}
+                              type="text"
+                              inputProps={{
+                                id: 'ol-select-type',
+                              }}
+                              onChange={(
+                                evt: React.ChangeEvent<HTMLInputElement>
+                              ) => {
+                                setFieldValue(
+                                  sideBarOption.name,
+                                  evt.target ? evt.target.value : ''
+                                );
+                              }}
+                              fullWidth
+                            >
+                              {sideBarOption?.options?.map((item) => (
+                                <MenuItem key={item.key} value={item.value}>
+                                  {item.display}
+                                </MenuItem>
+                              ))}
+                            </Field>
+                          </Grid>
+                        );
+                      } else {
+                        return (
+                          <Grid item xs>
+                            <Field
+                              variant={'outlined'}
+                              name={sideBarOption.name}
+                              label={sideBarOption.label}
+                              component={TextField}
+                              type="text"
+                              onChange={(
+                                evt: React.ChangeEvent<HTMLInputElement>
+                              ) => {
+                                setFieldValue(
+                                  sideBarOption.name,
+                                  evt.target ? evt.target.value : ''
+                                );
+                              }}
+                              fullWidth
+                            ></Field>
+                          </Grid>
+                        );
+                      }
+                    })}
+                </Grid>
+              </Paper>
+            </Grid>
+          </Form>
         )}
       </Formik>
-
     </div>
   );
 
@@ -86,11 +202,15 @@ export const HsFilters: FC = () => {
       {['left', 'right', 'top', 'bottom'].map((anchor) => (
         <React.Fragment key={anchor}>
           <Button onClick={toggleDrawer(anchor, true)}>{anchor}</Button>
-          <Drawer anchor={anchor} open={state[anchor]} onClose={toggleDrawer(anchor, false)}>
+          <Drawer
+            anchor={anchor}
+            open={state[anchor]}
+            onClose={toggleDrawer(anchor, false)}
+          >
             {list(anchor)}
           </Drawer>
         </React.Fragment>
       ))}
     </div>
   );
-}
+};
