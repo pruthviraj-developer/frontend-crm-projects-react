@@ -94,7 +94,7 @@ export const NonProcurableCurrentVendor: FC = () => {
   // toast('🦄 Wow so easy!');
   return (
     <StyledCntnr>
-      <h1>Modify Fulfilment status</h1>
+      <h1>Modify Fulfillment Status</h1>
       <FileUploadPage
         acceptType={['xlsx']}
         onSubmit={onSubmit}
