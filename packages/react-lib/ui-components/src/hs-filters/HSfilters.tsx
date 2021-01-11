@@ -5,7 +5,6 @@ import {
   AutocompleteRenderInputParams,
 } from 'formik-material-ui-lab';
 import clsx from 'clsx';
-import Drawer from '@material-ui/core/Drawer';
 
 import {
   TextField,
@@ -15,9 +14,10 @@ import {
   MenuItem,
   Paper,
   Button,
+  Drawer,
 } from '@material-ui/core';
 
-import { FileUploadSideBarOption } from './IFilters';
+import { FiltersOptions, AutoCompleteOptions, IHsFilters } from './IFilters';
 
 const useStyles = makeStyles({
   list: {
@@ -29,7 +29,10 @@ const useStyles = makeStyles({
 });
 
 const initialValues = {};
-export const HsFilters: FC = () => {
+export const HsFilters: FC<IHsFilters> = ({
+  sideBar,
+  defaultSelectedValues,
+}: IHsFilters) => {
   const classes = useStyles();
   const [state, setState] = useState({
     top: false,
@@ -37,7 +40,9 @@ export const HsFilters: FC = () => {
     bottom: false,
     right: false,
   });
-  const [filtersData, setFiltersData] = useState(initialValues);
+  const [selectedFilters, setSelectedFilters] = useState(
+    defaultSelectedValues || initialValues
+  );
   const toggleDrawer = (anchor, open) => (event) => {
     if (
       event.type === 'keydown' &&
@@ -45,41 +50,9 @@ export const HsFilters: FC = () => {
     ) {
       return;
     }
-
     setState({ ...state, [anchor]: open });
   };
 
-  const reasonOptions = [
-    { display: 'Non due to quality and sizing', value: '1kjh', id: '1' },
-    { display: 'Proc high return due to other reason', value: 'lkj2', id: '2' },
-  ];
-
-  const reasonSideBarOption: FileUploadSideBarOption = {
-    isSelect: true,
-    name: 'sreason',
-    label: 'mReason',
-    options: reasonOptions,
-    type: 'select',
-  };
-
-  const testFieldSideBarOption: FileUploadSideBarOption = {
-    isSelect: true,
-    name: 'treason',
-    label: 'Text Field Reason',
-  };
-
-  const autoSideBarOption: FileUploadSideBarOption = {
-    isSelect: true,
-    name: 'areason',
-    label: 'Auto Reason',
-    options: reasonOptions,
-    type: 'autocomplete',
-  };
-  const sideBar = [
-    autoSideBarOption,
-    reasonSideBarOption,
-    testFieldSideBarOption,
-  ];
   const list = (anchor) => (
     <div
       className={clsx(classes.list, {
@@ -92,12 +65,8 @@ export const HsFilters: FC = () => {
     >
       <Formik
         enableReinitialize={true}
-        initialValues={filtersData}
-        onSubmit={(values, { setSubmitting }) => {
-          setTimeout(() => {
-            setSubmitting(false);
-          }, 0);
-        }}
+        initialValues={selectedFilters}
+        onSubmit={()=>{}}
       >
         {({ values, errors, setFieldValue, touched }) => (
           <Form autoComplete="off">
@@ -106,7 +75,7 @@ export const HsFilters: FC = () => {
                 <pre>{JSON.stringify(values, null, 4)}</pre>
                 <Grid container direction="column" justify="center" spacing={3}>
                   {sideBar &&
-                    sideBar.map((sideBarOption: FileUploadSideBarOption) => {
+                    sideBar.map((sideBarOption: FiltersOptions) => {
                       if (sideBarOption.type === 'autocomplete') {
                         return (
                           <Grid item xs>
@@ -120,6 +89,10 @@ export const HsFilters: FC = () => {
                               getOptionLabel={(option) =>
                                 option.display ? option.display : ''
                               }
+                              getOptionSelected={(
+                                option: AutoCompleteOptions,
+                                selectedValue: AutoCompleteOptions
+                              ) => option.key == selectedValue?.key}
                               renderInput={(
                                 params: AutocompleteRenderInputParams
                               ) => (
@@ -143,6 +116,7 @@ export const HsFilters: FC = () => {
                               name={sideBarOption.name}
                               label={sideBarOption.label}
                               component={TextField}
+                              value={values[sideBarOption.name]}
                               type="text"
                               inputProps={{
                                 id: 'ol-select-type',
@@ -157,8 +131,8 @@ export const HsFilters: FC = () => {
                               }}
                               fullWidth
                             >
-                              {sideBarOption?.options?.map((item) => (
-                                <MenuItem key={item.key} value={item.value}>
+                              {sideBarOption?.options?.map((item, index) => (
+                                <MenuItem key={index} value={item.value}>
                                   {item.display}
                                 </MenuItem>
                               ))}

@@ -1,11 +1,61 @@
 import React, { FC } from 'react';
 import { HsFilters } from './HSfilters';
+import { FiltersOptions, IHsFilters } from './IFilters';
 export default {
   title: 'HsFilters',
   component: HsFilters,
 };
 
-export const HsFiltersComponent: FC = () => (
-    <HsFilters  />
-  );
-  
+const reasonOptions = [
+  {
+    display: 'Non due to quality and sizing',
+    value: '1kjh',
+    key: '1kjh',
+    id: '1',
+  },
+  {
+    display: 'Proc high return due to other reason',
+    value: 'lkj2',
+    key: 'lkj2',
+    id: '2',
+  },
+];
+
+const reasonSideBarOption: FiltersOptions = {
+  isSelect: true,
+  name: 'sreason',
+  label: 'mReason',
+  options: reasonOptions,
+  type: 'select',
+};
+
+const testFieldSideBarOption: FiltersOptions = {
+  isSelect: true,
+  name: 'treason',
+  label: 'Text Field Reason',
+};
+
+const autoSideBarOption: FiltersOptions = {
+  isSelect: true,
+  name: 'areason',
+  label: 'Auto Reason',
+  options: reasonOptions,
+  type: 'autocomplete',
+};
+
+const data: IHsFilters = {
+  sideBar: [autoSideBarOption, reasonSideBarOption, testFieldSideBarOption],
+  defaultSelectedValues: {
+    areason: [
+      {
+        display: 'Non due to quality and sizing',
+        value: '1kjh',
+        key: '1kjh',
+        id: '1',
+      },
+    ],
+    sreason: '1kjh',
+  },
+};
+
+export const HsFiltersComponent: FC = () => <HsFilters {...data} />;
