@@ -53,8 +53,7 @@ const data: IHsFilters = {
         key: '1kjh',
         id: '1',
       },
-    ],
-    sreason: '1kjh',
+    ]
   },
 };
 

@@ -15,6 +15,7 @@ import {
   Paper,
   Button,
   Drawer,
+  Select
 } from '@material-ui/core';
 
 import { FiltersOptions, AutoCompleteOptions, IHsFilters } from './IFilters';
@@ -115,8 +116,7 @@ export const HsFilters: FC<IHsFilters> = ({
                               variant={'outlined'}
                               name={sideBarOption.name}
                               label={sideBarOption.label}
-                              component={TextField}
-                              value={values[sideBarOption.name]}
+                              component={Select}
                               type="text"
                               inputProps={{
                                 id: 'ol-select-type',
@@ -131,8 +131,8 @@ export const HsFilters: FC<IHsFilters> = ({
                               }}
                               fullWidth
                             >
-                              {sideBarOption?.options?.map((item, index) => (
-                                <MenuItem key={index} value={item.value}>
+                              {sideBarOption?.options?.map((item:any, index) => (
+                                <MenuItem key={index} value={item}>
                                   {item.display}
                                 </MenuItem>
                               ))}

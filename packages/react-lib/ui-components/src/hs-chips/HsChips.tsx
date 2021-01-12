@@ -1,29 +1,30 @@
 import React, { FC, useState } from 'react';
 import Chip from '@material-ui/core/Chip';
-// import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import { IHsChips, Ilist, FiltersOption } from './IHsChips';
 
-// const useStyles = makeStyles({
-// });
+const useStyles = makeStyles({
+  chips : {
+    margin:'5px'
+  }
+});
 
 export const HsChips: FC<IHsChips> = ({objectsList}: IHsChips) => {
-//   const classes = useStyles();
+  const classes = useStyles();
   const [data, setData] = useState(objectsList || []);
-// const mapList = data.forEach(element => {
-//     mapList.set(element.key,element.options) 
-// });
-  const handleDelete = (key:string,index:number) => {
-    console.info('You clicked the delete icon.');
+  const handleDelete = (arrayindex:number, index:number) => {
+    const obj  = {...data[arrayindex]};
+    obj.options.splice(index,1);
+    data.splice(arrayindex,1);
+    setData([ ...data,obj]);
   };
 
   return (
     <div>
-        {/* {JSON.stringify(data)} */}
-        {data.map((obj:Ilist) => (
+        {data.map((obj:Ilist, arrayindex) => (
             obj.options.map(
-                (listObject:FiltersOption,index:number) => 
-                (<Chip label={listObject.display} onDelete={() => {handleDelete(obj.key,index);}} color="primary" />)
-                )
+              (listObject:FiltersOption,index:number) => 
+              (<Chip key={listObject.key || index} label={listObject.display} onDelete={() => {handleDelete(arrayindex, index);}} color="primary"  className={classes.chips}/>))
         ))}
     </div>
   );
