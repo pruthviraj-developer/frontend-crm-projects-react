@@ -11,7 +11,7 @@ import {
   SelectedRectAngle,
   DeSelectedRectAngle,
   NonProcIcon,
-} from '../../dist/';
+} from '../../dist/icons.esm';
 import styled from '@emotion/styled';
 
 export default {
