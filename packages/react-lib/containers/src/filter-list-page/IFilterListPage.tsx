@@ -1,3 +1,10 @@
+interface state {
+    top?: boolean;
+    left?: boolean;
+    bottom?: boolean;
+    right?: boolean;
+}
+
 export interface FiltersOption {
     display: string;
     id?: string | number;
@@ -36,8 +43,9 @@ export interface FiltersListPageProps{
     sideBar: Array<FiltersOptions>;
 }
 
-export interface IHsFilters {
+export interface IHsFiltersList {
     sideBar: Array<FiltersOptions>;
+    sideBarState?: state
     defaultSelectedValues?: any;
     updateFilters?:(a:any) => void;
     updateRemovedFilters?:(a:any) => void;   

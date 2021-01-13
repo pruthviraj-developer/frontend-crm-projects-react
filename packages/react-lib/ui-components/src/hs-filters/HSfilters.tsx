@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { Formik, Field, Form } from 'formik';
 import {
   Autocomplete,
@@ -13,7 +13,6 @@ import {
   makeStyles,
   MenuItem,
   Paper,
-  Button,
   Drawer,
   Select
 } from '@material-ui/core';
@@ -37,11 +36,13 @@ export const HsFilters: FC<IHsFilters> = ({
   updateFilters
 }: IHsFilters) => {
   const classes = useStyles();
-  const [state, setState] = useState(sideBarState || {
-    top: false,
-    left: false,
-    bottom: false,
-    right: false,
+  const [state, setState] = useState(()=>{
+    return sideBarState || {
+      top: false,
+      left: false,
+      bottom: false,
+      right: false,
+    }
   });
   const [selectedFilters, setSelectedFilters] = useState(
     defaultSelectedValues || initialValues
@@ -181,11 +182,14 @@ export const HsFilters: FC<IHsFilters> = ({
     </div>
   );
 
+  useEffect(() => {
+    setState(sideBarState || {});
+  }, [sideBarState])
+
   return (
     <div>
       {['left', 'right', 'top', 'bottom'].map((anchor:any) => (
         <React.Fragment key={anchor}>
-          <Button onClick={toggleDrawer(anchor, true)}>{anchor}</Button>
           <Drawer
             anchor={anchor}
             open={state[anchor]}

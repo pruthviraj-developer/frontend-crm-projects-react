@@ -1,8 +1,10 @@
 import React, { FC } from 'react';
 import { FilterListPage } from './FilterListPage';
-import { FiltersOptions } from './IFilterListPage';
+import { FiltersOptions , IHsFiltersList} from './IFilterListPage';
+import { Story } from '@storybook/react/types-6-0';
+
 export default {
-  title: 'HsFilterListPage',
+  title: 'Hs Filter List Page',
   component: FilterListPage,
 };
 
@@ -43,8 +45,13 @@ const autoSideBarOption: FiltersOptions = {
   type: 'autocomplete',
 };
 
-const data = {
+const props: IHsFiltersList = {
   sideBar: [reasonSideBarOption, testFieldSideBarOption, autoSideBarOption],
 };
 
-export const FilterListPageComponent: FC = () => <FilterListPage {...data} />;
+const Template: Story<IHsFiltersList> = (args) => (
+  <FilterListPage {...args} />
+);
+
+export const FilterListPageComponent = Template.bind({});
+FilterListPageComponent.args = props;

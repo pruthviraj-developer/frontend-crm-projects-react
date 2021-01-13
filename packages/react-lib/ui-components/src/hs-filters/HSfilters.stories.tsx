@@ -50,7 +50,7 @@ const updateFilters = (values) => {
 
 const data: IHsFilters = {
   sideBar: [autoSideBarOption, reasonSideBarOption, testFieldSideBarOption],
-  sideBarState: {left:true},
+  sideBarState: {right:true},
   defaultSelectedValues: {
     areason: [
       {
