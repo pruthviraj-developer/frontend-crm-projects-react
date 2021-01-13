@@ -51,6 +51,7 @@ interface EnhancedTableToolbarProps {
   rowsSelected: (string | Record<string, string>)[];
   deleteColumn?: (event: (string | Record<string, string>)[]) => void;
   exportColumn?: (event: (string | Record<string, string>)[]) => void;
+  showFilters?: (event: any) => void;
 }
 
 let headCells: HeadCell[] = [];
@@ -153,6 +154,11 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
   const exportSelected = () => {
     props.exportColumn && props.exportColumn(rowsSelected);
   };
+
+  const showFilters = () => {
+    props.showFilters && props.showFilters(true);
+  };
+
   return (
     <Toolbar
       className={clsx(classes.root, {
@@ -190,7 +196,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
           >
             Select Rows
           </Typography>
-          <Tooltip title="Filter list">
+          <Tooltip title="Filter list" onClick={showFilters}>
             <IconButton aria-label="filter list">
               <FilterListIcon />
             </IconButton>
@@ -261,6 +267,7 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
   fetchTableData,
   deleteColumn,
   exportColumn,
+  showFilters,
   stableSort,
   getComparator,
   onSort,
@@ -280,7 +287,7 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
     event: React.MouseEvent<unknown>,
     property: string
   ) => {
-    if(event){
+    if (event) {
       const isAsc = orderBy === property && order === 'asc';
       const sortingOrder = isAsc ? 'desc' : 'asc';
       setOrder(sortingOrder);
@@ -317,7 +324,7 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
   };
 
   const handleClick = (event: React.MouseEvent<unknown>, name: any) => {
-    if(event){
+    if (event) {
       const selectedIndex: number = selected.indexOf(name);
       let newSelected: (string | Record<string, string>)[] = [];
 
@@ -339,7 +346,7 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
-    if(event){
+    if (event) {
       headCells = [];
       setSelected([]);
       setPage(newPage);
@@ -384,8 +391,7 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
     return sortedRows;
   };
 
-  const isSelected: any = (name: any) =>
-    selected.indexOf(name) !== -1;
+  const isSelected: any = (name: any) => selected.indexOf(name) !== -1;
   const emptyRows =
     rowsPerPage - Math.min(rowsPerPage, totalRows.length - page * rowsPerPage);
   createHeadCells(rowKeys, columns);
@@ -397,6 +403,7 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
           rowsSelected={selected}
           deleteColumn={deleteColumn}
           exportColumn={exportColumn}
+          showFilters={showFilters}
         />
         <TableContainer>
           <Table

@@ -17,6 +17,7 @@ export interface SelectableTableProps {
   disableExport?: boolean;
   deleteColumn?: (event: (string | Record<string, string>)[]) => void;
   exportColumn?: (event: (string | Record<string, string>)[]) => void;
+  showFilters?: (event: (boolean | Record<string, string>)[]) => void;
   fetchTableData: (event: filterQueryParams) => void;
   stableSort?: (array: any, comparator: any) => number;
   onSort?: (event: filterQueryParams) => void;

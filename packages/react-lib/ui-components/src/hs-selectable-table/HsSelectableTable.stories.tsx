@@ -16,6 +16,10 @@ const deleteColumn = (e) => {
 const exportColumn = (e) => {
   action(e);
 };
+
+const showFilters = (e) => {
+  action(e);
+};
 const onSort = (sortingOrder, sortBy) => {
   action(sortingOrder, sortBy);
 };
@@ -73,6 +77,7 @@ const data: SelectableTableProps = {
   deleteColumn: deleteColumn,
   exportColumn: exportColumn,
   stableSort: stableSort,
+  showFilters,
   getComparator: getComparator,
   onSort: onSort,
 };
