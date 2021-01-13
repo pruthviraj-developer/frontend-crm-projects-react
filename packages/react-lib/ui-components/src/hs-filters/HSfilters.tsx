@@ -18,7 +18,7 @@ import {
   Select
 } from '@material-ui/core';
 
-import { FiltersOptions, AutoCompleteOptions, IHsFilters } from './IFilters';
+import { FFiltersOptions, AutoCompleteOptions, IHsFilters } from './IFilters';
 
 const useStyles = makeStyles({
   list: {
@@ -76,7 +76,7 @@ export const HsFilters: FC<IHsFilters> = ({
               <Paper variant="outlined" style={{ padding: '10px 20px' }}>
                 <Grid container direction="column" justify="center" spacing={3}>
                   {sideBar &&
-                    sideBar.map((sideBarOption: FiltersOptions) => {
+                    sideBar.map((sideBarOption: FFiltersOptions) => {
                       if (sideBarOption.type === 'autocomplete') {
                         return (
                           <Grid item xs key={sideBarOption.name}>

@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { HsFilters } from './HSfilters';
-import { FiltersOptions, IHsFilters } from './IFilters';
+import { FFiltersOptions, IHsFilters } from './IFilters';
 export default {
   title: 'HsFilters',
   component: HsFilters,
@@ -21,7 +21,7 @@ const reasonOptions = [
   },
 ];
 
-const reasonSideBarOption: FiltersOptions = {
+const reasonSideBarOption: FFiltersOptions = {
   isSelect: true,
   name: 'sreason',
   label: 'mReason',
@@ -29,13 +29,13 @@ const reasonSideBarOption: FiltersOptions = {
   type: 'select',
 };
 
-const testFieldSideBarOption: FiltersOptions = {
+const testFieldSideBarOption: FFiltersOptions = {
   isSelect: true,
   name: 'treason',
   label: 'Text Field Reason',
 };
 
-const autoSideBarOption: FiltersOptions = {
+const autoSideBarOption: FFiltersOptions = {
   isSelect: true,
   name: 'areason',
   label: 'Auto Reason',

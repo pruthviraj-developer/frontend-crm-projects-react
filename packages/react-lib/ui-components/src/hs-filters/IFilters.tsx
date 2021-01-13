@@ -1,4 +1,4 @@
-export interface FiltersOption {
+export interface FFiltersOption {
   display: string;
   id?: string | number;
   currencyCode?: string;
@@ -8,13 +8,13 @@ export interface FiltersOption {
   second?: string;
 }
 
-export interface FiltersOptions {
+export interface FFiltersOptions {
   isSelect?: boolean;
   name: string;
   label: string;
   type?: string;
   resetField?: string;
-  options?: FiltersOption[] | null;
+  options?: FFiltersOption[] | null;
   key?: string;
   input_type?: string;
 }
@@ -27,7 +27,7 @@ export interface AutoCompleteOptions {
 }
 
 export interface IHsFilters {
-  sideBar: Array<FiltersOptions>;
+  sideBar: Array<FFiltersOptions>;
   defaultSelectedValues?: any;
   updateFilters?:(a:any) => void;
 }

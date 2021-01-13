@@ -1,4 +1,4 @@
-export interface TableAction {
+export interface STableAction {
   url: string;
   display: string;
 }
@@ -21,7 +21,7 @@ export interface SelectableTableProps {
   stableSort?: (array: any, comparator: any) => number;
   onSort?: (event: filterQueryParams) => void;
   getComparator?: (a: any, b: any) => any;
-  tableActions?: TableAction[];
+  tableActions?: STableAction[];
   sortingId?: string;
   selectId?: string;
   sorting?: boolean;
