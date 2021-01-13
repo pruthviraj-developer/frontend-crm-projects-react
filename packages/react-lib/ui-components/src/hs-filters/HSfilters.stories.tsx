@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { HsFilters } from './HSfilters';
 import { FFiltersOptions, IHsFilters } from './IFilters';
+import { action } from '@storybook/addon-actions';
 export default {
   title: 'HsFilters',
   component: HsFilters,
@@ -44,11 +45,12 @@ const autoSideBarOption: FFiltersOptions = {
 };
 
 const updateFilters = (values) => {
-  // console.log(values);
+  action(values);
 };
 
 const data: IHsFilters = {
   sideBar: [autoSideBarOption, reasonSideBarOption, testFieldSideBarOption],
+  sideBarState: {left:true},
   defaultSelectedValues: {
     areason: [
       {

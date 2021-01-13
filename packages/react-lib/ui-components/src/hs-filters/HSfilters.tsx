@@ -32,11 +32,12 @@ const useStyles = makeStyles({
 const initialValues = {};
 export const HsFilters: FC<IHsFilters> = ({
   sideBar,
+  sideBarState,
   defaultSelectedValues,
   updateFilters
 }: IHsFilters) => {
   const classes = useStyles();
-  const [state, setState] = useState({
+  const [state, setState] = useState(sideBarState || {
     top: false,
     left: false,
     bottom: false,
@@ -119,9 +120,9 @@ export const HsFilters: FC<IHsFilters> = ({
                         );
                       } else if (sideBarOption.type === 'select') {
                         return (
-                          <Grid item xs>
+                          <Grid item xs key={sideBarOption.name}>
                             <Field
-                              select
+                              select="true"
                               variant={'outlined'}
                               name={sideBarOption.name}
                               label={sideBarOption.label}

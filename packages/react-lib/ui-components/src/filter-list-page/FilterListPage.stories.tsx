@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { FilterListPage } from './FilterListPage';
 import { FiltersOptions } from './IFilterListPage';
 export default {
-  title: 'HsFilerListPage',
+  title: 'HsFilterListPage',
   component: FilterListPage,
 };
 

@@ -1,3 +1,10 @@
+interface state {
+  top?: boolean;
+  left?: boolean;
+  bottom?: boolean;
+  right?: boolean;
+}
+
 export interface FFiltersOption {
   display: string;
   id?: string | number;
@@ -28,6 +35,7 @@ export interface AutoCompleteOptions {
 
 export interface IHsFilters {
   sideBar: Array<FFiltersOptions>;
+  sideBarState?: state
   defaultSelectedValues?: any;
   updateFilters?:(a:any) => void;
 }
