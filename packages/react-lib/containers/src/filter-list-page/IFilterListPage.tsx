@@ -31,11 +31,14 @@ export interface AutoCompleteOptions {
     first?: number | string;
 }
 
+export interface FiltersListPageProps{
+    objectsList?:Array<Ilist>;
+    sideBar: Array<FiltersOptions>;
+}
+
 export interface IHsFilters {
     sideBar: Array<FiltersOptions>;
     defaultSelectedValues?: any;
-}
-
-export interface FiltersListPageProps{
-    objectsList:Array<Ilist>
+    updateFilters?:(a:any) => void;
+    updateRemovedFilters?:(a:any) => void;   
 }

@@ -26,7 +26,7 @@ import ImportExportIcon from '@material-ui/icons/ImportExport';
 import { SelectableTableProps } from './ISelectableTable';
 
 type Order = 'asc' | 'desc';
-let sortedRows: Array<Record<string, string>> = [];
+let sortedRows: any = [];
 
 interface HeadCell {
   disablePadding: boolean;
@@ -147,10 +147,10 @@ const useToolbarStyles = makeStyles((theme: Theme) =>
 const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
   const classes = useToolbarStyles();
   const { numSelected, rowsSelected } = props;
-  const deleteSelected = (e) => {
+  const deleteSelected = () => {
     props.deleteColumn && props.deleteColumn(rowsSelected);
   };
-  const exportSelected = (e) => {
+  const exportSelected = () => {
     props.exportColumn && props.exportColumn(rowsSelected);
   };
   return (
@@ -280,18 +280,20 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
     event: React.MouseEvent<unknown>,
     property: string
   ) => {
-    const isAsc = orderBy === property && order === 'asc';
-    const sortingOrder = isAsc ? 'desc' : 'asc';
-    setOrder(sortingOrder);
-    setOrderBy(property);
-    onSort &&
-      onSort({
-        order: sortingOrder,
-        orderBy: property,
-        pageSize: rowsPerPage,
-        pageNo: page,
-      });
-    setSelected([]);
+    if(event){
+      const isAsc = orderBy === property && order === 'asc';
+      const sortingOrder = isAsc ? 'desc' : 'asc';
+      setOrder(sortingOrder);
+      setOrderBy(property);
+      onSort &&
+        onSort({
+          order: sortingOrder,
+          orderBy: property,
+          pageSize: rowsPerPage,
+          pageNo: page,
+        });
+      setSelected([]);
+    }
   };
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     headCells = [];
@@ -315,36 +317,40 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
   };
 
   const handleClick = (event: React.MouseEvent<unknown>, name: any) => {
-    const selectedIndex: number = selected.indexOf(name);
-    let newSelected: (string | Record<string, string>)[] = [];
+    if(event){
+      const selectedIndex: number = selected.indexOf(name);
+      let newSelected: (string | Record<string, string>)[] = [];
 
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
+      if (selectedIndex === -1) {
+        newSelected = newSelected.concat(selected, name);
+      } else if (selectedIndex === 0) {
+        newSelected = newSelected.concat(selected.slice(1));
+      } else if (selectedIndex === selected.length - 1) {
+        newSelected = newSelected.concat(selected.slice(0, -1));
+      } else if (selectedIndex > 0) {
+        newSelected = newSelected.concat(
+          selected.slice(0, selectedIndex),
+          selected.slice(selectedIndex + 1)
+        );
+      }
+      headCells = [];
+      setSelected(newSelected);
     }
-    headCells = [];
-    setSelected(newSelected);
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
-    headCells = [];
-    setSelected([]);
-    setPage(newPage);
-    fetchTableData &&
-      fetchTableData({
-        order,
-        orderBy,
-        pageSize: rowsPerPage,
-        pageNo: newPage,
-      });
+    if(event){
+      headCells = [];
+      setSelected([]);
+      setPage(newPage);
+      fetchTableData &&
+        fetchTableData({
+          order,
+          orderBy,
+          pageSize: rowsPerPage,
+          pageNo: newPage,
+        });
+    }
   };
 
   const handleChangeRowsPerPage = (
@@ -378,7 +384,7 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
     return sortedRows;
   };
 
-  const isSelected: any = (name: string | Record<string, string>) =>
+  const isSelected: any = (name: any) =>
     selected.indexOf(name) !== -1;
   const emptyRows =
     rowsPerPage - Math.min(rowsPerPage, totalRows.length - page * rowsPerPage);

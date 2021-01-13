@@ -183,7 +183,7 @@ export const HsFilters: FC<IHsFilters> = ({
 
   return (
     <div>
-      {['left', 'right', 'top', 'bottom'].map((anchor) => (
+      {['left', 'right', 'top', 'bottom'].map((anchor:any) => (
         <React.Fragment key={anchor}>
           <Button onClick={toggleDrawer(anchor, true)}>{anchor}</Button>
           <Drawer
