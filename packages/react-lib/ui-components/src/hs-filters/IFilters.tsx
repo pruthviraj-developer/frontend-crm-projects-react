@@ -29,4 +29,5 @@ export interface AutoCompleteOptions {
 export interface IHsFilters {
   sideBar: Array<FiltersOptions>;
   defaultSelectedValues?: any;
+  updateFilters?:(a:any) => void;
 }

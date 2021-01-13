@@ -14,5 +14,6 @@ export interface Ilist {
 }
 
 export interface IHsChips {
-    objectsList:Array<Ilist>
+    objectsList:Array<any>
+    updateRemovedFilters?:(a:any) => void;
 }

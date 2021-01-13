@@ -43,6 +43,10 @@ const autoSideBarOption: FiltersOptions = {
   type: 'autocomplete',
 };
 
+const updateFilters = (values) => {
+  // console.log(values);
+};
+
 const data: IHsFilters = {
   sideBar: [autoSideBarOption, reasonSideBarOption, testFieldSideBarOption],
   defaultSelectedValues: {
@@ -55,6 +59,7 @@ const data: IHsFilters = {
       },
     ]
   },
+  updateFilters:updateFilters
 };
 
 export const HsFiltersComponent: FC = () => <HsFilters {...data} />;

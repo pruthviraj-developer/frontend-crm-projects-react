@@ -33,6 +33,7 @@ const initialValues = {};
 export const HsFilters: FC<IHsFilters> = ({
   sideBar,
   defaultSelectedValues,
+  updateFilters
 }: IHsFilters) => {
   const classes = useStyles();
   const [state, setState] = useState({
@@ -69,17 +70,16 @@ export const HsFilters: FC<IHsFilters> = ({
         initialValues={selectedFilters}
         onSubmit={()=>{}}
       >
-        {({ values, errors, setFieldValue, touched }) => (
+        {({ errors, setFieldValue, touched }) => (
           <Form autoComplete="off">
             <Grid container direction="column" justify="center" spacing={1}>
               <Paper variant="outlined" style={{ padding: '10px 20px' }}>
-                <pre>{JSON.stringify(values, null, 4)}</pre>
                 <Grid container direction="column" justify="center" spacing={3}>
                   {sideBar &&
                     sideBar.map((sideBarOption: FiltersOptions) => {
                       if (sideBarOption.type === 'autocomplete') {
                         return (
-                          <Grid item xs>
+                          <Grid item xs key={sideBarOption.name}>
                             <Field
                               multiple
                               variant="standard"
@@ -94,6 +94,15 @@ export const HsFilters: FC<IHsFilters> = ({
                                 option: AutoCompleteOptions,
                                 selectedValue: AutoCompleteOptions
                               ) => option.key == selectedValue?.key}
+                              onChange={(
+                                _evt: React.ChangeEvent,
+                                actionvalue: AutoCompleteOptions
+                              ) => {
+                                let formValues = { ...selectedFilters,[sideBarOption.name]:actionvalue};
+                                setFieldValue(sideBarOption.name,actionvalue);
+                                setSelectedFilters(formValues);
+                                updateFilters && updateFilters(formValues);
+                              }}
                               renderInput={(
                                 params: AutocompleteRenderInputParams
                               ) => (
@@ -141,7 +150,7 @@ export const HsFilters: FC<IHsFilters> = ({
                         );
                       } else {
                         return (
-                          <Grid item xs>
+                          <Grid item xs key={sideBarOption.name}>
                             <Field
                               variant={'outlined'}
                               name={sideBarOption.name}
