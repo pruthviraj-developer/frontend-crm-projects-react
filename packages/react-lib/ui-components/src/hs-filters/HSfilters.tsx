@@ -95,7 +95,7 @@ export const HsFilters: FC<IHsFilters> = ({
                               getOptionSelected={(
                                 option: AutoCompleteOptions,
                                 selectedValue: AutoCompleteOptions
-                              ) => option.key == selectedValue?.key}
+                              ) => option.key == selectedValue?.key || []}
                               onChange={(
                                 _evt: React.ChangeEvent,
                                 actionvalue: AutoCompleteOptions

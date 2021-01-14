@@ -12,7 +12,7 @@ interface filterQueryParams {
 
 export interface SelectableTableProps {
   columns: Array<string>;
-  rows: Array<Record<string, string>>;
+  rows: Array<Record<string | number, string | number>>;
   rowKeys: Array<string>;
   disableExport?: boolean;
   deleteColumn?: (event: (string | Record<string, string>)[]) => void;
@@ -20,7 +20,7 @@ export interface SelectableTableProps {
   showFilters?: (event: (boolean | Record<string, string>)[]) => void;
   fetchTableData: (event: filterQueryParams) => void;
   stableSort?: (array: any, comparator: any) => number;
-  onSort?: (event: filterQueryParams) => void;
+  onSort?: (filterQueryParams) => void;
   getComparator?: (a: any, b: any) => any;
   tableActions?: STableAction[];
   sortingId?: string;

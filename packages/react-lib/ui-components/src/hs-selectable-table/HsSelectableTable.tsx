@@ -172,6 +172,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
             color="inherit"
             variant="h4"
             component="div"
+            align="left"
           >
             {numSelected} selected
           </Typography>
@@ -193,6 +194,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
             color="inherit"
             variant="h5"
             component="div"
+            align="left"
           >
             Select Rows
           </Typography>

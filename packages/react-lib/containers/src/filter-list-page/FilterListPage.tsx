@@ -2,12 +2,12 @@ import React, { FC , useState, useEffect } from 'react';
 import { HsChips } from '@hs/components';
 import { HsFilters } from '@hs/components';
 import { FiltersListPageProps, IHsFiltersList } from './IFilterListPage';
-import { Button } from '@material-ui/core';
+// import { Button } from '@material-ui/core';
 
-export const FilterListPage: FC<FiltersListPageProps> = ({sideBar}: FiltersListPageProps) => {
+export const FilterListPage: FC<FiltersListPageProps> = ({sideBar, toggleSideBar, updateFiltersList}: FiltersListPageProps) => {
   const [filters,setFilters] = useState<any>({});
   const [objectsList,setObjectsList] = useState<any>({objectsList:[]});
-  const [sideBarState,setSideBarState] = useState<any>({});
+  const [sideBarState,setSideBarState] = useState<any>(toggleSideBar);
   useEffect(() => {
     const objectsList:any = [];
     const keys = Object.keys(filters);
@@ -16,10 +16,15 @@ export const FilterListPage: FC<FiltersListPageProps> = ({sideBar}: FiltersListP
       objectsList.push({ key : element, options : filters[element]});
     }
     setObjectsList({objectsList});
-  }, [filters])
+  }, [filters]);
+
+  useEffect(() => {
+    setSideBarState(toggleSideBar);
+  }, [toggleSideBar]);
 
   const updateFilters = (data:any) => {
     setFilters(data);
+    updateFiltersList(data);
   };
 
   const updateRemovedFilters = (filters:any) => {
@@ -29,8 +34,9 @@ export const FilterListPage: FC<FiltersListPageProps> = ({sideBar}: FiltersListP
       if(element.options.length ){
         data[element.key] = element.options
       }
-      setFilters(data);
     }
+    setFilters(data);
+    updateFiltersList(data);
   };
 
   const data: IHsFiltersList = {
@@ -47,9 +53,6 @@ export const FilterListPage: FC<FiltersListPageProps> = ({sideBar}: FiltersListP
 
   return (
     <div>
-      <Button onClick={()=>{
-        setSideBarState({right:true});
-      }}>Show Panel</Button>
       <HsChips  {...chipsData} />
       <HsFilters {...data}/>
     </div>

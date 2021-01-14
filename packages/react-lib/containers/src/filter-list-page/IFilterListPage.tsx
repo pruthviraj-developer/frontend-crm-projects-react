@@ -41,6 +41,8 @@ export interface AutoCompleteOptions {
 export interface FiltersListPageProps{
     objectsList?:Array<Ilist>;
     sideBar: Array<FiltersOptions>;
+    toggleSideBar?: state;
+    updateFiltersList:(a:any) => void;
 }
 
 export interface IHsFiltersList {
