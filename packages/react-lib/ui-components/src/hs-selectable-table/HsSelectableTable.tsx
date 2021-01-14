@@ -76,7 +76,6 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
       onRequestSort(event, property);
     }
   };
-
   return (
     <TableHead>
       <TableRow>
@@ -85,6 +84,7 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
             indeterminate={numSelected > 0 && numSelected < rowCount}
             checked={
               rowCount > 0 &&
+              numSelected > 0 &&
               (numSelected === rowsPerPage ||
                 numSelected === rowCount % rowsPerPage)
             }
@@ -304,6 +304,7 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
       setSelected([]);
     }
   };
+
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     headCells = [];
     if (event.target.checked) {
@@ -393,7 +394,9 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
     return sortedRows;
   };
 
-  const isSelected: any = (name: any) => selected.indexOf(name) !== -1;
+  const isSelected: any = (name: any) => {
+    return selected.indexOf(name) !== -1;
+  };
   const emptyRows =
     rowsPerPage - Math.min(rowsPerPage, totalRows.length - page * rowsPerPage);
   createHeadCells(rowKeys, columns);
@@ -429,19 +432,21 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
               {sortData()
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row: Record<string, string | number>, index) => {
-                  const isItemSelected = sortingId
-                    ? isSelected(row[sortingId])
+                  const isItemSelected = selectId
+                    ? isSelected(row[selectId])
                     : false;
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.name)}
+                      onClick={(event) =>
+                        handleClick(event, selectId ? row[selectId] : row[0])
+                      }
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.name}
+                      key={selectId ? row[selectId] : row[0]}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">

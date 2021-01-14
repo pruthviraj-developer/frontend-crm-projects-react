@@ -22,6 +22,15 @@ module.exports = function (app) {
     }),
   );
 
+  app.use(
+    '/reorder-dashboard/',
+    createProxyMiddleware({
+      target: 'http://inventory-management-service.qa.hs.internal:9002/',
+      secure: false,
+      changeOrigin: true,
+    }),
+  );
+
   // app.use(
   //   '/markstatus/',
   //   createProxyMiddleware({
