@@ -262,6 +262,9 @@ const createHeadCells = (rowKeys, columns) => {
 export const HsSelectableTable: FC<SelectableTableProps> = ({
   rows,
   rowKeys,
+  rowsPerPageOptions,
+  displayRowsPerPage,
+  totalRowsCount,
   columns,
   sortingId,
   selectId,
@@ -283,7 +286,7 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
     []
   );
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(displayRowsPerPage);
   const totalRows = rows || [];
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -398,7 +401,7 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
     return selected.indexOf(name) !== -1;
   };
   const emptyRows =
-    rowsPerPage - Math.min(rowsPerPage, totalRows.length - page * rowsPerPage);
+    rowsPerPage - Math.min(rowsPerPage, totalRowsCount - page * rowsPerPage);
   createHeadCells(rowKeys, columns);
   return (
     <div className={classes.root}>
@@ -424,7 +427,7 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={totalRows.length}
+              rowCount={totalRowsCount}
               rowsPerPage={rowsPerPage}
               sorting={sorting}
             />
@@ -459,7 +462,7 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
                     </TableRow>
                   );
                 })}
-              {totalRows.length === 0 && (
+              {totalRowsCount === 0 && (
                 <TableRow style={{ height: 53 * emptyRows }}>
                   <TableCell colSpan={rowKeys.length} rowSpan={rowKeys.length}>
                     <h1>Data not available</h1>
@@ -470,9 +473,9 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={rowsPerPageOptions}
           component="div"
-          count={totalRows.length}
+          count={totalRowsCount}
           rowsPerPage={rowsPerPage}
           page={page}
           onChangePage={handleChangePage}

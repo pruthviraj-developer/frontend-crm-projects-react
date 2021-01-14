@@ -26,4 +26,7 @@ export interface SelectableTableProps {
   sortingId?: string;
   selectId?: string;
   sorting?: boolean;
+  rowsPerPageOptions: Array<number>;
+  displayRowsPerPage: number;
+  totalRowsCount: number;
 }

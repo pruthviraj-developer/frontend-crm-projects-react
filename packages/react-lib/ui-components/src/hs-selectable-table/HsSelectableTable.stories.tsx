@@ -20,8 +20,8 @@ const exportColumn = (e) => {
 const showFilters = (e) => {
   action(e);
 };
-const onSort = (sortingOrder, sortBy) => {
-  action(sortingOrder, sortBy);
+const onSort = (params) => {
+  action(params);
 };
 const descendingComparator = (a, b, orderBy) => {
   if (b[orderBy] < a[orderBy]) {
@@ -80,6 +80,9 @@ const data: SelectableTableProps = {
   showFilters,
   getComparator: getComparator,
   onSort: onSort,
+  rowsPerPageOptions: [5, 10, 15, 20],
+  displayRowsPerPage: 10,
+  totalRowsCount: 24,
 };
 
 export const HsSelectableTableComponent: FC = () => (

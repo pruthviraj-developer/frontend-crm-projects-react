@@ -9,7 +9,7 @@ const DashBoardWrapper = styled.div`
   margin-left: 90px;
 `;
 export const DashBoard = () => {
-  const [data, setData] = useState({ records: [] });
+  const [data, setData] = useState({ records: [], count: 0 });
   const [sideBarState, setSideBarSate] = useState({ right: false });
   const reasonOptions = [
     {
@@ -103,7 +103,7 @@ export const DashBoard = () => {
       }
     })();
     return () => {
-      setData({ records: [] });
+      setData({ records: [], count: 0 });
     };
   }, []);
 
@@ -147,6 +147,9 @@ export const DashBoard = () => {
     showFilters,
     getComparator: getComparator,
     onSort: onSort,
+    rowsPerPageOptions: [5, 10, 15, 20],
+    displayRowsPerPage: 10,
+    totalRowsCount: data['count'] || 0,
   };
   const filtersData: FiltersListPageProps = {
     sideBar: [reasonSideBarOption, autoSideBarOption],
