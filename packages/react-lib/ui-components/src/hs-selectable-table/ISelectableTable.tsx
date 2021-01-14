@@ -12,13 +12,13 @@ interface filterQueryParams {
 
 export interface SelectableTableProps {
   columns: Array<string>;
-  rows: Array<Record<string | number, string | number>>;
+  rows: Array<any>;
   rowKeys: Array<string>;
   disableExport?: boolean;
   deleteColumn?: (event: (string | Record<string, string>)[]) => void;
   exportColumn?: (event: (string | Record<string, string>)[]) => void;
   showFilters?: (event: (boolean | Record<string, string>)[]) => void;
-  fetchTableData: (event: filterQueryParams) => void;
+  fetchTableData: (data: any) => void;
   stableSort?: (array: any, comparator: any) => number;
   onSort?: (filterQueryParams) => void;
   getComparator?: (a: any, b: any) => any;

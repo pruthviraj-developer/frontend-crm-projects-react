@@ -3,14 +3,15 @@ import { FilterListPage, FiltersListPageProps } from '@hs/containers';
 import { HsSelectableTable, SelectableTableProps } from '@hs/components';
 import styled from '@emotion/styled';
 import { reorderService } from '@hs/services';
-// import { Irows, IDashboardData} from './IDashBorad';
+import { IDashboardData } from './IDashBorad';
 
 const DashBoardWrapper = styled.div`
   margin-left: 90px;
 `;
 export const DashBoard = () => {
-  const [data, setData] = useState({ records: [], count: 0 });
+  const [data, setData] = useState<IDashboardData | { records: Array<any>; count: 0 }>({ records: [], count: 0 });
   const [sideBarState, setSideBarSate] = useState({ right: false });
+  const [filterParams, setFilterParams] = useState<any>({ page_num: 1, page_size: 100, filters: {} });
   const reasonOptions = [
     {
       display: 'Non due to quality and sizing',
@@ -47,7 +48,9 @@ export const DashBoard = () => {
   };
 
   const fetchTableData = (e: any) => {
+    debugger;
     console.log(e);
+    setFilterParams({ ...filterParams, ...e });
   };
 
   const deleteColumn = (e: any) => {
@@ -91,12 +94,7 @@ export const DashBoard = () => {
   useEffect(() => {
     (async () => {
       try {
-        const postData = {
-          page_num: 1,
-          page_size: 100,
-          filters: {},
-        };
-        const list = await reorderService.getTableData<typeof postData, any>(postData);
+        const list = await reorderService.getTableData<typeof filterParams, any>(filterParams);
         setData(list);
       } catch (error) {
         console.log(error);
@@ -105,7 +103,7 @@ export const DashBoard = () => {
     return () => {
       setData({ records: [], count: 0 });
     };
-  }, []);
+  }, [filterParams]);
 
   const selectTableData: SelectableTableProps = {
     columns: [
@@ -138,7 +136,7 @@ export const DashBoard = () => {
       'season',
       'product_sub_type',
     ],
-    rows: data['records'] || [],
+    rows: data && data['records'] ? data['records'] : [],
     selectId: 'sku',
     fetchTableData: fetchTableData,
     deleteColumn: deleteColumn,
@@ -161,6 +159,7 @@ export const DashBoard = () => {
     <DashBoardWrapper>
       <h1>Checks and Balances DashBoard</h1>
       <FilterListPage {...filtersData} />
+
       <HsSelectableTable {...selectTableData} />
     </DashBoardWrapper>
   );

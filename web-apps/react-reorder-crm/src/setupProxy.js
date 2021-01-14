@@ -25,7 +25,7 @@ module.exports = function (app) {
   app.use(
     '/reorder-dashboard/',
     createProxyMiddleware({
-      target: 'http://inventory-management-service.qa.hs.internal:9002/',
+      target: 'http://crm.qa.hopscotch.in',
       secure: false,
       changeOrigin: true,
     }),

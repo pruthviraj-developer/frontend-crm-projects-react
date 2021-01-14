@@ -372,10 +372,14 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
     headCells = [];
     setSelected([]);
     const rowsPerPage = parseInt(event.target.value, 10);
+    const qParams = { pageSize: rowsPerPage, pageNo: 0 };
     setPage(0);
     setRowsPerPage(rowsPerPage);
-    fetchTableData &&
-      fetchTableData({ order, orderBy, pageSize: rowsPerPage, pageNo: 0 });
+    if (sorting) {
+      qParams['order'] = order;
+      qParams['orderBy'] = orderBy;
+    }
+    fetchTableData && fetchTableData(qParams);
   };
 
   const generateRow = (row) => {
