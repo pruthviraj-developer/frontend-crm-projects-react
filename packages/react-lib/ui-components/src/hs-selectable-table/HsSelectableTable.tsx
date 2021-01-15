@@ -24,10 +24,9 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import ImportExportIcon from '@material-ui/icons/ImportExport';
 import { SelectableTableProps } from './ISelectableTable';
-
+import { Colors } from '@hs/utils';
 type Order = 'asc' | 'desc';
 let sortedRows: any = [];
-
 interface HeadCell {
   disablePadding: boolean;
   id: any;
@@ -141,6 +140,8 @@ const useToolbarStyles = makeStyles((theme: Theme) =>
           },
     title: {
       flex: '1 1 100%',
+      fontSize: 16,
+      fontWeight: 'bold',
     },
   })
 );
@@ -174,16 +175,18 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
             component="div"
             align="left"
           >
-            {numSelected} selected
+            {numSelected} Selected
           </Typography>
           <Tooltip title="Delete" onClick={deleteSelected}>
             <IconButton aria-label="delete">
-              <DeleteIcon />
+              <DeleteIcon style={{ color: Colors.PINK[500], fontSize: 24 }} />
             </IconButton>
           </Tooltip>
           <Tooltip title="Import/Export" onClick={exportSelected}>
             <IconButton aria-label="ImportExport">
-              <ImportExportIcon />
+              <ImportExportIcon
+                style={{ color: Colors.PINK[500], fontSize: 20 }}
+              />
             </IconButton>
           </Tooltip>
         </>
@@ -200,7 +203,9 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
           </Typography>
           <Tooltip title="Filter list" onClick={showFilters}>
             <IconButton aria-label="filter list">
-              <FilterListIcon />
+              <FilterListIcon
+                style={{ color: Colors.PINK[500], fontSize: 24 }}
+              />
             </IconButton>
           </Tooltip>
         </>
