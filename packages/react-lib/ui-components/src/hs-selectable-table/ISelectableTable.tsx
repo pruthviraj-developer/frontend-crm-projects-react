@@ -30,4 +30,5 @@ export interface SelectableTableProps {
   currentPage?: number;
   displayRowsPerPage: number;
   totalRowsCount: number;
+  setColumnsWidth?: any;
 }

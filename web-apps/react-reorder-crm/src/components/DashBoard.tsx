@@ -202,6 +202,10 @@ export const DashBoard = () => {
     displayRowsPerPage: 10,
     currentPage: filterParams.page_num - 1,
     totalRowsCount: data.count || 0,
+    setColumnsWidth: {
+      asv_previous_week: 40,
+      asv_present: 30,
+    },
   };
   const filtersData: FiltersListPageProps = {
     sideBar: [reasonSideBarOption, autoSideBarOption],

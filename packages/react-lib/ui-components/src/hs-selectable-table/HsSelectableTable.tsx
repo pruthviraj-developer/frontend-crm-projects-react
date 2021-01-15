@@ -43,6 +43,7 @@ interface EnhancedTableProps {
   rowCount: number;
   rowsPerPage: number;
   sorting?: boolean;
+  setColumnsWidth?: any;
 }
 
 interface EnhancedTableToolbarProps {
@@ -66,6 +67,7 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
     rowsPerPage,
     onRequestSort,
     sorting,
+    setColumnsWidth,
   } = props;
   const createSortHandler = (property: string) => (
     event: React.MouseEvent<unknown>
@@ -100,6 +102,11 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
             padding={headCell.disablePadding ? 'none' : 'default'}
             sortDirection={orderBy === headCell.id ? order : false}
             className={classes.tableHead}
+            style={{
+              maxWidth: setColumnsWidth[headCell.id]
+                ? setColumnsWidth[headCell.id]
+                : 'auto',
+            }}
           >
             <TableSortLabel
               active={sorting && orderBy === headCell.id}
@@ -284,6 +291,7 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
   stableSort,
   getComparator,
   onSort,
+  setColumnsWidth,
 }: SelectableTableProps) => {
   const classes = useStyles();
   const [order, setOrder] = useState<Order>('asc');
@@ -389,11 +397,18 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
     fetchTableData && fetchTableData(qParams);
   };
 
-  const generateRow = (row) => {
+  const generateRow = (row, setColumnsWidth) => {
     return (
       <>
         {rowKeys.map((name: string, index: number) => (
-          <TableCell align="left" key={index} className={classes.tableRow}>
+          <TableCell
+            align="left"
+            key={index}
+            className={classes.tableRow}
+            style={{
+              maxWidth: setColumnsWidth[name] ? setColumnsWidth[name] : 'auto',
+            }}
+          >
             {row[name]}
           </TableCell>
         ))}
@@ -439,6 +454,7 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
                 onRequestSort={handleRequestSort}
                 rowCount={totalRowsCount}
                 rowsPerPage={rowsPerPage}
+                setColumnsWidth={setColumnsWidth}
                 sorting={sorting}
               />
               <TableBody>
@@ -468,7 +484,7 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
                             inputProps={{ 'aria-labelledby': labelId }}
                           />
                         </TableCell>
-                        {generateRow(row)}
+                        {generateRow(row, setColumnsWidth)}
                       </TableRow>
                     );
                   }

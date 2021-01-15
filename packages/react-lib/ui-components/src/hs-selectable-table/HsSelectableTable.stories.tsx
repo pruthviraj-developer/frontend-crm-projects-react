@@ -83,6 +83,9 @@ const data: SelectableTableProps = {
   rowsPerPageOptions: [5, 10, 15, 20],
   displayRowsPerPage: 10,
   totalRowsCount: 24,
+  setColumnsWidth: {
+    name: 50,
+  },
 };
 
 export const HsSelectableTableComponent: FC = () => (
