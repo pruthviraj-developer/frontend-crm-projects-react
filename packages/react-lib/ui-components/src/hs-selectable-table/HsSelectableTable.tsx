@@ -76,18 +76,18 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
       onRequestSort(event, property);
     }
   };
+  const isCheckBoxSelected =
+    rowCount > 0 &&
+    numSelected > 0 &&
+    (numSelected === rowsPerPage || numSelected === rowCount % rowsPerPage);
   return (
     <TableHead>
       <TableRow>
         <TableCell padding="checkbox">
           <Checkbox
             indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={
-              rowCount > 0 &&
-              numSelected > 0 &&
-              (numSelected === rowsPerPage ||
-                numSelected === rowCount % rowsPerPage)
-            }
+            checked={isCheckBoxSelected}
+            color={isCheckBoxSelected ? 'primary' : 'default'}
             onChange={(evt: React.ChangeEvent<HTMLInputElement>) => {
               headCells = [];
               onSelectAllClick(evt);
@@ -132,12 +132,12 @@ const useToolbarStyles = makeStyles((theme: Theme) =>
     highlight:
       theme.palette.type === 'light'
         ? {
-            color: theme.palette.secondary.main,
-            backgroundColor: lighten(theme.palette.secondary.light, 0.85),
+            color: theme.palette.primary.main,
+            backgroundColor: lighten(theme.palette.primary.light, 0.85),
           }
         : {
             color: theme.palette.text.primary,
-            backgroundColor: theme.palette.secondary.dark,
+            backgroundColor: theme.palette.primary.dark,
           },
     title: {
       flex: '1 1 100%',
@@ -169,7 +169,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
         <>
           <Typography
             className={classes.title}
-            color="inherit"
+            color={'primary'}
             variant="h4"
             component="div"
             align="left"
@@ -191,7 +191,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
         <>
           <Typography
             className={classes.title}
-            color="inherit"
+            color={'primary'}
             variant="h5"
             component="div"
             align="left"
@@ -216,6 +216,8 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     paper: {
       width: '100%',
+      border: '1px solid rgba(0, 0, 0, 0.12)',
+      borderRadius: 4,
       marginBottom: theme.spacing(2),
     },
     table: {
@@ -457,6 +459,7 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
                         <TableCell padding="checkbox">
                           <Checkbox
                             checked={isItemSelected}
+                            color={isItemSelected ? 'primary' : 'default'}
                             inputProps={{ 'aria-labelledby': labelId }}
                           />
                         </TableCell>

@@ -2,17 +2,65 @@ import React, { useState, useEffect } from 'react';
 import { FilterListPage, FiltersListPageProps } from '@hs/containers';
 import { HsSelectableTable, SelectableTableProps } from '@hs/components';
 import styled from '@emotion/styled';
+import { makeStyles } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
 import { reorderService } from '@hs/services';
-import { IDashboardData } from './IDashBorad';
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+  },
+  paper: {
+    padding: theme.spacing(2),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+    fontWeight: 'bold',
+    border: '1px solid rgba(0, 0, 0, 0.12)',
+    marginBottom: '20px',
+  },
+  header: {
+    margin: 10,
+    fontSize: 28,
+  },
+}));
 
 const DashBoardWrapper = styled.div`
-  margin-left: 90px;
+  margin: 10px 10px 10px 90px;
 `;
 export const DashBoard = () => {
+  const classes = useStyles();
   const [status, setStatus] = useState<string>('Loading');
-  const [data, setData] = useState<IDashboardData | { records: Array<any>; count: 0 }>({ records: [], count: 0 });
+  const [data, setData] = useState<{ records: Array<any>; count: 0 } | any>({ records: [], count: 0 });
   const [sideBarState, setSideBarSate] = useState({ right: false });
   const [filterParams, setFilterParams] = useState<any>({ page_num: 1, page_size: 100, filters: {} });
+  const defaultLabels: any = [
+    {
+      key: 'total_sku',
+      label: 'Total SKUs',
+    },
+    {
+      key: 'total_quantity',
+      label: 'Total Quantity',
+    },
+    {
+      key: 'total_amount',
+      label: 'Total Amount',
+    },
+    {
+      key: 'total_pid',
+      label: 'Total PIDs',
+    },
+    {
+      key: 'suggested_quantity',
+      label: 'Suggested Quantity',
+    },
+    {
+      key: 'total_asv',
+      label: 'Total ASV',
+    },
+  ];
+
   const reasonOptions = [
     {
       display: 'Non due to quality and sizing',
@@ -162,9 +210,20 @@ export const DashBoard = () => {
   };
   return (
     <DashBoardWrapper>
-      <h1>Checks and Balances DashBoard</h1>
+      <h1 className={classes.header}>Checks and Balances DashBoard</h1>
       <FilterListPage {...filtersData} />
       {data.count === 0 && <h5> {status} </h5>}
+      <Grid container spacing={2}>
+        {defaultLabels.map((obj: any) => {
+          return data?.[obj.key] ? (
+            <Grid item xs={3} key={obj.label}>
+              <Paper className={classes.paper}>
+                <span color="primary">{obj.label}</span> =&gt; <span>{data[obj.key]}</span>
+              </Paper>
+            </Grid>
+          ) : null;
+        })}
+      </Grid>
       {data.count > 0 && <HsSelectableTable {...selectTableData} />}
     </DashBoardWrapper>
   );
