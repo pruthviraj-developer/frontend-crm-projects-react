@@ -9,6 +9,7 @@ const DashBoardWrapper = styled.div`
   margin-left: 90px;
 `;
 export const DashBoard = () => {
+  const [status, setStatus] = useState<string>('Loading');
   const [data, setData] = useState<IDashboardData | { records: Array<any>; count: 0 }>({ records: [], count: 0 });
   const [sideBarState, setSideBarSate] = useState({ right: false });
   const [filterParams, setFilterParams] = useState<any>({ page_num: 1, page_size: 100, filters: {} });
@@ -48,9 +49,8 @@ export const DashBoard = () => {
   };
 
   const fetchTableData = (e: any) => {
-    debugger;
-    console.log(e);
-    setFilterParams({ ...filterParams, ...e });
+    setData({ records: [], count: 0 });
+    setFilterParams({ ...filterParams, page_num: e.pageNo + 1, page_size: e.pageSize });
   };
 
   const deleteColumn = (e: any) => {
@@ -94,10 +94,15 @@ export const DashBoard = () => {
   useEffect(() => {
     (async () => {
       try {
+        setStatus('Loading');
         const list = await reorderService.getTableData<typeof filterParams, any>(filterParams);
-        setData(list);
+        if (list.action === 'success') {
+          setData(list);
+        } else {
+          setStatus('No Data');
+        }
       } catch (error) {
-        console.log(error);
+        setStatus('No Data');
       }
     })();
     return () => {
@@ -147,20 +152,20 @@ export const DashBoard = () => {
     onSort: onSort,
     rowsPerPageOptions: [5, 10, 15, 20],
     displayRowsPerPage: 10,
-    totalRowsCount: data['count'] || 0,
+    currentPage: filterParams.page_num - 1,
+    totalRowsCount: data.count || 0,
   };
   const filtersData: FiltersListPageProps = {
     sideBar: [reasonSideBarOption, autoSideBarOption],
     toggleSideBar: sideBarState,
     updateFiltersList,
   };
-
   return (
     <DashBoardWrapper>
       <h1>Checks and Balances DashBoard</h1>
       <FilterListPage {...filtersData} />
-
-      <HsSelectableTable {...selectTableData} />
+      {data.count === 0 && <h5> {status} </h5>}
+      {data.count > 0 && <HsSelectableTable {...selectTableData} />}
     </DashBoardWrapper>
   );
 };

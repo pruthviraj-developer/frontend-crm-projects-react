@@ -266,6 +266,7 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
   displayRowsPerPage,
   totalRowsCount,
   columns,
+  currentPage,
   sortingId,
   selectId,
   sorting,
@@ -285,7 +286,7 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
   const [selected, setSelected] = useState<(string | Record<string, string>)[]>(
     []
   );
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(currentPage || 0);
   const [rowsPerPage, setRowsPerPage] = useState(displayRowsPerPage);
   const totalRows = rows || [];
   const handleRequestSort = (
@@ -356,13 +357,12 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
       headCells = [];
       setSelected([]);
       setPage(newPage);
-      fetchTableData &&
-        fetchTableData({
-          order,
-          orderBy,
-          pageSize: rowsPerPage,
-          pageNo: newPage,
-        });
+      const qParams = { pageSize: rowsPerPage, pageNo: newPage };
+      if (sorting) {
+        qParams['order'] = order;
+        qParams['orderBy'] = orderBy;
+      }
+      fetchTableData && fetchTableData(qParams);
     }
   };
 
@@ -404,92 +404,86 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
   const isSelected: any = (name: any) => {
     return selected.indexOf(name) !== -1;
   };
-  const emptyRows =
-    rowsPerPage - Math.min(rowsPerPage, totalRowsCount - page * rowsPerPage);
   createHeadCells(rowKeys, columns);
   return (
     <div className={classes.root}>
-      <Paper className={classes.paper}>
-        <EnhancedTableToolbar
-          numSelected={selected.length}
-          rowsSelected={selected}
-          deleteColumn={deleteColumn}
-          exportColumn={exportColumn}
-          showFilters={showFilters}
-        />
-        <TableContainer>
-          <Table
-            className={classes.table}
-            aria-labelledby="tableTitle"
-            size="medium"
-            aria-label="enhanced table"
-          >
-            <EnhancedTableHead
-              classes={classes}
-              numSelected={selected.length}
-              order={order}
-              orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
-              onRequestSort={handleRequestSort}
-              rowCount={totalRowsCount}
-              rowsPerPage={rowsPerPage}
-              sorting={sorting}
-            />
-            <TableBody>
-              {sortData()
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row: Record<string, string | number>, index) => {
-                  const isItemSelected = selectId
-                    ? isSelected(row[selectId])
-                    : false;
-                  const labelId = `enhanced-table-checkbox-${index}`;
+      {totalRowsCount > 0 && (
+        <Paper className={classes.paper}>
+          <EnhancedTableToolbar
+            numSelected={selected.length}
+            rowsSelected={selected}
+            deleteColumn={deleteColumn}
+            exportColumn={exportColumn}
+            showFilters={showFilters}
+          />
+          <TableContainer>
+            <Table
+              className={classes.table}
+              aria-labelledby="tableTitle"
+              size="medium"
+              aria-label="enhanced table"
+            >
+              <EnhancedTableHead
+                classes={classes}
+                numSelected={selected.length}
+                order={order}
+                orderBy={orderBy}
+                onSelectAllClick={handleSelectAllClick}
+                onRequestSort={handleRequestSort}
+                rowCount={totalRowsCount}
+                rowsPerPage={rowsPerPage}
+                sorting={sorting}
+              />
+              <TableBody>
+                {sortData().map(
+                  (row: Record<string, string | number>, index) => {
+                    const isItemSelected = selectId
+                      ? isSelected(row[selectId])
+                      : false;
+                    const labelId = `enhanced-table-checkbox-${index}`;
 
-                  return (
-                    <TableRow
-                      hover
-                      onClick={(event) =>
-                        handleClick(event, selectId ? row[selectId] : row[0])
-                      }
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={selectId ? row[selectId] : row[0]}
-                      selected={isItemSelected}
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          checked={isItemSelected}
-                          inputProps={{ 'aria-labelledby': labelId }}
-                        />
-                      </TableCell>
-                      {generateRow(row)}
-                    </TableRow>
-                  );
-                })}
-              {totalRowsCount === 0 && (
-                <TableRow style={{ height: 53 * emptyRows }}>
-                  <TableCell colSpan={rowKeys.length} rowSpan={rowKeys.length}>
-                    <h1>Data not available</h1>
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={rowsPerPageOptions}
-          component="div"
-          count={totalRowsCount}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onChangePage={handleChangePage}
-          onChangeRowsPerPage={handleChangeRowsPerPage}
-          classes={{
-            toolbar: classes.toolbar,
-            caption: classes.caption,
-          }}
-        />
-      </Paper>
+                    return (
+                      <TableRow
+                        hover
+                        onClick={(event) =>
+                          handleClick(event, selectId ? row[selectId] : row[0])
+                        }
+                        role="checkbox"
+                        aria-checked={isItemSelected}
+                        tabIndex={-1}
+                        key={selectId ? row[selectId] : row[0]}
+                        selected={isItemSelected}
+                      >
+                        <TableCell padding="checkbox">
+                          <Checkbox
+                            checked={isItemSelected}
+                            inputProps={{ 'aria-labelledby': labelId }}
+                          />
+                        </TableCell>
+                        {generateRow(row)}
+                      </TableRow>
+                    );
+                  }
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={rowsPerPageOptions}
+            component="div"
+            count={totalRowsCount}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onChangePage={handleChangePage}
+            onChangeRowsPerPage={handleChangeRowsPerPage}
+            classes={{
+              toolbar: classes.toolbar,
+              caption: classes.caption,
+            }}
+          />
+        </Paper>
+      )}
+      {totalRowsCount === 0 && <h5>No data to display</h5>}
     </div>
   );
 };
