@@ -26,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const DashBoardWrapper = styled.div`
+  width: 100%;
   margin: 10px 10px 10px 90px;
 `;
 export const DashBoard = () => {
