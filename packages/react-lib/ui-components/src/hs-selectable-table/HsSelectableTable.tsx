@@ -25,6 +25,8 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import ImportExportIcon from '@material-ui/icons/ImportExport';
 import { SelectableTableProps } from './ISelectableTable';
 import { Colors } from '@hs/utils';
+import { Button } from '@material-ui/core';
+
 type Order = 'asc' | 'desc';
 let sortedRows: any = [];
 interface HeadCell {
@@ -134,6 +136,8 @@ const useToolbarStyles = makeStyles((theme: Theme) =>
     root: {
       paddingLeft: theme.spacing(2),
       paddingRight: theme.spacing(1),
+      display: 'flex',
+      justifyContent: 'space-between',
     },
     highlight:
       theme.palette.type === 'light'
@@ -146,7 +150,6 @@ const useToolbarStyles = makeStyles((theme: Theme) =>
             backgroundColor: theme.palette.primary.dark,
           },
     title: {
-      flex: '1 1 100%',
       fontSize: 16,
       fontWeight: 'bold',
     },
@@ -184,18 +187,23 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
           >
             {numSelected} Selected
           </Typography>
-          <Tooltip title="Delete" onClick={deleteSelected}>
-            <IconButton aria-label="delete">
-              <DeleteIcon style={{ color: Colors.PINK[500], fontSize: 24 }} />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Import/Export" onClick={exportSelected}>
-            <IconButton aria-label="ImportExport">
-              <ImportExportIcon
-                style={{ color: Colors.PINK[500], fontSize: 20 }}
-              />
-            </IconButton>
-          </Tooltip>
+          <div className="actions">
+            <Button color="primary" size="small" variant="outlined">
+              Modify Quantity
+            </Button>
+            <Tooltip title="Cancel" onClick={deleteSelected}>
+              <IconButton aria-label="Cancel">
+                <DeleteIcon style={{ color: Colors.PINK[500], fontSize: 24 }} />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Approve" onClick={exportSelected}>
+              <IconButton aria-label="Approve">
+                <ImportExportIcon
+                  style={{ color: Colors.PINK[500], fontSize: 20 }}
+                />
+              </IconButton>
+            </Tooltip>
+          </div>
         </>
       ) : (
         <>
