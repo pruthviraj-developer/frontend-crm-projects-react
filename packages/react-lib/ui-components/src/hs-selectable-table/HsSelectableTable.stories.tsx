@@ -17,6 +17,10 @@ const exportColumn = (e) => {
   action(e);
 };
 
+const modifySelectedColumns = (e) => {
+  action(e);
+};
+
 const showFilters = (e) => {
   action(e);
 };
@@ -76,6 +80,7 @@ const data: SelectableTableProps = {
   fetchTableData: fetchTableData,
   deleteColumn: deleteColumn,
   exportColumn: exportColumn,
+  modifySelectedColumns: modifySelectedColumns,
   stableSort: stableSort,
   showFilters,
   getComparator: getComparator,

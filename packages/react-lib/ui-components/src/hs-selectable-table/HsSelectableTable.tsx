@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import clsx from 'clsx';
 import {
   createStyles,
@@ -25,8 +25,10 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import ImportExportIcon from '@material-ui/icons/ImportExport';
 import { SelectableTableProps } from './ISelectableTable';
 import { Colors } from '@hs/utils';
-import { Button } from '@material-ui/core';
-
+import { Button, MenuItem, Grid } from '@material-ui/core';
+import { Formik, Form, Field } from 'formik';
+import { TextField } from 'formik-material-ui';
+import * as Yup from 'yup';
 type Order = 'asc' | 'desc';
 let sortedRows: any = [];
 interface HeadCell {
@@ -34,6 +36,14 @@ interface HeadCell {
   id: any;
   label: string;
 }
+
+const modifyQuantityFormValidation = Yup.object().shape({
+  action: Yup.mixed().required('Please select action type'),
+  type: Yup.mixed().required('Please select update type'),
+  value: Yup.number()
+    .required('Please enter value')
+    .typeError('Please enter only numbers'),
+});
 
 interface EnhancedTableProps {
   classes: ReturnType<typeof useStyles>;
@@ -53,6 +63,7 @@ interface EnhancedTableToolbarProps {
   rowsSelected: (string | Record<string, string>)[];
   deleteColumn?: (event: (string | Record<string, string>)[]) => void;
   exportColumn?: (event: (string | Record<string, string>)[]) => void;
+  modifySelectedColumns?: (event: (string | Record<string, string>)[]) => void;
   showFilters?: (event: any) => void;
 }
 
@@ -159,6 +170,7 @@ const useToolbarStyles = makeStyles((theme: Theme) =>
 const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
   const classes = useToolbarStyles();
   const { numSelected, rowsSelected } = props;
+  const [modifyQuantityForm, showModifyQuantityForm] = useState<boolean>(false);
   const deleteSelected = () => {
     props.deleteColumn && props.deleteColumn(rowsSelected);
   };
@@ -166,66 +178,182 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
     props.exportColumn && props.exportColumn(rowsSelected);
   };
 
+  const modifySelected = (data) => {
+    props.modifySelectedColumns &&
+      props.modifySelectedColumns({ ...data, rows: rowsSelected });
+  };
+
   const showFilters = () => {
     props.showFilters && props.showFilters(true);
   };
 
+  useEffect(() => {
+    showModifyQuantityForm(false);
+  }, [numSelected]);
+
   return (
-    <Toolbar
-      className={clsx(classes.root, {
-        [classes.highlight]: numSelected > 0,
-      })}
-    >
-      {numSelected > 0 ? (
-        <>
-          <Typography
-            className={classes.title}
-            color={'primary'}
-            variant="h4"
-            component="div"
-            align="left"
-          >
-            {numSelected} Selected
-          </Typography>
-          <div className="actions">
-            <Button color="primary" size="small" variant="outlined">
-              Modify Quantity
-            </Button>
-            <Tooltip title="Cancel" onClick={deleteSelected}>
-              <IconButton aria-label="Cancel">
-                <DeleteIcon style={{ color: Colors.PINK[500], fontSize: 24 }} />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Approve" onClick={exportSelected}>
-              <IconButton aria-label="Approve">
-                <ImportExportIcon
-                  style={{ color: Colors.PINK[500], fontSize: 20 }}
+    <>
+      <Toolbar
+        className={clsx(classes.root, {
+          [classes.highlight]: numSelected > 0,
+        })}
+      >
+        {numSelected > 0 ? (
+          <>
+            <Typography
+              className={classes.title}
+              color={'primary'}
+              variant="h4"
+              component="div"
+              align="left"
+            >
+              {numSelected} Selected
+            </Typography>
+            <div className="actions">
+              <Button
+                color="primary"
+                size="small"
+                variant="outlined"
+                style={{ fontWeight: 'bold', fontSize: 10 }}
+                onClick={() => {
+                  showModifyQuantityForm(!modifyQuantityForm);
+                }}
+              >
+                Modify Quantity
+              </Button>
+              <Tooltip title="Cancel" onClick={deleteSelected}>
+                <IconButton aria-label="Cancel">
+                  <DeleteIcon
+                    style={{ color: Colors.PINK[500], fontSize: 24 }}
+                  />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Approve" onClick={exportSelected}>
+                <IconButton aria-label="Approve">
+                  <ImportExportIcon
+                    style={{ color: Colors.PINK[500], fontSize: 20 }}
+                  />
+                </IconButton>
+              </Tooltip>
+            </div>
+          </>
+        ) : (
+          <>
+            <Typography
+              className={classes.title}
+              color={'primary'}
+              variant="h5"
+              component="div"
+              align="left"
+            >
+              Select Rows
+            </Typography>
+            <Tooltip title="Filter list" onClick={showFilters}>
+              <IconButton aria-label="filter list">
+                <FilterListIcon
+                  style={{ color: Colors.PINK[500], fontSize: 24 }}
                 />
               </IconButton>
             </Tooltip>
-          </div>
-        </>
-      ) : (
-        <>
-          <Typography
-            className={classes.title}
-            color={'primary'}
-            variant="h5"
-            component="div"
-            align="left"
-          >
-            Select Rows
-          </Typography>
-          <Tooltip title="Filter list" onClick={showFilters}>
-            <IconButton aria-label="filter list">
-              <FilterListIcon
-                style={{ color: Colors.PINK[500], fontSize: 24 }}
-              />
-            </IconButton>
-          </Tooltip>
-        </>
+          </>
+        )}
+      </Toolbar>
+      {modifyQuantityForm && (
+        <Formik
+          initialValues={{ action: '', type: '', value: '' }}
+          validationSchema={modifyQuantityFormValidation}
+          onSubmit={(values, { setSubmitting }) => {
+            modifySelected(values);
+            setSubmitting(false);
+          }}
+        >
+          {() => (
+            <Form>
+              <Grid
+                container
+                spacing={2}
+                direction="row"
+                justify="flex-end"
+                alignItems="center"
+              >
+                <Grid item xs={2}>
+                  <Field
+                    component={TextField}
+                    type="text"
+                    name="action"
+                    label="Action Type"
+                    defaultValue=""
+                    style={{ width: '100%' }}
+                    select
+                    inputProps={{
+                      id: 'outlined-select',
+                    }}
+                    variant={'outlined'}
+                  >
+                    {[
+                      { display: 'Increase By', value: 'increased_by' },
+                      { display: 'Decrease By', value: 'decreased_by' },
+                    ].map((opt) => (
+                      <MenuItem key={opt.value} value={opt.value}>
+                        {opt.display}
+                      </MenuItem>
+                    ))}
+                  </Field>
+                </Grid>
+                <Grid item xs={2}>
+                  <Field
+                    component={TextField}
+                    type="text"
+                    name="type"
+                    label="Update Type"
+                    defaultValue=""
+                    style={{ width: '100%' }}
+                    select
+                    inputProps={{
+                      id: 'outlined-select',
+                    }}
+                    variant={'outlined'}
+                  >
+                    {[
+                      { display: 'Percentage', value: 'percentage' },
+                      { display: 'Number', value: 'number' },
+                    ].map((opt) => (
+                      <MenuItem key={opt.value} value={opt.value}>
+                        {opt.display}
+                      </MenuItem>
+                    ))}
+                  </Field>
+                </Grid>
+                <Grid item xs={1}>
+                  <Field
+                    component={TextField}
+                    name="value"
+                    type="text"
+                    label="Value"
+                    variant={'outlined'}
+                  />
+                </Grid>
+                <Grid item xs={1}>
+                  <Button
+                    type="submit"
+                    color="primary"
+                    variant="outlined"
+                    size="large"
+                    style={{
+                      fontWeight: 'bold',
+                      fontSize: 10,
+                      padding: '14px 10px',
+                    }}
+                  >
+                    Submit
+                  </Button>
+                </Grid>
+              </Grid>
+            </Form>
+          )}
+        </Formik>
       )}
-    </Toolbar>
+    </>
   );
 };
 
@@ -295,6 +423,7 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
   fetchTableData,
   deleteColumn,
   exportColumn,
+  modifySelectedColumns,
   showFilters,
   stableSort,
   getComparator,
@@ -439,6 +568,7 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
             rowsSelected={selected}
             deleteColumn={deleteColumn}
             exportColumn={exportColumn}
+            modifySelectedColumns={modifySelectedColumns}
             showFilters={showFilters}
           />
           <TableContainer>

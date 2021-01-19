@@ -110,6 +110,10 @@ export const DashBoard = () => {
     console.log(e);
   };
 
+  const modifySelectedColumns = (e: any) => {
+    console.log(e);
+  };
+
   const showFilters = (e: any) => {
     setSideBarSate({ right: e });
   };
@@ -197,6 +201,7 @@ export const DashBoard = () => {
     fetchTableData: fetchTableData,
     deleteColumn: deleteColumn,
     exportColumn: exportColumn,
+    modifySelectedColumns: modifySelectedColumns,
     stableSort: stableSort,
     showFilters,
     getComparator: getComparator,
