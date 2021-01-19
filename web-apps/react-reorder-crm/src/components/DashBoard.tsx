@@ -34,7 +34,7 @@ export const DashBoard = () => {
   const [status, setStatus] = useState<string>('Loading');
   const [data, setData] = useState<{ records: Array<any>; count: 0 } | any>({ records: [], count: 0 });
   const [sideBarState, setSideBarSate] = useState({ right: false });
-  const [filterParams, setFilterParams] = useState<any>({ page_num: 1, page_size: 100, filters: {} });
+  const [filterParams, setFilterParams] = useState<any>({ page_num: 1, page_size: 10, filters: {} });
   const defaultLabels: any = [
     {
       key: 'total_sku',

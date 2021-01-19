@@ -327,13 +327,8 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     headCells = [];
     if (event.target.checked) {
-      const currentIndex = page * rowsPerPage;
       const newSelecteds: (string | Record<string, string>)[] = [];
-      for (
-        let index = currentIndex;
-        index < currentIndex + rowsPerPage;
-        index++
-      ) {
+      for (let index = 0; index < rowsPerPage; index++) {
         const element = sortedRows[index];
         if (element) {
           newSelecteds.push(selectId ? element[selectId] : element);
