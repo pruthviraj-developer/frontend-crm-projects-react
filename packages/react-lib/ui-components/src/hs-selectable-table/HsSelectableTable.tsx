@@ -190,7 +190,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
         action_type: 'modify',
         decreased_by: data.action === 'decreased_by' ? data.value : null,
         increased_by: data.action === 'increased_by' ? data.value : null,
-        is_percentage_type: data.is_percentage_type === 'true' ? true : false,
+        is_percentage_type: data.is_percentage_type,
         skus: rowsSelected,
       });
   };
@@ -215,7 +215,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
       defaultValue: '',
       options: [
         { display: 'Percentage', value: 'true' },
-        { display: 'Number', value: 'null' },
+        { display: 'Number', value: 'false' },
       ],
     },
   ];
