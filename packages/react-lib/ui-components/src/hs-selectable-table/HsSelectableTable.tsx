@@ -20,9 +20,7 @@ import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
-import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
-import ImportExportIcon from '@material-ui/icons/ImportExport';
 import { SelectableTableProps } from './ISelectableTable';
 import { Colors } from '@hs/utils';
 import { Button, MenuItem, Grid } from '@material-ui/core';
@@ -171,10 +169,18 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
   const classes = useToolbarStyles();
   const { numSelected, rowsSelected } = props;
   const [modifyQuantityForm, showModifyQuantityForm] = useState<boolean>(false);
-  const deleteSelected = () => {
-    props.deleteColumn && props.deleteColumn(rowsSelected);
+  const cancelSelected = () => {
+    props.deleteColumn &&
+      props.deleteColumn({
+        action_type: 'modify',
+        decreased_by: null,
+        increased_by: null,
+        is_percentage_type: null,
+        skus: rowsSelected,
+      });
   };
-  const exportSelected = () => {
+
+  const approveSelected = () => {
     props.exportColumn && props.exportColumn(rowsSelected);
   };
 
@@ -248,20 +254,24 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
               >
                 Modify Quantity
               </Button>
-              <Tooltip title="Cancel" onClick={deleteSelected}>
-                <IconButton aria-label="Cancel">
-                  <DeleteIcon
-                    style={{ color: Colors.PINK[500], fontSize: 24 }}
-                  />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Approve" onClick={exportSelected}>
-                <IconButton aria-label="Approve">
-                  <ImportExportIcon
-                    style={{ color: Colors.PINK[500], fontSize: 20 }}
-                  />
-                </IconButton>
-              </Tooltip>
+              <Button
+                color="primary"
+                size="small"
+                variant="outlined"
+                style={{ fontWeight: 'bold', fontSize: 10, marginLeft: 10 }}
+                onClick={cancelSelected}
+              >
+                Cancel
+              </Button>
+              <Button
+                color="primary"
+                size="small"
+                variant="outlined"
+                style={{ fontWeight: 'bold', fontSize: 10, marginLeft: 10 }}
+                onClick={approveSelected}
+              >
+                Approve
+              </Button>
             </div>
           </>
         ) : (

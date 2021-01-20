@@ -103,32 +103,37 @@ export const DashBoard = () => {
     setFilterParams({ ...filterParams, page_num: e.pageNo + 1, page_size: e.pageSize });
   };
 
-  const deleteColumn = (e: any) => {
-    console.log(e);
-  };
-
-  const exportColumn = (e: any) => {
-    console.log(e);
-  };
-
-  const modifySelectedColumns = (postObject: any) => {
+  const updateOrders = (data: any, successMessage?: string) => {
     (async () => {
       let message = 'Please try later';
+      debugger;
       try {
-        const updateData = await reorderService.updateOrders<typeof postObject, any>(postObject);
+        const updateData = await reorderService.updateOrders<typeof data, any>(data);
         if (updateData.action === 'success') {
-          toast('Updated Successfully.');
+          toast(successMessage);
           setFilterParams({ ...filterParams });
           return;
         }
         toast.error(updateData.message || message);
       } catch (error) {
         if (error.action === 'failure') {
-          message = error.message;
+          message = error.message || message;
         }
         toast.error(message);
       }
     })();
+  };
+
+  const deleteColumn = (postObject: any) => {
+    updateOrders(postObject, 'Canceled Successfully.');
+  };
+
+  const exportColumn = (postObject: any) => {
+    console.log(postObject);
+  };
+
+  const modifySelectedColumns = (postObject: any) => {
+    updateOrders(postObject, 'Updated Successfully.');
   };
 
   const showFilters = (e: any) => {
