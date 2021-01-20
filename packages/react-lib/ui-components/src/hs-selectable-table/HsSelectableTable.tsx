@@ -184,7 +184,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
         action_type: 'modify',
         decreased_by: data.action === 'decreased_by' ? data.value : null,
         increased_by: data.action === 'increased_by' ? data.value : null,
-        is_percentage_type: data.is_percentage_type === 'true' ? true : null,
+        is_percentage_type: data.is_percentage_type === 'true' ? true : false,
         skus: rowsSelected,
       });
   };

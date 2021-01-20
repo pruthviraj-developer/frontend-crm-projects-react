@@ -1,8 +1,16 @@
 import { httpService } from '../http';
+
 const getTableData = <P, R>(data: P): Promise<R> => {
   const url = '/crm-api/assortment-plan-api/reorder-dashboard/get';
   return httpService.post<R>({ url, data });
 };
+
+const updateOrders = <P, R>(data: P): Promise<R> => {
+  const url = '/crm-api/assortment-plan-api/reorder-take-action';
+  return httpService.post<R>({ url, data });
+};
+
 export const reorderService = {
   getTableData,
+  updateOrders,
 };

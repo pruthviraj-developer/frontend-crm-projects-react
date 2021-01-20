@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FilterListPage, FiltersListPageProps } from '@hs/containers';
 import { HsSelectableTable, SelectableTableProps } from '@hs/components';
 import styled from '@emotion/styled';
+import { toast } from 'react-toastify';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
@@ -110,8 +111,24 @@ export const DashBoard = () => {
     console.log(e);
   };
 
-  const modifySelectedColumns = (e: any) => {
-    console.log(e);
+  const modifySelectedColumns = (postObject: any) => {
+    (async () => {
+      let message = 'Please try later';
+      try {
+        const updateData = await reorderService.updateOrders<typeof postObject, any>(postObject);
+        if (updateData.action === 'success') {
+          toast('Updated Successfully.');
+          setFilterParams({ ...filterParams });
+          return;
+        }
+        toast.error(updateData.message || message);
+      } catch (error) {
+        if (error.action === 'failure') {
+          message = error.message;
+        }
+        toast.error(message);
+      }
+    })();
   };
 
   const showFilters = (e: any) => {
