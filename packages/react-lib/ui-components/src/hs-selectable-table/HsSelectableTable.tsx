@@ -39,7 +39,7 @@ interface HeadCell {
 
 const modifyQuantityFormValidation = Yup.object().shape({
   action: Yup.mixed().required('Please select action type'),
-  type: Yup.mixed().required('Please select update type'),
+  is_percentage_type: Yup.mixed().required('Please select update type'),
   value: Yup.number()
     .required('Please enter value')
     .typeError('Please enter only numbers'),
@@ -60,10 +60,10 @@ interface EnhancedTableProps {
 
 interface EnhancedTableToolbarProps {
   numSelected: number;
-  rowsSelected: (string | Record<string, string>)[];
-  deleteColumn?: (event: (string | Record<string, string>)[]) => void;
-  exportColumn?: (event: (string | Record<string, string>)[]) => void;
-  modifySelectedColumns?: (event: (string | Record<string, string>)[]) => void;
+  rowsSelected: any;
+  deleteColumn?: (event: any) => void;
+  exportColumn?: (event: any) => void;
+  modifySelectedColumns?: (event: any) => void;
   showFilters?: (event: any) => void;
 }
 
@@ -180,12 +180,39 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
 
   const modifySelected = (data) => {
     props.modifySelectedColumns &&
-      props.modifySelectedColumns({ ...data, rows: rowsSelected });
+      props.modifySelectedColumns({
+        action_type: 'modify',
+        decreased_by: data.action === 'decreased_by' ? data.value : null,
+        increased_by: data.action === 'increased_by' ? data.value : null,
+        is_percentage_type: data.is_percentage_type === 'true' ? true : null,
+        skus: rowsSelected,
+      });
   };
 
   const showFilters = () => {
     props.showFilters && props.showFilters(true);
   };
+
+  const dropDownList = [
+    {
+      name: 'action',
+      label: 'Action Type',
+      defaultValue: '',
+      options: [
+        { display: 'Increase By', value: 'increased_by' },
+        { display: 'Decrease By', value: 'decreased_by' },
+      ],
+    },
+    {
+      name: 'is_percentage_type',
+      label: 'Update Type',
+      defaultValue: '',
+      options: [
+        { display: 'Percentage', value: 'true' },
+        { display: 'Number', value: 'null' },
+      ],
+    },
+  ];
 
   useEffect(() => {
     showModifyQuantityForm(false);
@@ -260,10 +287,10 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
       </Toolbar>
       {modifyQuantityForm && (
         <Formik
-          initialValues={{ action: '', type: '', value: '' }}
+          initialValues={{ action: '', is_percentage_type: '', value: '' }}
           validationSchema={modifyQuantityFormValidation}
           onSubmit={(values, { setSubmitting }) => {
-            modifySelected(values);
+            modifySelected({ ...values, action_type: 'modify' });
             setSubmitting(false);
           }}
         >
@@ -276,54 +303,30 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
                 justify="flex-end"
                 alignItems="center"
               >
-                <Grid item xs={2}>
-                  <Field
-                    component={TextField}
-                    type="text"
-                    name="action"
-                    label="Action Type"
-                    defaultValue=""
-                    style={{ width: '100%' }}
-                    select
-                    inputProps={{
-                      id: 'outlined-select',
-                    }}
-                    variant={'outlined'}
-                  >
-                    {[
-                      { display: 'Increase By', value: 'increased_by' },
-                      { display: 'Decrease By', value: 'decreased_by' },
-                    ].map((opt) => (
-                      <MenuItem key={opt.value} value={opt.value}>
-                        {opt.display}
-                      </MenuItem>
-                    ))}
-                  </Field>
-                </Grid>
-                <Grid item xs={2}>
-                  <Field
-                    component={TextField}
-                    type="text"
-                    name="type"
-                    label="Update Type"
-                    defaultValue=""
-                    style={{ width: '100%' }}
-                    select
-                    inputProps={{
-                      id: 'outlined-select',
-                    }}
-                    variant={'outlined'}
-                  >
-                    {[
-                      { display: 'Percentage', value: 'percentage' },
-                      { display: 'Number', value: 'number' },
-                    ].map((opt) => (
-                      <MenuItem key={opt.value} value={opt.value}>
-                        {opt.display}
-                      </MenuItem>
-                    ))}
-                  </Field>
-                </Grid>
+                {dropDownList.map((listObject, index) => {
+                  return (
+                    <Grid item xs={2} key={listObject.name}>
+                      <Field
+                        select
+                        variant={'outlined'}
+                        name={listObject.name}
+                        label={listObject.label}
+                        component={TextField}
+                        type="text"
+                        inputProps={{
+                          id: `ol-select-type-${index}`,
+                        }}
+                        fullWidth
+                      >
+                        {listObject?.options?.map((item: any, lindex) => (
+                          <MenuItem key={lindex} value={item.value}>
+                            {item.display}
+                          </MenuItem>
+                        ))}
+                      </Field>
+                    </Grid>
+                  );
+                })}
                 <Grid item xs={1}>
                   <Field
                     component={TextField}
