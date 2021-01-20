@@ -106,7 +106,6 @@ export const DashBoard = () => {
   const updateOrders = (data: any, successMessage?: string) => {
     (async () => {
       let message = 'Please try later';
-      debugger;
       try {
         const updateData = await reorderService.updateOrders<typeof data, any>(data);
         if (updateData.action === 'success') {

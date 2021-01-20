@@ -172,7 +172,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
   const cancelSelected = () => {
     props.deleteColumn &&
       props.deleteColumn({
-        action_type: 'modify',
+        action_type: 'cancel',
         decreased_by: null,
         increased_by: null,
         is_percentage_type: null,
