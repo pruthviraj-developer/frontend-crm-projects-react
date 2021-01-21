@@ -228,7 +228,7 @@ export const DashBoard = () => {
     getComparator: getComparator,
     onSort: onSort,
     rowsPerPageOptions: [5, 10, 15, 20],
-    displayRowsPerPage: 10,
+    displayRowsPerPage: filterParams.page_size || 10,
     currentPage: filterParams.page_num - 1,
     totalRowsCount: data.count || 0,
     setColumnsWidth: {

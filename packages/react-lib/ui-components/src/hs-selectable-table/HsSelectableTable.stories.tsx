@@ -8,24 +8,24 @@ export default {
 };
 
 const fetchTableData = (e) => {
-  action(e);
+  action('fetchTableData')(e);
 };
 const deleteColumn = (e) => {
-  action(e);
+  action('deleteColumn')(e);
 };
 const exportColumn = (e) => {
-  action(e);
+  action('exportColumn')(e);
 };
 
 const modifySelectedColumns = (e) => {
-  action(e);
+  action('modifySelectedColumns')(e);
 };
 
 const showFilters = (e) => {
   action(e);
 };
 const onSort = (params) => {
-  action(params);
+  action('onSort')(params);
 };
 const descendingComparator = (a, b, orderBy) => {
   if (b[orderBy] < a[orderBy]) {
@@ -74,8 +74,8 @@ const data: SelectableTableProps = {
     { name: 'Nougat', calories: 360, fat: 19, carbs: 9, protein: 37 },
     { name: 'Oreo', calories: 437, fat: 18, carbs: 63, protein: 4 },
   ],
-  sortingId: 'name',
-  selectId: 'name',
+  selectId: 'calories',
+  sortingId: 'fat',
   sorting: true,
   fetchTableData: fetchTableData,
   deleteColumn: deleteColumn,
@@ -85,8 +85,8 @@ const data: SelectableTableProps = {
   showFilters,
   getComparator: getComparator,
   onSort: onSort,
-  rowsPerPageOptions: [5, 10, 15, 20],
-  displayRowsPerPage: 10,
+  rowsPerPageOptions: [5, 8, 10, 15, 20],
+  displayRowsPerPage: 5,
   totalRowsCount: 24,
   setColumnsWidth: {
     name: 50,
