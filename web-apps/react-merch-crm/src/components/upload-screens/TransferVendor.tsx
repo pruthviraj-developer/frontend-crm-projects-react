@@ -10,30 +10,17 @@ import {
 import { merchStatusChangeService } from '@hs/services';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
-import { VendorList, CurrencyList, ListType, BrandList } from './IUploadScreens';
+import { VendorList, ListType, BrandList } from './IUploadScreens';
 
 const StyledCntnr = styled.div`
   margin-left: 90px;
   width: auto;
 `;
 
-// const reasonOptions = [
-//   { display: 'NonProcHighreturn due to quality and sizing', id: 1 },
-//   { display: 'NonProcHighreturn due to other reason', id: 2 },
-//   { display: 'NonProcHighreturn111 due to other reason', id: 3 },
-// ];
-
 const brandSideBarOption: FileUploadSideBarOption = {
   type: 'autocomplete',
   name: 'brandId',
   label: 'Brand',
-};
-
-const currencySideBarOption: FileUploadSideBarOption = {
-  type: 'autocomplete',
-  name: 'currency',
-  label: 'Currency',
-  key: 'currencyCode',
 };
 
 const vendorSideBarOption: FileUploadSideBarOption = {
@@ -47,7 +34,6 @@ const initialValues = {
   file: undefined,
   vendorId: '',
   brandId: '',
-  currency: '',
   resetInput: false,
 };
 
@@ -55,13 +41,12 @@ const TransferVendorValidation = Yup.object().shape({
   file: Yup.mixed().required('Please upload a file'),
   vendorId: Yup.string().required('Vendor is required'),
   brandId: Yup.string().required('Brand is required'),
-  currency: Yup.string().required('Currency is required'),
 });
 
 export const TransferVendor: FC = () => {
   const [brandsList, setBrandsList] = useState<ListType>(([] as unknown) as ListType);
   const [vendorList, setVendorList] = useState<ListType>(([] as unknown) as ListType);
-  const [currencyList, setCurrencyList] = useState<ListType>(([] as unknown) as ListType);
+  // const [currencyList, setCurrencyList] = useState<ListType>(([] as unknown) as ListType);
 
   useEffect(() => {
     (async () => {
@@ -71,16 +56,9 @@ export const TransferVendor: FC = () => {
       } catch (error) {
         setVendorList(([] as unknown) as ListType);
       }
-      try {
-        const list = await merchStatusChangeService.getCurrencyList<CurrencyList>();
-        setCurrencyList(list.currencyList);
-      } catch (error) {
-        setCurrencyList(([] as unknown) as ListType);
-      }
     })();
     return () => {
       setVendorList(([] as unknown) as ListType);
-      setCurrencyList(([] as unknown) as ListType);
     };
   }, []);
 
@@ -88,7 +66,7 @@ export const TransferVendor: FC = () => {
     try {
       const res = await merchStatusChangeService.transferToVendor({
         file: values.file?.file,
-        params: { vendorId: values.vendorId.id, brandId: values.brandId.id, currency: values.currency.currencyCode },
+        params: { vendorId: values.vendorId.id, brandId: values.brandId.id },
       });
       if (res.message) {
         toast.success(res.message);
@@ -144,7 +122,6 @@ export const TransferVendor: FC = () => {
         sideBar={[
           { ...vendorSideBarOption, options: vendorList },
           { ...brandSideBarOption, options: brandsList },
-          { ...currencySideBarOption, options: currencyList },
         ]}
         validationSchema={TransferVendorValidation}
         initialValues={initialValues}
