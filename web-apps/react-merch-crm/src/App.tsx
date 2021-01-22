@@ -63,7 +63,7 @@ const App: FC = () => {
           </Router>
         </MuiThemeProvider>
       </ThemeProvider>
-      <ToastContainer />
+      <ToastContainer autoClose={false} closeOnClick={false} draggable={false} newestOnTop={true} />
     </div>
   );
 };
