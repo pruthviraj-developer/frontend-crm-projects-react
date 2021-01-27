@@ -208,7 +208,8 @@ export const DashBoard = () => {
               list.push({ ...element, options: filters[element.name] });
             }
           }
-          setSideBarFilters(list);
+          const skuAttributes = filters.sku_attribute || [];
+          setSideBarFilters([...list,...skuAttributes]);
         } else {
           setFiltersMessage('Filters not available');
         }

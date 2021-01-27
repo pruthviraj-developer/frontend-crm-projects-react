@@ -79,56 +79,14 @@ export const HsFilters: FC<IHsFilters> = ({
                 <Grid container direction="column" justify="center" spacing={3}>
                   {sideBar &&
                     sideBar.map((sideBarOption: FFiltersOptions) => {
-                      if (sideBarOption.type === 'autocomplete') {
+                      if (sideBarOption.type === 'autocomplete' || sideBarOption.input_type === 'S') {
                         return (
-                          // <Grid item xs key={sideBarOption.name}>
-                          //   <Field
-                          //     multiple
-                          //     variant="standard"
-                          //     name={sideBarOption.name}
-                          //     label={sideBarOption.label}
-                          //     component={Autocomplete}
-                          //     options={sideBarOption.options || []}
-                          //     getOptionLabel={(option) =>
-                          //       option.display ? option.display : (option.value?option.value:'')
-                          //     }
-                          //     getOptionSelected={(
-                          //       option: AutoCompleteOptions,
-                          //       selectedValue: AutoCompleteOptions
-                          //     ) => option.key == selectedValue?.key || []}
-                          //     onChange={(
-                          //       _evt: React.ChangeEvent,
-                          //       newValue: AutoCompleteOptions
-                          //     ) => {
-                          //       debugger;
-                          //       let formValues = { 
-                          //         ...selectedFilters,
-                          //         [sideBarOption.name]:newValue
-                          //       };
-                          //       setFieldValue(sideBarOption.name,newValue);
-                          //       setSelectedFilters(formValues);
-                          //       updateFilters && updateFilters(formValues);
-                          //     }}
-                          //     renderInput={(
-                          //       params: AutocompleteRenderInputParams
-                          //     ) => (
-                          //       <MuiTextField
-                          //         {...params}
-                          //         error={touched['sort'] && !!errors['sort']}
-                          //         helperText={touched['sort'] && errors['sort']}
-                          //         label={sideBarOption.label}
-                          //         variant="outlined"
-                          //       />
-                          //     )}
-                          //   />
-                          // </Grid>
-
                           <Grid item xs  key={sideBarOption.name}>
                           <Field
                             multiple
                             variant="standard"
-                            name={sideBarOption.name}
-                            label={sideBarOption.label}
+                            name={sideBarOption.name || sideBarOption.key}
+                            label={sideBarOption.label || sideBarOption.display}
                             component={Autocomplete}
                             options={sideBarOption.options || []}
                             getOptionLabel={(option: any) =>
@@ -156,7 +114,7 @@ export const HsFilters: FC<IHsFilters> = ({
                                 {...params}
                                 error={touched['sort'] && !!errors['sort']}
                                 helperText={touched['sort'] && errors['sort']}
-                                label={sideBarOption.label}
+                                label={sideBarOption.label || sideBarOption.display}
                                 variant="outlined"
                               />
                             )}

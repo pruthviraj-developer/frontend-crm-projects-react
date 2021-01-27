@@ -24,6 +24,7 @@ export interface FFiltersOptions {
   options?: any;
   key?: string;
   input_type?: string;
+  display?: string;
 }
 
 export interface AutoCompleteOptions {
@@ -35,7 +36,7 @@ export interface AutoCompleteOptions {
 }
 
 export interface IHsFilters {
-  sideBar: Array<FFiltersOptions>;
+  sideBar: Array<any>;
   sideBarState?: state
   defaultSelectedValues?: any;
   updateFilters?:(a:any) => void;
