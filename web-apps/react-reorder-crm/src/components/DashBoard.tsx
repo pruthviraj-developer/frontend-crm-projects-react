@@ -171,7 +171,11 @@ export const DashBoard = () => {
         setStatus('Loading');
         const list = await reorderService.getTableData<typeof filterParams, any>(filterParams);
         if (list.action === 'success') {
-          setData(list);
+          if (list.records.length) {
+            setData(list);
+            return;
+          }
+          setStatus('No Data');
         } else {
           setStatus('No Data');
         }
