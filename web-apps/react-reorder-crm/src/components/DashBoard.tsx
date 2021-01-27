@@ -66,65 +66,7 @@ export const DashBoard = () => {
     },
   ];
 
-  const filtersList = [
-    {
-      name: 'bucket',
-      type: 'autocomplete',
-      label: 'Bucket',
-      isSelect: true,
-    },
-    {
-      name: 'brand_id',
-      type: 'autocomplete',
-      label: 'Brand',
-      isSelect: true,
-    },
-    {
-      name: 'status',
-      type: 'autocomplete',
-      label: 'Status',
-      isSelect: true,
-    },
-    {
-      name: 'age',
-      type: 'autocomplete',
-      label: 'Age',
-      isSelect: true,
-    },
-    {
-      name: 'gender',
-      type: 'autocomplete',
-      label: 'Gender',
-      isSelect: true,
-    },
-    {
-      name: 'plc',
-      type: 'autocomplete',
-      label: 'Plc',
-      isSelect: true,
-    },
-    {
-      name: 'reason',
-      type: 'autocomplete',
-      label: 'Reason',
-      isSelect: true,
-    },
-    {
-      name: 'category_id',
-      type: 'autocomplete',
-      label: 'Category',
-      isSelect: true,
-    },
-    {
-      name: 'vendor_id',
-      type: 'autocomplete',
-      label: 'Vendor',
-      isSelect: true,
-    },
-  ];
-
   const updateFiltersList = (e: any) => {
-    console.log(e, 'filters');
     setSelectedFilters(e);
   };
 
@@ -198,6 +140,62 @@ export const DashBoard = () => {
   };
 
   useEffect(() => {
+    const filtersList = [
+      {
+        name: 'bucket',
+        type: 'autocomplete',
+        label: 'Bucket',
+        isSelect: true,
+      },
+      {
+        name: 'brand_id',
+        type: 'autocomplete',
+        label: 'Brand',
+        isSelect: true,
+      },
+      {
+        name: 'status',
+        type: 'autocomplete',
+        label: 'Status',
+        isSelect: true,
+      },
+      {
+        name: 'age',
+        type: 'autocomplete',
+        label: 'Age',
+        isSelect: true,
+      },
+      {
+        name: 'gender',
+        type: 'autocomplete',
+        label: 'Gender',
+        isSelect: true,
+      },
+      {
+        name: 'plc',
+        type: 'autocomplete',
+        label: 'Plc',
+        isSelect: true,
+      },
+      {
+        name: 'reason',
+        type: 'autocomplete',
+        label: 'Reason',
+        isSelect: true,
+      },
+      {
+        name: 'category_id',
+        type: 'autocomplete',
+        label: 'Category',
+        isSelect: true,
+      },
+      {
+        name: 'vendor_id',
+        type: 'autocomplete',
+        label: 'Vendor',
+        isSelect: true,
+      },
+    ];
     (async () => {
       try {
         setFiltersMessage(loading);
@@ -215,11 +213,10 @@ export const DashBoard = () => {
           setFiltersMessage('Filters not available');
         }
       } catch (e) {
-        console.log(e);
         setFiltersMessage('Filters not available try later');
       }
     })();
-  }, [filtersList]);
+  }, []);
 
   useEffect(() => {
     (async () => {
