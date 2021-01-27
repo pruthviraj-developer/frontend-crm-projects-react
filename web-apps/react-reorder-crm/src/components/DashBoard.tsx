@@ -68,60 +68,59 @@ export const DashBoard = () => {
 
   const filtersList = [
     {
-      name:'bucket',
+      name: 'bucket',
       type: 'autocomplete',
       label: 'Bucket',
-      isSelect: true
+      isSelect: true,
     },
     {
-      name:'brand_id',
+      name: 'brand_id',
       type: 'autocomplete',
       label: 'Brand',
-      isSelect: true
+      isSelect: true,
     },
     {
-      name:'status',
+      name: 'status',
       type: 'autocomplete',
       label: 'Status',
-      isSelect: true
+      isSelect: true,
     },
     {
-      name:'age',
+      name: 'age',
       type: 'autocomplete',
       label: 'Age',
-      isSelect: true
+      isSelect: true,
     },
     {
-      name:'gender',
+      name: 'gender',
       type: 'autocomplete',
       label: 'Gender',
-      isSelect: true
+      isSelect: true,
     },
     {
-      name:'plc',
+      name: 'plc',
       type: 'autocomplete',
       label: 'Plc',
-      isSelect: true
+      isSelect: true,
     },
     {
-      name:'reason',
+      name: 'reason',
       type: 'autocomplete',
       label: 'Reason',
-      isSelect: true
+      isSelect: true,
     },
     {
-      name:'category_id',
+      name: 'category_id',
       type: 'autocomplete',
       label: 'Category',
-      isSelect: true
+      isSelect: true,
     },
     {
-      name:'vendor_id',
+      name: 'vendor_id',
       type: 'autocomplete',
       label: 'Vendor',
-      isSelect: true
-    }
-
+      isSelect: true,
+    },
   ];
 
   const updateFiltersList = (e: any) => {
@@ -159,7 +158,7 @@ export const DashBoard = () => {
   };
 
   const exportColumn = (postObject: any) => {
-    console.log(postObject);
+    updateOrders(postObject, 'Approved Successfully.');
   };
 
   const modifySelectedColumns = (postObject: any) => {
@@ -203,12 +202,12 @@ export const DashBoard = () => {
       try {
         setFiltersMessage(loading);
         const list = [];
-        const filters:any = await reorderService.getFilters();
-        if(filters){
+        const filters: any = await reorderService.getFilters();
+        if (filters) {
           for (let index = 0; index < filtersList.length; index++) {
             const element = filtersList[index];
-            if(filters[element.name]){
-              list.push({...element,options:filters[element.name]})
+            if (filters[element.name]) {
+              list.push({ ...element, options: filters[element.name] });
             }
           }
           setSideBarFilters(list);
@@ -220,14 +219,14 @@ export const DashBoard = () => {
         setFiltersMessage('Filters not available try later');
       }
     })();
-  },[]);
+  }, [filtersList]);
 
   useEffect(() => {
     (async () => {
       try {
         setStatus(loading);
-        const filterKeys:Array<string> = Object.keys(selectedFilters);
-        const filters:any = {};
+        const filterKeys: Array<string> = Object.keys(selectedFilters);
+        const filters: any = {};
         for (let index = 0; index < filterKeys.length; index++) {
           const element = selectedFilters[filterKeys[index]];
           // debugger;
@@ -250,7 +249,7 @@ export const DashBoard = () => {
     return () => {
       setData({ records: [], count: 0 });
     };
-  }, [filterParams,selectedFilters]);
+  }, [filterParams, selectedFilters]);
 
   const selectTableData: SelectableTableProps = {
     columns: [

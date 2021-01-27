@@ -181,7 +181,14 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
   };
 
   const approveSelected = () => {
-    props.exportColumn && props.exportColumn(rowsSelected);
+    props.exportColumn &&
+      props.exportColumn({
+        action_type: 'approve',
+        decreased_by: null,
+        increased_by: null,
+        is_percentage_type: null,
+        skus: rowsSelected,
+      });
   };
 
   const modifySelected = (data) => {
