@@ -219,7 +219,7 @@ export const DashBoard = () => {
         setFiltersMessage('Filters not available try later');
       }
     })();
-  }, []);
+  }, [filtersList]);
 
   useEffect(() => {
     (async () => {
@@ -229,10 +229,12 @@ export const DashBoard = () => {
         const filters: any = {};
         for (let index = 0; index < filterKeys.length; index++) {
           const element = selectedFilters[filterKeys[index]];
-          // debugger;
-          // filters[filterKeys[index]] = element.map(obj => obj.key);
+          if (selectedFilters[filterKeys[index]].length) {
+            filters[filterKeys[index]] = (element.map((data: Record<string, any>) => `'${data.key}'`) || []).toString();
+          }
         }
-        const list = await reorderService.getTableData<typeof filterParams, any>(filterParams);
+        const postObject = { ...filterParams, filters };
+        const list = await reorderService.getTableData<typeof postObject, any>(postObject);
         if (list.action === 'success') {
           if (list.records.length) {
             setData(list);
