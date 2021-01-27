@@ -18,7 +18,6 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.secondary,
     fontWeight: 'bold',
     border: '1px solid rgba(0, 0, 0, 0.12)',
-    marginBottom: '20px',
   },
   header: {
     margin: 10,
@@ -250,9 +249,10 @@ export const DashBoard = () => {
       <h1 className={classes.header}>Checks and Balances DashBoard</h1>
       <FilterListPage {...filtersData} />
       {data.count === 0 && <h5> {status} </h5>}
-      <Grid container spacing={2}>
+      <Grid container spacing={2} style={{ marginBottom: '5px' }}>
         {defaultLabels.map((obj: any) => {
-          return data?.[obj.key] ? (
+          const labelObj = data?.[obj.key] ? true : data && data[obj.key] == 0 ? true : undefined;
+          return labelObj ? (
             <Grid item xs={3} key={obj.label}>
               <Paper className={classes.paper}>
                 <span color="primary">{obj.label}</span> =&gt; <span>{data[obj.key]}</span>
