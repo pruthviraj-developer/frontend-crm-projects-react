@@ -81,43 +81,87 @@ export const HsFilters: FC<IHsFilters> = ({
                     sideBar.map((sideBarOption: FFiltersOptions) => {
                       if (sideBarOption.type === 'autocomplete') {
                         return (
-                          <Grid item xs key={sideBarOption.name}>
-                            <Field
-                              multiple
-                              variant="standard"
-                              name={sideBarOption.name}
-                              label={sideBarOption.label}
-                              component={Autocomplete}
-                              options={sideBarOption.options || []}
-                              getOptionLabel={(option) =>
-                                option.display ? option.display : ''
-                              }
-                              getOptionSelected={(
-                                option: AutoCompleteOptions,
-                                selectedValue: AutoCompleteOptions
-                              ) => option.key == selectedValue?.key || []}
-                              onChange={(
-                                _evt: React.ChangeEvent,
-                                actionvalue: AutoCompleteOptions
-                              ) => {
-                                let formValues = { ...selectedFilters,[sideBarOption.name]:actionvalue};
-                                setFieldValue(sideBarOption.name,actionvalue);
+                          // <Grid item xs key={sideBarOption.name}>
+                          //   <Field
+                          //     multiple
+                          //     variant="standard"
+                          //     name={sideBarOption.name}
+                          //     label={sideBarOption.label}
+                          //     component={Autocomplete}
+                          //     options={sideBarOption.options || []}
+                          //     getOptionLabel={(option) =>
+                          //       option.display ? option.display : (option.value?option.value:'')
+                          //     }
+                          //     getOptionSelected={(
+                          //       option: AutoCompleteOptions,
+                          //       selectedValue: AutoCompleteOptions
+                          //     ) => option.key == selectedValue?.key || []}
+                          //     onChange={(
+                          //       _evt: React.ChangeEvent,
+                          //       newValue: AutoCompleteOptions
+                          //     ) => {
+                          //       debugger;
+                          //       let formValues = { 
+                          //         ...selectedFilters,
+                          //         [sideBarOption.name]:newValue
+                          //       };
+                          //       setFieldValue(sideBarOption.name,newValue);
+                          //       setSelectedFilters(formValues);
+                          //       updateFilters && updateFilters(formValues);
+                          //     }}
+                          //     renderInput={(
+                          //       params: AutocompleteRenderInputParams
+                          //     ) => (
+                          //       <MuiTextField
+                          //         {...params}
+                          //         error={touched['sort'] && !!errors['sort']}
+                          //         helperText={touched['sort'] && errors['sort']}
+                          //         label={sideBarOption.label}
+                          //         variant="outlined"
+                          //       />
+                          //     )}
+                          //   />
+                          // </Grid>
+
+                          <Grid item xs  key={sideBarOption.name}>
+                          <Field
+                            multiple
+                            variant="standard"
+                            name={sideBarOption.name}
+                            label={sideBarOption.label}
+                            component={Autocomplete}
+                            options={sideBarOption.options || []}
+                            getOptionLabel={(option: any) =>
+                              option.display ? option.display : (option.value? option.value:'')
+                            }
+                            onChange={(
+                              evt: React.ChangeEvent<HTMLInputElement>,
+                              values: AutoCompleteOptions,
+                            ) => {
+                              if (evt) {
+                                let formValues = { 
+                                  ...selectedFilters,
+                                  [sideBarOption.name]:values
+                                };
+                                setFieldValue(sideBarOption.name,values);
                                 setSelectedFilters(formValues);
                                 updateFilters && updateFilters(formValues);
-                              }}
-                              renderInput={(
-                                params: AutocompleteRenderInputParams
-                              ) => (
-                                <MuiTextField
-                                  {...params}
-                                  error={touched['sort'] && !!errors['sort']}
-                                  helperText={touched['sort'] && errors['sort']}
-                                  label={sideBarOption.label}
-                                  variant="outlined"
-                                />
-                              )}
-                            />
-                          </Grid>
+                              }
+                            }}
+                            // style={{ width: 350 }}
+                            renderInput={(
+                              params: AutocompleteRenderInputParams
+                            ) => (
+                              <MuiTextField
+                                {...params}
+                                error={touched['sort'] && !!errors['sort']}
+                                helperText={touched['sort'] && errors['sort']}
+                                label={sideBarOption.label}
+                                variant="outlined"
+                              />
+                            )}
+                          />
+                        </Grid>
                         );
                       } else if (sideBarOption.type === 'select') {
                         return (

@@ -1,7 +1,7 @@
 import { httpService } from '../http';
 
 const getFilters = <R>(): Promise<R> => {
-  const url = '/crm-api/assortment-plan-api/reorder-dashboard';
+  const url = '/crm-api/assortment-plan-api/util/v2/filters';
   return httpService.get<R>({ url });
 };
 

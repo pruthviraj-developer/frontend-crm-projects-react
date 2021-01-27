@@ -10,17 +10,17 @@ export default {
 
 const reasonOptions = [
   {
-    display: 'Non due to quality and sizing',
-    value: '1kjh',
-    key: '1kjh',
-    id: '1',
+  "key": 1,
+  "value": "SKU Count Exceed",
+  "second": "SKU Count Exceed",
+  "first": 1
   },
   {
-    display: 'Proc high return due to other reason',
-    value: 'lkj2',
-    key: 'lkj2',
-    id: '2',
-  },
+  "key": 2,
+  "value": "ASV Exceed",
+  "second": "ASV Exceed",
+  "first": 2
+  }
 ];
 
 const reasonSideBarOption: FiltersOptions = {

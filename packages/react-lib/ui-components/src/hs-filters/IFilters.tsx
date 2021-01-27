@@ -6,7 +6,7 @@ interface state {
 }
 
 export interface FFiltersOption {
-  display: string;
+  display?: string;
   id?: string | number;
   currencyCode?: string;
   key?: string | number;
@@ -21,7 +21,7 @@ export interface FFiltersOptions {
   label: string;
   type?: string;
   resetField?: string;
-  options?: FFiltersOption[] | null;
+  options?: any;
   key?: string;
   input_type?: string;
 }
@@ -31,6 +31,7 @@ export interface AutoCompleteOptions {
   value?: number | string;
   second?: number | string;
   first?: number | string;
+  display?: number | string;
 }
 
 export interface IHsFilters {

@@ -26,7 +26,7 @@ export interface FiltersOptions {
     label: string;
     type?: string;
     resetField?: string;
-    options?: FiltersOption[] | null;
+    options?: any;
     key?: string;
     input_type?: string;
 }

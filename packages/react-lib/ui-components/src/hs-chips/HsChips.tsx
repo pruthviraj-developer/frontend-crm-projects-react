@@ -33,7 +33,7 @@ export const HsChips: FC<IHsChips> = ({
         obj.options.map((listObject: FiltersOption, index: number) => (
           <Chip
             key={listObject.key || index}
-            label={listObject.display}
+            label={listObject.display || listObject.value}
             onDelete={() => {
               handleDelete(arrayindex, index);
             }}

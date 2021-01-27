@@ -25,15 +25,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const loading = 'Loading';
 const DashBoardWrapper = styled.div`
   width: 100%;
   margin: 10px 10px 10px 90px;
 `;
 export const DashBoard = () => {
   const classes = useStyles();
-  const [status, setStatus] = useState<string>('Loading');
+  const [status, setStatus] = useState<string>(loading);
   const [data, setData] = useState<{ records: Array<any>; count: 0 } | any>({ records: [], count: 0 });
-  const [sideBarState, setSideBarSate] = useState({ right: false });
+  const [sideBarState, setSideBarState] = useState({ right: false });
+  const [sideBarFilters, setSideBarFilters] = useState<any>([]);
+  const [filtersMessage, setFiltersMessage] = useState<any>({});
+  const [selectedFilters, setSelectedFilters] = useState<any>({});
   const [filterParams, setFilterParams] = useState<any>({ page_num: 1, page_size: 10, filters: {} });
   const defaultLabels: any = [
     {
@@ -62,39 +66,67 @@ export const DashBoard = () => {
     },
   ];
 
-  const reasonOptions = [
+  const filtersList = [
     {
-      display: 'Non due to quality and sizing',
-      value: '1kjh',
-      key: '1kjh',
-      id: '1',
+      name:'bucket',
+      type: 'autocomplete',
+      label: 'Bucket',
+      isSelect: true
     },
     {
-      display: 'Proc high return due to other reason',
-      value: 'lkj2',
-      key: 'lkj2',
-      id: '2',
+      name:'brand_id',
+      type: 'autocomplete',
+      label: 'Brand',
+      isSelect: true
     },
+    {
+      name:'status',
+      type: 'autocomplete',
+      label: 'Status',
+      isSelect: true
+    },
+    {
+      name:'age',
+      type: 'autocomplete',
+      label: 'Age',
+      isSelect: true
+    },
+    {
+      name:'gender',
+      type: 'autocomplete',
+      label: 'Gender',
+      isSelect: true
+    },
+    {
+      name:'plc',
+      type: 'autocomplete',
+      label: 'Plc',
+      isSelect: true
+    },
+    {
+      name:'reason',
+      type: 'autocomplete',
+      label: 'Reason',
+      isSelect: true
+    },
+    {
+      name:'category_id',
+      type: 'autocomplete',
+      label: 'Category',
+      isSelect: true
+    },
+    {
+      name:'vendor_id',
+      type: 'autocomplete',
+      label: 'Vendor',
+      isSelect: true
+    }
+
   ];
-
-  const reasonSideBarOption = {
-    isSelect: true,
-    name: 'sreason',
-    label: 'mReason',
-    options: reasonOptions,
-    type: 'autocomplete',
-  };
-
-  const autoSideBarOption = {
-    isSelect: true,
-    name: 'areason',
-    label: 'Auto Reason',
-    options: reasonOptions,
-    type: 'autocomplete',
-  };
 
   const updateFiltersList = (e: any) => {
     console.log(e, 'filters');
+    setSelectedFilters(e);
   };
 
   const fetchTableData = (e: any) => {
@@ -135,7 +167,7 @@ export const DashBoard = () => {
   };
 
   const showFilters = (e: any) => {
-    setSideBarSate({ right: e });
+    setSideBarState({ right: e });
   };
   const onSort = (params: any) => {
     console.log(params);
@@ -149,11 +181,13 @@ export const DashBoard = () => {
     }
     return 0;
   };
+
   const getComparator = (order: any, orderBy: any) => {
     return order === 'desc'
       ? (a: any, b: any) => descendingComparator(a, b, orderBy)
       : (a: any, b: any) => -descendingComparator(a, b, orderBy);
   };
+
   const stableSort = (array: any, comparator: any) => {
     const stabilizedThis = array.map((el: any, index: any) => [el, index]);
     stabilizedThis.sort((a: any, b: any) => {
@@ -167,7 +201,38 @@ export const DashBoard = () => {
   useEffect(() => {
     (async () => {
       try {
-        setStatus('Loading');
+        setFiltersMessage(loading);
+        const list = [];
+        const filters:any = await reorderService.getFilters();
+        if(filters){
+          for (let index = 0; index < filtersList.length; index++) {
+            const element = filtersList[index];
+            if(filters[element.name]){
+              list.push({...element,options:filters[element.name]})
+            }
+          }
+          setSideBarFilters(list);
+        } else {
+          setFiltersMessage('Filters not available');
+        }
+      } catch (e) {
+        console.log(e);
+        setFiltersMessage('Filters not available try later');
+      }
+    })();
+  },[]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        setStatus(loading);
+        const filterKeys:Array<string> = Object.keys(selectedFilters);
+        const filters:any = {};
+        for (let index = 0; index < filterKeys.length; index++) {
+          const element = selectedFilters[filterKeys[index]];
+          // debugger;
+          // filters[filterKeys[index]] = element.map(obj => obj.key);
+        }
         const list = await reorderService.getTableData<typeof filterParams, any>(filterParams);
         if (list.action === 'success') {
           if (list.records.length) {
@@ -185,7 +250,7 @@ export const DashBoard = () => {
     return () => {
       setData({ records: [], count: 0 });
     };
-  }, [filterParams]);
+  }, [filterParams,selectedFilters]);
 
   const selectTableData: SelectableTableProps = {
     columns: [
@@ -240,7 +305,7 @@ export const DashBoard = () => {
     },
   };
   const filtersData: FiltersListPageProps = {
-    sideBar: [reasonSideBarOption, autoSideBarOption],
+    sideBar: [...sideBarFilters],
     toggleSideBar: sideBarState,
     updateFiltersList,
   };
@@ -251,7 +316,7 @@ export const DashBoard = () => {
       {data.count === 0 && <h5> {status} </h5>}
       <Grid container spacing={2} style={{ marginBottom: '5px' }}>
         {defaultLabels.map((obj: any) => {
-          const labelObj = data?.[obj.key] ? true : data && data[obj.key] == 0 ? true : undefined;
+          const labelObj = data?.[obj.key] ? true : data && data[obj.key] === 0 ? true : undefined;
           return labelObj ? (
             <Grid item xs={3} key={obj.label}>
               <Paper className={classes.paper}>

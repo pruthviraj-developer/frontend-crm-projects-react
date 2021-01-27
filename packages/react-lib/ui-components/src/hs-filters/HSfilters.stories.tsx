@@ -22,6 +22,26 @@ const reasonOptions = [
   },
 ];
 
+const reasonOptions2 = [
+  {
+  "key": 1,
+  "value": "SKU Count Exceed",
+  "second": "SKU Count Exceed",
+  "first": 1
+  },
+  {
+    value: '1kjh',
+    key: '1kjh',
+    id: '1',
+  },
+  {
+  "key": 2,
+  "value": "ASV Exceed",
+  "second": "ASV Exceed",
+  "first": 2
+  }
+];
+
 const reasonSideBarOption: FFiltersOptions = {
   isSelect: true,
   name: 'sreason',
@@ -40,7 +60,7 @@ const autoSideBarOption: FFiltersOptions = {
   isSelect: true,
   name: 'areason',
   label: 'Auto Reason',
-  options: reasonOptions,
+  options: reasonOptions2,
   type: 'autocomplete',
 };
 
@@ -54,7 +74,6 @@ const data: IHsFilters = {
   defaultSelectedValues: {
     areason: [
       {
-        display: 'Non due to quality and sizing',
         value: '1kjh',
         key: '1kjh',
         id: '1',
