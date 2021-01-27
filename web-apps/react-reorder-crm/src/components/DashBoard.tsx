@@ -219,7 +219,7 @@ export const DashBoard = () => {
         setFiltersMessage('Filters not available try later');
       }
     })();
-  }, [filtersList]);
+  }, []);
 
   useEffect(() => {
     (async () => {
