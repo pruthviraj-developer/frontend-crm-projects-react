@@ -71,11 +71,15 @@ export const DashBoard = () => {
       (async () => {
         try {
           const ids = values.map((obj: any) => obj.key).toString();
-          const index = data.findIndex((obj: any) => obj.name === 'sub_cat');
-          if (index > -1) {
-            data.splice(index, 1);
-            setSideBarFilters(data);
+          const list = ['sub_cat', 'pt'];
+          for (let no = 0; no < list.length; no++) {
+            const element = list[no];
+            const index = data.findIndex((obj: any) => obj.name === element);
+            if (index > -1) {
+              data.splice(index, 1);
+            }
           }
+          setSideBarFilters(data);
           if (ids.length) {
             const subCategories: any = await reorderService.getSubCategories({ ids });
             if (subCategories && subCategories.sub_cat) {
@@ -87,6 +91,37 @@ export const DashBoard = () => {
                 options: subCategories.sub_cat,
               };
               const indexFound = data.findIndex((obj: any) => obj.name === 'category_id');
+              if (indexFound > -1) {
+                data.splice(indexFound + 1, 0, subCategoryObject);
+                setSideBarFilters(data);
+                return;
+              }
+            }
+          }
+        } catch (e) {}
+      })();
+    }
+    if (key === 'sub_cat') {
+      let data = [...sideBarFilters];
+      (async () => {
+        try {
+          const ids = values.map((obj: any) => obj.key).toString();
+          const index = data.findIndex((obj: any) => obj.name === 'pt');
+          if (index > -1) {
+            data.splice(index, 1);
+            setSideBarFilters(data);
+          }
+          if (ids.length) {
+            const productType: any = await reorderService.getProductTypes({ ids });
+            if (productType && productType.pt) {
+              const subCategoryObject = {
+                name: 'pt',
+                type: 'autocomplete',
+                label: 'Product Type',
+                isSelect: true,
+                options: productType.pt,
+              };
+              const indexFound = data.findIndex((obj: any) => obj.name === 'sub_cat');
               if (indexFound > -1) {
                 data.splice(indexFound + 1, 0, subCategoryObject);
                 setSideBarFilters(data);
