@@ -68,7 +68,9 @@ const updateFilters = (values) => {
   action(values);
 };
 
-const aaa = [{"options":[{"key":"All","value":"All","second":"All","first":"All"},{"key":"Spring / Summer","value":"Spring / Summer","second":"Spring / Summer","first":"Spring / Summer"},{"key":"Autumn","value":"Autumn","second":"Autumn","first":"Autumn"},{"key":"Winter","value":"Winter","second":"Winter","first":"Winter"},{"key":"Monsoon/Rainy","value":"Monsoon/Rainy","second":"Monsoon/Rainy","first":"Monsoon/Rainy"},{"key":"Summer","value":"Summer","second":"Summer","first":"Summer"},{"key":"Spring","value":"Spring","second":"Spring","first":"Spring"},{"key":"Fall","value":"Fall","second":"Fall","first":"Fall"}],"key":"Season","input_type":"S","display":"Season"}];
+const aaa = [{"options":[{"key":"All","value":"All","second":"All","first":"All"},{"key":"Spring / Summer","value":"Spring / Summer","second":"Spring / Summer","first":"Spring / Summer"},
+{"key":"Autumn","value":"Autumn","second":"Autumn","first":"Autumn"},{"key":"Winter","value":"Winter","second":"Winter","first":"Winter"},{"key":"Monsoon/Rainy","value":"Monsoon/Rainy","second":"Monsoon/Rainy","first":"Monsoon/Rainy"},
+],"key":"Season","input_type":"S","display":"Season"}];
 
 const data: IHsFilters = {
   sideBar: [...aaa],
@@ -82,7 +84,8 @@ const data: IHsFilters = {
       },
     ]
   },
-  updateFilters:updateFilters
+  updateFilters:updateFilters,
+  updateFilter:updateFilters
 };
 
 export const HsFiltersComponent: FC = () => <HsFilters {...data} />;

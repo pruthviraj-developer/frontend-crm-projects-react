@@ -36,7 +36,6 @@ export const DashBoard = () => {
   const [data, setData] = useState<{ records: Array<any>; count: 0 } | any>({ records: [], count: 0 });
   const [sideBarState, setSideBarState] = useState({ right: false });
   const [sideBarFilters, setSideBarFilters] = useState<any>([]);
-  const [filtersMessage, setFiltersMessage] = useState<any>({});
   const [selectedFilters, setSelectedFilters] = useState<any>({});
   const [filterParams, setFilterParams] = useState<any>({ page_num: 1, page_size: 10, filters: {} });
   const defaultLabels: any = [
@@ -66,8 +65,31 @@ export const DashBoard = () => {
     },
   ];
 
-  const updateFiltersList = (e: any) => {
-    setSelectedFilters(e);
+  const updatedFilter = (key:any, values:any) => {
+    console.log(key,values);
+    if(key === 'category_id'){
+      (async () => {
+        try {
+          const ids = values.map( (obj:any) => obj.key).toString();
+          const subCategories: any = await reorderService.getSubCategories({ids});
+          if (subCategories && subCategories.sub_cat) {
+            let data = [...sideBarFilters];
+            const index = data.findIndex((obj:any )=> obj.name === 'sub_cat'); 
+            const subCategoryObject = { name: 'sub_cat', type: 'autocomplete',
+            label: 'Sub Category', isSelect: true, options: subCategories.sub_cat};
+            if(index > -1){
+              data.splice(index,1);
+            }
+            data.push(subCategoryObject);
+            setSideBarFilters(data);
+          }
+        } catch (e) {}
+      })();
+    }
+  };
+
+  const updateFiltersList = (filters: any) => {
+    setSelectedFilters(filters);
   };
 
   const fetchTableData = (e: any) => {
@@ -142,63 +164,50 @@ export const DashBoard = () => {
   useEffect(() => {
     const filtersList = [
       {
-        name: 'bucket',
-        type: 'autocomplete',
-        label: 'Bucket',
-        isSelect: true,
-      },
-      {
-        name: 'brand_id',
-        type: 'autocomplete',
-        label: 'Brand',
-        isSelect: true,
-      },
-      {
-        name: 'status',
-        type: 'autocomplete',
-        label: 'Status',
-        isSelect: true,
-      },
-      {
-        name: 'age',
-        type: 'autocomplete',
-        label: 'Age',
-        isSelect: true,
-      },
-      {
-        name: 'gender',
-        type: 'autocomplete',
-        label: 'Gender',
-        isSelect: true,
-      },
-      {
-        name: 'plc',
-        type: 'autocomplete',
-        label: 'Plc',
-        isSelect: true,
-      },
-      {
-        name: 'reason',
-        type: 'autocomplete',
-        label: 'Reason',
-        isSelect: true,
-      },
-      {
         name: 'category_id',
         type: 'autocomplete',
         label: 'Category',
         isSelect: true,
+        isSingle: true
       },
       {
         name: 'vendor_id',
         type: 'autocomplete',
         label: 'Vendor',
         isSelect: true,
+        isSingle: true
       },
+      {
+        name: 'reason',
+        type: 'autocomplete',
+        label: 'Reason',
+        isSelect: true,
+        isSingle: true
+      },
+      {
+        name: 'age',
+        type: 'autocomplete',
+        label: 'Age',
+        isSelect: true,
+        isSingle: true
+      },
+      {
+        name: 'gender',
+        type: 'autocomplete',
+        label: 'Gender',
+        isSelect: true,
+        isSingle: true
+      },
+      {
+        name: 'buyer',
+        type: 'autocomplete',
+        label: 'Buyer',
+        isSelect: true,
+        isSingle: true
+      }
     ];
     (async () => {
       try {
-        setFiltersMessage(loading);
         const list = [];
         const filters: any = await reorderService.getFilters();
         if (filters) {
@@ -210,12 +219,8 @@ export const DashBoard = () => {
           }
           const skuAttributes = filters.sku_attribute || [];
           setSideBarFilters([...list,...skuAttributes]);
-        } else {
-          setFiltersMessage('Filters not available');
         }
-      } catch (e) {
-        setFiltersMessage('Filters not available try later');
-      }
+      } catch (e) {}
     })();
   }, []);
 
@@ -228,7 +233,7 @@ export const DashBoard = () => {
         for (let index = 0; index < filterKeys.length; index++) {
           const element = selectedFilters[filterKeys[index]];
           if (selectedFilters[filterKeys[index]].length) {
-            filters[filterKeys[index]] = (element.map((data: Record<string, any>) => `'${data.key}'`) || []).toString();
+            filters[filterKeys[index]] = (element.map((data: Record<string, any>) => data.key) || [])[0];
           }
         }
         const postObject = { ...filterParams, filters };
@@ -307,6 +312,7 @@ export const DashBoard = () => {
     sideBar: [...sideBarFilters],
     toggleSideBar: sideBarState,
     updateFiltersList,
+    updatedFilter
   };
   return (
     <DashBoardWrapper>

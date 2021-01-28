@@ -4,7 +4,7 @@ import { HsFilters } from '@hs/components';
 import { FiltersListPageProps, IHsFiltersList } from './IFilterListPage';
 // import { Button } from '@material-ui/core';
 
-export const FilterListPage: FC<FiltersListPageProps> = ({sideBar, toggleSideBar, updateFiltersList}: FiltersListPageProps) => {
+export const FilterListPage: FC<FiltersListPageProps> = ({sideBar, toggleSideBar, updateFiltersList, updatedFilter}: FiltersListPageProps) => {
   const [filters,setFilters] = useState<any>({});
   const [objectsList,setObjectsList] = useState<any>({objectsList:[]});
   const [sideBarState,setSideBarState] = useState<any>(toggleSideBar);
@@ -27,6 +27,9 @@ export const FilterListPage: FC<FiltersListPageProps> = ({sideBar, toggleSideBar
     updateFiltersList(data);
   };
 
+  const updateFilter = (key:any,values:any) => {
+    updatedFilter(key,values);
+  };
   const updateRemovedFilters = (filters:any) => {
     const data:any = {}
     for (let index = 0; index < filters.length; index++) {
@@ -43,6 +46,7 @@ export const FilterListPage: FC<FiltersListPageProps> = ({sideBar, toggleSideBar
     sideBar,
     sideBarState,
     updateFilters,
+    updateFilter,
     defaultSelectedValues: {},
   };
 

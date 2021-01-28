@@ -17,12 +17,13 @@ export interface FFiltersOption {
 
 export interface FFiltersOptions {
   isSelect?: boolean;
+  isSingle?: boolean;
   name: string;
   label: string;
   type?: string;
   resetField?: string;
   options?: any;
-  key?: string;
+  key: string;
   input_type?: string;
   display?: string;
 }
@@ -40,4 +41,5 @@ export interface IHsFilters {
   sideBarState?: state
   defaultSelectedValues?: any;
   updateFilters?:(a:any) => void;
+  updateFilter?:(a:any,b:any) => void;
 }

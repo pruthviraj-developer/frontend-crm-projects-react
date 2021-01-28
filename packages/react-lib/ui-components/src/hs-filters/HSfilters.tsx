@@ -33,7 +33,8 @@ export const HsFilters: FC<IHsFilters> = ({
   sideBar,
   sideBarState,
   defaultSelectedValues,
-  updateFilters
+  updateFilters,
+  updateFilter
 }: IHsFilters) => {
   const classes = useStyles();
   const [state, setState] = useState(()=>{
@@ -81,7 +82,7 @@ export const HsFilters: FC<IHsFilters> = ({
                     sideBar.map((sideBarOption: FFiltersOptions) => {
                       if (sideBarOption.type === 'autocomplete' || sideBarOption.input_type === 'S') {
                         return (
-                          <Grid item xs  key={sideBarOption.name}>
+                          <Grid item xs  key={sideBarOption.name || sideBarOption.key}>
                           <Field
                             multiple
                             variant="standard"
@@ -94,19 +95,22 @@ export const HsFilters: FC<IHsFilters> = ({
                             }
                             onChange={(
                               evt: React.ChangeEvent<HTMLInputElement>,
-                              values: AutoCompleteOptions,
+                              values: AutoCompleteOptions[],
                             ) => {
                               if (evt) {
+                                if(sideBarOption.input_type === 'S' || sideBarOption.isSingle){
+                                  values.splice(0,values.length-1);
+                                }
                                 let formValues = { 
                                   ...selectedFilters,
                                   [sideBarOption.name]:values
                                 };
-                                setFieldValue(sideBarOption.name,values);
+                                setFieldValue(sideBarOption.name || sideBarOption.key,values);
                                 setSelectedFilters(formValues);
+                                updateFilter && updateFilter(sideBarOption.name || sideBarOption.key,values);
                                 updateFilters && updateFilters(formValues);
                               }
                             }}
-                            // style={{ width: 350 }}
                             renderInput={(
                               params: AutocompleteRenderInputParams
                             ) => (
@@ -123,11 +127,11 @@ export const HsFilters: FC<IHsFilters> = ({
                         );
                       } else if (sideBarOption.type === 'select') {
                         return (
-                          <Grid item xs key={sideBarOption.name}>
+                          <Grid item xs key={sideBarOption.name || sideBarOption.key}>
                             <Field
                               select="true"
                               variant={'outlined'}
-                              name={sideBarOption.name}
+                              name={sideBarOption.name || sideBarOption.key}
                               label={sideBarOption.label}
                               component={Select}
                               type="text"
@@ -138,7 +142,7 @@ export const HsFilters: FC<IHsFilters> = ({
                                 evt: React.ChangeEvent<HTMLInputElement>
                               ) => {
                                 setFieldValue(
-                                  sideBarOption.name,
+                                  sideBarOption.name || sideBarOption.key,
                                   evt.target ? evt.target.value : ''
                                 );
                               }}
@@ -154,10 +158,10 @@ export const HsFilters: FC<IHsFilters> = ({
                         );
                       } else {
                         return (
-                          <Grid item xs key={sideBarOption.name}>
+                          <Grid item xs key={sideBarOption.name || sideBarOption.key}>
                             <Field
                               variant={'outlined'}
-                              name={sideBarOption.name}
+                              name={sideBarOption.name || sideBarOption.key}
                               label={sideBarOption.label}
                               component={TextField}
                               type="text"
@@ -165,7 +169,7 @@ export const HsFilters: FC<IHsFilters> = ({
                                 evt: React.ChangeEvent<HTMLInputElement>
                               ) => {
                                 setFieldValue(
-                                  sideBarOption.name,
+                                  sideBarOption.name || sideBarOption.key,
                                   evt.target ? evt.target.value : ''
                                 );
                               }}
