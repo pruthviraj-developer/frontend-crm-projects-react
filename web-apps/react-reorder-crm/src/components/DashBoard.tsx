@@ -135,6 +135,26 @@ export const DashBoard = () => {
   };
 
   const updateFiltersList = (filters: any) => {
+    let data = [...sideBarFilters];
+    const removeFromSideBar = (filtersList: Array<string>) => {
+      const list = [...filtersList];
+      for (let no = 0; no < list.length; no++) {
+        const element = list[no];
+        const index = data.findIndex((obj: any) => obj.name === element);
+        if (index > -1) {
+          data.splice(index, 1);
+        }
+      }
+      setSideBarFilters([...data]);
+    };
+    if (!filters.category_id) {
+      delete filters.sub_cat;
+      delete filters.pt;
+      removeFromSideBar(['sub_cat', 'pt']);
+    } else if (!filters.sub_cat) {
+      delete filters.pt;
+      removeFromSideBar(['pt']);
+    }
     setSelectedFilters(filters);
     setFilterParams({ ...filterParams, page_num: 1 });
   };
