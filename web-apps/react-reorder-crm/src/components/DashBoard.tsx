@@ -68,20 +68,26 @@ export const DashBoard = () => {
   const updatedFilter = (key:any, values:any) => {
     console.log(key,values);
     if(key === 'category_id'){
+      let data = [...sideBarFilters];
       (async () => {
         try {
           const ids = values.map( (obj:any) => obj.key).toString();
-          const subCategories: any = await reorderService.getSubCategories({ids});
-          if (subCategories && subCategories.sub_cat) {
-            let data = [...sideBarFilters];
-            const index = data.findIndex((obj:any )=> obj.name === 'sub_cat'); 
-            const subCategoryObject = { name: 'sub_cat', type: 'autocomplete',
-            label: 'Sub Category', isSelect: true, options: subCategories.sub_cat};
-            if(index > -1){
-              data.splice(index,1);
-            }
-            data.push(subCategoryObject);
+          const index = data.findIndex((obj:any )=> obj.name === 'sub_cat');
+          if(index > -1){
+            data.splice(index,1);
             setSideBarFilters(data);
+          }
+          if(ids.length){
+            const subCategories: any = await reorderService.getSubCategories({ids});
+            if (subCategories && subCategories.sub_cat) {
+              const subCategoryObject = { name: 'sub_cat', type: 'autocomplete', label: 'Sub Category', isSelect: true, options: subCategories.sub_cat};
+              const indexFound = data.findIndex((obj:any )=> obj.name === 'category_id');
+              if(indexFound > -1){
+                data.splice(indexFound +1,0,subCategoryObject);
+                setSideBarFilters(data);
+                return;
+              }
+            }
           }
         } catch (e) {}
       })();
@@ -199,9 +205,9 @@ export const DashBoard = () => {
         isSingle: true
       },
       {
-        name: 'buyer',
+        name: 'buyers',
         type: 'autocomplete',
-        label: 'Buyer',
+        label: 'Buyers',
         isSelect: true,
         isSingle: true
       }
@@ -228,12 +234,18 @@ export const DashBoard = () => {
     (async () => {
       try {
         setStatus(loading);
+        const singleSelectlist = ['category_id','vendor_id','reason','age','gender','buyer'];
         const filterKeys: Array<string> = Object.keys(selectedFilters);
         const filters: any = {};
         for (let index = 0; index < filterKeys.length; index++) {
           const element = selectedFilters[filterKeys[index]];
           if (selectedFilters[filterKeys[index]].length) {
-            filters[filterKeys[index]] = (element.map((data: Record<string, any>) => data.key) || [])[0];
+            let data = (element.map((data: Record<string, any>) => data.key) || []);
+            if(singleSelectlist.includes(filterKeys[index])){
+              filters[filterKeys[index]] = data[0];
+            } else {
+              filters[filterKeys[index]] = data.toString();
+            }
           }
         }
         const postObject = { ...filterParams, filters };

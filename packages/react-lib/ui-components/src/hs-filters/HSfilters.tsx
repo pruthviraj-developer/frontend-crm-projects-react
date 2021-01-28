@@ -101,13 +101,24 @@ export const HsFilters: FC<IHsFilters> = ({
                                 if(sideBarOption.input_type === 'S' || sideBarOption.isSingle){
                                   values.splice(0,values.length-1);
                                 }
+                                const keyName = sideBarOption.name || sideBarOption.key;
                                 let formValues = { 
                                   ...selectedFilters,
-                                  [sideBarOption.name]:values
+                                  [keyName]:values
                                 };
-                                setFieldValue(sideBarOption.name || sideBarOption.key,values);
+                                setFieldValue(keyName,values);
+                                if(keyName === 'category_id'){
+                                  setFieldValue('sub_cat','');
+                                  setFieldValue('pt','');
+                                  delete formValues['sub_cat'];
+                                  delete formValues['pt'];
+                                }
+                                if(keyName === 'sub_cat'){
+                                  setFieldValue('pt','');
+                                  delete formValues['pt'];
+                                }
                                 setSelectedFilters(formValues);
-                                updateFilter && updateFilter(sideBarOption.name || sideBarOption.key,values);
+                                updateFilter && updateFilter(keyName,values);
                                 updateFilters && updateFilters(formValues);
                               }
                             }}

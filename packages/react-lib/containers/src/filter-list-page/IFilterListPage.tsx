@@ -40,14 +40,14 @@ export interface AutoCompleteOptions {
 
 export interface FiltersListPageProps{
     objectsList?:Array<Ilist>;
-    sideBar: Array<FiltersOptions>;
+    sideBar: Array<any>;
     toggleSideBar?: state;
     updatedFilter:(a:any,b:any) => void;
     updateFiltersList:(a:any) => void;
 }
 
 export interface IHsFiltersList {
-    sideBar: Array<FiltersOptions>;
+    sideBar: Array<any>;
     sideBarState?: state
     defaultSelectedValues?: any;
     updateFilter:(a:any,b:any) => void;

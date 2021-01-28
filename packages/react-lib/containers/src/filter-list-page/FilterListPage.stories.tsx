@@ -45,11 +45,21 @@ const autoSideBarOption: FiltersOptions = {
   type: 'autocomplete',
 };
 
-const props: IHsFiltersList = {
-  sideBar: [reasonSideBarOption, testFieldSideBarOption, autoSideBarOption],
+
+const aaa = [{"options":[{"key":"All","value":"All","second":"All","first":"All"},{"key":"Spring / Summer","value":"Spring / Summer","second":"Spring / Summer","first":"Spring / Summer"},
+{"key":"Autumn","value":"Autumn","second":"Autumn","first":"Autumn"},{"key":"Winter","value":"Winter","second":"Winter","first":"Winter"},{"key":"Monsoon/Rainy","value":"Monsoon/Rainy","second":"Monsoon/Rainy","first":"Monsoon/Rainy"},
+],"key":"Season","input_type":"S","display":"Season"}];
+
+const updateFilters = (a) => { console.log(a)};
+const props: any = {
+  sideBar: [...aaa],
+  sideBarState: {right:true},
+  updateFilters,
+  updatedFilter: updateFilters,
+  toggleSideBar: {right:true}
 };
 
-const Template: Story<IHsFiltersList> = (args) => (
+const Template: Story<any> = (args) => (
   <FilterListPage {...args} />
 );
 
