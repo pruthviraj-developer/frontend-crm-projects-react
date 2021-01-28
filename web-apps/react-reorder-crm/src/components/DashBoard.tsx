@@ -79,7 +79,7 @@ export const DashBoard = () => {
               data.splice(index, 1);
             }
           }
-          setSideBarFilters(data);
+          setSideBarFilters([...data]);
           if (ids.length) {
             const subCategories: any = await reorderService.getSubCategories({ ids });
             if (subCategories && subCategories.sub_cat) {
@@ -93,7 +93,7 @@ export const DashBoard = () => {
               const indexFound = data.findIndex((obj: any) => obj.name === 'category_id');
               if (indexFound > -1) {
                 data.splice(indexFound + 1, 0, subCategoryObject);
-                setSideBarFilters(data);
+                setSideBarFilters([...data]);
                 return;
               }
             }
@@ -109,12 +109,12 @@ export const DashBoard = () => {
           const index = data.findIndex((obj: any) => obj.name === 'pt');
           if (index > -1) {
             data.splice(index, 1);
-            setSideBarFilters(data);
+            setSideBarFilters([...data]);
           }
           if (ids.length) {
             const productType: any = await reorderService.getProductTypes({ ids });
             if (productType && productType.pt) {
-              const subCategoryObject = {
+              const productTypes = {
                 name: 'pt',
                 type: 'autocomplete',
                 label: 'Product Type',
@@ -123,8 +123,8 @@ export const DashBoard = () => {
               };
               const indexFound = data.findIndex((obj: any) => obj.name === 'sub_cat');
               if (indexFound > -1) {
-                data.splice(indexFound + 1, 0, subCategoryObject);
-                setSideBarFilters(data);
+                data.splice(indexFound + 1, 0, productTypes);
+                setSideBarFilters([...data]);
                 return;
               }
             }
