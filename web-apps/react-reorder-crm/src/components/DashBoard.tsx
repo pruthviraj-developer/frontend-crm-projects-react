@@ -66,7 +66,6 @@ export const DashBoard = () => {
   ];
 
   const updatedFilter = (key: any, values: any) => {
-    setFilterParams({ ...filterParams, page_num: 1 });
     if (key === 'category_id') {
       let data = [...sideBarFilters];
       (async () => {
@@ -102,6 +101,7 @@ export const DashBoard = () => {
 
   const updateFiltersList = (filters: any) => {
     setSelectedFilters(filters);
+    setFilterParams({ ...filterParams, page_num: 1 });
   };
 
   const fetchTableData = (e: any) => {
