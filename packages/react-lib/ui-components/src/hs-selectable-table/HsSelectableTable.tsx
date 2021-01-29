@@ -40,7 +40,13 @@ const modifyQuantityFormValidation = Yup.object().shape({
   is_percentage_type: Yup.mixed().required('Please select update type'),
   value: Yup.number()
     .required('Please enter value')
-    .typeError('Please enter only numbers'),
+    .positive()
+    .typeError('Please enter only numbers')
+    .when('is_percentage_type', {
+      is: 'true',
+      then: Yup.number(),
+      otherwise: Yup.number().integer(),
+    }),
 });
 
 interface EnhancedTableProps {
