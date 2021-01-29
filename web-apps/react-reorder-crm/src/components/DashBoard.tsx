@@ -170,7 +170,7 @@ export const DashBoard = () => {
       try {
         const updateData = await reorderService.updateOrders<typeof data, any>(data);
         if (updateData.action === 'success') {
-          toast(updateData.message || successMessage);
+          toast.success(updateData.message || successMessage);
           setFilterParams({ ...filterParams, page_num: 1 });
           return;
         }
