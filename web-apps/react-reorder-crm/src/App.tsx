@@ -28,7 +28,7 @@ const App: FC = () => {
           </Router>
         </MuiThemeProvider>
       </ThemeProvider>
-      <ToastContainer />
+      <ToastContainer autoClose={10000} closeOnClick={false} draggable={false} newestOnTop={true} />
     </div>
   );
 };
