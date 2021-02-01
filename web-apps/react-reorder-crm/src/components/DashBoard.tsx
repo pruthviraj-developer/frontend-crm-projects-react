@@ -1,4 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import { FilterListPage, FiltersListPageProps } from '@hs/containers';
 import { HsSelectableTable, SelectableTableProps } from '@hs/components';
 import styled from '@emotion/styled';
@@ -7,6 +13,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import { reorderService } from '@hs/services';
+import { Colors } from '@hs/utils';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,6 +30,15 @@ const useStyles = makeStyles((theme) => ({
     margin: 10,
     fontSize: 28,
   },
+  dialogTitle: {
+    fontSize: 18,
+    fontWeight: 600,
+  },
+  dialogDescription: {
+    color: Colors.PINK[500],
+    fontSize: 16,
+    fontWeight: 600,
+  },
 }));
 
 const loading = 'Loading';
@@ -34,6 +50,9 @@ export const DashBoard = () => {
   const classes = useStyles();
   const [status, setStatus] = useState<string>(loading);
   const [data, setData] = useState<{ records: Array<any>; count: 0 } | any>({ records: [], count: 0 });
+  const [confirmDialog, showConfirmDialog] = useState(false);
+  const [confirmationMessage, setConfirmationMessage] = useState<string>('');
+  const [actionRows, setActionRows] = useState<any>({});
   const [sideBarState, setSideBarState] = useState({ right: false });
   const [sideBarFilters, setSideBarFilters] = useState<any>([]);
   const [selectedFilters, setSelectedFilters] = useState<any>({});
@@ -185,15 +204,34 @@ export const DashBoard = () => {
   };
 
   const deleteColumn = (postObject: any) => {
-    updateOrders(postObject, 'Canceled Successfully.');
+    showConfirmDialog(true);
+    setActionRows(postObject);
+    const total = postObject.skus.length;
+    setConfirmationMessage(`Are you sure you want to Cancel ${total} ${total > 1 ? 'orders ' : 'order'}`);
   };
 
   const exportColumn = (postObject: any) => {
-    updateOrders(postObject, 'Approved Successfully.');
+    showConfirmDialog(true);
+    setActionRows(postObject);
+    const total = postObject.skus.length;
+    setConfirmationMessage(`Are you sure you want to Cancel ${total} ${total > 1 ? 'orders ' : 'order'}`);
   };
 
   const modifySelectedColumns = (postObject: any) => {
     updateOrders(postObject, 'Updated Successfully.');
+  };
+
+  const handleDialogClose = () => {
+    showConfirmDialog(false);
+  };
+
+  const updateAction = () => {
+    if (actionRows.action_type === 'cancel') {
+      updateOrders(actionRows, 'Canceled Successfully.');
+    } else {
+      updateOrders(actionRows, 'Approved Successfully.');
+    }
+    handleDialogClose();
   };
 
   const showFilters = (e: any) => {
@@ -405,6 +443,29 @@ export const DashBoard = () => {
         })}
       </Grid>
       {data.count > 0 && <HsSelectableTable {...selectTableData} />}
+      <Dialog
+        open={confirmDialog}
+        onClose={handleDialogClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          <span className={classes.dialogTitle}>Confirmation</span>
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            <span className={classes.dialogDescription}>{confirmationMessage}</span>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button variant="contained" color="primary" onClick={handleDialogClose}>
+            No
+          </Button>
+          <Button variant="contained" color="primary" onClick={updateAction} autoFocus>
+            Yes
+          </Button>
+        </DialogActions>
+      </Dialog>
     </DashBoardWrapper>
   );
 };
