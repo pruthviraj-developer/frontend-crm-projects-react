@@ -207,14 +207,14 @@ export const DashBoard = () => {
     showConfirmDialog(true);
     setActionRows(postObject);
     const total = postObject.skus.length;
-    setConfirmationMessage(`Approve quantity for ${total} ${total > 1 ? 'SKUs?' : 'SKU'}`);
+    setConfirmationMessage(`Cancel quantity for ${total} ${total > 1 ? 'SKUs?' : 'SKU'}`);
   };
 
   const exportColumn = (postObject: any) => {
     showConfirmDialog(true);
     setActionRows(postObject);
     const total = postObject.skus.length;
-    setConfirmationMessage(`Cancel quantity for ${total} ${total > 1 ? 'SKUs?' : 'SKU'}`);
+    setConfirmationMessage(`Approve quantity for ${total} ${total > 1 ? 'SKUs?' : 'SKU'}`);
   };
 
   const modifySelectedColumns = (postObject: any) => {
