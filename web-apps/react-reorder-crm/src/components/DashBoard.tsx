@@ -166,11 +166,11 @@ export const DashBoard = () => {
       }
       setSideBarFilters([...data]);
     };
-    if (!filters.category_id) {
+    if (!filters.category_id || (filters.category_id && filters.category_id.length === 0)) {
       delete filters.sub_cat;
       delete filters.pt;
       removeFromSideBar(['sub_cat', 'pt']);
-    } else if (!filters.sub_cat) {
+    } else if (!filters.sub_cat || (filters.sub_cat && filters.sub_cat.length === 0)) {
       delete filters.pt;
       removeFromSideBar(['pt']);
     }
@@ -376,6 +376,7 @@ export const DashBoard = () => {
       'ASV Previous Week',
       'Reason',
       'Age Class',
+      'Category',
       'Sub Category',
       'Product Type',
       'Quantity',
@@ -392,6 +393,7 @@ export const DashBoard = () => {
       'asv_previous_week',
       'reason',
       'age_class',
+      'category',
       'sub_category',
       'product_type',
       'quantity',
