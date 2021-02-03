@@ -30,7 +30,7 @@ export const HsChips: FC<IHsChips> = ({
   return (
     <div>
       {data.map((obj: Ilist, arrayindex) =>
-        obj.options.map((listObject: FiltersOption, index: number) => (
+        obj.options.map && obj.options.map((listObject: FiltersOption, index: number) => (
           <Chip
             key={listObject.key || index}
             label={listObject.display || listObject.value}

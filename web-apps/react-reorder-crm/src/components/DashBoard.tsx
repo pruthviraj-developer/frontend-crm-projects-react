@@ -42,6 +42,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const loading = 'Loading';
+const quantityFilterDropDown = [{"options":[{"key":">","value":">"},{"key":"<","value":"<"},{"key":"=","value":"="},{"key":">=","value":">="},{"key":"<=","value":"<="}],
+"key":"operator","input_type":"S","display":"Select operator"}];
 const DashBoardWrapper = styled.div`
   width: 100%;
   margin: 10px 10px 10px 90px;
@@ -84,21 +86,26 @@ export const DashBoard = () => {
     },
   ];
 
+  const removeFromFilters = (arrayList:Array<any>) => {
+    const list = [...arrayList];
+    let data = [...sideBarFilters];
+    for (let no = 0; no < list.length; no++) {
+      const element = list[no];
+      const index = data.findIndex((obj: any) => obj.name === element);
+      if (index > -1) {
+        data.splice(index, 1);
+      }
+    }
+    setSideBarFilters([...data]);
+  };
+
   const updatedFilter = (key: any, values: any) => {
     if (key === 'category_id') {
+      removeFromFilters(['sub_cat', 'pt']);
       let data = [...sideBarFilters];
       (async () => {
         try {
           const ids = values.map((obj: any) => obj.key).toString();
-          const list = ['sub_cat', 'pt'];
-          for (let no = 0; no < list.length; no++) {
-            const element = list[no];
-            const index = data.findIndex((obj: any) => obj.name === element);
-            if (index > -1) {
-              data.splice(index, 1);
-            }
-          }
-          setSideBarFilters([...data]);
           if (ids.length) {
             const subCategories: any = await reorderService.getSubCategories({ ids });
             if (subCategories && subCategories.sub_cat) {
@@ -121,15 +128,11 @@ export const DashBoard = () => {
       })();
     }
     if (key === 'sub_cat') {
+      removeFromFilters(['pt']);
       let data = [...sideBarFilters];
       (async () => {
         try {
           const ids = values.map((obj: any) => obj.key).toString();
-          const index = data.findIndex((obj: any) => obj.name === 'pt');
-          if (index > -1) {
-            data.splice(index, 1);
-            setSideBarFilters([...data]);
-          }
           if (ids.length) {
             const productType: any = await reorderService.getProductTypes({ ids });
             if (productType && productType.pt) {
@@ -238,7 +241,7 @@ export const DashBoard = () => {
     setSideBarState({ right: e });
   };
   const onSort = (params: any) => {
-    console.log(params);
+    // console.log(params);
   };
   const descendingComparator = (a: string, b: string, orderBy: any) => {
     if (b[orderBy] < a[orderBy]) {
@@ -323,7 +326,7 @@ export const DashBoard = () => {
             }
           }
           const skuAttributes = filters.sku_attribute || [];
-          setSideBarFilters([...list, ...skuAttributes]);
+          setSideBarFilters([...list, ...skuAttributes, ...quantityFilterDropDown]);
         }
       } catch (e) {}
     })();
@@ -332,21 +335,30 @@ export const DashBoard = () => {
   useEffect(() => {
     (async () => {
       try {
-        setStatus(loading);
         const singleSelectlist = ['category_id', 'vendor_id', 'reason', 'age', 'gender', 'buyer'];
         const filterKeys: Array<string> = Object.keys(selectedFilters);
         const filters: any = {};
         for (let index = 0; index < filterKeys.length; index++) {
           const element = selectedFilters[filterKeys[index]];
-          if (selectedFilters[filterKeys[index]].length) {
-            let data = element.map((data: Record<string, any>) => data.key) || [];
-            if (singleSelectlist.includes(filterKeys[index])) {
-              filters[filterKeys[index]] = data[0];
-            } else {
-              filters[filterKeys[index]] = data.toString();
+          if(filterKeys[index] !== 'quantity'){
+            if (selectedFilters[filterKeys[index]].length) {
+              let data = element.map((data: Record<string, any>) => data.key) || [];
+              if (singleSelectlist.includes(filterKeys[index])) {
+                filters[filterKeys[index]] = data[0];
+              } else {
+                filters[filterKeys[index]] = data.toString();
+              }
             }
+          } else {
+            filters[filterKeys[index]] = element;
           }
         }
+        if(filters.operator && (!filters.quantity)){
+          toast.error('Enter quantity');
+          return;
+        }
+        setStatus(loading);
+        setData({ records: [], count: 0 });
         const postObject = { ...filterParams, filters };
         const list = await reorderService.getTableData<typeof postObject, any>(postObject);
         if (list.action === 'success') {
@@ -362,9 +374,6 @@ export const DashBoard = () => {
         setStatus('No Data');
       }
     })();
-    return () => {
-      setData({ records: [], count: 0 });
-    };
   }, [filterParams, selectedFilters]);
 
   const selectTableData: SelectableTableProps = {

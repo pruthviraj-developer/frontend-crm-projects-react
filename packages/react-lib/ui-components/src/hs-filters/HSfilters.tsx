@@ -14,8 +14,10 @@ import {
   MenuItem,
   Paper,
   Drawer,
-  Select
+  Select,
+  Button
 } from '@material-ui/core';
+import * as Yup from 'yup';
 
 import { FFiltersOptions, AutoCompleteOptions, IHsFilters } from './IFilters';
 
@@ -29,6 +31,15 @@ const useStyles = makeStyles({
 });
 
 const initialValues = {};
+
+
+const filtersFormValidation = Yup.object().shape({
+  quantity: Yup.number()
+    .required('Please enter value')
+    .positive()
+    .typeError('Please enter only numbers')
+});
+
 export const HsFilters: FC<IHsFilters> = ({
   sideBar,
   sideBarState,
@@ -71,9 +82,14 @@ export const HsFilters: FC<IHsFilters> = ({
       <Formik
         enableReinitialize={true}
         initialValues={selectedFilters}
-        onSubmit={()=>{}}
+        validationSchema={filtersFormValidation}
+        onSubmit={(values,actions)=>{
+          actions.setSubmitting(false);
+          actions.validateForm();
+          updateFilters && updateFilters(values);
+        }}
       >
-        {({ errors, setFieldValue, touched }) => (
+        {({ errors, setFieldValue, touched, isValid }) => (
           <Form autoComplete="off">
             <Grid container direction="column" justify="center" spacing={1}>
               <Paper variant="outlined" style={{ padding: '10px 20px' }}>
@@ -107,6 +123,7 @@ export const HsFilters: FC<IHsFilters> = ({
                                   [keyName]:values
                                 };
                                 setFieldValue(keyName,values);
+                                // hardcoding as these are based on other  drop down values
                                 if(keyName === 'category_id'){
                                   setFieldValue('sub_cat','');
                                   setFieldValue('pt','');
@@ -117,9 +134,17 @@ export const HsFilters: FC<IHsFilters> = ({
                                   setFieldValue('pt','');
                                   delete formValues['pt'];
                                 }
+                                if(keyName !== 'operator'){
+                                  updateFilter && updateFilter(keyName,values);
+                                  updateFilters && updateFilters(formValues);
+                                } else if(keyName === 'operator' && values.length === 0){
+                                  setFieldValue('quantity','');
+                                  delete formValues['operator'];
+                                  delete formValues['quantity'];
+                                  updateFilter && updateFilter(keyName,values);
+                                  updateFilters && updateFilters(formValues);
+                                }
                                 setSelectedFilters(formValues);
-                                updateFilter && updateFilter(keyName,values);
-                                updateFilters && updateFilters(formValues);
                               }
                             }}
                             renderInput={(
@@ -190,6 +215,46 @@ export const HsFilters: FC<IHsFilters> = ({
                         );
                       }
                     })}
+                  {(selectedFilters['operator'] && selectedFilters['operator'].length > 0) && <Grid container direction="column" justify="center" spacing={3} style={{margin: 0}}>
+                        <Grid item xs key='quantity'>
+                          <Field
+                            variant='outlined'
+                            name='quantity'
+                            label='Quantity'
+                            component={TextField}
+                            error={touched.name && Boolean(errors.name)}
+                            type="text"
+                            helperText="Enter only numbers"
+                            onChange={(
+                              evt: React.ChangeEvent<HTMLInputElement>
+                            ) => {
+                              const value = evt.target ? evt.target.value : '';
+                              setFieldValue(
+                                'quantity',
+                                value
+                              );
+                              setSelectedFilters({...selectedFilters,quantity:value});
+                            }}
+                          ></Field>
+                        </Grid>
+                        <Grid item xs>
+                          <Button
+                            type="submit"
+                            color="primary"
+                            variant="outlined"
+                            size="large"
+                            disabled={!isValid}
+                            style={{
+                              fontWeight: 'bold',
+                              fontSize: 10,
+                              padding: '14px 10px',
+                              margin: '0  0 10px'
+                            }}>
+                            Submit
+                          </Button>
+                        </Grid>
+                    </Grid>
+                  }
                 </Grid>
               </Paper>
             </Grid>

@@ -29,11 +29,11 @@ export const FilterListPage: FC<FiltersListPageProps> = ({
 
   const updateFilters = (data: any) => {
     setFilters(data);
-    updateFiltersList(data);
+    updateFiltersList && updateFiltersList(data);
   };
 
   const updateFilter = (key: any, values: any) => {
-    updatedFilter(key, values);
+    updatedFilter && updatedFilter(key, values);
   };
   const updateRemovedFilters = (filters: any) => {
     const data: any = {};
@@ -49,8 +49,11 @@ export const FilterListPage: FC<FiltersListPageProps> = ({
     } else if (!data.sub_cat) {
       delete data.pt;
     }
+    if(!data.operator){
+      delete data.quantity;
+    }
     setFilters(data);
-    updateFiltersList(data);
+    updateFiltersList && updateFiltersList(data);
   };
 
   const data: IHsFiltersList = {
