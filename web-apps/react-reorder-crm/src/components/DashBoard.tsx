@@ -42,8 +42,20 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const loading = 'Loading';
-const quantityFilterDropDown = [{"options":[{"key":">","value":">"},{"key":"<","value":"<"},{"key":"=","value":"="},{"key":">=","value":">="},{"key":"<=","value":"<="}],
-"key":"operator","input_type":"S","display":"Select operator"}];
+const quantityFilterDropDown = [
+  {
+    options: [
+      { key: '>', value: '>' },
+      { key: '<', value: '<' },
+      { key: '=', value: '=' },
+      { key: '>=', value: '>=' },
+      { key: '<=', value: '<=' },
+    ],
+    key: 'operator',
+    input_type: 'S',
+    display: 'Select operator',
+  },
+];
 const DashBoardWrapper = styled.div`
   width: 100%;
   margin: 10px 10px 10px 90px;
@@ -86,7 +98,7 @@ export const DashBoard = () => {
     },
   ];
 
-  const removeFromFilters = (arrayList:Array<any>) => {
+  const removeFromFilters = (arrayList: Array<any>) => {
     const list = [...arrayList];
     let data = [...sideBarFilters];
     for (let no = 0; no < list.length; no++) {
@@ -340,7 +352,7 @@ export const DashBoard = () => {
         const filters: any = {};
         for (let index = 0; index < filterKeys.length; index++) {
           const element = selectedFilters[filterKeys[index]];
-          if(filterKeys[index] !== 'quantity'){
+          if (filterKeys[index] !== 'quantity') {
             if (selectedFilters[filterKeys[index]].length) {
               let data = element.map((data: Record<string, any>) => data.key) || [];
               if (singleSelectlist.includes(filterKeys[index])) {
@@ -353,7 +365,7 @@ export const DashBoard = () => {
             filters[filterKeys[index]] = element;
           }
         }
-        if(filters.operator && (!filters.quantity)){
+        if (filters.operator && !filters.quantity) {
           toast.error('Enter quantity');
           return;
         }
@@ -381,35 +393,27 @@ export const DashBoard = () => {
       'SKU',
       'PID',
       'Country',
+      'Season',
+      'Age Class',
       'ASV present',
       'ASV Previous Week',
+      'Cost',
       'Reason',
-      'Age Class',
-      'Category',
-      'Sub Category',
-      'Product Type',
       'Quantity',
       'Modified Quantity',
-      'Cost',
-      'Season',
-      'Product Sub  Type',
     ],
     rowKeys: [
       'sku',
       'pid',
       'country',
+      'season',
+      'age_class',
       'asv_present',
       'asv_previous_week',
+      'cost_price',
       'reason',
-      'age_class',
-      'category',
-      'sub_category',
-      'product_type',
       'quantity',
       'modified_quantity',
-      'cost_price',
-      'season',
-      'product_sub_type',
     ],
     rows: data && data['records'] ? data['records'] : [],
     selectId: 'sku',
