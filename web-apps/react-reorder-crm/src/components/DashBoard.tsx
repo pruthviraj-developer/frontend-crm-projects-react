@@ -51,7 +51,7 @@ const quantityFilterDropDown = [
       { key: '>=', value: '>=' },
       { key: '<=', value: '<=' },
     ],
-    key: 'operator',
+    key: 'mathOperator',
     input_type: 'S',
     display: 'Select operator',
   },
@@ -365,10 +365,11 @@ export const DashBoard = () => {
             filters[filterKeys[index]] = element;
           }
         }
-        if (filters.operator && !filters.quantity) {
-          toast.error('Enter quantity');
+        if (filters.mathOperator && !filters.quantity) {
           return;
         }
+        filters['operator'] = filters.mathOperator;
+        delete filters.mathOperator;
         setStatus(loading);
         setData({ records: [], count: 0 });
         const postObject = { ...filterParams, filters };

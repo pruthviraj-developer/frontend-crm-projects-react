@@ -49,7 +49,7 @@ export const FilterListPage: FC<FiltersListPageProps> = ({
     } else if (!data.sub_cat) {
       delete data.pt;
     }
-    if(!data.operator){
+    if (!data.mathOperator) {
       delete data.quantity;
     }
     setFilters(data);

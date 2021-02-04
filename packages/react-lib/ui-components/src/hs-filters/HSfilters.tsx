@@ -15,7 +15,7 @@ import {
   Paper,
   Drawer,
   Select,
-  Button
+  Button,
 } from '@material-ui/core';
 import * as Yup from 'yup';
 
@@ -32,12 +32,11 @@ const useStyles = makeStyles({
 
 const initialValues = {};
 
-
 const filtersFormValidation = Yup.object().shape({
   quantity: Yup.number()
     .required('Please enter value')
     .positive()
-    .typeError('Please enter only numbers')
+    .typeError('Please enter only numbers'),
 });
 
 export const HsFilters: FC<IHsFilters> = ({
@@ -45,16 +44,18 @@ export const HsFilters: FC<IHsFilters> = ({
   sideBarState,
   defaultSelectedValues,
   updateFilters,
-  updateFilter
+  updateFilter,
 }: IHsFilters) => {
   const classes = useStyles();
-  const [state, setState] = useState(()=>{
-    return sideBarState || {
-      top: false,
-      left: false,
-      bottom: false,
-      right: false,
-    }
+  const [state, setState] = useState(() => {
+    return (
+      sideBarState || {
+        top: false,
+        left: false,
+        bottom: false,
+        right: false,
+      }
+    );
   });
   const [selectedFilters, setSelectedFilters] = useState(
     defaultSelectedValues || initialValues
@@ -83,9 +84,8 @@ export const HsFilters: FC<IHsFilters> = ({
         enableReinitialize={true}
         initialValues={selectedFilters}
         validationSchema={filtersFormValidation}
-        onSubmit={(values,actions)=>{
+        onSubmit={(values, actions) => {
           actions.setSubmitting(false);
-          actions.validateForm();
           updateFilters && updateFilters(values);
         }}
       >
@@ -96,74 +96,99 @@ export const HsFilters: FC<IHsFilters> = ({
                 <Grid container direction="column" justify="center" spacing={3}>
                   {sideBar &&
                     sideBar.map((sideBarOption: FFiltersOptions) => {
-                      if (sideBarOption.type === 'autocomplete' || sideBarOption.input_type === 'S') {
+                      if (
+                        sideBarOption.type === 'autocomplete' ||
+                        sideBarOption.input_type === 'S'
+                      ) {
                         return (
-                          <Grid item xs  key={sideBarOption.name || sideBarOption.key}>
-                          <Field
-                            multiple
-                            variant="standard"
-                            name={sideBarOption.name || sideBarOption.key}
-                            label={sideBarOption.label || sideBarOption.display}
-                            component={Autocomplete}
-                            options={sideBarOption.options || []}
-                            getOptionLabel={(option: any) =>
-                              option.display ? option.display : (option.value? option.value:'')
-                            }
-                            onChange={(
-                              evt: React.ChangeEvent<HTMLInputElement>,
-                              values: AutoCompleteOptions[],
-                            ) => {
-                              if (evt) {
-                                if(sideBarOption.input_type === 'S' || sideBarOption.isSingle){
-                                  values.splice(0,values.length-1);
-                                }
-                                const keyName = sideBarOption.name || sideBarOption.key;
-                                let formValues = { 
-                                  ...selectedFilters,
-                                  [keyName]:values
-                                };
-                                setFieldValue(keyName,values);
-                                // hardcoding as these are based on other  drop down values
-                                if(keyName === 'category_id'){
-                                  setFieldValue('sub_cat','');
-                                  setFieldValue('pt','');
-                                  delete formValues['sub_cat'];
-                                  delete formValues['pt'];
-                                }
-                                if(keyName === 'sub_cat'){
-                                  setFieldValue('pt','');
-                                  delete formValues['pt'];
-                                }
-                                if(keyName !== 'operator'){
-                                  updateFilter && updateFilter(keyName,values);
-                                  updateFilters && updateFilters(formValues);
-                                } else if(keyName === 'operator' && values.length === 0){
-                                  setFieldValue('quantity','');
-                                  delete formValues['operator'];
-                                  delete formValues['quantity'];
-                                  updateFilter && updateFilter(keyName,values);
-                                  updateFilters && updateFilters(formValues);
-                                }
-                                setSelectedFilters(formValues);
+                          <Grid
+                            item
+                            xs
+                            key={sideBarOption.name || sideBarOption.key}
+                          >
+                            <Field
+                              multiple
+                              variant="standard"
+                              name={sideBarOption.name || sideBarOption.key}
+                              label={
+                                sideBarOption.label || sideBarOption.display
                               }
-                            }}
-                            renderInput={(
-                              params: AutocompleteRenderInputParams
-                            ) => (
-                              <MuiTextField
-                                {...params}
-                                error={touched['sort'] && !!errors['sort']}
-                                helperText={touched['sort'] && errors['sort']}
-                                label={sideBarOption.label || sideBarOption.display}
-                                variant="outlined"
-                              />
-                            )}
-                          />
-                        </Grid>
+                              component={Autocomplete}
+                              options={sideBarOption.options || []}
+                              getOptionLabel={(option: any) =>
+                                option.display
+                                  ? option.display
+                                  : option.value
+                                  ? option.value
+                                  : ''
+                              }
+                              onChange={(
+                                evt: React.ChangeEvent<HTMLInputElement>,
+                                values: AutoCompleteOptions[]
+                              ) => {
+                                if (evt) {
+                                  if (
+                                    (sideBarOption.input_type === 'S' ||
+                                      sideBarOption.isSingle) &&
+                                    values.length
+                                  ) {
+                                    values.splice(0, values.length - 1);
+                                  }
+                                  const keyName =
+                                    sideBarOption.name || sideBarOption.key;
+                                  const formValues = {
+                                    ...selectedFilters,
+                                    [keyName]: values,
+                                  };
+                                  setFieldValue(keyName, values);
+                                  // hardcoding as these are based on other  drop down values
+                                  if (keyName === 'category_id') {
+                                    setFieldValue('sub_cat', '');
+                                    setFieldValue('pt', '');
+                                    delete formValues['sub_cat'];
+                                    delete formValues['pt'];
+                                  }
+                                  if (keyName === 'sub_cat') {
+                                    setFieldValue('pt', '');
+                                    delete formValues['pt'];
+                                  }
+                                  if (keyName !== 'mathOperator') {
+                                    updateFilter &&
+                                      updateFilter(keyName, values);
+                                    updateFilters && updateFilters(formValues);
+                                  } else if (keyName === 'mathOperator') {
+                                    setFieldValue('quantity', '');
+                                    delete formValues['quantity'];
+                                    updateFilter &&
+                                      updateFilter(keyName, values);
+                                    updateFilters && updateFilters(formValues);
+                                  }
+                                  setSelectedFilters(formValues);
+                                }
+                              }}
+                              renderInput={(
+                                params: AutocompleteRenderInputParams
+                              ) => (
+                                <MuiTextField
+                                  {...params}
+                                  error={touched['sort'] && !!errors['sort']}
+                                  helperText={touched['sort'] && errors['sort']}
+                                  label={
+                                    sideBarOption.label || sideBarOption.display
+                                  }
+                                  variant="outlined"
+                                />
+                              )}
+                            />
+                          </Grid>
                         );
                       } else if (sideBarOption.type === 'select') {
                         return (
-                          <Grid item xs key={sideBarOption.name || sideBarOption.key}>
+                          <Grid
+                            item
+                            xs
+                            key={sideBarOption.name || sideBarOption.key}
+                          >
                             <Field
                               select="true"
                               variant={'outlined'}
@@ -184,17 +209,23 @@ export const HsFilters: FC<IHsFilters> = ({
                               }}
                               fullWidth
                             >
-                              {sideBarOption?.options?.map((item:any, index) => (
-                                <MenuItem key={index} value={item}>
-                                  {item.display}
-                                </MenuItem>
-                              ))}
+                              {sideBarOption?.options?.map(
+                                (item: any, index) => (
+                                  <MenuItem key={index} value={item}>
+                                    {item.display}
+                                  </MenuItem>
+                                )
+                              )}
                             </Field>
                           </Grid>
                         );
                       } else {
                         return (
-                          <Grid item xs key={sideBarOption.name || sideBarOption.key}>
+                          <Grid
+                            item
+                            xs
+                            key={sideBarOption.name || sideBarOption.key}
+                          >
                             <Field
                               variant={'outlined'}
                               name={sideBarOption.name || sideBarOption.key}
@@ -215,13 +246,22 @@ export const HsFilters: FC<IHsFilters> = ({
                         );
                       }
                     })}
-                  {(selectedFilters['operator'] && selectedFilters['operator'].length > 0) && <Grid container direction="column" justify="center" spacing={3} style={{margin: 0}}>
-                        <Grid item xs key='quantity'>
+                  {selectedFilters['mathOperator'] &&
+                    selectedFilters['mathOperator'].length > 0 && (
+                      <Grid
+                        container
+                        direction="column"
+                        justify="center"
+                        spacing={3}
+                        style={{ margin: 0 }}
+                      >
+                        <Grid item xs key="quantity">
                           <Field
-                            variant='outlined'
-                            name='quantity'
-                            label='Quantity'
+                            variant="outlined"
+                            name="quantity"
+                            label="Quantity"
                             component={TextField}
+                            value={selectedFilters['quantity'] || ''}
                             error={touched.name && Boolean(errors.name)}
                             type="text"
                             helperText="Enter only numbers"
@@ -229,11 +269,11 @@ export const HsFilters: FC<IHsFilters> = ({
                               evt: React.ChangeEvent<HTMLInputElement>
                             ) => {
                               const value = evt.target ? evt.target.value : '';
-                              setFieldValue(
-                                'quantity',
-                                value
-                              );
-                              setSelectedFilters({...selectedFilters,quantity:value});
+                              setFieldValue('quantity', value);
+                              setSelectedFilters({
+                                ...selectedFilters,
+                                quantity: value,
+                              });
                             }}
                           ></Field>
                         </Grid>
@@ -248,13 +288,14 @@ export const HsFilters: FC<IHsFilters> = ({
                               fontWeight: 'bold',
                               fontSize: 10,
                               padding: '14px 10px',
-                              margin: '0  0 10px'
-                            }}>
+                              margin: '0  0 10px',
+                            }}
+                          >
                             Submit
                           </Button>
                         </Grid>
-                    </Grid>
-                  }
+                      </Grid>
+                    )}
                 </Grid>
               </Paper>
             </Grid>
@@ -266,11 +307,11 @@ export const HsFilters: FC<IHsFilters> = ({
 
   useEffect(() => {
     setState(sideBarState || {});
-  }, [sideBarState])
+  }, [sideBarState]);
 
   return (
     <div>
-      {['left', 'right', 'top', 'bottom'].map((anchor:any) => (
+      {['left', 'right', 'top', 'bottom'].map((anchor: any) => (
         <React.Fragment key={anchor}>
           <Drawer
             anchor={anchor}
