@@ -159,9 +159,15 @@ export const HsFilters: FC<IHsFilters> = ({
                                   } else if (keyName === 'mathOperator') {
                                     setFieldValue('quantity', '');
                                     delete formValues['quantity'];
-                                    updateFilter &&
-                                      updateFilter(keyName, values);
-                                    updateFilters && updateFilters(formValues);
+                                    if (
+                                      formValues.mathOperator &&
+                                      formValues.mathOperator.length === 0
+                                    ) {
+                                      updateFilter &&
+                                        updateFilter(keyName, values);
+                                      updateFilters &&
+                                        updateFilters(formValues);
+                                    }
                                   }
                                   setSelectedFilters(formValues);
                                 }
