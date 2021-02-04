@@ -366,6 +366,7 @@ export const DashBoard = () => {
           }
         }
         if (filters.mathOperator && !filters.quantity) {
+          toast.error('Enter Quantity');
           return;
         }
         filters['operator'] = filters.mathOperator;
