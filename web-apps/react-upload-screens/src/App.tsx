@@ -1,21 +1,33 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { FC, Suspense } from 'react';
 import './App.css';
+import { ThemeProvider } from 'emotion-theming';
+import { MuiThemeProvider } from '@material-ui/core/styles';
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
+import { LightTheme } from '@hs/utils';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+const Msku = React.lazy(() => import('./components/msku/Msku'));
 
-function App() {
+const App: FC = () => {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
-          Learn React
-        </a>
-      </header>
+      <ThemeProvider theme={LightTheme}>
+        <MuiThemeProvider theme={LightTheme}>
+          <Router basename="/react-monorepo/upload">
+            <Switch>
+              <Redirect exact from="/" to="/msku" />
+              <Route path="/msku">
+                <Suspense fallback={<div>Loading...</div>}>
+                  <Msku />
+                </Suspense>
+              </Route>
+            </Switch>
+          </Router>
+        </MuiThemeProvider>
+      </ThemeProvider>
+      <ToastContainer autoClose={10000} closeOnClick={false} draggable={false} newestOnTop={true} />
     </div>
   );
-}
+};
 
 export default App;
