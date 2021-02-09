@@ -1,12 +1,11 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC } from 'react';
 import styled from '@emotion/styled';
-import { FileUploadPage, FileUploadState, FileUploadSideBarOption, SubmitHelper } from '@hs/containers';
+import { FileUploadPage, FileUploadState, SubmitHelper } from '@hs/containers';
 import { merchStatusChangeService } from '@hs/services';
 import { LeftNavBar, LeftNavBarProps } from '@hs/components';
 import { DashBoardIcon } from '@hs/icons';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
-import { ReasonList, ListType } from './IUploadScreens';
 
 const StyledCntnr = styled.div`
   margin-left: 90px;
@@ -15,13 +14,6 @@ const StyledCntnr = styled.div`
 
 const navItems: LeftNavBarProps = {
   navList: [{ linkUrl: '/msku', linkText: 'MSKU', icon: DashBoardIcon }],
-};
-
-const reasonSideBarOption: FileUploadSideBarOption = {
-  isSelect: true,
-  name: 'reasonId',
-  label: 'Reason',
-  type: 'select',
 };
 
 const initialValues = {
@@ -36,21 +28,6 @@ const NonProcurableValidation = Yup.object().shape({
 });
 
 const Msku: FC = () => {
-  const [list, setList] = useState<ListType>(([] as unknown) as ListType);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const list = await merchStatusChangeService.getReasonList<ReasonList>();
-        setList(list.reasonList);
-      } catch (error) {
-        setList(([] as unknown) as ListType);
-      }
-    })();
-    return () => {
-      setList(([] as unknown) as ListType);
-    };
-  }, []);
   const onSubmit = async (values: FileUploadState, { setSubmitting, setErrors, resetForm }: SubmitHelper) => {
     try {
       const res = await merchStatusChangeService.markNonProcurable({
@@ -105,7 +82,7 @@ const Msku: FC = () => {
           acceptType={['xlsx']}
           onSubmit={onSubmit}
           onExport={onExport}
-          sideBar={[{ ...reasonSideBarOption, options: list }]}
+          sideBar={[]}
           validationSchema={NonProcurableValidation}
           initialValues={initialValues}
         ></FileUploadPage>
