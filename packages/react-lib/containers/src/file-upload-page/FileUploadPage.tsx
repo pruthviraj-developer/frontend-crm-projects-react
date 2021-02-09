@@ -162,7 +162,7 @@ export const FileUploadPage: FC<FileUploadPageProps> = ({
                       type="button"
                       startIcon={<CloudDownloadIcon />}
                       onClick={() => {
-                        if (onExport) onExport();
+                        if (onExport) onExport(values);
                       }}
                     >
                       Download Template

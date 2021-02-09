@@ -16,7 +16,7 @@ export interface FileUploadPageProps {
     values: FileUploadState,
     { setSubmitting, setErrors, setStatus, resetForm }: SubmitHelper
   ) => void;
-  onExport?: () => void;
+  onExport?: (values?: FileUploadState) => void;
   onDropDownChange?: (obj: DropDownValuesWithType) => void;
   sideBar?: FileUploadSideBarOption[];
   validationSchema?: unknown;
