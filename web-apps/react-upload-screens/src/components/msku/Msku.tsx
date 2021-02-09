@@ -24,7 +24,6 @@ const initialValues = {
 
 const NonProcurableValidation = Yup.object().shape({
   file: Yup.mixed().required('Please upload a file'),
-  reasonId: Yup.string().required('Reason is required'),
 });
 
 const Msku: FC = () => {
@@ -48,18 +47,9 @@ const Msku: FC = () => {
       toast.error(error.data.data.message);
     }
   };
-  const onExport = async (values?: FileUploadState) => {
-    let reason = 'nonproc';
-    if (values?.reasonId) {
-      reason = values.reasonId;
-    }
-    if (!values?.file?.file) {
-      toast.warn('Select dropdown.');
-      return;
-    }
-
+  const onExport = async () => {
     const res = await merchStatusChangeService.getTemplateDownloadLink({
-      sheetKey: reason,
+      sheetKey: 'reason',
     });
     try {
       if (res.isAvailable) {
