@@ -7,6 +7,9 @@ import { LightTheme } from '@hs/utils';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 const MskuUpload = React.lazy(() => import('./components/msku/MskuUpload'));
+const ForecastAndCapitalBudget = React.lazy(
+  () => import('./components/forcast-capitalbudget/ForecastAndCapitalBudget'),
+);
 
 const App: FC = () => {
   return (
@@ -15,9 +18,14 @@ const App: FC = () => {
         <MuiThemeProvider theme={LightTheme}>
           <Router basename="/react-monorepo/upload">
             <Switch>
-              <Route path="/msku/:type">
+              <Route path="/msku/:screenType">
                 <Suspense fallback={<div>Loading...</div>}>
                   <MskuUpload />
+                </Suspense>
+              </Route>
+              <Route path="/bulk-upload/:screenType">
+                <Suspense fallback={<div>Loading...</div>}>
+                  <ForecastAndCapitalBudget />
                 </Suspense>
               </Route>
             </Switch>

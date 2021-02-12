@@ -7,10 +7,7 @@ import { DashBoardIcon } from '@hs/icons';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 import { useParams } from 'react-router-dom';
-
-export interface RouteParams {
-  type: string;
-}
+import { uploadRouteParam } from '../../types/IBulkUpload';
 
 const StyledCntnr = styled.div`
   margin-left: 90px;
@@ -34,10 +31,10 @@ const MskuValidation = Yup.object().shape({
 });
 
 const MskuUpload: FC = () => {
-  const params = useParams<RouteParams>();
+  const params = useParams<uploadRouteParam>();
   let header = '';
   let downloadFiletitle = '';
-  if (params.type === 'create') {
+  if (params.screenType === 'create') {
     header = 'Create New MSKU';
     downloadFiletitle = 'Download Template';
   } else {
