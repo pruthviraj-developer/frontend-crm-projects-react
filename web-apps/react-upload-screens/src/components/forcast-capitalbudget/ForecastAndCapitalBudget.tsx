@@ -17,7 +17,7 @@ const StyledCntnr = styled.div`
 const navItems: LeftNavBarProps = {
   navList: [
     { linkUrl: '/bulk-upload/forecast', linkText: 'Upload Forecast File', icon: DashBoardIcon },
-    { linkUrl: '/bulk-upload/capitalBudget', linkText: 'Upload Forecast File', icon: DashBoardIcon },
+    { linkUrl: '/bulk-upload/capitalBudget', linkText: 'Upload Capital Budget File', icon: DashBoardIcon },
   ],
 };
 
