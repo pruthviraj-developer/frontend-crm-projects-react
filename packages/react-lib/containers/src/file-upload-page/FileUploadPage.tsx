@@ -11,6 +11,7 @@ import {
   StyledUploadCntnr,
   StyledUploadSideBar,
   StyledTemplateButton,
+  StyledCircularProgress,
 } from './StyledFileUploadPage';
 import { TextField } from 'formik-material-ui';
 import {
@@ -184,7 +185,8 @@ export const FileUploadPage: FC<FileUploadPageProps> = ({
                 size={'large'}
                 type="submit"
               >
-                Submit
+                {isSubmitting ? 'Submitting' : 'Submit'}
+                {isSubmitting && <StyledCircularProgress size={18} />}
               </Button>
             </Grid>
           </Grid>

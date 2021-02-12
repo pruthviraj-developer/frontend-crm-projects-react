@@ -12,3 +12,4 @@ export * from './hs-table-v2';
 export * from './snack-bar';
 export * from './md-viewer';
 export * from './file-upload';
+export * from './error-panel';

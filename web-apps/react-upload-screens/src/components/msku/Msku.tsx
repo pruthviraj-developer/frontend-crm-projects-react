@@ -2,10 +2,15 @@ import React, { FC } from 'react';
 import styled from '@emotion/styled';
 import { FileUploadPage, FileUploadState, SubmitHelper } from '@hs/containers';
 import { merchStatusChangeService } from '@hs/services';
-import { LeftNavBar, LeftNavBarProps } from '@hs/components';
+import { LeftNavBar, LeftNavBarProps, ErrorPanel } from '@hs/components';
 import { DashBoardIcon } from '@hs/icons';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
+import { useParams } from 'react-router-dom';
+
+export interface RouteParams {
+  type: string;
+}
 
 const StyledCntnr = styled.div`
   margin-left: 90px;
@@ -13,7 +18,10 @@ const StyledCntnr = styled.div`
 `;
 
 const navItems: LeftNavBarProps = {
-  navList: [{ linkUrl: '/msku', linkText: 'MSKU', icon: DashBoardIcon }],
+  navList: [
+    { linkUrl: '/msku/create', linkText: 'MSKU Create', icon: DashBoardIcon },
+    { linkUrl: '/msku/update', linkText: 'MSKU Update', icon: DashBoardIcon },
+  ],
 };
 
 const initialValues = {
@@ -22,11 +30,19 @@ const initialValues = {
   resetInput: false,
 };
 
-const NonProcurableValidation = Yup.object().shape({
+const MskuValidation = Yup.object().shape({
   file: Yup.mixed().required('Please upload a file'),
 });
 
 const Msku: FC = () => {
+  const params = useParams<RouteParams>();
+  let header = '';
+  if (params.type === 'create') {
+    header = 'Create New MSKU';
+  } else {
+    header = 'Update Existing MSKU';
+  }
+
   const onSubmit = async (values: FileUploadState, { setSubmitting, setErrors, resetForm }: SubmitHelper) => {
     try {
       const res = await merchStatusChangeService.markNonProcurable({
@@ -61,21 +77,20 @@ const Msku: FC = () => {
       toast.error('Error getting template url');
     }
   };
-  // toast('🦄 Wow so easy!');
-  // toast('🦄 Wow so easy!');
   return (
     <>
       <LeftNavBar {...navItems}></LeftNavBar>
       <StyledCntnr>
-        <h1>MSKu</h1>
+        <h2>{header}</h2>
         <FileUploadPage
-          acceptType={['xlsx']}
+          acceptType={['csv', 'xls', 'xlsx']}
           onSubmit={onSubmit}
           onExport={onExport}
           sideBar={[]}
-          validationSchema={NonProcurableValidation}
+          validationSchema={MskuValidation}
           initialValues={initialValues}
         ></FileUploadPage>
+        <ErrorPanel />
       </StyledCntnr>
     </>
   );

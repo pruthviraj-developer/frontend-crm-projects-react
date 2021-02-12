@@ -2,7 +2,7 @@ import React, { FC, Suspense } from 'react';
 import './App.css';
 import { ThemeProvider } from 'emotion-theming';
 import { MuiThemeProvider } from '@material-ui/core/styles';
-import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { LightTheme } from '@hs/utils';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -15,8 +15,7 @@ const App: FC = () => {
         <MuiThemeProvider theme={LightTheme}>
           <Router basename="/react-monorepo/upload">
             <Switch>
-              <Redirect exact from="/" to="/msku" />
-              <Route path="/msku">
+              <Route path="/msku/:type">
                 <Suspense fallback={<div>Loading...</div>}>
                   <Msku />
                 </Suspense>

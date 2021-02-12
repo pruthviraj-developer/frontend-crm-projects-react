@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React from 'react';
 import { FileUploadPage } from './FileUploadPage';
 import { action } from '@storybook/addon-actions';
 import {
