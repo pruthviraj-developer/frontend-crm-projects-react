@@ -20,6 +20,7 @@ export interface FileUploadPageProps {
   onDropDownChange?: (obj: DropDownValuesWithType) => void;
   sideBar?: FileUploadSideBarOption[];
   validationSchema?: unknown;
+  downloadFileTitle?: string;
 }
 
 export interface FileUploadSideBarOption {
