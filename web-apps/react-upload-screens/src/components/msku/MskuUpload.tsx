@@ -26,7 +26,6 @@ const navItems: LeftNavBarProps = {
 
 const initialValues = {
   file: undefined,
-  reasonId: '',
   resetInput: false,
 };
 
@@ -34,13 +33,16 @@ const MskuValidation = Yup.object().shape({
   file: Yup.mixed().required('Please upload a file'),
 });
 
-const Msku: FC = () => {
+const MskuUpload: FC = () => {
   const params = useParams<RouteParams>();
   let header = '';
+  let downloadFiletitle = '';
   if (params.type === 'create') {
     header = 'Create New MSKU';
+    downloadFiletitle = 'Download Template';
   } else {
     header = 'Update Existing MSKU';
+    downloadFiletitle = 'Download current MSKU and taxonomy';
   }
 
   const onSubmit = async (values: FileUploadState, { setSubmitting, setErrors, resetForm }: SubmitHelper) => {
@@ -89,11 +91,25 @@ const Msku: FC = () => {
           sideBar={[]}
           validationSchema={MskuValidation}
           initialValues={initialValues}
+          downloadFileTitle={downloadFiletitle}
         ></FileUploadPage>
-        <ErrorPanel />
+        <ErrorPanel
+          messages={[
+            ' testing',
+            'Non-Proc: High return due to quality and sizing',
+            'Non-Proc: Catalogue culling',
+            'Non-Proc: High return due to quality and sizing',
+            'Non-Proc: Catalogue culling',
+            'Non-Proc: High return due to quality and sizing',
+            'Non-Proc: Catalogue culling',
+            'Non-Proc: High return due to quality and sizing',
+            'Non-Proc: Catalogue culling',
+            'Non-Proc: duplicated style in website and the price is higher',
+          ]}
+        />
       </StyledCntnr>
     </>
   );
 };
 
-export default Msku;
+export default MskuUpload;

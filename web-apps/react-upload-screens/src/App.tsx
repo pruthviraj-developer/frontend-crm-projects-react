@@ -6,7 +6,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { LightTheme } from '@hs/utils';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-const Msku = React.lazy(() => import('./components/msku/Msku'));
+const MskuUpload = React.lazy(() => import('./components/msku/MskuUpload'));
 
 const App: FC = () => {
   return (
@@ -17,7 +17,7 @@ const App: FC = () => {
             <Switch>
               <Route path="/msku/:type">
                 <Suspense fallback={<div>Loading...</div>}>
-                  <Msku />
+                  <MskuUpload />
                 </Suspense>
               </Route>
             </Switch>
