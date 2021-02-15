@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import styled from '@emotion/styled';
 import { FileUploadPage, FileUploadState, SubmitHelper } from '@hs/containers';
-import { merchStatusChangeService } from '@hs/services';
+import { bulkUploadService } from '@hs/services';
 import { LeftNavBar, LeftNavBarProps, ErrorPanel } from '@hs/components';
 import { DashBoardIcon } from '@hs/icons';
 import * as Yup from 'yup';
@@ -33,26 +33,28 @@ const MskuValidation = Yup.object().shape({
 const MskuUpload: FC = () => {
   const params = useParams<uploadRouteParam>();
   let header = '';
-  let downloadFiletitle = '';
+  let downloadFileTitle = '';
+  let action = '';
   if (params.screenType === 'create') {
     header = 'Create New MSKU';
-    downloadFiletitle = 'Download Template';
+    downloadFileTitle = 'Download Template';
+    action = 'createMsku';
   } else {
     header = 'Update Existing MSKU';
-    downloadFiletitle = 'Download current MSKU and taxonomy';
+    downloadFileTitle = 'Download current MSKU and taxonomy';
+    action = 'updateMsku';
   }
 
   const onSubmit = async (values: FileUploadState, { setSubmitting, setErrors, resetForm }: SubmitHelper) => {
     try {
-      const res = await merchStatusChangeService.markNonProcurable({
+      const res = await bulkUploadService.bulkUpload({
         file: values.file?.file,
-        params: { reasonId: values.reasonId },
       });
-      if (res.message) {
-        toast.success(res.message);
+      if (res.success_messages) {
+        res.success_messages.map((msg: string, index: number) => toast.success(msg, { delay: 400 * (index + 1) }));
       }
-      if (res.errors) {
-        res.errors.map((err: string, index: number) => toast.error(err, { delay: 400 * (index + 1) }));
+      if (res.error_messages) {
+        res.error_messages.map((err: string, index: number) => toast.error(err, { delay: 400 * (index + 1) }));
       }
       setSubmitting(false);
       resetForm({ values: { ...initialValues, resetInput: true } });
@@ -62,18 +64,20 @@ const MskuUpload: FC = () => {
       toast.error(error.data.data.message);
     }
   };
+
   const onExport = async () => {
-    const res = await merchStatusChangeService.getTemplateDownloadLink({
-      sheetKey: 'reason',
+    const res = await bulkUploadService.downloadTemplate({
+      action,
     });
     try {
-      if (res.isAvailable) {
+      if (res.is_available) {
         window.open(res.url);
+        toast.success(res.message);
       } else {
-        toast.warn('Template does not exist.');
+        toast.warn(res.message);
       }
     } catch (e) {
-      toast.error('Error getting template url');
+      toast.error(res.message);
     }
   };
   return (
@@ -88,7 +92,7 @@ const MskuUpload: FC = () => {
           sideBar={[]}
           validationSchema={MskuValidation}
           initialValues={initialValues}
-          downloadFileTitle={downloadFiletitle}
+          downloadFileTitle={downloadFileTitle}
         ></FileUploadPage>
         <ErrorPanel
           messages={[
@@ -98,10 +102,26 @@ const MskuUpload: FC = () => {
             'Non-Proc: High return due to quality and sizing',
             'Non-Proc: Catalogue culling',
             'Non-Proc: High return due to quality and sizing',
+            'Non-Proc: High return due to quality and sizing',
             'Non-Proc: Catalogue culling',
             'Non-Proc: High return due to quality and sizing',
             'Non-Proc: Catalogue culling',
-            'Non-Proc: duplicated style in website and the price is higher',
+            'Non-Proc: High return due to quality and sizing',
+            'Non-Proc: High return due to quality and sizing',
+            'Non-Proc: Catalogue culling',
+            'Non-Proc: High return due to quality and sizing',
+            'Non-Proc: Catalogue culling',
+            'Non-Proc: High return due to quality and sizing',
+            'Non-Proc: High return due to quality and sizing',
+            'Non-Proc: Catalogue culling',
+            'Non-Proc: High return due to quality and sizing',
+            'Non-Proc: Catalogue culling',
+            'Non-Proc: High return due to quality and sizing',
+            'Non-Proc: High return due to quality and sizing',
+            'Non-Proc: Catalogue culling',
+            'Non-Proc: High return due to quality and sizing',
+            'Non-Proc: Catalogue culling',
+            'Non-Proc: High return due to quality and sizing',
           ]}
         />
       </StyledCntnr>
