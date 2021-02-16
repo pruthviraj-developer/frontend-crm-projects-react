@@ -30,7 +30,7 @@ const bulkUploadValidation = Yup.object().shape({
   file: Yup.mixed().required('Please upload a file'),
 });
 
-const ForcastAndCapitalBudget: FC = () => {
+const ForecastAndCapitalBudget: FC = () => {
   const routeParam = useParams<uploadRouteParam>();
   let header = '';
   let action = '';
@@ -39,7 +39,7 @@ const ForcastAndCapitalBudget: FC = () => {
     action = 'downloadForecastTemplate';
   } else {
     header = 'Capital Budget Data Upload';
-    action = 'downloadCaptialBudgetTemplate';
+    action = 'downloadCapitalBudgetTemplate';
   }
 
   const onSubmit = async (values: FileUploadState, { setSubmitting, setErrors, resetForm }: SubmitHelper) => {
@@ -96,4 +96,4 @@ const ForcastAndCapitalBudget: FC = () => {
   );
 };
 
-export default ForcastAndCapitalBudget;
+export default ForecastAndCapitalBudget;
