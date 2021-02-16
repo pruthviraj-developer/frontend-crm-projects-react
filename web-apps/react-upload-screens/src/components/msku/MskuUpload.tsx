@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import styled from '@emotion/styled';
 import { FileUploadPage, FileUploadState, SubmitHelper } from '@hs/containers';
 import { bulkUploadService } from '@hs/services';
@@ -32,6 +32,7 @@ const MskuValidation = Yup.object().shape({
 
 const MskuUpload: FC = () => {
   const params = useParams<uploadRouteParam>();
+  const [errorMessages, setErrorMessages] = useState<string[]>([]);
   let header = '';
   let downloadFileTitle = '';
   let action = '';
@@ -54,6 +55,7 @@ const MskuUpload: FC = () => {
         res.success_messages.map((msg: string, index: number) => toast.success(msg, { delay: 400 * (index + 1) }));
       }
       if (res.error_messages) {
+        setErrorMessages(res.error_messages);
         res.error_messages.map((err: string, index: number) => toast.error(err, { delay: 400 * (index + 1) }));
       }
       setSubmitting(false);
@@ -62,6 +64,7 @@ const MskuUpload: FC = () => {
       setSubmitting(false);
       setErrors({ submit: error.data.data.message });
       toast.error(error.data.data.message);
+      setErrorMessages([]);
     }
   };
 
@@ -95,36 +98,7 @@ const MskuUpload: FC = () => {
           initialValues={initialValues}
           downloadFileTitle={downloadFileTitle}
         ></FileUploadPage>
-        <ErrorPanel
-          messages={[
-            ' testing',
-            'Non-Proc: High return due to quality and sizing',
-            'Non-Proc: Catalogue culling',
-            'Non-Proc: High return due to quality and sizing',
-            'Non-Proc: Catalogue culling',
-            'Non-Proc: High return due to quality and sizing',
-            'Non-Proc: High return due to quality and sizing',
-            'Non-Proc: Catalogue culling',
-            'Non-Proc: High return due to quality and sizing',
-            'Non-Proc: Catalogue culling',
-            'Non-Proc: High return due to quality and sizing',
-            'Non-Proc: High return due to quality and sizing',
-            'Non-Proc: Catalogue culling',
-            'Non-Proc: High return due to quality and sizing',
-            'Non-Proc: Catalogue culling',
-            'Non-Proc: High return due to quality and sizing',
-            'Non-Proc: High return due to quality and sizing',
-            'Non-Proc: Catalogue culling',
-            'Non-Proc: High return due to quality and sizing',
-            'Non-Proc: Catalogue culling',
-            'Non-Proc: High return due to quality and sizing',
-            'Non-Proc: High return due to quality and sizing',
-            'Non-Proc: Catalogue culling',
-            'Non-Proc: High return due to quality and sizing',
-            'Non-Proc: Catalogue culling',
-            'Non-Proc: High return due to quality and sizing',
-          ]}
-        />
+        <ErrorPanel messages={errorMessages} />
       </StyledCntnr>
     </>
   );
