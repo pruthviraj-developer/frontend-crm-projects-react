@@ -42,12 +42,12 @@ export const ErrorPanel: FC<ErrorPanelProps> = (props: ErrorPanelProps) => {
   const classes = useStyles();
 
   return (
-    <StyledErrorPanel>
-      <>
-        <StyledHeader>{header}</StyledHeader>
-        <List className={classes.root}>
-          {errorMessage &&
-            errorMessage.map((message: string, index: number) => (
+    <>
+      {errorMessage.length > 0 ? (
+        <StyledErrorPanel>
+          <StyledHeader>{header}</StyledHeader>
+          <List className={classes.root}>
+            {errorMessage.map((message: string, index: number) => (
               <>
                 <ListItem key={`item-${index}`} alignItems="flex-start">
                   <ListItemText
@@ -68,8 +68,11 @@ export const ErrorPanel: FC<ErrorPanelProps> = (props: ErrorPanelProps) => {
                 {index < errorMessage.length - 1 && <Divider component="li" />}
               </>
             ))}
-        </List>
-      </>
-    </StyledErrorPanel>
+          </List>
+        </StyledErrorPanel>
+      ) : (
+        []
+      )}
+    </>
   );
 };
