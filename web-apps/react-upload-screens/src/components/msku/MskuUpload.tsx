@@ -86,6 +86,7 @@ const MskuUpload: FC = () => {
       <StyledCntnr>
         <h2>{header}</h2>
         <FileUploadPage
+          key={action}
           acceptType={['csv', 'xls', 'xlsx']}
           onSubmit={onSubmit}
           onExport={onExport}

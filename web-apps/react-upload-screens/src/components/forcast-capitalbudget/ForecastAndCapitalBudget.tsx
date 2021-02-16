@@ -83,6 +83,7 @@ const ForcastAndCapitalBudget: FC = () => {
       <StyledCntnr>
         <h1>{header}</h1>
         <FileUploadPage
+          key={action}
           acceptType={['xlsx']}
           onSubmit={onSubmit}
           onExport={onExport}
