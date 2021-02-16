@@ -33,19 +33,25 @@ const bulkUploadValidation = Yup.object().shape({
 const ForecastAndCapitalBudget: FC = () => {
   const routeParam = useParams<uploadRouteParam>();
   let header = '';
-  let action = '';
+  let downloadAction = '';
+  let uploadAction = '';
   if (routeParam.screenType === 'forecast') {
     header = 'Forecast Data Upload';
-    action = 'downloadForecastTemplate';
+    downloadAction = 'downloadForecastTemplate';
+    uploadAction = 'uploadForecastData';
   } else {
     header = 'Capital Budget Data Upload';
-    action = 'downloadCapitalBudgetTemplate';
+    downloadAction = 'downloadCapitalBudgetTemplate';
+    uploadAction = 'uploadCapitalBudgetTemplate';
   }
 
   const onSubmit = async (values: FileUploadState, { setSubmitting, setErrors, resetForm }: SubmitHelper) => {
     try {
       const res = await bulkUploadService.bulkUpload({
-        file: values.file?.file,
+        data: {
+          file: values.file?.file,
+        },
+        params: { action: uploadAction },
       });
       if (res.success_messages) {
         res.success_messages.map((msg: string, index: number) => toast.success(msg, { delay: 400 * (index + 1) }));
@@ -64,7 +70,7 @@ const ForecastAndCapitalBudget: FC = () => {
 
   const onExport = async () => {
     const res = await bulkUploadService.downloadTemplate({
-      action,
+      action: downloadAction,
     });
     try {
       if (res.is_available) {
@@ -83,7 +89,7 @@ const ForecastAndCapitalBudget: FC = () => {
       <StyledCntnr>
         <h1>{header}</h1>
         <FileUploadPage
-          key={action}
+          key={downloadAction}
           acceptType={['xlsx']}
           onSubmit={onSubmit}
           onExport={onExport}

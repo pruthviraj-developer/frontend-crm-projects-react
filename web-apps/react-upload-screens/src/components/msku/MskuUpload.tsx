@@ -36,20 +36,26 @@ const MskuUpload: FC = () => {
   let header = '';
   let downloadFileTitle = '';
   let action = '';
+  let uploadAction = '';
   if (params.screenType === 'create') {
     header = 'Create New MSKU';
     downloadFileTitle = 'Download Template';
     action = 'createMsku';
+    uploadAction = 'createUploadMsku';
   } else {
     header = 'Update Existing MSKU';
     downloadFileTitle = 'Download current MSKU and taxonomy';
     action = 'updateMsku';
+    uploadAction = 'updateUploadMsku';
   }
 
   const onSubmit = async (values: FileUploadState, { setSubmitting, setErrors, resetForm }: SubmitHelper) => {
     try {
       const res = await bulkUploadService.bulkUpload({
-        file: values.file?.file,
+        data: {
+          file: values.file?.file,
+        },
+        params: { action: uploadAction },
       });
       if (res.success_messages) {
         res.success_messages.map((msg: string, index: number) => toast.success(msg, { delay: 400 * (index + 1) }));

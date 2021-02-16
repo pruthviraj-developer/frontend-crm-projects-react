@@ -2,7 +2,7 @@ import { httpService } from '../http';
 import {
   templateDownloadParam,
   templateDownloadRes,
-  bulkUploadParam,
+  bulkUploadParams,
   bulkUploadRes,
 } from './Ibulk.upload.service';
 
@@ -22,9 +22,12 @@ const downloadTemplate = (
     });
 };
 
-const bulkUpload = (data: bulkUploadParam): Promise<bulkUploadRes> => {
+const bulkUpload = ({
+  data,
+  params,
+}: bulkUploadParams): Promise<bulkUploadRes> => {
   const url = '/crm-api/intranet/bulk-uploader-service/multipart';
-  return httpService.post<bulkUploadRes>({ url, data });
+  return httpService.post<bulkUploadRes>({ url, data, params });
 };
 
 export const bulkUploadService = {
