@@ -2,3 +2,4 @@
 // export * from './create-carousel-page';
 export * from './create-non-carousel-page';
 export * from './file-upload-page';
+export * from './filter-list-page';
