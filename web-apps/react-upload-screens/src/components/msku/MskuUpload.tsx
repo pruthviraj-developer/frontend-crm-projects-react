@@ -40,13 +40,13 @@ const MskuUpload: FC = () => {
   if (params.screenType === 'create') {
     header = 'Create New MSKU';
     downloadFileTitle = 'Download Template';
-    action = 'createMsku';
-    uploadAction = 'createUploadMsku';
+    uploadAction = 'createMsku';
+    action = 'downloadCreateMsku';
   } else {
     header = 'Update Existing MSKU';
     downloadFileTitle = 'Download current MSKU and taxonomy';
-    action = 'updateMsku';
-    uploadAction = 'updateUploadMsku';
+    uploadAction = 'updateMsku';
+    action = 'downloadCurrentMsku';
   }
 
   const onSubmit = async (values: FileUploadState, { setSubmitting, setErrors, resetForm }: SubmitHelper) => {

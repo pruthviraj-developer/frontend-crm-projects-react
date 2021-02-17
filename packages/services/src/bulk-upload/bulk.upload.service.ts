@@ -10,7 +10,7 @@ const downloadTemplate = (
   params: templateDownloadParam,
   delay = 1
 ): Promise<templateDownloadRes> => {
-  const url = '/crm-api/intranet/bulk-uploader-service/multipart';
+  const url = '/crm-api/intranet/bulk-uploader-service/get';
   return httpService
     .get<templateDownloadRes>({ url, params })
     .then(async (response) => {
