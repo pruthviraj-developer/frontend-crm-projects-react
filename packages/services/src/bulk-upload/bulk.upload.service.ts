@@ -23,11 +23,15 @@ const downloadTemplate = (
 };
 
 const bulkUpload = ({
-  data,
+  file,
   params,
 }: bulkUploadParams): Promise<bulkUploadRes> => {
+  const data = new FormData();
+  if (file) {
+    data.append('file', file);
+  }
   const url = '/crm-api/intranet/bulk-uploader-service/multipart';
-  return httpService.post<bulkUploadRes>({ url, data, params });
+  return httpService.fileUpload<bulkUploadRes>({ url, data, params });
 };
 
 export const bulkUploadService = {

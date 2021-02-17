@@ -52,9 +52,7 @@ const MskuUpload: FC = () => {
   const onSubmit = async (values: FileUploadState, { setSubmitting, setErrors, resetForm }: SubmitHelper) => {
     try {
       const res = await bulkUploadService.bulkUpload({
-        data: {
-          file: values.file?.file,
-        },
+        file: values.file?.file,
         params: { action: uploadAction },
       });
       if (res.success_messages) {

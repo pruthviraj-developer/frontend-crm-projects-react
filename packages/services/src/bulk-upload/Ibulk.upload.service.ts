@@ -3,17 +3,12 @@ export interface templateDownloadRes {
   url: string;
   message: string;
 }
-
-export interface bulkUploadData {
-  file?: string | Blob;
-}
-
 export interface bulkUploadParamsType {
   action: string;
 }
 
 export interface bulkUploadParams {
-  data: bulkUploadData;
+  file?: string | Blob;
   params: bulkUploadParamsType;
 }
 export interface bulkUploadRes {
