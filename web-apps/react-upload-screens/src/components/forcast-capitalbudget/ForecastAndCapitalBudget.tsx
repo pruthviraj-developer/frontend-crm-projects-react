@@ -51,11 +51,11 @@ const ForecastAndCapitalBudget: FC = () => {
         file: values.file?.file,
         params: { action: uploadAction },
       });
-      if (res.success_messages) {
-        res.success_messages.map((msg: string, index: number) => toast.success(msg, { delay: 400 * (index + 1) }));
+      if (res.data.success_message) {
+        res.data.success_message.map((msg: string, index: number) => toast.success(msg, { delay: 400 * (index + 1) }));
       }
-      if (res.error_messages) {
-        res.error_messages.map((err: string, index: number) => toast.error(err, { delay: 400 * (index + 1) }));
+      if (res.data.error_message) {
+        res.data.error_message.map((err: string, index: number) => toast.error(err, { delay: 400 * (index + 1) }));
       }
       setSubmitting(false);
       resetForm({ values: { ...initialValues, resetInput: true } });
@@ -71,14 +71,14 @@ const ForecastAndCapitalBudget: FC = () => {
       action: downloadAction,
     });
     try {
-      if (res.is_available) {
-        window.open(res.url);
-        toast.success(res.message);
+      if (res.data.is_available) {
+        window.open(res.data.url);
+        toast.success(res.data.message);
       } else {
-        toast.warn(res.message);
+        toast.warn(res.data.message);
       }
     } catch (e) {
-      toast.error(res.message);
+      toast.error(res.data.message);
     }
   };
   return (

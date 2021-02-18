@@ -9,6 +9,7 @@ import styled from '@emotion/styled';
 import { ErrorPanelProps } from './IErrorPanel';
 import { Colors } from '@hs/utils';
 import { Typography } from '@material-ui/core';
+import { toast } from 'react-toastify';
 
 const StyledErrorPanel = styled(Paper)`
   width: '100%';
@@ -22,6 +23,12 @@ const StyledHeader = styled.div`
   background-color: ${Colors.RED[400]};
   padding: 10px 15px;
   text-align: center;
+`;
+
+const StyledCopytoClipboard = styled.button`
+  float: right;
+  margin: 5px;
+  cursor: pointer;
 `;
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -41,12 +48,27 @@ export const ErrorPanel: FC<ErrorPanelProps> = (props: ErrorPanelProps) => {
   const errorMessage: Array<string> = props.messages || [];
   const classes = useStyles();
 
+  const copyToClipboard = () => {
+    const textField = document.createElement('textarea');
+    textField.innerText = errorMessage.toString();
+    document.body.appendChild(textField);
+    textField.select();
+    document.execCommand('copy');
+    textField.remove();
+    toast.info('copy Error Messages');
+  };
+
   return (
     <>
       {errorMessage.length > 0 ? (
         <StyledErrorPanel>
-          <StyledHeader>{header}</StyledHeader>
-          <List className={classes.root}>
+          <StyledHeader>
+            {header}
+            <StyledCopytoClipboard onClick={copyToClipboard}>
+              Copy
+            </StyledCopytoClipboard>
+          </StyledHeader>
+          <List key={'list'} className={classes.root}>
             {errorMessage.map((message: string, index: number) => (
               <>
                 <ListItem key={`item-${index}`} alignItems="flex-start">
