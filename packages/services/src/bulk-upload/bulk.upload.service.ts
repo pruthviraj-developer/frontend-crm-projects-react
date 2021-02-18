@@ -14,7 +14,7 @@ const downloadTemplate = (
   return httpService
     .get<templateDownloadRes>({ url, params })
     .then(async (response) => {
-      if (!response.is_available && delay < 7) {
+      if (!response.data.is_available && delay < 7) {
         await new Promise((resolve) => setTimeout(resolve, delay * 1000));
         return await downloadTemplate(params, delay + 2);
       }
