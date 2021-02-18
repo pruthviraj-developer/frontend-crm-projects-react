@@ -79,7 +79,7 @@ const MskuUpload: FC = () => {
     try {
       if (res.data.is_available) {
         window.open(res.data.url);
-        toast.success(res.data.message);
+        res.data.message != '' && toast.success(res.data.message);
       } else {
         toast.warn(res.data.message);
       }
