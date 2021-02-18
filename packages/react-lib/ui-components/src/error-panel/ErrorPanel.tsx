@@ -10,6 +10,8 @@ import { ErrorPanelProps } from './IErrorPanel';
 import { Colors } from '@hs/utils';
 import { Typography } from '@material-ui/core';
 import { toast } from 'react-toastify';
+import IconButton from '@material-ui/core/IconButton';
+import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
 
 const StyledErrorPanel = styled(Paper)`
   width: '100%';
@@ -25,10 +27,11 @@ const StyledHeader = styled.div`
   text-align: center;
 `;
 
-const StyledCopytoClipboard = styled.button`
+const StyledCopytoClipboard = styled.div`
   float: right;
-  margin: 5px;
   cursor: pointer;
+  border-radius: 50%;
+  background: white;
 `;
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -59,42 +62,40 @@ export const ErrorPanel: FC<ErrorPanelProps> = (props: ErrorPanelProps) => {
   };
 
   return (
-    <>
-      {errorMessage.length > 0 ? (
-        <StyledErrorPanel>
-          <StyledHeader>
-            {header}
-            <StyledCopytoClipboard onClick={copyToClipboard}>
-              Copy
-            </StyledCopytoClipboard>
-          </StyledHeader>
-          <List key={'list'} className={classes.root}>
-            {errorMessage.map((message: string, index: number) => (
-              <>
-                <ListItem key={`item-${index}`} alignItems="flex-start">
-                  <ListItemText
-                    key={`error-${index}`}
-                    primary={
-                      <React.Fragment>
-                        <Typography
-                          component="span"
-                          variant="h5"
-                          color="textPrimary"
-                        >
-                          {`${index + 1}: ${message}`}
-                        </Typography>
-                      </React.Fragment>
-                    }
-                  />
-                </ListItem>
-                {index < errorMessage.length - 1 && <Divider component="li" />}
-              </>
-            ))}
-          </List>
-        </StyledErrorPanel>
-      ) : (
-        []
+    <StyledErrorPanel>
+      <StyledHeader>
+        {header}
+        <StyledCopytoClipboard onClick={copyToClipboard}>
+          <IconButton>
+            <FileCopyOutlinedIcon />
+          </IconButton>
+        </StyledCopytoClipboard>
+      </StyledHeader>
+      {errorMessage.length > 0 && (
+        <List key={'list'} className={classes.root}>
+          {errorMessage.map((message: string, index: number) => (
+            <>
+              <ListItem key={`item-${index}`} alignItems="flex-start">
+                <ListItemText
+                  key={`error-${index}`}
+                  primary={
+                    <React.Fragment>
+                      <Typography
+                        component="span"
+                        variant="h5"
+                        color="textPrimary"
+                      >
+                        {`${index + 1}: ${message}`}
+                      </Typography>
+                    </React.Fragment>
+                  }
+                />
+              </ListItem>
+              {index < errorMessage.length - 1 && <Divider component="li" />}
+            </>
+          ))}
+        </List>
       )}
-    </>
+    </StyledErrorPanel>
   );
 };

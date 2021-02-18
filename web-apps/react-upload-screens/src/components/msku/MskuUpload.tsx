@@ -60,7 +60,8 @@ const MskuUpload: FC = () => {
       }
       if (res.data.error_message) {
         setErrorMessages(res.data.error_message);
-        res.data.error_message.map((err: string, index: number) => toast.error(err, { delay: 400 * (index + 1) }));
+      } else {
+        setErrorMessages([]);
       }
       setSubmitting(false);
       resetForm({ values: { ...initialValues, resetInput: true } });
@@ -79,7 +80,7 @@ const MskuUpload: FC = () => {
     try {
       if (res.data.is_available) {
         window.open(res.data.url);
-        res.data.message != '' && toast.success(res.data.message);
+        res.data.message !== '' && toast.success(res.data.message);
       } else {
         toast.warn(res.data.message);
       }
@@ -102,7 +103,7 @@ const MskuUpload: FC = () => {
           initialValues={initialValues}
           downloadFileTitle={downloadFileTitle}
         ></FileUploadPage>
-        <ErrorPanel messages={errorMessages} />
+        {errorMessages.length > 0 && <ErrorPanel messages={errorMessages} />}
       </StyledCntnr>
     </>
   );

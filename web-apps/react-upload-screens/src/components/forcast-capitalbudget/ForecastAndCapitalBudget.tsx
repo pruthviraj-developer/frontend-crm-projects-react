@@ -73,7 +73,7 @@ const ForecastAndCapitalBudget: FC = () => {
     try {
       if (res.data.is_available) {
         window.open(res.data.url);
-        res.data.message != '' && toast.success(res.data.message);
+        res.data.message !== '' && toast.success(res.data.message);
       } else {
         toast.warn(res.data.message);
       }
