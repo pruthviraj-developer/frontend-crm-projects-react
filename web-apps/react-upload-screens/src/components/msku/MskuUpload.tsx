@@ -58,7 +58,7 @@ const MskuUpload: FC = () => {
       if (res.data) {
         res.data.success_message.map((msg: string, index: number) => toast.success(msg, { delay: 400 * (index + 1) }));
       }
-      if (res.data.error_message) {
+      if (res.data && res.data.error_message) {
         setErrorMessages(res.data.error_message);
       } else {
         setErrorMessages([]);

@@ -6,12 +6,11 @@ import Divider from '@material-ui/core/Divider';
 import ListItemText from '@material-ui/core/ListItemText';
 import Paper from '@material-ui/core/Paper';
 import styled from '@emotion/styled';
-import { ErrorPanelProps } from './IErrorPanel';
 import { Colors } from '@hs/utils';
 import { Typography } from '@material-ui/core';
-import { toast } from 'react-toastify';
 import IconButton from '@material-ui/core/IconButton';
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
+import { ErrorPanelProps } from './IErrorPanel';
 
 const StyledErrorPanel = styled(Paper)`
   width: '100%';
@@ -21,17 +20,16 @@ const StyledErrorPanel = styled(Paper)`
 
 const StyledHeader = styled.div`
   font-size: 2rem;
-  color: white;
+  color: ${Colors.WHITE};
   background-color: ${Colors.RED[400]};
-  padding: 10px 15px;
   text-align: center;
 `;
 
 const StyledCopytoClipboard = styled.div`
-  float: right;
-  cursor: pointer;
+  display: inline-flex;
+  margin: 5px;
   border-radius: 50%;
-  background: white;
+  background: ${Colors.WHITE};
 `;
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -58,7 +56,6 @@ export const ErrorPanel: FC<ErrorPanelProps> = (props: ErrorPanelProps) => {
     textField.select();
     document.execCommand('copy');
     textField.remove();
-    toast.info('copy Error Messages');
   };
 
   return (
@@ -67,7 +64,7 @@ export const ErrorPanel: FC<ErrorPanelProps> = (props: ErrorPanelProps) => {
         {header}
         <StyledCopytoClipboard onClick={copyToClipboard}>
           <IconButton>
-            <FileCopyOutlinedIcon />
+            <FileCopyOutlinedIcon fontSize="large" />
           </IconButton>
         </StyledCopytoClipboard>
       </StyledHeader>
