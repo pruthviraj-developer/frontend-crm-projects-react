@@ -42,7 +42,7 @@ const ForecastAndCapitalBudget: FC = () => {
   } else {
     header = 'Capital Budget Data Upload';
     downloadAction = 'downloadCapitalBudgetTemplate';
-    uploadAction = 'uploadCapitalBudgetTemplate';
+    uploadAction = 'uploadCapitalBudgetData';
   }
 
   const onSubmit = async (values: FileUploadState, { setSubmitting, setErrors, resetForm }: SubmitHelper) => {
