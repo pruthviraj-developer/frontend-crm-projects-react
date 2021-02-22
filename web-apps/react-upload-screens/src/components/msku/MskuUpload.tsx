@@ -1,12 +1,12 @@
 import React, { FC, useState } from 'react';
+import { toast } from 'react-toastify';
+import { useParams } from 'react-router-dom';
 import styled from '@emotion/styled';
+import * as Yup from 'yup';
 import { FileUploadPage, FileUploadState, SubmitHelper } from '@hs/containers';
 import { bulkUploadService } from '@hs/services';
 import { LeftNavBar, LeftNavBarProps, ErrorPanel } from '@hs/components';
 import { DashBoardIcon } from '@hs/icons';
-import * as Yup from 'yup';
-import { toast } from 'react-toastify';
-import { useParams } from 'react-router-dom';
 import { uploadRouteParam } from '../../types/IBulkUpload';
 
 const StyledCntnr = styled.div`
@@ -55,13 +55,14 @@ const MskuUpload: FC = () => {
         file: values.file?.file,
         params: { action: uploadAction },
       });
-      if (res.data) {
-        res.data.success_message.map((msg: string, index: number) => toast.success(msg, { delay: 400 * (index + 1) }));
+      if (res.data && res.data.success_message) {
+        res.data.success_message.length > 0 &&
+          res.data.success_message.map((msg: string, index: number) =>
+            toast.success(msg, { delay: 400 * (index + 1) }),
+          );
       }
       if (res.data && res.data.error_message) {
         setErrorMessages(res.data.error_message);
-      } else {
-        setErrorMessages([]);
       }
       setSubmitting(false);
       resetForm({ values: { ...initialValues, resetInput: true } });
