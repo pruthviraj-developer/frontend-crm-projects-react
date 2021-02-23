@@ -8,6 +8,7 @@ import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 import { useParams } from 'react-router-dom';
 import { uploadRouteParam } from '../../types/IBulkUpload';
+import { Helmet } from 'react-helmet';
 
 const StyledCntnr = styled.div`
   margin-left: 90px;
@@ -96,6 +97,9 @@ const ForecastAndCapitalBudget: FC = () => {
   };
   return (
     <>
+      <Helmet>
+        <title>{header}</title>
+      </Helmet>
       <LeftNavBar {...navItems}></LeftNavBar>
       <StyledCntnr>
         <h1>{header}</h1>

@@ -8,6 +8,7 @@ import { bulkUploadService } from '@hs/services';
 import { LeftNavBar, LeftNavBarProps, ErrorPanel } from '@hs/components';
 import { DashBoardIcon } from '@hs/icons';
 import { uploadRouteParam } from '../../types/IBulkUpload';
+import { Helmet } from 'react-helmet';
 
 const StyledCntnr = styled.div`
   margin-left: 90px;
@@ -95,6 +96,9 @@ const MskuUpload: FC = () => {
   };
   return (
     <>
+      <Helmet>
+        <title>{header}</title>
+      </Helmet>
       <LeftNavBar {...navItems}></LeftNavBar>
       <StyledCntnr>
         <h2>{header}</h2>

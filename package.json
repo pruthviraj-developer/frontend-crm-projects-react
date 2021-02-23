@@ -45,11 +45,17 @@
     "webpack": "4.42.0",
     "yarn": "^1.22.4"
   },
-  "workspaces": [
-    "packages/*",
-    "packages/react-lib/*",
-    "web-apps/*"
-  ],
+  "workspaces": {
+    "packages": [
+      "packages/*",
+      "packages/react-lib/*",
+      "web-apps/*"
+    ],
+    "nohoist": [
+      "**/react-scripts",
+      "**/react-scripts/**"
+    ]
+  },
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
