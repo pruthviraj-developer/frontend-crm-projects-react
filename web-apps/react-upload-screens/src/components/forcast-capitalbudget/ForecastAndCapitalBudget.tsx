@@ -47,9 +47,8 @@ const ForecastAndCapitalBudget: FC = () => {
     header = 'Capital Budget Data Upload';
     downloadAction = 'downloadCapitalBudgetTemplate';
     uploadAction = 'uploadCapitalBudgetData';
-    downloadFileTitle = 'Download Revenu Plan Template';
+    downloadFileTitle = 'Download Revenue Plan Template';
   }
-
   useEffect(() => {
     setErrorMessages([]);
   }, [routeParam.screenType]);
