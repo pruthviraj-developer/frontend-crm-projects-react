@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import styled from '@emotion/styled';
 import { FileUploadPage, FileUploadState, SubmitHelper } from '@hs/containers';
 import { bulkUploadService } from '@hs/services';
@@ -48,6 +48,10 @@ const ForecastAndCapitalBudget: FC = () => {
     uploadAction = 'uploadCapitalBudgetData';
     downloadFileTitle = 'Download Revenu Plan Template';
   }
+
+  useEffect(() => {
+    setErrorMessages([]);
+  }, [routeParam.screenType]);
 
   const onSubmit = async (values: FileUploadState, { setSubmitting, setErrors, resetForm }: SubmitHelper) => {
     try {
@@ -105,7 +109,7 @@ const ForecastAndCapitalBudget: FC = () => {
           initialValues={initialValues}
           downloadFileTitle={downloadFileTitle}
         ></FileUploadPage>
-        {errorMessages.length > 0 && <ErrorPanel messages={errorMessages} />}
+        {errorMessages.length > 0 && <ErrorPanel key={uploadAction} messages={errorMessages} />}
       </StyledCntnr>
     </>
   );

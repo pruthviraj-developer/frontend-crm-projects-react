@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { useParams } from 'react-router-dom';
 import styled from '@emotion/styled';
@@ -48,6 +48,10 @@ const MskuUpload: FC = () => {
     uploadAction = 'updateMsku';
     action = 'downloadCurrentMsku';
   }
+
+  useEffect(() => {
+    setErrorMessages([]);
+  }, [params.screenType]);
 
   const onSubmit = async (values: FileUploadState, { setSubmitting, setErrors, resetForm }: SubmitHelper) => {
     try {
@@ -104,7 +108,7 @@ const MskuUpload: FC = () => {
           initialValues={initialValues}
           downloadFileTitle={downloadFileTitle}
         ></FileUploadPage>
-        {errorMessages.length > 0 && <ErrorPanel messages={errorMessages} />}
+        {errorMessages.length > 0 && <ErrorPanel key={uploadAction} messages={errorMessages} />}
       </StyledCntnr>
     </>
   );

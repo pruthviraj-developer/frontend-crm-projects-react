@@ -69,7 +69,7 @@ export const ErrorPanel: FC<ErrorPanelProps> = (props: ErrorPanelProps) => {
         </StyledCopytoClipboard>
       </StyledHeader>
       {errorMessage.length > 0 && (
-        <List key={'list'} className={classes.root}>
+        <List key={'error-list'} className={classes.root}>
           {errorMessage.map((message: string, index: number) => (
             <>
               <ListItem key={`item-${index}`} alignItems="flex-start">
