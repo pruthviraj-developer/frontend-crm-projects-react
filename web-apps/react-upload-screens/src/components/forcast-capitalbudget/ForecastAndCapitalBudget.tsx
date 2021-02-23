@@ -1,8 +1,8 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import styled from '@emotion/styled';
 import { FileUploadPage, FileUploadState, SubmitHelper } from '@hs/containers';
 import { bulkUploadService } from '@hs/services';
-import { LeftNavBar, LeftNavBarProps } from '@hs/components';
+import { LeftNavBar, LeftNavBarProps, ErrorPanel } from '@hs/components';
 import { DashBoardIcon } from '@hs/icons';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
@@ -32,17 +32,21 @@ const bulkUploadValidation = Yup.object().shape({
 
 const ForecastAndCapitalBudget: FC = () => {
   const routeParam = useParams<uploadRouteParam>();
+  const [errorMessages, setErrorMessages] = useState<string[]>([]);
   let header = '';
   let downloadAction = '';
   let uploadAction = '';
+  let downloadFileTitle = '';
   if (routeParam.screenType === 'forecast') {
     header = 'Forecast Data Upload';
     downloadAction = 'downloadForecastTemplate';
     uploadAction = 'uploadForecastData';
+    downloadFileTitle = 'Download Forecast Template';
   } else {
     header = 'Capital Budget Data Upload';
     downloadAction = 'downloadCapitalBudgetTemplate';
     uploadAction = 'uploadCapitalBudgetData';
+    downloadFileTitle = 'Download Revenu Plan Template';
   }
 
   const onSubmit = async (values: FileUploadState, { setSubmitting, setErrors, resetForm }: SubmitHelper) => {
@@ -51,11 +55,15 @@ const ForecastAndCapitalBudget: FC = () => {
         file: values.file?.file,
         params: { action: uploadAction },
       });
-      if (res.data.success_message) {
-        res.data.success_message.map((msg: string, index: number) => toast.success(msg, { delay: 400 * (index + 1) }));
+      if (res.data && res.data.success_message) {
+        res.data.success_message.length > 0 &&
+          res.data.success_message.map((msg: string, index: number) =>
+            toast.success(msg, { delay: 400 * (index + 1) }),
+          );
       }
-      if (res.data.error_message) {
-        res.data.error_message.map((err: string, index: number) => toast.error(err, { delay: 400 * (index + 1) }));
+      if (res.data && res.data.error_message) {
+        setErrorMessages(res.data.error_message);
+        // res.data.error_message.map((err: string, index: number) => toast.error(err, { delay: 400 * (index + 1) }));
       }
       setSubmitting(false);
       resetForm({ values: { ...initialValues, resetInput: true } });
@@ -63,6 +71,7 @@ const ForecastAndCapitalBudget: FC = () => {
       setSubmitting(false);
       setErrors({ submit: error.data.data.message });
       toast.error(error.data.data.message);
+      setErrorMessages([]);
     }
   };
 
@@ -94,7 +103,9 @@ const ForecastAndCapitalBudget: FC = () => {
           sideBar={[]}
           validationSchema={bulkUploadValidation}
           initialValues={initialValues}
+          downloadFileTitle={downloadFileTitle}
         ></FileUploadPage>
+        {errorMessages.length > 0 && <ErrorPanel messages={errorMessages} />}
       </StyledCntnr>
     </>
   );
