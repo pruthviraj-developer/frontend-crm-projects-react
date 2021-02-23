@@ -112,7 +112,13 @@ const ForecastAndCapitalBudget: FC = () => {
           initialValues={initialValues}
           downloadFileTitle={downloadFileTitle}
         ></FileUploadPage>
-        {errorMessages.length > 0 && <ErrorPanel key={uploadAction} messages={errorMessages} />}
+        {errorMessages.length > 0 && (
+          <ErrorPanel
+            key={uploadAction}
+            messages={errorMessages}
+            onCopy={() => toast.info('Copied to Clipboard', { position: 'bottom-center' })}
+          />
+        )}
       </StyledCntnr>
     </>
   );

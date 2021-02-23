@@ -13,7 +13,7 @@ export const ErrorComponent = Template.bind({});
 ErrorComponent.args = {
   header: 'Error Panel',
   messages: [
-    ' testing',
+    'testing',
     'Non-Proc: High return due to quality and sizing',
     'Non-Proc: Catalogue culling',
     'Non-Proc: High return due to quality and sizing',

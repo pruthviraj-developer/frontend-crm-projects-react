@@ -27,9 +27,9 @@ const StyledHeader = styled.div`
 
 const StyledCopytoClipboard = styled.div`
   display: inline-flex;
-  margin: 5px;
-  border-radius: 50%;
-  background: ${Colors.WHITE};
+  margin-left: 5px;
+  /* border-radius: 50%; */
+  /* background: ${Colors.WHITE}; */
 `;
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -44,18 +44,21 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const ErrorPanel: FC<ErrorPanelProps> = (props: ErrorPanelProps) => {
-  const header = props.header || 'Errors';
-  const errorMessage: Array<string> = props.messages || [];
+export const ErrorPanel: FC<ErrorPanelProps> = ({
+  header = 'Errors',
+  messages = [],
+  onCopy,
+}: ErrorPanelProps) => {
   const classes = useStyles();
 
   const copyToClipboard = () => {
     const textField = document.createElement('textarea');
-    textField.innerText = errorMessage.toString();
+    textField.innerHTML = messages.join('\r\n');
     document.body.appendChild(textField);
     textField.select();
     document.execCommand('copy');
     textField.remove();
+    onCopy && onCopy(true);
   };
 
   return (
@@ -63,15 +66,15 @@ export const ErrorPanel: FC<ErrorPanelProps> = (props: ErrorPanelProps) => {
       <StyledHeader>
         {header}
         <StyledCopytoClipboard onClick={copyToClipboard}>
-          <IconButton>
+          <IconButton color={'secondary'}>
             <FileCopyOutlinedIcon fontSize="large" />
           </IconButton>
         </StyledCopytoClipboard>
       </StyledHeader>
-      {errorMessage.length > 0 && (
+      {messages.length > 0 && (
         <List key={'error-list'} className={classes.root}>
-          {errorMessage.map((message: string, index: number) => (
-            <>
+          {messages.map((message: string, index: number) => (
+            <React.Fragment key={`error-list-item${index}`}>
               <ListItem key={`item-${index}`} alignItems="flex-start">
                 <ListItemText
                   key={`error-${index}`}
@@ -88,8 +91,8 @@ export const ErrorPanel: FC<ErrorPanelProps> = (props: ErrorPanelProps) => {
                   }
                 />
               </ListItem>
-              {index < errorMessage.length - 1 && <Divider component="li" />}
-            </>
+              {index < messages.length - 1 && <Divider component="li" />}
+            </React.Fragment>
           ))}
         </List>
       )}
