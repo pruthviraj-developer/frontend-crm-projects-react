@@ -48,7 +48,6 @@ const ForecastAndCapitalBudget: FC = () => {
     uploadAction = 'uploadCapitalBudgetData';
     downloadFileTitle = 'Download Revenu Plan Template';
   }
-
   useEffect(() => {
     setErrorMessages([]);
   }, [routeParam.screenType]);
