@@ -4,7 +4,7 @@ export interface uploadRouteParam {
 
 export interface bulkUploadProps {
   header: string;
-  downloadBtnTitle: string;
+  downloadBtnLabel: string;
   uploadAction: string;
   downloadAction: string;
 }

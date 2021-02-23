@@ -20,7 +20,7 @@ const MskuUpload: FC = () => {
         <Route path={`${path}/create`}>
           <BulkUploadScreen
             header="Create New MSKU"
-            downloadBtnTitle="Download Template"
+            downloadBtnLabel="Download Template"
             uploadAction="createMsku"
             downloadAction="downloadCreateMsku"
           />
@@ -28,7 +28,7 @@ const MskuUpload: FC = () => {
         <Route path={`${path}/update`}>
           <BulkUploadScreen
             header="Update Existing MSKU"
-            downloadBtnTitle="Download current MSKU and taxonomy"
+            downloadBtnLabel="Download current MSKU and taxonomy"
             uploadAction="updateMsku"
             downloadAction="downloadCurrentMsku"
           />

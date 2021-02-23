@@ -33,9 +33,8 @@ export const FileUploadPage: FC<FileUploadPageProps> = ({
   sideBar,
   validationSchema,
   initialValues,
-  downloadFileTitle,
+  downloadBtnLabel = 'Download Template',
 }: FileUploadPageProps) => {
-  downloadFileTitle = downloadFileTitle || 'Download Template';
   return (
     <StyledUploadCntnr>
       <Formik
@@ -179,7 +178,7 @@ export const FileUploadPage: FC<FileUploadPageProps> = ({
                           if (onExport) onExport();
                         }}
                       >
-                        {downloadFileTitle}
+                        {downloadBtnLabel}
                       </Button>
                     </StyledTemplateButton>
                   </Grid>

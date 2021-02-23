@@ -24,7 +24,7 @@ const uploadValidation = Yup.object().shape({
 
 const BulkUploadScreen: FC<bulkUploadProps> = ({
   header,
-  downloadBtnTitle: downloadFileTitle,
+  downloadBtnLabel,
   uploadAction,
   downloadAction,
 }: bulkUploadProps) => {
@@ -88,7 +88,7 @@ const BulkUploadScreen: FC<bulkUploadProps> = ({
           sideBar={[]}
           validationSchema={uploadValidation}
           initialValues={initialValues}
-          downloadFileTitle={downloadFileTitle}
+          downloadBtnLabel={downloadBtnLabel}
         ></FileUploadPage>
         {errorMessages.length > 0 && (
           <ErrorPanel

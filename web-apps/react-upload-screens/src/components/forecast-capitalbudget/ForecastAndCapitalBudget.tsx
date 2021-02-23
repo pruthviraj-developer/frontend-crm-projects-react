@@ -20,7 +20,7 @@ const ForecastAndCapitalBudget: FC = () => {
         <Route path={`${path}/forecast`}>
           <BulkUploadScreen
             header="Forecast Data Upload"
-            downloadBtnTitle="Download Forecast Template"
+            downloadBtnLabel="Download Forecast Template"
             uploadAction="uploadForecastData"
             downloadAction="downloadForecastTemplate"
           />
@@ -28,7 +28,7 @@ const ForecastAndCapitalBudget: FC = () => {
         <Route path={`${path}/capitalBudget`}>
           <BulkUploadScreen
             header="Capital Budget Data Upload"
-            downloadBtnTitle="Download Revenue Plan Template"
+            downloadBtnLabel="Download Revenue Plan Template"
             uploadAction="uploadCapitalBudgetData"
             downloadAction="downloadCapitalBudgetTemplate"
           />
