@@ -18,12 +18,12 @@ const App: FC = () => {
         <MuiThemeProvider theme={LightTheme}>
           <Router basename="/react-monorepo/upload">
             <Switch>
-              <Route path="/msku/:screenType">
+              <Route path="/msku">
                 <Suspense fallback={<div>Loading...</div>}>
                   <MskuUpload />
                 </Suspense>
               </Route>
-              <Route path="/bulk-upload/:screenType">
+              <Route path="/bulk-upload">
                 <Suspense fallback={<div>Loading...</div>}>
                   <ForecastAndCapitalBudget />
                 </Suspense>
