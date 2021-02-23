@@ -8,7 +8,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 const MskuUpload = React.lazy(() => import('./components/msku/MskuUpload'));
 const ForecastAndCapitalBudget = React.lazy(
-  () => import('./components/forcast-capitalbudget/ForecastAndCapitalBudget'),
+  () => import('./components/forecast-capitalbudget/ForecastAndCapitalBudget'),
 );
 
 const App: FC = () => {
