@@ -3,16 +3,20 @@ import './App.css';
 import 'react-toastify/dist/ReactToastify.css';
 import { ThemeProvider } from 'emotion-theming';
 import { MuiThemeProvider } from '@material-ui/core/styles';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import { LightTheme } from '@hs/utils';
 import { LeftNavBar, LeftNavBarProps } from '@hs/components';
 import { ToastContainer } from 'react-toastify';
 import { DashBoardIcon } from '@hs/icons';
 import { DashBoard } from './components/DashBoard';
+import { Clusters } from './components/Clusters';
 
 const App: FC = () => {
   const navItems: LeftNavBarProps = {
-    navList: [{ linkUrl: '/', linkText: 'Dashboard', icon: DashBoardIcon }],
+    navList: [
+      { linkUrl: '/checks-and-balances', linkText: 'Dashboard', icon: DashBoardIcon },
+      { linkUrl: '/clusters', linkText: 'Clusters', icon: DashBoardIcon },
+    ],
   };
   return (
     <div className="App">
@@ -21,7 +25,11 @@ const App: FC = () => {
           <Router basename="/react-monorepo/reorder-checks-and-balances">
             <LeftNavBar {...navItems}></LeftNavBar>
             <Switch>
-              <Route path="/">
+              <Redirect exact from="/" to="/sosdashboard" />
+              <Route path="/clusters">
+                <Clusters />
+              </Route>
+              <Route path="/checks-and-balances">
                 <DashBoard />
               </Route>
             </Switch>
