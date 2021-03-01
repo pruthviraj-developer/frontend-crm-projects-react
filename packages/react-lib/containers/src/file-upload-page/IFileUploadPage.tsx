@@ -16,11 +16,11 @@ export interface FileUploadPageProps {
     values: FileUploadState,
     { setSubmitting, setErrors, setStatus, resetForm }: SubmitHelper
   ) => void;
-  onExport?: () => void;
+  onExport?: (action?: string) => void;
   onDropDownChange?: (obj: DropDownValuesWithType) => void;
+  downloadOption?: FiledownloadOption[];
   sideBar?: FileUploadSideBarOption[];
   validationSchema?: unknown;
-  downloadBtnLabel?: string;
 }
 
 export interface FileUploadSideBarOption {
@@ -31,6 +31,11 @@ export interface FileUploadSideBarOption {
   resetField?: string;
   options?: FileUploadListOption[];
   key?: string;
+}
+
+export interface FiledownloadOption {
+  label?: string;
+  action?: string;
 }
 
 export interface FileUploadListOption {

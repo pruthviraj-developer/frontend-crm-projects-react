@@ -22,12 +22,7 @@ const uploadValidation = Yup.object().shape({
   file: Yup.mixed().required('Please upload a file'),
 });
 
-const BulkUploadScreen: FC<bulkUploadProps> = ({
-  header,
-  downloadBtnLabel,
-  uploadAction,
-  downloadAction,
-}: bulkUploadProps) => {
+const BulkUploadScreen: FC<bulkUploadProps> = ({ header, uploadAction, downloadOption }: bulkUploadProps) => {
   const [errorMessages, setErrorMessages] = useState<string[]>([]);
   useEffect(() => {
     setErrorMessages([]);
@@ -58,7 +53,7 @@ const BulkUploadScreen: FC<bulkUploadProps> = ({
     }
   };
 
-  const onExport = async () => {
+  const onExport = async (downloadAction: any) => {
     const res = await bulkUploadService.downloadTemplate({
       action: downloadAction,
     });
@@ -81,14 +76,14 @@ const BulkUploadScreen: FC<bulkUploadProps> = ({
       <StyledCntnr>
         <h2>{header}</h2>
         <FileUploadPage
-          key={downloadAction}
+          key={`file-'${uploadAction}`}
           acceptType={['csv', 'xls', 'xlsx']}
           onSubmit={onSubmit}
           onExport={onExport}
           sideBar={[]}
           validationSchema={uploadValidation}
           initialValues={initialValues}
-          downloadBtnLabel={downloadBtnLabel}
+          downloadOption={downloadOption}
         ></FileUploadPage>
         {errorMessages.length > 0 && (
           <ErrorPanel

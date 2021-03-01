@@ -18,6 +18,7 @@ import {
   FileUploadPageProps,
   FileUploadSideBarOption,
   FileUploadListOption,
+  FiledownloadOption,
 } from './IFileUploadPage';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 import {
@@ -30,10 +31,10 @@ export const FileUploadPage: FC<FileUploadPageProps> = ({
   onSubmit,
   onExport,
   onDropDownChange,
+  downloadOption,
   sideBar,
   validationSchema,
   initialValues,
-  downloadBtnLabel = 'Download Template',
 }: FileUploadPageProps) => {
   return (
     <StyledUploadCntnr>
@@ -167,21 +168,27 @@ export const FileUploadPage: FC<FileUploadPageProps> = ({
                       acceptType={acceptType}
                     ></Field>
                   </Grid>
-                  <Grid item xs={12}>
-                    <StyledTemplateButton>
-                      <Button
-                        color={'primary'}
-                        size={'large'}
-                        type="button"
-                        startIcon={<CloudDownloadIcon />}
-                        onClick={() => {
-                          if (onExport) onExport();
-                        }}
-                      >
-                        {downloadBtnLabel}
-                      </Button>
-                    </StyledTemplateButton>
-                  </Grid>
+                  {downloadOption &&
+                    downloadOption.length > 0 &&
+                    downloadOption.map(
+                      (row: FiledownloadOption, index: number) => (
+                        <Grid key={`download-${index}`} item xs={12}>
+                          <StyledTemplateButton>
+                            <Button
+                              color={'primary'}
+                              size={'large'}
+                              type="button"
+                              startIcon={<CloudDownloadIcon />}
+                              onClick={() => {
+                                if (onExport) onExport(row?.action);
+                              }}
+                            >
+                              {row?.label}
+                            </Button>
+                          </StyledTemplateButton>
+                        </Grid>
+                      )
+                    )}
                 </Grid>
               </Grid>
               <Grid item xs={6}>

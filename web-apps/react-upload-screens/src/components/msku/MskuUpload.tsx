@@ -16,49 +16,34 @@ const navItems: LeftNavBarProps = {
 
 const MskuUpload: FC = () => {
   const { path } = useRouteMatch();
+  const createDownloadOption = [{ label: 'Download Template', action: 'downloadCreateMsku' }];
+  const updateDownloadOption = [
+    { label: 'Download current MSKU and taxonomy', action: 'downloadCurrentMsku' },
+    { label: 'Download blank template', action: 'downloadCreateMsku' },
+  ];
+
   return (
     <>
       <LeftNavBar {...navItems}></LeftNavBar>
       <Switch>
         <Route path={`${path}/create`}>
-          <BulkUploadScreen
-            header="Create New MSKU"
-            downloadBtnLabel="Download Template"
-            uploadAction="createMsku"
-            downloadAction="downloadCreateMsku"
-          />
+          <BulkUploadScreen header="Create New MSKU" uploadAction="createMsku" downloadOption={createDownloadOption} />
         </Route>
         <Route path={`${path}/update`}>
           <BulkUploadScreen
             header="Update Existing MSKU"
-            downloadBtnLabel="Download current MSKU and taxonomy"
             uploadAction="updateMsku"
-            downloadAction="downloadCurrentMsku"
+            downloadOption={updateDownloadOption}
           />
         </Route>
         <Route path={`${path}/upload-targets`}>
-          <BulkUploadScreen
-            header="Bulk upload MSKU Benchmarks"
-            downloadBtnLabel="Download template"
-            uploadAction="upload"
-            downloadAction="downloadupload"
-          />
+          <BulkUploadScreen header="Upload MSKU targets" uploadAction="" downloadOption={[]} />
         </Route>
         <Route path={`${path}/update-targets`}>
-          <BulkUploadScreen
-            header="Bulk Update MSKU Benchmarks"
-            downloadBtnLabel="Download latest MSKU targets file, Download template"
-            uploadAction="upload"
-            downloadAction="downloadupload"
-          />
+          <BulkUploadScreen header="Update MSKU targets" uploadAction="" downloadOption={[]} />
         </Route>
         <Route path={`${path}/salesplan-upload`}>
-          <BulkUploadScreen
-            header="Sales Plan Upload"
-            downloadBtnLabel="DOWNLOAD TEMPLATE"
-            uploadAction="upload"
-            downloadAction="downloadupload"
-          />
+          <BulkUploadScreen header="Sales Plan Upload" uploadAction="" downloadOption={[]} />
         </Route>
       </Switch>
     </>

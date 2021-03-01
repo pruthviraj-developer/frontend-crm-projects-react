@@ -13,6 +13,11 @@ const navItems: LeftNavBarProps = {
 
 const ForecastAndCapitalBudget: FC = () => {
   const { path } = useRouteMatch();
+  const forecastDownloadOption = [{ label: 'Download Forecast Template', action: 'downloadForecastTemplate' }];
+  const capitalBudgetDownloadOption = [
+    { label: 'Download Revenue Plan Template', action: 'downloadCapitalBudgetTemplate' },
+  ];
+
   return (
     <>
       <LeftNavBar {...navItems}></LeftNavBar>
@@ -20,17 +25,15 @@ const ForecastAndCapitalBudget: FC = () => {
         <Route path={`${path}/forecast`}>
           <BulkUploadScreen
             header="Forecast Data Upload"
-            downloadBtnLabel="Download Forecast Template"
             uploadAction="uploadForecastData"
-            downloadAction="downloadForecastTemplate"
+            downloadOption={forecastDownloadOption}
           />
         </Route>
         <Route path={`${path}/capitalBudget`}>
           <BulkUploadScreen
             header="Capital Budget Data Upload"
-            downloadBtnLabel="Download Revenue Plan Template"
             uploadAction="uploadCapitalBudgetData"
-            downloadAction="downloadCapitalBudgetTemplate"
+            downloadOption={capitalBudgetDownloadOption}
           />
         </Route>
       </Switch>

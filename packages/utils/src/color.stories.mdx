@@ -1,0 +1,130 @@
+import { Meta, ColorPalette, ColorItem } from '@storybook/addon-docs/blocks';
+
+import { Colors, primaryColor, secondaryColor, tertiaryColor  } from '@hs/utils';
+
+<Meta title="Design System|Color" />
+
+# Colors
+
+<ColorPalette>
+   <ColorItem
+    title="PrimaryColor"
+    subtitle="primaryColor[100]"
+    colors={[primaryColor[100]]}
+  />
+   <ColorItem
+    title="SecondaryColor"
+    subtitle="Colors.secondaryColor[100]"
+    colors={[secondaryColor[100]]}
+  />
+  <ColorItem
+    title="TertiaryColor"
+    subtitle="tertiaryColor[100]"
+    colors={[tertiaryColor[100]]}
+  />
+  <ColorItem
+    title="BLACK"
+    subtitle="Colors.BLACK"
+    colors={[Colors.BLACK]}
+  />
+  <ColorItem
+    title="WHITE"
+    subtitle="Colors.WHITE"
+    colors={[Colors.WHITE]}
+  />
+
+  <ColorItem 
+  title="GRAY" 
+  subtitle="GRAY" 
+  colors={[Colors.GRAY]}
+   />
+  <ColorItem
+    title="GRAY20"
+    subtitle="Colors.GRAY20"
+    colors={[Colors.GRAY20]}
+  />
+  <ColorItem
+    title="DARKGRAY"
+    subtitle="Colors.DARKGRAY"
+    colors={[Colors.DARKGRAY]}
+  />
+  <ColorItem
+    title="MERCURY"
+    subtitle="Colors.MERCURY"
+    colors={[Colors.MERCURY]}
+  />
+
+  <ColorItem
+    title="GREEN"
+    subtitle="Colors.GREEN[100-900]"
+    colors={[
+      Colors.GREEN[100],
+      Colors.GREEN[200],
+      Colors.GREEN[300],
+      Colors.GREEN[400],
+      Colors.GREEN[500],
+      Colors.GREEN[600],
+      Colors.GREEN[700],
+      Colors.GREEN[800],
+      Colors.GREEN[900],
+    ]}
+  />
+
+  <ColorItem
+    title="RED"
+    subtitle="theme.Colors.RED[100]]"
+    colors={[
+      Colors.RED[100],
+      Colors.RED[300],
+      Colors.RED[400],
+      Colors.RED[500],
+    ]}
+  />
+
+  <ColorItem
+    title="Colors.GREY_SHADE[400-900]"
+    subtitle="GREY_SHADE"
+    colors={[
+      Colors.GREY_SHADE[400],
+      Colors.GREY_SHADE[500],
+      Colors.GREY_SHADE[600],
+      Colors.GREY_SHADE[700],
+      Colors.GREY_SHADE[800],
+      Colors.GREY_SHADE[900],
+    ]}
+  />
+
+  <ColorItem
+    title="Colors.GREY_TINT[100-500]"
+    subtitle="GREY_TINT"
+    colors={[
+      Colors.GREY_TINT[100],
+      Colors.GREY_TINT[200],
+      Colors.GREY_TINT[300],
+      Colors.GREY_TINT[400],
+      Colors.GREY_TINT[500],
+    ]}
+  />
+
+  <ColorItem
+    title="Colors.PINK[100-900]"
+    subtitle="PINK"
+    colors={[
+      Colors.PINK[100],
+      Colors.PINK[200],
+      Colors.PINK[300],
+      Colors.PINK[400],
+      Colors.PINK[500],
+      Colors.PINK[600],
+      Colors.PINK[700],
+      Colors.PINK[800],
+      Colors.PINK[900],
+    ]}
+  />
+
+  <ColorItem
+    title="Colors.BLUE[500]"
+    subtitle="BLUE"
+    colors={[Colors.BLUE[500]]}
+  />
+</ColorPalette>;
