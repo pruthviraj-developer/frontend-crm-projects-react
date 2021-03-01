@@ -10,7 +10,7 @@ const navItems: LeftNavBarProps = {
     { linkUrl: 'update', linkText: 'MSKU Update', icon: DashBoardIcon },
     { linkUrl: 'upload-targets', linkText: 'Upload MSKU targets', icon: DashBoardIcon },
     { linkUrl: 'update-targets', linkText: 'Update MSKU targets', icon: DashBoardIcon },
-    { linkUrl: 'salesplan-upload', linkText: 'Sales Plan Upload', icon: DashBoardIcon },
+    // { linkUrl: 'salesplan-upload', linkText: 'Sales Plan Upload', icon: DashBoardIcon },
   ],
 };
 
@@ -20,6 +20,11 @@ const MskuUpload: FC = () => {
   const updateDownloadOption = [
     { label: 'Download current MSKU and taxonomy', action: 'downloadCurrentMsku' },
     { label: 'Download blank template', action: 'downloadCreateMsku' },
+  ];
+  const uploadTargetDownloadOption = [{ label: 'Download Template', action: '' }];
+  const updateTargetDownloadOption = [
+    { label: 'Download latest MSKU targets file', action: '' },
+    { label: 'Download Template', action: '' },
   ];
 
   return (
@@ -37,10 +42,18 @@ const MskuUpload: FC = () => {
           />
         </Route>
         <Route path={`${path}/upload-targets`}>
-          <BulkUploadScreen header="Upload MSKU targets" uploadAction="" downloadOption={[]} />
+          <BulkUploadScreen
+            header="Bulk upload MSKU Benchmarks"
+            uploadAction=""
+            downloadOption={uploadTargetDownloadOption}
+          />
         </Route>
         <Route path={`${path}/update-targets`}>
-          <BulkUploadScreen header="Update MSKU targets" uploadAction="" downloadOption={[]} />
+          <BulkUploadScreen
+            header="Bulk Update MSKU Benchmarks"
+            uploadAction=""
+            downloadOption={updateTargetDownloadOption}
+          />
         </Route>
         <Route path={`${path}/salesplan-upload`}>
           <BulkUploadScreen header="Sales Plan Upload" uploadAction="" downloadOption={[]} />
