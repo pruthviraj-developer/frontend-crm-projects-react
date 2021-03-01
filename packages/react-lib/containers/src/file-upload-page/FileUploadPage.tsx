@@ -168,8 +168,7 @@ export const FileUploadPage: FC<FileUploadPageProps> = ({
                       acceptType={acceptType}
                     ></Field>
                   </Grid>
-                  {downloadOption &&
-                    downloadOption.length > 0 &&
+                  {downloadOption && downloadOption.length > 0 ? (
                     downloadOption.map(
                       (row: FiledownloadOption, index: number) => (
                         <Grid key={`download-${index}`} item xs={12}>
@@ -188,7 +187,24 @@ export const FileUploadPage: FC<FileUploadPageProps> = ({
                           </StyledTemplateButton>
                         </Grid>
                       )
-                    )}
+                    )
+                  ) : (
+                    <Grid item xs={12}>
+                      <StyledTemplateButton>
+                        <Button
+                          color={'primary'}
+                          size={'large'}
+                          type="button"
+                          startIcon={<CloudDownloadIcon />}
+                          onClick={() => {
+                            if (onExport) onExport();
+                          }}
+                        >
+                          Download Template
+                        </Button>
+                      </StyledTemplateButton>
+                    </Grid>
+                  )}
                 </Grid>
               </Grid>
               <Grid item xs={6}>

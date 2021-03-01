@@ -53,7 +53,7 @@ const BulkUploadScreen: FC<bulkUploadProps> = ({ header, uploadAction, downloadO
     }
   };
 
-  const onExport = async (downloadAction: any) => {
+  const onExport = async (downloadAction?: any) => {
     const res = await bulkUploadService.downloadTemplate({
       action: downloadAction,
     });
