@@ -24,10 +24,9 @@ export interface FileUploadPageProps {
 }
 
 export interface FileUploadSideBarOption {
-  isSelect?: boolean;
   name: string;
   label: string;
-  type?: string;
+  type?: 'select' | 'input' | 'autocomplete';
   resetField?: string;
   options?: FileUploadListOption[];
   key?: string;

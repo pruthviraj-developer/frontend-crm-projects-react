@@ -21,14 +21,13 @@ const reasonOptions = [
 ];
 
 const reasonSideBarOption: FileUploadSideBarOption = {
-  isSelect: true,
   name: 'reason',
   label: 'Reason',
+  type: 'select',
   options: reasonOptions,
 };
 
 const remarkSideBarOption: FileUploadSideBarOption = {
-  isSelect: false,
   name: 'remark',
   label: 'Remark',
 };
