@@ -21,10 +21,10 @@ const MskuUpload: FC = () => {
     { label: 'Download current MSKU and taxonomy', action: 'downloadCurrentMsku' },
     { label: 'Download blank template', action: 'downloadCreateMsku' },
   ];
-  const uploadTargetDownloadOption = [{ label: 'Download Template', action: '' }];
+  const uploadTargetDownloadOption = [{ label: 'Download Template', action: 'downloadCreateMskuTarget' }];
   const updateTargetDownloadOption = [
-    { label: 'Download latest MSKU targets file', action: '' },
-    { label: 'Download Template', action: '' },
+    { label: 'Download latest MSKU targets file', action: 'downloadMskuTarget' },
+    { label: 'Download Template', action: 'downloadCreateMskuTarget' },
   ];
 
   return (
@@ -44,14 +44,14 @@ const MskuUpload: FC = () => {
         <Route path={`${path}/upload-targets`}>
           <BulkUploadScreen
             header="Bulk upload MSKU Benchmarks"
-            uploadAction=""
+            uploadAction="createMskuTarget"
             downloadOption={uploadTargetDownloadOption}
           />
         </Route>
         <Route path={`${path}/update-targets`}>
           <BulkUploadScreen
             header="Bulk Update MSKU Benchmarks"
-            uploadAction=""
+            uploadAction="updateMskuTarget"
             downloadOption={updateTargetDownloadOption}
           />
         </Route>
