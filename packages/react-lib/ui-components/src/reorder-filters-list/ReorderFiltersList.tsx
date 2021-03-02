@@ -10,7 +10,11 @@ import {
   Button,
 } from '@material-ui/core';
 
-import { Filters, FiltersOptions, FiltersObject } from './IFiltersList';
+import {
+  ReorderFilters,
+  ReorderFiltersOptions,
+  ReorderFiltersObject,
+} from './IReorderFiltersList';
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -31,11 +35,11 @@ const initialValues = {};
 const FiltersWrapper = styled.div`
   width: 100%;
 `;
-export const FiltersList: FC<FiltersObject> = ({
+export const ReorderFiltersList: FC<ReorderFiltersObject> = ({
   sideBar,
   defaultSelectedValues,
   onSubmit,
-}: FiltersObject) => {
+}: ReorderFiltersObject) => {
   const classes = useStyles();
   const [selectedFilters, setSelectedFilters] = useState(
     defaultSelectedValues || initialValues
@@ -58,7 +62,7 @@ export const FiltersList: FC<FiltersObject> = ({
               <Paper className={classes.paper} variant="outlined">
                 <Grid container direction="column" justify="center" spacing={3}>
                   {sideBar &&
-                    sideBar.map((sideBarOption: Filters) => {
+                    sideBar.map((sideBarOption: ReorderFilters) => {
                       if (
                         sideBarOption.type === 'autocomplete' ||
                         sideBarOption.input_type === 'S'
@@ -84,21 +88,20 @@ export const FiltersList: FC<FiltersObject> = ({
                               component={Autocomplete}
                               options={sideBarOption.options || []}
                               getOptionSelected={(
-                                option: FiltersOptions,
-                                selectedValue: FiltersOptions
+                                option: ReorderFiltersOptions,
+                                selectedValue: ReorderFiltersOptions
                               ) => {
                                 return option.key == selectedValue?.key;
                               }}
-                              getOptionLabel={(option: FiltersOptions) =>
-                                option.display
-                                  ? option.display
-                                  : option.value
-                                  ? option.value
-                                  : ''
+                              getOptionLabel={(option: ReorderFiltersOptions) =>
+                                option.display ||
+                                option.name ||
+                                option.value ||
+                                ''
                               }
                               onChange={(
                                 evt: React.ChangeEvent<HTMLInputElement>,
-                                values: FiltersOptions
+                                values: ReorderFiltersOptions
                               ) => {
                                 if (evt) {
                                   const keyName =
@@ -107,6 +110,13 @@ export const FiltersList: FC<FiltersObject> = ({
                                     ...selectedFilters,
                                     [keyName]: values,
                                   };
+                                  if (sideBarOption.clearFields) {
+                                    sideBarOption.clearFields.forEach(
+                                      (element: string) => {
+                                        delete formValues[element];
+                                      }
+                                    );
+                                  }
                                   setSelectedFilters(formValues);
                                 }
                               }}

@@ -1,14 +1,14 @@
 import React, { FC } from 'react';
-import { FiltersList } from './FiltersList';
+import { ReorderFiltersList } from './ReorderFiltersList';
 import { action } from '@storybook/addon-actions';
-import { FiltersObject } from './IFiltersList';
+import { ReorderFiltersObject } from './IReorderFiltersList';
 export default {
-  title: 'FiltersList',
-  component: FiltersList,
+  title: 'ReorderFiltersList',
+  component: ReorderFiltersList,
 };
 
 const onSubmit = (e: Record<string, unknown>) => {
-  action('FiltersList')(e);
+  action('ReorderFiltersList')(e);
 };
 
 const aaa = [
@@ -34,6 +34,7 @@ const aaa = [
     input_type: 'S',
     multi: true,
     display: 'Season',
+    clearFields: ['mathOperator', 'Cakes'],
   },
   {
     options: [
@@ -47,9 +48,22 @@ const aaa = [
     input_type: 'S',
     display: 'Select operator',
   },
+  {
+    options: [
+      { name: 'Cupcake', calories: 305, fat: 3.7, carbs: 67, protein: 4.3 },
+      { name: 'Donut', calories: 452, fat: 25, carbs: 51, protein: 4.9 },
+      { name: 'Eclair', calories: 262, fat: 16, carbs: 24, protein: 6 },
+      { name: 'Frozen yoghurt', calories: 159, fat: 6, carbs: 24, protein: 4 },
+      { name: 'Gingerbread', calories: 356, fat: 16, carbs: 49, protein: 3.9 },
+      { name: 'Honeycomb', calories: 408, fat: 3.2, carbs: 87, protein: 6.5 },
+    ],
+    key: 'Cakes',
+    input_type: 'S',
+    display: 'Cake',
+  },
 ];
 
-const data: FiltersObject = {
+const data: ReorderFiltersObject = {
   sideBar: [...aaa],
   defaultSelectedValues: {
     season: [
@@ -60,4 +74,6 @@ const data: FiltersObject = {
   onSubmit: onSubmit,
 };
 
-export const HsFiltersComponent: FC = () => <FiltersList {...data} />;
+export const ReOrderFiltersComponent: FC = () => (
+  <ReorderFiltersList {...data} />
+);
