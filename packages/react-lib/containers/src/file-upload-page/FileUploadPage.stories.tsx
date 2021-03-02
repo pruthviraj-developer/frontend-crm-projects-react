@@ -33,6 +33,8 @@ const remarkSideBarOption: FileUploadSideBarOption = {
   label: 'Remark',
 };
 
+const createDownloadOption = [{ label: 'Download Test Template ' }];
+
 const FileUploadPageValidation = Yup.object().shape({
   file: Yup.mixed().required('Please upload a file'),
   remark: Yup.string().required('Remark is required'),
@@ -66,4 +68,5 @@ FileUploadScreen.args = {
   sideBar: [reasonSideBarOption, remarkSideBarOption],
   validationSchema: FileUploadPageValidation,
   initialValues,
+  downloadOption: createDownloadOption,
 };

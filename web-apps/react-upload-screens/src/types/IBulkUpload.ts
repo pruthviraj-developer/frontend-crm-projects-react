@@ -1,13 +1,7 @@
-export interface uploadRouteParam {
-  screenType: string;
-}
+import { FileDownloadOption } from '@hs/containers';
 
 export interface bulkUploadProps {
   header: string;
   uploadAction: string;
-  downloadOption: FiledownloadOption[];
-}
-export interface FiledownloadOption {
-  label?: string;
-  action?: string;
+  downloadOption: FileDownloadOption[];
 }

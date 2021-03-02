@@ -18,7 +18,7 @@ import {
   FileUploadPageProps,
   FileUploadSideBarOption,
   FileUploadListOption,
-  FiledownloadOption,
+  FileDownloadOption,
 } from './IFileUploadPage';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 import {
@@ -31,7 +31,7 @@ export const FileUploadPage: FC<FileUploadPageProps> = ({
   onSubmit,
   onExport,
   onDropDownChange,
-  downloadOption,
+  downloadOption = [{ label: 'Download Template ' }],
   sideBar,
   validationSchema,
   initialValues,
@@ -168,42 +168,24 @@ export const FileUploadPage: FC<FileUploadPageProps> = ({
                       acceptType={acceptType}
                     ></Field>
                   </Grid>
-                  {downloadOption && downloadOption.length > 0 ? (
-                    downloadOption.map(
-                      (row: FiledownloadOption, index: number) => (
-                        <Grid key={`download-${index}`} item xs={12}>
-                          <StyledTemplateButton>
-                            <Button
-                              color={'primary'}
-                              size={'large'}
-                              type="button"
-                              startIcon={<CloudDownloadIcon />}
-                              onClick={() => {
-                                if (onExport) onExport(row?.action);
-                              }}
-                            >
-                              {row?.label}
-                            </Button>
-                          </StyledTemplateButton>
-                        </Grid>
-                      )
+                  {downloadOption.map(
+                    (row: FileDownloadOption, index: number) => (
+                      <Grid key={`download-option${index}`} item xs={12}>
+                        <StyledTemplateButton>
+                          <Button
+                            color={'primary'}
+                            size={'large'}
+                            type="button"
+                            startIcon={<CloudDownloadIcon />}
+                            onClick={() => {
+                              if (onExport) onExport(row?.action);
+                            }}
+                          >
+                            {row?.label}
+                          </Button>
+                        </StyledTemplateButton>
+                      </Grid>
                     )
-                  ) : (
-                    <Grid item xs={12}>
-                      <StyledTemplateButton>
-                        <Button
-                          color={'primary'}
-                          size={'large'}
-                          type="button"
-                          startIcon={<CloudDownloadIcon />}
-                          onClick={() => {
-                            if (onExport) onExport();
-                          }}
-                        >
-                          Download Template
-                        </Button>
-                      </StyledTemplateButton>
-                    </Grid>
                   )}
                 </Grid>
               </Grid>

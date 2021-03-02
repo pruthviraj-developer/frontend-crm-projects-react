@@ -18,7 +18,7 @@ export interface FileUploadPageProps {
   ) => void;
   onExport?: (action?: string) => void;
   onDropDownChange?: (obj: DropDownValuesWithType) => void;
-  downloadOption?: FiledownloadOption[];
+  downloadOption?: FileDownloadOption[];
   sideBar?: FileUploadSideBarOption[];
   validationSchema?: unknown;
 }
@@ -33,7 +33,7 @@ export interface FileUploadSideBarOption {
   key?: string;
 }
 
-export interface FiledownloadOption {
+export interface FileDownloadOption {
   label?: string;
   action?: string;
 }
