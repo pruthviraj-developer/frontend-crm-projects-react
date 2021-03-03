@@ -43,7 +43,7 @@ const MskuUpload: FC = () => {
         </Route>
         <Route path={`${path}/upload-targets`}>
           <BulkUploadScreen
-            header="Bulk upload MSKU Benchmarks"
+            header="Bulk Upload MSKU Benchmarks"
             uploadAction="createMskuTarget"
             downloadOption={uploadTargetDownloadOption}
           />
