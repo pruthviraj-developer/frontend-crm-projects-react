@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React from 'react';
 import { FileUploadPage } from './FileUploadPage';
 import { action } from '@storybook/addon-actions';
 import {
@@ -16,22 +16,31 @@ export default {
 };
 
 const reasonOptions = [
-  { display: 'NonProcHighreturn due to quality and sizing', value: '1' },
-  { display: 'NonProcHighreturn due to other reason', value: '2' },
+  { display: 'Reason 1', id: '1' },
+  { display: 'Reason 2', id: '2' },
 ];
 
 const reasonSideBarOption: FileUploadSideBarOption = {
-  isSelect: true,
   name: 'reason',
   label: 'Reason',
+  type: 'select',
   options: reasonOptions,
 };
 
 const remarkSideBarOption: FileUploadSideBarOption = {
-  isSelect: false,
   name: 'remark',
   label: 'Remark',
 };
+
+const createDownloadOption = [{ label: 'Download Custom Template ' }];
+
+const downloadOption = [
+  {
+    label: 'Download Blank Template',
+    action: 'downloadBlankTemplate',
+  },
+  { label: 'Download Filled Template', action: 'downloadFilledData' },
+];
 
 const FileUploadPageValidation = Yup.object().shape({
   file: Yup.mixed().required('Please upload a file'),
@@ -66,4 +75,24 @@ FileUploadScreen.args = {
   sideBar: [reasonSideBarOption, remarkSideBarOption],
   validationSchema: FileUploadPageValidation,
   initialValues,
+};
+
+export const WithoutSideBar = Template.bind({});
+WithoutSideBar.args = {
+  acceptType: ['xlsx'],
+  onSubmit,
+  onExport: action('onExport'),
+  validationSchema: FileUploadPageValidation,
+  initialValues,
+  downloadOption: createDownloadOption,
+};
+
+export const WithMultipleTemplate = Template.bind({});
+WithMultipleTemplate.args = {
+  acceptType: ['xlsx'],
+  onSubmit,
+  onExport: action('onExport'),
+  validationSchema: FileUploadPageValidation,
+  initialValues,
+  downloadOption: downloadOption,
 };

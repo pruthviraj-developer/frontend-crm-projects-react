@@ -18,7 +18,6 @@ const StyledCntnr = styled.div`
 // ];
 
 const reasonSideBarOption: FileUploadSideBarOption = {
-  isSelect: true,
   name: 'reasonId',
   label: 'Reason',
   type: 'select',
