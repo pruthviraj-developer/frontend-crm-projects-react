@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { ReorderFiltersList } from './ReorderFiltersList';
 import { action } from '@storybook/addon-actions';
-import { ReorderFiltersObject } from './IReorderFiltersList';
+import { ReorderFiltersObjectProps } from './IReorderFiltersList';
 export default {
   title: 'ReorderFiltersList',
   component: ReorderFiltersList,
@@ -32,7 +32,6 @@ const aaa = [
     ],
     key: 'season',
     input_type: 'S',
-    multi: true,
     display: 'Season',
     clearFields: ['mathOperator', 'Cakes'],
   },
@@ -59,18 +58,14 @@ const aaa = [
     ],
     key: 'Cakes',
     input_type: 'S',
+    multi: true,
     display: 'Cake',
   },
 ];
 
-const data: ReorderFiltersObject = {
+const data: ReorderFiltersObjectProps = {
   sideBar: [...aaa],
-  defaultSelectedValues: {
-    season: [
-      { key: 'Winter', value: 'Winter', second: 'Winter', first: 'Winter' },
-    ],
-    mathOperator: { key: '=', value: '=' },
-  },
+  defaultSelectedValues: {},
   onSubmit: onSubmit,
 };
 

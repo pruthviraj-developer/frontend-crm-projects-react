@@ -11,9 +11,9 @@ import {
 } from '@material-ui/core';
 
 import {
-  ReorderFilters,
+  ReorderFiltersProps,
   ReorderFiltersOptions,
-  ReorderFiltersObject,
+  ReorderFiltersObjectProps,
 } from './IReorderFiltersList';
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -35,11 +35,11 @@ const initialValues = {};
 const FiltersWrapper = styled.div`
   width: 100%;
 `;
-export const ReorderFiltersList: FC<ReorderFiltersObject> = ({
+export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
   sideBar,
   defaultSelectedValues,
   onSubmit,
-}: ReorderFiltersObject) => {
+}: ReorderFiltersObjectProps) => {
   const classes = useStyles();
   const [selectedFilters, setSelectedFilters] = useState(
     defaultSelectedValues || initialValues
@@ -62,7 +62,7 @@ export const ReorderFiltersList: FC<ReorderFiltersObject> = ({
               <Paper className={classes.paper} variant="outlined">
                 <Grid container direction="column" justify="center" spacing={3}>
                   {sideBar &&
-                    sideBar.map((sideBarOption: ReorderFilters) => {
+                    sideBar.map((sideBarOption: ReorderFiltersProps) => {
                       if (
                         sideBarOption.type === 'autocomplete' ||
                         sideBarOption.input_type === 'S'
@@ -74,7 +74,6 @@ export const ReorderFiltersList: FC<ReorderFiltersObject> = ({
                             key={sideBarOption.name || sideBarOption.key}
                           >
                             <Field
-                              multiple={sideBarOption.multi}
                               variant="standard"
                               name={sideBarOption.name || sideBarOption.key}
                               label={
@@ -83,8 +82,9 @@ export const ReorderFiltersList: FC<ReorderFiltersObject> = ({
                               value={
                                 selectedFilters[
                                   sideBarOption.name || sideBarOption.key
-                                ] || null
+                                ] || (sideBarOption.multi ? [] : null)
                               }
+                              multiple={sideBarOption.multi || false}
                               component={Autocomplete}
                               options={sideBarOption.options || []}
                               getOptionSelected={(
@@ -116,6 +116,9 @@ export const ReorderFiltersList: FC<ReorderFiltersObject> = ({
                                         delete formValues[element];
                                       }
                                     );
+                                  }
+                                  if (sideBarOption.onChange) {
+                                    sideBarOption.onChange(keyName, formValues);
                                   }
                                   setSelectedFilters(formValues);
                                 }

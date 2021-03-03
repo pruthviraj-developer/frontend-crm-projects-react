@@ -5,7 +5,7 @@ export interface ReorderFiltersOptions {
   name?: string;
 }
 
-export interface ReorderFilters {
+export interface ReorderFiltersProps {
   options?: ReorderFiltersOptions[] | null;
   key: string;
   input_type: string;
@@ -15,10 +15,11 @@ export interface ReorderFilters {
   multi?: boolean;
   display: string;
   clearFields?: Array<string>;
+  onChange?: (a: any, b: any) => any;
 }
 
-export interface ReorderFiltersObject {
-  sideBar: Array<ReorderFilters | any>;
+export interface ReorderFiltersObjectProps {
+  sideBar: Array<ReorderFiltersProps | any>;
   defaultSelectedValues: any;
-  onSubmit: (a: any) => void;
+  onSubmit: (a: any) => any;
 }
