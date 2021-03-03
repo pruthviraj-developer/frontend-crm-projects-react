@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from '@emotion/styled';
 import { makeStyles } from '@material-ui/core/styles';
 import { Colors } from '@hs/utils';
@@ -45,42 +45,80 @@ export const Clusters = () => {
     console.log(e);
   };
 
-  const onSubCategoryChange = (key: any, formData: any) => {
-    console.log(key, formData);
+  const removeFromArray = (elements: Array<any>, filtersList: Array<any>) => {
+    const list = [...filtersList];
+    [...elements].forEach((ele: string) => {
+      const removeElement = list.findIndex((obj: any) => obj.key === ele);
+      if (removeElement > -1) {
+        list.splice(removeElement, 1);
+      }
+    });
+    return list;
   };
 
-  const onCategoryChange = useCallback(
-    (key: any, formData: any) => {
-      console.log(key, formData);
-      let data = formData[key];
-      (async () => {
-        try {
-          const ids = data.map((obj: any) => obj.key).toString();
-          if (ids.length) {
-            const subCategories: any = await reorderService.getSubCategories({ ids });
-            if (subCategories && subCategories.sub_cat) {
-              const list = [...dropDownsList];
-              const indexFound = dropDownsList.findIndex((obj: any) => obj.name === 'category_id');
-              if (indexFound > -1) {
-                const subCategoryObject = {
-                  key: 'sub_cat',
-                  display: 'Sub Category',
-                  input_type: 'S',
-                  options: subCategories.sub_cat,
-                  onChange: onSubCategoryChange,
-                  multi: true,
-                };
-                list.splice(indexFound + 1, 0, subCategoryObject);
-                setDropDownsList([...list]);
-                return;
-              }
+  const onSubCategoryChange = (key: any, formData: any) => {
+    let data = formData[key];
+    (async () => {
+      try {
+        const ids = data.map((obj: any) => obj.key).toString();
+        const list = removeFromArray(['pt'], [...dropDownsList]);
+        if (ids.length) {
+          const productType: any = await reorderService.getProductTypes({ ids });
+          if (productType && productType.pt) {
+            const indexFound = list.findIndex((obj: any) => obj.key === 'sub_cat');
+            if (indexFound > -1) {
+              const productTypes = {
+                key: 'pt',
+                display: 'Product Type',
+                input_type: 'S',
+                options: productType.pt,
+                multi: true,
+              };
+              list.splice(indexFound + 1, 0, productTypes);
             }
           }
-        } catch (e) {}
-      })();
-    },
-    [dropDownsList],
-  );
+        }
+        setDropDownsList([...list]);
+      } catch (e) {}
+    })();
+  };
+
+  const onCategoryChange = (key: any, formData: any) => {
+    let data = formData[key];
+    (async () => {
+      try {
+        const ids = data.map((obj: any) => obj.key).toString();
+        const list = removeFromArray(['sub_cat', 'pt'], [...dropDownsList]);
+        if (ids.length) {
+          const subCategories: any = await reorderService.getSubCategories({ ids });
+          if (subCategories && subCategories.sub_cat) {
+            const indexFound = list.findIndex((obj: any) => obj.key === 'category_id');
+            if (indexFound > -1) {
+              const subCategoryObject = {
+                key: 'sub_cat',
+                display: 'Sub Category',
+                input_type: 'S',
+                options: subCategories.sub_cat,
+                multi: true,
+                clearFields: ['pt'],
+              };
+              list.splice(indexFound + 1, 0, subCategoryObject);
+            }
+          }
+        }
+        setDropDownsList([...list]);
+      } catch (e) {}
+    })();
+  };
+
+  const onDropDownChange = (key: any, formData: any) => {
+    console.log(key, formData);
+    if (key === 'category_id') {
+      onCategoryChange(key, formData);
+    } else if (key === 'sub_cat') {
+      onSubCategoryChange(key, formData);
+    }
+  };
 
   useEffect(() => {
     (async () => {
@@ -103,7 +141,7 @@ export const Clusters = () => {
               display: 'Category',
               multi: true,
               input_type: 'S',
-              onChange: onCategoryChange,
+              clearFields: ['sub_cat', 'pt'],
             },
             {
               key: 'gender',
@@ -127,12 +165,13 @@ export const Clusters = () => {
         setStatus('Try Later');
       }
     })();
-  }, [onCategoryChange]);
+  }, []);
 
   const data: ReorderFiltersObjectProps = {
     sideBar: [...dropDownsList],
     defaultSelectedValues: {},
     onSubmit: onSubmit,
+    onChange: onDropDownChange,
   };
 
   return (

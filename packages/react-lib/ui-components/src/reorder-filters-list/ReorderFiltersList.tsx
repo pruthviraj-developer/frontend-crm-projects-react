@@ -39,6 +39,7 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
   sideBar,
   defaultSelectedValues,
   onSubmit,
+  onChange,
 }: ReorderFiltersObjectProps) => {
   const classes = useStyles();
   const [selectedFilters, setSelectedFilters] = useState(
@@ -117,9 +118,7 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
                                       }
                                     );
                                   }
-                                  if (sideBarOption.onChange) {
-                                    sideBarOption.onChange(keyName, formValues);
-                                  }
+                                  onChange && onChange(keyName, formValues);
                                   setSelectedFilters(formValues);
                                 }
                               }}

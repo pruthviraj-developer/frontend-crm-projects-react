@@ -15,11 +15,11 @@ export interface ReorderFiltersProps {
   multi?: boolean;
   display: string;
   clearFields?: Array<string>;
-  onChange?: (a: any, b: any) => any;
 }
 
 export interface ReorderFiltersObjectProps {
   sideBar: Array<ReorderFiltersProps | any>;
   defaultSelectedValues: any;
   onSubmit: (a: any) => any;
+  onChange: (a: any, b: any) => any;
 }
