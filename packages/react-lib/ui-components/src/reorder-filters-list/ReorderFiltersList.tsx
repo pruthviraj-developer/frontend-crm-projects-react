@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { Formik, Field, Form } from 'formik';
+import { Formik, Field, Form, FieldArray } from 'formik';
 import styled from '@emotion/styled';
 import { Autocomplete, AutocompleteRenderInputParams } from '@material-ui/lab';
 import {
@@ -22,6 +22,10 @@ const useStyles = makeStyles((theme) => ({
   fullList: {
     width: 'auto',
   },
+  agegroup: {
+    margin: '10px 5px',
+    maxWidth: '300px',
+  },
   paper: {
     padding: theme.spacing(2),
     textAlign: 'center',
@@ -31,9 +35,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const ageGroupNumbers: Array<string> = [];
+for (let index = 1; index <= 180; index++) {
+  ageGroupNumbers.push(`${index}`);
+}
 const initialValues = {};
 const FiltersWrapper = styled.div`
-  width: 100%;
+  width: 80%;
+  margin: auto;
 `;
 export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
   sideBar,
@@ -118,6 +127,16 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
                                       }
                                     );
                                   }
+                                  if (
+                                    keyName === 'attribute' &&
+                                    formValues['attribute'] &&
+                                    formValues['attribute']['key'] ===
+                                      'age_group'
+                                  ) {
+                                    formValues['age_group'] = [
+                                      { from_age: '', to_age: '' },
+                                    ];
+                                  }
                                   onChange && onChange(keyName, formValues);
                                   setSelectedFilters(formValues);
                                 }
@@ -143,6 +162,85 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
                       }
                     })}
                 </Grid>
+                {selectedFilters['age_group'] &&
+                  selectedFilters['age_group'].length && (
+                    <FieldArray
+                      name="age_group"
+                      render={(arrayHelpers) => (
+                        <div>
+                          {selectedFilters['age_group'].map(
+                            (age: any, index) => (
+                              <Grid
+                                item
+                                data-age={age}
+                                key={index}
+                                container
+                                direction="row"
+                                alignItems="center"
+                              >
+                                <Grid item xs={5} className={classes.agegroup}>
+                                  <Field
+                                    variant="standard"
+                                    component={Autocomplete}
+                                    name="from_age"
+                                    options={ageGroupNumbers}
+                                    getOptionLabel={(option: string) => option}
+                                    renderInput={(
+                                      params: AutocompleteRenderInputParams
+                                    ) => (
+                                      <MuiTextField
+                                        {...params}
+                                        label={'From'}
+                                        variant="outlined"
+                                      />
+                                    )}
+                                  />
+                                </Grid>
+                                <Grid item xs={5} className={classes.agegroup}>
+                                  <Field
+                                    variant="standard"
+                                    component={Autocomplete}
+                                    name="to_age"
+                                    options={ageGroupNumbers}
+                                    getOptionLabel={(option: string) => option}
+                                    renderInput={(
+                                      params: AutocompleteRenderInputParams
+                                    ) => (
+                                      <MuiTextField
+                                        {...params}
+                                        label={'To'}
+                                        variant="outlined"
+                                      />
+                                    )}
+                                  />
+                                </Grid>
+                                <Grid item xs={2}>
+                                  <Button
+                                    type="button"
+                                    color="primary"
+                                    variant="outlined"
+                                    onClick={() => arrayHelpers.remove(index)}
+                                  >
+                                    Remove
+                                  </Button>
+                                </Grid>
+                              </Grid>
+                            )
+                          )}
+                          <Button
+                            type="button"
+                            color="primary"
+                            variant="outlined"
+                            onClick={() =>
+                              arrayHelpers.push({ to: '', from: '' })
+                            }
+                          >
+                            Add
+                          </Button>
+                        </div>
+                      )}
+                    />
+                  )}
                 <Grid item xs>
                   <Button
                     type="submit"
@@ -159,6 +257,7 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
                   >
                     Submit
                   </Button>
+                  <pre>{JSON.stringify({ selectedFilters })}</pre>
                 </Grid>
               </Paper>
             </Grid>

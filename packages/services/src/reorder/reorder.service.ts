@@ -1,5 +1,10 @@
 import { httpService } from '../http';
 
+const getColors = <R>(): Promise<R> => {
+  const url = '/crm-api/vendor-management-service/color';
+  return httpService.get<R>({ url });
+};
+
 const getFilters = <R>(): Promise<R> => {
   const url = '/crm-api/assortment-plan-api/util/v2/filters';
   return httpService.get<R>({ url });
@@ -31,6 +36,7 @@ const getFiltersList = <P, R>(data: P): Promise<R> => {
 };
 
 export const reorderService = {
+  getColors,
   getFilters,
   getFiltersList,
   getProductTypes,

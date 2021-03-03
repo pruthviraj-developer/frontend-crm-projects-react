@@ -111,12 +111,31 @@ export const Clusters = () => {
     })();
   };
 
+  const onAttributeChange = (key: any, formData: any) => {
+    if (key === 'color') {
+      const list = removeFromArray(['age_group'], [...dropDownsList]);
+      (async () => {
+        try {
+          const colors: any = await reorderService.getColors();
+          if (colors) {
+            list.push(colors);
+          }
+          setDropDownsList([...list]);
+        } catch (e) {}
+      })();
+    } else {
+      const list = removeFromArray(['color'], [...dropDownsList]);
+      setDropDownsList([...list]);
+    }
+  };
   const onDropDownChange = (key: any, formData: any) => {
     console.log(key, formData);
     if (key === 'category_id') {
       onCategoryChange(key, formData);
     } else if (key === 'sub_cat') {
       onSubCategoryChange(key, formData);
+    } else if (key === 'attribute') {
+      onAttributeChange(key, formData);
     }
   };
 
@@ -152,6 +171,15 @@ export const Clusters = () => {
               key: 'age',
               display: 'Age',
               input_type: 'S',
+            },
+            {
+              key: 'attribute',
+              display: 'Attribute Values',
+              input_type: 'S',
+              options: [
+                { key: 'color', name: 'Color' },
+                { key: 'age_group', name: 'Age Group' },
+              ],
             },
           ];
           dropDownsList.forEach((element: ReorderFiltersProps) => {
