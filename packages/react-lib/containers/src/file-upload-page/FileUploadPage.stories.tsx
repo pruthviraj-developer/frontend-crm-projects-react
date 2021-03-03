@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React from 'react';
 import { FileUploadPage } from './FileUploadPage';
 import { action } from '@storybook/addon-actions';
 import {
@@ -16,19 +16,18 @@ export default {
 };
 
 const reasonOptions = [
-  { display: 'NonProcHighreturn due to quality and sizing', id: '1' },
-  { display: 'NonProcHighreturn due to other reason', id: '2' },
+  { display: 'Reason 1', id: '1' },
+  { display: 'Reason 2', id: '2' },
 ];
 
 const reasonSideBarOption: FileUploadSideBarOption = {
-  isSelect: true,
   name: 'reason',
   label: 'Reason',
+  type: 'select',
   options: reasonOptions,
 };
 
 const remarkSideBarOption: FileUploadSideBarOption = {
-  isSelect: false,
   name: 'remark',
   label: 'Remark',
 };
@@ -78,28 +77,22 @@ FileUploadScreen.args = {
   initialValues,
 };
 
-export const WithoutSideBar: FC = () => (
-  <FileUploadPage
-    {...{
-      acceptType: ['xlsx'],
-      onSubmit,
-      onExport: action('onExport'),
-      validationSchema: FileUploadPageValidation,
-      initialValues,
-      downloadOption: createDownloadOption,
-    }}
-  />
-);
+export const WithoutSideBar = Template.bind({});
+WithoutSideBar.args = {
+  acceptType: ['xlsx'],
+  onSubmit,
+  onExport: action('onExport'),
+  validationSchema: FileUploadPageValidation,
+  initialValues,
+  downloadOption: createDownloadOption,
+};
 
-export const WithMultipleTemplate: FC = () => (
-  <FileUploadPage
-    {...{
-      acceptType: ['xlsx'],
-      onSubmit,
-      onExport: action('onExport'),
-      validationSchema: FileUploadPageValidation,
-      initialValues,
-      downloadOption: downloadOption,
-    }}
-  />
-);
+export const WithMultipleTemplate = Template.bind({});
+WithMultipleTemplate.args = {
+  acceptType: ['xlsx'],
+  onSubmit,
+  onExport: action('onExport'),
+  validationSchema: FileUploadPageValidation,
+  initialValues,
+  downloadOption: downloadOption,
+};
