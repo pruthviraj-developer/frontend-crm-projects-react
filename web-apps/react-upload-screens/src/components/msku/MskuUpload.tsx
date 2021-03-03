@@ -8,8 +8,8 @@ const navItems: LeftNavBarProps = {
   navList: [
     { linkUrl: 'create', linkText: 'MSKU Create', icon: DashBoardIcon },
     { linkUrl: 'update', linkText: 'MSKU Update', icon: DashBoardIcon },
-    //{ linkUrl: 'upload-targets', linkText: 'Upload MSKU targets', icon: DashBoardIcon },
-    //{ linkUrl: 'update-targets', linkText: 'Update MSKU targets', icon: DashBoardIcon },
+    { linkUrl: 'upload-targets', linkText: 'Upload MSKU targets', icon: DashBoardIcon },
+    { linkUrl: 'update-targets', linkText: 'Update MSKU targets', icon: DashBoardIcon },
     // { linkUrl: 'salesplan-upload', linkText: 'Sales Plan Upload', icon: DashBoardIcon },
   ],
 };
