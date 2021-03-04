@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from '@emotion/styled';
 import { makeStyles } from '@material-ui/core/styles';
 import { Colors } from '@hs/utils';
+import { toast } from 'react-toastify';
 import { reorderService } from '@hs/services';
 import { ReorderFiltersList, ReorderFiltersProps, ReorderFiltersObjectProps } from '@hs/components';
 
@@ -36,12 +37,21 @@ const ClusterWrapper = styled.div`
   margin: 10px 10px 10px 90px;
 `;
 const loading = 'Loading';
+const tryLater = 'Please try later';
+const showError = (error: Record<string, string>) => {
+  let message = tryLater;
+  if (error.action === 'failure') {
+    message = error.message;
+  }
+  toast.error(message);
+};
 
 export const Clusters = () => {
   const classes = useStyles();
   const [status, setStatus] = useState<string>(loading);
   const [dropDownsList, setDropDownsList] = useState<any>('');
   const onSubmit = (e: Record<string, unknown>) => {
+    debugger;
     console.log(e);
   };
 
@@ -79,7 +89,10 @@ export const Clusters = () => {
           }
         }
         setDropDownsList([...list]);
-      } catch (e) {}
+      } catch (error) {
+        setStatus(tryLater);
+        showError(error);
+      }
     })();
   };
 
@@ -107,12 +120,15 @@ export const Clusters = () => {
           }
         }
         setDropDownsList([...list]);
-      } catch (e) {}
+      } catch (error) {
+        setStatus(tryLater);
+        showError(error);
+      }
     })();
   };
 
   const onAttributeChange = (key: any, formData: any) => {
-    if (key === 'color') {
+    if (key === 'attribute' && formData.attribute.key === 'color') {
       const list = removeFromArray(['age_group'], [...dropDownsList]);
       (async () => {
         try {
@@ -121,13 +137,17 @@ export const Clusters = () => {
             list.push(colors);
           }
           setDropDownsList([...list]);
-        } catch (e) {}
+        } catch (error) {
+          setStatus(tryLater);
+          showError(error);
+        }
       })();
     } else {
       const list = removeFromArray(['color'], [...dropDownsList]);
       setDropDownsList([...list]);
     }
   };
+
   const onDropDownChange = (key: any, formData: any) => {
     console.log(key, formData);
     if (key === 'category_id') {
@@ -189,8 +209,9 @@ export const Clusters = () => {
           });
           setDropDownsList([...dropDownsList]);
         }
-      } catch (e) {
-        setStatus('Try Later');
+      } catch (error) {
+        setStatus(tryLater);
+        showError(error);
       }
     })();
   }, []);

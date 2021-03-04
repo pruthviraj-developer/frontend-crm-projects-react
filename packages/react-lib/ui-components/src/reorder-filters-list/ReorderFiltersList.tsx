@@ -9,7 +9,8 @@ import {
   Paper,
   Button,
 } from '@material-ui/core';
-
+import { TextField } from 'formik-material-ui';
+import { ReoOrderFormValidation } from './ReorderFiltersListValidation';
 import {
   ReorderFiltersProps,
   ReorderFiltersOptions,
@@ -25,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
   agegroup: {
     margin: '10px 5px',
     maxWidth: '300px',
+    textAlign: 'initial',
   },
   paper: {
     padding: theme.spacing(2),
@@ -35,10 +37,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ageGroupNumbers: Array<string> = [];
-for (let index = 1; index <= 180; index++) {
-  ageGroupNumbers.push(`${index}`);
-}
 const initialValues = {};
 const FiltersWrapper = styled.div`
   width: 80%;
@@ -60,13 +58,14 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
       <Formik
         enableReinitialize={true}
         initialValues={selectedFilters}
+        validationSchema={ReoOrderFormValidation}
         onSubmit={(values, actions) => {
           actions.setSubmitting(false);
           onSubmit && onSubmit(values);
           alert(JSON.stringify(values, null, 2));
         }}
       >
-        {({ errors, touched, isValid }) => (
+        {({ errors, touched, isValid, setFieldValue }) => (
           <Form autoComplete="off">
             <Grid container direction="column" justify="center" spacing={1}>
               <Paper className={classes.paper} variant="outlined">
@@ -134,8 +133,16 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
                                       'age_group'
                                   ) {
                                     formValues['age_group'] = [
-                                      { from_age: '', to_age: '' },
+                                      { from_age: null, to_age: null },
                                     ];
+                                    delete formValues['color'];
+                                  }
+                                  if (
+                                    keyName === 'attribute' &&
+                                    formValues['attribute'] &&
+                                    formValues['attribute']['key'] === 'color'
+                                  ) {
+                                    delete formValues['age_group'];
                                   }
                                   onChange && onChange(keyName, formValues);
                                   setSelectedFilters(formValues);
@@ -179,7 +186,7 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
                                 alignItems="center"
                               >
                                 <Grid item xs={5} className={classes.agegroup}>
-                                  <Field
+                                  {/* <Field
                                     variant="standard"
                                     component={Autocomplete}
                                     name="from_age"
@@ -194,10 +201,33 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
                                         variant="outlined"
                                       />
                                     )}
+                                  /> */}
+                                  <Field
+                                    component={TextField}
+                                    name={`age_group[${index}].from_age`}
+                                    type="text"
+                                    label={'From'}
+                                    variant={'outlined'}
+                                    onChange={(
+                                      evt: React.ChangeEvent<HTMLInputElement>
+                                    ) => {
+                                      const fromValue = evt.target
+                                        ? evt.target.value
+                                        : null;
+                                      setFieldValue(
+                                        `age_group[${index}].from_age`,
+                                        fromValue
+                                      );
+                                      const formValues = { ...selectedFilters };
+                                      formValues['age_group'][index][
+                                        'from_age'
+                                      ] = fromValue;
+                                      setSelectedFilters(formValues);
+                                    }}
                                   />
                                 </Grid>
                                 <Grid item xs={5} className={classes.agegroup}>
-                                  <Field
+                                  {/* <Field
                                     variant="standard"
                                     component={Autocomplete}
                                     name="to_age"
@@ -212,28 +242,74 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
                                         variant="outlined"
                                       />
                                     )}
+                                  /> */}
+                                  <Field
+                                    component={TextField}
+                                    name={`age_group[${index}].to_age`}
+                                    type="text"
+                                    label={'To'}
+                                    variant={'outlined'}
+                                    onChange={(
+                                      evt: React.ChangeEvent<HTMLInputElement>
+                                    ) => {
+                                      setFieldValue(
+                                        `age_group[${index}].to_age`,
+                                        evt.target ? evt.target.value : ''
+                                      );
+                                      const toValue = evt.target
+                                        ? evt.target.value
+                                        : null;
+                                      setFieldValue(
+                                        `age_group[${index}].to_age`,
+                                        toValue
+                                      );
+                                      const formValues = { ...selectedFilters };
+                                      formValues['age_group'][index][
+                                        'to_age'
+                                      ] = toValue;
+                                      setSelectedFilters(formValues);
+                                    }}
                                   />
                                 </Grid>
-                                <Grid item xs={2}>
-                                  <Button
-                                    type="button"
-                                    color="primary"
-                                    variant="outlined"
-                                    onClick={() => arrayHelpers.remove(index)}
-                                  >
-                                    Remove
-                                  </Button>
-                                </Grid>
+                                {index > 0 && (
+                                  <Grid item xs={2}>
+                                    <Button
+                                      type="button"
+                                      color="primary"
+                                      disabled={!isValid}
+                                      variant="outlined"
+                                      onClick={() => {
+                                        const formValues = {
+                                          ...selectedFilters,
+                                        };
+                                        formValues['age_group'].splice(
+                                          index,
+                                          1
+                                        );
+                                        setSelectedFilters(formValues);
+                                        arrayHelpers.remove(index);
+                                      }}
+                                    >
+                                      Remove
+                                    </Button>
+                                  </Grid>
+                                )}
                               </Grid>
                             )
                           )}
                           <Button
                             type="button"
                             color="primary"
+                            disabled={!isValid}
                             variant="outlined"
-                            onClick={() =>
-                              arrayHelpers.push({ to: '', from: '' })
-                            }
+                            onClick={() => {
+                              const formValues = { ...selectedFilters };
+                              formValues['age_group'].push({
+                                from_age: null,
+                                to_age: null,
+                              });
+                              setSelectedFilters(formValues);
+                            }}
                           >
                             Add
                           </Button>
@@ -257,7 +333,7 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
                   >
                     Submit
                   </Button>
-                  <pre>{JSON.stringify({ selectedFilters })}</pre>
+                  <pre>{isValid}</pre>
                 </Grid>
               </Paper>
             </Grid>

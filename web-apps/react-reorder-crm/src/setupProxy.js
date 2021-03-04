@@ -14,6 +14,15 @@ module.exports = function (app) {
   );
 
   app.use(
+    '/vendor-management-service/',
+    createProxyMiddleware({
+      target: 'http://inventory-management-service.qa.hs.internal:9002',
+      secure: false,
+      changeOrigin: true,
+    }),
+  );
+
+  app.use(
     '/intranet/login/',
     createProxyMiddleware({
       target: 'http://crm.qa.hopscotch.in/',
