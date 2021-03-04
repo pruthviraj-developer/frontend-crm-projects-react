@@ -50,9 +50,34 @@ export const Clusters = () => {
   const classes = useStyles();
   const [status, setStatus] = useState<string>(loading);
   const [dropDownsList, setDropDownsList] = useState<any>('');
-  const onSubmit = (e: Record<string, unknown>) => {
-    debugger;
-    console.log(e);
+  const onSubmit = (data: any) => {
+    const postObject: Record<string, unknown> = {};
+    [
+      'vendor_id',
+      'brand_id',
+      'category_id',
+      'sub_category_id',
+      'product_type_id',
+      'gender',
+      'age',
+      'age_constraints',
+      'color_constraints',
+    ].forEach((ele: string) => {
+      if (data[ele]) {
+        postObject[ele] = data[ele]['key'] || data[ele];
+      }
+    });
+    (async () => {
+      try {
+        const constraint: any = await reorderService.createConstraint(postObject);
+        debugger;
+        if (constraint) {
+        }
+      } catch (error) {
+        setStatus(tryLater);
+        showError(error);
+      }
+    })();
   };
 
   const removeFromArray = (elements: Array<any>, filtersList: Array<any>) => {
@@ -70,19 +95,18 @@ export const Clusters = () => {
     let data = formData[key];
     (async () => {
       try {
-        const ids = data.map((obj: any) => obj.key).toString();
-        const list = removeFromArray(['pt'], [...dropDownsList]);
-        if (ids.length) {
+        const ids = data.key;
+        const list = removeFromArray(['product_type_id'], [...dropDownsList]);
+        if (ids) {
           const productType: any = await reorderService.getProductTypes({ ids });
           if (productType && productType.pt) {
-            const indexFound = list.findIndex((obj: any) => obj.key === 'sub_cat');
+            const indexFound = list.findIndex((obj: any) => obj.key === 'sub_category_id');
             if (indexFound > -1) {
               const productTypes = {
-                key: 'pt',
+                key: 'product_type_id',
                 display: 'Product Type',
                 input_type: 'S',
                 options: productType.pt,
-                multi: true,
               };
               list.splice(indexFound + 1, 0, productTypes);
             }
@@ -100,20 +124,19 @@ export const Clusters = () => {
     let data = formData[key];
     (async () => {
       try {
-        const ids = data.map((obj: any) => obj.key).toString();
-        const list = removeFromArray(['sub_cat', 'pt'], [...dropDownsList]);
-        if (ids.length) {
+        const ids = data.key;
+        const list = removeFromArray(['sub_category_id', 'product_type_id'], [...dropDownsList]);
+        if (ids) {
           const subCategories: any = await reorderService.getSubCategories({ ids });
           if (subCategories && subCategories.sub_cat) {
             const indexFound = list.findIndex((obj: any) => obj.key === 'category_id');
             if (indexFound > -1) {
               const subCategoryObject = {
-                key: 'sub_cat',
+                key: 'sub_category_id',
                 display: 'Sub Category',
                 input_type: 'S',
                 options: subCategories.sub_cat,
-                multi: true,
-                clearFields: ['pt'],
+                clearFields: ['product_type_id'],
               };
               list.splice(indexFound + 1, 0, subCategoryObject);
             }
@@ -128,13 +151,13 @@ export const Clusters = () => {
   };
 
   const onAttributeChange = (key: any, formData: any) => {
-    if (key === 'attribute' && formData.attribute.key === 'color') {
-      const list = removeFromArray(['age_group'], [...dropDownsList]);
+    if (key === 'attribute' && formData.attribute.key === 'color_constraints') {
+      const list = removeFromArray(['age_constraints'], [...dropDownsList]);
       (async () => {
         try {
           const colors: any = await reorderService.getColors();
           if (colors) {
-            list.push(colors);
+            list.push({ ...colors, key: 'color_constraints' });
           }
           setDropDownsList([...list]);
         } catch (error) {
@@ -143,16 +166,15 @@ export const Clusters = () => {
         }
       })();
     } else {
-      const list = removeFromArray(['color'], [...dropDownsList]);
+      const list = removeFromArray(['color_constraints'], [...dropDownsList]);
       setDropDownsList([...list]);
     }
   };
 
   const onDropDownChange = (key: any, formData: any) => {
-    console.log(key, formData);
     if (key === 'category_id') {
       onCategoryChange(key, formData);
-    } else if (key === 'sub_cat') {
+    } else if (key === 'sub_category_id') {
       onSubCategoryChange(key, formData);
     } else if (key === 'attribute') {
       onAttributeChange(key, formData);
@@ -178,9 +200,8 @@ export const Clusters = () => {
             {
               key: 'category_id',
               display: 'Category',
-              multi: true,
               input_type: 'S',
-              clearFields: ['sub_cat', 'pt'],
+              clearFields: ['sub_category_id', 'product_type_id'],
             },
             {
               key: 'gender',
@@ -197,8 +218,8 @@ export const Clusters = () => {
               display: 'Attribute Values',
               input_type: 'S',
               options: [
-                { key: 'color', name: 'Color' },
-                { key: 'age_group', name: 'Age Group' },
+                { key: 'color_constraints', name: 'Color' },
+                { key: 'age_constraints', name: 'Age Group(Minimum 2)' },
               ],
             },
           ];
