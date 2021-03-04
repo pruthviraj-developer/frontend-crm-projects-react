@@ -59,22 +59,44 @@ export const Clusters = () => {
       'sub_category_id',
       'product_type_id',
       'gender',
-      'age',
       'age_constraints',
       'color_constraints',
     ].forEach((ele: string) => {
       if (data[ele]) {
-        postObject[ele] = data[ele]['key'] || data[ele];
+        if (ele === 'age_constraints') {
+          const age = [];
+          for (let index = 0; index < data[ele].length; index++) {
+            const element = data[ele][index];
+            age.push({
+              from: parseInt(element.from),
+              to: parseInt(element.to),
+            });
+          }
+          postObject[ele] = age;
+        } else if (ele === 'color_constraints') {
+          const color = [];
+          for (let index = 0; index < data[ele].length; index++) {
+            const element = data[ele][index];
+            color.push({
+              key: element.key,
+            });
+          }
+          postObject[ele] = color;
+        } else {
+          postObject[ele] = data[ele]['key'] || data[ele];
+        }
       }
     });
     (async () => {
       try {
         const constraint: any = await reorderService.createConstraint(postObject);
         debugger;
-        if (constraint) {
+        if (constraint.action === 'success') {
+          toast(constraint.message || 'Cluster created successfully');
+          return;
         }
+        showError(constraint);
       } catch (error) {
-        setStatus(tryLater);
         showError(error);
       }
     })();
@@ -114,7 +136,6 @@ export const Clusters = () => {
         }
         setDropDownsList([...list]);
       } catch (error) {
-        setStatus(tryLater);
         showError(error);
       }
     })();
@@ -144,7 +165,6 @@ export const Clusters = () => {
         }
         setDropDownsList([...list]);
       } catch (error) {
-        setStatus(tryLater);
         showError(error);
       }
     })();
@@ -161,7 +181,6 @@ export const Clusters = () => {
           }
           setDropDownsList([...list]);
         } catch (error) {
-          setStatus(tryLater);
           showError(error);
         }
       })();
@@ -246,7 +265,7 @@ export const Clusters = () => {
 
   return (
     <ClusterWrapper>
-      <h1 className={classes.header}>Checks and Balances DashBoard</h1>
+      <h1 className={classes.header}>Create age color pack constraint</h1>
       {dropDownsList.length === 0 && <h5> {status} </h5>}
       {dropDownsList.length > 0 && <ReorderFiltersList {...data} />}
     </ClusterWrapper>

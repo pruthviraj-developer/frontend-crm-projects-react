@@ -58,14 +58,13 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
       <Formik
         enableReinitialize={true}
         initialValues={selectedFilters}
-        validateOnChange
         validationSchema={ReoOrderFormValidation}
         onSubmit={(values, actions) => {
           actions.setSubmitting(false);
           onSubmit && onSubmit(values);
         }}
       >
-        {({ errors, touched, isValid, setFieldValue }) => (
+        {({ errors, touched, isValid, setFieldValue, validateForm }) => (
           <Form autoComplete="off">
             <Grid container direction="column" justify="center" spacing={1}>
               <Paper className={classes.paper} variant="outlined">
@@ -133,7 +132,7 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
                                       'age_constraints'
                                   ) {
                                     formValues['age_constraints'] = [
-                                      { from_age: null, to_age: null },
+                                      { from: null, to: null },
                                     ];
                                     delete formValues['color_constraints'];
                                   }
@@ -189,7 +188,7 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
                                 <Grid item xs={5} className={classes.agegroup}>
                                   <Field
                                     component={TextField}
-                                    name={`age_constraints[${index}].from_age`}
+                                    name={`age_constraints[${index}].from`}
                                     type="text"
                                     label={'From'}
                                     variant={'outlined'}
@@ -200,12 +199,12 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
                                         ? evt.target.value
                                         : null;
                                       setFieldValue(
-                                        `age_constraints[${index}].from_age`,
+                                        `age_constraints[${index}].from`,
                                         fromValue
                                       );
                                       const formValues = { ...selectedFilters };
                                       formValues['age_constraints'][index][
-                                        'from_age'
+                                        'from'
                                       ] = fromValue;
                                       setSelectedFilters(formValues);
                                     }}
@@ -214,7 +213,7 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
                                 <Grid item xs={5} className={classes.agegroup}>
                                   <Field
                                     component={TextField}
-                                    name={`age_constraints[${index}].to_age`}
+                                    name={`age_constraints[${index}].to`}
                                     type="text"
                                     label={'To'}
                                     variant={'outlined'}
@@ -222,19 +221,19 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
                                       evt: React.ChangeEvent<HTMLInputElement>
                                     ) => {
                                       setFieldValue(
-                                        `age_constraints[${index}].to_age`,
+                                        `age_constraints[${index}].to`,
                                         evt.target ? evt.target.value : ''
                                       );
                                       const toValue = evt.target
                                         ? evt.target.value
                                         : null;
                                       setFieldValue(
-                                        `age_constraints[${index}].to_age`,
+                                        `age_constraints[${index}].to`,
                                         toValue
                                       );
                                       const formValues = { ...selectedFilters };
                                       formValues['age_constraints'][index][
-                                        'to_age'
+                                        'to'
                                       ] = toValue;
                                       setSelectedFilters(formValues);
                                     }}
@@ -274,10 +273,11 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
                             onClick={() => {
                               const formValues = { ...selectedFilters };
                               formValues['age_constraints'].push({
-                                from_age: null,
-                                to_age: null,
+                                from: null,
+                                to: null,
                               });
                               setSelectedFilters(formValues);
+                              validateForm();
                             }}
                           >
                             Add
