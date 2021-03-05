@@ -1,10 +1,11 @@
 import { create } from '@storybook/theming/create';
 
 export default create({
-  base: 'dark',
+  base: 'light',
   // UI
   appBg: '#2F333D',
-  appContentBg: '#282c34',
+  //appContentBg: '#282c34',
+  appContentBg: '#FFF',
   appBorderColor: '#BDBDBD',
   appBorderRadius: 4,
 
@@ -14,6 +15,5 @@ export default create({
   barBg: '#ed54a4',
   brandTitle: 'HopScotch',
   //   brandImage: 'http://crm.hopscotch.in/intranet/static/css/images/logo.png',
-  brandImage:
-    'https://static.hopscotch.in/hopscotch-story-book-icon_mJN5fuZyN.svg',
+  brandImage: 'https://static.hopscotch.in/hopscotch-story-book-icon_mJN5fuZyN.svg',
 });
