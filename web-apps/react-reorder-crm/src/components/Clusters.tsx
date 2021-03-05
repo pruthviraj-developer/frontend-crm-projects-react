@@ -228,11 +228,6 @@ export const Clusters = () => {
               input_type: 'S',
             },
             {
-              key: 'age',
-              display: 'Age',
-              input_type: 'S',
-            },
-            {
               key: 'attribute',
               display: 'Attribute Values',
               input_type: 'S',
@@ -265,7 +260,7 @@ export const Clusters = () => {
 
   return (
     <ClusterWrapper>
-      <h1 className={classes.header}>Create age color pack constraint</h1>
+      <h1 className={classes.header}>Vendor casepack setup</h1>
       {dropDownsList.length === 0 && <h5> {status} </h5>}
       {dropDownsList.length > 0 && <ReorderFiltersList {...data} />}
     </ClusterWrapper>
