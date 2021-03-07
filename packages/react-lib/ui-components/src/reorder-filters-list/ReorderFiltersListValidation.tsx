@@ -3,10 +3,7 @@ export const ReoOrderFormValidation = Yup.object().shape({
   attribute: Yup.string().required('Please select color or age'),
   vendor_id: Yup.string().required('Please select vendor'),
   brand_id: Yup.string().required('Please select brand'),
-  // color_constraints: Yup.string().when('attribute', {
-  //   is: (attribute) => attribute.key === 'color_constraints',
-  //   then: Yup.string().required('Please select Color')
-  // }),
+  // color:Yup.array().min(2,'Please select atleast 2 colors'),
   age_constraints: Yup.array().of(
     Yup.object().shape({
       from: Yup.number()

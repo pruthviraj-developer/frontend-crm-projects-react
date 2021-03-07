@@ -87,12 +87,29 @@ export const Clusters = () => {
         }
       }
     });
+    const attribute = data.attribute.key;
+    if (attribute) {
+      const age = data.age_constraints;
+      const color = data.color_constraints;
+      if (attribute === 'color_constraints' && (!color || (color && color.length < 2))) {
+        toast.error('Please select minimum 2 colors');
+        return;
+      } else if (attribute === 'age_constraints') {
+        if (!age || (age && age.length < 2)) {
+          toast.error('Please select minimum 2 age constraints');
+          return;
+        }
+      }
+    } else {
+      toast.error('Please select attribute');
+      return;
+    }
     (async () => {
       try {
         const constraint: any = await reorderService.createConstraint(postObject);
-        debugger;
         if (constraint.action === 'success') {
           toast(constraint.message || 'Cluster created successfully');
+          window.location.reload();
           return;
         }
         showError(constraint);
@@ -177,7 +194,7 @@ export const Clusters = () => {
         try {
           const colors: any = await reorderService.getColors();
           if (colors) {
-            list.push({ ...colors, key: 'color_constraints' });
+            list.push({ ...colors, key: 'color_constraints', display: 'Color *' });
           }
           setDropDownsList([...list]);
         } catch (error) {
@@ -208,12 +225,12 @@ export const Clusters = () => {
           const dropDownsList = [
             {
               key: 'vendor_id',
-              display: 'Vendor',
+              display: 'Vendor *',
               input_type: 'S',
             },
             {
               key: 'brand_id',
-              display: 'Brand',
+              display: 'Brand *',
               input_type: 'S',
             },
             {
@@ -229,11 +246,11 @@ export const Clusters = () => {
             },
             {
               key: 'attribute',
-              display: 'Attribute Values',
+              display: 'Attribute Values *',
               input_type: 'S',
               options: [
-                { key: 'color_constraints', name: 'Color' },
-                { key: 'age_constraints', name: 'Age Group(Minimum 2)' },
+                { key: 'color_constraints', name: 'Color(Minimum 2) *' },
+                { key: 'age_constraints', name: 'Age Group(Minimum 2) *' },
               ],
             },
           ];
