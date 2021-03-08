@@ -19,7 +19,7 @@ const MskuUpload: FC = () => {
   const createDownloadOption = [{ label: 'Download Template', action: 'downloadCreateMsku' }];
   const updateDownloadOption = [
     { label: 'Download current MSKU and taxonomy', action: 'downloadCurrentMsku' },
-    { label: 'Download blank template', action: 'downloadCreateMsku' },
+    //{ label: 'Download blank template', action: 'downloadCreateMsku' },
   ];
   const uploadTargetDownloadOption = [{ label: 'Download Template', action: 'downloadCreateMskuTarget' }];
   const updateTargetDownloadOption = [
