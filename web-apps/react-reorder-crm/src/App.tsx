@@ -15,7 +15,7 @@ const App: FC = () => {
   const navItems: LeftNavBarProps = {
     navList: [
       { linkUrl: '/checks-and-balances', linkText: 'Dashboard', icon: DashBoardIcon },
-      { linkUrl: '/clusters', linkText: 'Clusters', icon: DashBoardIcon },
+      { linkUrl: '/clu', linkText: 'Clusters', icon: DashBoardIcon },
     ],
   };
   return (
@@ -25,12 +25,12 @@ const App: FC = () => {
           <Router basename="/react-monorepo/reorder-checks-and-balances">
             <LeftNavBar {...navItems}></LeftNavBar>
             <Switch>
-              <Redirect exact from="/" to="/sosdashboard" />
-              <Route path="/clusters">
-                <Clusters />
-              </Route>
+              <Redirect exact from="/" to="/checks-and-balances" />
               <Route path="/checks-and-balances">
                 <DashBoard />
+              </Route>
+              <Route path="/clu">
+                <Clusters />
               </Route>
             </Switch>
           </Router>
