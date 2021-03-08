@@ -60,5 +60,5 @@
     "lint-staged": "10.4.0",
     "prettier": "^2.1.2"
   },
-  "homepage": "/react-monorepo/reorder-checks-and-balances"
+  "homepage": "/react-monorepo/reorder"
 }

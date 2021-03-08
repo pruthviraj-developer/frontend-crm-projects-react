@@ -22,7 +22,7 @@ const App: FC = () => {
     <div className="App">
       <ThemeProvider theme={LightTheme}>
         <MuiThemeProvider theme={LightTheme}>
-          <Router basename="/react-monorepo/reorder-checks-and-balances">
+          <Router basename="/react-monorepo/reorder">
             <LeftNavBar {...navItems}></LeftNavBar>
             <Switch>
               <Redirect exact from="/" to="/checks-and-balances" />
