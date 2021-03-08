@@ -108,8 +108,10 @@ export const Clusters = () => {
       try {
         const constraint: any = await reorderService.createConstraint(postObject);
         if (constraint.action === 'success') {
-          toast(constraint.message || 'Cluster created successfully');
-          window.location.reload();
+          toast.success(constraint.message || 'Cluster created successfully');
+          setTimeout(() => {
+            window.location.reload();
+          }, 8000);
           return;
         }
         showError(constraint);

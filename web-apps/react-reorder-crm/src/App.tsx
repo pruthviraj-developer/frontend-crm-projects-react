@@ -15,7 +15,7 @@ const App: FC = () => {
   const navItems: LeftNavBarProps = {
     navList: [
       { linkUrl: '/checks-and-balances', linkText: 'Dashboard', icon: DashBoardIcon },
-      { linkUrl: '/clu', linkText: 'Clusters', icon: DashBoardIcon },
+      { linkUrl: '/clusters', linkText: 'Clusters', icon: DashBoardIcon },
     ],
   };
   return (
@@ -29,8 +29,11 @@ const App: FC = () => {
               <Route path="/checks-and-balances">
                 <DashBoard />
               </Route>
-              <Route path="/clu">
+              <Route path="/clusters">
                 <Clusters />
+              </Route>
+              <Route path="*">
+                <Redirect to="/checks-and-balances" />
               </Route>
             </Switch>
           </Router>
