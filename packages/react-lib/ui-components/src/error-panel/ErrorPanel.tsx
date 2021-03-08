@@ -66,10 +66,10 @@ export const ErrorPanel: FC<ErrorPanelProps> = ({
       <StyledHeader>
         {header}
         <StyledCopytoClipboard onClick={copyToClipboard}>
-          <IconButton color={'secondary'}>
+          <IconButton>
             <FileCopyOutlinedIcon
               fontSize="large"
-              htmlColor="${Colors.WHITE}"
+              htmlColor={`${Colors.WHITE}`}
             />
           </IconButton>
         </StyledCopytoClipboard>
