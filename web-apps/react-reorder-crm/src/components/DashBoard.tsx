@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Route, Switch } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -14,6 +15,11 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import { reorderService } from '@hs/services';
 import { Colors } from '@hs/utils';
+import { LeftNavBar, LeftNavBarProps } from '@hs/components';
+import { DashBoardIcon } from '@hs/icons';
+const navItems: LeftNavBarProps = {
+  navList: [{ linkUrl: '/checks-and-balances', linkText: 'Dashboard', icon: DashBoardIcon }],
+};
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -60,7 +66,7 @@ const DashBoardWrapper = styled.div`
   width: 100%;
   margin: 10px 10px 10px 90px;
 `;
-export const DashBoard = () => {
+const DashBoard = () => {
   const classes = useStyles();
   const [status, setStatus] = useState<string>(loading);
   const [data, setData] = useState<{ records: Array<any>; count: 0 } | any>({ records: [], count: 0 });
@@ -443,46 +449,54 @@ export const DashBoard = () => {
     updatedFilter,
   };
   return (
-    <DashBoardWrapper>
-      <h1 className={classes.header}>Checks and Balances DashBoard</h1>
-      <FilterListPage {...filtersData} />
-      {data.count === 0 && <h5> {status} </h5>}
-      <Grid container spacing={2} style={{ marginBottom: '5px' }}>
-        {defaultLabels.map((obj: any) => {
-          const labelObj = data?.[obj.key] ? true : data && data[obj.key] === 0 ? true : undefined;
-          return labelObj ? (
-            <Grid item xs={3} key={obj.label}>
-              <Paper className={classes.paper}>
-                <span color="primary">{obj.label}</span> =&gt; <span>{data[obj.key]}</span>
-              </Paper>
+    <>
+      <LeftNavBar {...navItems}></LeftNavBar>
+      <Switch>
+        <Route path="/">
+          <DashBoardWrapper>
+            <h1 className={classes.header}>Checks and Balances DashBoard</h1>
+            <FilterListPage {...filtersData} />
+            {data.count === 0 && <h5> {status} </h5>}
+            <Grid container spacing={2} style={{ marginBottom: '5px' }}>
+              {defaultLabels.map((obj: any) => {
+                const labelObj = data?.[obj.key] ? true : data && data[obj.key] === 0 ? true : undefined;
+                return labelObj ? (
+                  <Grid item xs={3} key={obj.label}>
+                    <Paper className={classes.paper}>
+                      <span color="primary">{obj.label}</span> =&gt; <span>{data[obj.key]}</span>
+                    </Paper>
+                  </Grid>
+                ) : null;
+              })}
             </Grid>
-          ) : null;
-        })}
-      </Grid>
-      {data.count > 0 && <HsSelectableTable {...selectTableData} />}
-      <Dialog
-        open={confirmDialog}
-        onClose={handleDialogClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          <span className={classes.dialogTitle}>Confirmation</span>
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            <span className={classes.dialogDescription}>{confirmationMessage}</span>
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button variant="contained" color="primary" onClick={handleDialogClose}>
-            No
-          </Button>
-          <Button variant="contained" color="primary" onClick={updateAction} autoFocus>
-            Yes
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </DashBoardWrapper>
+            {data.count > 0 && <HsSelectableTable {...selectTableData} />}
+            <Dialog
+              open={confirmDialog}
+              onClose={handleDialogClose}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+            >
+              <DialogTitle id="alert-dialog-title">
+                <span className={classes.dialogTitle}>Confirmation</span>
+              </DialogTitle>
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  <span className={classes.dialogDescription}>{confirmationMessage}</span>
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button variant="contained" color="primary" onClick={handleDialogClose}>
+                  No
+                </Button>
+                <Button variant="contained" color="primary" onClick={updateAction} autoFocus>
+                  Yes
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </DashBoardWrapper>
+        </Route>
+      </Switch>
+    </>
   );
 };
+export default DashBoard;

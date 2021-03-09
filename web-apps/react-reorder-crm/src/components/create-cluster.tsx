@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import { Route, Switch } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { makeStyles } from '@material-ui/core/styles';
 import { Colors } from '@hs/utils';
 import { toast } from 'react-toastify';
 import { reorderService } from '@hs/services';
 import { ReorderFiltersList, ReorderFiltersProps, ReorderFiltersObjectProps } from '@hs/components';
+import { LeftNavBar, LeftNavBarProps } from '@hs/components';
+import { DashBoardIcon } from '@hs/icons';
+const navItems: LeftNavBarProps = {
+  navList: [{ linkUrl: '/create-cluster', linkText: 'Create cluster', icon: DashBoardIcon }],
+};
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -46,7 +52,7 @@ const showError = (error: Record<string, string>) => {
   toast.error(message);
 };
 
-export const Clusters = () => {
+const CreateCluster = () => {
   const classes = useStyles();
   const [status, setStatus] = useState<string>(loading);
   const [dropDownsList, setDropDownsList] = useState<any>('');
@@ -278,10 +284,19 @@ export const Clusters = () => {
   };
 
   return (
-    <ClusterWrapper>
-      <h1 className={classes.header}>Vendor casepack setup</h1>
-      {dropDownsList.length === 0 && <h5> {status} </h5>}
-      {dropDownsList.length > 0 && <ReorderFiltersList {...data} />}
-    </ClusterWrapper>
+    <>
+      <LeftNavBar {...navItems}></LeftNavBar>
+      <Switch>
+        <Route path="/">
+          <ClusterWrapper>
+            <h1 className={classes.header}>Vendor casepack setup</h1>
+            {dropDownsList.length === 0 && <h5> {status} </h5>}
+            {dropDownsList.length > 0 && <ReorderFiltersList {...data} />}
+          </ClusterWrapper>
+        </Route>
+      </Switch>
+    </>
   );
 };
+
+export default CreateCluster;
