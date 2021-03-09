@@ -104,3 +104,9 @@ const Template: Story<SelectableTableProps> = (args) => (
 
 export const HsSelectableTableComponent = Template.bind({});
 HsSelectableTableComponent.args = data;
+
+export const DisableSorting = Template.bind({});
+DisableSorting.args = { ...data, sorting: false };
+
+export const CardsWiseEdit = Template.bind({});
+CardsWiseEdit.args = { ...data, selectId: 'carbs' };
