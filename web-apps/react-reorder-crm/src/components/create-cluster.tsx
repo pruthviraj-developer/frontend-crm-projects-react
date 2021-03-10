@@ -228,7 +228,7 @@ const CreateCluster = () => {
   useEffect(() => {
     (async () => {
       try {
-        const filters: any = await reorderService.getFilters();
+        const filters: any = await reorderService.getFiltersList();
         if (filters) {
           const dropDownsList = [
             {

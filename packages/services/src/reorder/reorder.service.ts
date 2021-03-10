@@ -37,9 +37,9 @@ const updateOrders = <P, R>(data: P): Promise<R> => {
   return httpService.post<R>({ url, data });
 };
 
-const getFiltersList = <P, R>(data: P): Promise<R> => {
+const getFiltersList = <R>(): Promise<R> => {
   const url = '/crm-api/assortment-plan-api/util/filters';
-  return httpService.post<R>({ url, data });
+  return httpService.get<R>({ url });
 };
 
 export const reorderService = {
