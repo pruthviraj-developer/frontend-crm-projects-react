@@ -19,12 +19,12 @@ const MskuUpload: FC = () => {
   const createDownloadOption = [{ label: 'Download Template', action: 'downloadCreateMsku' }];
   const updateDownloadOption = [
     { label: 'Download current MSKU and taxonomy', action: 'downloadCurrentMsku' },
-    //{ label: 'Download blank template', action: 'downloadCreateMsku' },
+    { label: 'Download blank template', action: 'downloadUpdateMsku' },
   ];
   const uploadTargetDownloadOption = [{ label: 'Download Template', action: 'downloadCreateMskuTarget' }];
   const updateTargetDownloadOption = [
     { label: 'Download latest MSKU targets file', action: 'downloadMskuTarget' },
-    { label: 'Download Template', action: 'downloadCreateMskuTarget' },
+    { label: 'Download Template', action: 'downloadUpdateMskuTarget' },
   ];
   const salesPlanDownloadOption = [{ label: 'Download Template', action: 'downloadMskuTargetSalePlan' }];
 
