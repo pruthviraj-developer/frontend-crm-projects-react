@@ -37,16 +37,16 @@ const updateOrders = <P, R>(data: P): Promise<R> => {
   return httpService.post<R>({ url, data });
 };
 
-const getFiltersList = <R>(): Promise<R> => {
-  const url = '/crm-api/assortment-plan-api/util/filters';
-  return httpService.get<R>({ url });
+const getBrands = <P, R>(params: P): Promise<R> => {
+  const url = '/crm-api/intranet/getbrandbyvendor';
+  return httpService.get<R>({ url, params });
 };
 
 export const reorderService = {
   createConstraint,
   getColors,
   getFilters,
-  getFiltersList,
+  getBrands,
   getProductTypes,
   getSubCategories,
   getTableData,

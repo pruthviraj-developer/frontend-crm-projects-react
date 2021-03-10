@@ -89,7 +89,7 @@ const CreateCluster = () => {
           }
           postObject[ele] = color;
         } else {
-          postObject[ele] = data[ele]['key'] || data[ele];
+          postObject[ele] = data[ele]['key'] || data[ele]['id'] || data[ele];
         }
       }
     });
@@ -215,6 +215,39 @@ const CreateCluster = () => {
     }
   };
 
+  const onVendorChange = (key: any, formData: any) => {
+    let data = formData[key];
+    const list = removeFromArray(['brand_id'], [...dropDownsList]);
+    if (data) {
+      const id = data.key;
+      (async () => {
+        try {
+          const brands: any = await reorderService.getBrands({ vendorId: id });
+          if (brands && brands.brandList && brands.brandList.length) {
+            const indexFound = list.findIndex((obj: any) => obj.key === 'vendor_id');
+            if (indexFound > -1) {
+              const brand = {
+                key: 'brand_id',
+                display: 'Brand *',
+                input_type: 'S',
+                options: brands.brandList,
+              };
+              list.splice(indexFound + 1, 0, brand);
+            }
+          } else {
+            toast.info('Brands are not available select different vendor');
+          }
+          setDropDownsList([...list]);
+        } catch (error) {
+          showError(error);
+          setDropDownsList([...list]);
+        }
+      })();
+    } else {
+      setDropDownsList([...list]);
+    }
+  };
+
   const onDropDownChange = (key: any, formData: any) => {
     if (key === 'category_id') {
       onCategoryChange(key, formData);
@@ -222,24 +255,22 @@ const CreateCluster = () => {
       onSubCategoryChange(key, formData);
     } else if (key === 'attribute') {
       onAttributeChange(key, formData);
+    } else if (key === 'vendor_id') {
+      onVendorChange(key, formData);
     }
   };
 
   useEffect(() => {
     (async () => {
       try {
-        const filters: any = await reorderService.getFiltersList();
+        const filters: any = await reorderService.getFilters();
         if (filters) {
           const dropDownsList = [
             {
               key: 'vendor_id',
               display: 'Vendor *',
               input_type: 'S',
-            },
-            {
-              key: 'brand_id',
-              display: 'Brand *',
-              input_type: 'S',
+              clearFields: ['brand_id'],
             },
             {
               key: 'category_id',
