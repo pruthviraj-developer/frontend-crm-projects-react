@@ -2,7 +2,7 @@ import { httpService } from '../http';
 
 const createConstraint = <P, R>(data: P): Promise<R> => {
   const url =
-    '/crm-api/assortment-plan-api/util/vendor-constraint-service/age-color-constraint';
+    '/crm-api/assortment-plan-api/reorder-take-action/vendor-constraint-service/age-color-constraint';
   return httpService.post<R>({ url, data });
 };
 
