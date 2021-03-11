@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { HsSelectableTable } from './HsSelectableTable';
 import { SelectableTableProps } from './ISelectableTable';
 import { action } from '@storybook/addon-actions';
+import { Story } from '@storybook/react/types-6-0';
 export default {
   title: 'HsSelectableTable',
   component: HsSelectableTable,
@@ -93,6 +94,19 @@ const data: SelectableTableProps = {
   },
 };
 
-export const HsSelectableTableComponent: FC = () => (
-  <HsSelectableTable {...data} />
+// export const HsSelectableTableComponent: FC = () => (
+//   <HsSelectableTable {...data} />
+// );
+
+const Template: Story<SelectableTableProps> = (args) => (
+  <HsSelectableTable {...args} />
 );
+
+export const HsSelectableTableComponent = Template.bind({});
+HsSelectableTableComponent.args = data;
+
+export const DisableSorting = Template.bind({});
+DisableSorting.args = { ...data, sorting: false };
+
+export const CardsWiseEdit = Template.bind({});
+CardsWiseEdit.args = { ...data, selectId: 'carbs' };
