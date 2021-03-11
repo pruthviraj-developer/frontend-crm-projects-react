@@ -1,14 +1,14 @@
 import React, { FC } from 'react';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
 import { LeftNavBar, LeftNavBarProps } from '@hs/components';
-import { DashBoardIcon } from '@hs/icons';
+import { DashBoardIcon, CreateIcon, ArchiveIcon, UploadIcon } from '@hs/icons';
 import BulkUploadScreen from '../common/BulkUploadScreen';
 
 const navItems: LeftNavBarProps = {
   navList: [
-    { linkUrl: 'create', linkText: 'MSKU Create', icon: DashBoardIcon },
-    { linkUrl: 'update', linkText: 'MSKU Update', icon: DashBoardIcon },
-    { linkUrl: 'upload-targets', linkText: 'Upload MSKU targets', icon: DashBoardIcon },
+    { linkUrl: 'create', linkText: 'MSKU Create', icon: CreateIcon },
+    { linkUrl: 'update', linkText: 'MSKU Update', icon: ArchiveIcon },
+    { linkUrl: 'upload-targets', linkText: 'Upload MSKU targets', icon: UploadIcon },
     { linkUrl: 'update-targets', linkText: 'Update MSKU targets', icon: DashBoardIcon },
     // { linkUrl: 'salesplan-upload', linkText: 'Sales Plan Upload', icon: DashBoardIcon },
   ],
