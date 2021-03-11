@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { HsFilters } from './HSfilters';
 import { IHsFilters } from './IFilters';
 import { action } from '@storybook/addon-actions';
+import { Story } from '@storybook/react/types-6-0';
 export default {
   title: 'HsFilters',
   component: HsFilters,
@@ -56,4 +57,8 @@ const data: IHsFilters = {
   updateFilter: updateFilters,
 };
 
-export const HsFiltersComponent: FC = () => <HsFilters {...data} />;
+//export const HsFiltersComponent: FC = () => <HsFilters {...data} />;
+
+const Template: Story<IHsFilters> = (args) => <HsFilters {...args} />;
+export const HsFiltersComponent = Template.bind({});
+HsFiltersComponent.args = data;
