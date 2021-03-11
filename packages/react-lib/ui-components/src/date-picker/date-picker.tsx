@@ -13,6 +13,7 @@ export interface Props {
   handleChange?: (event: React.MouseEvent) => void;
   disabled?: true | false;
   disableMinDate?: true | false;
+  timeStamp?: true | false;
 }
 
 const DateTimePicker = styled.div``;
@@ -38,7 +39,7 @@ export const DatePickerComponent: FC<Props> = (props: Props) => {
     <DateTimePicker>
       <DatePicker
         selected={startDate}
-        showTimeSelect
+        showTimeSelect={props.timeStamp}
         dateFormat={props.dateFormat}
         onBlur={handleOnBlur}
         onChange={(date) => date && onDateChange(date)}
