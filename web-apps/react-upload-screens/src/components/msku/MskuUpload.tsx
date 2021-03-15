@@ -1,15 +1,15 @@
 import React, { FC } from 'react';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
 import { LeftNavBar, LeftNavBarProps } from '@hs/components';
-import { DashBoardIcon } from '@hs/icons';
+import { DashBoardIcon, CreateIcon, ArchiveIcon, UploadIcon } from '@hs/icons';
 import BulkUploadScreen from '../common/BulkUploadScreen';
 
 const navItems: LeftNavBarProps = {
   navList: [
-    { linkUrl: 'create', linkText: 'MSKU Create', icon: DashBoardIcon },
-    { linkUrl: 'update', linkText: 'MSKU Update', icon: DashBoardIcon },
-    //{ linkUrl: 'upload-targets', linkText: 'Upload MSKU targets', icon: DashBoardIcon },
-    //{ linkUrl: 'update-targets', linkText: 'Update MSKU targets', icon: DashBoardIcon },
+    { linkUrl: 'create', linkText: 'MSKU Create', icon: CreateIcon },
+    { linkUrl: 'update', linkText: 'MSKU Update', icon: ArchiveIcon },
+    { linkUrl: 'upload-targets', linkText: 'Upload MSKU targets', icon: UploadIcon },
+    { linkUrl: 'update-targets', linkText: 'Update MSKU targets', icon: DashBoardIcon },
     // { linkUrl: 'salesplan-upload', linkText: 'Sales Plan Upload', icon: DashBoardIcon },
   ],
 };
@@ -19,13 +19,14 @@ const MskuUpload: FC = () => {
   const createDownloadOption = [{ label: 'Download Template', action: 'downloadCreateMsku' }];
   const updateDownloadOption = [
     { label: 'Download current MSKU and taxonomy', action: 'downloadCurrentMsku' },
-    //{ label: 'Download blank template', action: 'downloadCreateMsku' },
+    { label: 'Download blank template', action: 'downloadUpdateMsku' },
   ];
   const uploadTargetDownloadOption = [{ label: 'Download Template', action: 'downloadCreateMskuTarget' }];
   const updateTargetDownloadOption = [
     { label: 'Download latest MSKU targets file', action: 'downloadMskuTarget' },
-    { label: 'Download Template', action: 'downloadCreateMskuTarget' },
+    { label: 'Download Template', action: 'downloadUpdateMskuTarget' },
   ];
+  const salesPlanDownloadOption = [{ label: 'Download Template', action: 'downloadMskuTargetSalePlan' }];
 
   return (
     <>
@@ -43,7 +44,7 @@ const MskuUpload: FC = () => {
         </Route>
         <Route path={`${path}/upload-targets`}>
           <BulkUploadScreen
-            header="Bulk upload MSKU Benchmarks"
+            header="Bulk Upload MSKU Benchmarks"
             uploadAction="createMskuTarget"
             downloadOption={uploadTargetDownloadOption}
           />
@@ -56,7 +57,11 @@ const MskuUpload: FC = () => {
           />
         </Route>
         <Route path={`${path}/salesplan-upload`}>
-          <BulkUploadScreen header="Sales Plan Upload" uploadAction="" downloadOption={[]} />
+          <BulkUploadScreen
+            header="Sales Plan Upload"
+            uploadAction="createMskuTargetSalePlan"
+            downloadOption={salesPlanDownloadOption}
+          />
         </Route>
       </Switch>
     </>
