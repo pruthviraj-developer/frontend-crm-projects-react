@@ -10,7 +10,7 @@ const navItems: LeftNavBarProps = {
     { linkUrl: 'update', linkText: 'MSKU Update', icon: ArchiveIcon },
     { linkUrl: 'upload-targets', linkText: 'Upload MSKU targets', icon: UploadIcon },
     { linkUrl: 'update-targets', linkText: 'Update MSKU targets', icon: DashBoardIcon },
-    // { linkUrl: 'salesplan-upload', linkText: 'Sales Plan Upload', icon: DashBoardIcon },
+    { linkUrl: 'salesplan-upload', linkText: 'Sales Plan Upload', icon: DashBoardIcon },
   ],
 };
 
