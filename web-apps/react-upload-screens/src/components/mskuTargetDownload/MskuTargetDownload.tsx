@@ -19,7 +19,7 @@ const StyleDownloadButton = styled.div`
 `;
 
 const navItems: LeftNavBarProps = {
-  navList: [{ linkUrl: 'create', linkText: 'MSKU catalog targets', icon: ArchiveIcon }],
+  navList: [{ linkUrl: 'mskuTargetDownload', linkText: 'MSKU catalog targets', icon: ArchiveIcon }],
 };
 
 export interface MskuTargetDownloadProps {
