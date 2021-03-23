@@ -7,14 +7,19 @@ import styled from '@emotion/styled';
 import SaveIcon from '@material-ui/icons/Save';
 import { toast } from 'react-toastify';
 import { bulkUploadService } from '@hs/services';
+import { Paper } from '@material-ui/core';
+import Grid from '@material-ui/core/Grid';
 
-const StyledCntnr = styled.div`
-  margin-left: 90px;
-  width: auto;
+export const StyledCntnr = styled(Paper)`
+  max-width: 50vw;
+  margin: 90px;
+  padding: 50px;
+  text-align: center;
+  max-height: 50vw;
 `;
 
 const StyleDownloadButton = styled.div`
-  margin: 90px;
+  margin: 50px;
   width: auto;
 `;
 
@@ -55,22 +60,24 @@ const MskuTargetDownload: FC<MskuTargetDownloadProps> = ({
         <title>{header}</title>
       </Helmet>
       <LeftNavBar {...navItems}></LeftNavBar>
-      <StyledCntnr>
-        <h2>{header}</h2>
-        <StyleDownloadButton>
-          <Button
-            variant="contained"
-            color="primary"
-            size="large"
-            startIcon={<SaveIcon />}
-            onClick={() => {
-              if (onExport) onExport(action);
-            }}
-          >
-            {downloadOption}
-          </Button>
-        </StyleDownloadButton>
-      </StyledCntnr>
+      <Grid container direction="column" justify="center" alignItems="center">
+        <StyledCntnr elevation={3}>
+          <h2>{header}</h2>
+          <StyleDownloadButton>
+            <Button
+              variant="contained"
+              color="primary"
+              size="large"
+              startIcon={<SaveIcon />}
+              onClick={() => {
+                if (onExport) onExport(action);
+              }}
+            >
+              {downloadOption}
+            </Button>
+          </StyleDownloadButton>
+        </StyledCntnr>
+      </Grid>
     </>
   );
 };
