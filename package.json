@@ -69,7 +69,9 @@
       "prettier --write"
     ]
   },
-  "dependencies": {},
+  "dependencies": {
+    "chromatic": "^5.7.0"
+  },
   "scripts": {
     "storybook": "start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public"
