@@ -90,7 +90,7 @@ export interface NonHeroCarousel {
 }
 
 export type CloneHeroCarouselWithId = {
-  id: string;
+  id?: string;
   type: string;
 };
 

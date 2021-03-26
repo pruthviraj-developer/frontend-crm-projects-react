@@ -8,7 +8,8 @@ const StyledCreateorWrapper = styled.div`
   width: auto;
 `;
 const CarouselCreator: FC = () => {
-  const onSubmit = (data: any) => {
+  /* eslint-disable no-unused-vars */
+  const onSubmit = (_data: any) => {
     // alert(data);
     // console.log(data);
   };
