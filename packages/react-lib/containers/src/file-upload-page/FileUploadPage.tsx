@@ -35,9 +35,10 @@ export const FileUploadPage: FC<FileUploadPageProps> = ({
   sideBar,
   validationSchema,
   initialValues,
-  templateLoader,
 }: FileUploadPageProps) => {
   const [templateLoaderIndex, setTemplateLoaderIndex] = useState<number>(-1);
+  const [templateLoader, setTemplateLoader] = useState<boolean>(false);
+
   return (
     <StyledUploadCntnr>
       <Formik
@@ -189,10 +190,12 @@ export const FileUploadPage: FC<FileUploadPageProps> = ({
                                 <CloudDownloadIcon />
                               )
                             }
-                            onClick={() => {
+                            onClick={async () => {
                               if (onExport) {
                                 setTemplateLoaderIndex(index);
-                                onExport(row?.action);
+                                setTemplateLoader(true);
+                                await onExport(row?.action);
+                                setTemplateLoader(false);
                               }
                             }}
                           >
