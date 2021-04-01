@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { Formik, Field, Form } from 'formik';
 import { FileListType, FileUpload } from '@hs/components';
 import {
@@ -35,7 +35,9 @@ export const FileUploadPage: FC<FileUploadPageProps> = ({
   sideBar,
   validationSchema,
   initialValues,
+  templateLoader,
 }: FileUploadPageProps) => {
+  const [templateLoaderIndex, setTemplateLoaderIndex] = useState<number>(-1);
   return (
     <StyledUploadCntnr>
       <Formik
@@ -176,9 +178,22 @@ export const FileUploadPage: FC<FileUploadPageProps> = ({
                             color={'primary'}
                             size={'large'}
                             type="button"
-                            startIcon={<CloudDownloadIcon />}
+                            disabled={
+                              templateLoaderIndex === index && templateLoader
+                            }
+                            startIcon={
+                              templateLoaderIndex === index &&
+                              templateLoader ? (
+                                <StyledCircularProgress size={18} />
+                              ) : (
+                                <CloudDownloadIcon />
+                              )
+                            }
                             onClick={() => {
-                              if (onExport) onExport(row?.action);
+                              if (onExport) {
+                                setTemplateLoaderIndex(index);
+                                onExport(row?.action);
+                              }
                             }}
                           >
                             {row?.label}

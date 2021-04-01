@@ -24,6 +24,7 @@ const uploadValidation = Yup.object().shape({
 
 const BulkUploadScreen: FC<bulkUploadProps> = ({ header, uploadAction, downloadOption }: bulkUploadProps) => {
   const [errorMessages, setErrorMessages] = useState<string[]>([]);
+  const [templateLoader, setTemplateLoader] = useState<boolean>(false);
   useEffect(() => {
     setErrorMessages([]);
   }, [header]);
@@ -55,16 +56,20 @@ const BulkUploadScreen: FC<bulkUploadProps> = ({ header, uploadAction, downloadO
 
   const onExport = async (downloadAction?: string) => {
     try {
+      setTemplateLoader(true);
       const res = await bulkUploadService.downloadTemplate({
         action: downloadAction,
       });
       if (res.data.is_available) {
         window.open(res.data.url, '_blank');
         res.data.message !== '' && toast.success(res.data.message);
+        setTemplateLoader(false);
       } else {
         toast.warn(res.data.message);
+        setTemplateLoader(false);
       }
     } catch (e) {
+      setTemplateLoader(false);
       toast.error(e.data.data.message);
     }
   };
@@ -84,6 +89,7 @@ const BulkUploadScreen: FC<bulkUploadProps> = ({ header, uploadAction, downloadO
           validationSchema={uploadValidation}
           initialValues={initialValues}
           downloadOption={downloadOption}
+          templateLoader={templateLoader}
         ></FileUploadPage>
         {errorMessages.length > 0 && (
           <ErrorPanel
