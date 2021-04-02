@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { LeftNavBar, LeftNavBarProps } from '@hs/components';
 import { ArchiveIcon } from '@hs/icons';
 import { Helmet } from 'react-helmet';
@@ -9,6 +9,7 @@ import { toast } from 'react-toastify';
 import { bulkUploadService } from '@hs/services';
 import { Paper } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 export const StyledCntnr = styled(Paper)`
   max-width: 50vw;
@@ -50,10 +51,11 @@ const MskuTargetDownload: FC<MskuTargetDownloadProps> = ({
         toast.warn(res.data.message);
       }
     } catch (e) {
-      toast.error(e.data.data.message);
+      toast.error(e?.data?.data?.message);
     }
   };
 
+  const [templateLoader, setTemplateLoader] = useState<boolean>(false);
   return (
     <>
       <Helmet>
@@ -68,9 +70,14 @@ const MskuTargetDownload: FC<MskuTargetDownloadProps> = ({
               variant="contained"
               color="primary"
               size="large"
-              startIcon={<SaveIcon />}
-              onClick={() => {
-                if (onExport) onExport(action);
+              disabled={templateLoader}
+              startIcon={templateLoader ? <CircularProgress size={20} /> : <SaveIcon />}
+              onClick={async () => {
+                if (onExport) {
+                  setTemplateLoader(true);
+                  await onExport(action);
+                  setTemplateLoader(false);
+                }
               }}
             >
               {downloadOption}
