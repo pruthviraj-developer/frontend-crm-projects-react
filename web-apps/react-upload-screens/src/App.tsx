@@ -10,6 +10,7 @@ const MskuUpload = React.lazy(() => import('./components/msku/MskuUpload'));
 const ForecastAndCapitalBudget = React.lazy(
   () => import('./components/forecast-capitalbudget/ForecastAndCapitalBudget'),
 );
+const MskuTargetDownload = React.lazy(() => import('./components/mskuTargetDownload/MskuTargetDownload'));
 
 const App: FC = () => {
   return (
@@ -26,6 +27,15 @@ const App: FC = () => {
               <Route path="/bulk-upload">
                 <Suspense fallback={<div>Loading...</div>}>
                   <ForecastAndCapitalBudget />
+                </Suspense>
+              </Route>
+              <Route path="/mskuTargetDownload">
+                <Suspense fallback={<div>Loading...</div>}>
+                  <MskuTargetDownload
+                    header={'MSKU Catalog requirement Targets'}
+                    action={'downloadDiscoveryTargetCalculation'}
+                    downloadOption={'Download latest file'}
+                  />
                 </Suspense>
               </Route>
             </Switch>
