@@ -21,7 +21,6 @@ export interface FileUploadPageProps {
   downloadOption?: FileDownloadOption[];
   sideBar?: FileUploadSideBarOption[];
   validationSchema?: unknown;
-  templateLoader?: boolean;
 }
 
 export interface FileUploadSideBarOption {
