@@ -39,7 +39,7 @@ const MskuTargetDownload: FC<MskuTargetDownloadProps> = ({
   action,
   downloadOption,
 }: MskuTargetDownloadProps) => {
-  const onExport = async (downloadAction?: any) => {
+  const onExport = async (downloadAction?: string) => {
     try {
       const res = await bulkUploadService.downloadTemplate({
         action: downloadAction,
