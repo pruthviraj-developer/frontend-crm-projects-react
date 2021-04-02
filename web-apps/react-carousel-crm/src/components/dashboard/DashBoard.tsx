@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+/* eslint react/prop-types: 0 */
 import React, { FC, useState, useEffect, useCallback } from 'react';
 import { HSTable, HsTableProps, HsSnackbar, HsSnackbarProps } from '@hs/components';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
@@ -15,7 +16,6 @@ import { SelectedCircle, SvgIcon } from '@hs/icons';
 const DashBoardWrapper = styled.div`
   margin-left: 90px;
 `;
-
 const StyledIcon = styled(SvgIcon)`
   min-width: 24px;
 `;
@@ -122,7 +122,7 @@ const DashBoard: FC = () => {
     (async () => {
       try {
         const res = await carouselService.getNonHeroCarouselData<CloneHeroCarouselWithId>(rowData.id);
-        delete res['id'];
+        delete res?.id;
         saveCloneData(res);
       } catch (responseError) {
         const error = responseError.data || responseError;

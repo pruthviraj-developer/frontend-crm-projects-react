@@ -1,5 +1,6 @@
 build/
 node_modules/
-src/serviceWorker.js
+src/serviceWorker.ts
 dist
 .prettierrc.js
+src/setupProxy.js

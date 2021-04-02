@@ -1,8 +1,6 @@
 import React from 'react';
 import { MarkdownViewer } from '@hs/components';
 
-interface Props {}
-
-export const FAQScreen = (props: Props) => {
+export const FAQScreen = () => {
   return <MarkdownViewer docUrl="/react-monorepo/PageCarousel/faq.md"></MarkdownViewer>;
 };

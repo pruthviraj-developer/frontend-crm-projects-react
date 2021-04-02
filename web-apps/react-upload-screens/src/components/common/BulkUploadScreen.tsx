@@ -53,7 +53,7 @@ const BulkUploadScreen: FC<bulkUploadProps> = ({ header, uploadAction, downloadO
     }
   };
 
-  const onExport = async (downloadAction?: any) => {
+  const onExport = async (downloadAction?: string) => {
     try {
       const res = await bulkUploadService.downloadTemplate({
         action: downloadAction,
@@ -65,7 +65,7 @@ const BulkUploadScreen: FC<bulkUploadProps> = ({ header, uploadAction, downloadO
         toast.warn(res.data.message);
       }
     } catch (e) {
-      toast.error(e.data.data.message);
+      toast.error(e?.data?.data?.message);
     }
   };
   return (

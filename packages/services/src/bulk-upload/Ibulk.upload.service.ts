@@ -27,5 +27,5 @@ export interface bulkUploadRes {
 }
 
 export interface templateDownloadParam {
-  action: string;
+  action?: string;
 }
