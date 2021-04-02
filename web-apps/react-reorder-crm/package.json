@@ -51,5 +51,8 @@
       "last 1 safari version"
     ]
   },
-  "homepage": "/react-monorepo/reorder-checks-and-balances"
+  "devDependencies": {
+    "http-proxy-middleware": "^1.0.5"
+  },
+  "homepage": "/react-monorepo/reorder"
 }
