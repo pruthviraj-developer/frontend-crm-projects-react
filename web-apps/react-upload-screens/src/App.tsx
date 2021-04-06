@@ -33,7 +33,8 @@ const App: FC = () => {
                 <Suspense fallback={<div>Loading...</div>}>
                   <MskuTargetDownload
                     header={'MSKU Catalog requirement Targets'}
-                    action={'downloadDiscoveryTargetCalculation'}
+                    getSheetAction={'downloadDiscoveryTargetCalculation'}
+                    getUrlAction={'getUrlBySheetKey'}
                     downloadOption={'Download latest file'}
                   />
                 </Suspense>

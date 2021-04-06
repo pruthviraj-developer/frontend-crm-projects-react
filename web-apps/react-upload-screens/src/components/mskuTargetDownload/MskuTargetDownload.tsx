@@ -30,20 +30,30 @@ const navItems: LeftNavBarProps = {
 
 export interface MskuTargetDownloadProps {
   header: string;
-  action: string;
+  getSheetAction: string;
+  getUrlAction: string;
   downloadOption: string;
 }
 
 const MskuTargetDownload: FC<MskuTargetDownloadProps> = ({
   header,
-  action,
+  getSheetAction,
+  getUrlAction,
   downloadOption,
 }: MskuTargetDownloadProps) => {
-  const onExport = async (downloadAction?: string) => {
+  const onExport = async (getSheetAction?: string, getUrlAction?: string) => {
     try {
-      const res = await bulkUploadService.downloadTemplate({
-        action: downloadAction,
+      const response = await bulkUploadService.downloadTemplate({
+        action: getSheetAction,
+        sheetKey: '',
       });
+
+      const sheetKey = response.data?.sheetKey || '';
+      const res = await bulkUploadService.downloadTemplate({
+        action: getUrlAction,
+        sheetKey: sheetKey,
+      });
+
       if (res.data.is_available) {
         window.open(res.data.url, '_blank');
         res.data.message !== '' && toast.success(res.data.message);
@@ -75,7 +85,7 @@ const MskuTargetDownload: FC<MskuTargetDownloadProps> = ({
               onClick={async () => {
                 if (onExport) {
                   setTemplateLoader(true);
-                  await onExport(action);
+                  await onExport(getSheetAction, getUrlAction);
                   setTemplateLoader(false);
                 }
               }}
