@@ -45,7 +45,6 @@ const MskuTargetDownload: FC<MskuTargetDownloadProps> = ({
     try {
       const response = await bulkUploadService.downloadTemplate({
         action: getSheetAction,
-        sheetKey: '',
       });
 
       const sheetKey = response.data?.sheetKey || '';
