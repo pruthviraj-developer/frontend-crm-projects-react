@@ -6,6 +6,7 @@ export interface templateDownloadResType {
   is_available: boolean;
   url: string;
   message: string;
+  sheetKey?: string;
 }
 export interface bulkUploadParamsType {
   action: string;
@@ -28,4 +29,5 @@ export interface bulkUploadRes {
 
 export interface templateDownloadParam {
   action?: string;
+  sheetKey?: string;
 }
