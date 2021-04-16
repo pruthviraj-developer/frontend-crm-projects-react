@@ -33,7 +33,7 @@ const aaa = [
     key: 'season',
     input_type: 'S',
     display: 'Season',
-    clearFields: ['mathOperator', 'Cakes'],
+    clearFields: ['mathOperator', 'Cakes']
   },
   {
     options: [

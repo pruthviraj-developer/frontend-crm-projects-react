@@ -8,7 +8,7 @@ export const ReoOrderFormValidation = Yup.object().shape({
     Yup.object().shape({
       from: Yup.number()
         .required('Please enter value')
-        .positive('Please enter positive values')
+        .min(0, 'Minimun value should be zero')
         .max(180, 'Maximum value can be 180')
         .typeError('Please enter only numbers'),
       to: Yup.number()
