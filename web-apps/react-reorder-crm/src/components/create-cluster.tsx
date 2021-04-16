@@ -101,8 +101,8 @@ const CreateCluster = () => {
         toast.error('Please select minimum 2 colors');
         return;
       } else if (attribute === 'age_constraints') {
-        if (!age || (age && age.length < 2)) {
-          toast.error('Please select minimum 2 age constraints');
+        if (!age || (age && age.length < 1)) {
+          toast.error('Please select minimum age constraint');
           return;
         }
       }
