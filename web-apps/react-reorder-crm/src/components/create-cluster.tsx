@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { makeStyles } from '@material-ui/core/styles';
@@ -8,6 +8,7 @@ import { reorderService } from '@hs/services';
 import { ReorderFiltersList, ReorderFiltersProps, ReorderFiltersObjectProps } from '@hs/components';
 import { LeftNavBar, LeftNavBarProps } from '@hs/components';
 import { DashBoardIcon } from '@hs/icons';
+import { useQuery } from 'react-query';
 const navItems: LeftNavBarProps = {
   navList: [{ linkUrl: '/create-cluster', linkText: 'Create cluster', icon: DashBoardIcon }],
 };
@@ -56,6 +57,55 @@ const CreateCluster = () => {
   const classes = useStyles();
   const [status, setStatus] = useState<string>(loading);
   const [dropDownsList, setDropDownsList] = useState<any>('');
+  const filters: any = useQuery('filters', reorderService.getFilters, {
+    refetchOnWindowFocus: false,
+    onError: (error: Record<string, string>) => {
+      showError(error);
+      setStatus(tryLater);
+    },
+  });
+
+  const filtersData = filters && filters.data;
+  useEffect(() => {
+    if (filters.isSuccess) {
+      console.log(filtersData);
+      const dropDownsList = [
+        {
+          key: 'vendor_id',
+          display: 'Vendor *',
+          input_type: 'S',
+          clearFields: ['brand_id'],
+        },
+        {
+          key: 'category_id',
+          display: 'Category',
+          input_type: 'S',
+          clearFields: ['sub_category_id', 'product_type_id'],
+        },
+        {
+          key: 'gender',
+          display: 'Gender',
+          input_type: 'S',
+        },
+        {
+          key: 'attribute',
+          display: 'Attribute Values *',
+          input_type: 'S',
+          options: [
+            { key: 'color_constraints', name: 'Color(Minimum 2) *' },
+            { key: 'age_constraints', name: 'Age Group(Minimum 2) *' },
+          ],
+        },
+      ];
+      dropDownsList.forEach((element: ReorderFiltersProps) => {
+        if (filtersData[element.key]) {
+          element['options'] = filtersData[element.key];
+        }
+      });
+      setDropDownsList([...dropDownsList]);
+    }
+  }, [filtersData]);
+
   const onSubmit = (data: any) => {
     const postObject: Record<string, unknown> = {};
     [
@@ -259,53 +309,6 @@ const CreateCluster = () => {
       onVendorChange(key, formData);
     }
   };
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const filters: any = await reorderService.getFilters();
-        if (filters) {
-          const dropDownsList = [
-            {
-              key: 'vendor_id',
-              display: 'Vendor *',
-              input_type: 'S',
-              clearFields: ['brand_id'],
-            },
-            {
-              key: 'category_id',
-              display: 'Category',
-              input_type: 'S',
-              clearFields: ['sub_category_id', 'product_type_id'],
-            },
-            {
-              key: 'gender',
-              display: 'Gender',
-              input_type: 'S',
-            },
-            {
-              key: 'attribute',
-              display: 'Attribute Values *',
-              input_type: 'S',
-              options: [
-                { key: 'color_constraints', name: 'Color(Minimum 2) *' },
-                { key: 'age_constraints', name: 'Age Group(Minimum 2) *' },
-              ],
-            },
-          ];
-          dropDownsList.forEach((element: ReorderFiltersProps) => {
-            if (filters[element.key]) {
-              element['options'] = filters[element.key];
-            }
-          });
-          setDropDownsList([...dropDownsList]);
-        }
-      } catch (error) {
-        setStatus(tryLater);
-        showError(error);
-      }
-    })();
-  }, []);
 
   const data: ReorderFiltersObjectProps = {
     sideBar: [...dropDownsList],
