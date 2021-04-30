@@ -3,3 +3,4 @@ export * from './carousel';
 export * from './sos';
 export * from './bulk-upload';
 export * from './reorder';
+export * from './merch-intelligence';

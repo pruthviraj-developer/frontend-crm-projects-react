@@ -11,3 +11,5 @@ export * from './hs-selectable-table';
 export * from './hs-filters';
 export * from './hs-chips';
 export * from './reorder-filters-list';
+export * from './merch-cards';
+export * from './merch-progress-bars';

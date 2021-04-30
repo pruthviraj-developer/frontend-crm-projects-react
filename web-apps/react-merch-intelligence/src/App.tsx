@@ -1,21 +1,45 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { FC, Suspense } from 'react';
 import './App.css';
+import { ThemeProvider } from 'emotion-theming';
+import { MuiThemeProvider } from '@material-ui/core/styles';
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
+import { LightTheme } from '@hs/utils';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { makeStyles } from '@material-ui/core';
+const DashBoard = React.lazy(() => import('./components/DashBoard'));
 
-function App() {
+const useStyles = makeStyles((theme) => ({
+  toasterStyles: { fontFamily: 'inherit' },
+}));
+
+const App: FC = () => {
+  const classes = useStyles();
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
-          Learn React
-        </a>
-      </header>
+      <ThemeProvider theme={LightTheme}>
+        <MuiThemeProvider theme={LightTheme}>
+          <Router basename="/react-monorepo/merch-intelligence">
+            <Switch>
+              <Redirect exact from="/" to="/dashboard" />
+              <Route path="/dashboard">
+                <Suspense fallback={<div>Loading...</div>}>
+                  <DashBoard />
+                </Suspense>
+              </Route>
+            </Switch>
+          </Router>
+        </MuiThemeProvider>
+      </ThemeProvider>
+      <ToastContainer
+        autoClose={10000}
+        toastClassName={classes.toasterStyles}
+        closeOnClick={false}
+        draggable={false}
+        newestOnTop={true}
+      />
     </div>
   );
-}
+};
 
 export default App;

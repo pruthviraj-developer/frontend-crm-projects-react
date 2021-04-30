@@ -9,6 +9,7 @@ export interface ReorderFiltersProps {
   options?: ReorderFiltersOptions[] | null;
   key: string;
   input_type: string;
+  apiKey?: string;
   type?: string;
   name?: string;
   label?: string;

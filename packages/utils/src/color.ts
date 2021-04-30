@@ -1,11 +1,15 @@
+import toHex from 'colornames';
 export const primaryColor = {
   100: '#ed54a4',
+  200: '#ee65ad',
 };
 export const secondaryColor = {
   100: '#777',
+  200: '#22e6c5bd',
 };
 export const tertiaryColor = {
   100: '#204265',
+  200: '#09ADE0',
 };
 
 export const Colors = {
@@ -61,4 +65,9 @@ export const Colors = {
   BLUE: {
     500: '#2a3441',
   },
+};
+
+export const getHexCode = (name: string): string | undefined => {
+  const value = name && name.toLowerCase();
+  return toHex(value);
 };

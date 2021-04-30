@@ -33,12 +33,14 @@
   "author": "Rishikant Tiwari",
   "module": "dist/util.esm.js",
   "devDependencies": {
+    "@types/colornames": "^1.1.1",
     "husky": "4.3.0",
     "tsdx": "^0.13.2",
     "tslib": "^2.0.1",
     "typescript": "4.1.2"
   },
   "dependencies": {
-    "@material-ui/core": "4.11.3"
+    "@material-ui/core": "4.11.3",
+    "colornames": "^1.1.1"
   }
 }
