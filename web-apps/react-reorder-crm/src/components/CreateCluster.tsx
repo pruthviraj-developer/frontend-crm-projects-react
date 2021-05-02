@@ -1,14 +1,15 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { makeStyles } from '@material-ui/core/styles';
 import { Colors } from '@hs/utils';
 import { toast } from 'react-toastify';
 import { reorderService } from '@hs/services';
-import { ReorderFiltersList, ReorderFiltersProps, ReorderFiltersObjectProps } from '@hs/components';
+import { ReorderFiltersList, ReorderFiltersObjectProps } from '@hs/components';
 import { LeftNavBar, LeftNavBarProps } from '@hs/components';
 import { DashBoardIcon } from '@hs/icons';
 import { useQuery } from 'react-query';
+import { FilterType } from '../types/ICreateCluster';
 const navItems: LeftNavBarProps = {
   navList: [{ linkUrl: '/create-cluster', linkText: 'Create cluster', icon: DashBoardIcon }],
 };
@@ -57,35 +58,42 @@ const CreateCluster = () => {
   const classes = useStyles();
   const [status, setStatus] = useState<string>(loading);
   const [dropDownsList, setDropDownsList] = useState<any>('');
-  const filters: any = useQuery('filters', reorderService.getFilters, {
-    refetchOnWindowFocus: false,
-    onError: (error: Record<string, string>) => {
-      showError(error);
-      setStatus(tryLater);
+  const { data: filtersData, isSuccess: isFilterSuccess } = useQuery<FilterType, Record<string, string>>(
+    'filters',
+    reorderService.getFilters,
+    {
+      refetchOnWindowFocus: false,
+      onError: (error) => {
+        showError(error);
+        setStatus(tryLater);
+      },
     },
-  });
+  );
 
-  const filtersData = filters && filters.data;
+  // const filtersData = filters && filters.data;
   useEffect(() => {
-    if (filters.isSuccess) {
+    if (isFilterSuccess) {
       console.log(filtersData);
-      const dropDownsList = [
+      let formList = [
         {
           key: 'vendor_id',
           display: 'Vendor *',
           input_type: 'S',
           clearFields: ['brand_id'],
+          options: filtersData?.vendor_id,
         },
         {
           key: 'category_id',
           display: 'Category',
           input_type: 'S',
+          options: filtersData?.category_id,
           clearFields: ['sub_category_id', 'product_type_id'],
         },
         {
           key: 'gender',
           display: 'Gender',
           input_type: 'S',
+          options: filtersData?.gender,
         },
         {
           key: 'attribute',
@@ -97,14 +105,9 @@ const CreateCluster = () => {
           ],
         },
       ];
-      dropDownsList.forEach((element: ReorderFiltersProps) => {
-        if (filtersData[element.key]) {
-          element['options'] = filtersData[element.key];
-        }
-      });
-      setDropDownsList([...dropDownsList]);
+      setDropDownsList([...formList]);
     }
-  }, [filtersData]);
+  }, [filtersData, isFilterSuccess]);
 
   const onSubmit = (data: any) => {
     const postObject: Record<string, unknown> = {};

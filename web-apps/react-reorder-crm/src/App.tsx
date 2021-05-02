@@ -7,8 +7,10 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-d
 import { LightTheme } from '@hs/utils';
 import { ToastContainer } from 'react-toastify';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
+
 const queryClient = new QueryClient();
-const CreateCluster = React.lazy(() => import('./components/create-cluster'));
+const CreateCluster = React.lazy(() => import('./components/CreateCluster'));
 const DashBoard = React.lazy(() => import('./components/DashBoard'));
 
 const App: FC = () => {
@@ -39,6 +41,7 @@ const App: FC = () => {
         </ThemeProvider>
         <ToastContainer autoClose={10000} closeOnClick={false} draggable={false} newestOnTop={true} />
       </div>
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
 };
