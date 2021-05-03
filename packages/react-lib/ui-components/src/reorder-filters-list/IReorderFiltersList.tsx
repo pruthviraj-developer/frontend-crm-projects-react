@@ -4,9 +4,12 @@ export interface ReorderFiltersOptions {
   display?: string;
   name?: string;
 }
-
+interface FiltersOptions {
+  id: number;
+  display: string;
+}
 export interface ReorderFiltersProps {
-  options?: ReorderFiltersOptions[] | null;
+  options?: ReorderFiltersOptions[] | FiltersOptions[] | null;
   key: string;
   input_type: string;
   apiKey?: string;
@@ -16,6 +19,7 @@ export interface ReorderFiltersProps {
   multi?: boolean;
   display: string;
   clearFields?: Array<string>;
+  display_position: number;
 }
 
 export interface ReorderFiltersObjectProps {

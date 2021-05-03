@@ -1,49 +1,23 @@
 import { useState, useEffect } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import styled from '@emotion/styled';
-import { makeStyles } from '@material-ui/core/styles';
-import { Colors } from '@hs/utils';
 import { toast } from 'react-toastify';
 import { reorderService } from '@hs/services';
-import { ReorderFiltersList, ReorderFiltersObjectProps } from '@hs/components';
+import { ReorderFiltersList, ReorderFiltersObjectProps, ReorderFiltersProps } from '@hs/components';
 import { LeftNavBar, LeftNavBarProps } from '@hs/components';
 import { DashBoardIcon } from '@hs/icons';
 import { useQuery } from 'react-query';
-import { FilterType } from '../types/ICreateCluster';
+import { FilterType, Brand, Action, ActionType, ISubCategory } from '../types/ICreateCluster';
+import { useReducer } from 'react';
 const navItems: LeftNavBarProps = {
   navList: [{ linkUrl: '/create-cluster', linkText: 'Create cluster', icon: DashBoardIcon }],
 };
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  paper: {
-    padding: theme.spacing(2),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-    fontWeight: 'bold',
-    border: '1px solid rgba(0, 0, 0, 0.12)',
-  },
-  header: {
-    margin: 10,
-    fontSize: 28,
-  },
-  dialogTitle: {
-    fontSize: 18,
-    fontWeight: 600,
-  },
-  dialogDescription: {
-    color: Colors.PINK[500],
-    fontSize: 16,
-    fontWeight: 600,
-  },
-}));
 
 const ClusterWrapper = styled.div`
   width: 100%;
   margin: 10px 10px 10px 90px;
 `;
+
 const loading = 'Loading';
 const tryLater = 'Please try later';
 const showError = (error: Record<string, string>) => {
@@ -53,34 +27,62 @@ const showError = (error: Record<string, string>) => {
   }
   toast.error(message);
 };
+const reducer = (state: ReorderFiltersProps[], [type, payload]: Action): ReorderFiltersProps[] => {
+  switch (type) {
+    case ActionType.removeItems:
+      return state.filter((item) => !(payload as string[]).includes(item.key));
+    case ActionType.addItems:
+      return [...state, ...(payload as ReorderFiltersProps[])].sort((a, b) => a.display_position - b.display_position);
+  }
+  return state;
+};
 
 const CreateCluster = () => {
-  const classes = useStyles();
   const [status, setStatus] = useState<string>(loading);
-  const [dropDownsList, setDropDownsList] = useState<any>('');
+  const [dropDownsList, dispatch] = useReducer(reducer, []);
   const { data: filtersData, isSuccess: isFilterSuccess } = useQuery<FilterType, Record<string, string>>(
     'filters',
     reorderService.getFilters,
     {
-      refetchOnWindowFocus: false,
+      staleTime: Infinity,
       onError: (error) => {
         showError(error);
         setStatus(tryLater);
       },
     },
   );
+  const [vendorId, setVendorId] = useState<string>('');
+  const { data: brandData, isSuccess: isBrandSuccess, isFetching: isBrandFetching } = useQuery<
+    Brand,
+    Record<string, string>
+  >(['brands', vendorId], () => reorderService.getBrands({ vendorId: vendorId }), {
+    staleTime: Infinity,
+    enabled: vendorId !== '',
+  });
 
-  // const filtersData = filters && filters.data;
+  const [categoryId, setCategoryId] = useState<string>('');
+  const { data: subCategories, isSuccess: isSubCatSuccess, isFetching: isSubCatFetching } = useQuery<
+    ISubCategory,
+    Record<string, string>
+  >(['subCategories', categoryId], () => reorderService.getSubCategories({ ids: categoryId }), {
+    staleTime: Infinity,
+    enabled: categoryId !== '',
+    onError: (error) => {
+      showError(error);
+    },
+  });
+
   useEffect(() => {
     if (isFilterSuccess) {
       console.log(filtersData);
-      let formList = [
+      let formList: ReorderFiltersProps[] = [
         {
           key: 'vendor_id',
           display: 'Vendor *',
           input_type: 'S',
           clearFields: ['brand_id'],
           options: filtersData?.vendor_id,
+          display_position: 1,
         },
         {
           key: 'category_id',
@@ -88,12 +90,14 @@ const CreateCluster = () => {
           input_type: 'S',
           options: filtersData?.category_id,
           clearFields: ['sub_category_id', 'product_type_id'],
+          display_position: 3,
         },
         {
           key: 'gender',
           display: 'Gender',
           input_type: 'S',
           options: filtersData?.gender,
+          display_position: 6,
         },
         {
           key: 'attribute',
@@ -103,11 +107,47 @@ const CreateCluster = () => {
             { key: 'color_constraints', name: 'Color(Minimum 2) *' },
             { key: 'age_constraints', name: 'Age Group(Minimum 2) *' },
           ],
+          display_position: 7,
         },
       ];
-      setDropDownsList([...formList]);
+      dispatch([ActionType.addItems, formList]);
     }
   }, [filtersData, isFilterSuccess]);
+
+  useEffect(() => {
+    if (isBrandSuccess) {
+      if (brandData && brandData.brandList && brandData.brandList.length) {
+        const brand: ReorderFiltersProps = {
+          key: 'brand_id',
+          display: 'Brand *',
+          input_type: 'S',
+          options: brandData.brandList,
+          display_position: 2,
+        };
+        dispatch([ActionType.addItems, [brand]]);
+      } else {
+        !isBrandFetching && vendorId !== '' && toast.info('Brands are not available select different vendor');
+      }
+    }
+  }, [brandData, vendorId, isBrandSuccess, isBrandFetching]);
+
+  useEffect(() => {
+    if (isSubCatSuccess) {
+      if (subCategories && subCategories.sub_cat) {
+        const subCategoryObject = {
+          key: 'sub_category_id',
+          display: 'Sub Category',
+          input_type: 'S',
+          options: subCategories.sub_cat,
+          display_position: 4,
+          clearFields: ['product_type_id'],
+        };
+        dispatch([ActionType.addItems, [subCategoryObject]]);
+      }
+    } else {
+      !isSubCatFetching && categoryId !== '' && toast.info('Brands are not available select different vendor');
+    }
+  }, [subCategories, categoryId, isSubCatSuccess, isSubCatFetching]);
 
   const onSubmit = (data: any) => {
     const postObject: Record<string, unknown> = {};
@@ -180,68 +220,24 @@ const CreateCluster = () => {
     })();
   };
 
-  const removeFromArray = (elements: Array<any>, filtersList: Array<any>) => {
-    const list = [...filtersList];
-    [...elements].forEach((ele: string) => {
-      const removeElement = list.findIndex((obj: any) => obj.key === ele);
-      if (removeElement > -1) {
-        list.splice(removeElement, 1);
-      }
-    });
-    return list;
-  };
-
   const onSubCategoryChange = (key: any, formData: any) => {
     let data = formData[key];
     (async () => {
       try {
         const ids = data.key;
-        const list = removeFromArray(['product_type_id'], [...dropDownsList]);
         if (ids) {
           const productType: any = await reorderService.getProductTypes({ ids });
           if (productType && productType.pt) {
-            const indexFound = list.findIndex((obj: any) => obj.key === 'sub_category_id');
-            if (indexFound > -1) {
-              const productTypes = {
-                key: 'product_type_id',
-                display: 'Product Type',
-                input_type: 'S',
-                options: productType.pt,
-              };
-              list.splice(indexFound + 1, 0, productTypes);
-            }
+            const productTypes = {
+              key: 'product_type_id',
+              display: 'Product Type',
+              input_type: 'S',
+              options: productType.pt,
+              display_position: 5,
+            };
+            dispatch([ActionType.addItems, [productTypes]]);
           }
         }
-        setDropDownsList([...list]);
-      } catch (error) {
-        showError(error);
-      }
-    })();
-  };
-
-  const onCategoryChange = (key: any, formData: any) => {
-    let data = formData[key];
-    (async () => {
-      try {
-        const ids = data.key;
-        const list = removeFromArray(['sub_category_id', 'product_type_id'], [...dropDownsList]);
-        if (ids) {
-          const subCategories: any = await reorderService.getSubCategories({ ids });
-          if (subCategories && subCategories.sub_cat) {
-            const indexFound = list.findIndex((obj: any) => obj.key === 'category_id');
-            if (indexFound > -1) {
-              const subCategoryObject = {
-                key: 'sub_category_id',
-                display: 'Sub Category',
-                input_type: 'S',
-                options: subCategories.sub_cat,
-                clearFields: ['product_type_id'],
-              };
-              list.splice(indexFound + 1, 0, subCategoryObject);
-            }
-          }
-        }
-        setDropDownsList([...list]);
       } catch (error) {
         showError(error);
       }
@@ -250,66 +246,34 @@ const CreateCluster = () => {
 
   const onAttributeChange = (key: any, formData: any) => {
     if (key === 'attribute' && formData.attribute.key === 'color_constraints') {
-      const list = removeFromArray(['age_constraints'], [...dropDownsList]);
       (async () => {
         try {
           const colors: any = await reorderService.getColors();
           if (colors) {
-            list.push({ ...colors, key: 'color_constraints', display: 'Color *' });
+            dispatch([ActionType.addItems, [{ ...colors, key: 'color_constraints', display: 'Color *', display_position: 8 }]]);
           }
-          setDropDownsList([...list]);
         } catch (error) {
           showError(error);
         }
       })();
-    } else {
-      const list = removeFromArray(['color_constraints'], [...dropDownsList]);
-      setDropDownsList([...list]);
-    }
-  };
-
-  const onVendorChange = (key: any, formData: any) => {
-    let data = formData[key];
-    const list = removeFromArray(['brand_id'], [...dropDownsList]);
-    if (data) {
-      const id = data.key;
-      (async () => {
-        try {
-          const brands: any = await reorderService.getBrands({ vendorId: id });
-          if (brands && brands.brandList && brands.brandList.length) {
-            const indexFound = list.findIndex((obj: any) => obj.key === 'vendor_id');
-            if (indexFound > -1) {
-              const brand = {
-                key: 'brand_id',
-                display: 'Brand *',
-                input_type: 'S',
-                options: brands.brandList,
-              };
-              list.splice(indexFound + 1, 0, brand);
-            }
-          } else {
-            toast.info('Brands are not available select different vendor');
-          }
-          setDropDownsList([...list]);
-        } catch (error) {
-          showError(error);
-          setDropDownsList([...list]);
-        }
-      })();
-    } else {
-      setDropDownsList([...list]);
     }
   };
 
   const onDropDownChange = (key: any, formData: any) => {
+    let dataKey = formData[key]?.key || '';
     if (key === 'category_id') {
-      onCategoryChange(key, formData);
+      dispatch([ActionType.removeItems, ['sub_category_id', 'product_type_id']]);
+      setCategoryId(dataKey);
     } else if (key === 'sub_category_id') {
+      dispatch([ActionType.removeItems, ['product_type_id']]);
       onSubCategoryChange(key, formData);
     } else if (key === 'attribute') {
+      formData.attribute.key === 'color_constraints' && dispatch([ActionType.removeItems, ['age_constraints']]);
+      formData.attribute.key === 'age_constraints' && dispatch([ActionType.removeItems, ['color_constraints']]);
       onAttributeChange(key, formData);
     } else if (key === 'vendor_id') {
-      onVendorChange(key, formData);
+      dispatch([ActionType.removeItems, ['brand_id']]);
+      setVendorId(dataKey);
     }
   };
 
@@ -326,7 +290,7 @@ const CreateCluster = () => {
       <Switch>
         <Route path="/">
           <ClusterWrapper>
-            <h1 className={classes.header}>Vendor casepack setup</h1>
+            <h1>Vendor casepack setup</h1>
             {dropDownsList.length === 0 && <h5> {status} </h5>}
             {dropDownsList.length > 0 && <ReorderFiltersList {...data} />}
           </ClusterWrapper>
