@@ -7,7 +7,15 @@ import { ReorderFiltersList, ReorderFiltersObjectProps, ReorderFiltersProps } fr
 import { LeftNavBar, LeftNavBarProps } from '@hs/components';
 import { DashBoardIcon } from '@hs/icons';
 import { useQuery } from 'react-query';
-import { FilterType, Brand, Action, ActionType, ISubCategory } from '../types/ICreateCluster';
+import {
+  FilterType,
+  Brand,
+  Action,
+  ActionType,
+  ISubCategory,
+  IProductTypes,
+  SkuAttributeEntity,
+} from '../types/ICreateCluster';
 import { useReducer } from 'react';
 const navItems: LeftNavBarProps = {
   navList: [{ linkUrl: '/create-cluster', linkText: 'Create cluster', icon: DashBoardIcon }],
@@ -67,6 +75,30 @@ const CreateCluster = () => {
   >(['subCategories', categoryId], () => reorderService.getSubCategories({ ids: categoryId }), {
     staleTime: Infinity,
     enabled: categoryId !== '',
+    onError: (error) => {
+      showError(error);
+    },
+  });
+
+  const [subCategoryId, setSubCategoryId] = useState<string>('');
+  const { data: productsList, isSuccess: isProductSuccess, isFetching: isProductFetching } = useQuery<
+    IProductTypes,
+    Record<string, string>
+  >(['productsList', subCategoryId], () => reorderService.getProductTypes({ ids: subCategoryId }), {
+    staleTime: Infinity,
+    enabled: subCategoryId !== '',
+    onError: (error) => {
+      showError(error);
+    },
+  });
+
+  const [attributeId, setAttributeId] = useState<string>('');
+  const { data: colorsList, isSuccess: isColorsListSuccess, isFetching: isColorsListFetching } = useQuery<
+    SkuAttributeEntity,
+    Record<string, string>
+  >(['colorsList', attributeId], () => reorderService.getColors(), {
+    staleTime: Infinity,
+    enabled: attributeId === 'color_constraints',
     onError: (error) => {
       showError(error);
     },
@@ -133,7 +165,7 @@ const CreateCluster = () => {
 
   useEffect(() => {
     if (isSubCatSuccess) {
-      if (subCategories && subCategories.sub_cat) {
+      if (subCategories && subCategories.sub_cat && subCategories.sub_cat.length) {
         const subCategoryObject = {
           key: 'sub_category_id',
           display: 'Sub Category',
@@ -143,11 +175,47 @@ const CreateCluster = () => {
           clearFields: ['product_type_id'],
         };
         dispatch([ActionType.addItems, [subCategoryObject]]);
+      } else {
+        !isSubCatFetching &&
+          categoryId !== '' &&
+          toast.info('Sub categories are not available select different category');
       }
-    } else {
-      !isSubCatFetching && categoryId !== '' && toast.info('Brands are not available select different vendor');
     }
   }, [subCategories, categoryId, isSubCatSuccess, isSubCatFetching]);
+
+  useEffect(() => {
+    if (isProductSuccess) {
+      if (productsList && productsList.pt && productsList.pt.length) {
+        const productTypes = {
+          key: 'product_type_id',
+          display: 'Product Type',
+          input_type: 'S',
+          options: productsList.pt,
+          display_position: 5,
+        };
+        dispatch([ActionType.addItems, [productTypes]]);
+      } else {
+        !isProductFetching &&
+          subCategoryId !== '' &&
+          toast.info('Product types are not available please select different sub category');
+      }
+    }
+  }, [productsList, subCategoryId, isProductSuccess, isProductFetching]);
+
+  useEffect(() => {
+    if (isColorsListSuccess) {
+      if (colorsList && colorsList.options && colorsList.options.length) {
+        dispatch([
+          ActionType.addItems,
+          [{ ...colorsList, key: 'color_constraints', display: 'Color *', display_position: 8 }],
+        ]);
+      } else {
+        !isColorsListFetching &&
+          attributeId === 'color_constraints' &&
+          toast.info('Colors are not available try later');
+      }
+    }
+  }, [colorsList, attributeId, isColorsListSuccess, isColorsListFetching]);
 
   const onSubmit = (data: any) => {
     const postObject: Record<string, unknown> = {};
@@ -220,45 +288,6 @@ const CreateCluster = () => {
     })();
   };
 
-  const onSubCategoryChange = (key: any, formData: any) => {
-    let data = formData[key];
-    (async () => {
-      try {
-        const ids = data.key;
-        if (ids) {
-          const productType: any = await reorderService.getProductTypes({ ids });
-          if (productType && productType.pt) {
-            const productTypes = {
-              key: 'product_type_id',
-              display: 'Product Type',
-              input_type: 'S',
-              options: productType.pt,
-              display_position: 5,
-            };
-            dispatch([ActionType.addItems, [productTypes]]);
-          }
-        }
-      } catch (error) {
-        showError(error);
-      }
-    })();
-  };
-
-  const onAttributeChange = (key: any, formData: any) => {
-    if (key === 'attribute' && formData.attribute.key === 'color_constraints') {
-      (async () => {
-        try {
-          const colors: any = await reorderService.getColors();
-          if (colors) {
-            dispatch([ActionType.addItems, [{ ...colors, key: 'color_constraints', display: 'Color *', display_position: 8 }]]);
-          }
-        } catch (error) {
-          showError(error);
-        }
-      })();
-    }
-  };
-
   const onDropDownChange = (key: any, formData: any) => {
     let dataKey = formData[key]?.key || '';
     if (key === 'category_id') {
@@ -266,11 +295,12 @@ const CreateCluster = () => {
       setCategoryId(dataKey);
     } else if (key === 'sub_category_id') {
       dispatch([ActionType.removeItems, ['product_type_id']]);
-      onSubCategoryChange(key, formData);
+      setSubCategoryId(dataKey);
     } else if (key === 'attribute') {
-      formData.attribute.key === 'color_constraints' && dispatch([ActionType.removeItems, ['age_constraints']]);
-      formData.attribute.key === 'age_constraints' && dispatch([ActionType.removeItems, ['color_constraints']]);
-      onAttributeChange(key, formData);
+      const attributKey: string = formData.attribute.key;
+      attributKey === 'color_constraints' && dispatch([ActionType.removeItems, ['age_constraints']]);
+      attributKey === 'age_constraints' && dispatch([ActionType.removeItems, ['color_constraints']]);
+      setAttributeId(attributKey);
     } else if (key === 'vendor_id') {
       dispatch([ActionType.removeItems, ['brand_id']]);
       setVendorId(dataKey);

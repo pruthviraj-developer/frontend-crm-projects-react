@@ -38,6 +38,10 @@ export interface ISubCategory {
   sub_cat?: OptionType[] | null;
 }
 
+export interface IProductTypes {
+  pt?: OptionType[] | null;
+}
+
 export enum ActionType {
   removeItems = 'removeItem',
   addItems = 'addItem',
