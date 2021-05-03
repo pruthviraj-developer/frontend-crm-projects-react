@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { NavLink, Route, Switch } from 'react-router-dom';
 import styled from '@emotion/styled';
+// import Checkbox from '@material-ui/core/Checkbox';
 import { makeStyles } from '@material-ui/core/styles';
 import { Colors } from '@hs/utils';
 import { toast } from 'react-toastify';
@@ -14,6 +16,10 @@ import {
 } from '@hs/components';
 import { LeftNavBar, LeftNavBarProps } from '@hs/components';
 import { DashBoardIcon } from '@hs/icons';
+import MenuItem from '@material-ui/core/MenuItem';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
 
 const navItems: LeftNavBarProps = {
   navList: [
@@ -23,6 +29,13 @@ const navItems: LeftNavBarProps = {
 };
 
 const useStyles = makeStyles((theme) => ({
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
   root: {
     flexGrow: 1,
   },
@@ -57,171 +70,6 @@ const ClusterWrapper = styled.div`
   margin: 10px 10px 10px 90px;
 `;
 
-const data: any = [
-  {
-    id: 209,
-    vendor: 'Demo-Test-01',
-    brand: ['Girl 6+ years'],
-    category: '2020-09-09T17:53:56',
-    sub_category: '2020-09-10T16:20:00',
-    product_type: 'info@nstechs.com',
-    attribute: '2020-09-09T18:04:00',
-    gender: 'info@nstechs.com',
-    values: '2020-09-09T18:05:00',
-    active: true,
-    type: 1,
-    position: 2,
-  },
-  {
-    id: 186,
-    vendor: 'QA-Android-Test-4',
-    brand: ['Sale'],
-    category: '2020-09-08T15:46:25',
-    sub_category: '2020-09-30T13:05:00',
-    product_type: 'info@nstechs.com',
-    attribute: '2020-09-08T15:44:13',
-    gender: 'info@nstechs.com',
-    values: '2020-09-09T17:47:00',
-    active: false,
-    type: 2,
-    position: 2,
-  },
-  {
-    id: 208,
-    vendor: 'Demo-Test',
-    brand: ['Girl 6+ years', 'Foot wear'],
-    category: '2020-09-09T12:33:03',
-    sub_category: '2020-09-11T12:33:00',
-    product_type: 'info@nstechs.com',
-    attribute: '2020-09-09T16:29:00',
-    gender: 'info@nstechs.com',
-    values: '2020-09-09T17:23:00',
-    active: true,
-    type: 1,
-    position: 3,
-  },
-  {
-    id: 207,
-    vendor: 'Qa-Android-Test-8',
-    brand: ['Footwear'],
-    category: '2020-09-09T12:33:03',
-    sub_category: '2020-09-12T12:33:00',
-    product_type: 'info@nstechs.com',
-    attribute: '2020-09-09T13:07:07',
-    gender: 'info@nstechs.com',
-    values: '2020-09-09T13:07:14',
-    active: false,
-    type: 1,
-    position: 4,
-  },
-  {
-    id: 191,
-    vendor: 'QA-Android-Test-5',
-    brand: ['Sale'],
-    category: '2020-09-08T16:05:25',
-    sub_category: '2020-09-11T11:20:00',
-    product_type: 'info@nstechs.com',
-    attribute: '2020-09-08T16:02:42',
-    gender: 'info@nstechs.com',
-    values: '2020-09-09T11:18:50',
-    active: true,
-    type: 1,
-    position: 6,
-  },
-];
-const rows = data;
-
-const handleActionED = (e: any) => {
-  alert('Enable/Disable = ' + e.id);
-};
-
-const handleActionEdit = (e: any) => {
-  alert('Edit = ' + e.id);
-};
-
-const columns = [
-  {
-    id: 'id',
-    label: 'Id',
-    withIcon: true,
-    render: true,
-  },
-  {
-    id: 'vendor',
-    label: 'Vendor',
-    customRender: (row: any, isTitle?: boolean) => {
-      if (isTitle) {
-        return row.brand;
-      }
-      if (data) {
-        return (
-          <>
-            <NavLink to={{ pathname: `/edit-carousel/${row.id}` }}>{row.brand}</NavLink>
-          </>
-        );
-      }
-      return '--';
-    },
-  },
-  {
-    id: 'brand',
-    label: 'Brand',
-    width: 100,
-    withJoin: true,
-    render: true,
-  },
-  {
-    id: 'category',
-    label: 'Category',
-    withDate: true,
-    render: true,
-  },
-  {
-    id: 'sub_category',
-    label: 'Sub Category',
-    withDate: true,
-    render: true,
-  },
-  { id: 'product_type', label: 'Product Type', width: 80 },
-  { id: 'gender', label: 'Gender' },
-  {
-    id: 'attribute',
-    label: 'Attribute',
-    withDate: true,
-    render: true,
-  },
-  {
-    id: 'values',
-    label: 'Values',
-    withDate: true,
-    render: true,
-  },
-  {
-    label: 'Action',
-    render: (props: any, data: any) => {
-      if (data) {
-        return (
-          <div style={{ display: 'flex' }}>
-            <span onClick={() => handleActionED(data)}>Enable/Disable</span>&emsp;
-            <span onClick={() => handleActionEdit(data)}>Edit</span>
-          </div>
-        );
-      }
-    },
-    withIcon: true,
-  },
-];
-
-const tabData: HsTablePropsV1 = {
-  title: 'Table testing',
-  count: 250,
-  columns: columns,
-  rows: rows,
-  rowsPerPage: 10,
-  filterRowsPerPage: [10, 25, 50, 100],
-  fetchTableData: getUpdatedTableData,
-};
-
 const loading = 'Loading';
 const tryLater = 'Please try later';
 const showError = (error: Record<string, string>) => {
@@ -236,6 +84,20 @@ const CrmDashboard = () => {
   const classes = useStyles();
   const [status, setStatus] = useState<string>(loading);
   const [dropDownsList, setDropDownsList] = useState<any>('');
+  const [rows, setRows] = useState<any>();
+  const [selectedEd, setSelectedEd] = useState('');
+  // const [state, setState] = useState<{ ed: string | number; name: string }>({
+  //   ed: '',
+  //   name: 'hai',
+  // });
+
+  // const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
+  //   const name = event.target.name as keyof typeof state;
+  //   setState({
+  //     ...state,
+  //     [name]: event.target.value,
+  //   });
+  // };
   const onSubmit = (data: any) => {
     const postObject: Record<string, unknown> = {};
     ['vendor_id', 'brand_id', 'age_constraints', 'color_constraints'].forEach((ele: string) => {
@@ -249,7 +111,8 @@ const CrmDashboard = () => {
               to: parseInt(element.to),
             });
           }
-          postObject[ele] = age;
+          // postObject[ele] = age;
+          postObject['constraint'] = { key: 'age', value: age };
         } else if (ele === 'color_constraints') {
           const color = [];
           for (let index = 0; index < data[ele].length; index++) {
@@ -258,7 +121,8 @@ const CrmDashboard = () => {
               key: element.key,
             });
           }
-          postObject[ele] = color;
+          // postObject[ele] = color;
+          postObject['constraint'] = { key: 'color', value: color };
         } else {
           postObject[ele] = data[ele]['key'] || data[ele]['id'] || data[ele];
         }
@@ -283,15 +147,28 @@ const CrmDashboard = () => {
     }
     (async () => {
       try {
-        const constraint: any = await reorderService.createConstraint(postObject);
-        if (constraint.action === 'success') {
-          toast.success(constraint.message || 'Cluster created successfully');
-          setTimeout(() => {
-            window.location.reload();
-          }, 8000);
-          return;
-        }
-        showError(constraint);
+        const url = 'https://run.mocky.io/v3/51385f17-156a-4af2-a5c8-6644df0cc0d5';
+        const resData = () => {
+          axios.get(url).then((responseData) => {
+            console.log(responseData);
+            responseData.data.data.forEach((item1: any) => {
+              const nBrand = [];
+              nBrand.push(item1.brand);
+              item1.brand = nBrand;
+            });
+            setRows([...responseData.data.data]);
+          });
+        };
+        resData();
+        // const constraint: any = await reorderService.createConstraint(postObject);
+        // if (constraint.action === 'success') {
+        //   toast.success(constraint.message || 'Cluster created successfully');
+        //   setTimeout(() => {
+        //     window.location.reload();
+        //   }, 8000);
+        //   return;
+        // }
+        // showError(constraint);
       } catch (error) {
         showError(error);
       }
@@ -413,6 +290,198 @@ const CrmDashboard = () => {
     onChange: onDropDownChange,
   };
 
+  // const data: any = [
+  //   {
+  //     id: 209,
+  //     vendor: 'Demo-Test-01',
+  //     brand: ['Girl 6+ years'],
+  //     category: '2020-09-09T17:53:56',
+  //     sub_category: '2020-09-10T16:20:00',
+  //     product_type: 'info@nstechs.com',
+  //     attribute: '2020-09-09T18:04:00',
+  //     gender: 'info@nstechs.com',
+  //     values: '2020-09-09T18:05:00',
+  //     active: true,
+  //     type: 1,
+  //     position: 2,
+  //   },
+  //   {
+  //     id: 186,
+  //     vendor: 'QA-Android-Test-4',
+  //     brand: ['Sale'],
+  //     category: '2020-09-08T15:46:25',
+  //     sub_category: '2020-09-30T13:05:00',
+  //     product_type: 'info@nstechs.com',
+  //     attribute: '2020-09-08T15:44:13',
+  //     gender: 'info@nstechs.com',
+  //     values: '2020-09-09T17:47:00',
+  //     active: false,
+  //     type: 2,
+  //     position: 2,
+  //   },
+  //   {
+  //     id: 208,
+  //     vendor: 'Demo-Test',
+  //     brand: ['Girl 6+ years', 'Foot wear'],
+  //     category: '2020-09-09T12:33:03',
+  //     sub_category: '2020-09-11T12:33:00',
+  //     product_type: 'info@nstechs.com',
+  //     attribute: '2020-09-09T16:29:00',
+  //     gender: 'info@nstechs.com',
+  //     values: '2020-09-09T17:23:00',
+  //     active: true,
+  //     type: 1,
+  //     position: 3,
+  //   },
+  //   {
+  //     id: 207,
+  //     vendor: 'Qa-Android-Test-8',
+  //     brand: ['Footwear'],
+  //     category: '2020-09-09T12:33:03',
+  //     sub_category: '2020-09-12T12:33:00',
+  //     product_type: 'info@nstechs.com',
+  //     attribute: '2020-09-09T13:07:07',
+  //     gender: 'info@nstechs.com',
+  //     values: '2020-09-09T13:07:14',
+  //     active: false,
+  //     type: 1,
+  //     position: 4,
+  //   },
+  //   {
+  //     id: 191,
+  //     vendor: 'QA-Android-Test-5',
+  //     brand: ['Sale'],
+  //     category: '2020-09-08T16:05:25',
+  //     sub_category: '2020-09-11T11:20:00',
+  //     product_type: 'info@nstechs.com',
+  //     attribute: '2020-09-08T16:02:42',
+  //     gender: 'info@nstechs.com',
+  //     values: '2020-09-09T11:18:50',
+  //     active: true,
+  //     type: 1,
+  //     position: 6,
+  //   },
+  // ];
+  // const rows = data;
+  const columns = [
+    {
+      id: 'id',
+      label: 'Id',
+      withIcon: true,
+      render: true,
+    },
+    {
+      id: 'vendor',
+      label: 'Vendor',
+      customRender: (row: any, isTitle?: boolean) => {
+        if (isTitle) {
+          return row.brand;
+        }
+        if (row) {
+          return (
+            <>
+              <NavLink to={{ pathname: `/edit-carousel/${row.id}` }}>{row.brand}</NavLink>
+            </>
+          );
+        }
+        return '--';
+      },
+    },
+    {
+      id: 'brand',
+      label: 'Brand',
+      width: 100,
+      withJoin: true,
+      render: true,
+    },
+    {
+      id: 'category',
+      label: 'Category',
+      withDate: false,
+      render: true,
+    },
+    {
+      id: 'sub_category',
+      label: 'Sub Category',
+      withDate: false,
+      render: true,
+    },
+    { id: 'product_type', label: 'Product Type', width: 80 },
+    { id: 'gender', label: 'Gender' },
+    {
+      id: 'constraint_key.name',
+      label: 'Attribute',
+      customRender: (row: any, isTitle?: boolean) => {
+        // if (isTitle) {
+        //   return row.title;
+        // }
+        if (row) {
+          return <>{row.constraint_key.name}</>;
+        }
+        return '--';
+      },
+    },
+    {
+      id: 'constraint_key.value',
+      label: 'Values',
+      customRender: (row: any, isTitle?: boolean) => {
+        // if (isTitle) {
+        //   return row.title;
+        // }
+        if (row) {
+          return <>{row.constraint_key.value.map((record: any) => JSON.stringify(record))}</>;
+        }
+        return '--';
+      },
+    },
+    {
+      label: 'Action',
+      render: (props: any, data: any) => {
+        if (data) {
+          return (
+            <div style={{ display: 'flex' }}>
+              {/* <Checkbox checked={false} onChange={handleChange} inputProps={{ 'aria-label': 'primary checkbox' }} /> */}
+              <FormControl className={classes.formControl}>
+                <InputLabel id="enable-disable-label">Enable/Disable</InputLabel>
+                <Select
+                  name={selectedEd + 'Option'}
+                  labelId="enable-disable-label"
+                  value={selectedEd}
+                  onChange={handleActionED}
+                >
+                  <MenuItem value="enable">Enable</MenuItem>
+                  <MenuItem value="disable">Disable</MenuItem>
+                </Select>
+              </FormControl>
+            </div>
+          );
+        }
+      },
+      withIcon: true,
+    },
+  ];
+
+  const handleActionED = (e: any) => {
+    // let val;
+    // if (e.target.value == 1) {
+    //   val = 0;
+    // } else {
+    //   val = 1;
+    // }
+    setSelectedEd((e.target.name = e.target.value));
+    // alert('Enable/Disable = ' + e.id);
+  };
+
+  const tabData: HsTablePropsV1 = {
+    title: 'Table testing',
+    count: 250,
+    columns: columns,
+    rows: rows,
+    rowsPerPage: 10,
+    filterRowsPerPage: [10, 25, 50, 100],
+    fetchTableData: getUpdatedTableData,
+  };
+
   return (
     <>
       <LeftNavBar {...navItems}></LeftNavBar>
@@ -423,7 +492,7 @@ const CrmDashboard = () => {
             {dropDownsList.length === 0 && <h5> {status} </h5>}
             {dropDownsList.length > 0 && <ReorderFiltersList {...reorderData} />}
             <br />
-            {<HSTableV1 {...tabData} />}
+            {tabData.rows && <HSTableV1 {...tabData} />}
           </ClusterWrapper>
         </Route>
       </Switch>
