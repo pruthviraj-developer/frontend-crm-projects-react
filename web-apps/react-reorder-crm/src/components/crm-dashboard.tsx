@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { NavLink, Route, Switch } from 'react-router-dom';
 import styled from '@emotion/styled';
-// import Checkbox from '@material-ui/core/Checkbox';
 import { makeStyles } from '@material-ui/core/styles';
 import { Colors } from '@hs/utils';
 import { toast } from 'react-toastify';
@@ -14,12 +13,11 @@ import {
   HSTableV1,
   HsTablePropsV1,
 } from '@hs/components';
+import { Formik, Field } from 'formik';
+import { TextField, Grid } from '@material-ui/core';
 import { LeftNavBar, LeftNavBarProps } from '@hs/components';
 import { DashBoardIcon } from '@hs/icons';
 import MenuItem from '@material-ui/core/MenuItem';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
 
 const navItems: LeftNavBarProps = {
   navList: [
@@ -59,6 +57,14 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 16,
     fontWeight: 600,
   },
+  textFieldWidth: {
+    minWidth: 100,
+    margin: '8px 0',
+  },
+  filtersPadding: {
+    padding: '10px 20px',
+    margin: '5px 0',
+  },
 }));
 
 const getUpdatedTableData = (filters: Record<string, unknown>) => {
@@ -85,19 +91,42 @@ const CrmDashboard = () => {
   const [status, setStatus] = useState<string>(loading);
   const [dropDownsList, setDropDownsList] = useState<any>('');
   const [rows, setRows] = useState<any>();
-  const [selectedEd, setSelectedEd] = useState('');
-  // const [state, setState] = useState<{ ed: string | number; name: string }>({
-  //   ed: '',
-  //   name: 'hai',
-  // });
+  const [selectedOption, setSelectedOption] = useState<any>({ key: 'NONE', value: 'NONE' });
 
-  // const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
-  //   const name = event.target.name as keyof typeof state;
-  //   setState({
-  //     ...state,
-  //     [name]: event.target.value,
-  //   });
-  // };
+  const dashboardDataFetch = (postData?: Record<string, unknown>, call?: string) => {
+    (async () => {
+      try {
+        const url = 'https://run.mocky.io/v3/c319039a-3059-41d6-b637-d9d3e7c4dfed';
+        const resData = () => {
+          axios.get(url).then((responseData) => {
+            console.log(responseData);
+            responseData.data.data.forEach((item1: any) => {
+              const nBrand = [];
+              nBrand.push(item1.brand);
+              item1.brand = nBrand;
+            });
+            setRows([...responseData.data.data]);
+          });
+        };
+        resData();
+
+        if (call === 'submit') {
+          const constraint: any = await reorderService.createConstraint(postData);
+          if (constraint.action === 'success') {
+            toast.success(constraint.message || 'Cluster created successfully');
+            setTimeout(() => {
+              window.location.reload();
+            }, 8000);
+            return;
+          }
+          showError(constraint);
+        }
+      } catch (error) {
+        showError(error);
+      }
+    })();
+  };
+
   const onSubmit = (data: any) => {
     const postObject: Record<string, unknown> = {};
     ['vendor_id', 'brand_id', 'age_constraints', 'color_constraints'].forEach((ele: string) => {
@@ -145,34 +174,8 @@ const CrmDashboard = () => {
       toast.error('Please select attribute');
       return;
     }
-    (async () => {
-      try {
-        const url = 'https://run.mocky.io/v3/51385f17-156a-4af2-a5c8-6644df0cc0d5';
-        const resData = () => {
-          axios.get(url).then((responseData) => {
-            console.log(responseData);
-            responseData.data.data.forEach((item1: any) => {
-              const nBrand = [];
-              nBrand.push(item1.brand);
-              item1.brand = nBrand;
-            });
-            setRows([...responseData.data.data]);
-          });
-        };
-        resData();
-        // const constraint: any = await reorderService.createConstraint(postObject);
-        // if (constraint.action === 'success') {
-        //   toast.success(constraint.message || 'Cluster created successfully');
-        //   setTimeout(() => {
-        //     window.location.reload();
-        //   }, 8000);
-        //   return;
-        // }
-        // showError(constraint);
-      } catch (error) {
-        showError(error);
-      }
-    })();
+
+    dashboardDataFetch(postObject, 'submit');
   };
 
   const removeFromArray = (elements: Array<any>, filtersList: Array<any>) => {
@@ -290,79 +293,29 @@ const CrmDashboard = () => {
     onChange: onDropDownChange,
   };
 
-  // const data: any = [
-  //   {
-  //     id: 209,
-  //     vendor: 'Demo-Test-01',
-  //     brand: ['Girl 6+ years'],
-  //     category: '2020-09-09T17:53:56',
-  //     sub_category: '2020-09-10T16:20:00',
-  //     product_type: 'info@nstechs.com',
-  //     attribute: '2020-09-09T18:04:00',
-  //     gender: 'info@nstechs.com',
-  //     values: '2020-09-09T18:05:00',
-  //     active: true,
-  //     type: 1,
-  //     position: 2,
-  //   },
-  //   {
-  //     id: 186,
-  //     vendor: 'QA-Android-Test-4',
-  //     brand: ['Sale'],
-  //     category: '2020-09-08T15:46:25',
-  //     sub_category: '2020-09-30T13:05:00',
-  //     product_type: 'info@nstechs.com',
-  //     attribute: '2020-09-08T15:44:13',
-  //     gender: 'info@nstechs.com',
-  //     values: '2020-09-09T17:47:00',
-  //     active: false,
-  //     type: 2,
-  //     position: 2,
-  //   },
-  //   {
-  //     id: 208,
-  //     vendor: 'Demo-Test',
-  //     brand: ['Girl 6+ years', 'Foot wear'],
-  //     category: '2020-09-09T12:33:03',
-  //     sub_category: '2020-09-11T12:33:00',
-  //     product_type: 'info@nstechs.com',
-  //     attribute: '2020-09-09T16:29:00',
-  //     gender: 'info@nstechs.com',
-  //     values: '2020-09-09T17:23:00',
-  //     active: true,
-  //     type: 1,
-  //     position: 3,
-  //   },
-  //   {
-  //     id: 207,
-  //     vendor: 'Qa-Android-Test-8',
-  //     brand: ['Footwear'],
-  //     category: '2020-09-09T12:33:03',
-  //     sub_category: '2020-09-12T12:33:00',
-  //     product_type: 'info@nstechs.com',
-  //     attribute: '2020-09-09T13:07:07',
-  //     gender: 'info@nstechs.com',
-  //     values: '2020-09-09T13:07:14',
-  //     active: false,
-  //     type: 1,
-  //     position: 4,
-  //   },
-  //   {
-  //     id: 191,
-  //     vendor: 'QA-Android-Test-5',
-  //     brand: ['Sale'],
-  //     category: '2020-09-08T16:05:25',
-  //     sub_category: '2020-09-11T11:20:00',
-  //     product_type: 'info@nstechs.com',
-  //     attribute: '2020-09-08T16:02:42',
-  //     gender: 'info@nstechs.com',
-  //     values: '2020-09-09T11:18:50',
-  //     active: true,
-  //     type: 1,
-  //     position: 6,
-  //   },
-  // ];
-  // const rows = data;
+  const optionList = [
+    {
+      key: 'NONE',
+      value: 'None',
+    },
+    {
+      key: 'ENABLE',
+      value: 'Enable',
+    },
+    {
+      key: 'DISABLE',
+      value: 'Disable',
+    },
+  ];
+
+  const getActionDropDownValues = () => {
+    return optionList.map((item: any) => (
+      <MenuItem key={item.key} value={item.key}>
+        {item.value}
+      </MenuItem>
+    ));
+  };
+
   const columns = [
     {
       id: 'id',
@@ -439,21 +392,37 @@ const CrmDashboard = () => {
       render: (props: any, data: any) => {
         if (data) {
           return (
-            <div style={{ display: 'flex' }}>
-              {/* <Checkbox checked={false} onChange={handleChange} inputProps={{ 'aria-label': 'primary checkbox' }} /> */}
-              <FormControl className={classes.formControl}>
-                <InputLabel id="enable-disable-label">Enable/Disable</InputLabel>
-                <Select
-                  name={selectedEd + 'Option'}
-                  labelId="enable-disable-label"
-                  value={selectedEd}
-                  onChange={handleActionED}
+            <Formik
+              enableReinitialize={true}
+              initialValues={{ value: 'None' }}
+              onSubmit={(values: any, { setSubmitting }) => {
+                setSubmitting(false);
+              }}
+            >
+              <Grid item className={classes.textFieldWidth}>
+                <Field
+                  component={TextField}
+                  id={selectedOption.value + data.id}
+                  type="text"
+                  name={data.value.toLowerCase()}
+                  label="Enable/Disable"
+                  fullWidth
+                  value={data.value || ''}
+                  select
+                  onChange={(evt: React.ChangeEvent<HTMLInputElement>) => {
+                    const selectedValues = { value: evt.target.value };
+                    // console.log(selectedValues);
+                    setSelectedOption(selectedValues);
+                  }}
+                  inputProps={{
+                    id: 'outlined-select',
+                  }}
+                  variant={'outlined'}
                 >
-                  <MenuItem value="enable">Enable</MenuItem>
-                  <MenuItem value="disable">Disable</MenuItem>
-                </Select>
-              </FormControl>
-            </div>
+                  {getActionDropDownValues()}
+                </Field>
+              </Grid>
+            </Formik>
           );
         }
       },
@@ -461,16 +430,16 @@ const CrmDashboard = () => {
     },
   ];
 
-  const handleActionED = (e: any) => {
-    // let val;
-    // if (e.target.value == 1) {
-    //   val = 0;
-    // } else {
-    //   val = 1;
-    // }
-    setSelectedEd((e.target.name = e.target.value));
-    // alert('Enable/Disable = ' + e.id);
+  const handleActionED = (e: any, dataVal: any) => {
+    // setSelectedEd({ value: e.target.value });
+    // setSelectedEd({ ...selectedEd, [e.target.name]: e.target.value });
+    // setSelectedEd({ [e.target.name]: e.target.value });
+    console.log(dataVal, e.target.value);
   };
+
+  useEffect(() => {
+    dashboardDataFetch();
+  }, []);
 
   const tabData: HsTablePropsV1 = {
     title: 'Table testing',
