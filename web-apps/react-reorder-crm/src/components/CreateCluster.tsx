@@ -297,10 +297,10 @@ const CreateCluster = () => {
       dispatch([ActionType.removeItems, ['product_type_id']]);
       setSubCategoryId(dataKey);
     } else if (key === 'attribute') {
-      const attributKey: string = formData.attribute.key;
-      attributKey === 'color_constraints' && dispatch([ActionType.removeItems, ['age_constraints']]);
-      attributKey === 'age_constraints' && dispatch([ActionType.removeItems, ['color_constraints']]);
-      setAttributeId(attributKey);
+      const attributeKey: string = formData.attribute.key;
+      attributeKey === 'color_constraints' && dispatch([ActionType.removeItems, ['age_constraints']]);
+      attributeKey === 'age_constraints' && dispatch([ActionType.removeItems, ['color_constraints']]);
+      setAttributeId(attributeKey);
     } else if (key === 'vendor_id') {
       dispatch([ActionType.removeItems, ['brand_id']]);
       setVendorId(dataKey);
