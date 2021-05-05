@@ -32,6 +32,11 @@ const App: FC = () => {
                     <CreateCluster />
                   </Suspense>
                 </Route>
+                <Route path="/edit-cluster/:id/:group_id">
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <CreateCluster />
+                  </Suspense>
+                </Route>
                 <Route path="*">
                   <Redirect to="/checks-and-balances" />
                 </Route>

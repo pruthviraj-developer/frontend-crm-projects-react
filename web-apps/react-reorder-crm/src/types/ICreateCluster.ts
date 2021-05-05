@@ -1,4 +1,4 @@
-import { ReorderFiltersProps } from '@hs/components';
+import { ReorderFiltersProps, ReorderFiltersOptions } from '@hs/components';
 
 export interface FilterType {
   bucket?: OptionType[] | null;
@@ -14,9 +14,9 @@ export interface FilterType {
   brand_id?: OptionType[] | null;
 }
 interface OptionType {
-  key: string;
+  key: string | number;
   value: string;
-  second: string;
+  second: string | number;
   first: string | number;
 }
 
@@ -48,3 +48,7 @@ export enum ActionType {
 }
 
 export type Action = [ActionType.removeItems, string[]] | [ActionType.addItems, ReorderFiltersProps[]];
+
+export interface ISelectedValues {
+  [key: string]: OptionType | BrandListEntity | ReorderFiltersOptions | string | number;
+}

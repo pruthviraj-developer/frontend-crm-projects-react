@@ -3,13 +3,21 @@ export interface ReorderFiltersOptions {
   value?: string;
   display?: string;
   name?: string;
+  type?: string;
 }
 interface FiltersOptions {
   id: number;
   display: string;
 }
+interface OptionType {
+  key: string | number;
+  value: string;
+  second: string | number;
+  first: string | number;
+}
+
 export interface ReorderFiltersProps {
-  options?: ReorderFiltersOptions[] | FiltersOptions[] | null;
+  options?: ReorderFiltersOptions[] | FiltersOptions[] | OptionType[] | null;
   key: string;
   input_type: string;
   apiKey?: string;
