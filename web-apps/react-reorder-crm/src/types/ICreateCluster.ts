@@ -53,7 +53,57 @@ export interface ISelectedValues {
   [key: string]: OptionType | BrandListEntity | ReorderFiltersOptions | string | number;
 }
 
-export interface ICreateConstraintType {
+export interface ICreateConstraintResponseType {
   action: string;
   message: string;
+}
+
+export interface ICreateClusterType {
+  vendor_id: VendorId;
+  brand_id: BrandId;
+  category_id: CategoryIdOrSubCategoryIdOrProductTypeId;
+  sub_category_id: CategoryIdOrSubCategoryIdOrProductTypeId;
+  product_type_id: CategoryIdOrSubCategoryIdOrProductTypeId;
+  gender: Gender;
+  age_constraints?: AgeConstraintsEntity[] | null;
+  color_constraints?: ColorConstraintsEntity[] | null;
+  attribute: Attribute;
+}
+
+export interface VendorId {
+  key: number;
+  value: string;
+  second: number;
+  first: number;
+}
+export interface BrandId {
+  id: number;
+  display: string;
+}
+export interface CategoryIdOrSubCategoryIdOrProductTypeId {
+  key: number;
+  value: string;
+  second: string;
+  first: number;
+}
+export interface Gender {
+  key: string;
+  value: string;
+  second: string;
+  first: string;
+}
+
+interface AgeConstraintsEntity {
+  from: number;
+  to: number;
+}
+export interface Attribute {
+  key: string;
+  name: string;
+  type: string;
+}
+
+interface ColorConstraintsEntity {
+  display: string;
+  key: string;
 }

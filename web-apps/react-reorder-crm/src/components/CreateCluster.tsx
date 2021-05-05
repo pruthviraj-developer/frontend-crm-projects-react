@@ -17,7 +17,8 @@ import {
   Brand,
   Action,
   ActionType,
-  ICreateConstraintType,
+  ICreateConstraintResponseType,
+  ICreateClusterType,
   ISubCategory,
   IProductTypes,
   ISelectedValues,
@@ -39,7 +40,7 @@ const attributeOptions: Array<ReorderFiltersOptions> = [
   { key: 'color_constraints', name: 'Color(Minimum 2) *', type: 'color' },
   { key: 'age_constraints', name: 'Age Group(Minimum 2) *', type: 'age' },
 ];
-const showError = (error: ICreateConstraintType | Record<string, string>) => {
+const showError = (error: ICreateConstraintResponseType | Record<string, string>) => {
   let message = tryLater;
   if (error.action === 'failure') {
     message = error.message;
@@ -155,7 +156,7 @@ const CreateCluster = () => {
       ];
       dispatch([ActionType.addItems, formList]);
     }
-  }, [filtersData, isFilterSuccess]);
+  }, [filtersData, isFilterSuccess, params.id]);
 
   useEffect(() => {
     if (isBrandSuccess) {
@@ -173,7 +174,7 @@ const CreateCluster = () => {
         !isBrandFetching && vendorId !== '' && toast.info('Brands are not available select different vendor');
       }
     }
-  }, [brandData, vendorId, isBrandSuccess, isBrandFetching]);
+  }, [brandData, vendorId, isBrandSuccess, isBrandFetching, params.id]);
 
   useEffect(() => {
     if (isSubCatSuccess) {
@@ -286,7 +287,7 @@ const CreateCluster = () => {
     }
   }, [params]);
 
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: ICreateClusterType | any) => {
     const postObject: Record<string, unknown> = {};
     [
       'vendor_id',
@@ -342,7 +343,7 @@ const CreateCluster = () => {
     }
     (async () => {
       try {
-        const constraint: ICreateConstraintType = await reorderService.createConstraint(postObject);
+        const constraint: ICreateConstraintResponseType = await reorderService.createConstraint(postObject);
         if (constraint.action === 'success') {
           toast.success(constraint.message || 'Cluster created successfully');
           setTimeout(() => {
