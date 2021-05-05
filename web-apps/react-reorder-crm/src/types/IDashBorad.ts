@@ -28,3 +28,56 @@ export interface IDashboardData {
   total_amount: number;
   records: Irows[];
 }
+
+export interface IDropdownOptionsList {
+  first: number;
+  key: number;
+  second: string;
+  value: string;
+}
+
+export interface IDropdownListData {
+  clearFields?: Array<string>;
+  display: string;
+  input_type: string;
+  key: string | any;
+  options?: IDropdownOptionsList[] | any;
+}
+
+export interface IRecord {
+  from: number;
+  to: number;
+}
+
+export interface IConstraintData {
+  group_id: number;
+  name: string;
+  value: IRecord[];
+}
+
+export interface IDashboardSetData {
+  id: number;
+  brand: Array<string>;
+  constraint_key: IConstraintData;
+  product_type: string;
+  sub_category: string;
+  value: string;
+  vendor: number | string;
+  category: string;
+  gender: string;
+}
+
+export interface IDashboardResponse {
+  action: string;
+  data?: IDashboardSetData[];
+  message?: string;
+  params?: string;
+  statusCode: number;
+  totalCount: number;
+}
+
+export interface IFilterPostData {
+  id: string | number;
+  group_id: number;
+  action: string;
+}

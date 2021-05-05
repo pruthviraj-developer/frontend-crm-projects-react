@@ -1,23 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { NavLink, Route, Switch } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { makeStyles } from '@material-ui/core/styles';
-import { Colors } from '@hs/utils';
-import { toast } from 'react-toastify';
+import { Button } from '@material-ui/core';
 import { reorderService } from '@hs/services';
+import { DashBoardIcon } from '@hs/icons';
+import { IDropdownListData, IDashboardSetData, IDashboardResponse, IFilterPostData, IRecord } from './IDashBorad';
 import {
+  LeftNavBar,
+  LeftNavBarProps,
   ReorderFiltersList,
   ReorderFiltersProps,
   ReorderFiltersObjectProps,
   HSTableV1,
   HsTablePropsV1,
 } from '@hs/components';
-import { Formik, Field } from 'formik';
-import { TextField, Grid } from '@material-ui/core';
-import { LeftNavBar, LeftNavBarProps } from '@hs/components';
-import { DashBoardIcon } from '@hs/icons';
-import MenuItem from '@material-ui/core/MenuItem';
+import { toast } from 'react-toastify';
 
 const navItems: LeftNavBarProps = {
   navList: [
@@ -27,43 +25,14 @@ const navItems: LeftNavBarProps = {
 };
 
 const useStyles = makeStyles((theme) => ({
-  formControl: {
-    margin: theme.spacing(1),
-    minWidth: 120,
-  },
-  selectEmpty: {
-    marginTop: theme.spacing(2),
-  },
-  root: {
-    flexGrow: 1,
-  },
-  paper: {
-    padding: theme.spacing(2),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-    fontWeight: 'bold',
-    border: '1px solid rgba(0, 0, 0, 0.12)',
-  },
   header: {
     margin: 10,
     fontSize: 28,
   },
-  dialogTitle: {
-    fontSize: 18,
-    fontWeight: 600,
-  },
-  dialogDescription: {
-    color: Colors.PINK[500],
-    fontSize: 16,
-    fontWeight: 600,
-  },
-  textFieldWidth: {
-    minWidth: 100,
-    margin: '8px 0',
-  },
-  filtersPadding: {
-    padding: '10px 20px',
-    margin: '5px 0',
+  clearFilters: {
+    fontSize: '12px',
+    marginTop: '5px',
+    padding: '10px 0',
   },
 }));
 
@@ -89,42 +58,55 @@ const showError = (error: Record<string, string>) => {
 const CrmDashboard = () => {
   const classes = useStyles();
   const [status, setStatus] = useState<string>(loading);
-  const [dropDownsList, setDropDownsList] = useState<any>('');
-  const [rows, setRows] = useState<any>();
-  const [selectedOption, setSelectedOption] = useState<any>({ key: 'NONE', value: 'NONE' });
+  const [dropDownsList, setDropDownsList] = useState<Array<IDropdownListData>>([]);
+  const [rows, setRows] = useState<Array<IDashboardSetData>>([]);
 
-  const dashboardDataFetch = (postData?: Record<string, unknown>, call?: string) => {
-    (async () => {
-      try {
-        const url = 'https://run.mocky.io/v3/c319039a-3059-41d6-b637-d9d3e7c4dfed';
-        const resData = () => {
-          axios.get(url).then((responseData) => {
-            console.log(responseData);
-            responseData.data.data.forEach((item1: any) => {
+  const dashboardDataFetch = (postData?: Record<string, unknown>) => {
+    if (postData) {
+      let cKey = postData.constraint;
+      let postFilterData = {
+        vendor_id: postData.vendor_id,
+        brand_id: postData.brand_id,
+        constraint: cKey,
+        page: '',
+        size: '',
+      };
+      (async () => {
+        try {
+          const constraint: any = await reorderService.getDashboardFilteredData(postFilterData);
+          if (constraint.action === 'success') {
+            toast.success(constraint.message || 'Data found');
+            setRows(constraint.data);
+            return;
+          }
+          showError(constraint);
+        } catch (error) {
+          showError(error);
+        }
+      })();
+    } else {
+      (async () => {
+        try {
+          const response = await reorderService.getDashboardData();
+          if (response) {
+            const responseData: any = response;
+            responseData.data.forEach((item1: any) => {
               const nBrand = [];
               nBrand.push(item1.brand);
               item1.brand = nBrand;
             });
-            setRows([...responseData.data.data]);
-          });
-        };
-        resData();
-
-        if (call === 'submit') {
-          const constraint: any = await reorderService.createConstraint(postData);
-          if (constraint.action === 'success') {
-            toast.success(constraint.message || 'Cluster created successfully');
-            setTimeout(() => {
-              window.location.reload();
-            }, 8000);
-            return;
+            setRows(responseData.data);
+          } else {
+            showError({
+              status: 'failure',
+              errorMessage: 'Data not available',
+            });
           }
-          showError(constraint);
+        } catch (error) {
+          showError(error);
         }
-      } catch (error) {
-        showError(error);
-      }
-    })();
+      })();
+    }
   };
 
   const onSubmit = (data: any) => {
@@ -175,7 +157,7 @@ const CrmDashboard = () => {
       return;
     }
 
-    dashboardDataFetch(postObject, 'submit');
+    dashboardDataFetch(postObject);
   };
 
   const removeFromArray = (elements: Array<any>, filtersList: Array<any>) => {
@@ -293,29 +275,6 @@ const CrmDashboard = () => {
     onChange: onDropDownChange,
   };
 
-  const optionList = [
-    {
-      key: 'NONE',
-      value: 'None',
-    },
-    {
-      key: 'ENABLE',
-      value: 'Enable',
-    },
-    {
-      key: 'DISABLE',
-      value: 'Disable',
-    },
-  ];
-
-  const getActionDropDownValues = () => {
-    return optionList.map((item: any) => (
-      <MenuItem key={item.key} value={item.key}>
-        {item.value}
-      </MenuItem>
-    ));
-  };
-
   const columns = [
     {
       id: 'id',
@@ -326,14 +285,14 @@ const CrmDashboard = () => {
     {
       id: 'vendor',
       label: 'Vendor',
-      customRender: (row: any, isTitle?: boolean) => {
+      customRender: (row: IDashboardSetData, isTitle?: boolean) => {
         if (isTitle) {
           return row.brand;
         }
         if (row) {
           return (
             <>
-              <NavLink to={{ pathname: `/edit-carousel/${row.id}` }}>{row.brand}</NavLink>
+              <NavLink to={{ pathname: `/edit-cluster/${row.id}/${row.constraint_key.group_id}` }}>{row.brand}</NavLink>
             </>
           );
         }
@@ -364,10 +323,7 @@ const CrmDashboard = () => {
     {
       id: 'constraint_key.name',
       label: 'Attribute',
-      customRender: (row: any, isTitle?: boolean) => {
-        // if (isTitle) {
-        //   return row.title;
-        // }
+      customRender: (row: IDashboardSetData, isTitle?: boolean) => {
         if (row) {
           return <>{row.constraint_key.name}</>;
         }
@@ -377,64 +333,69 @@ const CrmDashboard = () => {
     {
       id: 'constraint_key.value',
       label: 'Values',
-      customRender: (row: any, isTitle?: boolean) => {
-        // if (isTitle) {
-        //   return row.title;
-        // }
+      customRender: (row: IDashboardSetData, isTitle?: boolean) => {
         if (row) {
-          return <>{row.constraint_key.value.map((record: any) => JSON.stringify(record))}</>;
+          if (row.constraint_key.name === 'age') {
+            return (
+              <>
+                {row.constraint_key.value.map((record: any, index: number) => (
+                  <li key={'ageLi' + index}>{'From: ' + record.from + ', To: ' + record.to}</li>
+                ))}
+              </>
+            );
+          } else {
+            return <>{row.constraint_key.value.map((record: any) => JSON.stringify(record))}</>;
+          }
         }
         return '--';
       },
     },
     {
       label: 'Action',
-      render: (props: any, data: any) => {
+      render: (props: any, data: IDashboardSetData) => {
         if (data) {
           return (
-            <Formik
-              enableReinitialize={true}
-              initialValues={{ value: 'None' }}
-              onSubmit={(values: any, { setSubmitting }) => {
-                setSubmitting(false);
-              }}
+            <Button
+              variant="contained"
+              color="primary"
+              type="submit"
+              className={classes.clearFilters}
+              onClick={(e) => handleAction(data)}
             >
-              <Grid item className={classes.textFieldWidth}>
-                <Field
-                  component={TextField}
-                  id={selectedOption.value + data.id}
-                  type="text"
-                  name={data.value.toLowerCase()}
-                  label="Enable/Disable"
-                  fullWidth
-                  value={data.value || ''}
-                  select
-                  onChange={(evt: React.ChangeEvent<HTMLInputElement>) => {
-                    const selectedValues = { value: evt.target.value };
-                    // console.log(selectedValues);
-                    setSelectedOption(selectedValues);
-                  }}
-                  inputProps={{
-                    id: 'outlined-select',
-                  }}
-                  variant={'outlined'}
-                >
-                  {getActionDropDownValues()}
-                </Field>
-              </Grid>
-            </Formik>
+              {data.value}
+            </Button>
           );
         }
       },
-      withIcon: true,
+      withIcon: false,
     },
   ];
 
-  const handleActionED = (e: any, dataVal: any) => {
-    // setSelectedEd({ value: e.target.value });
-    // setSelectedEd({ ...selectedEd, [e.target.name]: e.target.value });
-    // setSelectedEd({ [e.target.name]: e.target.value });
-    console.log(dataVal, e.target.value);
+  const handleAction = (data: IDashboardSetData) => {
+    let actionPost;
+    if (data.value === 'ENABLE') {
+      actionPost = 'DISABLE';
+    } else {
+      actionPost = 'ENABLE';
+    }
+    let filterPostData: IFilterPostData = {
+      id: data.vendor,
+      group_id: data.constraint_key.group_id,
+      action: actionPost,
+    };
+    (async () => {
+      try {
+        const filterData: any = await reorderService.postDataAction(filterPostData);
+        if (filterData.action === 'success') {
+          toast.success(filterData.message || 'Data found');
+          setRows(filterData.data);
+          return;
+        }
+        showError(filterData);
+      } catch (error) {
+        showError(error);
+      }
+    })();
   };
 
   useEffect(() => {
@@ -443,11 +404,11 @@ const CrmDashboard = () => {
 
   const tabData: HsTablePropsV1 = {
     title: 'Table testing',
-    count: 250,
+    count: rows.length,
     columns: columns,
     rows: rows,
-    rowsPerPage: 10,
-    filterRowsPerPage: [10, 25, 50, 100],
+    rowsPerPage: 5,
+    filterRowsPerPage: [5, 10, 15, 20],
     fetchTableData: getUpdatedTableData,
   };
 
