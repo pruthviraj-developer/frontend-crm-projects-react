@@ -25,6 +25,7 @@ export interface ReorderFiltersProps {
   name?: string;
   label?: string;
   multi?: boolean;
+  disabled?: boolean;
   display: string;
   clearFields?: Array<string>;
   display_position: number;

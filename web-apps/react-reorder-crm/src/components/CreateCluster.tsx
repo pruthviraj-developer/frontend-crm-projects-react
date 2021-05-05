@@ -17,6 +17,7 @@ import {
   Brand,
   Action,
   ActionType,
+  ICreateConstraintType,
   ISubCategory,
   IProductTypes,
   ISelectedValues,
@@ -38,7 +39,7 @@ const attributeOptions: Array<ReorderFiltersOptions> = [
   { key: 'color_constraints', name: 'Color(Minimum 2) *', type: 'color' },
   { key: 'age_constraints', name: 'Age Group(Minimum 2) *', type: 'age' },
 ];
-const showError = (error: Record<string, string>) => {
+const showError = (error: ICreateConstraintType | Record<string, string>) => {
   let message = tryLater;
   if (error.action === 'failure') {
     message = error.message;
@@ -126,6 +127,7 @@ const CreateCluster = () => {
           input_type: 'S',
           clearFields: ['brand_id'],
           options: filtersData?.vendor_id,
+          disabled: params.id ? true : false,
           display_position: 1,
         },
         {
@@ -161,6 +163,7 @@ const CreateCluster = () => {
         const brand: ReorderFiltersProps = {
           key: 'brand_id',
           display: 'Brand *',
+          disabled: params.id ? true : false,
           input_type: 'S',
           options: brandData.brandList,
           display_position: 2,
@@ -281,7 +284,7 @@ const CreateCluster = () => {
         ...attributes,
       });
     }
-  }, []);
+  }, [params]);
 
   const onSubmit = (data: any) => {
     const postObject: Record<string, unknown> = {};
@@ -339,7 +342,7 @@ const CreateCluster = () => {
     }
     (async () => {
       try {
-        const constraint: any = await reorderService.createConstraint(postObject);
+        const constraint: ICreateConstraintType = await reorderService.createConstraint(postObject);
         if (constraint.action === 'success') {
           toast.success(constraint.message || 'Cluster created successfully');
           setTimeout(() => {
@@ -354,7 +357,7 @@ const CreateCluster = () => {
     })();
   };
 
-  const onDropDownChange = (key: any, formData: any) => {
+  const onDropDownChange = (key: string, formData: Record<string, Record<string, string>>) => {
     let dataKey = formData[key]?.key || '';
     if (key === 'category_id') {
       dispatch([ActionType.removeItems, ['sub_category_id', 'product_type_id']]);

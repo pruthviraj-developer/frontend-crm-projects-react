@@ -52,3 +52,8 @@ export type Action = [ActionType.removeItems, string[]] | [ActionType.addItems, 
 export interface ISelectedValues {
   [key: string]: OptionType | BrandListEntity | ReorderFiltersOptions | string | number;
 }
+
+export interface ICreateConstraintType {
+  action: string;
+  message: string;
+}
