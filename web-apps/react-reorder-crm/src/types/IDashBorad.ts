@@ -81,3 +81,15 @@ export interface IFilterPostData {
   group_id: number;
   action: string;
 }
+
+export declare type IFilterParams = {
+  size: number;
+  page: number;
+};
+
+export declare type tableParams = {
+  size: number;
+  page: number;
+};
+
+export {};

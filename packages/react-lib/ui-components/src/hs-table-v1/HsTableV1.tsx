@@ -17,7 +17,7 @@ const StyledHsTable = styled(Paper)`
 const StyledTableContainer = styled(TableContainer)`
   max-height: 80vh;
   .MuiTableCell-root {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
   }
 `;
 
@@ -57,9 +57,10 @@ export const HSTableV1: FC<HsTablePropsV1> = (props: HsTablePropsV1) => {
       return (
         <>
           {row[column.id]}{' '}
-          {column.withIcon && row.active && (
-            <StyledIcon icon={SelectedCircle} />
-          )}
+          {(column.withIcon && row.active) ||
+            (column.withIcon && row.value === 'DISABLE' && (
+              <StyledIcon icon={SelectedCircle} />
+            ))}
         </>
       );
     } else if (column.withDate) {

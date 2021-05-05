@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Button } from '@material-ui/core';
 import { reorderService } from '@hs/services';
 import { DashBoardIcon } from '@hs/icons';
-import { IDropdownListData, IDashboardSetData, IDashboardResponse, IFilterPostData, IRecord } from './IDashBorad';
+import { IDropdownListData, IDashboardSetData, IFilterPostData, IFilterParams } from './IDashBorad';
 import {
   LeftNavBar,
   LeftNavBarProps,
@@ -36,10 +36,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getUpdatedTableData = (filters: Record<string, unknown>) => {
-  alert(filters);
-};
-
 const ClusterWrapper = styled.div`
   width: 100%;
   margin: 10px 10px 10px 90px;
@@ -60,20 +56,23 @@ const CrmDashboard = () => {
   const [status, setStatus] = useState<string>(loading);
   const [dropDownsList, setDropDownsList] = useState<Array<IDropdownListData>>([]);
   const [rows, setRows] = useState<Array<IDashboardSetData>>([]);
+  const [filterParams, setFilterParams] = useState<IFilterParams>({ size: 10, page: 0 });
+
+  const getUpdatedTableData = (filters: any) => {
+    setFilterParams({ size: filters.size, page: filters.page });
+  };
 
   const dashboardDataFetch = (postData?: Record<string, unknown>) => {
     if (postData) {
-      let cKey = postData.constraint;
       let postFilterData = {
         vendor_id: postData.vendor_id,
         brand_id: postData.brand_id,
-        constraint: cKey,
-        page: '',
-        size: '',
+        constraint: postData.attribute === 'age' ? { key: 'age' } : { key: 'color' },
       };
       (async () => {
         try {
-          const constraint: any = await reorderService.getDashboardFilteredData(postFilterData);
+          const params = { ...filterParams, page: filterParams.page + 1 };
+          const constraint: any = await reorderService.getDashboardFilteredData({ ...postFilterData, ...params });
           if (constraint.action === 'success') {
             toast.success(constraint.message || 'Data found');
             setRows(constraint.data);
@@ -90,11 +89,6 @@ const CrmDashboard = () => {
           const response = await reorderService.getDashboardData();
           if (response) {
             const responseData: any = response;
-            responseData.data.forEach((item1: any) => {
-              const nBrand = [];
-              nBrand.push(item1.brand);
-              item1.brand = nBrand;
-            });
             setRows(responseData.data);
           } else {
             showError({
@@ -111,52 +105,11 @@ const CrmDashboard = () => {
 
   const onSubmit = (data: any) => {
     const postObject: Record<string, unknown> = {};
-    ['vendor_id', 'brand_id', 'age_constraints', 'color_constraints'].forEach((ele: string) => {
+    ['vendor_id', 'brand_id', 'attribute'].forEach((ele: string) => {
       if (data[ele]) {
-        if (ele === 'age_constraints') {
-          const age = [];
-          for (let index = 0; index < data[ele].length; index++) {
-            const element = data[ele][index];
-            age.push({
-              from: parseInt(element.from),
-              to: parseInt(element.to),
-            });
-          }
-          // postObject[ele] = age;
-          postObject['constraint'] = { key: 'age', value: age };
-        } else if (ele === 'color_constraints') {
-          const color = [];
-          for (let index = 0; index < data[ele].length; index++) {
-            const element = data[ele][index];
-            color.push({
-              key: element.key,
-            });
-          }
-          // postObject[ele] = color;
-          postObject['constraint'] = { key: 'color', value: color };
-        } else {
-          postObject[ele] = data[ele]['key'] || data[ele]['id'] || data[ele];
-        }
+        postObject[ele] = data[ele]['key'] || data[ele]['id'] || data[ele];
       }
     });
-    const attribute = data.attribute.key;
-    if (attribute) {
-      const age = data.age_constraints;
-      const color = data.color_constraints;
-      if (attribute === 'color_constraints' && (!color || (color && color.length < 2))) {
-        toast.error('Please select minimum 2 colors');
-        return;
-      } else if (attribute === 'age_constraints') {
-        if (!age || (age && age.length < 2)) {
-          toast.error('Please select minimum 2 age constraints');
-          return;
-        }
-      }
-    } else {
-      toast.error('Please select attribute');
-      return;
-    }
-
     dashboardDataFetch(postObject);
   };
 
@@ -179,17 +132,17 @@ const CrmDashboard = () => {
           const dropDownsList = [
             {
               key: 'vendor_id',
-              display: 'Vendor *',
+              display: 'Vendor',
               input_type: 'S',
               clearFields: ['brand_id'],
             },
             {
               key: 'attribute',
-              display: 'Attribute Values *',
+              display: 'Attribute Values',
               input_type: 'S',
               options: [
-                { key: 'color_constraints', name: 'Color(Minimum 2) *' },
-                { key: 'age_constraints', name: 'Age Group(Minimum 2) *' },
+                { key: 'color', name: 'Color' },
+                { key: 'age', name: 'Age' },
               ],
             },
           ];
@@ -240,30 +193,8 @@ const CrmDashboard = () => {
     }
   };
 
-  const onAttributeChange = (key: any, formData: any) => {
-    if (key === 'attribute' && formData.attribute.key === 'color_constraints') {
-      const list = removeFromArray(['age_constraints'], [...dropDownsList]);
-      (async () => {
-        try {
-          const colors: any = await reorderService.getColors();
-          if (colors) {
-            list.push({ ...colors, key: 'color_constraints', display: 'Color *' });
-          }
-          setDropDownsList([...list]);
-        } catch (error) {
-          showError(error);
-        }
-      })();
-    } else {
-      const list = removeFromArray(['color_constraints'], [...dropDownsList]);
-      setDropDownsList([...list]);
-    }
-  };
-
   const onDropDownChange = (key: any, formData: any) => {
-    if (key === 'attribute') {
-      onAttributeChange(key, formData);
-    } else if (key === 'vendor_id') {
+    if (key === 'vendor_id') {
       onVendorChange(key, formData);
     }
   };
@@ -303,7 +234,7 @@ const CrmDashboard = () => {
       id: 'brand',
       label: 'Brand',
       width: 100,
-      withJoin: true,
+      withJoin: false,
       render: true,
     },
     {
@@ -319,9 +250,9 @@ const CrmDashboard = () => {
       render: true,
     },
     { id: 'product_type', label: 'Product Type', width: 80 },
-    { id: 'gender', label: 'Gender' },
+    { id: 'gender', label: 'Gender', width: 80 },
     {
-      id: 'constraint_key.name',
+      id: 'attribute',
       label: 'Attribute',
       customRender: (row: IDashboardSetData, isTitle?: boolean) => {
         if (row) {
@@ -331,7 +262,7 @@ const CrmDashboard = () => {
       },
     },
     {
-      id: 'constraint_key.value',
+      id: 'value',
       label: 'Values',
       customRender: (row: IDashboardSetData, isTitle?: boolean) => {
         if (row) {
@@ -344,7 +275,7 @@ const CrmDashboard = () => {
               </>
             );
           } else {
-            return <>{row.constraint_key.value.map((record: any) => JSON.stringify(record))}</>;
+            return <>{row.constraint_key.value.join(',')}</>;
           }
         }
         return '--';
@@ -372,20 +303,14 @@ const CrmDashboard = () => {
   ];
 
   const handleAction = (data: IDashboardSetData) => {
-    let actionPost;
-    if (data.value === 'ENABLE') {
-      actionPost = 'DISABLE';
-    } else {
-      actionPost = 'ENABLE';
-    }
     let filterPostData: IFilterPostData = {
       id: data.vendor,
       group_id: data.constraint_key.group_id,
-      action: actionPost,
+      action: data.value === 'ENABLE' ? 'DISABLE' : 'ENABLE',
     };
     (async () => {
       try {
-        const filterData: any = await reorderService.postDataAction(filterPostData);
+        const filterData: any = await reorderService.updateDashboardAction(filterPostData);
         if (filterData.action === 'success') {
           toast.success(filterData.message || 'Data found');
           setRows(filterData.data);
@@ -403,7 +328,7 @@ const CrmDashboard = () => {
   }, []);
 
   const tabData: HsTablePropsV1 = {
-    title: 'Table testing',
+    title: 'Dashboard Table',
     count: rows.length,
     columns: columns,
     rows: rows,

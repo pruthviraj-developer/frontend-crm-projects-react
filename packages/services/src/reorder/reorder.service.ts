@@ -50,7 +50,6 @@ const getBrands = <P, R>(params: P): Promise<R> => {
 
 const getDashboardData = <P, R>(params?: P): Promise<R> => {
   const url = 'https://run.mocky.io/v3/c319039a-3059-41d6-b637-d9d3e7c4dfed';
-  // const url = '/crm-api/intranet/getbrandbyvendor';
   return httpService.get<R>({ url, params });
 };
 
@@ -59,7 +58,7 @@ const getDashboardFilteredData = <P, R>(params?: P): Promise<R> => {
   return httpService.get<R>({ url, params });
 };
 
-const postDataAction = <P, R>(data: P): Promise<R> => {
+const updateDashboardAction = <P, R>(data: P): Promise<R> => {
   const url =
     '/assortment-plan-api/reorder-take-action/vendor-constraint-service/age-color-constraint';
   return httpService.patch({ url, params: { ...data } });
@@ -77,5 +76,5 @@ export const reorderService = {
   updateOrders,
   getDashboardData,
   getDashboardFilteredData,
-  postDataAction,
+  updateDashboardAction,
 };
