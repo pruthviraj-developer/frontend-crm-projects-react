@@ -6,6 +6,12 @@ const createConstraint = <P, R>(data: P): Promise<R> => {
   return httpService.post<R>({ url, data });
 };
 
+const getConstraint = <P, R>(params: P): Promise<R> => {
+  const url =
+    '/crm-api/assortment-plan-api/reorder-take-action/vendor-constraint-service/age-color-constraint';
+  return httpService.get<R>({ url, params });
+};
+
 const getColors = <R>(): Promise<R> => {
   const url =
     '/crm-api/assortment-plan-api/util/vendor-constraint-service/color';
@@ -44,6 +50,7 @@ const getBrands = <P, R>(params: P): Promise<R> => {
 
 export const reorderService = {
   createConstraint,
+  getConstraint,
   getColors,
   getFilters,
   getBrands,

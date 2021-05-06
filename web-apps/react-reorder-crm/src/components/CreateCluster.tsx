@@ -19,6 +19,8 @@ import {
   ActionType,
   ICreateConstraintResponseType,
   ICreateClusterType,
+  IUpdateConstraintType,
+  IUpdateConstraintResponseDataType,
   ISubCategory,
   IProductTypes,
   ISelectedValues,
@@ -263,27 +265,64 @@ const CreateCluster = () => {
           },
         },
       };
-      const data = response.data;
-      const attributeData = attributeOptions.find((attribute) => attribute.type === data.constraint_key.name);
-      let attributes = {};
-      const attributeKey = attributeData?.key || '';
-      setVendorId(data.vendor_id.key);
-      setCategoryId(data.category_id.key);
-      setSubCategoryId(data.sub_category_id.key);
-      setAttributeId(attributeKey);
-      if (attributeData) {
-        attributes = { attribute: attributeData };
-      }
-      setDefaultSelectedValues({
-        vendor_id: data.vendor_id,
-        brand_id: data.brand_id,
-        category_id: data.category_id,
-        sub_category_id: data.sub_category_id,
-        product_type_id: data.product_type_id,
-        gender: data.gender,
-        [attributeKey]: data.constraint_key.value,
-        ...attributes,
-      });
+
+      (async () => {
+        try {
+          const constraint: IUpdateConstraintType = await reorderService.getConstraint(params);
+          if (constraint.action === 'success') {
+            const responseData: IUpdateConstraintResponseDataType = constraint.data;
+            const attributeData = attributeOptions.find(
+              (attribute) => attribute.type === responseData.constraint_key.name,
+            );
+            let attributes = {};
+            const attributeKey = attributeData?.key || '';
+            setVendorId(responseData.vendor_id.key);
+            setCategoryId(responseData.category_id.key);
+            setSubCategoryId(responseData.sub_category_id.key);
+            setAttributeId(attributeKey);
+            if (attributeData) {
+              attributes = { attribute: attributeData };
+            }
+            setDefaultSelectedValues({
+              vendor_id: responseData.vendor_id,
+              brand_id: responseData.brand_id,
+              category_id: responseData.category_id,
+              sub_category_id: responseData.sub_category_id,
+              product_type_id: responseData.product_type_id,
+              gender: responseData.gender,
+              [attributeKey]: responseData.constraint_key.value,
+              ...attributes,
+            });
+          } else {
+            showError(constraint);
+          }
+        } catch (error) {
+          showError(error);
+          // TBR after intergration
+          const data = response.data;
+          const attributeData = attributeOptions.find((attribute) => attribute.type === data.constraint_key.name);
+          let attributes = {};
+          const attributeKey = attributeData?.key || '';
+          setVendorId(data.vendor_id.key);
+          setCategoryId(data.category_id.key);
+          setSubCategoryId(data.sub_category_id.key);
+          setAttributeId(attributeKey);
+          if (attributeData) {
+            attributes = { attribute: attributeData };
+          }
+          setDefaultSelectedValues({
+            vendor_id: data.vendor_id,
+            brand_id: data.brand_id,
+            category_id: data.category_id,
+            sub_category_id: data.sub_category_id,
+            product_type_id: data.product_type_id,
+            gender: data.gender,
+            [attributeKey]: data.constraint_key.value,
+            ...attributes,
+          });
+          // end
+        }
+      })();
     }
   }, [params]);
 

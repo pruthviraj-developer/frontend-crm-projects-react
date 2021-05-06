@@ -28,7 +28,7 @@ export interface ReorderFiltersProps {
   disabled?: boolean;
   display: string;
   clearFields?: Array<string>;
-  display_position: number;
+  display_position?: number;
 }
 
 export interface ReorderFiltersObjectProps {
