@@ -3,12 +3,7 @@ import { Route, Switch, useParams } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { toast } from 'react-toastify';
 import { reorderService } from '@hs/services';
-import {
-  ReorderFiltersList,
-  ReorderFiltersObjectProps,
-  ReorderFiltersOptions,
-  ReorderFiltersProps,
-} from '@hs/components';
+import { ReorderFiltersList, ReorderFiltersObjectProps, ReorderFiltersOptions } from '@hs/components';
 import { LeftNavBar, LeftNavBarProps } from '@hs/components';
 import { DashBoardIcon } from '@hs/icons';
 import { useQuery } from 'react-query';
@@ -21,6 +16,7 @@ import {
   ICreateClusterType,
   IUpdateConstraintType,
   IUpdateConstraintResponseDataType,
+  ICreateClusterDropDownProps,
   ISubCategory,
   IProductTypes,
   ISelectedValues,
@@ -49,12 +45,14 @@ const showError = (error: ICreateConstraintResponseType | Record<string, string>
   }
   toast.error(message);
 };
-const reducer = (state: ReorderFiltersProps[], [type, payload]: Action): ReorderFiltersProps[] => {
+const reducer = (state: ICreateClusterDropDownProps[], [type, payload]: Action): ICreateClusterDropDownProps[] => {
   switch (type) {
     case ActionType.removeItems:
       return state.filter((item) => !(payload as string[]).includes(item.key));
     case ActionType.addItems:
-      return [...state, ...(payload as ReorderFiltersProps[])].sort((a, b) => a.display_position - b.display_position);
+      return [...state, ...(payload as ICreateClusterDropDownProps[])].sort(
+        (a, b) => a.display_position - b.display_position,
+      );
   }
   return state;
 };
@@ -123,7 +121,7 @@ const CreateCluster = () => {
   useEffect(() => {
     if (isFilterSuccess) {
       console.log(filtersData);
-      let formList: ReorderFiltersProps[] = [
+      let formList: ICreateClusterDropDownProps[] = [
         {
           key: 'vendor_id',
           display: 'Vendor *',
@@ -163,7 +161,7 @@ const CreateCluster = () => {
   useEffect(() => {
     if (isBrandSuccess) {
       if (brandData && brandData.brandList && brandData.brandList.length) {
-        const brand: ReorderFiltersProps = {
+        const brand: ICreateClusterDropDownProps = {
           key: 'brand_id',
           display: 'Brand *',
           disabled: params.id ? true : false,

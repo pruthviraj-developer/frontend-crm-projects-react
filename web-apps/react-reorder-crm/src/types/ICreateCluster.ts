@@ -108,3 +108,18 @@ export interface ConstraintKey {
   group_id: number;
   value?: AgeConstraintsEntity[] | ColorConstraintsEntity[] | null;
 }
+
+export interface ICreateClusterDropDownProps {
+  options?: ReorderFiltersOptions[] | BrandListEntity[] | OptionType[] | null;
+  key: string;
+  input_type: string;
+  apiKey?: string;
+  type?: string;
+  name?: string;
+  label?: string;
+  multi?: boolean;
+  disabled?: boolean;
+  display: string;
+  clearFields?: Array<string>;
+  display_position: number;
+}
