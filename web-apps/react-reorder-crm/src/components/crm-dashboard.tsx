@@ -1,21 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, Route, Switch } from 'react-router-dom';
 import styled from '@emotion/styled';
+import clsx from 'clsx';
+import { toast } from 'react-toastify';
 import { makeStyles } from '@material-ui/core/styles';
-import { Button } from '@material-ui/core';
+import { TextField as MuiTextField, Paper, Button, Grid } from '@material-ui/core';
 import { reorderService } from '@hs/services';
 import { DashBoardIcon } from '@hs/icons';
-import { IDropdownListData, IDashboardSetData, IFilterPostData, IFilterParams } from './IDashBorad';
+import { Formik, Form, Field } from 'formik';
+import { Autocomplete, AutocompleteRenderInputParams } from 'formik-material-ui-lab';
+import { ISelectedFilters, IDropdownListData, IDashboardSetData, IFilterPostData, IFilterParams } from './IDashBorad';
 import {
   LeftNavBar,
   LeftNavBarProps,
-  ReorderFiltersList,
   ReorderFiltersProps,
-  ReorderFiltersObjectProps,
+  ReorderFiltersOptions,
   HSTableV1,
   HsTablePropsV1,
 } from '@hs/components';
-import { toast } from 'react-toastify';
 
 const navItems: LeftNavBarProps = {
   navList: [
@@ -25,6 +27,21 @@ const navItems: LeftNavBarProps = {
 };
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+  },
+  paper: {
+    padding: theme.spacing(2),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+    fontWeight: 'bold',
+    border: '1px solid rgba(0, 0, 0, 0.12)',
+    marginBottom: '10px',
+    paddingBottom: 0,
+  },
+  filters: {
+    paddingBottom: theme.spacing(2),
+  },
   header: {
     margin: 10,
     fontSize: 28,
@@ -36,12 +53,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ClusterWrapper = styled.div`
+const DashBoardWrapper = styled.div`
   width: 100%;
   margin: 10px 10px 10px 90px;
 `;
 
-const loading = 'Loading';
+const FiltersWrapper = styled.div`
+  margin: auto;
+`;
+
 const tryLater = 'Please try later';
 const showError = (error: Record<string, string>) => {
   let message = tryLater;
@@ -53,8 +73,8 @@ const showError = (error: Record<string, string>) => {
 
 const CrmDashboard = () => {
   const classes = useStyles();
-  const [status, setStatus] = useState<string>(loading);
   const [dropDownsList, setDropDownsList] = useState<Array<IDropdownListData>>([]);
+  const [selectedFilters, setSelectedFilters] = useState<ISelectedFilters>({});
   const [rows, setRows] = useState<Array<IDashboardSetData>>([]);
   const [filterParams, setFilterParams] = useState<IFilterParams>({ size: 10, page: 0 });
 
@@ -136,15 +156,6 @@ const CrmDashboard = () => {
               input_type: 'S',
               clearFields: ['brand_id'],
             },
-            {
-              key: 'attribute',
-              display: 'Attribute Values',
-              input_type: 'S',
-              options: [
-                { key: 'color', name: 'Color' },
-                { key: 'age', name: 'Age' },
-              ],
-            },
           ];
           dropDownsList.forEach((element: ReorderFiltersProps) => {
             if (filters[element.key]) {
@@ -154,7 +165,6 @@ const CrmDashboard = () => {
           setDropDownsList([...dropDownsList]);
         }
       } catch (error) {
-        setStatus(tryLater);
         showError(error);
       }
     })();
@@ -193,17 +203,43 @@ const CrmDashboard = () => {
     }
   };
 
-  const onDropDownChange = (key: any, formData: any) => {
-    if (key === 'vendor_id') {
-      onVendorChange(key, formData);
+  const onBrandChange = (key: any, formData: any) => {
+    let data = formData[key];
+    const list = removeFromArray(['attribute'], [...dropDownsList]);
+    if (data) {
+      try {
+        const attributes = [
+          { key: 'color', name: 'Color' },
+          { key: 'age', name: 'Age' },
+        ];
+        if (attributes.length) {
+          const indexFound = list.findIndex((obj: any) => obj.key === 'brand_id');
+          if (indexFound > -1) {
+            const attribute = {
+              key: 'attribute',
+              display: 'Attributes',
+              input_type: 'S',
+              options: attributes,
+            };
+            list.splice(indexFound + 1, 0, attribute);
+          }
+        } else {
+          toast.info('Attributes are not available select different brand');
+        }
+        setDropDownsList([...list]);
+      } catch (error) {
+        showError(error);
+        setDropDownsList([...list]);
+      }
     }
   };
 
-  const reorderData: ReorderFiltersObjectProps = {
-    sideBar: [...dropDownsList],
-    defaultSelectedValues: {},
-    onSubmit: onSubmit,
-    onChange: onDropDownChange,
+  const onDropDownChange = (key: any, formData: any) => {
+    if (key === 'vendor_id') {
+      onVendorChange(key, formData);
+    } else if (key === 'brand_id') {
+      onBrandChange(key, formData);
+    }
   };
 
   const columns = [
@@ -342,13 +378,100 @@ const CrmDashboard = () => {
       <LeftNavBar {...navItems}></LeftNavBar>
       <Switch>
         <Route path="/">
-          <ClusterWrapper>
+          <DashBoardWrapper>
             <h1 className={classes.header}>Crm Dashboard Page</h1>
-            {dropDownsList.length === 0 && <h5> {status} </h5>}
-            {dropDownsList.length > 0 && <ReorderFiltersList {...reorderData} />}
-            <br />
+            <FiltersWrapper className={classes.root}>
+              <Formik
+                enableReinitialize={true}
+                initialValues={{}}
+                onSubmit={(values, actions) => {
+                  actions.setSubmitting(false);
+                  onSubmit(dropDownsList);
+                }}
+              >
+                {() => (
+                  <Form autoComplete="off">
+                    <Grid container direction="column" justify="center" spacing={1}>
+                      <Paper className={clsx(classes.paper, classes.filters)} variant="outlined">
+                        <Grid container direction="row" justify="center" spacing={3}>
+                          {dropDownsList &&
+                            dropDownsList.map((sideBarOption: ReorderFiltersProps) => {
+                              if (sideBarOption.type === 'autocomplete' || sideBarOption.input_type === 'S') {
+                                return (
+                                  <Grid
+                                    item
+                                    sm={2}
+                                    style={{ padding: '4px' }}
+                                    key={sideBarOption.name || sideBarOption.key}
+                                  >
+                                    <Field
+                                      variant="standard"
+                                      name={sideBarOption.name || sideBarOption.key}
+                                      label={sideBarOption.label || sideBarOption.display}
+                                      component={Autocomplete}
+                                      options={sideBarOption.options || []}
+                                      getOptionLabel={(option: ReorderFiltersOptions) =>
+                                        option.display || option.name || option.value || ''
+                                      }
+                                      onChange={(
+                                        evt: React.ChangeEvent<HTMLInputElement>,
+                                        values: ReorderFiltersOptions,
+                                      ) => {
+                                        if (evt) {
+                                          const keyName = sideBarOption.name || sideBarOption.key;
+                                          const formValues = {
+                                            ...selectedFilters,
+                                            [keyName]: values,
+                                          };
+                                          if (sideBarOption.clearFields) {
+                                            sideBarOption.clearFields.forEach((element: string) => {
+                                              delete formValues[element];
+                                            });
+                                          }
+                                          setSelectedFilters({ mskuId: { key: 0 } });
+                                          onDropDownChange(keyName, formValues);
+                                        }
+                                      }}
+                                      renderInput={(params: AutocompleteRenderInputParams) => (
+                                        <MuiTextField
+                                          {...params}
+                                          label={sideBarOption.label || sideBarOption.display}
+                                          variant="outlined"
+                                        />
+                                      )}
+                                    />
+                                  </Grid>
+                                );
+                              } else {
+                                return false;
+                              }
+                            })}
+                          <Grid item xs={1} style={{ padding: '4px' }}>
+                            <Button
+                              type="submit"
+                              color="primary"
+                              variant="outlined"
+                              size="large"
+                              disabled={!selectedFilters['mskuId']}
+                              style={{
+                                fontWeight: 'bold',
+                                fontSize: 10,
+                                padding: '15px 10px',
+                                margin: '0 10px 0px',
+                              }}
+                            >
+                              Submit
+                            </Button>
+                          </Grid>
+                        </Grid>
+                      </Paper>
+                    </Grid>
+                  </Form>
+                )}
+              </Formik>
+            </FiltersWrapper>
             {tabData.rows && <HSTableV1 {...tabData} />}
-          </ClusterWrapper>
+          </DashBoardWrapper>
         </Route>
       </Switch>
     </>

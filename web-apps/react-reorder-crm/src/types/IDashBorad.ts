@@ -44,6 +44,17 @@ export interface IDropdownListData {
   options?: IDropdownOptionsList[] | any;
 }
 
+export interface ISelectedFilterData {
+  key: any;
+  first?: number;
+  second?: string;
+  value?: string;
+}
+
+export interface ISelectedFilters {
+  [key: string]: ISelectedFilterData;
+}
+
 export interface IRecord {
   from: number;
   to: number;
