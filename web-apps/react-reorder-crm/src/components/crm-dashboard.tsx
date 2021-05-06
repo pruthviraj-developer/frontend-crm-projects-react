@@ -9,7 +9,7 @@ import { reorderService } from '@hs/services';
 import { DashBoardIcon } from '@hs/icons';
 import { Formik, Form, Field } from 'formik';
 import { Autocomplete, AutocompleteRenderInputParams } from 'formik-material-ui-lab';
-import { ISelectedFilters, IDropdownListData, IDashboardSetData, IFilterPostData, IFilterParams } from './IDashBorad';
+import { IDropdownListData, IDashboardSetData, IFilterPostData, IFilterParams } from './IDashBorad';
 import {
   LeftNavBar,
   LeftNavBarProps,
@@ -74,9 +74,9 @@ const showError = (error: Record<string, string>) => {
 const CrmDashboard = () => {
   const classes = useStyles();
   const [dropDownsList, setDropDownsList] = useState<Array<IDropdownListData>>([]);
-  const [selectedFilters, setSelectedFilters] = useState<ISelectedFilters>({});
   const [rows, setRows] = useState<Array<IDashboardSetData>>([]);
   const [filterParams, setFilterParams] = useState<IFilterParams>({ size: 10, page: 0 });
+  const [postObject, setPostObject] = useState({});
 
   const getUpdatedTableData = (filters: any) => {
     setFilterParams({ size: filters.size, page: filters.page });
@@ -123,13 +123,7 @@ const CrmDashboard = () => {
     }
   };
 
-  const onSubmit = (data: any) => {
-    const postObject: Record<string, unknown> = {};
-    ['vendor_id', 'brand_id', 'attribute'].forEach((ele: string) => {
-      if (data[ele]) {
-        postObject[ele] = data[ele]['key'] || data[ele]['id'] || data[ele];
-      }
-    });
+  const onSubmit = () => {
     dashboardDataFetch(postObject);
   };
 
@@ -172,6 +166,7 @@ const CrmDashboard = () => {
 
   const onVendorChange = (key: any, formData: any) => {
     let data = formData[key];
+    setPostObject({ ...postObject, vendor_id: formData[key]['key'] });
     const list = removeFromArray(['brand_id'], [...dropDownsList]);
     if (data) {
       const id = data.key;
@@ -205,6 +200,7 @@ const CrmDashboard = () => {
 
   const onBrandChange = (key: any, formData: any) => {
     let data = formData[key];
+    setPostObject({ ...postObject, brand_id: formData[key]['id'] });
     const list = removeFromArray(['attribute'], [...dropDownsList]);
     if (data) {
       try {
@@ -234,11 +230,17 @@ const CrmDashboard = () => {
     }
   };
 
+  const onAttributeChange = (key: any, formData: any) => {
+    setPostObject({ ...postObject, attribute: formData[key]['key'] });
+  };
+
   const onDropDownChange = (key: any, formData: any) => {
     if (key === 'vendor_id') {
       onVendorChange(key, formData);
     } else if (key === 'brand_id') {
       onBrandChange(key, formData);
+    } else if (key === 'attribute') {
+      onAttributeChange(key, formData);
     }
   };
 
@@ -386,7 +388,7 @@ const CrmDashboard = () => {
                 initialValues={{}}
                 onSubmit={(values, actions) => {
                   actions.setSubmitting(false);
-                  onSubmit(dropDownsList);
+                  onSubmit();
                 }}
               >
                 {() => (
@@ -419,16 +421,12 @@ const CrmDashboard = () => {
                                       ) => {
                                         if (evt) {
                                           const keyName = sideBarOption.name || sideBarOption.key;
-                                          const formValues = {
-                                            ...selectedFilters,
-                                            [keyName]: values,
-                                          };
+                                          const formValues = { [keyName]: values };
                                           if (sideBarOption.clearFields) {
                                             sideBarOption.clearFields.forEach((element: string) => {
                                               delete formValues[element];
                                             });
                                           }
-                                          setSelectedFilters({ mskuId: { key: 0 } });
                                           onDropDownChange(keyName, formValues);
                                         }
                                       }}
@@ -452,7 +450,7 @@ const CrmDashboard = () => {
                               color="primary"
                               variant="outlined"
                               size="large"
-                              disabled={!selectedFilters['mskuId']}
+                              disabled={!Object.keys(postObject).length}
                               style={{
                                 fontWeight: 'bold',
                                 fontSize: 10,
