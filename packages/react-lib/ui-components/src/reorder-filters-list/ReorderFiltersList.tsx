@@ -93,9 +93,12 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
                                 ] || (sideBarOption.multi ? [] : null)
                               }
                               multiple={sideBarOption.multi || false}
+                              disabled={sideBarOption.disabled || false}
                               component={Autocomplete}
                               options={sideBarOption.options || []}
-                              disableCloseOnSelect={sideBarOption.multi?true:false}
+                              disableCloseOnSelect={
+                                sideBarOption.multi ? true : false
+                              }
                               getOptionSelected={(
                                 option: ReorderFiltersOptions,
                                 selectedValue: ReorderFiltersOptions
