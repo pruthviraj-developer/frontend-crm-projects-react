@@ -11,6 +11,10 @@ const onSubmit = (e: Record<string, unknown>) => {
   action('ReorderFiltersList')(e);
 };
 
+const onChange = (e) => {
+  // console.log(e);
+};
+
 const aaa = [
   {
     options: [
@@ -33,7 +37,7 @@ const aaa = [
     key: 'season',
     input_type: 'S',
     display: 'Season',
-    clearFields: ['mathOperator', 'Cakes']
+    clearFields: ['mathOperator', 'Cakes'],
   },
   {
     options: [
@@ -67,6 +71,7 @@ const data: ReorderFiltersObjectProps = {
   sideBar: [...aaa],
   defaultSelectedValues: {},
   onSubmit: onSubmit,
+  onChange: onChange,
 };
 
 export const ReOrderFiltersComponent: FC = () => (

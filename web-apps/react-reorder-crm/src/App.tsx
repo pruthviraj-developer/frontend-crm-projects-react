@@ -11,6 +11,7 @@ import { ReactQueryDevtools } from 'react-query/devtools';
 
 const queryClient = new QueryClient();
 const CreateCluster = React.lazy(() => import('./components/CreateCluster'));
+const CrmDashboard = React.lazy(() => import('./components/crm-dashboard'));
 const DashBoard = React.lazy(() => import('./components/DashBoard'));
 
 const App: FC = () => {
@@ -35,6 +36,11 @@ const App: FC = () => {
                 <Route path="/edit-cluster/:id/:group_id">
                   <Suspense fallback={<div>Loading...</div>}>
                     <CreateCluster />
+                  </Suspense>
+                </Route>
+                <Route path="/reorder-crm-dashboard">
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <CrmDashboard />
                   </Suspense>
                 </Route>
                 <Route path="*">
