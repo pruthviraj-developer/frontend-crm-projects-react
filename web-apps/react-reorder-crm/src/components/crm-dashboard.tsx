@@ -9,7 +9,7 @@ import { reorderService } from '@hs/services';
 import { DashBoardIcon } from '@hs/icons';
 import { Formik, Form, Field } from 'formik';
 import { Autocomplete, AutocompleteRenderInputParams } from 'formik-material-ui-lab';
-import { IDropdownListData, IDashboardSetData, IFilterPostData, IFilterParams } from './IDashBorad';
+import { IDropdownListData, IDashboardSetData, IFilterPostData, IFilterParams } from '../types/IDashBoard';
 import {
   LeftNavBar,
   LeftNavBarProps,
