@@ -18,10 +18,7 @@ import { Colors } from '@hs/utils';
 import { LeftNavBar, LeftNavBarProps } from '@hs/components';
 import { DashBoardIcon } from '@hs/icons';
 const navItems: LeftNavBarProps = {
-  navList: [
-    { linkUrl: '/checks-and-balances', linkText: 'Dashboard', icon: DashBoardIcon },
-    { linkUrl: '/reorder-crm-dashboard', linkText: 'Reorder Dashboard', icon: DashBoardIcon },
-  ],
+  navList: [{ linkUrl: '/checks-and-balances', linkText: 'Dashboard', icon: DashBoardIcon }],
 };
 
 const useStyles = makeStyles((theme) => ({

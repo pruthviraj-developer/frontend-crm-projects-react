@@ -21,7 +21,7 @@ import {
   IProductTypes,
   ISelectedValues,
   SkuAttributeEntity,
-} from '../types/ICreateCluster';
+} from '../../types/ICreateCluster';
 import { useReducer } from 'react';
 const navItems: LeftNavBarProps = {
   navList: [{ linkUrl: '/create-cluster', linkText: 'Create cluster', icon: DashBoardIcon }],

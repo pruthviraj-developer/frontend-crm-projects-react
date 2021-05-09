@@ -10,9 +10,8 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 
 const queryClient = new QueryClient();
-const CreateCluster = React.lazy(() => import('./components/CreateCluster'));
-const CrmDashboard = React.lazy(() => import('./components/crm-dashboard'));
-const DashBoard = React.lazy(() => import('./components/DashBoard'));
+const Clusters = React.lazy(() => import('./components/clusters'));
+const ChecksAndBalanceDashBoard = React.lazy(() => import('./components/checks-and-balances/DashBoard'));
 
 const App: FC = () => {
   return (
@@ -22,30 +21,20 @@ const App: FC = () => {
           <MuiThemeProvider theme={LightTheme}>
             <Router basename="/react-monorepo/reorder">
               <Switch>
-                <Redirect exact from="/" to="/checks-and-balances" />
+                <Redirect exact from="/" to="/clusters" />
                 <Route path="/checks-and-balances">
                   <Suspense fallback={<div>Loading...</div>}>
-                    <DashBoard />
+                    <ChecksAndBalanceDashBoard />
                   </Suspense>
                 </Route>
-                <Route path="/create-cluster">
+                <Route path="/clusters">
                   <Suspense fallback={<div>Loading...</div>}>
-                    <CreateCluster />
+                    <Clusters />
                   </Suspense>
                 </Route>
-                <Route path="/edit-cluster/:id/:group_id">
-                  <Suspense fallback={<div>Loading...</div>}>
-                    <CreateCluster />
-                  </Suspense>
-                </Route>
-                <Route path="/reorder-crm-dashboard">
-                  <Suspense fallback={<div>Loading...</div>}>
-                    <CrmDashboard />
-                  </Suspense>
-                </Route>
-                <Route path="*">
+                {/* <Route path="*">
                   <Redirect to="/checks-and-balances" />
-                </Route>
+                </Route> */}
               </Switch>
             </Router>
           </MuiThemeProvider>

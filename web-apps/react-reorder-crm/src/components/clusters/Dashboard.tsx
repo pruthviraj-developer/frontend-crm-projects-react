@@ -9,7 +9,7 @@ import { reorderService } from '@hs/services';
 import { DashBoardIcon } from '@hs/icons';
 import { Formik, Form, Field } from 'formik';
 import { Autocomplete, AutocompleteRenderInputParams } from 'formik-material-ui-lab';
-import { IDropdownListData, IDashboardSetData, IFilterPostData, IFilterParams } from '../types/IDashBoard';
+import { IDropdownListData, IDashboardSetData, IFilterPostData, IFilterParams } from '../../types/IDashBoard';
 import {
   LeftNavBar,
   LeftNavBarProps,
@@ -19,12 +19,12 @@ import {
   HsTablePropsV1,
 } from '@hs/components';
 
-const navItems: LeftNavBarProps = {
-  navList: [
-    { linkUrl: '/create-cluster', linkText: 'Create cluster', icon: DashBoardIcon },
-    { linkUrl: '/reorder-crm-dashboard', linkText: 'Reorder Dashboard', icon: DashBoardIcon },
-  ],
-};
+// const navItems: LeftNavBarProps = {
+//   navList: [
+//     { linkUrl: '/create-cluster', linkText: 'Create cluster', icon: DashBoardIcon },
+//     { linkUrl: '/reorder-crm-dashboard', linkText: 'Reorder Dashboard', icon: DashBoardIcon },
+//   ],
+// };
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -377,101 +377,96 @@ const CrmDashboard = () => {
 
   return (
     <>
-      <LeftNavBar {...navItems}></LeftNavBar>
-      <Switch>
-        <Route path="/">
-          <DashBoardWrapper>
-            <h1 className={classes.header}>Crm Dashboard Page</h1>
-            <FiltersWrapper className={classes.root}>
-              <Formik
-                enableReinitialize={true}
-                initialValues={{}}
-                onSubmit={(values, actions) => {
-                  actions.setSubmitting(false);
-                  onSubmit();
-                }}
-              >
-                {() => (
-                  <Form autoComplete="off">
-                    <Grid container direction="column" justify="center" spacing={1}>
-                      <Paper className={clsx(classes.paper, classes.filters)} variant="outlined">
-                        <Grid container direction="row" justify="center" spacing={3}>
-                          {dropDownsList &&
-                            dropDownsList.map((sideBarOption: ReorderFiltersProps) => {
-                              if (sideBarOption.type === 'autocomplete' || sideBarOption.input_type === 'S') {
-                                return (
-                                  <Grid
-                                    item
-                                    sm={2}
-                                    style={{ padding: '4px' }}
-                                    key={sideBarOption.name || sideBarOption.key}
-                                  >
-                                    <Field
-                                      variant="standard"
-                                      name={sideBarOption.name || sideBarOption.key}
-                                      label={sideBarOption.label || sideBarOption.display}
-                                      component={Autocomplete}
-                                      options={sideBarOption.options || []}
-                                      getOptionLabel={(option: ReorderFiltersOptions) =>
-                                        option.display || option.name || option.value || ''
+      <DashBoardWrapper>
+        <h1 className={classes.header}>Crm Dashboard Page</h1>
+        <FiltersWrapper className={classes.root}>
+          <Formik
+            enableReinitialize={true}
+            initialValues={{}}
+            onSubmit={(values, actions) => {
+              actions.setSubmitting(false);
+              onSubmit();
+            }}
+          >
+            {() => (
+              <Form autoComplete="off">
+                <Grid container direction="column" justify="center" spacing={1}>
+                  <Paper className={clsx(classes.paper, classes.filters)} variant="outlined">
+                    <Grid container direction="row" justify="center" spacing={3}>
+                      {dropDownsList &&
+                        dropDownsList.map((sideBarOption: ReorderFiltersProps) => {
+                          if (sideBarOption.type === 'autocomplete' || sideBarOption.input_type === 'S') {
+                            return (
+                              <Grid
+                                item
+                                sm={2}
+                                style={{ padding: '4px' }}
+                                key={sideBarOption.name || sideBarOption.key}
+                              >
+                                <Field
+                                  variant="standard"
+                                  name={sideBarOption.name || sideBarOption.key}
+                                  label={sideBarOption.label || sideBarOption.display}
+                                  component={Autocomplete}
+                                  options={sideBarOption.options || []}
+                                  getOptionLabel={(option: ReorderFiltersOptions) =>
+                                    option.display || option.name || option.value || ''
+                                  }
+                                  onChange={(
+                                    evt: React.ChangeEvent<HTMLInputElement>,
+                                    values: ReorderFiltersOptions,
+                                  ) => {
+                                    if (evt) {
+                                      const keyName = sideBarOption.name || sideBarOption.key;
+                                      const formValues = { [keyName]: values };
+                                      if (sideBarOption.clearFields) {
+                                        sideBarOption.clearFields.forEach((element: string) => {
+                                          delete formValues[element];
+                                        });
                                       }
-                                      onChange={(
-                                        evt: React.ChangeEvent<HTMLInputElement>,
-                                        values: ReorderFiltersOptions,
-                                      ) => {
-                                        if (evt) {
-                                          const keyName = sideBarOption.name || sideBarOption.key;
-                                          const formValues = { [keyName]: values };
-                                          if (sideBarOption.clearFields) {
-                                            sideBarOption.clearFields.forEach((element: string) => {
-                                              delete formValues[element];
-                                            });
-                                          }
-                                          onDropDownChange(keyName, formValues);
-                                        }
-                                      }}
-                                      renderInput={(params: AutocompleteRenderInputParams) => (
-                                        <MuiTextField
-                                          {...params}
-                                          label={sideBarOption.label || sideBarOption.display}
-                                          variant="outlined"
-                                        />
-                                      )}
+                                      onDropDownChange(keyName, formValues);
+                                    }
+                                  }}
+                                  renderInput={(params: AutocompleteRenderInputParams) => (
+                                    <MuiTextField
+                                      {...params}
+                                      label={sideBarOption.label || sideBarOption.display}
+                                      variant="outlined"
                                     />
-                                  </Grid>
-                                );
-                              } else {
-                                return false;
-                              }
-                            })}
-                          <Grid item xs={1} style={{ padding: '4px' }}>
-                            <Button
-                              type="submit"
-                              color="primary"
-                              variant="outlined"
-                              size="large"
-                              disabled={!Object.keys(postObject).length}
-                              style={{
-                                fontWeight: 'bold',
-                                fontSize: 10,
-                                padding: '15px 10px',
-                                margin: '0 10px 0px',
-                              }}
-                            >
-                              Submit
-                            </Button>
-                          </Grid>
-                        </Grid>
-                      </Paper>
+                                  )}
+                                />
+                              </Grid>
+                            );
+                          } else {
+                            return false;
+                          }
+                        })}
+                      <Grid item xs={1} style={{ padding: '4px' }}>
+                        <Button
+                          type="submit"
+                          color="primary"
+                          variant="outlined"
+                          size="large"
+                          disabled={!Object.keys(postObject).length}
+                          style={{
+                            fontWeight: 'bold',
+                            fontSize: 10,
+                            padding: '15px 10px',
+                            margin: '0 10px 0px',
+                          }}
+                        >
+                          Submit
+                        </Button>
+                      </Grid>
                     </Grid>
-                  </Form>
-                )}
-              </Formik>
-            </FiltersWrapper>
-            {tabData.rows && <HSTableV1 {...tabData} />}
-          </DashBoardWrapper>
-        </Route>
-      </Switch>
+                  </Paper>
+                </Grid>
+              </Form>
+            )}
+          </Formik>
+        </FiltersWrapper>
+        {tabData.rows && <HSTableV1 {...tabData} />}
+      </DashBoardWrapper>
     </>
   );
 };
