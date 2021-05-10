@@ -50,7 +50,7 @@ export enum ActionType {
 export type Action = [ActionType.removeItems, string[]] | [ActionType.addItems, ReorderFiltersProps[]];
 
 export interface ISelectedValues {
-  [key: string]: OptionType | BrandListEntity | ReorderFiltersOptions | string | number;
+  [key: string]: OptionType | BrandListEntity | ReorderFiltersOptions | string | number | any;
 }
 
 export interface ICreateConstraintResponseType {

@@ -15,9 +15,20 @@ import {
   LeftNavBarProps,
   ReorderFiltersProps,
   ReorderFiltersOptions,
+  ReorderFiltersObjectProps,
   HSTableV1,
   HsTablePropsV1,
 } from '@hs/components';
+import {
+  Brand,
+  FilterType,
+  ICreateClusterDropDownProps,
+  Action,
+  ActionType,
+  ISelectedValues,
+} from '../types/ICreateCluster';
+import { useQuery } from 'react-query';
+import { useReducer } from 'react';
 
 const navItems: LeftNavBarProps = {
   navList: [
@@ -71,12 +82,77 @@ const showError = (error: Record<string, string>) => {
   toast.error(message);
 };
 
+const reducer = (state: ICreateClusterDropDownProps[], [type, payload]: Action): ICreateClusterDropDownProps[] => {
+  switch (type) {
+    case ActionType.removeItems:
+      return state.filter((item) => !(payload as string[]).includes(item.key));
+    case ActionType.addItems:
+      return [...state, ...(payload as ICreateClusterDropDownProps[])].sort(
+        (a, b) => a.display_position - b.display_position,
+      );
+  }
+  return state;
+};
+
 const CrmDashboard = () => {
   const classes = useStyles();
-  const [dropDownsList, setDropDownsList] = useState<Array<IDropdownListData>>([]);
+  const [dropDownsList, dispatch] = useReducer(reducer, []);
+  const [selectedFilters, setSelectedFilters] = useState<ISelectedValues>({});
   const [rows, setRows] = useState<Array<IDashboardSetData>>([]);
   const [filterParams, setFilterParams] = useState<IFilterParams>({ size: 10, page: 0 });
-  const [postObject, setPostObject] = useState({});
+
+  const { data: filterData, isSuccess: isFilterSuccess } = useQuery<FilterType, Record<string, string>>(
+    'filters',
+    reorderService.getFilters,
+    {
+      staleTime: Infinity,
+      onError: (error: Record<string, string>) => {
+        showError(error);
+      },
+    },
+  );
+
+  const [vendorId, setVendorId] = useState<string | number>('');
+  const { data: brandData, isSuccess: isBrandSuccess, isFetching: isBrandFetching } = useQuery<
+    Brand,
+    Record<string, string>
+  >(['brands', vendorId], () => reorderService.getBrands({ vendorId: vendorId }), {
+    staleTime: Infinity,
+    enabled: vendorId !== '',
+  });
+
+  useEffect(() => {
+    if (isFilterSuccess) {
+      let formList: ICreateClusterDropDownProps[] = [
+        {
+          key: 'vendor_id',
+          display: 'Vendor *',
+          input_type: 'S',
+          clearFields: ['brand_id'],
+          options: filterData?.vendor_id,
+          display_position: 1,
+        },
+      ];
+      dispatch([ActionType.addItems, formList]);
+    }
+  }, [filterData, isFilterSuccess]);
+
+  useEffect(() => {
+    if (isBrandSuccess) {
+      if (brandData && brandData.brandList && brandData.brandList.length) {
+        const brand: ICreateClusterDropDownProps = {
+          key: 'brand_id',
+          display: 'Brand *',
+          input_type: 'S',
+          options: brandData.brandList,
+          display_position: 2,
+        };
+        dispatch([ActionType.addItems, [brand]]);
+      } else {
+        !isBrandFetching && vendorId !== '' && toast.info('Brands are not available select different vendor');
+      }
+    }
+  }, [brandData, vendorId, isBrandSuccess, isBrandFetching]);
 
   const getUpdatedTableData = (filters: any) => {
     setFilterParams({ size: filters.size, page: filters.page });
@@ -87,7 +163,7 @@ const CrmDashboard = () => {
       let postFilterData = {
         vendor_id: postData.vendor_id,
         brand_id: postData.brand_id,
-        constraint: postData.attribute === 'age' ? { key: 'age' } : { key: 'color' },
+        constraint: postData.attribute,
       };
       (async () => {
         try {
@@ -124,123 +200,32 @@ const CrmDashboard = () => {
   };
 
   const onSubmit = () => {
+    const postObject: Record<string, number> = {};
+    ['vendor_id', 'brand_id', 'attribute'].forEach((ele: string) => {
+      if (selectedFilters[ele]) {
+        postObject[ele] = selectedFilters[ele]['key'] || selectedFilters[ele]['id'] || selectedFilters[ele];
+      }
+    });
+
     dashboardDataFetch(postObject);
   };
 
-  const removeFromArray = (elements: Array<any>, filtersList: Array<any>) => {
-    const list = [...filtersList];
-    [...elements].forEach((ele: string) => {
-      const removeElement = list.findIndex((obj: any) => obj.key === ele);
-      if (removeElement > -1) {
-        list.splice(removeElement, 1);
-      }
-    });
-    return list;
-  };
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const filters: any = await reorderService.getFilters();
-        if (filters) {
-          const dropDownsList = [
-            {
-              key: 'vendor_id',
-              display: 'Vendor',
-              input_type: 'S',
-              clearFields: ['brand_id'],
-            },
-          ];
-          dropDownsList.forEach((element: ReorderFiltersProps) => {
-            if (filters[element.key]) {
-              element['options'] = filters[element.key];
-            }
-          });
-          setDropDownsList([...dropDownsList]);
-        }
-      } catch (error) {
-        showError(error);
-      }
-    })();
-  }, []);
-
-  const onVendorChange = (key: any, formData: any) => {
-    let data = formData[key];
-    setPostObject({ ...postObject, vendor_id: formData[key]['key'] });
-    const list = removeFromArray(['brand_id'], [...dropDownsList]);
-    if (data) {
-      const id = data.key;
-      (async () => {
-        try {
-          const brands: any = await reorderService.getBrands({ vendorId: id });
-          if (brands && brands.brandList && brands.brandList.length) {
-            const indexFound = list.findIndex((obj: any) => obj.key === 'vendor_id');
-            if (indexFound > -1) {
-              const brand = {
-                key: 'brand_id',
-                display: 'Brand *',
-                input_type: 'S',
-                options: brands.brandList,
-              };
-              list.splice(indexFound + 1, 0, brand);
-            }
-          } else {
-            toast.info('Brands are not available select different vendor');
-          }
-          setDropDownsList([...list]);
-        } catch (error) {
-          showError(error);
-          setDropDownsList([...list]);
-        }
-      })();
-    } else {
-      setDropDownsList([...list]);
-    }
-  };
-
-  const onBrandChange = (key: any, formData: any) => {
-    let data = formData[key];
-    setPostObject({ ...postObject, brand_id: formData[key]['id'] });
-    const list = removeFromArray(['attribute'], [...dropDownsList]);
-    if (data) {
-      try {
-        const attributes = [
+  const onDropDownChange = (key: any, formData: any) => {
+    let dataKey = formData[key]?.key || '';
+    if (key === 'vendor_id') {
+      dispatch([ActionType.removeItems, ['brand_id']]);
+      setVendorId(dataKey);
+    } else if (key === 'brand_id') {
+      const attribute = {
+        key: 'attribute',
+        display: 'Attributes',
+        input_type: 'S',
+        options: [
           { key: 'color', name: 'Color' },
           { key: 'age', name: 'Age' },
-        ];
-        if (attributes.length) {
-          const indexFound = list.findIndex((obj: any) => obj.key === 'brand_id');
-          if (indexFound > -1) {
-            const attribute = {
-              key: 'attribute',
-              display: 'Attributes',
-              input_type: 'S',
-              options: attributes,
-            };
-            list.splice(indexFound + 1, 0, attribute);
-          }
-        } else {
-          toast.info('Attributes are not available select different brand');
-        }
-        setDropDownsList([...list]);
-      } catch (error) {
-        showError(error);
-        setDropDownsList([...list]);
-      }
-    }
-  };
-
-  const onAttributeChange = (key: any, formData: any) => {
-    setPostObject({ ...postObject, attribute: formData[key]['key'] });
-  };
-
-  const onDropDownChange = (key: any, formData: any) => {
-    if (key === 'vendor_id') {
-      onVendorChange(key, formData);
-    } else if (key === 'brand_id') {
-      onBrandChange(key, formData);
-    } else if (key === 'attribute') {
-      onAttributeChange(key, formData);
+        ],
+      };
+      dispatch([ActionType.addItems, [attribute]]);
     }
   };
 
@@ -328,6 +313,7 @@ const CrmDashboard = () => {
               variant="contained"
               color="primary"
               type="submit"
+              disabled={data.value !== 'DISABLE'}
               className={classes.clearFilters}
               onClick={(e) => handleAction(data)}
             >
@@ -342,9 +328,9 @@ const CrmDashboard = () => {
 
   const handleAction = (data: IDashboardSetData) => {
     let filterPostData: IFilterPostData = {
-      id: data.vendor,
+      id: data.id,
       group_id: data.constraint_key.group_id,
-      action: data.value === 'ENABLE' ? 'DISABLE' : 'ENABLE',
+      action: data.value.toLowerCase() === 'enable' ? 'disable' : 'enable',
     };
     (async () => {
       try {
@@ -410,6 +396,10 @@ const CrmDashboard = () => {
                                       variant="standard"
                                       name={sideBarOption.name || sideBarOption.key}
                                       label={sideBarOption.label || sideBarOption.display}
+                                      value={
+                                        selectedFilters[sideBarOption.name || sideBarOption.key] ||
+                                        (sideBarOption.multi ? [] : null)
+                                      }
                                       component={Autocomplete}
                                       options={sideBarOption.options || []}
                                       getOptionLabel={(option: ReorderFiltersOptions) =>
@@ -421,12 +411,13 @@ const CrmDashboard = () => {
                                       ) => {
                                         if (evt) {
                                           const keyName = sideBarOption.name || sideBarOption.key;
-                                          const formValues = { [keyName]: values };
+                                          const formValues = { ...selectedFilters, [keyName]: values };
                                           if (sideBarOption.clearFields) {
                                             sideBarOption.clearFields.forEach((element: string) => {
                                               delete formValues[element];
                                             });
                                           }
+                                          setSelectedFilters(formValues);
                                           onDropDownChange(keyName, formValues);
                                         }
                                       }}
@@ -450,7 +441,7 @@ const CrmDashboard = () => {
                               color="primary"
                               variant="outlined"
                               size="large"
-                              disabled={!Object.keys(postObject).length}
+                              // disabled={!Object.keys(postObject).length}
                               style={{
                                 fontWeight: 'bold',
                                 fontSize: 10,
