@@ -21,7 +21,7 @@ const App: FC = () => {
           <MuiThemeProvider theme={LightTheme}>
             <Router basename="/react-monorepo/reorder">
               <Switch>
-                <Redirect exact from="/" to="/clusters" />
+                <Redirect exact from="/" to="/clusters/dashboard" />
                 <Route path="/checks-and-balances">
                   <Suspense fallback={<div>Loading...</div>}>
                     <ChecksAndBalanceDashBoard />

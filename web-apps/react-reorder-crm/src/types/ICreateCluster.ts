@@ -123,3 +123,7 @@ export interface ICreateClusterDropDownProps {
   clearFields?: Array<string>;
   display_position: number;
 }
+
+export interface ICreateClusterProps {
+  header: string;
+}

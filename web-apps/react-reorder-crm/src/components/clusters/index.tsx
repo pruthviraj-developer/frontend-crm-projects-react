@@ -1,14 +1,14 @@
 import React, { FC } from 'react';
 import { LeftNavBar, LeftNavBarProps } from '@hs/components';
 import { DashBoardIcon } from '@hs/icons';
-import { Suspense } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import CreateCluster from './CreateCluster';
 import Dashboard from './Dashboard';
+const baseUrl = '/clusters';
 const navItems: LeftNavBarProps = {
   navList: [
-    { linkUrl: 'create-cluster', linkText: 'Create clusterx', icon: DashBoardIcon },
-    { linkUrl: 'clusters', linkText: 'Reorder Dashboard', icon: DashBoardIcon },
+    { linkUrl: `${baseUrl}/create-cluster`, linkText: 'Create clusterx', icon: DashBoardIcon },
+    { linkUrl: `${baseUrl}/dashboard`, linkText: 'Cluster Dashboard', icon: DashBoardIcon },
   ],
 };
 
@@ -17,20 +17,14 @@ const Cluster: FC = () => {
     <>
       <LeftNavBar {...navItems}></LeftNavBar>
       <Switch>
-        <Route path="/">
-          <Suspense fallback={<div>Loading...</div>}>
-            <Dashboard />
-          </Suspense>
+        <Route path={`${baseUrl}/dashboard`}>
+          <Dashboard />
         </Route>
-        <Route path="/create-cluster">
-          <Suspense fallback={<div>Loading...</div>}>
-            <CreateCluster />
-          </Suspense>
+        <Route path={`${baseUrl}/create-cluster`}>
+          <CreateCluster header="Vendor casepack setup" />
         </Route>
-        <Route path="/edit-cluster/:id/:group_id">
-          <Suspense fallback={<div>Loading...</div>}>
-            <CreateCluster />
-          </Suspense>
+        <Route path={`${baseUrl}/edit-cluster/:id/:group_id`}>
+          <CreateCluster header="Edit Vendor casepack setup" />
         </Route>
       </Switch>
     </>

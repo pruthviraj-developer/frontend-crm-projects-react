@@ -1,11 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Route, Switch, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { toast } from 'react-toastify';
 import { reorderService } from '@hs/services';
 import { ReorderFiltersList, ReorderFiltersObjectProps, ReorderFiltersOptions } from '@hs/components';
-import { LeftNavBar, LeftNavBarProps } from '@hs/components';
-import { DashBoardIcon } from '@hs/icons';
 import { useQuery } from 'react-query';
 import {
   FilterType,
@@ -21,11 +19,9 @@ import {
   IProductTypes,
   ISelectedValues,
   SkuAttributeEntity,
+  ICreateClusterProps,
 } from '../../types/ICreateCluster';
 import { useReducer } from 'react';
-const navItems: LeftNavBarProps = {
-  navList: [{ linkUrl: '/create-cluster', linkText: 'Create cluster', icon: DashBoardIcon }],
-};
 
 const ClusterWrapper = styled.div`
   width: 100%;
@@ -57,7 +53,7 @@ const reducer = (state: ICreateClusterDropDownProps[], [type, payload]: Action):
   return state;
 };
 
-const CreateCluster = () => {
+const CreateCluster = ({ header }: ICreateClusterProps) => {
   const [status, setStatus] = useState<string>(loading);
   const [dropDownsList, dispatch] = useReducer(reducer, []);
   const [defaultSelectedValues, setDefaultSelectedValues] = useState<ISelectedValues>({});
@@ -423,23 +419,11 @@ const CreateCluster = () => {
 
   return (
     <>
-      <LeftNavBar {...navItems}></LeftNavBar>
-      <Switch>
-        <Route path="/">
-          <ClusterWrapper>
-            <h1>Vendor casepack setup</h1>
-            {dropDownsList.length === 0 && <h5> {status} </h5>}
-            {dropDownsList.length > 0 && <ReorderFiltersList {...data} />}
-          </ClusterWrapper>
-        </Route>
-        <Route path="/edit-cluster/:id/:group_id">
-          <ClusterWrapper>
-            <h1>Edit vendor casepack setup</h1>
-            {dropDownsList.length === 0 && <h5> {status} </h5>}
-            {dropDownsList.length > 0 && <ReorderFiltersList {...data} />}
-          </ClusterWrapper>
-        </Route>
-      </Switch>
+      <ClusterWrapper>
+        <h1>{header}</h1>
+        {dropDownsList.length === 0 && <h5> {status} </h5>}
+        {dropDownsList.length > 0 && <ReorderFiltersList {...data} />}
+      </ClusterWrapper>
     </>
   );
 };

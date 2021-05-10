@@ -1,30 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { NavLink, Route, Switch } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import styled from '@emotion/styled';
 import clsx from 'clsx';
 import { toast } from 'react-toastify';
 import { makeStyles } from '@material-ui/core/styles';
 import { TextField as MuiTextField, Paper, Button, Grid } from '@material-ui/core';
 import { reorderService } from '@hs/services';
-import { DashBoardIcon } from '@hs/icons';
 import { Formik, Form, Field } from 'formik';
 import { Autocomplete, AutocompleteRenderInputParams } from 'formik-material-ui-lab';
 import { IDropdownListData, IDashboardSetData, IFilterPostData, IFilterParams } from '../../types/IDashBoard';
-import {
-  LeftNavBar,
-  LeftNavBarProps,
-  ReorderFiltersProps,
-  ReorderFiltersOptions,
-  HSTableV1,
-  HsTablePropsV1,
-} from '@hs/components';
-
-// const navItems: LeftNavBarProps = {
-//   navList: [
-//     { linkUrl: '/create-cluster', linkText: 'Create cluster', icon: DashBoardIcon },
-//     { linkUrl: '/reorder-crm-dashboard', linkText: 'Reorder Dashboard', icon: DashBoardIcon },
-//   ],
-// };
+import { ReorderFiltersProps, ReorderFiltersOptions, HSTableV1, HsTablePropsV1 } from '@hs/components';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -261,7 +246,7 @@ const CrmDashboard = () => {
         if (row) {
           return (
             <>
-              <NavLink to={{ pathname: `/edit-cluster/${row.id}/${row.constraint_key.group_id}` }}>{row.brand}</NavLink>
+              <NavLink to={{ pathname: `edit-cluster/${row.id}/${row.constraint_key.group_id}` }}>{row.brand}</NavLink>
             </>
           );
         }
@@ -378,7 +363,7 @@ const CrmDashboard = () => {
   return (
     <>
       <DashBoardWrapper>
-        <h1 className={classes.header}>Crm Dashboard Page</h1>
+        <h1 className={classes.header}>Vendor Casepack Dashboard</h1>
         <FiltersWrapper className={classes.root}>
           <Formik
             enableReinitialize={true}
