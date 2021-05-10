@@ -131,5 +131,4 @@ export interface IUrlParamsEntity {
 
 export interface ICreateClusterProps {
   header: string;
-  params: IUrlParamsEntity;
 }

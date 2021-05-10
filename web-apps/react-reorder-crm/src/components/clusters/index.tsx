@@ -1,10 +1,9 @@
 import React, { FC } from 'react';
 import { LeftNavBar, LeftNavBarProps } from '@hs/components';
 import { DashBoardIcon } from '@hs/icons';
-import { Route, Switch, useParams } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import CreateCluster from './CreateCluster';
 import Dashboard from './Dashboard';
-import { IUrlParamsEntity } from '../../types/ICreateCluster';
 const baseUrl = '/clusters';
 const navItems: LeftNavBarProps = {
   navList: [
@@ -14,7 +13,6 @@ const navItems: LeftNavBarProps = {
 };
 
 const Cluster: FC = () => {
-  const params = useParams<IUrlParamsEntity>();
   return (
     <>
       <LeftNavBar {...navItems}></LeftNavBar>
@@ -23,10 +21,10 @@ const Cluster: FC = () => {
           <Dashboard />
         </Route>
         <Route path={`${baseUrl}/create-cluster`}>
-          <CreateCluster header="Vendor casepack setup" params={params} key={'Create'} />
+          <CreateCluster header="Vendor casepack setup" key={'Create'} />
         </Route>
         <Route path={`${baseUrl}/edit-cluster/:id/:group_id`}>
-          <CreateCluster header="Edit Vendor casepack setup" params={params} key={`Edit${Math.random() * 100}`} />
+          <CreateCluster header="Edit Vendor casepack setup" key={'Edit'} />
         </Route>
       </Switch>
     </>

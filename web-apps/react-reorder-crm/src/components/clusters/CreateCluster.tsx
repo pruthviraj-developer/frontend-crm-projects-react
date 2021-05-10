@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { toast } from 'react-toastify';
 import { reorderService } from '@hs/services';
@@ -18,6 +19,7 @@ import {
   ISubCategory,
   IProductTypes,
   ISelectedValues,
+  IUrlParamsEntity,
   SkuAttributeEntity,
   ICreateClusterProps,
 } from '../../types/ICreateCluster';
@@ -53,11 +55,12 @@ const reducer = (state: ICreateClusterDropDownProps[], [type, payload]: Action):
   return state;
 };
 
-const CreateCluster = ({ header, params }: ICreateClusterProps) => {
+const CreateCluster = ({ header }: ICreateClusterProps) => {
   const history = useHistory();
   const [status, setStatus] = useState<string>(loading);
   const [dropDownsList, dispatch] = useReducer(reducer, []);
   const [defaultSelectedValues, setDefaultSelectedValues] = useState<ISelectedValues>({});
+  const params = useParams<IUrlParamsEntity>();
   const { data: filtersData, isSuccess: isFilterSuccess } = useQuery<FilterType, Record<string, string>>(
     'filters',
     reorderService.getFilters,
@@ -369,7 +372,7 @@ const CreateCluster = ({ header, params }: ICreateClusterProps) => {
 
   const data: ReorderFiltersObjectProps = {
     sideBar: [...dropDownsList],
-    defaultSelectedValues: defaultSelectedValues,
+    defaultSelectedValues,
     onSubmit: onSubmit,
     onChange: onDropDownChange,
   };
@@ -379,7 +382,7 @@ const CreateCluster = ({ header, params }: ICreateClusterProps) => {
       <ClusterWrapper>
         <h1>{header}</h1>
         {dropDownsList.length === 0 && <h5> {status} </h5>}
-        {dropDownsList.length > 0 && <ReorderFiltersList {...data} />}
+        {dropDownsList.length > 0 && <ReorderFiltersList key={`constraint${Math.random() * 1000}`} {...data} />}
       </ClusterWrapper>
     </>
   );
