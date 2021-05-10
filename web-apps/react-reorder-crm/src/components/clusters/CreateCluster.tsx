@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { toast } from 'react-toastify';
 import { reorderService } from '@hs/services';
 import { ReorderFiltersList, ReorderFiltersObjectProps, ReorderFiltersOptions } from '@hs/components';
 import { useQuery } from 'react-query';
+import { useHistory } from 'react-router-dom';
 import {
   FilterType,
   Brand,
@@ -53,16 +53,17 @@ const reducer = (state: ICreateClusterDropDownProps[], [type, payload]: Action):
   return state;
 };
 
-const CreateCluster = ({ header }: ICreateClusterProps) => {
+const CreateCluster = ({ header, params }: ICreateClusterProps) => {
+  const history = useHistory();
   const [status, setStatus] = useState<string>(loading);
   const [dropDownsList, dispatch] = useReducer(reducer, []);
   const [defaultSelectedValues, setDefaultSelectedValues] = useState<ISelectedValues>({});
-  const params = useParams<{ id: string; group_id: string }>();
   const { data: filtersData, isSuccess: isFilterSuccess } = useQuery<FilterType, Record<string, string>>(
     'filters',
     reorderService.getFilters,
     {
       staleTime: Infinity,
+      retry: false,
       onError: (error) => {
         showError(error);
         setStatus(tryLater);
@@ -75,6 +76,7 @@ const CreateCluster = ({ header }: ICreateClusterProps) => {
     Record<string, string>
   >(['brands', vendorId], () => reorderService.getBrands({ vendorId: vendorId }), {
     staleTime: Infinity,
+    retry: false,
     enabled: vendorId !== '',
   });
 
@@ -84,6 +86,7 @@ const CreateCluster = ({ header }: ICreateClusterProps) => {
     Record<string, string>
   >(['subCategories', categoryId], () => reorderService.getSubCategories({ ids: categoryId }), {
     staleTime: Infinity,
+    retry: false,
     enabled: categoryId !== '',
     onError: (error) => {
       showError(error);
@@ -96,6 +99,7 @@ const CreateCluster = ({ header }: ICreateClusterProps) => {
     Record<string, string>
   >(['productsList', subCategoryId], () => reorderService.getProductTypes({ ids: subCategoryId }), {
     staleTime: Infinity,
+    retry: false,
     enabled: subCategoryId !== '',
     onError: (error) => {
       showError(error);
@@ -108,6 +112,7 @@ const CreateCluster = ({ header }: ICreateClusterProps) => {
     Record<string, string>
   >(['colorsList', attributeId], () => reorderService.getColors(), {
     staleTime: Infinity,
+    retry: false,
     enabled: attributeId === 'color_constraints',
     onError: (error) => {
       showError(error);
@@ -333,9 +338,7 @@ const CreateCluster = ({ header }: ICreateClusterProps) => {
         const constraint: ICreateConstraintResponseType = await reorderService.createConstraint(postObject);
         if (constraint.action === 'success') {
           toast.success(constraint.message || 'Cluster created successfully');
-          setTimeout(() => {
-            window.location.reload();
-          }, 8000);
+          history.push('/clusters/dashboard');
           return;
         }
         showError(constraint);
