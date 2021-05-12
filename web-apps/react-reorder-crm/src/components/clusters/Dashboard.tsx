@@ -191,28 +191,28 @@ const CrmDashboard = () => {
     setFilterParams({ size: filters.pageSize, page: filters.pageNo + 1 });
   };
 
-  const fetchDashboardTableData = (postData: Record<string, unknown>) => {
-    if (postData) {
-      let postFilterData = {
-        vendor_id: postData.vendor_id,
-        brand_id: postData.brand_id,
-        constraint: postData.attribute,
-      };
-      (async () => {
-        try {
-          const constraint: any = await reorderService.getDashboardData({ ...postFilterData, ...filterParams });
-          if (constraint.action === 'success') {
-            toast.success(constraint.message || 'Data found');
-            // setRows(constraint.data);
-            return;
-          }
-          showError(constraint);
-        } catch (error) {
-          showError(error);
-        }
-      })();
-    }
-  };
+  // const fetchDashboardTableData = (postData: Record<string, unknown>) => {
+  //   if (postData) {
+  //     let postFilterData = {
+  //       vendor_id: postData.vendor_id,
+  //       brand_id: postData.brand_id,
+  //       constraint: postData.attribute,
+  //     };
+  //     (async () => {
+  //       try {
+  //         const constraint: any = await reorderService.getDashboardData({ ...postFilterData, ...filterParams });
+  //         if (constraint.action === 'success') {
+  //           toast.success(constraint.message || 'Data found');
+  //           // setRows(constraint.data);
+  //           return;
+  //         }
+  //         showError(constraint);
+  //       } catch (error) {
+  //         showError(error);
+  //       }
+  //     })();
+  //   }
+  // };
 
   const onFiltersSubmit = () => {
     const postObject: Record<string, number> = {};
