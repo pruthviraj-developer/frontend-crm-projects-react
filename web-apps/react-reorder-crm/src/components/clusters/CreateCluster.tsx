@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react';
-import { Route, Switch, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { toast } from 'react-toastify';
 import { reorderService } from '@hs/services';
 import { ReorderFiltersList, ReorderFiltersObjectProps, ReorderFiltersOptions } from '@hs/components';
-import { LeftNavBar, LeftNavBarProps } from '@hs/components';
-import { DashBoardIcon } from '@hs/icons';
 import { useQuery } from 'react-query';
+import { useHistory } from 'react-router-dom';
 import {
   FilterType,
   Brand,
@@ -20,12 +19,11 @@ import {
   ISubCategory,
   IProductTypes,
   ISelectedValues,
+  IUrlParamsEntity,
   SkuAttributeEntity,
-} from '../types/ICreateCluster';
+  ICreateClusterProps,
+} from '../../types/ICreateCluster';
 import { useReducer } from 'react';
-const navItems: LeftNavBarProps = {
-  navList: [{ linkUrl: '/create-cluster', linkText: 'Create cluster', icon: DashBoardIcon }],
-};
 
 const ClusterWrapper = styled.div`
   width: 100%;
@@ -39,7 +37,7 @@ const attributeOptions: Array<ReorderFiltersOptions> = [
   { key: 'age_constraints', name: 'Age Group(Minimum 2) *', type: 'age' },
 ];
 const showError = (error: ICreateConstraintResponseType | Record<string, string>) => {
-  let message = tryLater;
+  let message = error.message || tryLater;
   if (error.action === 'failure') {
     message = error.message;
   }
@@ -57,16 +55,18 @@ const reducer = (state: ICreateClusterDropDownProps[], [type, payload]: Action):
   return state;
 };
 
-const CreateCluster = () => {
+const CreateCluster = ({ header }: ICreateClusterProps) => {
+  const history = useHistory();
   const [status, setStatus] = useState<string>(loading);
   const [dropDownsList, dispatch] = useReducer(reducer, []);
   const [defaultSelectedValues, setDefaultSelectedValues] = useState<ISelectedValues>({});
-  const params = useParams<{ id: string; group_id: string }>();
+  const params = useParams<IUrlParamsEntity>();
   const { data: filtersData, isSuccess: isFilterSuccess } = useQuery<FilterType, Record<string, string>>(
     'filters',
     reorderService.getFilters,
     {
       staleTime: Infinity,
+      retry: false,
       onError: (error) => {
         showError(error);
         setStatus(tryLater);
@@ -79,6 +79,7 @@ const CreateCluster = () => {
     Record<string, string>
   >(['brands', vendorId], () => reorderService.getBrands({ vendorId: vendorId }), {
     staleTime: Infinity,
+    retry: false,
     enabled: vendorId !== '',
   });
 
@@ -88,6 +89,7 @@ const CreateCluster = () => {
     Record<string, string>
   >(['subCategories', categoryId], () => reorderService.getSubCategories({ ids: categoryId }), {
     staleTime: Infinity,
+    retry: false,
     enabled: categoryId !== '',
     onError: (error) => {
       showError(error);
@@ -100,6 +102,7 @@ const CreateCluster = () => {
     Record<string, string>
   >(['productsList', subCategoryId], () => reorderService.getProductTypes({ ids: subCategoryId }), {
     staleTime: Infinity,
+    retry: false,
     enabled: subCategoryId !== '',
     onError: (error) => {
       showError(error);
@@ -112,6 +115,7 @@ const CreateCluster = () => {
     Record<string, string>
   >(['colorsList', attributeId], () => reorderService.getColors(), {
     staleTime: Infinity,
+    retry: false,
     enabled: attributeId === 'color_constraints',
     onError: (error) => {
       showError(error);
@@ -120,7 +124,6 @@ const CreateCluster = () => {
 
   useEffect(() => {
     if (isFilterSuccess) {
-      console.log(filtersData);
       let formList: ICreateClusterDropDownProps[] = [
         {
           key: 'vendor_id',
@@ -232,38 +235,6 @@ const CreateCluster = () => {
 
   useEffect(() => {
     if (params.id && params.group_id) {
-      const response = {
-        action: 'success',
-        message: '',
-        params: null,
-        statusCode: 200,
-        data: {
-          id: 5,
-          vendor_id: { key: 13472, value: '123', second: 123, first: 13472 },
-          brand_id: { id: 14505, display: 'Si Noir' },
-          category_id: { key: 373, value: 'Apparel - Children', second: 'Apparel - Children', first: 373 },
-          sub_category_id: { key: 426, value: 'Bottoms', second: 'Bottoms', first: 426 },
-          product_type_id: { key: 1608, value: 'Palazzos', second: 'Palazzos', first: 1608 },
-          gender: { key: 'GIRL', value: 'Girl', second: 'Girl', first: 'GIRL' },
-          //  constraint_key: {
-          //    name:'color',
-          //    group_id:2,
-          //    value:[{display: 'Blue', key: 'Blue'}, {
-          //     'display': 'Purple',
-          //     'key': 'Purple'
-          //     }]
-          //  }
-          constraint_key: {
-            name: 'age',
-            group_id: 2,
-            value: [
-              { from: 5, to: 8 },
-              { from: 1, to: 3 },
-            ],
-          },
-        },
-      };
-
       (async () => {
         try {
           const constraint: IUpdateConstraintType = await reorderService.getConstraint(params);
@@ -274,9 +245,19 @@ const CreateCluster = () => {
             );
             let attributes = {};
             const attributeKey = attributeData?.key || '';
-            setVendorId(responseData.vendor_id.key);
-            setCategoryId(responseData.category_id.key);
-            setSubCategoryId(responseData.sub_category_id.key);
+            const vendorId = responseData.vendor_id?.key || '';
+            if (vendorId) {
+              setVendorId(vendorId);
+              const categoryId = responseData.category_id?.key || '';
+              if (categoryId) {
+                setCategoryId(categoryId);
+                const subCategory = responseData.sub_category_id?.key || '';
+                if (subCategory) {
+                  setSubCategoryId(subCategory);
+                }
+              }
+            }
+
             setAttributeId(attributeKey);
             if (attributeData) {
               attributes = { attribute: attributeData };
@@ -295,37 +276,14 @@ const CreateCluster = () => {
             showError(constraint);
           }
         } catch (error) {
-          showError(error);
-          // TBR after intergration
-          const data = response.data;
-          const attributeData = attributeOptions.find((attribute) => attribute.type === data.constraint_key.name);
-          let attributes = {};
-          const attributeKey = attributeData?.key || '';
-          setVendorId(data.vendor_id.key);
-          setCategoryId(data.category_id.key);
-          setSubCategoryId(data.sub_category_id.key);
-          setAttributeId(attributeKey);
-          if (attributeData) {
-            attributes = { attribute: attributeData };
-          }
-          setDefaultSelectedValues({
-            vendor_id: data.vendor_id,
-            brand_id: data.brand_id,
-            category_id: data.category_id,
-            sub_category_id: data.sub_category_id,
-            product_type_id: data.product_type_id,
-            gender: data.gender,
-            [attributeKey]: data.constraint_key.value,
-            ...attributes,
-          });
-          // end
+          showError(error.data || error);
         }
       })();
     }
   }, [params]);
 
   const onSubmit = (data: ICreateClusterType | any) => {
-    const postObject: Record<string, unknown> = {};
+    const postObject: ICreateClusterType | any = {};
     [
       'vendor_id',
       'brand_id',
@@ -380,12 +338,10 @@ const CreateCluster = () => {
     }
     (async () => {
       try {
-        const constraint: ICreateConstraintResponseType = await reorderService.createConstraint(postObject);
+        const constraint: ICreateConstraintResponseType = await reorderService.createConstraint(params, postObject);
         if (constraint.action === 'success') {
           toast.success(constraint.message || 'Cluster created successfully');
-          setTimeout(() => {
-            window.location.reload();
-          }, 8000);
+          history.push('/clusters/dashboard');
           return;
         }
         showError(constraint);
@@ -416,30 +372,20 @@ const CreateCluster = () => {
 
   const data: ReorderFiltersObjectProps = {
     sideBar: [...dropDownsList],
-    defaultSelectedValues: defaultSelectedValues,
+    defaultSelectedValues,
     onSubmit: onSubmit,
     onChange: onDropDownChange,
   };
 
   return (
     <>
-      <LeftNavBar {...navItems}></LeftNavBar>
-      <Switch>
-        <Route path="/">
-          <ClusterWrapper>
-            <h1>Vendor casepack setup</h1>
-            {dropDownsList.length === 0 && <h5> {status} </h5>}
-            {dropDownsList.length > 0 && <ReorderFiltersList {...data} />}
-          </ClusterWrapper>
-        </Route>
-        <Route path="/edit-cluster/:id/:group_id">
-          <ClusterWrapper>
-            <h1>Edit vendor casepack setup</h1>
-            {dropDownsList.length === 0 && <h5> {status} </h5>}
-            {dropDownsList.length > 0 && <ReorderFiltersList {...data} />}
-          </ClusterWrapper>
-        </Route>
-      </Switch>
+      <ClusterWrapper>
+        <h1>{header}</h1>
+        {dropDownsList.length === 0 && <h5> {status} </h5>}
+        {dropDownsList.length > 0 && (
+          <ReorderFiltersList key={params.id ? `constraint${Math.random() * 1000}` : 'constraint'} {...data} />
+        )}
+      </ClusterWrapper>
     </>
   );
 };

@@ -123,3 +123,12 @@ export interface ICreateClusterDropDownProps {
   clearFields?: Array<string>;
   display_position: number;
 }
+
+export interface IUrlParamsEntity {
+  id: string;
+  group_id: string;
+}
+
+export interface ICreateClusterProps {
+  header: string;
+}
