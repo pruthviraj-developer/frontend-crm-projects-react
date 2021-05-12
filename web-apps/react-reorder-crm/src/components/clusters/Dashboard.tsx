@@ -148,6 +148,9 @@ const CrmDashboard = () => {
       setRows(dashboardData.data);
       setTotalRowsCount(dashboardData.totalCount);
     }
+    if (isDashboardFetching) {
+      setTotalRowsCount(0);
+    }
   }, [dashboardData, isDashboardSuccess, isDashboardFetching]);
 
   useEffect(() => {
@@ -157,7 +160,7 @@ const CrmDashboard = () => {
           key: 'vendor_id',
           display: 'Vendor *',
           input_type: 'S',
-          clearFields: ['brand_id', 'attribute'],
+          clearFields: ['brand_id', 'constraint'],
           options: filterData?.vendor_id,
           display_position: 1,
         },
@@ -173,7 +176,7 @@ const CrmDashboard = () => {
           key: 'brand_id',
           display: 'Brand *',
           input_type: 'S',
-          clearFields: ['attribute'],
+          clearFields: ['constraint'],
           options: brandData.brandList,
           display_position: 2,
         };
@@ -213,7 +216,7 @@ const CrmDashboard = () => {
 
   const onFiltersSubmit = () => {
     const postObject: Record<string, number> = {};
-    ['vendor_id', 'brand_id', 'attribute'].forEach((ele: string) => {
+    ['vendor_id', 'brand_id', 'constraint'].forEach((ele: string) => {
       if (selectedFilters[ele]) {
         postObject[ele] = selectedFilters[ele]['key'] || selectedFilters[ele]['id'] || selectedFilters[ele];
       }
@@ -354,7 +357,6 @@ const CrmDashboard = () => {
       let filterPostData: IFilterPostData = {
         id: actionData.id,
         group_id: actionData.constraint_key.group_id,
-        action: actionData.value ? actionData.value : 'disable',
       };
       (async () => {
         try {
@@ -372,7 +374,7 @@ const CrmDashboard = () => {
     }
   };
 
-  const tabData: HsTablePropsV1 = {
+  const tableData: HsTablePropsV1 = {
     title: 'Dashboard Table',
     count: totalRowsCount || 0,
     activePage: filterParams.page - 1 || 0,
@@ -478,7 +480,7 @@ const CrmDashboard = () => {
             )}
           </Formik>
         </FiltersWrapper>
-        {tabData.rows && <HSTableV1 {...tabData} />}
+        {totalRowsCount > 0 && <HSTableV1 {...tableData} />}
         <Dialog
           open={confirmDialog}
           onClose={handleDialogClose}
