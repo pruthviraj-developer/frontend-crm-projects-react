@@ -9,13 +9,18 @@ import { reorderService } from '@hs/services';
 import { DashBoardIcon } from '@hs/icons';
 import { Formik, Form, Field } from 'formik';
 import { Autocomplete, AutocompleteRenderInputParams } from 'formik-material-ui-lab';
-import { IDropdownListData, IDashboardSetData, IFilterPostData, IFilterParams } from '../types/IDashBoard';
+import {
+  IDropdownListData,
+  IDashboardResponse,
+  IDashboardSetData,
+  IFilterPostData,
+  IFilterParams,
+} from '../types/IDashBoard';
 import {
   LeftNavBar,
   LeftNavBarProps,
   ReorderFiltersProps,
   ReorderFiltersOptions,
-  ReorderFiltersObjectProps,
   HSTableV1,
   HsTablePropsV1,
 } from '@hs/components';
@@ -82,6 +87,11 @@ const showError = (error: Record<string, string>) => {
   toast.error(message);
 };
 
+const attributeOptions = [
+  { key: 'color', name: 'Color' },
+  { key: 'age', name: 'Age' },
+];
+
 const reducer = (state: ICreateClusterDropDownProps[], [type, payload]: Action): ICreateClusterDropDownProps[] => {
   switch (type) {
     case ActionType.removeItems:
@@ -99,7 +109,7 @@ const CrmDashboard = () => {
   const [dropDownsList, dispatch] = useReducer(reducer, []);
   const [selectedFilters, setSelectedFilters] = useState<ISelectedValues>({});
   const [rows, setRows] = useState<Array<IDashboardSetData>>([]);
-  const [filterParams, setFilterParams] = useState<IFilterParams>({ size: 10, page: 0 });
+  const [filterParams, setFilterParams] = useState<IFilterParams>({ size: 5, page: 1 });
 
   const { data: filterData, isSuccess: isFilterSuccess } = useQuery<FilterType, Record<string, string>>(
     'filters',
@@ -121,6 +131,23 @@ const CrmDashboard = () => {
     enabled: vendorId !== '',
   });
 
+  const { data: dashboardData, isSuccess: isDashboardSuccess, isFetching: isDashboardFetching } = useQuery<any>(
+    'dashboardData',
+    () => reorderService.getDashboardData({ ...filterParams }),
+    {
+      staleTime: 2000,
+      onError: (error: any) => {
+        showError(error);
+      },
+    },
+  );
+
+  useEffect(() => {
+    if (isDashboardSuccess) {
+      setRows(dashboardData.data);
+    }
+  }, [filterParams, dashboardData, isDashboardSuccess, isDashboardFetching]);
+
   useEffect(() => {
     if (isFilterSuccess) {
       let formList: ICreateClusterDropDownProps[] = [
@@ -128,7 +155,7 @@ const CrmDashboard = () => {
           key: 'vendor_id',
           display: 'Vendor *',
           input_type: 'S',
-          clearFields: ['brand_id'],
+          clearFields: ['brand_id', 'attribute'],
           options: filterData?.vendor_id,
           display_position: 1,
         },
@@ -144,6 +171,7 @@ const CrmDashboard = () => {
           key: 'brand_id',
           display: 'Brand *',
           input_type: 'S',
+          clearFields: ['attribute'],
           options: brandData.brandList,
           display_position: 2,
         };
@@ -155,10 +183,10 @@ const CrmDashboard = () => {
   }, [brandData, vendorId, isBrandSuccess, isBrandFetching]);
 
   const getUpdatedTableData = (filters: any) => {
-    setFilterParams({ size: filters.size, page: filters.page });
+    setFilterParams({ ...filterParams, size: filters.pageSize, page: filters.pageNo + 1 });
   };
 
-  const dashboardDataFetch = (postData?: Record<string, unknown>) => {
+  const dashboardDataFetch = (postData: Record<string, unknown>) => {
     if (postData) {
       let postFilterData = {
         vendor_id: postData.vendor_id,
@@ -175,23 +203,6 @@ const CrmDashboard = () => {
             return;
           }
           showError(constraint);
-        } catch (error) {
-          showError(error);
-        }
-      })();
-    } else {
-      (async () => {
-        try {
-          const response = await reorderService.getDashboardData();
-          if (response) {
-            const responseData: any = response;
-            setRows(responseData.data);
-          } else {
-            showError({
-              status: 'failure',
-              errorMessage: 'Data not available',
-            });
-          }
         } catch (error) {
           showError(error);
         }
@@ -213,18 +224,16 @@ const CrmDashboard = () => {
   const onDropDownChange = (key: any, formData: any) => {
     let dataKey = formData[key]?.key || '';
     if (key === 'vendor_id') {
-      dispatch([ActionType.removeItems, ['brand_id']]);
+      dispatch([ActionType.removeItems, ['brand_id', 'attribute']]);
       setVendorId(dataKey);
     } else if (key === 'brand_id') {
       const attribute = {
         key: 'attribute',
         display: 'Attributes',
         input_type: 'S',
-        options: [
-          { key: 'color', name: 'Color' },
-          { key: 'age', name: 'Age' },
-        ],
+        options: attributeOptions,
       };
+      dispatch([ActionType.removeItems, ['attribute']]);
       dispatch([ActionType.addItems, [attribute]]);
     }
   };
@@ -241,12 +250,14 @@ const CrmDashboard = () => {
       label: 'Vendor',
       customRender: (row: IDashboardSetData, isTitle?: boolean) => {
         if (isTitle) {
-          return row.brand;
+          return row.vendor;
         }
         if (row) {
           return (
             <>
-              <NavLink to={{ pathname: `/edit-cluster/${row.id}/${row.constraint_key.group_id}` }}>{row.brand}</NavLink>
+              <NavLink to={{ pathname: `/edit-cluster/${row.id}/${row.constraint_key.group_id}` }}>
+                {row.vendor}
+              </NavLink>
             </>
           );
         }
@@ -293,7 +304,7 @@ const CrmDashboard = () => {
             return (
               <>
                 {row.constraint_key.value.map((record: any, index: number) => (
-                  <li key={'ageLi' + index}>{'From: ' + record.from + ', To: ' + record.to}</li>
+                  <li key={'ageLi' + index}>{'From: ' + record.from_age + ', To: ' + record.to_age}</li>
                 ))}
               </>
             );
@@ -313,11 +324,11 @@ const CrmDashboard = () => {
               variant="contained"
               color="primary"
               type="submit"
-              disabled={data.value !== 'DISABLE'}
+              // disabled={data.value !== 'DISABLE'}
               className={classes.clearFilters}
               onClick={(e) => handleAction(data)}
             >
-              {data.value}
+              {data.value ? data.value : 'DISABLE'}
             </Button>
           );
         }
@@ -330,7 +341,7 @@ const CrmDashboard = () => {
     let filterPostData: IFilterPostData = {
       id: data.id,
       group_id: data.constraint_key.group_id,
-      action: data.value.toLowerCase() === 'enable' ? 'disable' : 'enable',
+      action: data.value ? data.value : 'disable',
     };
     (async () => {
       try {
@@ -347,16 +358,12 @@ const CrmDashboard = () => {
     })();
   };
 
-  useEffect(() => {
-    dashboardDataFetch();
-  }, []);
-
   const tabData: HsTablePropsV1 = {
     title: 'Dashboard Table',
-    count: rows.length,
+    count: rows.length || 0,
     columns: columns,
-    rows: rows,
-    rowsPerPage: 5,
+    rows: rows || [],
+    rowsPerPage: filterParams.size || 5,
     filterRowsPerPage: [5, 10, 15, 20],
     fetchTableData: getUpdatedTableData,
   };
@@ -441,7 +448,7 @@ const CrmDashboard = () => {
                               color="primary"
                               variant="outlined"
                               size="large"
-                              // disabled={!Object.keys(postObject).length}
+                              disabled={!vendorId}
                               style={{
                                 fontWeight: 'bold',
                                 fontSize: 10,

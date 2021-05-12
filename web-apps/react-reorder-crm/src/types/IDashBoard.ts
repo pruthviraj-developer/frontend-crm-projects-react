@@ -56,14 +56,14 @@ export interface ISelectedFilters {
 }
 
 export interface IRecord {
-  from: number;
-  to: number;
+  to_age: string;
+  from_age: string;
 }
 
 export interface IConstraintData {
   group_id: number;
   name: string;
-  value: IRecord[];
+  value: any;
 }
 
 export interface IDashboardSetData {

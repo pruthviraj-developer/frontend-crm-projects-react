@@ -49,7 +49,8 @@ const getBrands = <P, R>(params: P): Promise<R> => {
 };
 
 const getDashboardData = <P, R>(params?: P): Promise<R> => {
-  const url = 'https://run.mocky.io/v3/c319039a-3059-41d6-b637-d9d3e7c4dfed';
+  const url = 'https://run.mocky.io/v3/1075b672-b091-429a-999e-c3f6d963b434';
+  // const url = 'https://run.mocky.io/v3/7d297837-c723-4071-b1a3-f15085627445';
   return httpService.get<R>({ url, params });
 };
 
