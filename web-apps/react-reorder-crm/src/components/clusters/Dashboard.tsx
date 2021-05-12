@@ -2,15 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import styled from '@emotion/styled';
 import clsx from 'clsx';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import { toast } from 'react-toastify';
 import { makeStyles } from '@material-ui/core/styles';
 import { TextField as MuiTextField, Paper, Button, Grid } from '@material-ui/core';
 import { reorderService } from '@hs/services';
-import { DashBoardIcon } from '@hs/icons';
+import { Colors } from '@hs/utils';
 import { Formik, Form, Field } from 'formik';
 import { Autocomplete, AutocompleteRenderInputParams } from 'formik-material-ui-lab';
 import { IDashboardSetData, IFilterPostData, IFilterParams } from '../../types/IDashBoard';
-import { LeftNavBarProps, ReorderFiltersProps, ReorderFiltersOptions, HSTableV1, HsTablePropsV1 } from '@hs/components';
+import { ReorderFiltersProps, ReorderFiltersOptions, HSTableV1, HsTablePropsV1 } from '@hs/components';
 import {
   Brand,
   FilterType,
@@ -21,13 +26,6 @@ import {
 } from '../../types/ICreateCluster';
 import { useQuery } from 'react-query';
 import { useReducer } from 'react';
-
-const navItems: LeftNavBarProps = {
-  navList: [
-    { linkUrl: '/create-cluster', linkText: 'Create cluster', icon: DashBoardIcon },
-    { linkUrl: '/reorder-crm-dashboard', linkText: 'Reorder Dashboard', icon: DashBoardIcon },
-  ],
-};
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -53,6 +51,15 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '12px',
     marginTop: '5px',
     padding: '10px 0',
+  },
+  dialogTitle: {
+    fontSize: 18,
+    fontWeight: 600,
+  },
+  dialogDescription: {
+    color: Colors.PINK[500],
+    fontSize: 16,
+    fontWeight: 600,
   },
 }));
 
@@ -97,6 +104,8 @@ const CrmDashboard = () => {
   const [selectedFilters, setSelectedFilters] = useState<ISelectedValues>({});
   const [rows, setRows] = useState<Array<IDashboardSetData>>([]);
   const [filterParams, setFilterParams] = useState<IFilterParams>({ size: 5, page: 1 });
+  const [confirmDialog, showConfirmDialog] = useState(false);
+  const [actionData, setActionData] = useState<IDashboardSetData>();
 
   const { data: filterData, isSuccess: isFilterSuccess } = useQuery<FilterType, Record<string, string>>(
     'filters',
@@ -133,7 +142,7 @@ const CrmDashboard = () => {
     if (isDashboardSuccess) {
       setRows(dashboardData.data);
     }
-  }, [filterParams, dashboardData, isDashboardSuccess, isDashboardFetching]);
+  }, [dashboardData, isDashboardSuccess, isDashboardFetching]);
 
   useEffect(() => {
     if (isFilterSuccess) {
@@ -170,7 +179,7 @@ const CrmDashboard = () => {
   }, [brandData, vendorId, isBrandSuccess, isBrandFetching]);
 
   const getUpdatedTableData = (filters: any) => {
-    setFilterParams({ ...filterParams, size: filters.pageSize, page: filters.pageNo + 1 });
+    setFilterParams({ size: filters.pageSize, page: filters.pageNo + 1 });
   };
 
   const dashboardDataFetch = (postData: Record<string, unknown>) => {
@@ -182,8 +191,7 @@ const CrmDashboard = () => {
       };
       (async () => {
         try {
-          const params = { ...filterParams, page: filterParams.page + 1 };
-          const constraint: any = await reorderService.getDashboardFilteredData({ ...postFilterData, ...params });
+          const constraint: any = await reorderService.getDashboardFilteredData({ ...postFilterData, ...filterParams });
           if (constraint.action === 'success') {
             toast.success(constraint.message || 'Data found');
             setRows(constraint.data);
@@ -208,6 +216,10 @@ const CrmDashboard = () => {
     dashboardDataFetch(postObject);
   };
 
+  useEffect(() => {
+    onSubmit();
+  }, [filterParams]);
+
   const onDropDownChange = (key: any, formData: any) => {
     let dataKey = formData[key]?.key || '';
     if (key === 'vendor_id') {
@@ -223,6 +235,15 @@ const CrmDashboard = () => {
       dispatch([ActionType.removeItems, ['attribute']]);
       dispatch([ActionType.addItems, [attribute]]);
     }
+  };
+
+  const handleDialogClose = () => {
+    showConfirmDialog(false);
+  };
+
+  const updateAction = (data: IDashboardSetData) => {
+    showConfirmDialog(true);
+    setActionData(data);
   };
 
   const columns = [
@@ -309,11 +330,11 @@ const CrmDashboard = () => {
               variant="contained"
               color="primary"
               type="submit"
-              // disabled={data.value !== 'DISABLE'}
+              disabled={!data.constraint_key.active}
               className={classes.clearFilters}
-              onClick={(e) => handleAction(data)}
+              onClick={(e) => updateAction(data)}
             >
-              {data.value ? data.value : 'DISABLE'}
+              {data.constraint_key.active ? 'DISABLE' : 'DISABLED'}
             </Button>
           );
         }
@@ -322,25 +343,28 @@ const CrmDashboard = () => {
     },
   ];
 
-  const handleAction = (data: IDashboardSetData) => {
-    let filterPostData: IFilterPostData = {
-      id: data.id,
-      group_id: data.constraint_key.group_id,
-      action: data.value ? data.value : 'disable',
-    };
-    (async () => {
-      try {
-        const filterData: any = await reorderService.updateDashboardAction(filterPostData);
-        if (filterData.action === 'success') {
-          toast.success(filterData.message || 'Data found');
-          setRows(filterData.data);
-          return;
+  const handleAction = () => {
+    handleDialogClose();
+    if (actionData) {
+      let filterPostData: IFilterPostData = {
+        id: actionData.id,
+        group_id: actionData.constraint_key.group_id,
+        action: actionData.value ? actionData.value : 'disable',
+      };
+      (async () => {
+        try {
+          const filterData: any = await reorderService.updateDashboardAction(filterPostData);
+          if (filterData.action === 'success') {
+            toast.success(filterData.message || 'Data found');
+            setRows(filterData.data);
+            return;
+          }
+          showError(filterData);
+        } catch (error) {
+          showError(error);
         }
-        showError(filterData);
-      } catch (error) {
-        showError(error);
-      }
-    })();
+      })();
+    }
   };
 
   const tabData: HsTablePropsV1 = {
@@ -449,6 +473,29 @@ const CrmDashboard = () => {
           </Formik>
         </FiltersWrapper>
         {tabData.rows && <HSTableV1 {...tabData} />}
+        <Dialog
+          open={confirmDialog}
+          onClose={handleDialogClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">
+            <span className={classes.dialogTitle}>Confirmation</span>
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              <span className={classes.dialogDescription}>Do you want to proceed with disable?</span>
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button variant="contained" color="primary" onClick={handleDialogClose}>
+              No
+            </Button>
+            <Button variant="contained" color="primary" onClick={() => handleAction()} autoFocus>
+              Yes
+            </Button>
+          </DialogActions>
+        </Dialog>
       </DashBoardWrapper>
     </>
   );

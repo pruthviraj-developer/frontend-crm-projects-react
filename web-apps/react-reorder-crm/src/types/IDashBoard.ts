@@ -64,6 +64,7 @@ export interface IConstraintData {
   group_id: number;
   name: string;
   value: any;
+  active: boolean;
 }
 
 export interface IDashboardSetData {
