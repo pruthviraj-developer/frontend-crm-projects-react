@@ -62,12 +62,7 @@ const getBrands = <P, R>(params: P): Promise<R> => {
 };
 
 const getDashboardData = <P, R>(params?: P): Promise<R> => {
-  const url = 'https://run.mocky.io/v3/0d40009e-438c-47e9-8f25-76dc94bc9330';
-  return httpService.get<R>({ url, params });
-};
-
-const getDashboardFilteredData = <P, R>(params?: P): Promise<R> => {
-  const url = '/crm-api/intranet/getdashboardbyfilter';
+  const url = '/crm-api/assortment-plan-api/util/dashboard';
   return httpService.get<R>({ url, params });
 };
 
@@ -88,6 +83,5 @@ export const reorderService = {
   getTableData,
   updateOrders,
   getDashboardData,
-  getDashboardFilteredData,
   updateDashboardAction,
 };

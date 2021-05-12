@@ -86,6 +86,8 @@ const attributeOptions = [
   { key: 'age', name: 'Age' },
 ];
 
+const defaultPageFilters = { size: 5, page: 1 };
+
 const reducer = (state: ICreateClusterDropDownProps[], [type, payload]: Action): ICreateClusterDropDownProps[] => {
   switch (type) {
     case ActionType.removeItems:
@@ -103,7 +105,9 @@ const CrmDashboard = () => {
   const [dropDownsList, dispatch] = useReducer(reducer, []);
   const [selectedFilters, setSelectedFilters] = useState<ISelectedValues>({});
   const [rows, setRows] = useState<Array<IDashboardSetData>>([]);
-  const [filterParams, setFilterParams] = useState<IFilterParams>({ size: 5, page: 1 });
+  const [totalRowsCount, setTotalRowsCount] = useState<number>(0);
+  const [postDataFiltersObject, setPostDataFiltersObject] = useState({});
+  const [filterParams, setFilterParams] = useState<IFilterParams>(defaultPageFilters);
   const [confirmDialog, showConfirmDialog] = useState(false);
   const [actionData, setActionData] = useState<IDashboardSetData>();
 
@@ -128,12 +132,13 @@ const CrmDashboard = () => {
   });
 
   const { data: dashboardData, isSuccess: isDashboardSuccess, isFetching: isDashboardFetching } = useQuery<any>(
-    'dashboardData',
-    () => reorderService.getDashboardData({ ...filterParams }),
+    ['dashboardData', postDataFiltersObject, filterParams],
+    () => reorderService.getDashboardData({ ...postDataFiltersObject, ...filterParams }),
     {
       staleTime: 2000,
       onError: (error: any) => {
         showError(error);
+        setTotalRowsCount(0);
       },
     },
   );
@@ -141,6 +146,7 @@ const CrmDashboard = () => {
   useEffect(() => {
     if (isDashboardSuccess) {
       setRows(dashboardData.data);
+      setTotalRowsCount(dashboardData.totalCount);
     }
   }, [dashboardData, isDashboardSuccess, isDashboardFetching]);
 
@@ -182,7 +188,7 @@ const CrmDashboard = () => {
     setFilterParams({ size: filters.pageSize, page: filters.pageNo + 1 });
   };
 
-  const dashboardDataFetch = (postData: Record<string, unknown>) => {
+  const fetchDashboardTableData = (postData: Record<string, unknown>) => {
     if (postData) {
       let postFilterData = {
         vendor_id: postData.vendor_id,
@@ -191,10 +197,10 @@ const CrmDashboard = () => {
       };
       (async () => {
         try {
-          const constraint: any = await reorderService.getDashboardFilteredData({ ...postFilterData, ...filterParams });
+          const constraint: any = await reorderService.getDashboardData({ ...postFilterData, ...filterParams });
           if (constraint.action === 'success') {
             toast.success(constraint.message || 'Data found');
-            setRows(constraint.data);
+            // setRows(constraint.data);
             return;
           }
           showError(constraint);
@@ -205,34 +211,31 @@ const CrmDashboard = () => {
     }
   };
 
-  const onSubmit = () => {
+  const onFiltersSubmit = () => {
     const postObject: Record<string, number> = {};
     ['vendor_id', 'brand_id', 'attribute'].forEach((ele: string) => {
       if (selectedFilters[ele]) {
         postObject[ele] = selectedFilters[ele]['key'] || selectedFilters[ele]['id'] || selectedFilters[ele];
       }
     });
-
-    dashboardDataFetch(postObject);
+    setFilterParams({ ...defaultPageFilters });
+    setPostDataFiltersObject(postObject);
+    // fetchDashboardTableData(postObject);
   };
-
-  useEffect(() => {
-    onSubmit();
-  }, [filterParams]);
 
   const onDropDownChange = (key: any, formData: any) => {
     let dataKey = formData[key]?.key || '';
     if (key === 'vendor_id') {
-      dispatch([ActionType.removeItems, ['brand_id', 'attribute']]);
+      dispatch([ActionType.removeItems, ['brand_id', 'constraint']]);
       setVendorId(dataKey);
     } else if (key === 'brand_id') {
       const attribute = {
-        key: 'attribute',
+        key: 'constraint',
         display: 'Attributes',
         input_type: 'S',
         options: attributeOptions,
       };
-      dispatch([ActionType.removeItems, ['attribute']]);
+      dispatch([ActionType.removeItems, ['constraint']]);
       dispatch([ActionType.addItems, [attribute]]);
     }
   };
@@ -292,7 +295,7 @@ const CrmDashboard = () => {
     { id: 'product_type', label: 'Product Type', width: 80 },
     { id: 'gender', label: 'Gender', width: 80 },
     {
-      id: 'attribute',
+      id: 'constraint',
       label: 'Attribute',
       customRender: (row: IDashboardSetData, isTitle?: boolean) => {
         if (row) {
@@ -314,8 +317,10 @@ const CrmDashboard = () => {
                 ))}
               </>
             );
-          } else {
+          } else if (row.constraint_key.name === 'color') {
             return <>{row.constraint_key.value.join(',')}</>;
+          } else {
+            return <>--</>;
           }
         }
         return '--';
@@ -330,11 +335,11 @@ const CrmDashboard = () => {
               variant="contained"
               color="primary"
               type="submit"
-              disabled={!data.constraint_key.active}
+              disabled={!data.is_active}
               className={classes.clearFilters}
               onClick={(e) => updateAction(data)}
             >
-              {data.constraint_key.active ? 'DISABLE' : 'DISABLED'}
+              {data.is_active ? 'DISABLE' : 'DISABLED'}
             </Button>
           );
         }
@@ -356,7 +361,7 @@ const CrmDashboard = () => {
           const filterData: any = await reorderService.updateDashboardAction(filterPostData);
           if (filterData.action === 'success') {
             toast.success(filterData.message || 'Data found');
-            setRows(filterData.data);
+            setFilterParams(defaultPageFilters);
             return;
           }
           showError(filterData);
@@ -369,7 +374,8 @@ const CrmDashboard = () => {
 
   const tabData: HsTablePropsV1 = {
     title: 'Dashboard Table',
-    count: rows.length || 0,
+    count: totalRowsCount || 0,
+    activePage: filterParams.page - 1 || 0,
     columns: columns,
     rows: rows || [],
     rowsPerPage: filterParams.size || 5,
@@ -387,7 +393,7 @@ const CrmDashboard = () => {
             initialValues={{}}
             onSubmit={(values, actions) => {
               actions.setSubmitting(false);
-              onSubmit();
+              onFiltersSubmit();
             }}
           >
             {() => (

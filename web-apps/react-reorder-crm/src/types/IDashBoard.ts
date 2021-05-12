@@ -64,7 +64,6 @@ export interface IConstraintData {
   group_id: number;
   name: string;
   value: any;
-  active: boolean;
 }
 
 export interface IDashboardSetData {
@@ -77,6 +76,7 @@ export interface IDashboardSetData {
   vendor: number | string;
   category: string;
   gender: string;
+  is_active: boolean;
 }
 
 export interface IDashboardResponse {
