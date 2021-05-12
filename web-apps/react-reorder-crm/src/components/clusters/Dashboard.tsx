@@ -2,14 +2,30 @@ import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import styled from '@emotion/styled';
 import clsx from 'clsx';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import { toast } from 'react-toastify';
 import { makeStyles } from '@material-ui/core/styles';
 import { TextField as MuiTextField, Paper, Button, Grid } from '@material-ui/core';
 import { reorderService } from '@hs/services';
+import { Colors } from '@hs/utils';
 import { Formik, Form, Field } from 'formik';
 import { Autocomplete, AutocompleteRenderInputParams } from 'formik-material-ui-lab';
-import { IDropdownListData, IDashboardSetData, IFilterPostData, IFilterParams } from '../../types/IDashBoard';
+import { IDashboardSetData, IFilterPostData, IFilterParams } from '../../types/IDashBoard';
 import { ReorderFiltersProps, ReorderFiltersOptions, HSTableV1, HsTablePropsV1 } from '@hs/components';
+import {
+  Brand,
+  FilterType,
+  ICreateClusterDropDownProps,
+  Action,
+  ActionType,
+  ISelectedValues,
+} from '../../types/ICreateCluster';
+import { useQuery } from 'react-query';
+import { useReducer } from 'react';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -36,6 +52,15 @@ const useStyles = makeStyles((theme) => ({
     marginTop: '5px',
     padding: '10px 0',
   },
+  dialogTitle: {
+    fontSize: 18,
+    fontWeight: 600,
+  },
+  dialogDescription: {
+    color: Colors.PINK[500],
+    fontSize: 16,
+    fontWeight: 600,
+  },
 }));
 
 const DashBoardWrapper = styled.div`
@@ -56,177 +81,175 @@ const showError = (error: Record<string, string>) => {
   toast.error(message);
 };
 
+const attributeOptions = [
+  { key: 'color', name: 'Color' },
+  { key: 'age', name: 'Age' },
+];
+
+const defaultPageFilters = { size: 5, page: 1 };
+
+const reducer = (state: ICreateClusterDropDownProps[], [type, payload]: Action): ICreateClusterDropDownProps[] => {
+  switch (type) {
+    case ActionType.removeItems:
+      return state.filter((item) => !(payload as string[]).includes(item.key));
+    case ActionType.addItems:
+      return [...state, ...(payload as ICreateClusterDropDownProps[])].sort(
+        (a, b) => a.display_position - b.display_position,
+      );
+  }
+  return state;
+};
+
 const CrmDashboard = () => {
   const classes = useStyles();
-  const [dropDownsList, setDropDownsList] = useState<Array<IDropdownListData>>([]);
+  const [dropDownsList, dispatch] = useReducer(reducer, []);
+  const [selectedFilters, setSelectedFilters] = useState<ISelectedValues>({});
   const [rows, setRows] = useState<Array<IDashboardSetData>>([]);
-  const [filterParams, setFilterParams] = useState<IFilterParams>({ size: 10, page: 0 });
-  const [postObject, setPostObject] = useState({});
+  const [totalRowsCount, setTotalRowsCount] = useState<number>(0);
+  const [postDataFiltersObject, setPostDataFiltersObject] = useState({});
+  const [filterParams, setFilterParams] = useState<IFilterParams>(defaultPageFilters);
+  const [confirmDialog, showConfirmDialog] = useState(false);
+  const [actionData, setActionData] = useState<IDashboardSetData>();
 
-  const getUpdatedTableData = (filters: any) => {
-    setFilterParams({ size: filters.size, page: filters.page });
-  };
+  const { data: filterData, isSuccess: isFilterSuccess } = useQuery<FilterType, Record<string, string>>(
+    'filters',
+    reorderService.getFilters,
+    {
+      staleTime: Infinity,
+      onError: (error: Record<string, string>) => {
+        showError(error);
+      },
+    },
+  );
 
-  const dashboardDataFetch = (postData?: Record<string, unknown>) => {
-    if (postData) {
-      let postFilterData = {
-        vendor_id: postData.vendor_id,
-        brand_id: postData.brand_id,
-        constraint: postData.attribute === 'age' ? { key: 'age' } : { key: 'color' },
-      };
-      (async () => {
-        try {
-          const params = { ...filterParams, page: filterParams.page + 1 };
-          const constraint: any = await reorderService.getDashboardFilteredData({ ...postFilterData, ...params });
-          if (constraint.action === 'success') {
-            toast.success(constraint.message || 'Data found');
-            setRows(constraint.data);
-            return;
-          }
-          showError(constraint);
-        } catch (error) {
-          showError(error);
-        }
-      })();
-    } else {
-      (async () => {
-        try {
-          const response = await reorderService.getDashboardData();
-          if (response) {
-            const responseData: any = response;
-            setRows(responseData.data);
-          } else {
-            showError({
-              status: 'failure',
-              errorMessage: 'Data not available',
-            });
-          }
-        } catch (error) {
-          showError(error);
-        }
-      })();
-    }
-  };
+  const [vendorId, setVendorId] = useState<string | number>('');
+  const { data: brandData, isSuccess: isBrandSuccess, isFetching: isBrandFetching } = useQuery<
+    Brand,
+    Record<string, string>
+  >(['brands', vendorId], () => reorderService.getBrands({ vendorId: vendorId }), {
+    staleTime: Infinity,
+    enabled: vendorId !== '',
+  });
 
-  const onSubmit = () => {
-    dashboardDataFetch(postObject);
-  };
-
-  const removeFromArray = (elements: Array<any>, filtersList: Array<any>) => {
-    const list = [...filtersList];
-    [...elements].forEach((ele: string) => {
-      const removeElement = list.findIndex((obj: any) => obj.key === ele);
-      if (removeElement > -1) {
-        list.splice(removeElement, 1);
-      }
-    });
-    return list;
-  };
+  const { data: dashboardData, isSuccess: isDashboardSuccess, isFetching: isDashboardFetching } = useQuery<any>(
+    ['dashboardData', postDataFiltersObject, filterParams],
+    () => reorderService.getDashboardData({ ...postDataFiltersObject, ...filterParams }),
+    {
+      staleTime: 2000,
+      onError: (error: any) => {
+        showError(error);
+        setTotalRowsCount(0);
+      },
+    },
+  );
 
   useEffect(() => {
-    (async () => {
-      try {
-        const filters: any = await reorderService.getFilters();
-        if (filters) {
-          const dropDownsList = [
-            {
-              key: 'vendor_id',
-              display: 'Vendor',
-              input_type: 'S',
-              clearFields: ['brand_id'],
-            },
-          ];
-          dropDownsList.forEach((element: ReorderFiltersProps) => {
-            if (filters[element.key]) {
-              element['options'] = filters[element.key];
-            }
-          });
-          setDropDownsList([...dropDownsList]);
-        }
-      } catch (error) {
-        showError(error);
-      }
-    })();
-  }, []);
-
-  const onVendorChange = (key: any, formData: any) => {
-    let data = formData[key];
-    setPostObject({ ...postObject, vendor_id: formData[key]['key'] });
-    const list = removeFromArray(['brand_id'], [...dropDownsList]);
-    if (data) {
-      const id = data.key;
-      (async () => {
-        try {
-          const brands: any = await reorderService.getBrands({ vendorId: id });
-          if (brands && brands.brandList && brands.brandList.length) {
-            const indexFound = list.findIndex((obj: any) => obj.key === 'vendor_id');
-            if (indexFound > -1) {
-              const brand = {
-                key: 'brand_id',
-                display: 'Brand *',
-                input_type: 'S',
-                options: brands.brandList,
-              };
-              list.splice(indexFound + 1, 0, brand);
-            }
-          } else {
-            toast.info('Brands are not available select different vendor');
-          }
-          setDropDownsList([...list]);
-        } catch (error) {
-          showError(error);
-          setDropDownsList([...list]);
-        }
-      })();
-    } else {
-      setDropDownsList([...list]);
+    if (isDashboardSuccess) {
+      setRows(dashboardData.data);
+      setTotalRowsCount(dashboardData.totalCount);
     }
-  };
+    if (isDashboardFetching) {
+      setTotalRowsCount(0);
+    }
+  }, [dashboardData, isDashboardSuccess, isDashboardFetching]);
 
-  const onBrandChange = (key: any, formData: any) => {
-    let data = formData[key];
-    setPostObject({ ...postObject, brand_id: formData[key]['id'] });
-    const list = removeFromArray(['attribute'], [...dropDownsList]);
-    if (data) {
-      try {
-        const attributes = [
-          { key: 'color', name: 'Color' },
-          { key: 'age', name: 'Age' },
-        ];
-        if (attributes.length) {
-          const indexFound = list.findIndex((obj: any) => obj.key === 'brand_id');
-          if (indexFound > -1) {
-            const attribute = {
-              key: 'attribute',
-              display: 'Attributes',
-              input_type: 'S',
-              options: attributes,
-            };
-            list.splice(indexFound + 1, 0, attribute);
-          }
-        } else {
-          toast.info('Attributes are not available select different brand');
-        }
-        setDropDownsList([...list]);
-      } catch (error) {
-        showError(error);
-        setDropDownsList([...list]);
+  useEffect(() => {
+    if (isFilterSuccess) {
+      let formList: ICreateClusterDropDownProps[] = [
+        {
+          key: 'vendor_id',
+          display: 'Vendor *',
+          input_type: 'S',
+          clearFields: ['brand_id', 'constraint'],
+          options: filterData?.vendor_id,
+          display_position: 1,
+        },
+      ];
+      dispatch([ActionType.addItems, formList]);
+    }
+  }, [filterData, isFilterSuccess]);
+
+  useEffect(() => {
+    if (isBrandSuccess) {
+      if (brandData && brandData.brandList && brandData.brandList.length) {
+        const brand: ICreateClusterDropDownProps = {
+          key: 'brand_id',
+          display: 'Brand *',
+          input_type: 'S',
+          clearFields: ['constraint'],
+          options: brandData.brandList,
+          display_position: 2,
+        };
+        dispatch([ActionType.addItems, [brand]]);
+      } else {
+        !isBrandFetching && vendorId !== '' && toast.info('Brands are not available select different vendor');
       }
     }
+  }, [brandData, vendorId, isBrandSuccess, isBrandFetching]);
+
+  const getUpdatedTableData = (filters: any) => {
+    setFilterParams({ size: filters.pageSize, page: filters.pageNo + 1 });
   };
 
-  const onAttributeChange = (key: any, formData: any) => {
-    setPostObject({ ...postObject, attribute: formData[key]['key'] });
+  // const fetchDashboardTableData = (postData: Record<string, unknown>) => {
+  //   if (postData) {
+  //     let postFilterData = {
+  //       vendor_id: postData.vendor_id,
+  //       brand_id: postData.brand_id,
+  //       constraint: postData.attribute,
+  //     };
+  //     (async () => {
+  //       try {
+  //         const constraint: any = await reorderService.getDashboardData({ ...postFilterData, ...filterParams });
+  //         if (constraint.action === 'success') {
+  //           toast.success(constraint.message || 'Data found');
+  //           // setRows(constraint.data);
+  //           return;
+  //         }
+  //         showError(constraint);
+  //       } catch (error) {
+  //         showError(error);
+  //       }
+  //     })();
+  //   }
+  // };
+
+  const onFiltersSubmit = () => {
+    const postObject: Record<string, number> = {};
+    ['vendor_id', 'brand_id', 'constraint'].forEach((ele: string) => {
+      if (selectedFilters[ele]) {
+        postObject[ele] = selectedFilters[ele]['key'] || selectedFilters[ele]['id'] || selectedFilters[ele];
+      }
+    });
+    setFilterParams({ ...defaultPageFilters });
+    setPostDataFiltersObject(postObject);
+    // fetchDashboardTableData(postObject);
   };
 
   const onDropDownChange = (key: any, formData: any) => {
+    let dataKey = formData[key]?.key || '';
     if (key === 'vendor_id') {
-      onVendorChange(key, formData);
+      dispatch([ActionType.removeItems, ['brand_id', 'constraint']]);
+      setVendorId(dataKey);
     } else if (key === 'brand_id') {
-      onBrandChange(key, formData);
-    } else if (key === 'attribute') {
-      onAttributeChange(key, formData);
+      const attribute = {
+        key: 'constraint',
+        display: 'Attributes',
+        input_type: 'S',
+        options: attributeOptions,
+      };
+      dispatch([ActionType.removeItems, ['constraint']]);
+      dispatch([ActionType.addItems, [attribute]]);
     }
+  };
+
+  const handleDialogClose = () => {
+    showConfirmDialog(false);
+  };
+
+  const updateAction = (data: IDashboardSetData) => {
+    showConfirmDialog(true);
+    setActionData(data);
   };
 
   const columns = [
@@ -241,12 +264,12 @@ const CrmDashboard = () => {
       label: 'Vendor',
       customRender: (row: IDashboardSetData, isTitle?: boolean) => {
         if (isTitle) {
-          return row.brand;
+          return row.vendor;
         }
         if (row) {
           return (
             <>
-              <NavLink to={{ pathname: `edit-cluster/${row.id}/${row.constraint_key.group_id}` }}>{row.brand}</NavLink>
+              <NavLink to={{ pathname: `edit-cluster/${row.id}/${row.constraint_key.group_id}` }}>{row.vendor}</NavLink>
             </>
           );
         }
@@ -275,7 +298,7 @@ const CrmDashboard = () => {
     { id: 'product_type', label: 'Product Type', width: 80 },
     { id: 'gender', label: 'Gender', width: 80 },
     {
-      id: 'attribute',
+      id: 'constraint',
       label: 'Attribute',
       customRender: (row: IDashboardSetData, isTitle?: boolean) => {
         if (row) {
@@ -293,12 +316,14 @@ const CrmDashboard = () => {
             return (
               <>
                 {row.constraint_key.value.map((record: any, index: number) => (
-                  <li key={'ageLi' + index}>{'From: ' + record.from + ', To: ' + record.to}</li>
+                  <li key={'ageLi' + index}>{'From: ' + record.from_age + ', To: ' + record.to_age}</li>
                 ))}
               </>
             );
-          } else {
+          } else if (row.constraint_key.name === 'color') {
             return <>{row.constraint_key.value.join(',')}</>;
+          } else {
+            return <>--</>;
           }
         }
         return '--';
@@ -313,10 +338,11 @@ const CrmDashboard = () => {
               variant="contained"
               color="primary"
               type="submit"
+              disabled={!data.is_active}
               className={classes.clearFilters}
-              onClick={(e) => handleAction(data)}
+              onClick={(e) => updateAction(data)}
             >
-              {data.value}
+              {data.is_active ? 'DISABLE' : 'DISABLED'}
             </Button>
           );
         }
@@ -325,37 +351,36 @@ const CrmDashboard = () => {
     },
   ];
 
-  const handleAction = (data: IDashboardSetData) => {
-    let filterPostData: IFilterPostData = {
-      id: data.vendor,
-      group_id: data.constraint_key.group_id,
-      action: data.value === 'ENABLE' ? 'DISABLE' : 'ENABLE',
-    };
-    (async () => {
-      try {
-        const filterData: any = await reorderService.updateDashboardAction(filterPostData);
-        if (filterData.action === 'success') {
-          toast.success(filterData.message || 'Data found');
-          setRows(filterData.data);
-          return;
+  const handleAction = () => {
+    handleDialogClose();
+    if (actionData) {
+      let filterPostData: IFilterPostData = {
+        id: actionData.id,
+        group_id: actionData.constraint_key.group_id,
+      };
+      (async () => {
+        try {
+          const filterData: any = await reorderService.updateDashboardAction(filterPostData);
+          if (filterData.action === 'success') {
+            toast.success(filterData.message || 'Data found');
+            setFilterParams(defaultPageFilters);
+            return;
+          }
+          showError(filterData);
+        } catch (error) {
+          showError(error);
         }
-        showError(filterData);
-      } catch (error) {
-        showError(error);
-      }
-    })();
+      })();
+    }
   };
 
-  useEffect(() => {
-    dashboardDataFetch();
-  }, []);
-
-  const tabData: HsTablePropsV1 = {
+  const tableData: HsTablePropsV1 = {
     title: 'Dashboard Table',
-    count: rows.length,
+    count: totalRowsCount || 0,
+    activePage: filterParams.page - 1 || 0,
     columns: columns,
-    rows: rows,
-    rowsPerPage: 5,
+    rows: rows || [],
+    rowsPerPage: filterParams.size || 5,
     filterRowsPerPage: [5, 10, 15, 20],
     fetchTableData: getUpdatedTableData,
   };
@@ -370,7 +395,7 @@ const CrmDashboard = () => {
             initialValues={{}}
             onSubmit={(values, actions) => {
               actions.setSubmitting(false);
-              onSubmit();
+              onFiltersSubmit();
             }}
           >
             {() => (
@@ -392,6 +417,10 @@ const CrmDashboard = () => {
                                   variant="standard"
                                   name={sideBarOption.name || sideBarOption.key}
                                   label={sideBarOption.label || sideBarOption.display}
+                                  value={
+                                    selectedFilters[sideBarOption.name || sideBarOption.key] ||
+                                    (sideBarOption.multi ? [] : null)
+                                  }
                                   component={Autocomplete}
                                   options={sideBarOption.options || []}
                                   getOptionLabel={(option: ReorderFiltersOptions) =>
@@ -403,12 +432,13 @@ const CrmDashboard = () => {
                                   ) => {
                                     if (evt) {
                                       const keyName = sideBarOption.name || sideBarOption.key;
-                                      const formValues = { [keyName]: values };
+                                      const formValues = { ...selectedFilters, [keyName]: values };
                                       if (sideBarOption.clearFields) {
                                         sideBarOption.clearFields.forEach((element: string) => {
                                           delete formValues[element];
                                         });
                                       }
+                                      setSelectedFilters(formValues);
                                       onDropDownChange(keyName, formValues);
                                     }
                                   }}
@@ -432,7 +462,7 @@ const CrmDashboard = () => {
                           color="primary"
                           variant="outlined"
                           size="large"
-                          disabled={!Object.keys(postObject).length}
+                          disabled={!vendorId}
                           style={{
                             fontWeight: 'bold',
                             fontSize: 10,
@@ -450,7 +480,30 @@ const CrmDashboard = () => {
             )}
           </Formik>
         </FiltersWrapper>
-        {tabData.rows && <HSTableV1 {...tabData} />}
+        {totalRowsCount > 0 && <HSTableV1 {...tableData} />}
+        <Dialog
+          open={confirmDialog}
+          onClose={handleDialogClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">
+            <span className={classes.dialogTitle}>Confirmation</span>
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              <span className={classes.dialogDescription}>Do you want to proceed with disable?</span>
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button variant="contained" color="primary" onClick={handleDialogClose}>
+              No
+            </Button>
+            <Button variant="contained" color="primary" onClick={() => handleAction()} autoFocus>
+              Yes
+            </Button>
+          </DialogActions>
+        </Dialog>
       </DashBoardWrapper>
     </>
   );

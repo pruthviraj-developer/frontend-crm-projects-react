@@ -56,14 +56,14 @@ export interface ISelectedFilters {
 }
 
 export interface IRecord {
-  from: number;
-  to: number;
+  to_age: string;
+  from_age: string;
 }
 
 export interface IConstraintData {
   group_id: number;
   name: string;
-  value: IRecord[];
+  value: any;
 }
 
 export interface IDashboardSetData {
@@ -76,6 +76,7 @@ export interface IDashboardSetData {
   vendor: number | string;
   category: string;
   gender: string;
+  is_active: boolean;
 }
 
 export interface IDashboardResponse {
@@ -90,7 +91,6 @@ export interface IDashboardResponse {
 export interface IFilterPostData {
   id: string | number;
   group_id: number;
-  action: string;
 }
 
 export declare type IFilterParams = {

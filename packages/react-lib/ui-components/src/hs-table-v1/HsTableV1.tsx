@@ -28,7 +28,7 @@ const StyledIcon = styled(SvgIcon)`
 export const HSTableV1: FC<HsTablePropsV1> = (props: HsTablePropsV1) => {
   const columns = props.columns;
   const rows = props.rows;
-  const [page, setPage] = React.useState(0);
+  const [page, setPage] = React.useState(props.activePage || 0);
   const [rowsPerPage, setRowsPerPage] = React.useState(() => props.rowsPerPage);
 
   useEffect(() => {
@@ -56,11 +56,10 @@ export const HSTableV1: FC<HsTablePropsV1> = (props: HsTablePropsV1) => {
     if (column.withIcon) {
       return (
         <>
+          {column.withIcon && (row.active || row.value === 'DISABLE') && (
+            <StyledIcon icon={SelectedCircle} />
+          )}
           {row[column.id]}{' '}
-          {(column.withIcon && row.active) ||
-            (column.withIcon && row.value === 'DISABLE' && (
-              <StyledIcon icon={SelectedCircle} />
-            ))}
         </>
       );
     } else if (column.withDate) {

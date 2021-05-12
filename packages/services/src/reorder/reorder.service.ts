@@ -1,16 +1,20 @@
 import { httpService } from '../http';
-import queryString from 'query-string'
+import queryString from 'query-string';
 
 import {
   ICreateClusterType,
   IReorderCreateConstraintParams,
-  IReorderCreateConstraint
+  IReorderCreateConstraint,
 } from '../reorder/Ireorder.service';
 
-const createConstraint = (params: IReorderCreateConstraintParams, data: ICreateClusterType ): Promise<IReorderCreateConstraint> => {
+const createConstraint = (
+  params: IReorderCreateConstraintParams,
+  data: ICreateClusterType
+): Promise<IReorderCreateConstraint> => {
   const url = queryString.stringifyUrl({
-    url: '/crm-api/assortment-plan-api/reorder-take-action/vendor-constraint-service/age-color-constraint',
-    query: {...params}
+    url:
+      '/crm-api/assortment-plan-api/reorder-take-action/vendor-constraint-service/age-color-constraint',
+    query: { ...params },
   });
   return httpService.post<IReorderCreateConstraint>({ url, data });
 };
@@ -58,19 +62,14 @@ const getBrands = <P, R>(params: P): Promise<R> => {
 };
 
 const getDashboardData = <P, R>(params?: P): Promise<R> => {
-  const url = 'https://run.mocky.io/v3/c319039a-3059-41d6-b637-d9d3e7c4dfed';
-  return httpService.get<R>({ url, params });
-};
-
-const getDashboardFilteredData = <P, R>(params?: P): Promise<R> => {
-  const url = '/crm-api/intranet/getdashboardbyfilter';
+  const url = '/crm-api/assortment-plan-api/util/dashboard';
   return httpService.get<R>({ url, params });
 };
 
 const updateDashboardAction = <P, R>(data: P): Promise<R> => {
   const url =
-    '/assortment-plan-api/reorder-take-action/vendor-constraint-service/age-color-constraint';
-  return httpService.patch({ url, params: { ...data } });
+    '/crm-api/assortment-plan-api/reorder-take-action/vendor-constraint-service/age-color-constraint';
+  return httpService.post({ url, params: { ...data } });
 };
 
 export const reorderService = {
@@ -84,6 +83,5 @@ export const reorderService = {
   getTableData,
   updateOrders,
   getDashboardData,
-  getDashboardFilteredData,
   updateDashboardAction,
 };

@@ -283,7 +283,7 @@ const CreateCluster = ({ header }: ICreateClusterProps) => {
   }, [params]);
 
   const onSubmit = (data: ICreateClusterType | any) => {
-    const postObject:  ICreateClusterType | any = {};
+    const postObject: ICreateClusterType | any = {};
     [
       'vendor_id',
       'brand_id',
@@ -338,7 +338,7 @@ const CreateCluster = ({ header }: ICreateClusterProps) => {
     }
     (async () => {
       try {
-        const constraint: ICreateConstraintResponseType = await reorderService.createConstraint( params, postObject);
+        const constraint: ICreateConstraintResponseType = await reorderService.createConstraint(params, postObject);
         if (constraint.action === 'success') {
           toast.success(constraint.message || 'Cluster created successfully');
           history.push('/clusters/dashboard');
@@ -382,7 +382,9 @@ const CreateCluster = ({ header }: ICreateClusterProps) => {
       <ClusterWrapper>
         <h1>{header}</h1>
         {dropDownsList.length === 0 && <h5> {status} </h5>}
-        {dropDownsList.length > 0 && <ReorderFiltersList key={ params.id ? `constraint${Math.random() * 1000}` :'constraint'} {...data} />}
+        {dropDownsList.length > 0 && (
+          <ReorderFiltersList key={params.id ? `constraint${Math.random() * 1000}` : 'constraint'} {...data} />
+        )}
       </ClusterWrapper>
     </>
   );
