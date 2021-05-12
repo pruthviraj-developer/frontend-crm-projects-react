@@ -1,9 +1,18 @@
 import { httpService } from '../http';
+import queryString from 'query-string'
 
-const createConstraint = <P, R>(data: P): Promise<R> => {
-  const url =
-    '/crm-api/assortment-plan-api/reorder-take-action/vendor-constraint-service/age-color-constraint';
-  return httpService.post<R>({ url, data });
+import {
+  ICreateClusterType,
+  IReorderCreateConstraintParams,
+  IReorderCreateConstraint
+} from '../reorder/Ireorder.service';
+
+const createConstraint = (params: IReorderCreateConstraintParams, data: ICreateClusterType ): Promise<IReorderCreateConstraint> => {
+  const url = queryString.stringifyUrl({
+    url: '/crm-api/assortment-plan-api/reorder-take-action/vendor-constraint-service/age-color-constraint',
+    query: {...params}
+  });
+  return httpService.post<IReorderCreateConstraint>({ url, data });
 };
 
 const getConstraint = <P, R>(params: P): Promise<R> => {

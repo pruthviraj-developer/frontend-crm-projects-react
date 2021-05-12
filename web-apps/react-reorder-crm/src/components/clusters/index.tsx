@@ -21,10 +21,10 @@ const Cluster: FC = () => {
           <Dashboard />
         </Route>
         <Route path={`${baseUrl}/create-cluster`}>
-          <CreateCluster header="Vendor casepack setup" />
+          <CreateCluster header="Vendor casepack setup" key={'Create'} />
         </Route>
         <Route path={`${baseUrl}/edit-cluster/:id/:group_id`}>
-          <CreateCluster header="Edit Vendor casepack setup" />
+          <CreateCluster header="Edit Vendor casepack setup" key={'Edit'} />
         </Route>
       </Switch>
     </>
