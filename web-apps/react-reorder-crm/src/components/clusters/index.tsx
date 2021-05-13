@@ -7,8 +7,8 @@ import Dashboard from './Dashboard';
 const baseUrl = '/clusters';
 const navItems: LeftNavBarProps = {
   navList: [
-    { linkUrl: `${baseUrl}/create-cluster`, linkText: 'Create clusterx', icon: DashBoardIcon },
-    { linkUrl: `${baseUrl}/dashboard`, linkText: 'Cluster Dashboard', icon: DashBoardIcon },
+    { linkUrl: `${baseUrl}/create-cluster`, linkText: 'Create Casepack', icon: DashBoardIcon },
+    { linkUrl: `${baseUrl}/dashboard`, linkText: 'Casepack Dashboard', icon: DashBoardIcon },
   ],
 };
 

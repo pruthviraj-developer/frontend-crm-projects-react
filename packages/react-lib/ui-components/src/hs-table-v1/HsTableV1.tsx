@@ -56,7 +56,7 @@ export const HSTableV1: FC<HsTablePropsV1> = (props: HsTablePropsV1) => {
     if (column.withIcon) {
       return (
         <>
-          {column.withIcon && (row.active || row.value === 'DISABLE') && (
+          {column.withIcon && row.active && (
             <StyledIcon icon={SelectedCircle} />
           )}
           {row[column.id]}{' '}
@@ -123,7 +123,7 @@ export const HSTableV1: FC<HsTablePropsV1> = (props: HsTablePropsV1) => {
                   <TableRow hover role="checkbox" tabIndex={-1} key={index}>
                     {columns.map((column: any, index) => {
                       if (column.id) {
-                        const value = row[column.id];
+                        const value = row[column.id] || 'NA';
                         return (
                           <TableCell
                             key={column.id}
