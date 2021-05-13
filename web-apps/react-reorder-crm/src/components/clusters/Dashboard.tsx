@@ -86,7 +86,7 @@ const attributeOptions = [
   { key: 'age', name: 'Age' },
 ];
 
-const defaultPageFilters = { size: 5, page: 1 };
+const defaultPageFilters = { size: 5, page: 0 };
 
 const reducer = (state: ICreateClusterDropDownProps[], [type, payload]: Action): ICreateClusterDropDownProps[] => {
   switch (type) {
@@ -136,8 +136,8 @@ const CrmDashboard = () => {
       staleTime: 2000,
       onError: (error: any) => {
         showError(error);
-      }
-    }
+      },
+    },
   );
   useEffect(() => {
     if (isFilterSuccess) {
@@ -174,7 +174,7 @@ const CrmDashboard = () => {
   }, [brandData, vendorId, isBrandSuccess, isBrandFetching]);
 
   const getUpdatedTableData = (filters: any) => {
-    setFilterParams({ size: filters.pageSize, page: filters.pageNo + 1 });
+    setFilterParams({ size: filters.pageSize, page: filters.pageNo });
   };
 
   // const fetchDashboardTableData = (postData: Record<string, unknown>) => {
@@ -290,6 +290,7 @@ const CrmDashboard = () => {
     {
       id: 'value',
       label: 'Values',
+      width: 200,
       customRender: (row: IDashboardSetData, isTitle?: boolean) => {
         if (isTitle) {
           if (row.constraint_key.name === 'age') {
@@ -361,8 +362,8 @@ const CrmDashboard = () => {
 
   const tableData: HsTablePropsV1 = {
     title: 'Dashboard Table',
-    count:  dashboardData ? dashboardData['totalCount'] : 0,
-    activePage: filterParams.page - 1 || 0,
+    count: dashboardData ? dashboardData['totalCount'] : 0,
+    activePage: filterParams.page,
     columns: columns,
     rows: dashboardData ? dashboardData['data'] : [],
     rowsPerPage: filterParams.size || 5,
