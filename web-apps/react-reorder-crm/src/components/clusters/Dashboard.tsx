@@ -479,7 +479,8 @@ const CrmDashboard = () => {
             )}
           </Formik>
         </FiltersWrapper>
-        {totalRowsCount > 0 && <HSTableV1 {...tableData} />}
+        {totalRowsCount > 0 && tableData.rows.length > 0 && <HSTableV1 {...tableData} />}
+        {tableData.rows.length === 0 && 'No Data'}
         <Dialog
           open={confirmDialog}
           onClose={handleDialogClose}
