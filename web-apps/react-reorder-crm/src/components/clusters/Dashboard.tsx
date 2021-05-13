@@ -104,8 +104,6 @@ const CrmDashboard = () => {
   const classes = useStyles();
   const [dropDownsList, dispatch] = useReducer(reducer, []);
   const [selectedFilters, setSelectedFilters] = useState<ISelectedValues>({});
-  const [rows, setRows] = useState<Array<IDashboardSetData>>([]);
-  const [totalRowsCount, setTotalRowsCount] = useState<number>(0);
   const [postDataFiltersObject, setPostDataFiltersObject] = useState({});
   const [filterParams, setFilterParams] = useState<IFilterParams>(defaultPageFilters);
   const [confirmDialog, showConfirmDialog] = useState(false);
@@ -138,21 +136,9 @@ const CrmDashboard = () => {
       staleTime: 2000,
       onError: (error: any) => {
         showError(error);
-        setTotalRowsCount(0);
-      },
-    },
+      }
+    }
   );
-
-  useEffect(() => {
-    if (isDashboardSuccess) {
-      setRows(dashboardData.data);
-      setTotalRowsCount(dashboardData.totalCount);
-    }
-    if (isDashboardFetching) {
-      setTotalRowsCount(0);
-    }
-  }, [dashboardData, isDashboardSuccess, isDashboardFetching]);
-
   useEffect(() => {
     if (isFilterSuccess) {
       let formList: ICreateClusterDropDownProps[] = [
@@ -375,10 +361,10 @@ const CrmDashboard = () => {
 
   const tableData: HsTablePropsV1 = {
     title: 'Dashboard Table',
-    count: totalRowsCount || 0,
+    count:  dashboardData ? dashboardData['totalCount'] : 0,
     activePage: filterParams.page - 1 || 0,
     columns: columns,
-    rows: rows || [],
+    rows: dashboardData ? dashboardData['data'] : [],
     rowsPerPage: filterParams.size || 5,
     filterRowsPerPage: [5, 10, 15, 20],
     fetchTableData: getUpdatedTableData,
@@ -479,8 +465,8 @@ const CrmDashboard = () => {
             )}
           </Formik>
         </FiltersWrapper>
-        {totalRowsCount > 0 && tableData.rows.length > 0 && <HSTableV1 {...tableData} />}
-        {tableData.rows.length === 0 && 'No Data'}
+        {isDashboardSuccess && tableData.rows.length > 0 && <HSTableV1 {...tableData} />}
+        {tableData.rows.length === 0 && (isDashboardFetching ? 'Loading...' : 'No Data')}
         <Dialog
           open={confirmDialog}
           onClose={handleDialogClose}
