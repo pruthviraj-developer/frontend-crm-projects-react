@@ -256,8 +256,6 @@ const CrmDashboard = () => {
     {
       id: 'id',
       label: 'Id',
-      withIcon: true,
-      render: true,
     },
     {
       id: 'vendor',
@@ -279,21 +277,14 @@ const CrmDashboard = () => {
     {
       id: 'brand',
       label: 'Brand',
-      width: 100,
-      withJoin: false,
-      render: true,
     },
     {
       id: 'category',
       label: 'Category',
-      withDate: false,
-      render: true,
     },
     {
       id: 'sub_category',
       label: 'Sub Category',
-      withDate: false,
-      render: true,
     },
     { id: 'product_type', label: 'Product Type', width: 80 },
     { id: 'gender', label: 'Gender', width: 80 },
@@ -301,6 +292,9 @@ const CrmDashboard = () => {
       id: 'constraint',
       label: 'Attribute',
       customRender: (row: IDashboardSetData, isTitle?: boolean) => {
+        if (isTitle) {
+          return row.constraint_key.name;
+        }
         if (row) {
           return <>{row.constraint_key.name}</>;
         }
@@ -311,6 +305,12 @@ const CrmDashboard = () => {
       id: 'value',
       label: 'Values',
       customRender: (row: IDashboardSetData, isTitle?: boolean) => {
+        if (isTitle) {
+          if (row.constraint_key.name === 'age') {
+            return;
+          }
+          return row.constraint_key.value.join(',');
+        }
         if (row) {
           if (row.constraint_key.name === 'age') {
             return (
@@ -337,12 +337,11 @@ const CrmDashboard = () => {
             <Button
               variant="contained"
               color="primary"
-              type="submit"
-              disabled={!data.is_active}
+              type="button"
               className={classes.clearFilters}
               onClick={(e) => updateAction(data)}
             >
-              {data.is_active ? 'DISABLE' : 'DISABLED'}
+              DISABLE
             </Button>
           );
         }
@@ -492,7 +491,7 @@ const CrmDashboard = () => {
           </DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              <span className={classes.dialogDescription}>Do you want to proceed with disable?</span>
+              <span className={classes.dialogDescription}>Do you want to disable the case pack configuration?</span>
             </DialogContentText>
           </DialogContent>
           <DialogActions>
