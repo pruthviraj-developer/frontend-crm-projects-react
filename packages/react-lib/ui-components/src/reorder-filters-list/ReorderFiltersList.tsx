@@ -148,7 +148,9 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
                                   ) {
                                     delete formValues['age_constraints'];
                                   }
-                                  onChange && onChange(keyName, formValues);
+                                  if(keyName != 'color_constraints'){
+                                    onChange && onChange(keyName, formValues);
+                                  }
                                   setSelectedFilters(formValues);
                                 }
                               }}
