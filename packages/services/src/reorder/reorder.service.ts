@@ -69,7 +69,7 @@ const getDashboardData = <P, R>(params?: P): Promise<R> => {
 const updateDashboardAction = <P, R>(data: P): Promise<R> => {
   const url =
     '/crm-api/assortment-plan-api/reorder-take-action/vendor-constraint-service/age-color-constraint';
-  return httpService.post({ url, params: { ...data } });
+  return httpService.patch({ url, params: { ...data } });
 };
 
 export const reorderService = {

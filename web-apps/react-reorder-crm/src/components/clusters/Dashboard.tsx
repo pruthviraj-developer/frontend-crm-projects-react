@@ -24,7 +24,12 @@ import {
   ActionType,
   ISelectedValues,
 } from '../../types/ICreateCluster';
-import { useQuery } from 'react-query';
+
+import {
+  IDashboardResponse
+} from '../../types/IDashBoard';
+
+import { useQuery, useQueryClient } from 'react-query';
 import { useReducer } from 'react';
 
 const useStyles = makeStyles((theme) => ({
@@ -73,9 +78,9 @@ const FiltersWrapper = styled.div`
 `;
 
 const tryLater = 'Please try later';
-const showError = (error: Record<string, string>) => {
+const showError = (error: IDashboardResponse | Record<string, string>) => {
   let message = tryLater;
-  if (error.action === 'failure') {
+  if (error.action === 'failure' && error.message) {
     message = error.message;
   }
   toast.error(message);
@@ -108,7 +113,7 @@ const CrmDashboard = () => {
   const [filterParams, setFilterParams] = useState<IFilterParams>(defaultPageFilters);
   const [confirmDialog, showConfirmDialog] = useState(false);
   const [actionData, setActionData] = useState<IDashboardSetData>();
-
+  const queryClient = useQueryClient();
   const { data: filterData, isSuccess: isFilterSuccess } = useQuery<FilterType, Record<string, string>>(
     'filters',
     reorderService.getFilters,
@@ -177,28 +182,6 @@ const CrmDashboard = () => {
     setFilterParams({ size: filters.pageSize, page: filters.pageNo });
   };
 
-  // const fetchDashboardTableData = (postData: Record<string, unknown>) => {
-  //   if (postData) {
-  //     let postFilterData = {
-  //       vendor_id: postData.vendor_id,
-  //       brand_id: postData.brand_id,
-  //       constraint: postData.attribute,
-  //     };
-  //     (async () => {
-  //       try {
-  //         const constraint: any = await reorderService.getDashboardData({ ...postFilterData, ...filterParams });
-  //         if (constraint.action === 'success') {
-  //           toast.success(constraint.message || 'Data found');
-  //           // setRows(constraint.data);
-  //           return;
-  //         }
-  //         showError(constraint);
-  //       } catch (error) {
-  //         showError(error);
-  //       }
-  //     })();
-  //   }
-  // };
 
   const onFiltersSubmit = () => {
     const postObject: Record<string, number> = {};
@@ -343,16 +326,18 @@ const CrmDashboard = () => {
       let filterPostData: IFilterPostData = {
         id: actionData.id,
         group_id: actionData.constraint_key.group_id,
+        action:'disable'
       };
       (async () => {
         try {
-          const filterData: any = await reorderService.updateDashboardAction(filterPostData);
-          if (filterData.action === 'success') {
-            toast.success(filterData.message || 'Data found');
+          const disableConstraint: IDashboardResponse = await reorderService.updateDashboardAction(filterPostData);
+          if (disableConstraint.action === 'success') {
+            toast.success(disableConstraint.message || 'updated successfully');
             setFilterParams(defaultPageFilters);
+            queryClient.invalidateQueries('dashboardData');
             return;
           }
-          showError(filterData);
+          showError(disableConstraint);
         } catch (error) {
           showError(error);
         }
