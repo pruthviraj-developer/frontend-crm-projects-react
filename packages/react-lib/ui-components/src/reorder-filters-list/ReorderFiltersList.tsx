@@ -274,7 +274,7 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
                           <Button
                             type="button"
                             color="primary"
-                            disabled={!isValid}
+                            disabled={!isValid || !selectedFilters['age_constraints'][0]['from'] || !selectedFilters['age_constraints'][0]['to']}
                             variant="outlined"
                             onClick={() => {
                               const formValues = { ...selectedFilters };
@@ -298,7 +298,7 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
                     color="primary"
                     variant="outlined"
                     size="large"
-                    disabled={!isValid}
+                    disabled={!isValid || !defaultSelectedValues.isConstraintFormDirty}
                     style={{
                       fontWeight: 'bold',
                       fontSize: 10,

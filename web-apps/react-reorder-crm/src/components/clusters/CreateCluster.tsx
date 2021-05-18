@@ -368,7 +368,7 @@ const CreateCluster = ({ header }: ICreateClusterProps) => {
       dispatch([ActionType.removeItems, ['brand_id']]);
       setVendorId(dataKey);
     }
-    setDefaultSelectedValues(formData);
+    setDefaultSelectedValues({...formData, isConstraintFormDirty:1});
   };
 
   const data: ReorderFiltersObjectProps = {
