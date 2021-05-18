@@ -25,9 +25,7 @@ import {
   ISelectedValues,
 } from '../../types/ICreateCluster';
 
-import {
-  IDashboardResponse
-} from '../../types/IDashBoard';
+import { IDashboardResponse } from '../../types/IDashBoard';
 
 import { useQuery, useQueryClient } from 'react-query';
 import { useReducer } from 'react';
@@ -65,6 +63,15 @@ const useStyles = makeStyles((theme) => ({
     color: Colors.PINK[500],
     fontSize: 16,
     fontWeight: 600,
+  },
+  tableBorder: {
+    border: '1.5px solid rgba(224, 224, 224, 1)',
+    width: '60%',
+    borderCollapse: 'collapse',
+  },
+  borderAround: {
+    border: '1.5px solid rgba(224, 224, 224, 1)',
+    width: '50%',
   },
 }));
 
@@ -182,7 +189,6 @@ const CrmDashboard = () => {
     setFilterParams({ size: filters.pageSize, page: filters.pageNo });
   };
 
-
   const onFiltersSubmit = () => {
     const postObject: Record<string, number> = {};
     ['vendor_id', 'brand_id', 'constraint'].forEach((ele: string) => {
@@ -284,11 +290,22 @@ const CrmDashboard = () => {
         if (row) {
           if (row.constraint_key.name === 'age') {
             return (
-              <>
-                {row.constraint_key.value.map((record: any, index: number) => (
-                  <li key={'ageLi' + index}>{'From: ' + record.from_age + ', To: ' + record.to_age}</li>
-                ))}
-              </>
+              <table className={classes.tableBorder}>
+                <thead>
+                  <tr style={{ textAlign: 'center' }}>
+                    <th className={classes.borderAround}>From</th>
+                    <th className={classes.borderAround}>To</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {row.constraint_key.value.map((record: any, index: number) => (
+                    <tr key={'ageLi' + index} style={{ textAlign: 'center' }}>
+                      <td className={classes.borderAround}>{record.from_age}</td>
+                      <td className={classes.borderAround}>{record.to_age}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             );
           } else if (row.constraint_key.name === 'color') {
             return <>{row.constraint_key.value.join(',')}</>;
@@ -326,7 +343,7 @@ const CrmDashboard = () => {
       let filterPostData: IFilterPostData = {
         id: actionData.id,
         group_id: actionData.constraint_key.group_id,
-        action:'disable'
+        action: 'disable',
       };
       (async () => {
         try {
