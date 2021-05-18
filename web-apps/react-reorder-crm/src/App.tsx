@@ -39,7 +39,13 @@ const App: FC = () => {
             </Router>
           </MuiThemeProvider>
         </ThemeProvider>
-        <ToastContainer autoClose={10000} closeOnClick={false} draggable={false} newestOnTop={true} />
+        <ToastContainer
+          autoClose={10000}
+          closeOnClick={false}
+          draggable={false}
+          newestOnTop={true}
+          style={{ width: '300px' }}
+        />
       </div>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
