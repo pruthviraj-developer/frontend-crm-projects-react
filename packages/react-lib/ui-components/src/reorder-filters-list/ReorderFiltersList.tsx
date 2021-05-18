@@ -52,6 +52,7 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
   const [selectedFilters, setSelectedFilters] = useState(
     defaultSelectedValues || initialValues
   );
+  const [isConstraintFormDirty,setIsConstraintFormDirty] = useState(0);
 
   return (
     <FiltersWrapper className={classes.root}>
@@ -213,6 +214,7 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
                                         'from'
                                       ] = fromValue;
                                       setSelectedFilters(formValues);
+                                      setIsConstraintFormDirty(1);
                                     }}
                                   />
                                 </Grid>
@@ -242,6 +244,7 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
                                         'to'
                                       ] = toValue;
                                       setSelectedFilters(formValues);
+                                      setIsConstraintFormDirty(1);
                                     }}
                                   />
                                 </Grid>
@@ -283,6 +286,7 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
                                 to: null,
                               });
                               setSelectedFilters(formValues);
+                              setIsConstraintFormDirty(1);
                               validateForm();
                             }}
                           >
@@ -298,7 +302,7 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
                     color="primary"
                     variant="outlined"
                     size="large"
-                    disabled={!isValid || !defaultSelectedValues.isConstraintFormDirty}
+                    disabled={!isValid || (!defaultSelectedValues.isConstraintFormDirty && !isConstraintFormDirty)}
                     style={{
                       fontWeight: 'bold',
                       fontSize: 10,
