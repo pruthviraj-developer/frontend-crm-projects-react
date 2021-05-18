@@ -263,8 +263,10 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
                                           index,
                                           1
                                         );
-                                        setSelectedFilters(formValues);
                                         arrayHelpers.remove(index);
+                                        setSelectedFilters(formValues);
+                                        setIsConstraintFormDirty(1);
+                                        validateForm();
                                       }}
                                     >
                                       Remove
@@ -277,7 +279,8 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
                           <Button
                             type="button"
                             color="primary"
-                            disabled={!isValid || !selectedFilters['age_constraints'][selectedFilters['age_constraints'].length-1]['from'] || !selectedFilters['age_constraints'][selectedFilters['age_constraints'].length -1]['to']}
+                            disabled={!isValid || !(selectedFilters['age_constraints'][selectedFilters['age_constraints'].length-1]['from'] != null  
+                            || selectedFilters['age_constraints'][selectedFilters['age_constraints'].length -1]['to'] != null)}
                             variant="outlined"
                             onClick={() => {
                               const formValues = { ...selectedFilters };
@@ -302,7 +305,8 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
                     color="primary"
                     variant="outlined"
                     size="large"
-                    disabled={!isValid || (!defaultSelectedValues.isConstraintFormDirty && !isConstraintFormDirty) || selectedFilters['age_constraints'] && (!selectedFilters['age_constraints'][selectedFilters['age_constraints'].length-1]['from'] || !selectedFilters['age_constraints'][selectedFilters['age_constraints'].length -1]['to'])}
+                    disabled={!isValid || (!defaultSelectedValues.isConstraintFormDirty && !isConstraintFormDirty) || !(selectedFilters['age_constraints'][selectedFilters['age_constraints'].length-1]['from'] != null  
+                    || selectedFilters['age_constraints'][selectedFilters['age_constraints'].length -1]['to'] != null)}
                     style={{
                       fontWeight: 'bold',
                       fontSize: 10,
