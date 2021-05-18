@@ -305,8 +305,9 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
                     color="primary"
                     variant="outlined"
                     size="large"
-                    disabled={!isValid || (!defaultSelectedValues.isConstraintFormDirty && !isConstraintFormDirty) || !(selectedFilters['age_constraints'][selectedFilters['age_constraints'].length-1]['from'] != null  
-                    || selectedFilters['age_constraints'][selectedFilters['age_constraints'].length -1]['to'] != null)}
+                    disabled={!isValid || (!defaultSelectedValues.isConstraintFormDirty && !isConstraintFormDirty) || 
+                      (selectedFilters && selectedFilters['age_constraints'] && !(selectedFilters['age_constraints'][selectedFilters['age_constraints'].length-1]['from'] != null  
+                    || selectedFilters['age_constraints'][selectedFilters['age_constraints'].length -1]['to'] != null))}
                     style={{
                       fontWeight: 'bold',
                       fontSize: 10,
