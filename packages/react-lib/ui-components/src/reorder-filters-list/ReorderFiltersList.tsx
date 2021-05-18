@@ -152,6 +152,7 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
                                   if(keyName != 'color_constraints'){
                                     onChange && onChange(keyName, formValues);
                                   }
+                                  setIsConstraintFormDirty(1);
                                   setSelectedFilters(formValues);
                                 }
                               }}
