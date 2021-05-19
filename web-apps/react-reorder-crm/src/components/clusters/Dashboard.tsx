@@ -66,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
   },
   tableBorder: {
     border: '1.5px solid rgba(224, 224, 224, 1)',
-    width: '60%',
+    width: '100%',
     borderCollapse: 'collapse',
   },
   borderAround: {

@@ -110,6 +110,7 @@ export const HSTableV1: FC<HsTablePropsV1> = (props: HsTablePropsV1) => {
                       overflow: 'hidden',
                       textOverflow: 'ellipsis',
                       fontWeight: 'bold',
+                      textAlign: 'center',
                     }}
                   >
                     {column.label}
@@ -140,6 +141,7 @@ export const HSTableV1: FC<HsTablePropsV1> = (props: HsTablePropsV1) => {
                               overflow: 'hidden',
                               textOverflow: 'ellipsis',
                               padding: '16px 10px',
+                              textAlign: 'center',
                             }}
                           >
                             {column.customRender
@@ -161,6 +163,7 @@ export const HSTableV1: FC<HsTablePropsV1> = (props: HsTablePropsV1) => {
                               overflow: 'hidden',
                               textOverflow: 'ellipsis',
                               padding: '16px 10px',
+                              textAlign: 'center',
                             }}
                           >
                             {column.render(props, row)}
