@@ -223,7 +223,7 @@ const CreateCluster = ({ header }: ICreateClusterProps) => {
       if (colorsList && colorsList.options && colorsList.options.length) {
         dispatch([
           ActionType.addItems,
-          [{ ...colorsList, key: 'color_constraints', display: 'Color *', display_position: 8 }],
+          [{ ...colorsList, key: 'color_constraints', type: 'autoselectall', input_type: 'autoselectall',  display: 'Color *', display_position: 8 }],
         ]);
       } else {
         !isColorsListFetching &&

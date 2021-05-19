@@ -8,7 +8,9 @@ import {
   makeStyles,
   Paper,
   Button,
+  MenuItem
 } from '@material-ui/core';
+import { Colors } from '@hs/utils';
 import { TextField } from 'formik-material-ui';
 import { ReoOrderFormValidation } from './ReorderFiltersListValidation';
 import {
@@ -35,6 +37,15 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 'bold',
     border: '1px solid rgba(0, 0, 0, 0.12)',
   },
+  option: {
+    '&:hover': {
+      backgroundColor: '#F9867B'
+    },
+    '&[aria-selected="true"]': {
+      backgroundColor: '#EB1000'
+    },
+    fontSize:14
+  }
 }));
 
 const initialValues = {};
@@ -53,6 +64,23 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
     defaultSelectedValues || initialValues
   );
   const [isConstraintFormDirty,setIsConstraintFormDirty] = useState(0);
+
+  const addAllClick = () => {
+    const colorsObject= sideBar.find(obj => obj.key === 'color_constraints');
+    const colorsDropDown = colorsObject && colorsObject.options || [];
+    setSelectedFilters({...selectedFilters, 'color_constraints' :colorsDropDown});
+  };
+
+  const selectAllAutoComplete  = ({ children, ...other }) => {
+    return (
+      <Paper {...other}>
+          <MenuItem color="primary" style={{fontSize:14, color:Colors.PINK[500]}} onMouseDown = {()=>{addAllClick()}}>
+            All
+          </MenuItem>
+        {children}
+      </Paper>
+    );
+  };
 
   return (
     <FiltersWrapper className={classes.root}>
@@ -169,6 +197,93 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
                                   variant="outlined"
                                 />
                               )}
+                            />
+                          </Grid>
+                        );
+                      } else if(sideBarOption.type === 'autoselectall'){
+                        return (
+                          <Grid
+                            item
+                            xs
+                            key={sideBarOption.name || sideBarOption.key}
+                          >
+                            <Field
+                              variant="standard"
+                              // PopperComponent={selectAllAutoComplete}
+                              name={sideBarOption.name || sideBarOption.key}
+                              label={
+                                sideBarOption.label || sideBarOption.display
+                              }
+                              value={
+                                selectedFilters[
+                                  sideBarOption.name || sideBarOption.key
+                                ] || (sideBarOption.multi ? [] : null)
+                              }
+                              multiple={sideBarOption.multi || false}
+                              disabled={sideBarOption.disabled || false}
+                              component={Autocomplete}
+                              options={sideBarOption.options || []}
+                              disableCloseOnSelect={
+                                sideBarOption.multi ? true : false
+                              }
+                              classes={{
+                                option: classes.option
+                              }}
+                              limitTags={5}
+                              getOptionSelected={(
+                                option: ReorderFiltersOptions,
+                                selectedValue: ReorderFiltersOptions
+                              ) => {
+                                return option.key == selectedValue?.key;
+                              }}
+                              getOptionLabel={(option: ReorderFiltersOptions) =>
+                                option.display ||
+                                option.name ||
+                                option.value ||
+                                ''
+                              }
+                              onChange={(
+                                evt: React.ChangeEvent<HTMLInputElement>,
+                                values: Array<ReorderFiltersOptions>
+                              ) => {
+                                if (evt) {
+                                  const keyName =
+                                    sideBarOption.name || sideBarOption.key;
+                                  let filteredValues:ReorderFiltersOptions[] = [];
+                                  if(keyName === 'color_constraints' && values && values.length>1){
+                                    filteredValues = values.filter((obj:ReorderFiltersOptions) => obj.key != 'all');
+                                  }
+                                  const formValues = {
+                                    ...selectedFilters,
+                                    [keyName]: filteredValues.length?filteredValues:values,
+                                  };
+                                  if (sideBarOption.clearFields) {
+                                    sideBarOption.clearFields.forEach(
+                                      (element: string) => {
+                                        delete formValues[element];
+                                      }
+                                    );
+                                  }
+                                  if(keyName != 'color_constraints'){
+                                    onChange && onChange(keyName, formValues);
+                                  }
+                                  setSelectedFilters(formValues);
+                                }
+                              }}
+                              renderInput={(
+                                params: AutocompleteRenderInputParams
+                              ) => (
+                                <MuiTextField
+                                  {...params}
+                                  error={touched['sort'] && !!errors['sort']}
+                                  helperText={touched['sort'] && errors['sort']}
+                                  label={
+                                    sideBarOption.label || sideBarOption.display
+                                  }
+                                  variant="outlined"
+                                />
+                              )}
+                              PaperComponent={selectAllAutoComplete}
                             />
                           </Grid>
                         );
@@ -317,7 +432,6 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
                   >
                     Submit
                   </Button>
-                  <pre>{isValid}</pre>
                 </Grid>
               </Paper>
             </Grid>
