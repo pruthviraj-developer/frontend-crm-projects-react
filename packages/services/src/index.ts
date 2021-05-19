@@ -4,3 +4,4 @@ export * from './sos';
 export * from './bulk-upload';
 export * from './reorder';
 export * from './merch-intelligence';
+export * from './product-subtype';
