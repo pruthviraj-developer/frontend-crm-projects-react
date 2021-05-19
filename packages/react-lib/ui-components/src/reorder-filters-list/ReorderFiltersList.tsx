@@ -8,7 +8,6 @@ import {
   makeStyles,
   Paper,
   Button,
-  MenuItem
 } from '@material-ui/core';
 import { Colors } from '@hs/utils';
 import { TextField } from 'formik-material-ui';
@@ -18,6 +17,14 @@ import {
   ReorderFiltersOptions,
   ReorderFiltersObjectProps,
 } from './IReorderFiltersList';
+
+import { SelectedRectAngle , DeSelectedRectAngle, SvgIcon} from '@hs/icons';
+
+const StyledIcon = styled(SvgIcon)`
+  margin: 0 20px;
+  fill: white;
+`;
+
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -38,12 +45,7 @@ const useStyles = makeStyles((theme) => ({
     border: '1px solid rgba(0, 0, 0, 0.12)',
   },
   option: {
-    '&:hover': {
-      backgroundColor: '#FFEFF8'
-    },
-    '&[aria-selected="true"]': {
-      backgroundColor: '#FAAFD7'
-    },
+    paddingLeft:0,
     fontSize:14
   }
 }));
@@ -65,21 +67,10 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
   );
   const [isConstraintFormDirty,setIsConstraintFormDirty] = useState(0);
 
-  const addAllClick = () => {
+  const getAllColors = () => {
     const colorsObject= sideBar.find(obj => obj.key === 'color_constraints');
-    const colorsDropDown = colorsObject && colorsObject.options || [];
-    setSelectedFilters({...selectedFilters, 'color_constraints' :colorsDropDown});
-  };
-
-  const selectAllAutoComplete  = ({ children, ...other }) => {
-    return (
-      <Paper {...other}>
-          <MenuItem color="primary" style={{fontSize:14, color:Colors.PINK[500]}} onMouseDown = {()=>{addAllClick()}}>
-            All
-          </MenuItem>
-        {children}
-      </Paper>
-    );
+    const options = colorsObject && colorsObject.options;
+    return  options && options.slice(1) || [];
   };
 
   return (
@@ -180,8 +171,8 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
                                   if(keyName != 'color_constraints'){
                                     onChange && onChange(keyName, formValues);
                                   }
-                                  setIsConstraintFormDirty(1);
                                   setSelectedFilters(formValues);
+                                  setIsConstraintFormDirty(1);
                                 }
                               }}
                               renderInput={(
@@ -209,7 +200,6 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
                           >
                             <Field
                               variant="standard"
-                              // PopperComponent={selectAllAutoComplete}
                               name={sideBarOption.name || sideBarOption.key}
                               label={
                                 sideBarOption.label || sideBarOption.display
@@ -229,7 +219,7 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
                               classes={{
                                 option: classes.option
                               }}
-                              limitTags={5}
+                              limitTags={10}
                               getOptionSelected={(
                                 option: ReorderFiltersOptions,
                                 selectedValue: ReorderFiltersOptions
@@ -242,6 +232,14 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
                                 option.value ||
                                 ''
                               }
+                              renderOption={(option, selectedValue) => {
+                                const displayLabel = option.display || option.name || option.value;
+                                if(displayLabel && displayLabel.toLowerCase() === "select all"){
+                                  return <span style={{color:Colors.PINK[500], fontSize: 18,paddingLeft:20}}>{displayLabel}</span>;
+                                } else {
+                                return <span style={{display: 'flex',alignItems: 'center'}}>{<StyledIcon icon={selectedValue.selected?SelectedRectAngle:DeSelectedRectAngle } />} {displayLabel}</span>;
+                                }
+                              }}
                               onChange={(
                                 evt: React.ChangeEvent<HTMLInputElement>,
                                 values: Array<ReorderFiltersOptions>
@@ -250,8 +248,11 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
                                   const keyName =
                                     sideBarOption.name || sideBarOption.key;
                                   let filteredValues:ReorderFiltersOptions[] = [];
-                                  if(keyName === 'color_constraints' && values && values.length>1){
-                                    filteredValues = values.filter((obj:ReorderFiltersOptions) => obj.key != 'all');
+                                  if(keyName === 'color_constraints' && values && values.length){
+                                    const index = values.findIndex((obj:ReorderFiltersOptions) => obj.key == 'all');
+                                    if(index > -1) {
+                                      filteredValues = getAllColors();
+                                    }
                                   }
                                   const formValues = {
                                     ...selectedFilters,
@@ -267,6 +268,7 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
                                   if(keyName != 'color_constraints'){
                                     onChange && onChange(keyName, formValues);
                                   }
+                                  setIsConstraintFormDirty(1);
                                   setSelectedFilters(formValues);
                                 }
                               }}
@@ -283,7 +285,6 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
                                   variant="outlined"
                                 />
                               )}
-                              PaperComponent={selectAllAutoComplete}
                             />
                           </Grid>
                         );
