@@ -39,10 +39,10 @@ const useStyles = makeStyles((theme) => ({
   },
   option: {
     '&:hover': {
-      backgroundColor: '#F9867B'
+      backgroundColor: '#FFEFF8'
     },
     '&[aria-selected="true"]': {
-      backgroundColor: '#EB1000'
+      backgroundColor: '#FAAFD7'
     },
     fontSize:14
   }
