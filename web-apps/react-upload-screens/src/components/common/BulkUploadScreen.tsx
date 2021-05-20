@@ -55,9 +55,16 @@ const BulkUploadScreen: FC<bulkUploadProps> = ({ header, uploadAction, downloadO
 
   const onExport = async (downloadAction?: string) => {
     try {
-      const res = await bulkUploadService.downloadTemplate({
+      let res = await bulkUploadService.downloadTemplate({
         action: downloadAction,
       });
+      const sheetKey = res.data?.sheetKey;
+      if (sheetKey) {
+        res = await bulkUploadService.downloadTemplate({
+          action: 'getUrlBySheetKey',
+          sheetKey: sheetKey,
+        });
+      }
       if (res.data.is_available) {
         window.open(res.data.url, '_blank');
         res.data.message !== '' && toast.success(res.data.message);
