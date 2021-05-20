@@ -26,6 +26,13 @@ export interface PropsType {
   fetchTableData?: any;
 }
 
+// export enum ActionType {
+//   removeItems = 'removeItem',
+//   addItems = 'addItem',
+// }
+
+export type Action = ['removeItem', string[]] | ['addItem', any];
+
 export declare type IPageType = {
   pageSize: number;
   pageNo: number;
