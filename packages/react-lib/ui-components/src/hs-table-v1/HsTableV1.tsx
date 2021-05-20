@@ -124,7 +124,7 @@ export const HSTableV1: FC<HsTablePropsV1> = (props: HsTablePropsV1) => {
                   <TableRow hover role="checkbox" tabIndex={-1} key={index}>
                     {columns.map((column: any, index) => {
                       if (column.id) {
-                        const value = row[column.id] || 'NA';
+                        const value = row[column.id] || 'ALL';
                         return (
                           <TableCell
                             key={column.id}
