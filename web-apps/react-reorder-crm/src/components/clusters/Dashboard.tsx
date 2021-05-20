@@ -252,17 +252,70 @@ const CrmDashboard = () => {
     {
       id: 'brand',
       label: 'Brand',
+      customRender: (row: IDashboardSetData, isTitle?: boolean) => {
+        if (isTitle) {
+          return row.brand;
+        }
+        if (row.brand) {
+          return <>{row.brand}</>;
+        }
+        return 'ALL';
+      },
     },
     {
       id: 'category',
       label: 'Category',
+      customRender: (row: IDashboardSetData, isTitle?: boolean) => {
+        if (isTitle) {
+          return row.category;
+        }
+        if (row.category) {
+          return <>{row.category}</>;
+        }
+        return 'ALL';
+      },
     },
     {
       id: 'sub_category',
       label: 'Sub Category',
+      customRender: (row: IDashboardSetData, isTitle?: boolean) => {
+        if (isTitle) {
+          return row.sub_category;
+        }
+        if (row.sub_category) {
+          return <>{row.sub_category}</>;
+        }
+        return 'ALL';
+      },
     },
-    { id: 'product_type', label: 'Product Type', width: 80 },
-    { id: 'gender', label: 'Gender', width: 80 },
+    {
+      id: 'product_type',
+      label: 'Product Type',
+      width: 80,
+      customRender: (row: IDashboardSetData, isTitle?: boolean) => {
+        if (isTitle) {
+          return row.product_type;
+        }
+        if (row.product_type) {
+          return <>{row.product_type}</>;
+        }
+        return 'ALL';
+      },
+    },
+    {
+      id: 'gender',
+      label: 'Gender',
+      width: 80,
+      customRender: (row: IDashboardSetData, isTitle?: boolean) => {
+        if (isTitle) {
+          return row.gender;
+        }
+        if (row.gender) {
+          return <>{row.gender}</>;
+        }
+        return 'ALL';
+      },
+    },
     {
       id: 'constraint',
       label: 'Attribute',
@@ -270,10 +323,10 @@ const CrmDashboard = () => {
         if (isTitle) {
           return row.constraint_key.name;
         }
-        if (row) {
+        if (row.constraint_key.name) {
           return <>{row.constraint_key.name}</>;
         }
-        return '--';
+        return 'ALL';
       },
     },
     {
@@ -287,7 +340,7 @@ const CrmDashboard = () => {
           }
           return row.constraint_key.value.join(',');
         }
-        if (row) {
+        if (row.constraint_key.value.length > 0) {
           if (row.constraint_key.name === 'age') {
             return (
               <table className={classes.tableBorder}>
@@ -310,10 +363,10 @@ const CrmDashboard = () => {
           } else if (row.constraint_key.name === 'color') {
             return <>{row.constraint_key.value.join(',')}</>;
           } else {
-            return <>--</>;
+            return <>ALL</>;
           }
         }
-        return '--';
+        return 'ALL';
       },
     },
     {
