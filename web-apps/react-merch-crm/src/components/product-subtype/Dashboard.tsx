@@ -47,16 +47,16 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const DashBoardWrapper = styled.div`
-  width: 100%;
+  width: 94%;
   margin: 10px 0 0 9rem;
 `;
 
 const TableWrapper = styled.div`
-  width: 94%;
+  width: 100%;
 `;
 
 const FiltersWrapper = styled.div`
-  width: 80%;
+  width: 100%;
   margin: auto;
   margin-bottom: 1rem;
 `;
@@ -90,8 +90,6 @@ const ProductSubtypeDashboard: FC = () => {
   const [productTypeId, setProductTypeId] = useState<number>(0);
   const [filterPage, setFilterPage] = useState<IPageType>(defaultPageFilters);
   const queryClient = useQueryClient();
-
-  const value: Array<string> = [];
 
   const { data: categoryData, isSuccess: isCategoryDataSuccess } = useQuery<OptionType[] | any>(
     'category',
@@ -151,9 +149,6 @@ const ProductSubtypeDashboard: FC = () => {
         },
       ];
       dispatch(['addItem', formList]);
-      categoryData.forEach((item: OptionType) => {
-        value.push(item.value);
-      });
     }
   }, [categoryData, isCategoryDataSuccess]);
 
@@ -234,7 +229,13 @@ const ProductSubtypeDashboard: FC = () => {
         if (row) {
           return (
             <>
-              <NavLink to={{ pathname: `edit-cluster/${row.productCategoryId}` }}>{row.productCategoryName}</NavLink>
+              <NavLink
+                to={{
+                  pathname: `/edit-product-subtype/${row.productCategoryId}/${row.productSubCategoryId}/${row.productTypeId}`,
+                }}
+              >
+                {row.productCategoryName}
+              </NavLink>
             </>
           );
         }
@@ -330,15 +331,13 @@ const ProductSubtypeDashboard: FC = () => {
                             return (
                               <Grid item xs={3} style={{ padding: '4px' }} key={eachItem.key}>
                                 <Field
-                                  value={selectedFilters[eachItem.name || eachItem.key] || (eachItem.multi ? [] : null)}
+                                  value={selectedFilters[eachItem.key]}
                                   variant="standard"
                                   name={eachItem.display}
                                   label={eachItem.display}
                                   component={Autocomplete}
                                   options={eachItem.options || []}
-                                  getOptionLabel={(option: IProductTypeDropDownProps) =>
-                                    option.value || option.key || option.display
-                                  }
+                                  getOptionLabel={(option: IProductTypeDropDownProps) => option.value}
                                   onChange={(event: React.ChangeEvent<HTMLInputElement>, newVal: OptionType) => {
                                     if (event) {
                                       const keyName = eachItem.key;
@@ -364,38 +363,46 @@ const ProductSubtypeDashboard: FC = () => {
                           }
                         })}
                     </Grid>
-                    <Grid item direction="column" style={{ padding: '4px', marginTop: '1rem', marginBottom: '-10px' }}>
-                      <Button
-                        type="submit"
-                        color="primary"
-                        variant="outlined"
-                        size="large"
-                        disabled={productTypeId == 0}
-                        style={{
-                          fontWeight: 'bold',
-                          fontSize: 10,
-                          padding: '15px 20px',
-                          margin: '0 10px 0px',
-                        }}
-                      >
-                        Submit
-                      </Button>
+                    <Grid
+                      container
+                      direction="column"
+                      justify="center"
+                      spacing={3}
+                      style={{ padding: '4px', marginTop: '1rem', marginBottom: '-2.5rem' }}
+                    >
+                      <Grid item>
+                        <Button
+                          type="submit"
+                          color="primary"
+                          variant="outlined"
+                          size="large"
+                          disabled={productTypeId == 0}
+                          style={{
+                            fontWeight: 'bold',
+                            fontSize: 10,
+                            padding: '15px 20px',
+                            margin: '0 10px 0px',
+                          }}
+                        >
+                          Submit
+                        </Button>
 
-                      <Button
-                        type="button"
-                        color="primary"
-                        variant="outlined"
-                        size="large"
-                        disabled={productTypeId == 0}
-                        style={{
-                          fontWeight: 'bold',
-                          fontSize: 10,
-                          padding: '15px 20px',
-                          margin: '0 10px 0px',
-                        }}
-                      >
-                        Add Product Subtype
-                      </Button>
+                        <Button
+                          type="button"
+                          color="primary"
+                          variant="outlined"
+                          size="large"
+                          disabled={productTypeId == 0}
+                          style={{
+                            fontWeight: 'bold',
+                            fontSize: 10,
+                            padding: '15px 20px',
+                            margin: '0 10px 0px',
+                          }}
+                        >
+                          Add Product Subtype
+                        </Button>
+                      </Grid>
                     </Grid>
                   </Paper>
                 </Grid>
