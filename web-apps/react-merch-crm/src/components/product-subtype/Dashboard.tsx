@@ -24,6 +24,7 @@ import {
   Action,
   ActionType,
 } from './IDashboard';
+import CreateProduct from './CreateProduct';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -51,7 +52,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const navItems: LeftNavBarProps = {
-  navList: [{ linkUrl: '/products/product-subtype', linkText: 'Product SubType Dashboard', icon: DashBoardIcon }],
+  navList: [
+    { linkUrl: '/products/product-subtype', linkText: 'Product SubType Dashboard', icon: DashBoardIcon },
+    { linkUrl: '/products/create-product', linkText: 'Add Product Subtype', icon: DashBoardIcon },
+  ],
 };
 
 const DashBoardWrapper = styled.div`
@@ -427,6 +431,9 @@ const ProductSubtypeDashboard: FC = () => {
               {isDashboardSuccess && tableData.rows.length > 0 && <HSTableV1 {...tableData} />}
             </TableWrapper>
           </DashBoardWrapper>
+        </Route>
+        <Route path={`${path}/create-product`}>
+          <CreateProduct header="Add Product Subtype" key={'Create'} />
         </Route>
       </Switch>
     </>
