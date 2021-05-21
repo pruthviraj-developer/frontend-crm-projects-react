@@ -64,12 +64,12 @@ export interface ISelectedValues {
   [key: string]: OptionType | string | number | any;
 }
 
-// export enum ActionType {
-//   removeItems = 'removeItem',
-//   addItems = 'addItem',
-// }
+export enum ActionType {
+  removeItems = 'removeItem',
+  addItems = 'addItem',
+}
 
-export type Action = ['removeItem', string[]] | ['addItem', any];
+export type Action = [ActionType.removeItems, string[]] | [ActionType.addItems, any];
 
 export declare type IPageType = {
   pageSize: number;

@@ -22,6 +22,7 @@ import {
   OptionType,
   ISelectedValues,
   Action,
+  ActionType,
 } from './IDashboard';
 
 const useStyles = makeStyles((theme) => ({
@@ -81,9 +82,9 @@ const defaultPageFilters = { pageSize: 20, pageNo: 0 };
 
 const reducer = (state: any, [type, payload]: Action): any => {
   switch (type) {
-    case 'removeItem':
+    case ActionType.removeItems:
       return state.filter((item: any) => !(payload as string[]).includes(item.key));
-    case 'addItem':
+    case ActionType.addItems:
       return [...state, ...(payload as any)].sort((a, b) => a.display_position - b.display_position);
   }
   return state;
@@ -156,7 +157,7 @@ const ProductSubtypeDashboard: FC = () => {
           display_position: 1,
         },
       ];
-      dispatch(['addItem', formList]);
+      dispatch([ActionType.addItems, formList]);
     }
   }, [categoryData, isCategoryDataSuccess]);
 
@@ -171,7 +172,7 @@ const ProductSubtypeDashboard: FC = () => {
           options: subCategoryData,
           display_position: 2,
         };
-        dispatch(['addItem', [subCat]]);
+        dispatch([ActionType.addItems, [subCat]]);
       } else {
         !isSubCategoryFetching &&
           categoryId !== '' &&
@@ -190,7 +191,7 @@ const ProductSubtypeDashboard: FC = () => {
           options: productTypeData,
           display_position: 2,
         };
-        dispatch(['addItem', [productType]]);
+        dispatch([ActionType.addItems, [productType]]);
       } else {
         !isProductTypeDataFetching &&
           subcategoryId !== '' &&
@@ -291,12 +292,12 @@ const ProductSubtypeDashboard: FC = () => {
   const onDropDownChange = (key: string, formData: ISelectedValues) => {
     const dataKey = formData[key]?.key || '';
     if (key === 'productCategoryId') {
-      dispatch(['removeItem', ['productSubCategoryId', 'productTypeId']]);
+      dispatch([ActionType.removeItems, ['productSubCategoryId', 'productTypeId']]);
       setCategoryId(dataKey);
       setSubCategoryId('');
       setProductTypeId(0);
     } else if (key === 'productSubCategoryId') {
-      dispatch(['removeItem', ['productTypeId']]);
+      dispatch([ActionType.removeItems, ['productTypeId']]);
       setSubCategoryId(dataKey);
       setProductTypeId(0);
     } else if (key === 'productTypeId') {
