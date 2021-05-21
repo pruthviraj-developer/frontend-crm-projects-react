@@ -343,13 +343,13 @@ const ProductSubtypeDashboard: FC = () => {
                                 return (
                                   <Grid item xs={3} style={{ padding: '4px' }} key={eachItem.key}>
                                     <Field
-                                      value={selectedFilters[eachItem.key]}
+                                      value={selectedFilters[eachItem.key] || null}
                                       variant="standard"
                                       name={eachItem.display}
                                       label={eachItem.display}
                                       component={Autocomplete}
                                       options={eachItem.options || []}
-                                      getOptionLabel={(option: IProductTypeDropDownProps) => option.value}
+                                      getOptionLabel={(option: IProductTypeDropDownProps) => option.value || option.key}
                                       onChange={(event: React.ChangeEvent<HTMLInputElement>, newVal: OptionType) => {
                                         if (event) {
                                           const keyName = eachItem.key;
