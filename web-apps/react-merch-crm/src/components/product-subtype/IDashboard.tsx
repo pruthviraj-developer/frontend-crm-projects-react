@@ -10,6 +10,29 @@ export interface DashboardData {
   status: string;
 }
 
+export interface IDashboardResponse {
+  messageList?: string;
+  productSubtypeList: DashboardData[] | any;
+  status?: string;
+  totalCount: number;
+}
+
+export interface IProductTypeDropDownProps {
+  options?: OptionType[] | null;
+  key: string;
+  input_type: string;
+  apiKey?: string;
+  type?: string;
+  name?: string;
+  label?: string;
+  multi?: boolean;
+  disabled?: boolean;
+  display: string;
+  clearFields?: Array<string>;
+  display_position: number;
+  value?: string;
+}
+
 export interface CategoryType {
   id: string;
   label: string;
@@ -24,6 +47,21 @@ export interface PropsType {
   columns: CategoryType[];
   rows: DashboardData[];
   fetchTableData?: any;
+}
+
+export interface OptionType {
+  key: string | number;
+  value: string;
+  second: string | number;
+  first: string | number;
+}
+
+export interface Options {
+  [key: number]: OptionType[];
+}
+
+export interface ISelectedValues {
+  [key: string]: OptionType | string | number | any;
 }
 
 // export enum ActionType {

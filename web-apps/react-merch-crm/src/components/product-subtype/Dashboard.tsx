@@ -10,7 +10,16 @@ import { Autocomplete, AutocompleteRenderInputParams } from '@material-ui/lab';
 import { productSubtypeService } from '@hs/services';
 import { HSTableV1, HsTablePropsV1 } from '@hs/components';
 import { useQuery, useQueryClient } from 'react-query';
-import { DashboardData, IPageType, PropsType, Action } from './IDashboard';
+import {
+  IDashboardResponse,
+  DashboardData,
+  IProductTypeDropDownProps,
+  IPageType,
+  PropsType,
+  OptionType,
+  ISelectedValues,
+  Action,
+} from './IDashboard';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -76,14 +85,15 @@ const reducer = (state: any, [type, payload]: Action): any => {
 const ProductSubtypeDashboard: FC = () => {
   const classes = useStyles();
   const [dropDownsList, dispatch] = useReducer(reducer, []);
-  const [selectedFilters, setSelectedFilters] = useState<any>({});
+  const [postFilterData, setPostFilterData] = useState({});
+  const [selectedFilters, setSelectedFilters] = useState<ISelectedValues>({});
   const [productTypeId, setProductTypeId] = useState<number>(0);
   const [filterPage, setFilterPage] = useState<IPageType>(defaultPageFilters);
   const queryClient = useQueryClient();
 
   const value: Array<string> = [];
 
-  const { data: categoryData, isSuccess: isCategoryDataSuccess } = useQuery<any>(
+  const { data: categoryData, isSuccess: isCategoryDataSuccess } = useQuery<OptionType[] | any>(
     'category',
     productSubtypeService.getCategory,
     {
@@ -96,7 +106,7 @@ const ProductSubtypeDashboard: FC = () => {
 
   const [categoryId, setCategoryId] = useState<string | number>('');
   const { data: subCategoryData, isSuccess: isSubCategorySuccess, isFetching: isSubCategoryFetching } = useQuery<
-    any,
+    OptionType[] | any,
     Record<string, string>
   >(['subcategory', categoryId], () => productSubtypeService.getSubCategory(categoryId), {
     staleTime: Infinity,
@@ -108,7 +118,7 @@ const ProductSubtypeDashboard: FC = () => {
     data: productTypeData,
     isSuccess: isProductTypeDataSuccess,
     isFetching: isProductTypeDataFetching,
-  } = useQuery<any, Record<string, string>>(
+  } = useQuery<OptionType[] | any, Record<string, string>>(
     ['producttype', subcategoryId],
     () => productSubtypeService.getProductType(subcategoryId),
     {
@@ -117,9 +127,9 @@ const ProductSubtypeDashboard: FC = () => {
     },
   );
 
-  const { data: dashboardData, isSuccess: isDashboardSuccess } = useQuery<any>(
+  const { data: dashboardData, isSuccess: isDashboardSuccess } = useQuery<IDashboardResponse>(
     ['dashboardData', filterPage],
-    () => productSubtypeService.getDashboardData({ ...filterPage, pageNo: filterPage.pageNo + 1 }, {}),
+    () => productSubtypeService.getDashboardData({ ...filterPage, pageNo: filterPage.pageNo + 1 }, postFilterData),
     {
       staleTime: 2000,
       onError: (error: any) => {
@@ -130,7 +140,7 @@ const ProductSubtypeDashboard: FC = () => {
 
   useEffect(() => {
     if (isCategoryDataSuccess) {
-      const formList: any = [
+      const formList: IProductTypeDropDownProps[] = [
         {
           key: 'productCategoryId',
           display: 'Category',
@@ -141,7 +151,7 @@ const ProductSubtypeDashboard: FC = () => {
         },
       ];
       dispatch(['addItem', formList]);
-      categoryData.forEach((item: any) => {
+      categoryData.forEach((item: OptionType) => {
         value.push(item.value);
       });
     }
@@ -150,7 +160,7 @@ const ProductSubtypeDashboard: FC = () => {
   useEffect(() => {
     if (isSubCategorySuccess) {
       if (subCategoryData && subCategoryData.length) {
-        const subCat: any = {
+        const subCat: IProductTypeDropDownProps = {
           key: 'productSubCategoryId',
           display: 'Sub Category',
           input_type: 'S',
@@ -170,7 +180,7 @@ const ProductSubtypeDashboard: FC = () => {
   useEffect(() => {
     if (isProductTypeDataSuccess) {
       if (productTypeData && productTypeData.length) {
-        const productType: any = {
+        const productType: IProductTypeDropDownProps = {
           key: 'productTypeId',
           display: 'Product Type',
           input_type: 'S',
@@ -269,7 +279,7 @@ const ProductSubtypeDashboard: FC = () => {
     fetchTableData: getUpdatedTableData,
   };
 
-  const onDropDownChange = (key: any, formData: any) => {
+  const onDropDownChange = (key: string, formData: ISelectedValues) => {
     const dataKey = formData[key]?.key || '';
     if (key === 'productCategoryId') {
       dispatch(['removeItem', ['productSubCategoryId', 'productTypeId']]);
@@ -293,7 +303,7 @@ const ProductSubtypeDashboard: FC = () => {
       }
     });
     setFilterPage({ ...defaultPageFilters });
-    // setPostDataFiltersObject(postObject);
+    setPostFilterData({ ...postObject });
   };
 
   return (
@@ -315,7 +325,7 @@ const ProductSubtypeDashboard: FC = () => {
                   <Paper className={clsx(classes.paper, classes.filters)} variant="outlined">
                     <Grid container direction="row" justify="center" spacing={3}>
                       {dropDownsList &&
-                        dropDownsList.map((eachItem: any) => {
+                        dropDownsList.map((eachItem: IProductTypeDropDownProps) => {
                           if (eachItem.input_type === 'S') {
                             return (
                               <Grid item xs={3} style={{ padding: '4px' }} key={eachItem.key}>
@@ -326,11 +336,13 @@ const ProductSubtypeDashboard: FC = () => {
                                   label={eachItem.display}
                                   component={Autocomplete}
                                   options={eachItem.options || []}
-                                  getOptionLabel={(option: any) => option.value || option.key || option.display}
-                                  onChange={(event: React.ChangeEvent<HTMLInputElement>, newVal: any) => {
+                                  getOptionLabel={(option: IProductTypeDropDownProps) =>
+                                    option.value || option.key || option.display
+                                  }
+                                  onChange={(event: React.ChangeEvent<HTMLInputElement>, newVal: OptionType) => {
                                     if (event) {
                                       const keyName = eachItem.key;
-                                      const formValues = { ...selectedFilters, [keyName]: newVal };
+                                      const formValues: ISelectedValues = { ...selectedFilters, [keyName]: newVal };
                                       if (eachItem.clearFields) {
                                         eachItem.clearFields.forEach((element: string) => {
                                           delete formValues[element];
