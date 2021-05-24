@@ -46,7 +46,7 @@ export interface PropsType {
   title: string;
   columns: CategoryType[];
   rows: DashboardData[];
-  fetchTableData?: any;
+  fetchTableData?: IPageType;
 }
 
 export interface OptionType {
@@ -61,7 +61,7 @@ export interface Options {
 }
 
 export interface ISelectedValues {
-  [key: string]: OptionType | string | number | any;
+  [key: string]: OptionType | any;
 }
 
 export enum ActionType {
@@ -69,7 +69,7 @@ export enum ActionType {
   addItems = 'addItem',
 }
 
-export type Action = [ActionType.removeItems, string[]] | [ActionType.addItems, any];
+export type Action = [ActionType.removeItems, string[]] | [ActionType.addItems, IProductTypeDropDownProps[]];
 
 export declare type IPageType = {
   pageSize: number;

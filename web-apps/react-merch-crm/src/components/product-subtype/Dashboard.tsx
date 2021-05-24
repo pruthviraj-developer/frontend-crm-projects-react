@@ -84,12 +84,14 @@ const showError = (error: Record<string, string>) => {
 
 const defaultPageFilters = { pageSize: 20, pageNo: 0 };
 
-const reducer = (state: any, [type, payload]: Action): any => {
+const reducer = (state: IProductTypeDropDownProps[], [type, payload]: Action): IProductTypeDropDownProps[] => {
   switch (type) {
     case ActionType.removeItems:
-      return state.filter((item: any) => !(payload as string[]).includes(item.key));
+      return state.filter((item) => !(payload as string[]).includes(item.key));
     case ActionType.addItems:
-      return [...state, ...(payload as any)].sort((a, b) => a.display_position - b.display_position);
+      return [...state, ...(payload as IProductTypeDropDownProps[])].sort(
+        (a, b) => a.display_position - b.display_position,
+      );
   }
   return state;
 };
@@ -104,7 +106,7 @@ const ProductSubtypeDashboard: FC = () => {
   const [filterPage, setFilterPage] = useState<IPageType>(defaultPageFilters);
   const queryClient = useQueryClient();
 
-  const { data: categoryData, isSuccess: isCategoryDataSuccess } = useQuery<OptionType[] | any>(
+  const { data: categoryData, isSuccess: isCategoryDataSuccess } = useQuery<OptionType[]>(
     'category',
     productSubtypeService.getCategory,
     {
@@ -117,7 +119,7 @@ const ProductSubtypeDashboard: FC = () => {
 
   const [categoryId, setCategoryId] = useState<string | number>('');
   const { data: subCategoryData, isSuccess: isSubCategorySuccess, isFetching: isSubCategoryFetching } = useQuery<
-    OptionType[] | any,
+    OptionType[],
     Record<string, string>
   >(['subcategory', categoryId], () => productSubtypeService.getSubCategory(categoryId), {
     staleTime: Infinity,
@@ -129,7 +131,7 @@ const ProductSubtypeDashboard: FC = () => {
     data: productTypeData,
     isSuccess: isProductTypeDataSuccess,
     isFetching: isProductTypeDataFetching,
-  } = useQuery<OptionType[] | any, Record<string, string>>(
+  } = useQuery<OptionType[], Record<string, string>>(
     ['producttype', subcategoryId],
     () => productSubtypeService.getProductType(subcategoryId),
     {
@@ -244,7 +246,7 @@ const ProductSubtypeDashboard: FC = () => {
             <>
               <NavLink
                 to={{
-                  pathname: `/edit-product-subtype/${row.productCategoryId}/${row.productSubCategoryId}/${row.productTypeId}`,
+                  pathname: `edit-product-subtype/${row.productCategoryId}/${row.productSubCategoryId}/${row.productTypeId}`,
                 }}
               >
                 {row.productCategoryName}
@@ -379,15 +381,7 @@ const ProductSubtypeDashboard: FC = () => {
                                 return false;
                               }
                             })}
-                        </Grid>
-                        <Grid
-                          container
-                          direction="column"
-                          justify="center"
-                          spacing={3}
-                          style={{ padding: '4px', marginTop: '1rem', marginBottom: '-2.5rem' }}
-                        >
-                          <Grid item>
+                          <Grid item xs={1} style={{ padding: '4px' }}>
                             <Button
                               type="submit"
                               color="primary"
@@ -402,22 +396,6 @@ const ProductSubtypeDashboard: FC = () => {
                               }}
                             >
                               Submit
-                            </Button>
-
-                            <Button
-                              type="button"
-                              color="primary"
-                              variant="outlined"
-                              size="large"
-                              disabled={productTypeId == 0}
-                              style={{
-                                fontWeight: 'bold',
-                                fontSize: 10,
-                                padding: '15px 20px',
-                                margin: '0 10px 0px',
-                              }}
-                            >
-                              Add Product Subtype
                             </Button>
                           </Grid>
                         </Grid>
@@ -434,6 +412,9 @@ const ProductSubtypeDashboard: FC = () => {
         </Route>
         <Route path={`${path}/create-product`}>
           <CreateProduct header="Add Product Subtype" key={'Create'} />
+        </Route>
+        <Route path={`${path}/edit-product-subtype/:cat_id/:subcat_id/:prod_type_id`}>
+          <CreateProduct header="Edit Product Subtype" key={'Update'} />
         </Route>
       </Switch>
     </>

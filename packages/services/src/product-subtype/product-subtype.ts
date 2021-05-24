@@ -20,6 +20,11 @@ const getProductType = <P, R>(subcategoryId: P): Promise<R> => {
   return httpService.get<R>({ url });
 };
 
+const addProduct = <P, R>(data: P): Promise<R> => {
+  const url = '/crm-api/intranet/productsubtype/save';
+  return httpService.post<R>({ url, data });
+};
+
 const getDashboardData = <P, R>(
   params: Record<symbol, unknown>,
   data: P
@@ -40,6 +45,7 @@ export const productSubtypeService = {
   getCategory,
   getSubCategory,
   getProductType,
+  addProduct,
   getDashboardData,
   updateAction,
 };
