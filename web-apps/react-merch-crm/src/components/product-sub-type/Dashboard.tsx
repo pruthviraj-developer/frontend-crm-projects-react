@@ -82,7 +82,6 @@ const reducer = (state: IProductTypeDropDownProps[], [type, payload]: Action): I
         (a, b) => a.display_position - b.display_position,
       );
   }
-  return state;
 };
 
 const ProductSubtypeDashboard: FC = () => {
