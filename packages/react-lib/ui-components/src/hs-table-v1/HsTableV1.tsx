@@ -17,7 +17,7 @@ const StyledHsTable = styled(Paper)`
 const StyledTableContainer = styled(TableContainer)`
   max-height: 80vh;
   .MuiTableCell-root {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
   }
 `;
 
@@ -28,7 +28,7 @@ const StyledIcon = styled(SvgIcon)`
 export const HSTableV1: FC<HsTablePropsV1> = (props: HsTablePropsV1) => {
   const columns = props.columns;
   const rows = props.rows;
-  const [page, setPage] = React.useState(0);
+  const [page, setPage] = React.useState(props.activePage || 0);
   const [rowsPerPage, setRowsPerPage] = React.useState(() => props.rowsPerPage);
 
   useEffect(() => {
@@ -56,10 +56,10 @@ export const HSTableV1: FC<HsTablePropsV1> = (props: HsTablePropsV1) => {
     if (column.withIcon) {
       return (
         <>
-          {row[column.id]}{' '}
           {column.withIcon && row.active && (
             <StyledIcon icon={SelectedCircle} />
           )}
+          {row[column.id]}{' '}
         </>
       );
     } else if (column.withDate) {
@@ -110,6 +110,7 @@ export const HSTableV1: FC<HsTablePropsV1> = (props: HsTablePropsV1) => {
                       overflow: 'hidden',
                       textOverflow: 'ellipsis',
                       fontWeight: 'bold',
+                      textAlign: 'center',
                     }}
                   >
                     {column.label}
@@ -140,6 +141,7 @@ export const HSTableV1: FC<HsTablePropsV1> = (props: HsTablePropsV1) => {
                               overflow: 'hidden',
                               textOverflow: 'ellipsis',
                               padding: '16px 10px',
+                              textAlign: 'center',
                             }}
                           >
                             {column.customRender
@@ -161,6 +163,7 @@ export const HSTableV1: FC<HsTablePropsV1> = (props: HsTablePropsV1) => {
                               overflow: 'hidden',
                               textOverflow: 'ellipsis',
                               padding: '16px 10px',
+                              textAlign: 'center',
                             }}
                           >
                             {column.render(props, row)}

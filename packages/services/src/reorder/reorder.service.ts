@@ -1,9 +1,27 @@
 import { httpService } from '../http';
+import queryString from 'query-string';
 
-const createConstraint = <P, R>(data: P): Promise<R> => {
+import {
+  ICreateClusterType,
+  IReorderCreateConstraintParams,
+  IReorderCreateConstraint,
+} from '../reorder/Ireorder.service';
+
+const createConstraint = (
+  params: IReorderCreateConstraintParams,
+  data: ICreateClusterType
+): Promise<IReorderCreateConstraint> => {
+  const url = queryString.stringifyUrl({
+    url: '/crm-api/assortment-plan-api/reorder-take-action/vendor-constraint-service/age-color-constraint',
+    query: { ...params },
+  });
+  return httpService.post<IReorderCreateConstraint>({ url, data });
+};
+
+const getConstraint = <P, R>(params: P): Promise<R> => {
   const url =
     '/crm-api/assortment-plan-api/reorder-take-action/vendor-constraint-service/age-color-constraint';
-  return httpService.post<R>({ url, data });
+  return httpService.get<R>({ url, params });
 };
 
 const getColors = <R>(): Promise<R> => {
@@ -42,8 +60,20 @@ const getBrands = <P, R>(params: P): Promise<R> => {
   return httpService.get<R>({ url, params });
 };
 
+const getDashboardData = <P, R>(params?: P): Promise<R> => {
+  const url = '/crm-api/assortment-plan-api/util/dashboard';
+  return httpService.get<R>({ url, params });
+};
+
+const updateDashboardAction = <P, R>(data: P): Promise<R> => {
+  const url =
+    '/crm-api/assortment-plan-api/reorder-take-action/vendor-constraint-service/age-color-constraint';
+  return httpService.patch({ url, params: { ...data } });
+};
+
 export const reorderService = {
   createConstraint,
+  getConstraint,
   getColors,
   getFilters,
   getBrands,
@@ -51,4 +81,6 @@ export const reorderService = {
   getSubCategories,
   getTableData,
   updateOrders,
+  getDashboardData,
+  updateDashboardAction,
 };
