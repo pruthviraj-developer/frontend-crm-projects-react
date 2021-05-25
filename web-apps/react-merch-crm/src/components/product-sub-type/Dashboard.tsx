@@ -129,7 +129,7 @@ const ProductSubtypeDashboard: FC = () => {
   );
 
   const { data: dashboardData, isSuccess: isDashboardSuccess } = useQuery<IDashboardResponse>(
-    ['dashboardData', filterPage],
+    ['dashboardData', postFilterData, filterPage],
     () => productSubtypeService.getDashboardData({ ...filterPage, pageNo: filterPage.pageNo + 1 }, postFilterData),
     {
       staleTime: 2000,
@@ -327,12 +327,12 @@ const ProductSubtypeDashboard: FC = () => {
               <Form autoComplete="off">
                 <Grid container direction="column" justify="center" spacing={1}>
                   <Paper className={clsx(classes.paper, classes.filters)} variant="outlined">
-                    <Grid container direction="row" justify="center" spacing={3}>
+                    <Grid container direction="row" justify="center" spacing={2}>
                       {dropDownsList &&
                         dropDownsList.map((eachItem: IProductTypeDropDownProps) => {
                           if (eachItem.input_type === 'S') {
                             return (
-                              <Grid item xs={3} style={{ padding: '4px' }} key={eachItem.key}>
+                              <Grid item xs={2} style={{ padding: '4px' }} key={eachItem.key}>
                                 <Field
                                   value={selectedFilters[eachItem.key] || null}
                                   variant="standard"
@@ -377,6 +377,7 @@ const ProductSubtypeDashboard: FC = () => {
                             fontSize: 10,
                             padding: '15px 20px',
                             margin: '0 10px 0px',
+                            width: '100%',
                           }}
                         >
                           Submit
