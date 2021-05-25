@@ -56,10 +56,10 @@ export const HSTableV1: FC<HsTablePropsV1> = (props: HsTablePropsV1) => {
     if (column.withIcon) {
       return (
         <>
-          {row[column.id]}{' '}
           {column.withIcon && row.active && (
             <StyledIcon icon={SelectedCircle} />
           )}
+          {row[column.id]}{' '}
         </>
       );
     } else if (column.withDate) {

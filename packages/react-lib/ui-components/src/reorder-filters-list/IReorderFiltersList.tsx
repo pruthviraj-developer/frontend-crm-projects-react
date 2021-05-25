@@ -3,10 +3,21 @@ export interface ReorderFiltersOptions {
   value?: string;
   display?: string;
   name?: string;
+  type?: string;
+}
+interface FiltersOptions {
+  id: number;
+  display: string;
+}
+interface OptionType {
+  key: string | number;
+  value: string;
+  second: string | number;
+  first: string | number;
 }
 
 export interface ReorderFiltersProps {
-  options?: ReorderFiltersOptions[] | null;
+  options?: ReorderFiltersOptions[] | FiltersOptions[] | OptionType[] | null;
   key: string;
   input_type: string;
   apiKey?: string;
@@ -14,8 +25,10 @@ export interface ReorderFiltersProps {
   name?: string;
   label?: string;
   multi?: boolean;
+  disabled?: boolean;
   display: string;
   clearFields?: Array<string>;
+  display_position?: number;
 }
 
 export interface ReorderFiltersObjectProps {

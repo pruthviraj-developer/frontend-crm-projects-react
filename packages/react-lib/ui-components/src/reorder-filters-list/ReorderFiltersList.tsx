@@ -52,6 +52,7 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
   const [selectedFilters, setSelectedFilters] = useState(
     defaultSelectedValues || initialValues
   );
+  const [isConstraintFormDirty,setIsConstraintFormDirty] = useState(0);
 
   return (
     <FiltersWrapper className={classes.root}>
@@ -93,9 +94,12 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
                                 ] || (sideBarOption.multi ? [] : null)
                               }
                               multiple={sideBarOption.multi || false}
+                              disabled={sideBarOption.disabled || false}
                               component={Autocomplete}
                               options={sideBarOption.options || []}
-                              disableCloseOnSelect={sideBarOption.multi?true:false}
+                              disableCloseOnSelect={
+                                sideBarOption.multi ? true : false
+                              }
                               getOptionSelected={(
                                 option: ReorderFiltersOptions,
                                 selectedValue: ReorderFiltersOptions
@@ -145,7 +149,10 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
                                   ) {
                                     delete formValues['age_constraints'];
                                   }
-                                  onChange && onChange(keyName, formValues);
+                                  if(keyName != 'color_constraints'){
+                                    onChange && onChange(keyName, formValues);
+                                  }
+                                  setIsConstraintFormDirty(1);
                                   setSelectedFilters(formValues);
                                 }
                               }}
@@ -208,6 +215,7 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
                                         'from'
                                       ] = fromValue;
                                       setSelectedFilters(formValues);
+                                      setIsConstraintFormDirty(1);
                                     }}
                                   />
                                 </Grid>
@@ -237,6 +245,7 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
                                         'to'
                                       ] = toValue;
                                       setSelectedFilters(formValues);
+                                      setIsConstraintFormDirty(1);
                                     }}
                                   />
                                 </Grid>
@@ -245,7 +254,6 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
                                     <Button
                                       type="button"
                                       color="primary"
-                                      disabled={!isValid}
                                       variant="outlined"
                                       onClick={() => {
                                         const formValues = {
@@ -255,8 +263,10 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
                                           index,
                                           1
                                         );
-                                        setSelectedFilters(formValues);
                                         arrayHelpers.remove(index);
+                                        setSelectedFilters(formValues);
+                                        setIsConstraintFormDirty(1);
+                                        validateForm();
                                       }}
                                     >
                                       Remove
@@ -269,7 +279,8 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
                           <Button
                             type="button"
                             color="primary"
-                            disabled={!isValid}
+                            disabled={!isValid || !(selectedFilters['age_constraints'][selectedFilters['age_constraints'].length-1]['from'] != null  
+                            || selectedFilters['age_constraints'][selectedFilters['age_constraints'].length -1]['to'] != null)}
                             variant="outlined"
                             onClick={() => {
                               const formValues = { ...selectedFilters };
@@ -278,6 +289,7 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
                                 to: null,
                               });
                               setSelectedFilters(formValues);
+                              setIsConstraintFormDirty(1);
                               validateForm();
                             }}
                           >
@@ -293,7 +305,9 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
                     color="primary"
                     variant="outlined"
                     size="large"
-                    disabled={!isValid}
+                    disabled={!isValid || (!defaultSelectedValues.isConstraintFormDirty && !isConstraintFormDirty) || 
+                      (selectedFilters && selectedFilters['age_constraints'] && !(selectedFilters['age_constraints'][selectedFilters['age_constraints'].length-1]['from'] != null  
+                    || selectedFilters['age_constraints'][selectedFilters['age_constraints'].length -1]['to'] != null))}
                     style={{
                       fontWeight: 'bold',
                       fontSize: 10,

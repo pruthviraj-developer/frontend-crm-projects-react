@@ -6,11 +6,13 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { LightTheme } from '@hs/utils';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-const MskuUpload = React.lazy(() => import('./components/msku/MskuUpload'));
+const MskuUpload = React.lazy(() => import(/* webpackChunkName: "msku-upload" */ './components/msku/MskuUpload'));
 const ForecastAndCapitalBudget = React.lazy(
-  () => import('./components/forecast-capitalbudget/ForecastAndCapitalBudget'),
+  () => import(/* webpackChunkName: "forecast" */ './components/forecast-capitalbudget/ForecastAndCapitalBudget'),
 );
-const MskuTargetDownload = React.lazy(() => import('./components/mskuTargetDownload/MskuTargetDownload'));
+const MskuTargetDownload = React.lazy(
+  () => import(/* webpackChunkName: "msku-target" */ './components/mskuTargetDownload/MskuTargetDownload'),
+);
 
 const App: FC = () => {
   return (
