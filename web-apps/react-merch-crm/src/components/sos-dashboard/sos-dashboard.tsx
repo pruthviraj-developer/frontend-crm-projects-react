@@ -1,10 +1,7 @@
-import React from 'react';
-import { FC, useState, useEffect } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { useLocation, useRouteMatch } from 'react-router-dom';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import styled from '@emotion/styled';
-import { DashBoardIcon, NonProcIcon, TransferIcon } from '@hs/icons';
 import CancelIcon from '@material-ui/icons/Cancel';
 import ExposureIcon from '@material-ui/icons/Exposure';
 import { IconButton, Button } from '@material-ui/core';
@@ -19,17 +16,9 @@ import { TransitionProps } from '@material-ui/core/transitions';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 
-import { LeftNavBar, LeftNavBarProps, HSTableV1, HsTableProps } from '@hs/components';
+import { HSTableV1, HsTableProps } from '@hs/components';
 import { sosService, sosTableData, sosErrorMessage, sosTableParams, tableParams, updateSosParams } from '@hs/services';
 import { toast } from 'react-toastify';
-
-import Merchandisers from '../merchandisers/Merchandisers';
-import {
-  NonProcurable,
-  NonProcurableCurrentVendor,
-  TransferVendor,
-  TransferVendorWithRevisedData,
-} from '../upload-screens';
 
 const DashBoardWrapper = styled.div`
   margin-left: 90px;
@@ -57,21 +46,8 @@ const useStyles = makeStyles({
     padding: '0 16px 16px',
   },
 });
-
-const navItems: LeftNavBarProps = {
-  navList: [
-    { linkUrl: '/sos/sosdashboard', linkText: 'SOS Dashboard', icon: DashBoardIcon },
-    { linkUrl: '/sos/merchandisers', linkText: 'Merchandisers', icon: DashBoardIcon },
-    { linkUrl: '/sos/mark-non-procurable', linkText: 'Mark Non-procurable', icon: NonProcIcon },
-    { linkUrl: '/sos/modify-fulfillment-status', linkText: 'Modify Fulfillment Status', icon: NonProcIcon },
-    { linkUrl: '/sos/transfer-pid', linkText: 'Transfer PID : No Modification', icon: TransferIcon },
-    { linkUrl: '/sos/transfer-revised-pids', linkText: 'Transfer PID : Modify Details', icon: TransferIcon },
-  ],
-};
-
-const DashBoard: FC = () => {
+const SosDashboard: FC = () => {
   const location = useLocation();
-  const { path } = useRouteMatch();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [sosData, setTableData] = useState<sosTableData>({});
   const [count, setCount] = useState<number>(0);
@@ -327,61 +303,38 @@ const DashBoard: FC = () => {
   }, [filterParams, pathName]);
 
   return (
-    <>
-      <LeftNavBar {...navItems}></LeftNavBar>
-      <Switch>
-        <Redirect exact from="/sos" to="/sos/sosdashboard" />
-        <Route path={`${path}/merchandisers`}>
-          <Merchandisers />
-        </Route>
-        <Route path={`${path}/mark-non-procurable`}>
-          <NonProcurable />
-        </Route>
-        <Route path={`${path}/modify-fulfillment-status`}>
-          <NonProcurableCurrentVendor />
-        </Route>
-        <Route path={`${path}/transfer-pid`}>
-          <TransferVendor />
-        </Route>
-        <Route path={`${path}/transfer-revised-pids`}>
-          <TransferVendorWithRevisedData />
-        </Route>
-        <Route path={`${path}/sosdashboard`}>
-          <DashBoardWrapper>
-            <h1>SOS DashBoard</h1>
-            {count > 0 && <HSTableV1 {...TableData} />}
-            {count === 0 && <h5> {status}</h5>}
-            <Dialog
-              open={sosPopup}
-              TransitionComponent={Transition}
-              keepMounted
-              onClose={handleSosPopupClose}
-              aria-labelledby="alert-dialog-slide-title"
-              aria-describedby="alert-dialog-slide-description"
-              className={classes.cancelpopup}
-            >
-              <DialogTitle id="alert-dialog-slide-title" style={{ padding: '16px 24px 0 24px' }}>
-                <span className={classes.popuptitle}>Cancel SOS</span>
-              </DialogTitle>
-              <DialogContent style={{ padding: '0px 24px 10px' }}>
-                <DialogContentText style={{ marginBottom: '0' }} id="alert-dialog-slide-description">
-                  <p style={{ fontSize: '15px', fontWeight: 'bold' }}>Do you want to cancel the SOS?</p>
-                </DialogContentText>
-              </DialogContent>
-              <DialogActions className={classes.actionbuttons}>
-                <Button variant="contained" color="primary" onClick={handleSosPopupClose}>
-                  No
-                </Button>
-                <Button variant="contained" color="primary" onClick={handleSosPopupCloseSuccess}>
-                  Yes
-                </Button>
-              </DialogActions>
-            </Dialog>
-          </DashBoardWrapper>
-        </Route>
-      </Switch>
-    </>
+    <DashBoardWrapper>
+      <h1>SOS DashBoard</h1>
+      {count > 0 && <HSTableV1 {...TableData} />}
+      {count === 0 && <h5> {status}</h5>}
+      <Dialog
+        open={sosPopup}
+        TransitionComponent={Transition}
+        keepMounted
+        onClose={handleSosPopupClose}
+        aria-labelledby="alert-dialog-slide-title"
+        aria-describedby="alert-dialog-slide-description"
+        className={classes.cancelpopup}
+      >
+        <DialogTitle id="alert-dialog-slide-title" style={{ padding: '16px 24px 0 24px' }}>
+          <span className={classes.popuptitle}>Cancel SOS</span>
+        </DialogTitle>
+        <DialogContent style={{ padding: '0px 24px 10px' }}>
+          <DialogContentText style={{ marginBottom: '0' }} id="alert-dialog-slide-description">
+            <p style={{ fontSize: '15px', fontWeight: 'bold' }}>Do you want to cancel the SOS?</p>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions className={classes.actionbuttons}>
+          <Button variant="contained" color="primary" onClick={handleSosPopupClose}>
+            No
+          </Button>
+          <Button variant="contained" color="primary" onClick={handleSosPopupCloseSuccess}>
+            Yes
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </DashBoardWrapper>
   );
 };
 
-export default DashBoard;
+export default SosDashboard;

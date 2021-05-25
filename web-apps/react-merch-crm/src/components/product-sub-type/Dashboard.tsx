@@ -1,7 +1,5 @@
 import React, { FC, useState, useEffect, useReducer } from 'react';
 import { NavLink } from 'react-router-dom';
-import { useRouteMatch } from 'react-router-dom';
-import { Switch, Route, Redirect } from 'react-router-dom';
 import { Formik, Field, Form } from 'formik';
 import styled from '@emotion/styled';
 import clsx from 'clsx';
@@ -10,8 +8,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { TextField as MuiTextField, Grid, Paper, Button } from '@material-ui/core';
 import { Autocomplete, AutocompleteRenderInputParams } from '@material-ui/lab';
 import { productSubtypeService } from '@hs/services';
-import { LeftNavBar, LeftNavBarProps, HSTableV1, HsTablePropsV1 } from '@hs/components';
-import { DashBoardIcon } from '@hs/icons';
+import { HSTableV1, HsTablePropsV1 } from '@hs/components';
 import { useQuery, useQueryClient } from 'react-query';
 import {
   IDashboardResponse,
@@ -24,7 +21,6 @@ import {
   Action,
   ActionType,
 } from './IDashboard';
-import CreateProduct from './CreateProduct';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -50,13 +46,6 @@ const useStyles = makeStyles((theme) => ({
     border: '1px solid rgba(0, 0, 0, 0.12)',
   },
 }));
-
-const navItems: LeftNavBarProps = {
-  navList: [
-    { linkUrl: '/products/product-subtype', linkText: 'Product SubType Dashboard', icon: DashBoardIcon },
-    { linkUrl: '/products/create-product', linkText: 'Add Product Subtype', icon: DashBoardIcon },
-  ],
-};
 
 const DashBoardWrapper = styled.div`
   width: 94%;
@@ -97,7 +86,6 @@ const reducer = (state: IProductTypeDropDownProps[], [type, payload]: Action): I
 };
 
 const ProductSubtypeDashboard: FC = () => {
-  const { path } = useRouteMatch();
   const classes = useStyles();
   const [dropDownsList, dispatch] = useReducer(reducer, []);
   const [postFilterData, setPostFilterData] = useState({});
@@ -324,99 +312,85 @@ const ProductSubtypeDashboard: FC = () => {
 
   return (
     <>
-      <LeftNavBar {...navItems}></LeftNavBar>
-      <Switch>
-        <Redirect exact from="/products" to="/products/product-subtype" />
-        <Route path={`${path}/product-subtype`}>
-          <DashBoardWrapper>
-            <h1 className={classes.header}>Product SubType Dashboard</h1>
-            <FiltersWrapper className={classes.root}>
-              <Formik
-                enableReinitialize={true}
-                initialValues={{}}
-                onSubmit={(values, actions) => {
-                  actions.setSubmitting(false);
-                  onFiltersSubmit();
-                }}
-              >
-                {() => (
-                  <Form autoComplete="off">
-                    <Grid container direction="column" justify="center" spacing={1}>
-                      <Paper className={clsx(classes.paper, classes.filters)} variant="outlined">
-                        <Grid container direction="row" justify="center" spacing={3}>
-                          {dropDownsList &&
-                            dropDownsList.map((eachItem: IProductTypeDropDownProps) => {
-                              if (eachItem.input_type === 'S') {
-                                return (
-                                  <Grid item xs={3} style={{ padding: '4px' }} key={eachItem.key}>
-                                    <Field
-                                      value={selectedFilters[eachItem.key] || null}
-                                      variant="standard"
-                                      name={eachItem.display}
-                                      label={eachItem.display}
-                                      component={Autocomplete}
-                                      options={eachItem.options || []}
-                                      getOptionLabel={(option: IProductTypeDropDownProps) => option.value || option.key}
-                                      onChange={(event: React.ChangeEvent<HTMLInputElement>, newVal: OptionType) => {
-                                        if (event) {
-                                          const keyName = eachItem.key;
-                                          const formValues: ISelectedValues = { ...selectedFilters, [keyName]: newVal };
-                                          if (eachItem.clearFields) {
-                                            eachItem.clearFields.forEach((element: string) => {
-                                              delete formValues[element];
-                                            });
-                                          }
+      <DashBoardWrapper>
+        <h1 className={classes.header}>Product SubType Dashboard</h1>
+        <FiltersWrapper className={classes.root}>
+          <Formik
+            enableReinitialize={true}
+            initialValues={{}}
+            onSubmit={(values, actions) => {
+              actions.setSubmitting(false);
+              onFiltersSubmit();
+            }}
+          >
+            {() => (
+              <Form autoComplete="off">
+                <Grid container direction="column" justify="center" spacing={1}>
+                  <Paper className={clsx(classes.paper, classes.filters)} variant="outlined">
+                    <Grid container direction="row" justify="center" spacing={3}>
+                      {dropDownsList &&
+                        dropDownsList.map((eachItem: IProductTypeDropDownProps) => {
+                          if (eachItem.input_type === 'S') {
+                            return (
+                              <Grid item xs={3} style={{ padding: '4px' }} key={eachItem.key}>
+                                <Field
+                                  value={selectedFilters[eachItem.key] || null}
+                                  variant="standard"
+                                  name={eachItem.display}
+                                  label={eachItem.display}
+                                  component={Autocomplete}
+                                  options={eachItem.options || []}
+                                  getOptionLabel={(option: IProductTypeDropDownProps) => option.value || option.key}
+                                  onChange={(event: React.ChangeEvent<HTMLInputElement>, newVal: OptionType) => {
+                                    if (event) {
+                                      const keyName = eachItem.key;
+                                      const formValues: ISelectedValues = { ...selectedFilters, [keyName]: newVal };
+                                      if (eachItem.clearFields) {
+                                        eachItem.clearFields.forEach((element: string) => {
+                                          delete formValues[element];
+                                        });
+                                      }
 
-                                          setSelectedFilters(formValues);
-                                          onDropDownChange(keyName, formValues);
-                                        }
-                                      }}
-                                      renderInput={(params: AutocompleteRenderInputParams) => (
-                                        <MuiTextField {...params} label={eachItem.display} variant="outlined" />
-                                      )}
-                                    />
-                                  </Grid>
-                                );
-                              } else {
-                                return false;
-                              }
-                            })}
-                          <Grid item xs={1} style={{ padding: '4px' }}>
-                            <Button
-                              type="submit"
-                              color="primary"
-                              variant="outlined"
-                              size="large"
-                              disabled={productTypeId == 0}
-                              style={{
-                                fontWeight: 'bold',
-                                fontSize: 10,
-                                padding: '15px 20px',
-                                margin: '0 10px 0px',
-                              }}
-                            >
-                              Submit
-                            </Button>
-                          </Grid>
-                        </Grid>
-                      </Paper>
+                                      setSelectedFilters(formValues);
+                                      onDropDownChange(keyName, formValues);
+                                    }
+                                  }}
+                                  renderInput={(params: AutocompleteRenderInputParams) => (
+                                    <MuiTextField {...params} label={eachItem.display} variant="outlined" />
+                                  )}
+                                />
+                              </Grid>
+                            );
+                          } else {
+                            return false;
+                          }
+                        })}
+                      <Grid item xs={1} style={{ padding: '4px' }}>
+                        <Button
+                          type="submit"
+                          color="primary"
+                          variant="outlined"
+                          size="large"
+                          disabled={productTypeId == 0}
+                          style={{
+                            fontWeight: 'bold',
+                            fontSize: 10,
+                            padding: '15px 20px',
+                            margin: '0 10px 0px',
+                          }}
+                        >
+                          Submit
+                        </Button>
+                      </Grid>
                     </Grid>
-                  </Form>
-                )}
-              </Formik>
-            </FiltersWrapper>
-            <TableWrapper>
-              {isDashboardSuccess && tableData.rows.length > 0 && <HSTableV1 {...tableData} />}
-            </TableWrapper>
-          </DashBoardWrapper>
-        </Route>
-        <Route path={`${path}/create-product`}>
-          <CreateProduct header="Add Product Subtype" key={'Create'} />
-        </Route>
-        <Route path={`${path}/edit-product-subtype/:cat_id/:subcat_id/:prod_type_id`}>
-          <CreateProduct header="Edit Product Subtype" key={'Update'} />
-        </Route>
-      </Switch>
+                  </Paper>
+                </Grid>
+              </Form>
+            )}
+          </Formik>
+        </FiltersWrapper>
+        <TableWrapper>{isDashboardSuccess && tableData.rows.length > 0 && <HSTableV1 {...tableData} />}</TableWrapper>
+      </DashBoardWrapper>
     </>
   );
 };

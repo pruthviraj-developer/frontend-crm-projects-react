@@ -4,14 +4,15 @@ import { MuiThemeProvider } from '@material-ui/core/styles';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import { LightTheme } from '@hs/utils';
 import './App.css';
-import ProductSubType from './components/product-subtype/Dashboard';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
-const DashBoard = React.lazy(() => import(/* webpackChunkName: 'sos' */ './components/dashboard/Dashboard'));
+const Dashboard = React.lazy(() => import(/* webpackChunkName: 'sos' */ './components/sos-dashboard'));
+const ProductSubType = React.lazy(
+  () => import(/* webpackChunkName: 'product-sub-type' */ './components/product-sub-type'),
+);
 const queryClient = new QueryClient();
-
 const App: FC = () => {
   return (
     <QueryClientProvider client={queryClient}>
@@ -21,12 +22,14 @@ const App: FC = () => {
             <Router basename="/react-monorepo/merch">
               <Switch>
                 <Redirect exact from="/" to="/sos" />
-                <Route path="/products">
-                  <ProductSubType />
+                <Route path="/product-sub-types">
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <ProductSubType />
+                  </Suspense>
                 </Route>
                 <Route path="/sos">
                   <Suspense fallback={<div>Loading...</div>}>
-                    <DashBoard />
+                    <Dashboard />
                   </Suspense>
                 </Route>
                 <Redirect to="/sos" />
