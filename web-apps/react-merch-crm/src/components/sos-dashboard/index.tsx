@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
-import { useRouteMatch } from 'react-router-dom';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { Route, Redirect, Switch, useRouteMatch } from 'react-router-dom';
 import { DashBoardIcon, NonProcIcon, TransferIcon } from '@hs/icons';
 
 import { LeftNavBar, LeftNavBarProps } from '@hs/components';
@@ -48,6 +47,7 @@ const Dashboard: FC = () => {
         <Route path={`${path}/sosdashboard`}>
           <SosDashboard />
         </Route>
+        <Redirect to="/sos/sosdashboard" />
       </Switch>
     </>
   );
