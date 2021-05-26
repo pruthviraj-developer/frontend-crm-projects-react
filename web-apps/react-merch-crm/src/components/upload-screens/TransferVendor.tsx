@@ -44,8 +44,8 @@ const TransferVendorValidation = Yup.object().shape({
 });
 
 export const TransferVendor: FC = () => {
-  const [brandsList, setBrandsList] = useState<ListType>(([] as unknown) as ListType);
-  const [vendorList, setVendorList] = useState<ListType>(([] as unknown) as ListType);
+  const [brandsList, setBrandsList] = useState<ListType>([] as unknown as ListType);
+  const [vendorList, setVendorList] = useState<ListType>([] as unknown as ListType);
   // const [currencyList, setCurrencyList] = useState<ListType>(([] as unknown) as ListType);
 
   useEffect(() => {
@@ -54,11 +54,11 @@ export const TransferVendor: FC = () => {
         const list = await merchStatusChangeService.getVendorList<VendorList>();
         setVendorList(list.vendorList);
       } catch (error) {
-        setVendorList(([] as unknown) as ListType);
+        setVendorList([] as unknown as ListType);
       }
     })();
     return () => {
-      setVendorList(([] as unknown) as ListType);
+      setVendorList([] as unknown as ListType);
     };
   }, []);
 
@@ -105,7 +105,7 @@ export const TransferVendor: FC = () => {
           const list = await merchStatusChangeService.getBrandsList<BrandList>({ vendorId: obj.values.id });
           setBrandsList(list.brandList);
         } catch (error) {
-          setBrandsList(([] as unknown) as ListType);
+          setBrandsList([] as unknown as ListType);
         }
       })();
     }

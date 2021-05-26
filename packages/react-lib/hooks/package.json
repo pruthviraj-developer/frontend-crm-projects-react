@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
   "license": "MIT",
-  "main": "dist/services.esm.js",
+  "main": "dist/hooks.esm.js",
   "typings": "dist/index.d.ts",
   "files": [
     "dist",
@@ -11,13 +11,15 @@
     "node": ">=12"
   },
   "scripts": {
-    "start": "cross-env NODE_ENV=development tsdx watch --format esm --verbose",
+    "start": "tsdx watch --format esm",
     "build": "tsdx build --format esm",
-    "test": "tsdx test",
+    "test": "tsdx test --passWithNoTests",
     "lint": "tsdx lint",
     "prepare": "tsdx build --format esm"
   },
-  "peerDependencies": {},
+  "peerDependencies": {
+    "react": "17.0.2"
+  },
   "husky": {
     "hooks": {
       "pre-commit": "tsdx lint"
@@ -29,17 +31,21 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "name": "@hs/services",
+  "name": "@hs/hooks",
   "author": "Rishikant Tiwari",
-  "module": "dist/services.esm.js",
+  "module": "dist/hooks.esm.js",
   "devDependencies": {
+    "@types/react": "17.0.6",
+    "@types/react-dom": "17.0.5",
     "husky": "6.0.0",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
     "tsdx": "0.14.1",
     "tslib": "2.2.0",
     "typescript": "4.1.2"
   },
   "dependencies": {
-    "axios": "0.21.1",
-    "query-string": "^7.0.0"
+    "@hs/services": "^1.0.0",
+    "react-query": "^3.16.0"
   }
 }
