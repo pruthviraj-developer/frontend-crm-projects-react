@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
-import { useRouteMatch } from 'react-router-dom';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { Route, Redirect, Switch, useRouteMatch } from 'react-router-dom';
 import { DashBoardIcon, NonProcIcon, TransferIcon } from '@hs/icons';
 
 import { LeftNavBar, LeftNavBarProps } from '@hs/components';
@@ -14,7 +13,7 @@ import {
 } from '../upload-screens';
 const navItems: LeftNavBarProps = {
   navList: [
-    { linkUrl: '/sos/sosdashboard', linkText: 'SOS Dashboard', icon: DashBoardIcon },
+    { linkUrl: '/sos/sos-dashboard', linkText: 'SOS Dashboard', icon: DashBoardIcon },
     { linkUrl: '/sos/merchandisers', linkText: 'Merchandisers', icon: DashBoardIcon },
     { linkUrl: '/sos/mark-non-procurable', linkText: 'Mark Non-procurable', icon: NonProcIcon },
     { linkUrl: '/sos/modify-fulfillment-status', linkText: 'Modify Fulfillment Status', icon: NonProcIcon },
@@ -29,7 +28,7 @@ const Dashboard: FC = () => {
     <>
       <LeftNavBar {...navItems}></LeftNavBar>
       <Switch>
-        <Redirect exact from="/sos" to="/sos/sosdashboard" />
+        <Redirect exact from="/sos" to="/sos/sos-dashboard" />
         <Route path={`${path}/merchandisers`}>
           <Merchandisers />
         </Route>
@@ -45,9 +44,10 @@ const Dashboard: FC = () => {
         <Route path={`${path}/transfer-revised-pids`}>
           <TransferVendorWithRevisedData />
         </Route>
-        <Route path={`${path}/sosdashboard`}>
+        <Route path={`${path}/sos-dashboard`}>
           <SosDashboard />
         </Route>
+        <Redirect to="/sos/sos-dashboard" />
       </Switch>
     </>
   );
