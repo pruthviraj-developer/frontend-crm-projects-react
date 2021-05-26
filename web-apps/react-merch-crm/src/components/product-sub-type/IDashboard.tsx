@@ -31,6 +31,7 @@ export interface IProductTypeDropDownProps {
   clearFields?: Array<string>;
   display_position: number;
   value?: string;
+  attributeName?: string;
 }
 
 export interface CategoryType {
