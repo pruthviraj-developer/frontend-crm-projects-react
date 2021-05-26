@@ -41,7 +41,7 @@ const NonProcurableValidation = Yup.object().shape({
 });
 
 export const NonProcurable: FC = () => {
-  const [list, setList] = useState<ListType>(([] as unknown) as ListType);
+  const [list, setList] = useState<ListType>([] as unknown as ListType);
 
   useEffect(() => {
     (async () => {
@@ -49,11 +49,11 @@ export const NonProcurable: FC = () => {
         const list = await merchStatusChangeService.getReasonList<ReasonList>();
         setList(list.reasonList);
       } catch (error) {
-        setList(([] as unknown) as ListType);
+        setList([] as unknown as ListType);
       }
     })();
     return () => {
-      setList(([] as unknown) as ListType);
+      setList([] as unknown as ListType);
     };
   }, []);
   const onSubmit = async (values: FileUploadState, { setSubmitting, setErrors, resetForm }: SubmitHelper) => {

@@ -74,53 +74,73 @@ const CreateCluster = ({ header }: ICreateClusterProps) => {
     },
   );
   const [vendorId, setVendorId] = useState<string | number>('');
-  const { data: brandData, isSuccess: isBrandSuccess, isFetching: isBrandFetching } = useQuery<
-    Brand,
-    Record<string, string>
-  >(['brands', vendorId], () => reorderService.getBrands({ vendorId: vendorId }), {
-    staleTime: Infinity,
-    retry: false,
-    enabled: vendorId !== '',
-  });
+  const {
+    data: brandData,
+    isSuccess: isBrandSuccess,
+    isFetching: isBrandFetching,
+  } = useQuery<Brand, Record<string, string>>(
+    ['brands', vendorId],
+    () => reorderService.getBrands({ vendorId: vendorId }),
+    {
+      staleTime: Infinity,
+      retry: false,
+      enabled: vendorId !== '',
+    },
+  );
 
   const [categoryId, setCategoryId] = useState<string | number>('');
-  const { data: subCategories, isSuccess: isSubCatSuccess, isFetching: isSubCatFetching } = useQuery<
-    ISubCategory,
-    Record<string, string>
-  >(['subCategories', categoryId], () => reorderService.getSubCategories({ ids: categoryId }), {
-    staleTime: Infinity,
-    retry: false,
-    enabled: categoryId !== '',
-    onError: (error) => {
-      showError(error);
+  const {
+    data: subCategories,
+    isSuccess: isSubCatSuccess,
+    isFetching: isSubCatFetching,
+  } = useQuery<ISubCategory, Record<string, string>>(
+    ['subCategories', categoryId],
+    () => reorderService.getSubCategories({ ids: categoryId }),
+    {
+      staleTime: Infinity,
+      retry: false,
+      enabled: categoryId !== '',
+      onError: (error) => {
+        showError(error);
+      },
     },
-  });
+  );
 
   const [subCategoryId, setSubCategoryId] = useState<string | number>('');
-  const { data: productsList, isSuccess: isProductSuccess, isFetching: isProductFetching } = useQuery<
-    IProductTypes,
-    Record<string, string>
-  >(['productsList', subCategoryId], () => reorderService.getProductTypes({ ids: subCategoryId }), {
-    staleTime: Infinity,
-    retry: false,
-    enabled: subCategoryId !== '',
-    onError: (error) => {
-      showError(error);
+  const {
+    data: productsList,
+    isSuccess: isProductSuccess,
+    isFetching: isProductFetching,
+  } = useQuery<IProductTypes, Record<string, string>>(
+    ['productsList', subCategoryId],
+    () => reorderService.getProductTypes({ ids: subCategoryId }),
+    {
+      staleTime: Infinity,
+      retry: false,
+      enabled: subCategoryId !== '',
+      onError: (error) => {
+        showError(error);
+      },
     },
-  });
+  );
 
   const [attributeId, setAttributeId] = useState<string | number>('');
-  const { data: colorsList, isSuccess: isColorsListSuccess, isFetching: isColorsListFetching } = useQuery<
-    SkuAttributeEntity,
-    Record<string, string>
-  >(['colorsList', attributeId], () => reorderService.getColors(), {
-    staleTime: Infinity,
-    retry: false,
-    enabled: attributeId === 'color_constraints',
-    onError: (error) => {
-      showError(error);
+  const {
+    data: colorsList,
+    isSuccess: isColorsListSuccess,
+    isFetching: isColorsListFetching,
+  } = useQuery<SkuAttributeEntity, Record<string, string>>(
+    ['colorsList', attributeId],
+    () => reorderService.getColors(),
+    {
+      staleTime: Infinity,
+      retry: false,
+      enabled: attributeId === 'color_constraints',
+      onError: (error) => {
+        showError(error);
+      },
     },
-  });
+  );
 
   useEffect(() => {
     if (isFilterSuccess) {
@@ -223,7 +243,7 @@ const CreateCluster = ({ header }: ICreateClusterProps) => {
       if (colorsList && colorsList.options && colorsList.options.length) {
         dispatch([
           ActionType.addItems,
-          [{ ...colorsList, key: 'color_constraints', display: 'Color *', display_position: 8 }],
+          [{ ...colorsList, options:[{value:'Select All', key:'all', first:'all', second:'all'}, ...colorsList.options], key: 'color_constraints', type: 'autoselectall', input_type: 'autoselectall',  display: 'Color *', display_position: 8 }],
         ]);
       } else {
         !isColorsListFetching &&
@@ -368,7 +388,7 @@ const CreateCluster = ({ header }: ICreateClusterProps) => {
       dispatch([ActionType.removeItems, ['brand_id']]);
       setVendorId(dataKey);
     }
-    setDefaultSelectedValues({...formData, isConstraintFormDirty:1});
+    setDefaultSelectedValues({ ...formData, isConstraintFormDirty: 1 });
   };
 
   const data: ReorderFiltersObjectProps = {

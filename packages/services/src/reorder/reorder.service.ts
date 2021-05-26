@@ -12,8 +12,7 @@ const createConstraint = (
   data: ICreateClusterType
 ): Promise<IReorderCreateConstraint> => {
   const url = queryString.stringifyUrl({
-    url:
-      '/crm-api/assortment-plan-api/reorder-take-action/vendor-constraint-service/age-color-constraint',
+    url: '/crm-api/assortment-plan-api/reorder-take-action/vendor-constraint-service/age-color-constraint',
     query: { ...params },
   });
   return httpService.post<IReorderCreateConstraint>({ url, data });

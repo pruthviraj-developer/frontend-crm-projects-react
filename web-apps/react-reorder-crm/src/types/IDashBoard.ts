@@ -91,7 +91,7 @@ export interface IDashboardResponse {
 export interface IFilterPostData {
   id: string | number;
   group_id: number;
-  action : string;
+  action: string;
 }
 
 export declare type IFilterParams = {

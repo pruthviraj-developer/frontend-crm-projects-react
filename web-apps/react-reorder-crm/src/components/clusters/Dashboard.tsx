@@ -133,15 +133,24 @@ const CrmDashboard = () => {
   );
 
   const [vendorId, setVendorId] = useState<string | number>('');
-  const { data: brandData, isSuccess: isBrandSuccess, isFetching: isBrandFetching } = useQuery<
-    Brand,
-    Record<string, string>
-  >(['brands', vendorId], () => reorderService.getBrands({ vendorId: vendorId }), {
-    staleTime: Infinity,
-    enabled: vendorId !== '',
-  });
+  const {
+    data: brandData,
+    isSuccess: isBrandSuccess,
+    isFetching: isBrandFetching,
+  } = useQuery<Brand, Record<string, string>>(
+    ['brands', vendorId],
+    () => reorderService.getBrands({ vendorId: vendorId }),
+    {
+      staleTime: Infinity,
+      enabled: vendorId !== '',
+    },
+  );
 
-  const { data: dashboardData, isSuccess: isDashboardSuccess, isFetching: isDashboardFetching } = useQuery<any>(
+  const {
+    data: dashboardData,
+    isSuccess: isDashboardSuccess,
+    isFetching: isDashboardFetching,
+  } = useQuery<any>(
     ['dashboardData', postDataFiltersObject, filterParams],
     () => reorderService.getDashboardData({ ...postDataFiltersObject, ...filterParams }),
     {
