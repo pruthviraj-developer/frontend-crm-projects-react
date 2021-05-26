@@ -65,6 +65,21 @@ const aaa = [
     multi: true,
     display: 'Cake',
   },
+  {
+    options: [
+      { name: 'test ', calories: 305, fat: 3.7, carbs: 67, protein: 4.3 },
+      { name: 'Chocolate ', calories: 452, fat: 25, carbs: 51, protein: 4.9 },
+      { name: 'Biscuits ', calories: 262, fat: 16, carbs: 24, protein: 6 },
+      { name: 'yoghurt', calories: 159, fat: 6, carbs: 24, protein: 4 },
+      { name: 'Break', calories: 356, fat: 16, carbs: 49, protein: 3.9 },
+      { name: 'Breakfast ', calories: 408, fat: 3.2, carbs: 87, protein: 6.5 },
+    ],
+    key: 'Chocolates',
+    input_type: 'autoselectall',
+    type: 'autoselectall',
+    multi: true,
+    display: 'Cake',
+  }
 ];
 
 const data: ReorderFiltersObjectProps = {

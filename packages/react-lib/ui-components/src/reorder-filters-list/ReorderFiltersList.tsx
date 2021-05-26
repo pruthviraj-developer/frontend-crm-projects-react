@@ -9,6 +9,7 @@ import {
   Paper,
   Button,
 } from '@material-ui/core';
+import { Colors } from '@hs/utils';
 import { TextField } from 'formik-material-ui';
 import { ReoOrderFormValidation } from './ReorderFiltersListValidation';
 import {
@@ -16,6 +17,14 @@ import {
   ReorderFiltersOptions,
   ReorderFiltersObjectProps,
 } from './IReorderFiltersList';
+
+import { SelectedRectAngle , DeSelectedRectAngle, SvgIcon} from '@hs/icons';
+
+const StyledIcon = styled(SvgIcon)`
+  margin: 0 20px;
+  fill: white;
+`;
+
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -35,6 +44,10 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 'bold',
     border: '1px solid rgba(0, 0, 0, 0.12)',
   },
+  option: {
+    paddingLeft:0,
+    fontSize:14
+  }
 }));
 
 const initialValues = {};
@@ -53,6 +66,12 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
     defaultSelectedValues || initialValues
   );
   const [isConstraintFormDirty,setIsConstraintFormDirty] = useState(0);
+
+  const getAllColors = () => {
+    const colorsObject= sideBar.find(obj => obj.key === 'color_constraints');
+    const options = colorsObject && colorsObject.options;
+    return  options && options.slice(1) || [];
+  };
 
   return (
     <FiltersWrapper className={classes.root}>
@@ -148,6 +167,103 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
                                       'color_constraints'
                                   ) {
                                     delete formValues['age_constraints'];
+                                  }
+                                  if(keyName != 'color_constraints'){
+                                    onChange && onChange(keyName, formValues);
+                                  }
+                                  setSelectedFilters(formValues);
+                                  setIsConstraintFormDirty(1);
+                                }
+                              }}
+                              renderInput={(
+                                params: AutocompleteRenderInputParams
+                              ) => (
+                                <MuiTextField
+                                  {...params}
+                                  error={touched['sort'] && !!errors['sort']}
+                                  helperText={touched['sort'] && errors['sort']}
+                                  label={
+                                    sideBarOption.label || sideBarOption.display
+                                  }
+                                  variant="outlined"
+                                />
+                              )}
+                            />
+                          </Grid>
+                        );
+                      } else if(sideBarOption.type === 'autoselectall'){
+                        return (
+                          <Grid
+                            item
+                            xs
+                            key={sideBarOption.name || sideBarOption.key}
+                          >
+                            <Field
+                              variant="standard"
+                              name={sideBarOption.name || sideBarOption.key}
+                              label={
+                                sideBarOption.label || sideBarOption.display
+                              }
+                              value={
+                                selectedFilters[
+                                  sideBarOption.name || sideBarOption.key
+                                ] || (sideBarOption.multi ? [] : null)
+                              }
+                              multiple={sideBarOption.multi || false}
+                              disabled={sideBarOption.disabled || false}
+                              component={Autocomplete}
+                              options={sideBarOption.options || []}
+                              disableCloseOnSelect={
+                                sideBarOption.multi ? true : false
+                              }
+                              classes={{
+                                option: classes.option
+                              }}
+                              limitTags={10}
+                              getOptionSelected={(
+                                option: ReorderFiltersOptions,
+                                selectedValue: ReorderFiltersOptions
+                              ) => {
+                                return option.key == selectedValue?.key;
+                              }}
+                              getOptionLabel={(option: ReorderFiltersOptions) =>
+                                option.display ||
+                                option.name ||
+                                option.value ||
+                                ''
+                              }
+                              renderOption={(option, selectedValue) => {
+                                const displayLabel = option.display || option.name || option.value;
+                                if(displayLabel && displayLabel.toLowerCase() === "select all"){
+                                  return <span style={{color:Colors.PINK[500], fontSize: 18,paddingLeft:20}}>{displayLabel}</span>;
+                                } else {
+                                return <span style={{display: 'flex',alignItems: 'center'}}>{<StyledIcon icon={selectedValue.selected?SelectedRectAngle:DeSelectedRectAngle } />} {displayLabel}</span>;
+                                }
+                              }}
+                              onChange={(
+                                evt: React.ChangeEvent<HTMLInputElement>,
+                                values: Array<ReorderFiltersOptions>
+                              ) => {
+                                if (evt) {
+                                  const keyName =
+                                    sideBarOption.name || sideBarOption.key;
+                                  let filteredValues:ReorderFiltersOptions[] = [];
+                                  if(keyName === 'color_constraints' && values && values.length){
+                                    const index = values.findIndex((obj:ReorderFiltersOptions) => obj.key == 'all');
+                                    if(index > -1) {
+                                      filteredValues = getAllColors();
+                                    }
+                                  }
+                                  const formValues = {
+                                    ...selectedFilters,
+                                    [keyName]: filteredValues.length?filteredValues:values,
+                                  };
+                                  if (sideBarOption.clearFields) {
+                                    sideBarOption.clearFields.forEach(
+                                      (element: string) => {
+                                        delete formValues[element];
+                                      }
+                                    );
                                   }
                                   if(keyName != 'color_constraints'){
                                     onChange && onChange(keyName, formValues);
@@ -317,7 +433,6 @@ export const ReorderFiltersList: FC<ReorderFiltersObjectProps> = ({
                   >
                     Submit
                   </Button>
-                  <pre>{isValid}</pre>
                 </Grid>
               </Paper>
             </Grid>

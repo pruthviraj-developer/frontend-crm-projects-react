@@ -33,6 +33,7 @@ export interface Brand {
 interface BrandListEntity {
   id: number;
   display: string;
+  key?: string;
 }
 export interface ISubCategory {
   sub_cat?: OptionType[] | null;
