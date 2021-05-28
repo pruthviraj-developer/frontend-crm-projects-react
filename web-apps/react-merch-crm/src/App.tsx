@@ -12,6 +12,9 @@ const Dashboard = React.lazy(() => import(/* webpackChunkName: 'sos' */ './compo
 const ProductSubType = React.lazy(
   () => import(/* webpackChunkName: 'product-sub-type' */ './components/product-sub-type'),
 );
+const BuyerDashboard = React.lazy(
+  () => import(/* webpackChunkName: 'product-sub-type' */ './components/buyer-dashboard'),
+);
 const queryClient = new QueryClient();
 const App: FC = () => {
   return (
@@ -30,6 +33,11 @@ const App: FC = () => {
                 <Route path="/sos">
                   <Suspense fallback={<div>Loading...</div>}>
                     <Dashboard />
+                  </Suspense>
+                </Route>
+                <Route path="/buyer">
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <BuyerDashboard />
                   </Suspense>
                 </Route>
                 <Redirect to="/sos" />
