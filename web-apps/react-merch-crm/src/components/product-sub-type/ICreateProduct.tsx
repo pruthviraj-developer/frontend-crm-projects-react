@@ -3,9 +3,7 @@ export interface ICreateProductSubtypeProps {
 }
 
 export interface IUrlParamsEntity {
-  cat_id: string;
-  subcat_id: string;
-  prod_type_id: string;
+  id: string;
 }
 
 export interface IOptionType {

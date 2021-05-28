@@ -14,6 +14,7 @@ import {
   ActionType,
 } from './ICreateProduct';
 import { TextField as MuiTextField, Grid, Paper, Button } from '@material-ui/core';
+import { TextField } from '@material-ui/core';
 import { Autocomplete, AutocompleteRenderInputParams } from '@material-ui/lab';
 import { productSubtypeService } from '@hs/services';
 import { IProductTypeDropDownProps, OptionType, ISelectedValues } from './IDashboard';
@@ -76,7 +77,6 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
   const [selectedFilters, setSelectedFilters] = useState<ISelectedValues>({});
   const [dropDownList, dispatch] = useReducer(reducer, []);
   const [productTypeId, setProductTypeId] = useState<string | number>('');
-  // const [productSubTye, setProductSubtype] = useState<string | number>('');
 
   let subTypeArr = [];
   const params = useParams<IUrlParamsEntity>();
@@ -133,6 +133,12 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
           options: productTypeData,
           display_position: 3,
         },
+        {
+          key: 'productSubTypeName',
+          display: 'Product Subtype',
+          options: '',
+          display_position: 4,
+        },
       ];
       dispatch([ActionType.removeItems, ['productCategoryId', 'productSubCategoryId', 'productTypeId']]);
       dispatch([ActionType.addItems, formList]);
@@ -140,31 +146,16 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
   }, [categoryData, subCategoryData, productTypeData]);
 
   useEffect(() => {
-    if (params.cat_id && params.subcat_id && params.prod_type_id) {
+    if (params.id) {
       (async () => {
         try {
-          const productTypeData: OptionType[] = await productSubtypeService.getProductType(params.subcat_id);
+          const productTypeData: OptionType[] = await productSubtypeService.getProductType(params.id);
           if (categoryData) {
-            const catData = categoryData.find((category) => category.key == params.cat_id);
+            const catData = categoryData.find((category) => category.key == params.id);
             const categoryKey = catData?.key || '';
             if (categoryKey) {
               setCategoryId(categoryKey);
               setSelectedFilters({ ...selectedFilters, ['productCategoryId']: catData });
-              if (subCategoryData) {
-                const subCatData = subCategoryData.find((subCategory) => subCategory.key == params.subcat_id);
-                const subCategoryKey = subCatData?.key || '';
-                if (subCategoryKey) {
-                  setSubCategoryId(subCategoryKey);
-                  setSelectedFilters({ ...selectedFilters, ['productSubCategoryId']: subCatData });
-                  if (productTypeData) {
-                    const prodTypeData = productTypeData.find((prodType) => prodType.key == params.prod_type_id);
-                    const prodTypeKey = prodTypeData?.key || '';
-                    if (prodTypeKey) {
-                      setSelectedFilters({ ...selectedFilters, ['productTypeId']: prodTypeData });
-                    }
-                  }
-                }
-              }
             }
           }
         } catch (error) {
@@ -200,39 +191,20 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
   };
 
   const handleAddClick = () => {
-    if (categoryId && subcategoryId && productTypeId) {
-      (async () => {
-        try {
-          const attribData: any = await productSubtypeService.getAttributes(364);
-          if (attribData.status === 'SUCCESS') {
-            const attribute = {
-              display: 'Product Subtype',
-              display_position: 4,
-              key: 'productSubtypeId',
-              options: attribData.productSubType.attributeList,
-            };
-            dispatch([ActionType.removeItems, ['productSubtypeId', 'attributeVal']]);
-            selectedFilters['productSubtypeId'] = '';
-            selectedFilters['attributeVal'] = '';
-            dispatch([ActionType.addItems, [attribute]]);
-          }
-        } catch (error) {
-          showError(error);
-        }
-      })();
-    }
+    alert('Button Click');
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, key: string) => {
+    setSelectedFilters({ ...selectedFilters, [key]: e.target.value });
   };
 
   const onFiltersSubmit = (actionMessage: string) => {
     const postObject: Record<string, number> = {};
-    ['productCategoryId', 'productSubCategoryId', 'productTypeId', 'productSubtypeId', 'attributeVal'].forEach(
-      (ele: string) => {
-        if (selectedFilters[ele]) {
-          postObject[ele] =
-            selectedFilters[ele]['key'] || selectedFilters[ele]['attributeName'] || selectedFilters[ele];
-        }
-      },
-    );
+    ['productCategoryId', 'productSubCategoryId', 'productTypeId', 'productSubtypeName'].forEach((ele: string) => {
+      if (selectedFilters[ele]) {
+        postObject[ele] = selectedFilters[ele]['key'] || selectedFilters[ele]['attributeName'] || selectedFilters[ele];
+      }
+    });
 
     (async () => {
       try {
@@ -271,34 +243,49 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                   <Paper className={clsx(classes.paper, classes.filters)} variant="outlined">
                     <Grid container direction="column" justify="center" spacing={3}>
                       {dropDownList &&
-                        dropDownList.map((singleDropdown) => (
-                          <Grid item xs={12} style={{ padding: '4px', marginTop: '1rem' }} key={singleDropdown.key}>
-                            <Field
-                              variant="standard"
-                              name={singleDropdown.key}
-                              id={singleDropdown.key}
-                              value={selectedFilters[singleDropdown.key] || null}
-                              label={singleDropdown.display}
-                              component={Autocomplete}
-                              options={singleDropdown.options || []}
-                              getOptionLabel={(option: IProductTypeDropDownProps) =>
-                                option.value || option.key || option.attributeName || option
-                              }
-                              onChange={(event: React.ChangeEvent<HTMLInputElement>, newVal: OptionType) => {
-                                if (event) {
-                                  const keyName = singleDropdown.key;
-                                  const formValues: ISelectedValues = { ...selectedFilters, [keyName]: newVal };
-                                  setSelectedFilters(formValues);
-                                  onDropDownChange(keyName, formValues);
+                        dropDownList.map((singleDropdown) =>
+                          singleDropdown.key == 'productSubTypeName' ? (
+                            <Grid item xs={12} style={{ padding: '4px', marginTop: '1rem' }} key={singleDropdown.key}>
+                              <TextField
+                                label="Product Subtype"
+                                value={selectedFilters['productSubtypeName'] || ''}
+                                variant="outlined"
+                                fullWidth={true}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                  handleInputChange(e, 'productSubtypeName')
                                 }
-                              }}
-                              renderInput={(params: AutocompleteRenderInputParams) => (
-                                <MuiTextField {...params} label={singleDropdown.display} variant="outlined" />
-                              )}
-                            />
-                          </Grid>
-                        ))}
+                              />
+                            </Grid>
+                          ) : (
+                            <Grid item xs={12} style={{ padding: '4px', marginTop: '1rem' }} key={singleDropdown.key}>
+                              <Field
+                                variant="standard"
+                                name={singleDropdown.key}
+                                id={singleDropdown.key}
+                                value={selectedFilters[singleDropdown.key] || null}
+                                label={singleDropdown.display}
+                                component={Autocomplete}
+                                options={singleDropdown.options || []}
+                                getOptionLabel={(option: IProductTypeDropDownProps) =>
+                                  option.value || option.key || option.attributeName || option
+                                }
+                                onChange={(event: React.ChangeEvent<HTMLInputElement>, newVal: OptionType) => {
+                                  if (event) {
+                                    const keyName = singleDropdown.key;
+                                    const formValues: ISelectedValues = { ...selectedFilters, [keyName]: newVal };
+                                    setSelectedFilters(formValues);
+                                    onDropDownChange(keyName, formValues);
+                                  }
+                                }}
+                                renderInput={(params: AutocompleteRenderInputParams) => (
+                                  <MuiTextField {...params} label={singleDropdown.display} variant="outlined" />
+                                )}
+                              />
+                            </Grid>
+                          ),
+                        )}
                     </Grid>
+                    <Grid container direction="row" justify="center" spacing={3}></Grid>
                     <Grid
                       container
                       direction="row"
@@ -312,7 +299,6 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                           color="primary"
                           variant="outlined"
                           size="large"
-                          disabled={productTypeId == ''}
                           style={{
                             fontWeight: 'bold',
                             fontSize: 10,
@@ -321,7 +307,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                           }}
                           onClick={handleAddClick}
                         >
-                          Add Product Subtype
+                          Add Attribute
                         </Button>
                       </Grid>
                       <Grid item>

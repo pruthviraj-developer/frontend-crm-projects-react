@@ -20,17 +20,14 @@ const getProductType = <P, R>(subcategoryId: P): Promise<R> => {
   return httpService.get<R>({ url });
 };
 
+const getAttributesList = <R>(): Promise<R> => {
+  const url = '/crm-api/intranet/productlistings/creation-setup';
+  return httpService.get<R>({ url });
+};
+
 const addProduct = <P, R>(data: P): Promise<R> => {
   const url = '/crm-api/intranet/productsubtype/save';
   return httpService.post<R>({ url, data });
-};
-
-const getAttributes = <P, R>(productSubtypeId: P): Promise<R> => {
-  // const url = '/crm-api/productsubtype/get/' + productSubtypeId;
-  const url =
-    'https://run.mocky.io/v3/d4d620a4-7d71-4f67-8602-d60f8069c234/' +
-    productSubtypeId;
-  return httpService.get<R>({ url });
 };
 
 const getDashboardData = <P, R>(
@@ -54,7 +51,7 @@ export const productSubtypeService = {
   getSubCategory,
   getProductType,
   addProduct,
-  getAttributes,
+  getAttributesList,
   getDashboardData,
   updateAction,
 };
