@@ -105,13 +105,18 @@ const ProductSubtypeDashboard: FC = () => {
   );
 
   const [categoryId, setCategoryId] = useState<string | number>('');
-  const { data: subCategoryData, isSuccess: isSubCategorySuccess, isFetching: isSubCategoryFetching } = useQuery<
-    OptionType[],
-    Record<string, string>
-  >(['subcategory', categoryId], () => productSubtypeService.getSubCategory(categoryId), {
-    staleTime: Infinity,
-    enabled: categoryId !== '',
-  });
+  const {
+    data: subCategoryData,
+    isSuccess: isSubCategorySuccess,
+    isFetching: isSubCategoryFetching,
+  } = useQuery<OptionType[], Record<string, string>>(
+    ['subcategory', categoryId],
+    () => productSubtypeService.getSubCategory(categoryId),
+    {
+      staleTime: Infinity,
+      enabled: categoryId !== '',
+    },
+  );
 
   const [subcategoryId, setSubCategoryId] = useState<string | number>('');
   const {
