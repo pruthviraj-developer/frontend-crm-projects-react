@@ -25,7 +25,7 @@ const ProductSubType: FC = () => {
         <Route path={`${path}/create-product`}>
           <CreateProduct header="Create Product Subtype" key={'Create'} />
         </Route>
-        <Route path={`${path}/edit-product-subtype/:cat_id/:subcat_id/:prod_type_id`}>
+        <Route path={`${path}/edit-product-subtype/:id`}>
           <CreateProduct header="Edit Product Subtype" key={'Update'} />
         </Route>
         <Redirect to="/product-sub-types/product-sub-type" />

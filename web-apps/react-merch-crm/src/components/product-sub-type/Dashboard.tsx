@@ -112,10 +112,7 @@ const ProductSubtypeDashboard: FC = () => {
   } = useQuery<OptionType[], Record<string, string>>(
     ['subcategory', categoryId],
     () => productSubtypeService.getSubCategory(categoryId),
-    {
-      staleTime: Infinity,
-      enabled: categoryId !== '',
-    },
+    { staleTime: Infinity, enabled: categoryId !== '' },
   );
 
   const [subcategoryId, setSubCategoryId] = useState<string | number>('');
@@ -227,21 +224,43 @@ const ProductSubtypeDashboard: FC = () => {
 
   const columns = [
     {
-      id: 'productCategoryName',
-      label: 'Category',
+      id: 'productSubtypeID',
+      label: 'Id',
       customRender: (row: DashboardData, isTitle?: boolean) => {
         if (isTitle) {
-          return row.productCategoryName;
+          return row.productSubtypeId;
+        }
+        if (row) {
+          return <>{row.productSubtypeId}</>;
+        }
+        return '--';
+      },
+    },
+    {
+      id: 'productCategoryName',
+      label: 'Category',
+    },
+    {
+      id: 'productSubCategoryName',
+      label: 'Sub Category',
+    },
+    { id: 'productTypeName', label: 'Product Type' },
+    {
+      id: 'productSubtypeName',
+      label: 'Product Sub Type',
+      customRender: (row: DashboardData, isTitle?: boolean) => {
+        if (isTitle) {
+          return row.productSubtypeName;
         }
         if (row) {
           return (
             <>
               <NavLink
                 to={{
-                  pathname: `edit-product-subtype/${row.productCategoryId}/${row.productSubCategoryId}/${row.productTypeId}`,
+                  pathname: `edit-product-subtype/${row.productSubtypeId}`,
                 }}
               >
-                {row.productCategoryName}
+                {row.productSubtypeName}
               </NavLink>
             </>
           );
@@ -249,12 +268,6 @@ const ProductSubtypeDashboard: FC = () => {
         return '--';
       },
     },
-    {
-      id: 'productSubCategoryName',
-      label: 'Sub Category',
-    },
-    { id: 'productTypeName', label: 'Product Type' },
-    { id: 'productSubtypeName', label: 'Product Sub Type' },
     {
       label: 'Action',
       render: (props: PropsType, data: DashboardData) => {
