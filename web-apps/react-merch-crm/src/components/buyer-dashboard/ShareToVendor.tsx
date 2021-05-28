@@ -13,7 +13,7 @@ import { IVendors, IVendorsOption } from './IShareToVendor';
 import * as Yup from 'yup';
 const validationSchema = Yup.object().shape({
   vendor: Yup.string().required('Please select vendor'),
-  email: Yup.string().email('Email is invalid').required('Email is required'),
+  email_ids: Yup.array().of(Yup.string().email('Email is invalid').required('Email is required')),
 });
 
 const useStyles = makeStyles((theme) => ({
@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
   emailIds: {
     alignItems: 'center',
     padding: theme.spacing(0),
-    margin: 0,
+    marginBottom: 10,
   },
 }));
 
@@ -63,7 +63,6 @@ const showError = (error: Record<string, string>) => {
 
 const initialValues = {
   vendor: '',
-  email: '',
   email_ids: [],
 };
 const ShareToVendor = () => {
@@ -118,7 +117,7 @@ const ShareToVendor = () => {
                             option.id == selectedValue?.id || {}
                           }
                           onChange={(_evt: React.ChangeEvent, actionvalue: IVendorsOption) => {
-                            setFieldValue('email', actionvalue?.email || 'test');
+                            setFieldValue('email_ids', [actionvalue?.email]);
                           }}
                           getOptionLabel={(option: IVendorsOption) => option.display || ''}
                           renderInput={(params: AutocompleteRenderInputParams) => (
@@ -126,81 +125,70 @@ const ShareToVendor = () => {
                           )}
                         />
                       </Grid>
-                      {values.email && (
-                        <Grid item xs>
-                          <Field
-                            component={TextField}
-                            fullWidth
-                            name="email"
-                            type="text"
-                            label="Email"
-                            variant={'outlined'}
-                          />
-                        </Grid>
-                      )}
-                      <FieldArray name="email_ids">
-                        {({ insert, remove, push }) => (
-                          <div>
-                            {values.email_ids.length > 0 &&
-                              values.email_ids.map((email, index) => (
-                                <Grid
-                                  container
-                                  direction="row"
-                                  justify="center"
-                                  spacing={3}
-                                  key={index}
-                                  className={classes.emailIds}
+                      <Grid style={{ padding: 10 }}>
+                        <FieldArray name="email_ids">
+                          {({ remove, push }) => (
+                            <Grid>
+                              {values.email_ids.length > 0 &&
+                                values.email_ids.map((email, index) => (
+                                  <Grid
+                                    container
+                                    direction="row"
+                                    justify="flex-start"
+                                    spacing={3}
+                                    key={index}
+                                    className={classes.emailIds}
+                                  >
+                                    <Grid item xs={6}>
+                                      <Field
+                                        component={TextField}
+                                        fullWidth
+                                        name={`email_ids.${index}`}
+                                        type="text"
+                                        label="Email"
+                                        variant={'outlined'}
+                                      />
+                                    </Grid>
+                                    <Grid item xs={3}>
+                                      <Button
+                                        type="button"
+                                        className="secondary"
+                                        variant="outlined"
+                                        size="large"
+                                        style={{
+                                          fontWeight: 'bold',
+                                          fontSize: 10,
+                                          padding: '15px 20px',
+                                          width: '100%',
+                                        }}
+                                        onClick={() => remove(index)}
+                                      >
+                                        X
+                                      </Button>
+                                    </Grid>
+                                  </Grid>
+                                ))}
+                              <Grid item>
+                                <Button
+                                  type="button"
+                                  className="secondary"
+                                  variant="outlined"
+                                  size="large"
+                                  style={{
+                                    fontWeight: 'bold',
+                                    fontSize: 10,
+                                    padding: '15px 20px',
+                                    width: '100%',
+                                  }}
+                                  onClick={() => push('')}
                                 >
-                                  <Grid item xs={6}>
-                                    <Field
-                                      component={TextField}
-                                      fullWidth
-                                      name={`email_ids.${index}`}
-                                      type="text"
-                                      label="Email"
-                                      variant={'outlined'}
-                                    />
-                                  </Grid>
-                                  <Grid item xs={3}>
-                                    <Button
-                                      type="button"
-                                      className="secondary"
-                                      variant="outlined"
-                                      size="large"
-                                      style={{
-                                        fontWeight: 'bold',
-                                        fontSize: 10,
-                                        padding: '15px 20px',
-                                        width: '100%',
-                                      }}
-                                      onClick={() => remove(index)}
-                                    >
-                                      X
-                                    </Button>
-                                  </Grid>
-                                  <Grid item xs={3}></Grid>
-                                </Grid>
-                              ))}
-                            <Grid item>
-                              <Button
-                                type="button"
-                                className="secondary"
-                                variant="outlined"
-                                size="large"
-                                style={{
-                                  fontWeight: 'bold',
-                                  fontSize: 10,
-                                  padding: '15px 20px',
-                                  width: '100%',
-                                }}
-                                onClick={() => push('')}
-                              >
-                                Add Email
-                              </Button>
+                                  Add Email
+                                </Button>
+                              </Grid>
                             </Grid>
-                          </div>
-                        )}
-                      </FieldArray>
+                          )}
+                        </FieldArray>
+                      </Grid>
                       <Grid item>
                         <Button
                           type="submit"
@@ -220,6 +208,7 @@ const ShareToVendor = () => {
                     </Grid>
                   </Paper>
                 </Grid>
+                <pre>{JSON.stringify(values)}</pre>
               </Form>
             )}
           </Formik>
