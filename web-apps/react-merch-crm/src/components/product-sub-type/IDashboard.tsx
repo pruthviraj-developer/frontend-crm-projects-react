@@ -32,6 +32,7 @@ export interface IProductTypeDropDownProps {
   display_position: number;
   value?: string;
   attributeName?: string;
+  displayName?: string;
 }
 
 export interface CategoryType {
