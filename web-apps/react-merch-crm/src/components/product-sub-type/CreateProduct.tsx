@@ -95,11 +95,12 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
   const classes = useStyles();
   const [dialogStatus, setDialogStatus] = React.useState(false);
   const [selectedFilters, setSelectedFilters] = useState<ISelectedValues>({});
-  const [attributeListItems, setAttributeListItems] = useState([]);
+  const [attributeListItems, setAttributeListItems] = useState<any>([]);
   const [selectedAttributes, setSelectedAttributes] = useState<any>({});
   const [attributeList, dispatchAttributeList] = useReducer(reducer, []);
   const [dropDownList, dispatch] = useReducer(reducer, []);
   const [productTypeId, setProductTypeId] = useState<string | number>('');
+  const [recycleAttribute, setRecycleAttribute] = useState<any>([]);
 
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
@@ -225,6 +226,27 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
     }
   };
 
+  const handleDelete = (attributeDelete: any) => {
+    const notAllowed = ['attribute#' + attributeDelete.key];
+    dispatchAttributeList([ActionType.removeItems, [attributeDelete.key]]);
+    const filtered = Object.keys(selectedAttributes)
+      .filter((key) => !notAllowed.includes(key))
+      .reduce((obj: any, key) => {
+        obj[key] = selectedAttributes[key];
+        return obj;
+      }, {});
+
+    setSelectedAttributes(filtered);
+
+    const addAttributeFiltered = recycleAttribute.filter(
+      (item: any) => item[0].key.replace(/ /g, '_') === attributeDelete.key,
+    );
+    const arrAttrFiltered = addAttributeFiltered[0][0];
+    setAttributeListItems([...attributeListItems, arrAttrFiltered]);
+    const nRecycleData = recycleAttribute.filter((item: any) => item[0].key !== attributeDelete.key);
+    setRecycleAttribute(nRecycleData);
+  };
+
   const character_format = (str: string) => {
     str = str.charAt(0).toUpperCase() + str.slice(1);
     str = str.replace(/_/g, ' ');
@@ -254,16 +276,61 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
     };
     dispatchAttributeList([ActionType.removeItems, [keyLabel]]);
     dispatchAttributeList([ActionType.addItems, [attributeValues]]);
+    const recycle: any = attributeListItems.filter((item: any) => item.key == attributeItem.key);
+    setRecycleAttribute([...recycleAttribute, recycle]);
     setAttributeListItems(attributeListItems.filter((attrb: any) => attrb.key !== attributeItem.key));
   };
 
+  const removeDuplicates = (arr: any) => {
+    return arr.reduce(
+      (p: any, c: any) => {
+        const id = [c.attribute.key, c.operation.key].join('|');
+        if (p.temp.indexOf(id) === -1) {
+          p.out.push(c);
+          p.temp.push(id);
+        }
+        return p;
+      },
+      {
+        temp: [],
+        out: [],
+      },
+    ).out;
+  };
+
   const onFiltersSubmit = (actionMessage: string) => {
-    const postObject: Record<string, number> = {};
-    ['productCategoryId', 'productSubCategoryId', 'productTypeId', 'productSubtypeName'].forEach((ele: string) => {
-      if (selectedFilters[ele]) {
-        postObject[ele] = selectedFilters[ele]['key'] || selectedFilters[ele]['attributeName'] || selectedFilters[ele];
+    alert(actionMessage);
+    const arr: any = [];
+    let bArr: any = [];
+    Object.keys(selectedAttributes).forEach((record) => {
+      const atName = record.split('attribute#')[1];
+      if (atName) {
+        if (record.includes(atName)) {
+          arr.push(record);
+        }
+        let obj: any = {};
+        arr.forEach((eachRecord: any) => {
+          if (eachRecord) {
+            obj['attribute'] = selectedAttributes['attribute#' + eachRecord.split('#')[1]];
+            obj['operation'] = selectedAttributes['operation#' + eachRecord.split('#')[1]];
+            obj['option'] = selectedAttributes['option#' + eachRecord.split('#')[1]];
+            bArr.push(obj);
+            obj = {};
+          }
+        });
       }
     });
+
+    bArr = removeDuplicates(bArr);
+    const newbArr = { attributes: bArr };
+    const postObject = { ...selectedFilters, ...newbArr };
+
+    // const postObject: Record<string, number> = {};
+    // ['productCategoryId', 'productSubCategoryId', 'productTypeId', 'productSubtypeName'].forEach((ele: string) => {
+    //   if (selectedFilters[ele]) {
+    //     postObject[ele] = selectedFilters[ele]['key'] || selectedFilters[ele]['attributeName'] || selectedFilters[ele];
+    //   }
+    // });
 
     (async () => {
       try {
@@ -444,6 +511,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                                   size="small"
                                   className={classes.crossBtn}
                                   style={{ top: '-9px' }}
+                                  onClick={() => handleDelete(attribute)}
                                 >
                                   <DeleteForeverIcon fontSize="large" />
                                 </Button>
@@ -502,14 +570,14 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                                 />
                               </Grid>
 
-                              <Grid item xs style={{ padding: '4px' }} key={'textfield#' + attribute.key}>
+                              <Grid item xs style={{ padding: '4px' }} key={'option#' + attribute.key}>
                                 <TextField
                                   label={character_format(attribute.key)}
-                                  value={selectedAttributes[attribute.key] || ''}
+                                  value={selectedAttributes['option#' + attribute.key] || ''}
                                   variant="outlined"
                                   fullWidth={true}
                                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                    handleInputChange(e, attribute.key)
+                                    handleInputChange(e, 'option#' + attribute.key)
                                   }
                                 />
                               </Grid>
@@ -521,6 +589,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                                   size="small"
                                   className={classes.crossBtn}
                                   style={{ top: '-9px' }}
+                                  onClick={() => handleDelete(attribute)}
                                 >
                                   <DeleteForeverIcon fontSize="large" />
                                 </Button>
