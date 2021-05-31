@@ -8,16 +8,29 @@ import { makeStyles } from '@material-ui/core/styles';
 import {
   ICreateProductSubtypeProps,
   IUrlParamsEntity,
+  IOptionType,
+  IDeleteItemsType,
+  IProductType,
   IProductDropdowns,
   IProductDropDownProps,
+  IAttributeListItem,
+  ISelectedAttributesType,
   Action,
   ActionType,
 } from './ICreateProduct';
 import { TextField as MuiTextField, Grid, Paper, Button } from '@material-ui/core';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import { TextField } from '@material-ui/core';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Dialog from '@material-ui/core/Dialog';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { useTheme } from '@material-ui/core/styles';
 import { Autocomplete, AutocompleteRenderInputParams } from '@material-ui/lab';
 import { productSubtypeService } from '@hs/services';
-import { IProductTypeDropDownProps, OptionType, ISelectedValues } from './IDashboard';
+import { IProductTypeDropDownProps, ISelectedValues } from './IDashboard';
 import { useQuery } from 'react-query';
 import { useReducer } from 'react';
 
@@ -26,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   paper: {
-    padding: theme.spacing(2),
+    padding: theme.spacing(4),
     textAlign: 'center',
     color: theme.palette.text.secondary,
     fontWeight: 'bold',
@@ -38,6 +51,17 @@ const useStyles = makeStyles((theme) => ({
   },
   filters: {
     paddingBottom: theme.spacing(2),
+  },
+  crossBtn: {
+    position: 'relative',
+    top: '-4px',
+    fontSize: '1.5rem',
+    marginLeft: '-10px',
+    width: '100%',
+    height: '50px',
+    padding: '1.5rem',
+    alignSelf: 'center',
+    borderRadius: '5px',
   },
 }));
 
@@ -74,14 +98,25 @@ const reducer = (state: IProductDropDownProps[], [type, payload]: Action): IProd
 
 const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
   const classes = useStyles();
+  const [dialogStatus, setDialogStatus] = React.useState(false);
   const [selectedFilters, setSelectedFilters] = useState<ISelectedValues>({});
+  const [attributeListItems, setAttributeListItems] = useState<IAttributeListItem[]>([]);
+  const [selectedAttributes, setSelectedAttributes] = useState<ISelectedAttributesType>({});
+  const [attributeList, dispatchAttributeList] = useReducer(reducer, []);
   const [dropDownList, dispatch] = useReducer(reducer, []);
   const [productTypeId, setProductTypeId] = useState<string | number>('');
+  const [recycleAttribute, setRecycleAttribute] = useState<IAttributeListItem[]>([]);
 
-  let subTypeArr = [];
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+
   const params = useParams<IUrlParamsEntity>();
 
-  const { data: categoryData, isSuccess: isCategoryDataSuccess } = useQuery<OptionType[]>(
+  const handleClose = () => {
+    setDialogStatus(false);
+  };
+
+  const { data: categoryData, isSuccess: isCategoryDataSuccess } = useQuery<IOptionType[]>(
     'category',
     productSubtypeService.getCategory,
     {
@@ -93,22 +128,29 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
   );
 
   const [categoryId, setCategoryId] = useState<string | number>('');
-  const { data: subCategoryData } = useQuery<OptionType[], Record<string, string>>(
-    ['subcategory', categoryId],
-    () => productSubtypeService.getSubCategory(categoryId),
-    {
-      staleTime: Infinity,
-      enabled: categoryId !== '',
-    },
-  );
+  const { data: subCategoryData, isSuccess: isSubCategoryDataSuccess } = useQuery<
+    IOptionType[],
+    Record<string, string>
+  >(['subcategory', categoryId], () => productSubtypeService.getSubCategory(categoryId), {
+    staleTime: Infinity,
+    enabled: categoryId !== '',
+  });
 
   const [subcategoryId, setSubCategoryId] = useState<string | number>('');
-  const { data: productTypeData } = useQuery<OptionType[], Record<string, string>>(
+  const { data: productTypeData, isSuccess: isProductTypeSuccess } = useQuery<IOptionType[], Record<string, string>>(
     ['producttype', subcategoryId],
     () => productSubtypeService.getProductType(subcategoryId),
     {
       staleTime: Infinity,
       enabled: subcategoryId !== '',
+    },
+  );
+
+  const { data: attributeData, isSuccess: isAttributeSuccess } = useQuery<any, Record<string, string>>(
+    ['attributes'],
+    () => productSubtypeService.getAttributesList(),
+    {
+      staleTime: 2000,
     },
   );
 
@@ -143,19 +185,36 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
       dispatch([ActionType.removeItems, ['productCategoryId', 'productSubCategoryId', 'productTypeId']]);
       dispatch([ActionType.addItems, formList]);
     }
-  }, [categoryData, subCategoryData, productTypeData]);
+  }, [categoryData, subCategoryData, productTypeData, isSubCategoryDataSuccess, isProductTypeSuccess]);
 
   useEffect(() => {
     if (params.id) {
       (async () => {
         try {
-          const productTypeData: OptionType[] = await productSubtypeService.getProductType(params.id);
-          if (categoryData) {
-            const catData = categoryData.find((category) => category.key == params.id);
-            const categoryKey = catData?.key || '';
-            if (categoryKey) {
+          const productTypeData: IProductType = await productSubtypeService.getDashboardData({}, {});
+          if (productTypeData) {
+            const fetchedData = productTypeData?.productSubtypeList?.find(
+              (subType) => subType.productSubtypeId == params.id,
+            );
+            const categoryKey = fetchedData?.productCategoryId || '';
+            const subCategoryKey = fetchedData?.productSubCategoryId || '';
+            // const productTypeKey = fetchedData?.productTypeId || '';
+
+            if (categoryData) {
+              const catDat = categoryData?.filter((category) => category.key == categoryKey);
               setCategoryId(categoryKey);
-              setSelectedFilters({ ...selectedFilters, ['productCategoryId']: catData });
+              if (subCategoryData) {
+                const subCat = subCategoryData?.filter((subCategory) => subCategory.key == subCategoryKey);
+                setSubCategoryId(subCategoryKey);
+                // if(productTypeData){
+                //   const producDat = productTypeData?.filter((productType) => productType.key == productTypeKey);
+                //   setProductTypeId(productTypeKey);
+                //   setSelectedFilters({['productTypeId']: {...producDat[0]}});
+                // }
+                setSelectedFilters({ ['productSubCategoryId']: { ...subCat[0] } });
+              }
+              setSelectedFilters({ ['productCategoryId']: { ...catDat[0] } });
+              dispatch([ActionType.removeItems, ['productSubTypeName']]);
             }
           }
         } catch (error) {
@@ -165,46 +224,149 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
     }
   }, [params]);
 
+  useEffect(() => {
+    if (isAttributeSuccess) {
+      let attributes: IAttributeListItem[] = [];
+      Object.keys(attributeData.data.attributes).forEach((item) => {
+        attributes.push({ [item]: attributeData.data.attributes[item], ['key']: item });
+      });
+      attributes = attributes.sort(function (a, b) {
+        if (a[a.key]['attributeName'] < b[b.key]['attributeName']) {
+          return -1;
+        }
+        if (a[a.key]['attributeName'] > b[b.key]['attributeName']) {
+          return 1;
+        }
+        return 0;
+      });
+      setAttributeListItems(attributes);
+    }
+  }, [attributeData, isAttributeSuccess]);
+
   const onDropDownChange = (key: string, formData: ISelectedValues) => {
     const dataKey = formData[key]?.key || formData[key]?.attributeValue || formData[key] || '';
     if (key === 'productCategoryId') {
       setCategoryId(dataKey);
-      dispatch([ActionType.removeItems, ['productSubtypeId', 'attributeVal']]);
+      dispatch([ActionType.removeItems, ['productSubTypeName']]);
     } else if (key === 'productSubCategoryId') {
       setSubCategoryId(dataKey);
-      dispatch([ActionType.removeItems, ['productSubtypeId', 'attributeVal']]);
+      dispatch([ActionType.removeItems, ['productSubTypeName']]);
     } else if (key === 'productTypeId') {
       setProductTypeId(dataKey);
-      dispatch([ActionType.removeItems, ['productSubtypeId', 'attributeVal']]);
-    } else if (key === 'productSubtypeId') {
-      subTypeArr = dataKey;
-      // setProductSubtype(formData[key]?.attributeName);
-      const attributeValues = {
-        display: 'Attribute Value',
-        display_position: 4,
-        key: 'attributeVal',
-        options: subTypeArr,
-      };
-      dispatch([ActionType.removeItems, ['attributeVal']]);
-      dispatch([ActionType.addItems, [attributeValues]]);
     }
   };
 
-  const handleAddClick = () => {
-    alert('Button Click');
+  const handleDelete = (attributeDelete: IDeleteItemsType) => {
+    const notAllowed = ['attribute#' + attributeDelete.key];
+    dispatchAttributeList([ActionType.removeItems, [attributeDelete.key]]);
+    const filtered = Object.keys(selectedAttributes)
+      .filter((key) => !notAllowed.includes(key))
+      .reduce((obj: any, key) => {
+        obj[key] = selectedAttributes[key];
+        return obj;
+      }, {});
+
+    setSelectedAttributes(filtered);
+
+    const addAttributeFiltered = recycleAttribute.filter(
+      (item: IAttributeListItem | any) => item.key.replace(/ /g, '_') === attributeDelete.key,
+    );
+    setAttributeListItems([...attributeListItems, ...addAttributeFiltered]);
+    const nRecycleData = recycleAttribute.filter((item) => item.key !== attributeDelete.key);
+    setRecycleAttribute(nRecycleData);
+  };
+
+  const character_format = (str: string) => {
+    str = str.charAt(0).toUpperCase() + str.slice(1);
+    str = str.replace(/_/g, ' ');
+    return str;
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, key: string) => {
-    setSelectedFilters({ ...selectedFilters, [key]: e.target.value });
+    setSelectedAttributes({ ...selectedAttributes, [key]: e.target.value });
+  };
+
+  const handleListItemClick = (attributeItem: IAttributeListItem) => {
+    setDialogStatus(false);
+    const newVal = {
+      key: attributeItem.key,
+      value: attributeItem.key,
+      label: attributeItem[attributeItem.key].attributeName,
+      placeholder: attributeItem[attributeItem.key].label,
+    };
+    setSelectedAttributes({
+      ...selectedAttributes,
+      ['attribute#' + attributeItem.key.replace(/ /g, '_')]: newVal,
+    });
+    const keyLabel = attributeItem.key;
+    const attributeValues: IDeleteItemsType = {
+      display: 'Attribute',
+      label: attributeItem[keyLabel].attributeName,
+      display_position: 5,
+      operationType: attributeItem[keyLabel].operationType,
+      uiType: attributeItem[keyLabel]['uiType'],
+      key: keyLabel.replace(/ /g, '_'),
+      options: attributeItem[keyLabel]?.values,
+    };
+    dispatchAttributeList([ActionType.removeItems, [keyLabel]]);
+    dispatchAttributeList([ActionType.addItems, [attributeValues]]);
+    const recycle: IAttributeListItem[] = attributeListItems.filter(
+      (item: IAttributeListItem) => item.key == attributeItem.key,
+    );
+    setRecycleAttribute([...recycleAttribute, ...recycle]);
+    setAttributeListItems(attributeListItems.filter((attrb: IAttributeListItem) => attrb.key !== attributeItem.key));
+  };
+
+  const removeDuplicates = (arr: any) => {
+    return arr.reduce(
+      (p: any, c: any) => {
+        const id = [c.attribute.key, c.operation.key].join('|');
+        if (p.temp.indexOf(id) === -1) {
+          p.out.push(c);
+          p.temp.push(id);
+        }
+        return p;
+      },
+      {
+        temp: [],
+        out: [],
+      },
+    ).out;
   };
 
   const onFiltersSubmit = (actionMessage: string) => {
-    const postObject: Record<string, number> = {};
-    ['productCategoryId', 'productSubCategoryId', 'productTypeId', 'productSubtypeName'].forEach((ele: string) => {
-      if (selectedFilters[ele]) {
-        postObject[ele] = selectedFilters[ele]['key'] || selectedFilters[ele]['attributeName'] || selectedFilters[ele];
+    alert(actionMessage);
+    const arr: any = [];
+    let bArr: any = [];
+    Object.keys(selectedAttributes).forEach((record) => {
+      const atName = record.split('attribute#')[1];
+      if (atName) {
+        if (record.includes(atName)) {
+          arr.push(record);
+        }
+        let obj: any = {};
+        arr.forEach((eachRecord: any) => {
+          if (eachRecord) {
+            obj['attribute'] = selectedAttributes['attribute#' + eachRecord.split('#')[1]];
+            obj['operation'] = selectedAttributes['operation#' + eachRecord.split('#')[1]];
+            obj['option'] = selectedAttributes['option#' + eachRecord.split('#')[1]];
+            bArr.push(obj);
+            obj = {};
+          }
+        });
       }
     });
+
+    bArr = removeDuplicates(bArr);
+    const newbArr = { attributes: bArr };
+    const postObject = { ...selectedFilters, ...newbArr };
+
+    // const postObject: Record<string, number> = {};
+    // ['productCategoryId', 'productSubCategoryId', 'productTypeId', 'productSubtypeName'].forEach((ele: string) => {
+    //   if (selectedFilters[ele]) {
+    //     postObject[ele] = selectedFilters[ele]['key'] || selectedFilters[ele]['attributeName'] || selectedFilters[ele];
+    //   }
+    // });
 
     (async () => {
       try {
@@ -248,12 +410,14 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                             <Grid item xs={12} style={{ padding: '4px', marginTop: '1rem' }} key={singleDropdown.key}>
                               <TextField
                                 label="Product Subtype"
-                                value={selectedFilters['productSubtypeName'] || ''}
+                                value={selectedFilters['productSubTypeName'] || ''}
                                 variant="outlined"
                                 fullWidth={true}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                  handleInputChange(e, 'productSubtypeName')
-                                }
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                  const keyName = singleDropdown.key;
+                                  const formValues: ISelectedValues = { ...selectedFilters, [keyName]: e.target.value };
+                                  setSelectedFilters(formValues);
+                                }}
                               />
                             </Grid>
                           ) : (
@@ -262,6 +426,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                                 variant="standard"
                                 name={singleDropdown.key}
                                 id={singleDropdown.key}
+                                disabled={params.id ? true : false}
                                 value={selectedFilters[singleDropdown.key] || null}
                                 label={singleDropdown.display}
                                 component={Autocomplete}
@@ -269,7 +434,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                                 getOptionLabel={(option: IProductTypeDropDownProps) =>
                                   option.value || option.key || option.attributeName || option
                                 }
-                                onChange={(event: React.ChangeEvent<HTMLInputElement>, newVal: OptionType) => {
+                                onChange={(event: React.ChangeEvent<HTMLInputElement>, newVal: IOptionType) => {
                                   if (event) {
                                     const keyName = singleDropdown.key;
                                     const formValues: ISelectedValues = { ...selectedFilters, [keyName]: newVal };
@@ -285,13 +450,311 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                           ),
                         )}
                     </Grid>
-                    <Grid container direction="row" justify="center" spacing={3}></Grid>
+                    <Grid container direction="column" justify="center" spacing={3} style={{ marginTop: '1rem' }}>
+                      {attributeList &&
+                        attributeList.map((attribute: any) =>
+                          attribute.uiType === 'SINGLE' ? (
+                            <Grid
+                              container
+                              direction="row"
+                              spacing={3}
+                              style={{ marginTop: '1rem' }}
+                              key={'attributeList#' + attribute.key}
+                            >
+                              <Grid
+                                item
+                                xs={3}
+                                style={{ padding: '4px', marginLeft: '1.2rem' }}
+                                key={'attribute#' + attribute.key}
+                              >
+                                <TextField
+                                  label="Attribute"
+                                  disabled={true}
+                                  value={selectedAttributes['attribute#' + attribute.key]['label'] || ''}
+                                  variant="outlined"
+                                  fullWidth={true}
+                                />
+                              </Grid>
+
+                              <Grid
+                                item
+                                xs={3}
+                                style={{ padding: '4px', marginLeft: '0rem' }}
+                                key={'operation#' + attribute.key}
+                              >
+                                <Field
+                                  variant="standard"
+                                  name={'operation#' + attribute.key}
+                                  id={'operation#' + attribute.key}
+                                  defaultValue={selectedAttributes[attribute.operationType[0]]}
+                                  value={
+                                    selectedAttributes['operation#' + attribute.key] || attribute.operationType[0] || ''
+                                  }
+                                  label="Operation"
+                                  component={Autocomplete}
+                                  options={attribute.operationType || []}
+                                  getOptionLabel={(option: IProductTypeDropDownProps) =>
+                                    option.displayName || option.key
+                                  }
+                                  onChange={(event: React.ChangeEvent<HTMLInputElement>, newVal: IOptionType) => {
+                                    if (event) {
+                                      const keyName = 'operation#' + attribute.key;
+                                      const formValues: ISelectedValues = {
+                                        ...selectedAttributes,
+                                        [keyName]: newVal,
+                                      };
+                                      setSelectedAttributes(formValues);
+                                      onDropDownChange(keyName, attribute);
+                                    }
+                                  }}
+                                  renderInput={(params: AutocompleteRenderInputParams) => (
+                                    <MuiTextField {...params} label="Operation" variant="outlined" />
+                                  )}
+                                />
+                              </Grid>
+
+                              <Grid item xs style={{ padding: '4px' }} key={'option#' + attribute.key}>
+                                <Field
+                                  variant="standard"
+                                  name={'option#' + attribute.key}
+                                  id={'option#' + attribute.key}
+                                  value={selectedAttributes['option#' + attribute.key] || null}
+                                  label="Select"
+                                  component={Autocomplete}
+                                  options={attribute.options || []}
+                                  getOptionLabel={(option: IProductTypeDropDownProps) =>
+                                    option.displayName || option.key
+                                  }
+                                  onChange={(event: React.ChangeEvent<HTMLInputElement>, newVal: IOptionType) => {
+                                    if (event) {
+                                      const keyName = 'option#' + attribute.key;
+                                      const formValues: ISelectedValues = {
+                                        ...selectedAttributes,
+                                        [keyName]: newVal,
+                                      };
+                                      setSelectedAttributes(formValues);
+                                      onDropDownChange(keyName, attribute);
+                                    }
+                                  }}
+                                  renderInput={(params: AutocompleteRenderInputParams) => (
+                                    <MuiTextField {...params} label="Select" variant="outlined" />
+                                  )}
+                                />
+                              </Grid>
+                              <Grid item xs={1}>
+                                <Button
+                                  type="button"
+                                  color="primary"
+                                  variant="outlined"
+                                  size="small"
+                                  className={classes.crossBtn}
+                                  style={{ top: '-9px' }}
+                                  onClick={() => handleDelete(attribute)}
+                                >
+                                  <DeleteForeverIcon fontSize="large" />
+                                </Button>
+                              </Grid>
+                            </Grid>
+                          ) : attribute.uiType === 'MULTI' ? (
+                            <Grid
+                              container
+                              direction="row"
+                              spacing={3}
+                              style={{ marginTop: '1rem' }}
+                              key={'attributeList#' + attribute.key}
+                            >
+                              <Grid
+                                item
+                                xs={3}
+                                style={{ padding: '4px', marginLeft: '1.2rem' }}
+                                key={'attribute#' + attribute.key}
+                              >
+                                <TextField
+                                  label="Attribute"
+                                  disabled={true}
+                                  value={selectedAttributes['attribute#' + attribute.key]['label'] || ''}
+                                  variant="outlined"
+                                  fullWidth={true}
+                                />
+                              </Grid>
+
+                              <Grid
+                                item
+                                xs={3}
+                                style={{ padding: '4px', marginLeft: '0rem' }}
+                                key={'operation#' + attribute.key}
+                              >
+                                <Field
+                                  variant="standard"
+                                  name={'operation#' + attribute.key}
+                                  id={'operation#' + attribute.key}
+                                  defaultValue={selectedAttributes[attribute.operationType[0]]}
+                                  value={
+                                    selectedAttributes['operation#' + attribute.key] || attribute.operationType[0] || ''
+                                  }
+                                  label="Operation"
+                                  component={Autocomplete}
+                                  options={attribute.operationType || []}
+                                  getOptionLabel={(option: IProductTypeDropDownProps) =>
+                                    option.displayName || option.key
+                                  }
+                                  onChange={(event: React.ChangeEvent<HTMLInputElement>, newVal: IOptionType) => {
+                                    if (event) {
+                                      const keyName = 'operation#' + attribute.key;
+                                      const formValues: ISelectedValues = {
+                                        ...selectedAttributes,
+                                        [keyName]: newVal,
+                                      };
+                                      setSelectedAttributes(formValues);
+                                      onDropDownChange(keyName, attribute);
+                                    }
+                                  }}
+                                  renderInput={(params: AutocompleteRenderInputParams) => (
+                                    <MuiTextField {...params} label="Operation" variant="outlined" />
+                                  )}
+                                />
+                              </Grid>
+
+                              <Grid item xs style={{ padding: '4px' }} key={'option#' + attribute.key}>
+                                <Field
+                                  multiple={attribute.uiType === 'MULTI' || false}
+                                  variant="standard"
+                                  name={'option#' + attribute.key}
+                                  id={'option#' + attribute.key}
+                                  value={
+                                    selectedAttributes['option#' + attribute.key] || (attribute.uiType ? [] : null)
+                                  }
+                                  label="Select"
+                                  component={Autocomplete}
+                                  options={attribute.options || []}
+                                  getOptionSelected={(option: any, selectedValue: any) => {
+                                    return option.key == selectedValue?.key;
+                                  }}
+                                  getOptionLabel={(option: IProductTypeDropDownProps) =>
+                                    option.displayName || option.key
+                                  }
+                                  onChange={(event: React.ChangeEvent<HTMLInputElement>, newVal: IOptionType) => {
+                                    if (event) {
+                                      const keyName = 'option#' + attribute.key;
+                                      const formValues: ISelectedValues = {
+                                        ...selectedAttributes,
+                                        [keyName]: newVal,
+                                      };
+                                      setSelectedAttributes(formValues);
+                                      onDropDownChange(keyName, attribute);
+                                    }
+                                  }}
+                                  renderInput={(params: AutocompleteRenderInputParams) => (
+                                    <MuiTextField {...params} label="Select" variant="outlined" />
+                                  )}
+                                />
+                              </Grid>
+                              <Grid item xs={1}>
+                                <Button
+                                  type="button"
+                                  color="primary"
+                                  variant="outlined"
+                                  size="small"
+                                  className={classes.crossBtn}
+                                  style={{ top: '-9px' }}
+                                  onClick={() => handleDelete(attribute)}
+                                >
+                                  <DeleteForeverIcon fontSize="large" />
+                                </Button>
+                              </Grid>
+                            </Grid>
+                          ) : (
+                            <Grid
+                              container
+                              direction="row"
+                              spacing={3}
+                              style={{ marginTop: '1rem' }}
+                              key={'attributeList#' + attribute.key}
+                            >
+                              <Grid
+                                item
+                                xs={3}
+                                style={{ padding: '4px', marginLeft: '1.2rem' }}
+                                key={'attribute#' + attribute.key}
+                              >
+                                <TextField
+                                  label="Attribute"
+                                  disabled={true}
+                                  value={selectedAttributes['attribute#' + attribute.key]['label'] || ''}
+                                  variant="outlined"
+                                  fullWidth={true}
+                                />
+                              </Grid>
+                              <Grid item xs={3} style={{ padding: '4px' }} key={'operation#' + attribute.key}>
+                                <Field
+                                  variant="standard"
+                                  name={'operation#' + attribute.key}
+                                  id={'operation#' + attribute.key}
+                                  defaultValue={selectedAttributes[attribute.operationType[0]]}
+                                  value={
+                                    selectedAttributes['operation#' + attribute.key] || attribute.operationType[0] || ''
+                                  }
+                                  label="Operation"
+                                  component={Autocomplete}
+                                  options={attribute.operationType || []}
+                                  getOptionLabel={(option: IProductTypeDropDownProps) =>
+                                    option.displayName || option.key
+                                  }
+                                  onChange={(event: React.ChangeEvent<HTMLInputElement>, newVal: IOptionType) => {
+                                    if (event) {
+                                      const keyName = 'operation#' + attribute.key;
+                                      const formValues: ISelectedValues = {
+                                        ...selectedAttributes,
+                                        [keyName]: newVal,
+                                      };
+                                      setSelectedAttributes(formValues);
+                                      onDropDownChange(keyName, attribute);
+                                    }
+                                  }}
+                                  renderInput={(params: AutocompleteRenderInputParams) => (
+                                    <MuiTextField {...params} label="Operation" variant="outlined" />
+                                  )}
+                                />
+                              </Grid>
+
+                              <Grid item xs style={{ padding: '4px' }} key={'option#' + attribute.key}>
+                                <TextField
+                                  label={
+                                    selectedAttributes['attribute#' + attribute.key]['placeholder'] ||
+                                    character_format(attribute.key)
+                                  }
+                                  value={selectedAttributes['option#' + attribute.key] || ''}
+                                  variant="outlined"
+                                  fullWidth={true}
+                                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                    handleInputChange(e, 'option#' + attribute.key)
+                                  }
+                                />
+                              </Grid>
+                              <Grid item xs={1}>
+                                <Button
+                                  type="button"
+                                  color="primary"
+                                  variant="outlined"
+                                  size="small"
+                                  className={classes.crossBtn}
+                                  style={{ top: '-9px' }}
+                                  onClick={() => handleDelete(attribute)}
+                                >
+                                  <DeleteForeverIcon fontSize="large" />
+                                </Button>
+                              </Grid>
+                            </Grid>
+                          ),
+                        )}
+                    </Grid>
+
                     <Grid
                       container
                       direction="row"
                       justify="center"
                       spacing={3}
-                      style={{ padding: '4px', marginTop: '1rem', marginBottom: '-2.5rem' }}
+                      style={{ padding: '4px', marginTop: '2rem', marginBottom: '-2.5rem' }}
                     >
                       <Grid item>
                         <Button
@@ -305,7 +768,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                             padding: '15px 20px',
                             width: '100%',
                           }}
-                          onClick={handleAddClick}
+                          onClick={() => setDialogStatus(true)}
                         >
                           Add Attribute
                         </Button>
@@ -333,6 +796,47 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
               </Form>
             )}
           </Formik>
+          <Dialog
+            fullScreen={fullScreen}
+            onClose={handleClose}
+            aria-labelledby="attribute-dialog"
+            open={dialogStatus}
+            maxWidth={'lg'}
+          >
+            <DialogTitle id="attribute-dialog" style={{ textAlign: 'center', borderBottom: '1px solid' }}>
+              Select Attribute
+            </DialogTitle>
+            <List>
+              <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <Autocomplete
+                  freeSolo
+                  id="attribute-search"
+                  disableClearable
+                  options={attributeListItems.map((option) => option.key)}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Search..."
+                      margin="normal"
+                      variant="outlined"
+                      InputProps={{ ...params.InputProps, type: 'search' }}
+                    />
+                  )}
+                  style={{ width: '90%' }}
+                />
+              </div>
+              {attributeListItems.map((eachAttributeListItem: any) => (
+                <ListItem
+                  button
+                  onClick={() => handleListItemClick(eachAttributeListItem)}
+                  key={eachAttributeListItem.key}
+                >
+                  <ListItemText primary={eachAttributeListItem[eachAttributeListItem.key]['attributeName']} />
+                </ListItem>
+              ))}
+              {!isAttributeSuccess ? 'No Data' : ''}
+            </List>
+          </Dialog>
         </FiltersWrapper>
       </ProductWrapper>
     </>
