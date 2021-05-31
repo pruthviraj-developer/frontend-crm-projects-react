@@ -226,9 +226,18 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
 
   useEffect(() => {
     if (isAttributeSuccess) {
-      const attributes: IAttributeListItem[] = [];
+      let attributes: IAttributeListItem[] = [];
       Object.keys(attributeData.data.attributes).forEach((item) => {
         attributes.push({ [item]: attributeData.data.attributes[item], ['key']: item });
+      });
+      attributes = attributes.sort(function (a, b) {
+        if (a[a.key]['attributeName'] < b[b.key]['attributeName']) {
+          return -1;
+        }
+        if (a[a.key]['attributeName'] > b[b.key]['attributeName']) {
+          return 1;
+        }
+        return 0;
       });
       setAttributeListItems(attributes);
     }
