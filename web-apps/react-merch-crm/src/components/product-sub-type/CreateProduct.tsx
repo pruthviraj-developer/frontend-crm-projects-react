@@ -8,8 +8,13 @@ import { makeStyles } from '@material-ui/core/styles';
 import {
   ICreateProductSubtypeProps,
   IUrlParamsEntity,
+  IOptionType,
+  IDeleteItemsType,
+  IProductType,
   IProductDropdowns,
   IProductDropDownProps,
+  IAttributeListItem,
+  ISelectedAttributesType,
   Action,
   ActionType,
 } from './ICreateProduct';
@@ -25,7 +30,7 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTheme } from '@material-ui/core/styles';
 import { Autocomplete, AutocompleteRenderInputParams } from '@material-ui/lab';
 import { productSubtypeService } from '@hs/services';
-import { IProductTypeDropDownProps, OptionType, ISelectedValues } from './IDashboard';
+import { IProductTypeDropDownProps, ISelectedValues } from './IDashboard';
 import { useQuery } from 'react-query';
 import { useReducer } from 'react';
 
@@ -95,12 +100,12 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
   const classes = useStyles();
   const [dialogStatus, setDialogStatus] = React.useState(false);
   const [selectedFilters, setSelectedFilters] = useState<ISelectedValues>({});
-  const [attributeListItems, setAttributeListItems] = useState<any>([]);
-  const [selectedAttributes, setSelectedAttributes] = useState<any>({});
+  const [attributeListItems, setAttributeListItems] = useState<IAttributeListItem[]>([]);
+  const [selectedAttributes, setSelectedAttributes] = useState<ISelectedAttributesType>({});
   const [attributeList, dispatchAttributeList] = useReducer(reducer, []);
   const [dropDownList, dispatch] = useReducer(reducer, []);
   const [productTypeId, setProductTypeId] = useState<string | number>('');
-  const [recycleAttribute, setRecycleAttribute] = useState<any>([]);
+  const [recycleAttribute, setRecycleAttribute] = useState<IAttributeListItem[]>([]);
 
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
@@ -111,7 +116,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
     setDialogStatus(false);
   };
 
-  const { data: categoryData, isSuccess: isCategoryDataSuccess } = useQuery<OptionType[]>(
+  const { data: categoryData, isSuccess: isCategoryDataSuccess } = useQuery<IOptionType[]>(
     'category',
     productSubtypeService.getCategory,
     {
@@ -123,17 +128,16 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
   );
 
   const [categoryId, setCategoryId] = useState<string | number>('');
-  const { data: subCategoryData } = useQuery<OptionType[], Record<string, string>>(
-    ['subcategory', categoryId],
-    () => productSubtypeService.getSubCategory(categoryId),
-    {
-      staleTime: Infinity,
-      enabled: categoryId !== '',
-    },
-  );
+  const { data: subCategoryData, isSuccess: isSubCategoryDataSuccess } = useQuery<
+    IOptionType[],
+    Record<string, string>
+  >(['subcategory', categoryId], () => productSubtypeService.getSubCategory(categoryId), {
+    staleTime: Infinity,
+    enabled: categoryId !== '',
+  });
 
   const [subcategoryId, setSubCategoryId] = useState<string | number>('');
-  const { data: productTypeData } = useQuery<OptionType[], Record<string, string>>(
+  const { data: productTypeData, isSuccess: isProductTypeSuccess } = useQuery<IOptionType[], Record<string, string>>(
     ['producttype', subcategoryId],
     () => productSubtypeService.getProductType(subcategoryId),
     {
@@ -142,7 +146,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
     },
   );
 
-  const { data: attributeData, isSuccess: isAttributeSuccess } = useQuery<any, any>(
+  const { data: attributeData, isSuccess: isAttributeSuccess } = useQuery<any, Record<string, string>>(
     ['attributes'],
     () => productSubtypeService.getAttributesList(),
     {
@@ -181,19 +185,36 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
       dispatch([ActionType.removeItems, ['productCategoryId', 'productSubCategoryId', 'productTypeId']]);
       dispatch([ActionType.addItems, formList]);
     }
-  }, [categoryData, subCategoryData, productTypeData]);
+  }, [categoryData, subCategoryData, productTypeData, isSubCategoryDataSuccess, isProductTypeSuccess]);
 
   useEffect(() => {
     if (params.id) {
       (async () => {
         try {
-          const productTypeData: OptionType[] = await productSubtypeService.getProductType(params.id);
+          const productTypeData: IProductType = await productSubtypeService.getDashboardData({}, {});
           if (productTypeData) {
-            const catData = categoryData?.find((category) => category.key == params.id);
-            const categoryKey = catData?.key || '';
-            if (categoryKey) {
+            const fetchedData = productTypeData?.productSubtypeList?.find(
+              (subType) => subType.productSubtypeId == params.id,
+            );
+            const categoryKey = fetchedData?.productCategoryId || '';
+            const subCategoryKey = fetchedData?.productSubCategoryId || '';
+            // const productTypeKey = fetchedData?.productTypeId || '';
+
+            if (categoryData) {
+              const catDat = categoryData?.filter((category) => category.key == categoryKey);
               setCategoryId(categoryKey);
-              setSelectedFilters({ ...selectedFilters, ['productCategoryId']: catData });
+              if (subCategoryData) {
+                const subCat = subCategoryData?.filter((subCategory) => subCategory.key == subCategoryKey);
+                setSubCategoryId(subCategoryKey);
+                // if(productTypeData){
+                //   const producDat = productTypeData?.filter((productType) => productType.key == productTypeKey);
+                //   setProductTypeId(productTypeKey);
+                //   setSelectedFilters({['productTypeId']: {...producDat[0]}});
+                // }
+                setSelectedFilters({ ['productSubCategoryId']: { ...subCat[0] } });
+              }
+              setSelectedFilters({ ['productCategoryId']: { ...catDat[0] } });
+              dispatch([ActionType.removeItems, ['productSubTypeName']]);
             }
           }
         } catch (error) {
@@ -205,7 +226,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
 
   useEffect(() => {
     if (isAttributeSuccess) {
-      const attributes: any = [];
+      const attributes: IAttributeListItem[] = [];
       Object.keys(attributeData.data.attributes).forEach((item) => {
         attributes.push({ [item]: attributeData.data.attributes[item], ['key']: item });
       });
@@ -226,7 +247,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
     }
   };
 
-  const handleDelete = (attributeDelete: any) => {
+  const handleDelete = (attributeDelete: IDeleteItemsType) => {
     const notAllowed = ['attribute#' + attributeDelete.key];
     dispatchAttributeList([ActionType.removeItems, [attributeDelete.key]]);
     const filtered = Object.keys(selectedAttributes)
@@ -239,11 +260,10 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
     setSelectedAttributes(filtered);
 
     const addAttributeFiltered = recycleAttribute.filter(
-      (item: any) => item[0].key.replace(/ /g, '_') === attributeDelete.key,
+      (item: IAttributeListItem | any) => item.key.replace(/ /g, '_') === attributeDelete.key,
     );
-    const arrAttrFiltered = addAttributeFiltered[0][0];
-    setAttributeListItems([...attributeListItems, arrAttrFiltered]);
-    const nRecycleData = recycleAttribute.filter((item: any) => item[0].key !== attributeDelete.key);
+    setAttributeListItems([...attributeListItems, ...addAttributeFiltered]);
+    const nRecycleData = recycleAttribute.filter((item) => item.key !== attributeDelete.key);
     setRecycleAttribute(nRecycleData);
   };
 
@@ -257,28 +277,29 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
     setSelectedAttributes({ ...selectedAttributes, [key]: e.target.value });
   };
 
-  const handleListItemClick = (attributeItem: any) => {
+  const handleListItemClick = (attributeItem: IAttributeListItem) => {
     setDialogStatus(false);
     const newVal = { key: attributeItem.key, value: attributeItem.key };
     setSelectedAttributes({
       ...selectedAttributes,
       ['attribute#' + attributeItem.key.replace(/ /g, '_')]: newVal,
-      ['operation#' + attributeItem.key.replace(/ /g, '_')]: attributeItem[attributeItem.key]['operationType'][0],
     });
     const keyLabel = attributeItem.key;
-    const attributeValues = {
+    const attributeValues: IDeleteItemsType = {
       display: 'Attribute',
       display_position: 5,
-      operationType: attributeItem[keyLabel]['operationType'],
+      operationType: attributeItem[keyLabel].operationType,
       uiType: attributeItem[keyLabel]['uiType'],
       key: keyLabel.replace(/ /g, '_'),
-      options: attributeItem[keyLabel]['values'],
+      options: attributeItem[keyLabel]?.values,
     };
     dispatchAttributeList([ActionType.removeItems, [keyLabel]]);
     dispatchAttributeList([ActionType.addItems, [attributeValues]]);
-    const recycle: any = attributeListItems.filter((item: any) => item.key == attributeItem.key);
-    setRecycleAttribute([...recycleAttribute, recycle]);
-    setAttributeListItems(attributeListItems.filter((attrb: any) => attrb.key !== attributeItem.key));
+    const recycle: IAttributeListItem[] = attributeListItems.filter(
+      (item: IAttributeListItem) => item.key == attributeItem.key,
+    );
+    setRecycleAttribute([...recycleAttribute, ...recycle]);
+    setAttributeListItems(attributeListItems.filter((attrb: IAttributeListItem) => attrb.key !== attributeItem.key));
   };
 
   const removeDuplicates = (arr: any) => {
@@ -390,6 +411,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                                 variant="standard"
                                 name={singleDropdown.key}
                                 id={singleDropdown.key}
+                                disabled={params.id ? true : false}
                                 value={selectedFilters[singleDropdown.key] || null}
                                 label={singleDropdown.display}
                                 component={Autocomplete}
@@ -397,7 +419,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                                 getOptionLabel={(option: IProductTypeDropDownProps) =>
                                   option.value || option.key || option.attributeName || option
                                 }
-                                onChange={(event: React.ChangeEvent<HTMLInputElement>, newVal: OptionType) => {
+                                onChange={(event: React.ChangeEvent<HTMLInputElement>, newVal: IOptionType) => {
                                   if (event) {
                                     const keyName = singleDropdown.key;
                                     const formValues: ISelectedValues = { ...selectedFilters, [keyName]: newVal };
@@ -449,6 +471,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                                   variant="standard"
                                   name={'operation#' + attribute.key}
                                   id={'operation#' + attribute.key}
+                                  defaultValue={selectedAttributes[attribute.operationType[0]]}
                                   value={
                                     selectedAttributes['operation#' + attribute.key] || attribute.operationType[0] || ''
                                   }
@@ -458,7 +481,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                                   getOptionLabel={(option: IProductTypeDropDownProps) =>
                                     option.displayName || option.key
                                   }
-                                  onChange={(event: React.ChangeEvent<HTMLInputElement>, newVal: OptionType) => {
+                                  onChange={(event: React.ChangeEvent<HTMLInputElement>, newVal: IOptionType) => {
                                     if (event) {
                                       const keyName = 'operation#' + attribute.key;
                                       const formValues: ISelectedValues = {
@@ -487,7 +510,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                                   getOptionLabel={(option: IProductTypeDropDownProps) =>
                                     option.displayName || option.key
                                   }
-                                  onChange={(event: React.ChangeEvent<HTMLInputElement>, newVal: OptionType) => {
+                                  onChange={(event: React.ChangeEvent<HTMLInputElement>, newVal: IOptionType) => {
                                     if (event) {
                                       const keyName = 'option#' + attribute.key;
                                       const formValues: ISelectedValues = {
@@ -544,6 +567,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                                   variant="standard"
                                   name={'operation#' + attribute.key}
                                   id={'operation#' + attribute.key}
+                                  defaultValue={selectedAttributes[attribute.operationType[0]]}
                                   value={
                                     selectedAttributes['operation#' + attribute.key] || attribute.operationType[0] || ''
                                   }
@@ -553,7 +577,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                                   getOptionLabel={(option: IProductTypeDropDownProps) =>
                                     option.displayName || option.key
                                   }
-                                  onChange={(event: React.ChangeEvent<HTMLInputElement>, newVal: OptionType) => {
+                                  onChange={(event: React.ChangeEvent<HTMLInputElement>, newVal: IOptionType) => {
                                     if (event) {
                                       const keyName = 'operation#' + attribute.key;
                                       const formValues: ISelectedValues = {
