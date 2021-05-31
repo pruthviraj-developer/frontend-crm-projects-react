@@ -9,11 +9,11 @@ import { TextField } from 'formik-material-ui';
 import { Grid, Paper, Button, TextField as MuiTextField } from '@material-ui/core';
 import { buyerService } from '@hs/services';
 import { useQuery } from 'react-query';
-import { IVendors, IVendorsOption } from './IShareToVendor';
+import { IVendors, IVendorsOption, OptionsType } from './IShareToVendor';
 import * as Yup from 'yup';
 const validationSchema = Yup.object().shape({
   vendor: Yup.string().required('Please select vendor'),
-  email_ids: Yup.array().of(Yup.string().email('Email is invalid').required('Email is required')),
+  emailIds: Yup.array().of(Yup.string().email('Email is invalid').required('Email is required')),
 });
 
 const useStyles = makeStyles((theme) => ({
@@ -63,7 +63,14 @@ const showError = (error: Record<string, string>) => {
 
 const initialValues = {
   vendor: '',
-  email_ids: [],
+  emailIds: [],
+  vendorDetails: [
+    {
+      categoryId: {},
+      subCategoryId: {},
+      productTypeId: [],
+    },
+  ],
 };
 const ShareToVendor = () => {
   const classes = useStyles();
@@ -117,7 +124,7 @@ const ShareToVendor = () => {
                             option.id == selectedValue?.id || {}
                           }
                           onChange={(_evt: React.ChangeEvent, actionvalue: IVendorsOption) => {
-                            setFieldValue('email_ids', [actionvalue?.email]);
+                            setFieldValue('emailIds', [actionvalue?.email]);
                           }}
                           getOptionLabel={(option: IVendorsOption) => option.display || ''}
                           renderInput={(params: AutocompleteRenderInputParams) => (
@@ -126,11 +133,11 @@ const ShareToVendor = () => {
                         />
                       </Grid>
                       <Grid style={{ padding: 10 }}>
-                        <FieldArray name="email_ids">
+                        <FieldArray name="emailIds">
                           {({ remove, push }) => (
                             <Grid>
-                              {values.email_ids.length > 0 &&
-                                values.email_ids.map((email, index) => (
+                              {values.emailIds.length > 0 &&
+                                values.emailIds.map((email, index) => (
                                   <Grid
                                     container
                                     direction="row"
@@ -143,7 +150,7 @@ const ShareToVendor = () => {
                                       <Field
                                         component={TextField}
                                         fullWidth
-                                        name={`email_ids.${index}`}
+                                        name={`emailIds.${index}`}
                                         type="text"
                                         label="Email"
                                         variant={'outlined'}
@@ -183,6 +190,105 @@ const ShareToVendor = () => {
                                   onClick={() => push('')}
                                 >
                                   Add Email
+                                </Button>
+                              </Grid>
+                            </Grid>
+                          )}
+                        </FieldArray>
+                      </Grid>
+                      <Grid style={{ padding: 10 }}>
+                        <FieldArray name="vendorDetails">
+                          {({ remove, push }) => (
+                            <Grid>
+                              {values.vendorDetails.length > 0 &&
+                                values.vendorDetails.map((email, index) => (
+                                  <Grid
+                                    container
+                                    direction="row"
+                                    justify="flex-start"
+                                    spacing={3}
+                                    key={index}
+                                    className={classes.emailIds}
+                                  >
+                                    <Grid item xs={2} style={{ padding: '4px' }} key={index}>
+                                      <Field
+                                        name={`vendorDetails.${index}.category`}
+                                        variant="standard"
+                                        label="Category"
+                                        component={Autocomplete}
+                                        options={[]}
+                                        getOptionLabel={(option: OptionsType) => option.value || option.key}
+                                        onChange={(event: React.ChangeEvent<HTMLInputElement>, newVal: OptionsType) => {
+                                          if (event) {
+                                            alert(1);
+                                            // console.log(event, newVal);
+                                          }
+                                        }}
+                                        renderInput={(params: AutocompleteRenderInputParams) => (
+                                          <MuiTextField {...params} label={'Category'} variant="outlined" />
+                                        )}
+                                      />
+                                    </Grid>
+                                    <Grid item xs={3} style={{ padding: '4px' }} key={index}>
+                                      <Field
+                                        name={`vendorDetails.${index}.category`}
+                                        variant="standard"
+                                        label="Category"
+                                        component={Autocomplete}
+                                        options={[]}
+                                        getOptionLabel={(option: OptionsType) => option.value || option.key}
+                                        renderInput={(params: AutocompleteRenderInputParams) => (
+                                          <MuiTextField {...params} label={'Sub Category'} variant="outlined" />
+                                        )}
+                                      />
+                                    </Grid>
+                                    <Grid item xs={3} style={{ padding: '4px' }} key={index}>
+                                      <Field
+                                        name={`vendorDetails.${index}.category`}
+                                        variant="standard"
+                                        label="Category"
+                                        component={Autocomplete}
+                                        options={[]}
+                                        getOptionLabel={(option: OptionsType) => option.value || option.key}
+                                        renderInput={(params: AutocompleteRenderInputParams) => (
+                                          <MuiTextField {...params} label={'Product types'} variant="outlined" />
+                                        )}
+                                      />
+                                    </Grid>
+                                    <Grid item xs={3}>
+                                      <Button
+                                        type="button"
+                                        className="secondary"
+                                        variant="outlined"
+                                        size="large"
+                                        style={{
+                                          fontWeight: 'bold',
+                                          fontSize: 10,
+                                          padding: '15px 20px',
+                                          width: '100%',
+                                        }}
+                                        onClick={() => remove(index)}
+                                      >
+                                        X
+                                      </Button>
+                                    </Grid>
+                                  </Grid>
+                                ))}
+                              <Grid item>
+                                <Button
+                                  type="button"
+                                  className="secondary"
+                                  variant="outlined"
+                                  size="large"
+                                  style={{
+                                    fontWeight: 'bold',
+                                    fontSize: 10,
+                                    padding: '15px 20px',
+                                    width: '100%',
+                                  }}
+                                  onClick={() => push({ categoryId: {}, subCategoryId: {}, productTypeId: [] })}
+                                >
+                                  Add Products
                                 </Button>
                               </Grid>
                             </Grid>
