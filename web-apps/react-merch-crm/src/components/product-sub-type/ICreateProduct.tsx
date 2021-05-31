@@ -97,6 +97,7 @@ export interface IOptionsType {
 
 export interface IDeleteItemsType {
   display: string;
+  label: string;
   display_position: number;
   key: string;
   operationType?: IOperationType;
