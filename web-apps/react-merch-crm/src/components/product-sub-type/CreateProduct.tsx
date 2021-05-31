@@ -292,6 +292,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
       key: attributeItem.key,
       value: attributeItem.key,
       label: attributeItem[attributeItem.key].attributeName,
+      placeholder: attributeItem[attributeItem.key].label,
     };
     setSelectedAttributes({
       ...selectedAttributes,
@@ -518,7 +519,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                                   name={'option#' + attribute.key}
                                   id={'option#' + attribute.key}
                                   value={selectedAttributes['option#' + attribute.key] || null}
-                                  label="Option"
+                                  label="Select"
                                   component={Autocomplete}
                                   options={attribute.options || []}
                                   getOptionLabel={(option: IProductTypeDropDownProps) =>
@@ -536,7 +537,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                                     }
                                   }}
                                   renderInput={(params: AutocompleteRenderInputParams) => (
-                                    <MuiTextField {...params} label="Option" variant="outlined" />
+                                    <MuiTextField {...params} label="Select" variant="outlined" />
                                   )}
                                 />
                               </Grid>
@@ -623,7 +624,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                                   value={
                                     selectedAttributes['option#' + attribute.key] || (attribute.uiType ? [] : null)
                                   }
-                                  label="Option"
+                                  label="Select"
                                   component={Autocomplete}
                                   options={attribute.options || []}
                                   getOptionSelected={(option: any, selectedValue: any) => {
@@ -644,7 +645,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                                     }
                                   }}
                                   renderInput={(params: AutocompleteRenderInputParams) => (
-                                    <MuiTextField {...params} label="Option" variant="outlined" />
+                                    <MuiTextField {...params} label="Select" variant="outlined" />
                                   )}
                                 />
                               </Grid>
@@ -718,7 +719,10 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
 
                               <Grid item xs style={{ padding: '4px' }} key={'option#' + attribute.key}>
                                 <TextField
-                                  label={character_format(attribute.key)}
+                                  label={
+                                    selectedAttributes['attribute#' + attribute.key]['placeholder'] ||
+                                    character_format(attribute.key)
+                                  }
                                   value={selectedAttributes['option#' + attribute.key] || ''}
                                   variant="outlined"
                                   fullWidth={true}
