@@ -85,8 +85,8 @@ const FiltersWrapper = styled.div`
 const tryLater = 'Please try later';
 const showError = (error: Record<string, string>) => {
   let message = tryLater;
-  if (error.action === 'failure' && error.message) {
-    message = error.message;
+  if (error.action === 'FAILURE' && error.messageList) {
+    message = error.messageList[0];
   }
   toast.error(message);
 };
@@ -201,7 +201,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
   }, [attributeData, isAttributeSuccess]);
 
   useEffect(() => {
-    if (params.id && isAttributeSuccess) {
+    if (params.id) {
       getProductData();
     }
   }, [params]);
@@ -670,7 +670,6 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                           color="primary"
                           variant="outlined"
                           size="large"
-                          disabled={selectedFilters['productType'] == ''}
                           style={{
                             fontWeight: 'bold',
                             fontSize: 10,
