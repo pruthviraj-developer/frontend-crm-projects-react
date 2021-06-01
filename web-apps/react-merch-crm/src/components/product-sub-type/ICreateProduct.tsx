@@ -39,6 +39,12 @@ export interface IProductDropdowns {
   display_position: number;
 }
 
+export interface IOperationType {
+  displayName?: string;
+  key: string;
+  value: string;
+}
+
 export interface IProductDropDownProps {
   options?: IProductDropdowns[] | null;
   key: string;
@@ -52,6 +58,9 @@ export interface IProductDropDownProps {
   display: string;
   clearFields?: Array<string>;
   display_position: number;
+  id?: string | number;
+  operationType?: IOperationType[] | any;
+  uiType?: string;
 }
 
 export interface IValues {
@@ -59,10 +68,20 @@ export interface IValues {
   value: string | number;
 }
 
-export interface IOperationType {
-  displayName?: string;
+export interface IValueOfSelected {
   key: string;
   value: string;
+}
+
+export interface IAttributeValues {
+  display: string;
+  id?: string | number;
+  label?: string;
+  display_position: number;
+  operationType?: IOperationType[] | any;
+  uiType?: string;
+  key: string;
+  options?: IValues[] | any;
 }
 
 export interface IAttributeItems {
@@ -78,16 +97,36 @@ export interface IAttributeItems {
   valueType: string;
   values?: IValues[];
   key?: string;
-  operationType?: IOperationType;
+  operationType: IOperationType[] | null;
 }
 
-export interface IAttributeListItem {
+export interface IAttributeResponse {
   [key: string]: IAttributeItems;
-  key?: string | any;
+}
+
+export interface ICategoryData {
+  key: number;
+  name: string;
+}
+
+export interface IAttributeResponseData {
+  attributes: IAttributeResponse | any;
+  category: ICategoryData[] | [];
+}
+
+export interface ISelectedData {
+  attributeId?: string | number;
+  attributeValue?: string | any;
+}
+
+export interface IAttributeData {
+  action: number;
+  data: IAttributeResponseData;
+  statusCode: number;
 }
 
 export interface ISelectedAttributesType {
-  [key: string]: any;
+  [key: string]: ISelectedData;
 }
 
 export interface IOptionsType {
@@ -97,12 +136,12 @@ export interface IOptionsType {
 
 export interface IDeleteItemsType {
   display: string;
-  label: string;
+  label?: string;
   display_position: number;
   key: string;
-  operationType?: IOperationType;
-  options: IOptionsType | any;
-  uiType: string;
+  operationType?: IOperationType | null;
+  options?: IOptionsType | any;
+  uiType?: string;
   values?: IOperationType;
 }
 
