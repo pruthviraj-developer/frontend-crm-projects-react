@@ -1,13 +1,26 @@
 import { useQuery } from 'react-query';
-import { reorderService } from '@hs/services';
-import { IProductTypes, ISubCategory, IUseCategoryProps } from './IUseCategory';
+import { reorderService, productSubtypeService } from '@hs/services';
+import {
+  IProductTypes,
+  ISubCategory,
+  IUseCategoryProps,
+  OptionType,
+} from './IUseCategory';
 
 export const useCategory = ({
   category_id,
   sub_category_ids,
 }: IUseCategoryProps) => {
   const {
-    data: subCategoryList,
+    data: categoryList,
+    isSuccess: isCategoryLoaded,
+    error: categoryError,
+  } = useQuery<OptionType[]>('category', productSubtypeService.getCategory, {
+    staleTime: Infinity,
+  });
+
+  const {
+    data: subCategoryData,
     isSuccess: isSubCatLoaded,
     isFetching: isSubCatFetching,
     error: subCatError,
@@ -36,7 +49,10 @@ export const useCategory = ({
     }
   );
   return {
-    subCategoryList,
+    categoryList,
+    isCategoryLoaded,
+    categoryError,
+    subCategoryList: subCategoryData?.sub_cat,
     isSubCatLoaded,
     isSubCatFetching,
     subCatError,
