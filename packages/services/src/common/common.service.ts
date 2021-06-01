@@ -6,7 +6,7 @@ const getCategory = <T>(): Promise<T> => {
 };
 
 const getSubCategory = <P, R>(categoryId: P): Promise<R> => {
-  const url =`/crm-api/intranet/getsubcategory/${categoryId}`;
+  const url = `/crm-api/intranet/getsubcategory/${categoryId}`;
   return httpService.get<R>({ url });
 };
 

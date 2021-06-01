@@ -7,7 +7,8 @@ import { Formik, Form, Field, FieldArray } from 'formik';
 import { Autocomplete, AutocompleteRenderInputParams } from 'formik-material-ui-lab';
 import { TextField } from 'formik-material-ui';
 import { Grid, Paper, Button, TextField as MuiTextField } from '@material-ui/core';
-import { buyerService, commonService } from '@hs/services';
+import { buyerService } from '@hs/services';
+import { useCategory } from '@hs/hooks';
 import { useQuery } from 'react-query';
 import { IVendors, IVendorsOption, OptionsType } from './IShareToVendor';
 import * as Yup from 'yup';
@@ -102,36 +103,13 @@ const ShareToVendor = () => {
       },
     },
   );
-
-  const { data: categoryList, isLoading: isCategoryListLoading } = useQuery<OptionsType[], Record<string, string>>(
-    'category',
-    commonService.getCategory,
-    {
-      staleTime: Infinity,
-      onError: (error: Record<string, string>) => {
-        showError(error);
-      },
-    },
-  );
-
   const [categoryId, setCategoryId] = useState<number>();
-  const { data: subCategoryList, isLoading: isSubCategoryListLoading } = useQuery<
-    OptionsType[],
-    Record<string, string>
-  >(['subcategory', categoryId], () => commonService.getSubCategory(categoryId), {
-    staleTime: Infinity,
-    enabled: categoryId !== undefined,
-  });
-
   const [subCategoryId, setSubCategoryId] = useState<number>();
-  const { data: productsList, isLoading: isProductTypeLoading } = useQuery<OptionsType[], Record<string, string>>(
-    ['subcategory', categoryId],
-    () => commonService.getProductTypes(categoryId),
-    {
-      staleTime: Infinity,
-      enabled: subCategoryId !== undefined,
-    },
-  );
+  const { categoryList, isCategoryListLoading, subCategoryList, isSubCategoryListLoading, pTList, isPTLoading } =
+    useCategory({
+      categoryId,
+      subCategoryId,
+    });
 
   return (
     <>
@@ -295,8 +273,8 @@ const ShareToVendor = () => {
                                         label="Product types"
                                         multiple
                                         component={Autocomplete}
-                                        options={productsList || []}
-                                        loading={isProductTypeLoading}
+                                        options={pTList || []}
+                                        loading={isPTLoading}
                                         onOpen={() => {
                                           const product: Record<string, number> =
                                             values.vendorDetails[index].subCategoryId;
