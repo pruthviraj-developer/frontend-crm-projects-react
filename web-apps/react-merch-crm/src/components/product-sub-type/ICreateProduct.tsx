@@ -78,12 +78,27 @@ export interface IAttributeItems {
   valueType: string;
   values?: IValues[];
   key?: string;
-  operationType?: IOperationType;
+  operationType: IOperationType[] | null;
+}
+
+export interface IAttributeResponse {
+  [key: string]: IAttributeItems;
+}
+
+export interface ICategoryData {
+  key: number;
+  name: string;
+}
+
+export interface IAttributeResponseData {
+  attributes: IAttributeResponse;
+  category: ICategoryData[];
 }
 
 export interface IAttributeListItem {
-  [key: string]: IAttributeItems;
-  key?: string | any;
+  action?: string;
+  data: IAttributeResponseData | null;
+  statusCode?: number;
 }
 
 export interface ISelectedAttributesType {
@@ -95,12 +110,23 @@ export interface IOptionsType {
   key: string;
 }
 
+export interface IAddItemsType {
+  display: string;
+  label: string;
+  display_position: number;
+  key: string;
+  operationType: IOperationType[] | null;
+  options: IOptionsType | any;
+  uiType: string;
+  values?: IOperationType;
+}
+
 export interface IDeleteItemsType {
   display: string;
   label: string;
   display_position: number;
   key: string;
-  operationType?: IOperationType;
+  operationType: IOperationType | null;
   options: IOptionsType | any;
   uiType: string;
   values?: IOperationType;
