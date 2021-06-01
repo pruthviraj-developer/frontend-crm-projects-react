@@ -631,24 +631,6 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
               Select Attribute
             </DialogTitle>
             <List>
-              <div style={{ display: 'flex', justifyContent: 'center' }}>
-                <Autocomplete
-                  freeSolo
-                  id="attribute-search"
-                  disableClearable
-                  options={attributeListItems && Object.keys(attributeListItems).map((option: string) => option)}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Search..."
-                      margin="normal"
-                      variant="outlined"
-                      InputProps={{ ...params.InputProps, type: 'search' }}
-                    />
-                  )}
-                  style={{ width: '90%' }}
-                />
-              </div>
               {attributeListItems &&
                 Object.keys(attributeListItems).map((eachAttributeListItem: string) => (
                   <ListItem
