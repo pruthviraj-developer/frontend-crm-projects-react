@@ -1,5 +1,5 @@
 import { useQuery } from 'react-query';
-import { reorderService, productSubtypeService } from '@hs/services';
+import { reorderService , commonService } from '@hs/services';
 import {
   IProductTypes,
   ISubCategory,
@@ -15,7 +15,7 @@ export const useCategory = ({
     data: categoryList,
     isSuccess: isCategoryLoaded,
     error: categoryError,
-  } = useQuery<OptionType[]>('category', productSubtypeService.getCategory, {
+  } = useQuery<OptionType[]>('category', commonService.getCategory, {
     staleTime: Infinity,
   });
 
@@ -26,7 +26,7 @@ export const useCategory = ({
     error: subCatError,
   } = useQuery<ISubCategory, Record<string, string>>(
     ['subCategories', category_id],
-    () => reorderService.getSubCategories({ ids: category_id }),
+    () => commonService.getSubCategory(category_id)),
     {
       staleTime: Infinity,
       retry: false,
@@ -41,7 +41,7 @@ export const useCategory = ({
     error: pTError,
   } = useQuery<IProductTypes, Record<string, string>>(
     ['productsList', sub_category_ids],
-    () => reorderService.getProductTypes({ ids: sub_category_ids }),
+    () => commonService.getProductTypes(sub_category_ids),
     {
       staleTime: Infinity,
       retry: false,
