@@ -145,6 +145,27 @@ export interface IDeleteItemsType {
   values?: IOperationType;
 }
 
+export interface ProductAttributeType {
+  type: IValueOfSelected;
+  uiType: string;
+  values: IValueOfSelected[];
+}
+
+export interface ProductDataType {
+  attributes: ProductAttributeType[];
+  categoryId: IValueOfSelected;
+  productSubTypeName: string;
+  productTypeId: IValueOfSelected;
+  subCategoryId: IValueOfSelected;
+}
+
+export interface IGetProductResponse {
+  action: string;
+  data: ProductDataType;
+  messageList?: string | null;
+  statusCode: number;
+}
+
 export enum ActionType {
   removeItems = 'removeItem',
   addItems = 'addItem',

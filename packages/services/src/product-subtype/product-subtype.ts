@@ -21,12 +21,25 @@ const getProductType = <P, R>(subcategoryId: P): Promise<R> => {
 };
 
 const getAttributesList = <R>(): Promise<R> => {
-  const url = '/crm-api/intranet/productlistings/creation-setup';
+  const url = '/crm-api/intranet/productsubtype/creation-setup';
   return httpService.get<R>({ url });
 };
 
 const addProduct = <P, R>(data: P): Promise<R> => {
-  const url = '/crm-api/intranet/productsubtype/save';
+  const url = '/crm-api/intranet/productsubtype/create';
+  return httpService.post<R>({ url, data });
+};
+
+const getProduct = <P, R>(Id: P): Promise<R> => {
+  const url = `/crm-api/intranet/productsubtype/getapi/${Id}`;
+  return httpService.get<R>({ url });
+};
+
+const updateProduct = <P, R>(
+  data: P,
+  subtypeId: string | number
+): Promise<R> => {
+  const url = `/crm-api/intranet/productsubtype/update/${subtypeId}`;
   return httpService.post<R>({ url, data });
 };
 
@@ -50,7 +63,9 @@ export const productSubtypeService = {
   getCategory,
   getSubCategory,
   getProductType,
+  getProduct,
   addProduct,
+  updateProduct,
   getAttributesList,
   getDashboardData,
   updateAction,

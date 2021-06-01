@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { Formik, Field, Form } from 'formik';
 import styled from '@emotion/styled';
@@ -15,7 +15,7 @@ import {
   IAttributeResponse,
   IDeleteItemsType,
   IOptionsType,
-  IProductType,
+  IGetProductResponse,
   IProductDropdowns,
   IProductDropDownProps,
   ISelectedAttributesType,
@@ -38,6 +38,7 @@ import { productSubtypeService } from '@hs/services';
 import { IProductTypeDropDownProps, ISelectedValues } from './IDashboard';
 import { useQuery } from 'react-query';
 import { useReducer } from 'react';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -102,11 +103,12 @@ const reducer = (state: IProductDropDownProps[], [type, payload]: Action): IProd
 };
 
 const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
+  const history = useHistory();
   const classes = useStyles();
   const [dialogStatus, setDialogStatus] = React.useState(false);
   const [selectedFilters, setSelectedFilters] = useState<ISelectedValues>({});
   const [attributeListItems, setAttributeListItems] = useState<IAttributeResponse>({});
-  const [selectedAttributes, setSelectedAttributes] = useState<ISelectedAttributesType>({});
+  const [selectedAttributes, setSelectedAttributes] = useState<any>({});
   const [attributeList, dispatchAttributeList] = useReducer(reducer, []);
   const [dropDownList, dispatch] = useReducer(reducer, []);
   const [productTypeId, setProductTypeId] = useState<string | number>('');
@@ -155,7 +157,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
     ['attributes'],
     () => productSubtypeService.getAttributesList(),
     {
-      staleTime: 2000,
+      staleTime: Infinity,
     },
   );
 
@@ -163,71 +165,34 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
     if (isCategoryDataSuccess) {
       const formList: IProductDropdowns[] = [
         {
-          key: 'category',
+          key: 'categoryId',
           display: 'Category',
           options: categoryData,
           display_position: 1,
         },
         {
-          key: 'subCategory',
+          key: 'subcategoryId',
           display: 'Sub Category',
           options: subCategoryData,
           display_position: 2,
         },
         {
-          key: 'productType',
+          key: 'productTypeId',
           display: 'Product Type',
           options: productTypeData,
           display_position: 3,
         },
         {
-          key: 'subTypeName',
+          key: 'productSubtypeName',
           display: 'Product Subtype',
           options: '',
           display_position: 4,
         },
       ];
-      dispatch([ActionType.removeItems, ['category', 'subCategory', 'productType']]);
+      dispatch([ActionType.removeItems, ['categoryId', 'subcategoryId', 'productTypeId']]);
       dispatch([ActionType.addItems, formList]);
     }
   }, [categoryData, subCategoryData, productTypeData, isSubCategoryDataSuccess, isProductTypeSuccess]);
-
-  useEffect(() => {
-    if (params.id) {
-      (async () => {
-        try {
-          const productTypeData: IProductType = await productSubtypeService.getDashboardData({}, {});
-          if (productTypeData) {
-            const fetchedData = productTypeData?.productSubtypeList?.find(
-              (subType) => subType.productSubtypeId == params.id,
-            );
-            const categoryKey = fetchedData?.productCategoryId || '';
-            const subCategoryKey = fetchedData?.productSubCategoryId || '';
-            // const productTypeKey = fetchedData?.productTypeId || '';
-
-            if (categoryData) {
-              const catDat = categoryData?.filter((category) => category.key == categoryKey);
-              setCategoryId(categoryKey);
-              if (subCategoryData) {
-                const subCat = subCategoryData?.filter((subCategory) => subCategory.key == subCategoryKey);
-                setSubCategoryId(subCategoryKey);
-                // if(productTypeData){
-                //   const producDat = productTypeData?.filter((productType) => productType.key == productTypeKey);
-                //   setProductTypeId(productTypeKey);
-                //   setSelectedFilters({['productTypeId']: {...producDat[0]}});
-                // }
-                setSelectedFilters({ ['subCategory']: { ...subCat[0] } });
-              }
-              setSelectedFilters({ ['category']: { ...catDat[0] } });
-              dispatch([ActionType.removeItems, ['subTypeName']]);
-            }
-          }
-        } catch (error) {
-          showError(error);
-        }
-      })();
-    }
-  }, [params]);
 
   useEffect(() => {
     if (isAttributeSuccess) {
@@ -235,14 +200,87 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
     }
   }, [attributeData, isAttributeSuccess]);
 
+  useEffect(() => {
+    if (params.id && isAttributeSuccess) {
+      getProductData();
+    }
+  }, [params]);
+
+  const getProductData = useCallback(() => {
+    (async () => {
+      try {
+        const productTypeData: IGetProductResponse = await productSubtypeService.getProduct(params.id);
+        if (productTypeData) {
+          const category = productTypeData?.data.categoryId;
+          const subCategory = productTypeData?.data.subCategoryId;
+          const productType = productTypeData?.data.productTypeId;
+          const subTypeName = productTypeData?.data.productSubTypeName || '';
+
+          setSelectedFilters({
+            ['categoryId']: { ...category },
+            ['subcategoryId']: { ...subCategory },
+            ['productTypeId']: { ...productType },
+            ['productSubtypeName']: subTypeName,
+          });
+
+          productTypeData.data.attributes.map((eachAttrib) => {
+            const newVal = {
+              [eachAttrib.type.value]: {
+                attributeId: eachAttrib.type.key,
+                attributeValue: eachAttrib.uiType === 'MULTI' ? eachAttrib.values : eachAttrib.values[0],
+              },
+            };
+            setSelectedAttributes((prevState: any) => {
+              return { ...prevState, ...newVal };
+            });
+
+            const attributeValues: IAttributeValues = {
+              display: 'Attribute',
+              id: eachAttrib.type.key,
+              label: eachAttrib.type.value,
+              display_position: 5,
+              operationType: [],
+              uiType: eachAttrib.uiType,
+              key: eachAttrib.type.value,
+              options: eachAttrib.values,
+            };
+            dispatchAttributeList([ActionType.addItems, [attributeValues]]);
+
+            const recycle: IAttributeResponse = {};
+            Object.keys(attributeListItems).forEach((item) => {
+              if (attributeListItems[item].attributeKey === eachAttrib.type.value) {
+                recycle[item] = { ...attributeListItems[item] };
+              }
+            });
+            setRecycleAttribute((prevState: any) => {
+              return { ...prevState, ...recycle };
+            });
+
+            const recycleList: IAttributeResponse = {};
+            Object.keys(attributeListItems).forEach((item) => {
+              if (attributeListItems[item].attributeKey !== eachAttrib.type.value) {
+                recycleList[item] = { ...attributeListItems[item] };
+              }
+            });
+            setAttributeListItems((prevState: any) => {
+              return { ...prevState, ...recycleList };
+            });
+          });
+        }
+      } catch (error) {
+        showError(error);
+      }
+    })();
+  }, []);
+
   const onDropDownChange = (key: string, formData: ISelectedValues) => {
     const dataKey = formData[key]?.key || formData[key]?.attributeValue || formData[key] || '';
-    if (key === 'category') {
+    if (key === 'categoryId') {
       setCategoryId(dataKey);
-      dispatch([ActionType.removeItems, ['subTypeName']]);
-    } else if (key === 'subCategory') {
+      dispatch([ActionType.removeItems, ['productSubtypeName']]);
+    } else if (key === 'subcategoryId') {
       setSubCategoryId(dataKey);
-      dispatch([ActionType.removeItems, ['subTypeName']]);
+      dispatch([ActionType.removeItems, ['productSubtypeName']]);
     } else if (key === 'productType') {
       setProductTypeId(dataKey);
     }
@@ -297,10 +335,12 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
     const newVal = {
       [attributeItem.attributeKey]: {
         attributeId: attributeItem.attributeId,
-        attributeValue: attributeItem.uiType === 'TEXTBOX' || attributeItem.uiType === 'SINGLE' ? '' : [],
+        attributeValue: attributeItem.uiType === 'MULTI' || attributeItem.uiType === 'SINGLE' ? [] : '',
       },
     };
-    setSelectedAttributes({ ...selectedAttributes, ...newVal });
+    setSelectedAttributes((prevState: any) => {
+      return { ...prevState, ...newVal };
+    });
 
     const attributeValues: IAttributeValues = {
       display: 'Attribute',
@@ -334,50 +374,75 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
 
   const onFiltersSubmit = (actionMessage: string) => {
     let postObject: Record<string, number> = {};
-    ['category', 'subCategory', 'productType', 'subTypeName'].forEach((ele: string) => {
+    ['categoryId', 'subcategoryId', 'productTypeId', 'productSubtypeName'].forEach((ele: string) => {
       if (selectedFilters[ele]) {
         postObject[ele] = selectedFilters[ele]['key'] || selectedFilters[ele]['attributeName'] || selectedFilters[ele];
       }
     });
 
-    const nObj: any = {};
-
+    const mObj: any = [];
     Object.keys(selectedAttributes).forEach((ele) => {
-      const valueOfArr: Array<string> = [];
+      const valueOfArr = [];
       if (selectedAttributes[ele]) {
         if (typeof selectedAttributes[ele]['attributeValue'] == 'string') {
-          nObj[ele] = [selectedAttributes[ele]['attributeValue']];
+          mObj.push({
+            attributeId: selectedAttributes[ele]['attributeId'],
+            attributeValues: [selectedAttributes[ele]['attributeValue']],
+          });
         }
         if (typeof selectedAttributes[ele]['attributeValue'] == 'object') {
           if (selectedAttributes[ele]['attributeValue']['value']) {
-            nObj[ele] = [selectedAttributes[ele]['attributeValue']['value']];
+            mObj.push({
+              attributeId: selectedAttributes[ele]['attributeId'],
+              attributeValues: [selectedAttributes[ele]['attributeValue']['value']],
+            });
           } else {
             for (const [, value] of Object.entries<IValueOfSelected>(selectedAttributes[ele]['attributeValue'])) {
               valueOfArr.push(value.value);
             }
-            nObj[ele] = valueOfArr;
+
+            mObj.push({ attributeId: selectedAttributes[ele]['attributeId'], attributeValues: valueOfArr });
           }
         }
       }
     });
 
-    postObject = { ...postObject, attributeList: nObj };
+    postObject = { ...postObject, ...mObj };
 
-    (async () => {
-      try {
-        const productPostStatus: Record<string, string> = await productSubtypeService.addProduct({ ...postObject });
-        if (productPostStatus.status === 'SUCCESS') {
-          toast.success(productPostStatus.messageList || `Product ${actionMessage} successfully`);
-          setTimeout(() => {
-            window.location.reload();
-          }, 8000);
-          return;
+    if (actionMessage === 'updated') {
+      (async () => {
+        try {
+          const productPostStatus: Record<string, string> = await productSubtypeService.updateProduct(
+            postObject,
+            params.id,
+          );
+          if (productPostStatus.status === 'SUCCESS') {
+            toast.success(productPostStatus.messageList || `Product ${actionMessage} successfully`);
+            setTimeout(() => {
+              window.location.reload();
+            }, 8000);
+            return;
+          }
+          showError(productPostStatus);
+        } catch (error) {
+          showError(error);
         }
-        showError({});
-      } catch (error) {
-        showError(error);
-      }
-    })();
+      })();
+    } else {
+      (async () => {
+        try {
+          const productPostStatus: Record<string, string> = await productSubtypeService.addProduct({ ...postObject });
+          if (productPostStatus.status === 'SUCCESS') {
+            toast.success(productPostStatus.messageList || `Product ${actionMessage} successfully`);
+            history.push('/product-sub-types/product-sub-type');
+            return;
+          }
+          showError(productPostStatus);
+        } catch (error) {
+          showError(error);
+        }
+      })();
+    }
   };
 
   return (
@@ -390,7 +455,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
             initialValues={{}}
             onSubmit={(values, actions) => {
               actions.setSubmitting(false);
-              const actionKey = header.indexOf('Add') > -1 ? 'added' : 'updated';
+              const actionKey = header.indexOf('Create') > -1 ? 'added' : 'updated';
               onFiltersSubmit(actionKey);
             }}
           >
@@ -401,11 +466,11 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                     <Grid container direction="column" justify="center" spacing={3}>
                       {dropDownList &&
                         dropDownList.map((singleDropdown) =>
-                          singleDropdown.key == 'subTypeName' ? (
+                          singleDropdown.key == 'productSubtypeName' ? (
                             <Grid item xs={12} style={{ padding: '4px', marginTop: '1rem' }} key={singleDropdown.key}>
                               <TextField
                                 label="Product Subtype"
-                                value={selectedFilters['subTypeName'] || ''}
+                                value={selectedFilters['productSubtypeName'] || ''}
                                 variant="outlined"
                                 fullWidth={true}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -479,11 +544,13 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                                   id={'option#' + attribute.key}
                                   value={
                                     selectedAttributes[attribute.key].attributeValue ||
-                                    (attribute.uiType === 'MULTI' ? [] : null)
+                                    (attribute.uiType === 'MULTI' || attribute.uiType === 'SINGLE' ? [] : null)
                                   }
                                   label="Select"
                                   component={Autocomplete}
-                                  options={attribute.options || []}
+                                  options={
+                                    attributeData?.data.attributes[attribute.key]['values'] || attribute.options || []
+                                  }
                                   getOptionSelected={(option: IOptionsType, selectedValue: IOptionsType) => {
                                     return option.key == selectedValue?.key;
                                   }}
@@ -603,7 +670,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                           color="primary"
                           variant="outlined"
                           size="large"
-                          disabled={productTypeId == ''}
+                          disabled={selectedFilters['productType'] == ''}
                           style={{
                             fontWeight: 'bold',
                             fontSize: 10,
@@ -620,6 +687,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
               </Form>
             )}
           </Formik>
+
           <Dialog
             fullScreen={fullScreen}
             onClose={handleClose}
