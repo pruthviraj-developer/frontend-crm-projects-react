@@ -19,6 +19,7 @@ import {
   IProductDropdowns,
   IProductDropDownProps,
   ISelectedAttributesType,
+  IValueOfSelected,
   Action,
   ActionType,
 } from './ICreateProduct';
@@ -340,8 +341,9 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
     });
 
     const nObj: any = {};
+
     Object.keys(selectedAttributes).forEach((ele) => {
-      const valueOfArr: any = [];
+      const valueOfArr: Array<string> = [];
       if (selectedAttributes[ele]) {
         if (typeof selectedAttributes[ele]['attributeValue'] == 'string') {
           nObj[ele] = [selectedAttributes[ele]['attributeValue']];
@@ -350,8 +352,8 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
           if (selectedAttributes[ele]['attributeValue']['value']) {
             nObj[ele] = [selectedAttributes[ele]['attributeValue']['value']];
           } else {
-            for (const [, value] of Object.entries(selectedAttributes[ele]['attributeValue'])) {
-              valueOfArr.push(value);
+            for (const [, value] of Object.entries<IValueOfSelected>(selectedAttributes[ele]['attributeValue'])) {
+              valueOfArr.push(value.value);
             }
             nObj[ele] = valueOfArr;
           }

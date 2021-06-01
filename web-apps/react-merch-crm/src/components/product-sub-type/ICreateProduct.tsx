@@ -68,6 +68,11 @@ export interface IValues {
   value: string | number;
 }
 
+export interface IValueOfSelected {
+  key: string;
+  value: string;
+}
+
 export interface IAttributeValues {
   display: string;
   id?: string | number;
