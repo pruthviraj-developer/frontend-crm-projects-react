@@ -419,12 +419,14 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
             postObject,
             params.id,
           );
-          if (productPostStatus.status === 'SUCCESS') {
-            toast.success(productPostStatus.messageList || `Product ${actionMessage} successfully`);
-            history.push('/product-sub-types/product-sub-type');
+          if (productPostStatus.action === 'SUCCESS') {
+            toast.success(productPostStatus.messageList[0] || `Product ${actionMessage} successfully`);
+            setTimeout(() => {
+              history.push('/product-sub-types/product-sub-type');
+            }, 5000);
+
             return;
           }
-          showError(productPostStatus);
         } catch (error) {
           showError(error);
         }
@@ -433,14 +435,13 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
       (async () => {
         try {
           const productPostStatus: Record<string, string> = await productSubtypeService.addProduct({ ...postObject });
-          if (productPostStatus.status === 'SUCCESS') {
-            toast.success(productPostStatus.messageList || `Product ${actionMessage} successfully`);
+          if (productPostStatus.action === 'SUCCESS') {
+            toast.success(productPostStatus.messageList[0] || `Product ${actionMessage} successfully`);
             setTimeout(() => {
               window.location.reload();
-            }, 8000);
+            }, 5000);
             return;
           }
-          showError(productPostStatus);
         } catch (error) {
           showError(error);
         }
