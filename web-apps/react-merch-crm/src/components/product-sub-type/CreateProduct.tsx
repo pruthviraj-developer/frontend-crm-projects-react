@@ -9,13 +9,15 @@ import {
   ICreateProductSubtypeProps,
   IUrlParamsEntity,
   IOptionType,
+  IAttributeData,
   IAttributeItems,
-  IAddItemsType,
+  IAttributeValues,
+  IAttributeResponse,
   IDeleteItemsType,
+  IOptionsType,
   IProductType,
   IProductDropdowns,
   IProductDropDownProps,
-  IAttributeListItem,
   ISelectedAttributesType,
   Action,
   ActionType,
@@ -102,12 +104,12 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
   const classes = useStyles();
   const [dialogStatus, setDialogStatus] = React.useState(false);
   const [selectedFilters, setSelectedFilters] = useState<ISelectedValues>({});
-  const [attributeListItems, setAttributeListItems] = useState<any>();
-  const [selectedAttributes, setSelectedAttributes] = useState<any>({});
+  const [attributeListItems, setAttributeListItems] = useState<IAttributeResponse>({});
+  const [selectedAttributes, setSelectedAttributes] = useState<ISelectedAttributesType>({});
   const [attributeList, dispatchAttributeList] = useReducer(reducer, []);
   const [dropDownList, dispatch] = useReducer(reducer, []);
   const [productTypeId, setProductTypeId] = useState<string | number>('');
-  const [recycleAttribute, setRecycleAttribute] = useState<any>({});
+  const [recycleAttribute, setRecycleAttribute] = useState<IAttributeResponse>({});
 
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
@@ -148,7 +150,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
     },
   );
 
-  const { data: attributeData, isSuccess: isAttributeSuccess } = useQuery<any, Record<string, string>>(
+  const { data: attributeData, isSuccess: isAttributeSuccess } = useQuery<IAttributeData, Record<string, string>>(
     ['attributes'],
     () => productSubtypeService.getAttributesList(),
     {
@@ -228,20 +230,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
 
   useEffect(() => {
     if (isAttributeSuccess) {
-      // const attributes: IAttributeListItem[] = [];
-      // Object.keys(attributeData.data.attributes).forEach((item) => {
-      //   attributes.push({ [item]: attributeData.data.attributes[item] });
-      // });
-      // attributes = attributes.sort(function (a, b) {
-      //   if (a[a.key]['attributeName'] < b[b.key]['attributeName']) {
-      //     return -1;
-      //   }
-      //   if (a[a.key]['attributeName'] > b[b.key]['attributeName']) {
-      //     return 1;
-      //   }
-      //   return 0;
-      // });
-      setAttributeListItems(attributeData.data.attributes);
+      setAttributeListItems(attributeData?.data?.attributes);
     }
   }, [attributeData, isAttributeSuccess]);
 
@@ -269,7 +258,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
       }, {});
     setSelectedAttributes(filtered);
 
-    const recycledAttribList: any = {};
+    const recycledAttribList: IAttributeResponse = {};
     Object.keys(recycleAttribute).forEach((item) => {
       if (recycleAttribute[item].attributeKey === attributeDelete.key) {
         recycledAttribList[item] = { ...recycleAttribute[item] };
@@ -277,7 +266,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
     });
     setAttributeListItems({ ...attributeListItems, ...recycledAttribList });
 
-    const delFromRecycledAttrib: any = {};
+    const delFromRecycledAttrib: IAttributeResponse = {};
     Object.keys(recycleAttribute).forEach((item) => {
       if (recycleAttribute[item].attributeKey !== attributeDelete.key) {
         delFromRecycledAttrib[item] = { ...recycleAttribute[item] };
@@ -292,7 +281,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
     return str;
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, attributeItm: any) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, attributeItm: IAttributeValues) => {
     const setVal = {
       [attributeItm.key]: {
         attributeId: attributeItm.id,
@@ -312,7 +301,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
     };
     setSelectedAttributes({ ...selectedAttributes, ...newVal });
 
-    const attributeValues: any = {
+    const attributeValues: IAttributeValues = {
       display: 'Attribute',
       id: attributeItem.attributeId,
       label: attributeItem.attributeName,
@@ -325,7 +314,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
     dispatchAttributeList([ActionType.removeItems, [attributeItem.attributeKey]]);
     dispatchAttributeList([ActionType.addItems, [attributeValues]]);
 
-    const recycle: any = {};
+    const recycle: IAttributeResponse = {};
     Object.keys(attributeListItems).forEach((item) => {
       if (attributeListItems[item].attributeKey === attributeItem.attributeKey) {
         recycle[item] = { ...attributeListItems[item] };
@@ -333,7 +322,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
     });
     setRecycleAttribute({ ...recycleAttribute, ...recycle });
 
-    const recycleList: any = {};
+    const recycleList: IAttributeResponse = {};
     Object.keys(attributeListItems).forEach((item) => {
       if (attributeListItems[item].attributeKey !== attributeItem.attributeKey) {
         recycleList[item] = { ...attributeListItems[item] };
@@ -351,7 +340,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
     });
 
     const nObj: any = {};
-    Object.keys(selectedAttributes).forEach((ele, i) => {
+    Object.keys(selectedAttributes).forEach((ele) => {
       const valueOfArr: any = [];
       if (selectedAttributes[ele]) {
         if (typeof selectedAttributes[ele]['attributeValue'] == 'string') {
@@ -456,7 +445,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                     </Grid>
                     <Grid container direction="column" justify="center" spacing={3} style={{ marginTop: '1rem' }}>
                       {attributeList &&
-                        attributeList.map((attribute: any) =>
+                        attributeList.map((attribute: IAttributeValues) =>
                           attribute.uiType === 'SINGLE' || attribute.uiType === 'MULTI' ? (
                             <Grid
                               container
@@ -493,7 +482,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                                   label="Select"
                                   component={Autocomplete}
                                   options={attribute.options || []}
-                                  getOptionSelected={(option: any, selectedValue: any) => {
+                                  getOptionSelected={(option: IOptionsType, selectedValue: IOptionsType) => {
                                     return option.key == selectedValue?.key;
                                   }}
                                   getOptionLabel={(option: IProductTypeDropDownProps) =>
@@ -641,12 +630,12 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
               Select Attribute
             </DialogTitle>
             <List>
-              {/* <div style={{ display: 'flex', justifyContent: 'center' }}>
+              <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <Autocomplete
                   freeSolo
                   id="attribute-search"
                   disableClearable
-                  options={attributeListItems.map((option) => option.key)}
+                  options={attributeListItems && Object.keys(attributeListItems).map((option: string) => option)}
                   renderInput={(params) => (
                     <TextField
                       {...params}
@@ -658,9 +647,9 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                   )}
                   style={{ width: '90%' }}
                 />
-              </div> */}
+              </div>
               {attributeListItems &&
-                Object.keys(attributeListItems).map((eachAttributeListItem: any) => (
+                Object.keys(attributeListItems).map((eachAttributeListItem: string) => (
                   <ListItem
                     button
                     onClick={() => handleListItemClick(attributeListItems[eachAttributeListItem])}
