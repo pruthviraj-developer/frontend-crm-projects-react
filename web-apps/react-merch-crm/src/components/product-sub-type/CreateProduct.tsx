@@ -87,8 +87,11 @@ const showError = (error: Record<string, string>) => {
   let message = tryLater;
   if (error.action === 'FAILURE' && error.messageList) {
     message = error.messageList[0];
+    toast.error(message);
+  } else {
+    message = error.messageList[0];
+    toast.success(message);
   }
-  toast.error(message);
 };
 
 const reducer = (state: IProductDropDownProps[], [type, payload]: Action): IProductDropDownProps[] => {
@@ -407,7 +410,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
       }
     });
 
-    postObject = { ...postObject, ...mObj };
+    postObject = { ...postObject, attributeList: mObj };
 
     if (actionMessage === 'updated') {
       (async () => {
@@ -418,9 +421,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
           );
           if (productPostStatus.status === 'SUCCESS') {
             toast.success(productPostStatus.messageList || `Product ${actionMessage} successfully`);
-            setTimeout(() => {
-              window.location.reload();
-            }, 8000);
+            history.push('/product-sub-types/product-sub-type');
             return;
           }
           showError(productPostStatus);
@@ -434,7 +435,9 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
           const productPostStatus: Record<string, string> = await productSubtypeService.addProduct({ ...postObject });
           if (productPostStatus.status === 'SUCCESS') {
             toast.success(productPostStatus.messageList || `Product ${actionMessage} successfully`);
-            history.push('/product-sub-types/product-sub-type');
+            setTimeout(() => {
+              window.location.reload();
+            }, 8000);
             return;
           }
           showError(productPostStatus);
