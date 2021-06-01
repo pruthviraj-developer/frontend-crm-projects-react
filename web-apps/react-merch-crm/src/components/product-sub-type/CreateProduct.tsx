@@ -392,7 +392,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
               onFiltersSubmit(actionKey);
             }}
           >
-            {(values) => (
+            {() => (
               <Form autoComplete="off">
                 <Grid container direction="column" justify="center" spacing={1}>
                   <Paper className={clsx(classes.paper, classes.filters)} variant="outlined">
@@ -615,7 +615,6 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                     </Grid>
                   </Paper>
                 </Grid>
-                <pre>{JSON.stringify(values)}</pre>
               </Form>
             )}
           </Formik>
