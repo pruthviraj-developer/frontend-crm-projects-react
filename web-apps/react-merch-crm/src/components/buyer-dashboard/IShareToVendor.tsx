@@ -8,10 +8,8 @@ export interface IVendorsOption {
 }
 
 export interface OptionsType {
-  first: number;
-  key: string;
-  second: string;
-  value: string;
+  id: number;
+  name: string;
 }
 
 export interface IDashboardResponse {
@@ -20,4 +18,15 @@ export interface IDashboardResponse {
   params?: string;
   statusCode?: number;
   data: OptionsType[];
+}
+
+export interface IInitialProductTypes {
+  vendor: number | null;
+  emailIds: (string)[] | null;
+  vendorDetails: (VendorDetailsEntity)[] | null;
+}
+interface VendorDetailsEntity {
+  categoryId: OptionsType | {};
+  subCategoryId: OptionsType;
+  productTypeId: (OptionsType)[] | null;
 }

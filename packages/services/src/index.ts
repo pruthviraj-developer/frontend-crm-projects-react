@@ -5,3 +5,4 @@ export * from './bulk-upload';
 export * from './reorder';
 export * from './merch-intelligence';
 export * from './product-subtype';
+export * from './common';

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from '@emotion/styled';
 import clsx from 'clsx';
 import { toast } from 'react-toastify';
@@ -7,7 +7,7 @@ import { Formik, Form, Field, FieldArray } from 'formik';
 import { Autocomplete, AutocompleteRenderInputParams } from 'formik-material-ui-lab';
 import { TextField } from 'formik-material-ui';
 import { Grid, Paper, Button, TextField as MuiTextField } from '@material-ui/core';
-import { buyerService } from '@hs/services';
+import { buyerService, commonService } from '@hs/services';
 import { useQuery } from 'react-query';
 import { IVendors, IVendorsOption, OptionsType } from './IShareToVendor';
 import * as Yup from 'yup';
@@ -38,6 +38,24 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     padding: theme.spacing(0),
     marginBottom: 10,
+  },
+  vendorDetails: {
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  addAndSubmit: {
+    fontWeight: 'bold',
+    fontSize: 10,
+    padding: '15px 20px',
+    width: '100%',
+  },
+  shareToVendor: {
+    padding: '4px',
+    marginTop: '1rem',
+    marginBottom: '-2.5rem',
+  },
+  p10: {
+    padding: 10,
   },
 }));
 
@@ -74,7 +92,7 @@ const initialValues = {
 };
 const ShareToVendor = () => {
   const classes = useStyles();
-  const { data: vendors, isFetching: isVendorsLoading } = useQuery<IVendors, Record<string, string>>(
+  const { data: vendors, isLoading: isVendorsLoading } = useQuery<IVendors, Record<string, string>>(
     'vendors',
     buyerService.getVendorList,
     {
@@ -84,6 +102,37 @@ const ShareToVendor = () => {
       },
     },
   );
+
+  const { data: categoryList, isLoading: isCategoryListLoading } = useQuery<OptionsType[], Record<string, string>>(
+    'category',
+    commonService.getCategory,
+    {
+      staleTime: Infinity,
+      onError: (error: Record<string, string>) => {
+        showError(error);
+      },
+    },
+  );
+
+  const [categoryId, setCategoryId] = useState<number>();
+  const { data: subCategoryList, isLoading: isSubCategoryListLoading } = useQuery<
+    OptionsType[],
+    Record<string, string>
+  >(['subcategory', categoryId], () => commonService.getSubCategory(categoryId), {
+    staleTime: Infinity,
+    enabled: categoryId !== undefined,
+  });
+
+  const [subCategoryId, setSubCategoryId] = useState<number>();
+  const { data: productsList, isLoading: isProductTypeLoading } = useQuery<OptionsType[], Record<string, string>>(
+    ['subcategory', categoryId],
+    () => commonService.getProductTypes(categoryId),
+    {
+      staleTime: Infinity,
+      enabled: subCategoryId !== undefined,
+    },
+  );
+
   return (
     <>
       <ShareToVendorWrapper>
@@ -101,17 +150,7 @@ const ShareToVendor = () => {
               <Form autoComplete="off">
                 <Grid container direction="column" justify="center" spacing={3}>
                   <Paper className={clsx(classes.paper, classes.filters)} variant="outlined">
-                    <Grid
-                      container
-                      direction="column"
-                      justify="center"
-                      spacing={3}
-                      style={{
-                        padding: '4px',
-                        marginTop: '1rem',
-                        marginBottom: '-2.5rem',
-                      }}
-                    >
+                    <Grid container direction="column" justify="center" spacing={3} className={classes.shareToVendor}>
                       <Grid item xs>
                         <Field
                           name="vendor"
@@ -132,7 +171,7 @@ const ShareToVendor = () => {
                           )}
                         />
                       </Grid>
-                      <Grid style={{ padding: 10 }}>
+                      <Grid className={classes.p10}>
                         <FieldArray name="emailIds">
                           {({ remove, push }) => (
                             <Grid>
@@ -159,15 +198,9 @@ const ShareToVendor = () => {
                                     <Grid item xs={3}>
                                       <Button
                                         type="button"
-                                        className="secondary"
                                         variant="outlined"
                                         size="large"
-                                        style={{
-                                          fontWeight: 'bold',
-                                          fontSize: 10,
-                                          padding: '15px 20px',
-                                          width: '100%',
-                                        }}
+                                        className={clsx('secondary', classes.addAndSubmit)}
                                         onClick={() => remove(index)}
                                       >
                                         X
@@ -178,15 +211,9 @@ const ShareToVendor = () => {
                               <Grid item>
                                 <Button
                                   type="button"
-                                  className="secondary"
                                   variant="outlined"
                                   size="large"
-                                  style={{
-                                    fontWeight: 'bold',
-                                    fontSize: 10,
-                                    padding: '15px 20px',
-                                    width: '100%',
-                                  }}
+                                  className={clsx('secondary', classes.addAndSubmit)}
                                   onClick={() => push('')}
                                 >
                                   Add Email
@@ -196,7 +223,7 @@ const ShareToVendor = () => {
                           )}
                         </FieldArray>
                       </Grid>
-                      <Grid style={{ padding: 10 }}>
+                      <Grid className={classes.p10}>
                         <FieldArray name="vendorDetails">
                           {({ remove, push }) => (
                             <Grid>
@@ -207,21 +234,25 @@ const ShareToVendor = () => {
                                     direction="row"
                                     justify="flex-start"
                                     spacing={3}
-                                    key={index}
-                                    className={classes.emailIds}
+                                    key={`vendor${index}`}
+                                    className={classes.vendorDetails}
                                   >
-                                    <Grid item xs={2} style={{ padding: '4px' }} key={index}>
+                                    <Grid item xs={3}>
                                       <Field
-                                        name={`vendorDetails.${index}.category`}
+                                        id={`category.${index}`}
+                                        name={`vendorDetails.${index}.categoryId`}
                                         variant="standard"
                                         label="Category"
                                         component={Autocomplete}
-                                        options={[]}
-                                        getOptionLabel={(option: OptionsType) => option.value || option.key}
+                                        options={categoryList || []}
+                                        loading={isCategoryListLoading}
+                                        value={values.vendorDetails[index].categoryId || null}
+                                        getOptionLabel={(option: OptionsType) => option.name || ''}
                                         onChange={(event: React.ChangeEvent<HTMLInputElement>, newVal: OptionsType) => {
                                           if (event) {
-                                            alert(1);
-                                            // console.log(event, newVal);
+                                            setFieldValue(`vendorDetails.${index}.categoryId`, newVal);
+                                            setFieldValue(`vendorDetails.${index}.subCategoryId`, {});
+                                            setFieldValue(`vendorDetails.${index}.productTypeId`, []);
                                           }
                                         }}
                                         renderInput={(params: AutocompleteRenderInputParams) => (
@@ -229,44 +260,67 @@ const ShareToVendor = () => {
                                         )}
                                       />
                                     </Grid>
-                                    <Grid item xs={3} style={{ padding: '4px' }} key={index}>
+                                    <Grid item xs={3}>
                                       <Field
-                                        name={`vendorDetails.${index}.category`}
+                                        name={`vendorDetails.${index}.subCategoryId`}
                                         variant="standard"
-                                        label="Category"
+                                        label="Sub Category"
                                         component={Autocomplete}
-                                        options={[]}
-                                        getOptionLabel={(option: OptionsType) => option.value || option.key}
+                                        options={subCategoryList || []}
+                                        loading={isSubCategoryListLoading}
+                                        value={values.vendorDetails[index].subCategoryId || null}
+                                        onOpen={() => {
+                                          const category: Record<string, number> =
+                                            values.vendorDetails[index].categoryId;
+                                          if (category && category.id) {
+                                            setCategoryId(category.id);
+                                          }
+                                        }}
+                                        getOptionLabel={(option: OptionsType) => option.name || ''}
+                                        onChange={(event: React.ChangeEvent<HTMLInputElement>, newVal: OptionsType) => {
+                                          if (event) {
+                                            setFieldValue(`vendorDetails.${index}.subCategoryId`, newVal);
+                                            setFieldValue(`vendorDetails.${index}.productTypeId`, []);
+                                          }
+                                        }}
                                         renderInput={(params: AutocompleteRenderInputParams) => (
                                           <MuiTextField {...params} label={'Sub Category'} variant="outlined" />
                                         )}
                                       />
                                     </Grid>
-                                    <Grid item xs={3} style={{ padding: '4px' }} key={index}>
+                                    <Grid item xs={4}>
                                       <Field
-                                        name={`vendorDetails.${index}.category`}
+                                        name={`vendorDetails.${index}.productTypeId`}
                                         variant="standard"
-                                        label="Category"
+                                        label="Product types"
+                                        multiple
                                         component={Autocomplete}
-                                        options={[]}
-                                        getOptionLabel={(option: OptionsType) => option.value || option.key}
+                                        options={productsList || []}
+                                        loading={isProductTypeLoading}
+                                        onOpen={() => {
+                                          const product: Record<string, number> =
+                                            values.vendorDetails[index].subCategoryId;
+                                          if (product && product.id) {
+                                            setSubCategoryId(product.id);
+                                          }
+                                        }}
+                                        getOptionLabel={(option: OptionsType) => option.name || ''}
+                                        onChange={(event: React.ChangeEvent<HTMLInputElement>, newVal: OptionsType) => {
+                                          if (event) {
+                                            setFieldValue(`vendorDetails.${index}.productTypeId`, newVal);
+                                          }
+                                        }}
                                         renderInput={(params: AutocompleteRenderInputParams) => (
                                           <MuiTextField {...params} label={'Product types'} variant="outlined" />
                                         )}
                                       />
                                     </Grid>
-                                    <Grid item xs={3}>
+                                    <Grid item xs={2}>
                                       <Button
                                         type="button"
-                                        className="secondary"
                                         variant="outlined"
                                         size="large"
-                                        style={{
-                                          fontWeight: 'bold',
-                                          fontSize: 10,
-                                          padding: '15px 20px',
-                                          width: '100%',
-                                        }}
+                                        className={clsx('secondary', classes.addAndSubmit)}
                                         onClick={() => remove(index)}
                                       >
                                         X
@@ -277,15 +331,9 @@ const ShareToVendor = () => {
                               <Grid item>
                                 <Button
                                   type="button"
-                                  className="secondary"
                                   variant="outlined"
                                   size="large"
-                                  style={{
-                                    fontWeight: 'bold',
-                                    fontSize: 10,
-                                    padding: '15px 20px',
-                                    width: '100%',
-                                  }}
+                                  className={clsx('secondary', classes.addAndSubmit)}
                                   onClick={() => push({ categoryId: {}, subCategoryId: {}, productTypeId: [] })}
                                 >
                                   Add Products
@@ -301,12 +349,7 @@ const ShareToVendor = () => {
                           color="primary"
                           variant="outlined"
                           size="large"
-                          style={{
-                            fontWeight: 'bold',
-                            fontSize: 10,
-                            padding: '15px 20px',
-                            width: '100%',
-                          }}
+                          className={classes.addAndSubmit}
                         >
                           Share
                         </Button>
