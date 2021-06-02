@@ -119,6 +119,11 @@ export interface ISelectedData {
   attributeValue?: string | any;
 }
 
+export interface IAttributeResTypeData {
+  attributeId?: string | number;
+  attributeValues: Array<string>;
+}
+
 export interface IAttributeData {
   action: number;
   data: IAttributeResponseData;

@@ -18,6 +18,7 @@ import {
   IGetProductResponse,
   IProductDropdowns,
   IProductDropDownProps,
+  IAttributeResTypeData,
   ISelectedAttributesType,
   IValueOfSelected,
   Action,
@@ -33,12 +34,28 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTheme } from '@material-ui/core/styles';
-import { Autocomplete, AutocompleteRenderInputParams } from '@material-ui/lab';
+import { Autocomplete, AutocompleteRenderInputParams } from 'formik-material-ui-lab';
 import { productSubtypeService } from '@hs/services';
 import { IProductTypeDropDownProps, ISelectedValues } from './IDashboard';
 import { useQuery } from 'react-query';
 import { useReducer } from 'react';
 import { useHistory } from 'react-router-dom';
+import * as Yup from 'yup';
+const validationSchema = Yup.object().shape({
+  categoryId: Yup.string().required('Please select category').nullable(true),
+  subcategoryId: Yup.string().required('Please select sub category').nullable(true),
+  productTypeId: Yup.string().required('Please select product type').nullable(true),
+  productSubtypeName: Yup.string().required('Product sub type name is required').nullable(true),
+  attributeList: Yup.array()
+    .of(
+      Yup.object().shape({
+        attributeId: Yup.string(),
+        attributeValues: Yup.array().of(Yup.string()),
+      }),
+    )
+    .required()
+    .min(1, 'Please add at least one attribute'),
+});
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -92,6 +109,14 @@ const showError = (error: Record<string, string>) => {
     message = error.messageList[0];
     toast.success(message);
   }
+};
+
+const initialValues: any = {
+  categoryId: '',
+  subcategoryId: '',
+  productTypeId: '',
+  productSubtypeName: '',
+  attributeList: [],
 };
 
 const reducer = (state: IProductDropDownProps[], [type, payload]: Action): IProductDropDownProps[] => {
@@ -219,6 +244,21 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
           const productType = productTypeData?.data.productTypeId;
           const subTypeName = productTypeData?.data.productSubTypeName || '';
 
+          const attributesParamUrlResponse: IAttributeResTypeData[] = [];
+          productTypeData.data.attributes.forEach((item) => {
+            const obj: IAttributeResTypeData = { attributeId: item.type.key, attributeValues: [] };
+            item.values.forEach((val: IValueOfSelected) => {
+              obj?.attributeValues.push(val.value);
+            });
+            attributesParamUrlResponse.push(obj);
+          });
+
+          (initialValues.categoryId = { ...category }),
+            (initialValues.subcategoryId = { ...subCategory }),
+            (initialValues.productTypeId = { ...productType }),
+            (initialValues.productSubtypeName = subTypeName),
+            (initialValues.attributeList = [...attributesParamUrlResponse]);
+
           setSelectedFilters({
             ['categoryId']: { ...category },
             ['subcategoryId']: { ...subCategory },
@@ -233,7 +273,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                 attributeValue: eachAttrib.uiType === 'MULTI' ? eachAttrib.values : eachAttrib.values[0],
               },
             };
-            setSelectedAttributes((prevState: any) => {
+            setSelectedAttributes((prevState: ISelectedAttributesType) => {
               return { ...prevState, ...newVal };
             });
 
@@ -255,7 +295,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                 recycle[item] = { ...attributeListItems[item] };
               }
             });
-            setRecycleAttribute((prevState: any) => {
+            setRecycleAttribute((prevState: IAttributeResponse) => {
               return { ...prevState, ...recycle };
             });
 
@@ -265,7 +305,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                 recycleList[item] = { ...attributeListItems[item] };
               }
             });
-            setAttributeListItems((prevState: any) => {
+            setAttributeListItems((prevState: IAttributeResponse) => {
               return { ...prevState, ...recycleList };
             });
           });
@@ -341,7 +381,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
         attributeValue: attributeItem.uiType === 'MULTI' || attributeItem.uiType === 'SINGLE' ? [] : '',
       },
     };
-    setSelectedAttributes((prevState: any) => {
+    setSelectedAttributes((prevState: IAttributeValues) => {
       return { ...prevState, ...newVal };
     });
 
@@ -420,6 +460,11 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
             params.id,
           );
           if (productPostStatus.action === 'SUCCESS') {
+            (initialValues.categoryId = ''),
+              (initialValues.subcategoryId = ''),
+              (initialValues.productTypeId = ''),
+              (initialValues.productSubtypeName = ''),
+              (initialValues.attributeList = []);
             toast.success(productPostStatus.messageList[0] || `Product ${actionMessage} successfully`);
             setTimeout(() => {
               history.push('/product-sub-types/product-sub-type');
@@ -436,6 +481,11 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
         try {
           const productPostStatus: Record<string, string> = await productSubtypeService.addProduct({ ...postObject });
           if (productPostStatus.action === 'SUCCESS') {
+            (initialValues.categoryId = ''),
+              (initialValues.subcategoryId = ''),
+              (initialValues.productTypeId = ''),
+              (initialValues.productSubtypeName = ''),
+              (initialValues.attributeList = []);
             toast.success(productPostStatus.messageList[0] || `Product ${actionMessage} successfully`);
             setTimeout(() => {
               window.location.reload();
@@ -456,14 +506,15 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
         <FiltersWrapper className={classes.root}>
           <Formik
             enableReinitialize={true}
-            initialValues={{}}
+            initialValues={initialValues}
+            validationSchema={validationSchema}
             onSubmit={(values, actions) => {
               actions.setSubmitting(false);
               const actionKey = header.indexOf('Create') > -1 ? 'added' : 'updated';
               onFiltersSubmit(actionKey);
             }}
           >
-            {() => (
+            {({ values, setFieldValue, errors, touched, isValid, dirty }) => (
               <Form autoComplete="off">
                 <Grid container direction="column" justify="center" spacing={1}>
                   <Paper className={clsx(classes.paper, classes.filters)} variant="outlined">
@@ -474,15 +525,31 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                             <Grid item xs={12} style={{ padding: '4px', marginTop: '1rem' }} key={singleDropdown.key}>
                               <TextField
                                 label="Product Subtype"
-                                value={selectedFilters['productSubtypeName'] || ''}
+                                name={'productSubtypeName'}
+                                value={selectedFilters['productSubtypeName'] || values.productSubtypeName || ''}
                                 variant="outlined"
                                 fullWidth={true}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                   const keyName = singleDropdown.key;
                                   const formValues: ISelectedValues = { ...selectedFilters, [keyName]: e.target.value };
                                   setSelectedFilters(formValues);
+                                  setFieldValue('productSubtypeName', e.target.value);
                                 }}
                               />
+                              {errors.productSubtypeName && touched.productSubtypeName ? (
+                                <div
+                                  style={{
+                                    fontSize: '1rem',
+                                    color: 'red',
+                                    textAlign: 'left',
+                                    paddingLeft: '2px',
+                                    paddingTop: '2px',
+                                    fontWeight: 'normal',
+                                  }}
+                                >
+                                  {errors.productSubtypeName || null}
+                                </div>
+                              ) : null}
                             </Grid>
                           ) : (
                             <Grid item xs={12} style={{ padding: '4px', marginTop: '1rem' }} key={singleDropdown.key}>
@@ -491,7 +558,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                                 name={singleDropdown.key}
                                 id={singleDropdown.key}
                                 disabled={params.id ? true : false}
-                                value={selectedFilters[singleDropdown.key] || null}
+                                value={selectedFilters[singleDropdown.key] || values[singleDropdown.key] || null}
                                 label={singleDropdown.display}
                                 component={Autocomplete}
                                 options={singleDropdown.options || []}
@@ -503,6 +570,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                                     const keyName = singleDropdown.key;
                                     const formValues: ISelectedValues = { ...selectedFilters, [keyName]: newVal };
                                     setSelectedFilters(formValues);
+                                    setFieldValue(singleDropdown.key, newVal);
                                     onDropDownChange(keyName, formValues);
                                   }
                                 }}
@@ -510,13 +578,27 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                                   <MuiTextField {...params} label={singleDropdown.display} variant="outlined" />
                                 )}
                               />
+                              {errors[singleDropdown.key] && touched[singleDropdown.key] ? (
+                                <div
+                                  style={{
+                                    fontSize: '1rem',
+                                    color: 'red',
+                                    textAlign: 'left',
+                                    paddingLeft: '2px',
+                                    paddingTop: '2px',
+                                    fontWeight: 'normal',
+                                  }}
+                                >
+                                  {errors[singleDropdown.key] || null}
+                                </div>
+                              ) : null}
                             </Grid>
                           ),
                         )}
                     </Grid>
                     <Grid container direction="column" justify="center" spacing={3} style={{ marginTop: '1rem' }}>
                       {attributeList &&
-                        attributeList.map((attribute: IAttributeValues) =>
+                        attributeList.map((attribute: IAttributeValues, index: number) =>
                           attribute.uiType === 'SINGLE' || attribute.uiType === 'MULTI' ? (
                             <Grid
                               container
@@ -544,10 +626,11 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                                 <Field
                                   variant="standard"
                                   multiple={attribute.uiType === 'MULTI' || false}
-                                  name={'option#' + attribute.key}
+                                  name={`attributeList.${index}.${attribute.key}`}
                                   id={'option#' + attribute.key}
                                   value={
                                     selectedAttributes[attribute.key].attributeValue ||
+                                    values.attributeList[attribute.key] ||
                                     (attribute.uiType === 'MULTI' || attribute.uiType === 'SINGLE' ? [] : null)
                                   }
                                   label="Select"
@@ -561,7 +644,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                                   getOptionLabel={(option: IProductTypeDropDownProps) =>
                                     option.value || option.key || ''
                                   }
-                                  onChange={(event: React.ChangeEvent<HTMLInputElement>, newVal: IOptionType) => {
+                                  onChange={(event: React.ChangeEvent<HTMLInputElement>, newVal: any) => {
                                     if (event) {
                                       const keyName = attribute.key;
                                       const formValues: ISelectedValues = {
@@ -572,6 +655,12 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                                         },
                                       };
                                       setSelectedAttributes({ ...formValues });
+                                      setFieldValue(`attributeList.${index}`, {
+                                        ['attributeId']: attribute.id,
+                                        ['attributeValues']: [
+                                          newVal.length ? newVal.map((val: any) => val.value) : newVal.value,
+                                        ],
+                                      });
                                       onDropDownChange(keyName, attribute);
                                     }
                                   }}
@@ -588,7 +677,13 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                                   size="small"
                                   className={classes.crossBtn}
                                   style={{ top: '-9px' }}
-                                  onClick={() => handleDelete(attribute)}
+                                  onClick={() => {
+                                    const attributeItemFilter = values.attributeList.filter(
+                                      (attr: any) => attr.attributeId !== attribute.id,
+                                    );
+                                    setFieldValue('attributeList', attributeItemFilter);
+                                    handleDelete(attribute);
+                                  }}
                                 >
                                   <DeleteForeverIcon fontSize="large" />
                                 </Button>
@@ -634,7 +729,13 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                                   size="small"
                                   className={classes.crossBtn}
                                   style={{ top: '-9px' }}
-                                  onClick={() => handleDelete(attribute)}
+                                  onClick={() => {
+                                    const attributeItemFilter = values.attributeList.filter(
+                                      (attr: any) => attr.attributeId !== attribute.id,
+                                    );
+                                    setFieldValue('attributeList', attributeItemFilter);
+                                    handleDelete(attribute);
+                                  }}
                                 >
                                   <DeleteForeverIcon fontSize="large" />
                                 </Button>
@@ -672,7 +773,8 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                         <Button
                           type="submit"
                           color="primary"
-                          variant="outlined"
+                          variant={'contained'}
+                          disabled={!isValid || !dirty}
                           size="large"
                           style={{
                             fontWeight: 'bold',
@@ -687,6 +789,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                     </Grid>
                   </Paper>
                 </Grid>
+                {/* <pre>{JSON.stringify(values) + '\n'}</pre> */}
               </Form>
             )}
           </Formik>
