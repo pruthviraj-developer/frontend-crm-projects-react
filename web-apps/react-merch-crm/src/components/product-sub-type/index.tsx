@@ -18,8 +18,8 @@ const ProductSubType: FC = () => {
     <>
       <LeftNavBar {...navItems}></LeftNavBar>
       <Switch>
-        <Redirect exact from="/product-sub-types" to="/product-sub-types/product-sub-type" />
-        <Route path={`${path}/product-sub-type`}>
+        <Redirect exact from="/product-sub-types" to="/product-sub-types/dash-board" />
+        <Route path={`${path}/dash-board`}>
           <DashBoard />
         </Route>
         <Route path={`${path}/create-product`}>
@@ -28,7 +28,7 @@ const ProductSubType: FC = () => {
         <Route path={`${path}/edit-product-subtype/:id`}>
           <CreateProduct header="Edit Product Subtype" key={'Update'} />
         </Route>
-        <Redirect to="/product-sub-types/product-sub-type" />
+        <Redirect to="/product-sub-types/dash-board" />
       </Switch>
     </>
   );
