@@ -134,7 +134,6 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
   const history = useHistory();
   const classes = useStyles();
   const [dialogStatus, setDialogStatus] = React.useState(false);
-  const [selectedFilters, setSelectedFilters] = useState<ISelectedValues>({});
   const [attributeListItems, setAttributeListItems] = useState<IAttributeResponse>({});
   const [selectedAttributes, setSelectedAttributes] = useState<any>({});
   const [attributeList, dispatchAttributeList] = useReducer(reducer, []);
@@ -259,12 +258,12 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
             (initialValues.productSubtypeName = subTypeName),
             (initialValues.attributeList = [...attributesParamUrlResponse]);
 
-          setSelectedFilters({
-            ['categoryId']: { ...category },
-            ['subcategoryId']: { ...subCategory },
-            ['productTypeId']: { ...productType },
-            ['productSubtypeName']: subTypeName,
-          });
+          // setSelectedFilters({
+          //   ['categoryId']: { ...category },
+          //   ['subcategoryId']: { ...subCategory },
+          //   ['productTypeId']: { ...productType },
+          //   ['productSubtypeName']: subTypeName,
+          // });
 
           productTypeData.data.attributes.map((eachAttrib) => {
             const newVal = {
@@ -276,7 +275,6 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
             setSelectedAttributes((prevState: ISelectedAttributesType) => {
               return { ...prevState, ...newVal };
             });
-
             const attributeValues: IAttributeValues = {
               display: 'Attribute',
               id: eachAttrib.type.key,
@@ -316,14 +314,13 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
     })();
   }, []);
 
-  const onDropDownChange = (key: string, formData: ISelectedValues) => {
-    const dataKey = formData[key]?.key || formData[key]?.attributeValue || formData[key] || '';
+  const onDropDownChange = (key: string, id: string | number) => {
     if (key === 'categoryId') {
-      setCategoryId(dataKey);
+      setCategoryId(id);
     } else if (key === 'subcategoryId') {
-      setSubCategoryId(dataKey);
+      setSubCategoryId(id);
     } else if (key === 'productType') {
-      setProductTypeId(dataKey);
+      setProductTypeId(id);
     }
   };
 
@@ -337,7 +334,6 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
         return obj;
       }, {});
     setSelectedAttributes(filtered);
-
     const recycledAttribList: IAttributeResponse = {};
     Object.keys(recycleAttribute).forEach((item) => {
       if (recycleAttribute[item].attributeKey === attributeDelete.key) {
@@ -413,42 +409,15 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
     setAttributeListItems(recycleList);
   };
 
-  const onFiltersSubmit = (actionMessage: string) => {
+  const onFiltersSubmit = (values: any, actions: any) => {
+    const actionMessage = header.indexOf('Create') > -1 ? 'added' : 'updated';
     let postObject: Record<string, number> = {};
     ['categoryId', 'subcategoryId', 'productTypeId', 'productSubtypeName'].forEach((ele: string) => {
-      if (selectedFilters[ele]) {
-        postObject[ele] = selectedFilters[ele]['key'] || selectedFilters[ele]['attributeName'] || selectedFilters[ele];
+      if (values[ele]) {
+        postObject[ele] = values[ele]['key'] || values[ele]['attributeName'] || values[ele];
       }
     });
-
-    const mObj: any = [];
-    Object.keys(selectedAttributes).forEach((ele) => {
-      const valueOfArr = [];
-      if (selectedAttributes[ele]) {
-        if (typeof selectedAttributes[ele]['attributeValue'] == 'string') {
-          mObj.push({
-            attributeId: selectedAttributes[ele]['attributeId'],
-            attributeValues: [selectedAttributes[ele]['attributeValue']],
-          });
-        }
-        if (typeof selectedAttributes[ele]['attributeValue'] == 'object') {
-          if (selectedAttributes[ele]['attributeValue']['value']) {
-            mObj.push({
-              attributeId: selectedAttributes[ele]['attributeId'],
-              attributeValues: [selectedAttributes[ele]['attributeValue']['value']],
-            });
-          } else {
-            for (const [, value] of Object.entries<IValueOfSelected>(selectedAttributes[ele]['attributeValue'])) {
-              valueOfArr.push(value.value);
-            }
-
-            mObj.push({ attributeId: selectedAttributes[ele]['attributeId'], attributeValues: valueOfArr });
-          }
-        }
-      }
-    });
-
-    postObject = { ...postObject, attributeList: mObj };
+    postObject = { ...values, ...postObject };
 
     if (actionMessage === 'updated') {
       (async () => {
@@ -506,11 +475,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
             enableReinitialize={true}
             initialValues={initialValues}
             validationSchema={validationSchema}
-            onSubmit={(values, actions) => {
-              actions.setSubmitting(false);
-              const actionKey = header.indexOf('Create') > -1 ? 'added' : 'updated';
-              onFiltersSubmit(actionKey);
-            }}
+            onSubmit={onFiltersSubmit}
           >
             {({ values, setFieldValue, errors, touched, isValid, dirty }) => (
               <Form autoComplete="off">
@@ -525,13 +490,13 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                                 label="Product Subtype"
                                 name={'productSubtypeName'}
                                 component={TextField}
-                                value={selectedFilters['productSubtypeName'] || values.productSubtypeName || ''}
+                                // value={selectedFilters['productSubtypeName'] || values.productSubtypeName || ''}
                                 variant="outlined"
                                 fullWidth={true}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                  const keyName = singleDropdown.key;
-                                  const formValues: ISelectedValues = { ...selectedFilters, [keyName]: e.target.value };
-                                  setSelectedFilters(formValues);
+                                  // const keyName = singleDropdown.key;
+                                  // const formValues: ISelectedValues = { ...selectedFilters, [keyName]: e.target.value };
+                                  // setSelectedFilters(formValues);
                                   setFieldValue('productSubtypeName', e.target.value);
                                 }}
                               />
@@ -546,16 +511,17 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                                 label={singleDropdown.display}
                                 component={Autocomplete}
                                 options={singleDropdown.options || []}
-                                getOptionLabel={(option: IProductTypeDropDownProps) =>
-                                  option.value || option.key || option.attributeName || option
+                                getOptionLabel={(option: IProductTypeDropDownProps) => option.value || ''}
+                                getOptionSelected={(option: IProductTypeDropDownProps, selectedValue: any) =>
+                                  option.key === selectedValue
                                 }
                                 onChange={(event: React.ChangeEvent<HTMLInputElement>, newVal: IOptionType) => {
                                   if (event) {
                                     const keyName = singleDropdown.key;
-                                    const formValues: ISelectedValues = { ...selectedFilters, [keyName]: newVal };
-                                    setSelectedFilters(formValues);
+                                    // const formValues: ISelectedValues = { ...selectedFilters, [keyName]: newVal };
+                                    // setSelectedFilters(formValues);
                                     setFieldValue(singleDropdown.key, newVal);
-                                    onDropDownChange(keyName, formValues);
+                                    newVal && onDropDownChange(keyName, newVal.key);
                                   }
                                 }}
                                 renderInput={(params: AutocompleteRenderInputParams) => (
@@ -621,24 +587,22 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                                     option.value || option.key || ''
                                   }
                                   onChange={(event: React.ChangeEvent<HTMLInputElement>, newVal: any) => {
-                                    if (event) {
-                                      const keyName = attribute.key;
-                                      const formValues: ISelectedValues = {
-                                        ...selectedAttributes,
-                                        [keyName]: {
-                                          attributeId: attribute.id,
-                                          attributeValue: newVal,
-                                        },
-                                      };
-                                      setSelectedAttributes({ ...formValues });
-                                      setFieldValue(`attributeList.${index}`, {
-                                        ['attributeId']: attribute.id,
-                                        ['attributeValues']: [
-                                          newVal.length ? newVal.map((val: any) => val.value) : newVal.value,
-                                        ],
-                                      });
-                                      onDropDownChange(keyName, attribute);
-                                    }
+                                    const keyName = attribute.key;
+                                    const formValues: ISelectedValues = {
+                                      ...selectedAttributes,
+                                      [keyName]: {
+                                        attributeId: attribute.id,
+                                        attributeValue: newVal,
+                                      },
+                                    };
+                                    setSelectedAttributes({ ...formValues });
+                                    setFieldValue(`attributeList.${index}`, {
+                                      ['attributeId']: attribute.id,
+                                      ['attributeValues']: [
+                                        newVal.length ? newVal.map((val: any) => val.value) : newVal.value,
+                                      ],
+                                    });
+                                    // onDropDownChange(keyName, attribute);
                                   }}
                                   renderInput={(params: AutocompleteRenderInputParams) => (
                                     <MuiTextField {...params} label="Select" variant="outlined" />
@@ -734,12 +698,6 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                           color="primary"
                           variant="outlined"
                           size="large"
-                          style={{
-                            fontWeight: 'bold',
-                            fontSize: 10,
-                            padding: '15px 20px',
-                            width: '100%',
-                          }}
                           onClick={() => setDialogStatus(true)}
                         >
                           Add Attribute
@@ -752,12 +710,6 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                           variant={'contained'}
                           disabled={!isValid || !dirty}
                           size="large"
-                          style={{
-                            fontWeight: 'bold',
-                            fontSize: 10,
-                            padding: '15px 20px',
-                            width: '100%',
-                          }}
                         >
                           {header.indexOf('Create') > -1 ? 'Create Product' : 'Update Product'}
                         </Button>
@@ -765,7 +717,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                     </Grid>
                   </Paper>
                 </Grid>
-                {/* <pre>{JSON.stringify(values) + '\n'}</pre> */}
+                <pre>{JSON.stringify(values) + '\n'}</pre>
               </Form>
             )}
           </Formik>
