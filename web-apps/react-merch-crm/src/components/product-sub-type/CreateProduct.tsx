@@ -26,7 +26,7 @@ import {
 } from './ICreateProduct';
 import { TextField as MuiTextField, Grid, Paper, Button } from '@material-ui/core';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-import { TextField } from '@material-ui/core';
+import { TextField } from 'formik-material-ui';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -42,10 +42,10 @@ import { useReducer } from 'react';
 import { useHistory } from 'react-router-dom';
 import * as Yup from 'yup';
 const validationSchema = Yup.object().shape({
-  categoryId: Yup.string().required('Please select category').nullable(true),
-  subcategoryId: Yup.string().required('Please select sub category').nullable(true),
-  productTypeId: Yup.string().required('Please select product type').nullable(true),
-  productSubtypeName: Yup.string().required('Product sub type name is required').nullable(true),
+  categoryId: Yup.string().required('Please select category'),
+  subcategoryId: Yup.string().required('Please select sub category'),
+  productTypeId: Yup.string().required('Please select product type'),
+  productSubtypeName: Yup.string().required('Product sub type name is required'),
   attributeList: Yup.array()
     .of(
       Yup.object().shape({
@@ -217,7 +217,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
           display_position: 4,
         },
       ];
-      dispatch([ActionType.removeItems, ['categoryId', 'subcategoryId', 'productTypeId']]);
+      dispatch([ActionType.removeItems, ['categoryId', 'subcategoryId', 'productTypeId', 'productSubtypeName']]);
       dispatch([ActionType.addItems, formList]);
     }
   }, [categoryData, subCategoryData, productTypeData, isSubCategoryDataSuccess, isProductTypeSuccess]);
@@ -320,10 +320,8 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
     const dataKey = formData[key]?.key || formData[key]?.attributeValue || formData[key] || '';
     if (key === 'categoryId') {
       setCategoryId(dataKey);
-      dispatch([ActionType.removeItems, ['productSubtypeName']]);
     } else if (key === 'subcategoryId') {
       setSubCategoryId(dataKey);
-      dispatch([ActionType.removeItems, ['productSubtypeName']]);
     } else if (key === 'productType') {
       setProductTypeId(dataKey);
     }
@@ -523,9 +521,10 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                         dropDownList.map((singleDropdown) =>
                           singleDropdown.key == 'productSubtypeName' ? (
                             <Grid item xs={12} style={{ padding: '4px', marginTop: '1rem' }} key={singleDropdown.key}>
-                              <TextField
+                              <Field
                                 label="Product Subtype"
                                 name={'productSubtypeName'}
+                                component={TextField}
                                 value={selectedFilters['productSubtypeName'] || values.productSubtypeName || ''}
                                 variant="outlined"
                                 fullWidth={true}
@@ -536,20 +535,6 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                                   setFieldValue('productSubtypeName', e.target.value);
                                 }}
                               />
-                              {errors.productSubtypeName && touched.productSubtypeName ? (
-                                <div
-                                  style={{
-                                    fontSize: '1rem',
-                                    color: 'red',
-                                    textAlign: 'left',
-                                    paddingLeft: '2px',
-                                    paddingTop: '2px',
-                                    fontWeight: 'normal',
-                                  }}
-                                >
-                                  {errors.productSubtypeName || null}
-                                </div>
-                              ) : null}
                             </Grid>
                           ) : (
                             <Grid item xs={12} style={{ padding: '4px', marginTop: '1rem' }} key={singleDropdown.key}>
@@ -558,7 +543,6 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                                 name={singleDropdown.key}
                                 id={singleDropdown.key}
                                 disabled={params.id ? true : false}
-                                value={selectedFilters[singleDropdown.key] || values[singleDropdown.key] || null}
                                 label={singleDropdown.display}
                                 component={Autocomplete}
                                 options={singleDropdown.options || []}
@@ -575,23 +559,15 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                                   }
                                 }}
                                 renderInput={(params: AutocompleteRenderInputParams) => (
-                                  <MuiTextField {...params} label={singleDropdown.display} variant="outlined" />
+                                  <MuiTextField
+                                    {...params}
+                                    error={touched[singleDropdown.key] && !!errors[singleDropdown.key]}
+                                    helperText={touched[singleDropdown.key] && errors[singleDropdown.key]}
+                                    label={singleDropdown.display}
+                                    variant="outlined"
+                                  />
                                 )}
                               />
-                              {errors[singleDropdown.key] && touched[singleDropdown.key] ? (
-                                <div
-                                  style={{
-                                    fontSize: '1rem',
-                                    color: 'red',
-                                    textAlign: 'left',
-                                    paddingLeft: '2px',
-                                    paddingTop: '2px',
-                                    fontWeight: 'normal',
-                                  }}
-                                >
-                                  {errors[singleDropdown.key] || null}
-                                </div>
-                              ) : null}
                             </Grid>
                           ),
                         )}
@@ -613,7 +589,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                                 style={{ padding: '4px', marginLeft: '1.2rem' }}
                                 key={'attribute#' + attribute.key}
                               >
-                                <TextField
+                                <MuiTextField
                                   label="Attribute"
                                   disabled={true}
                                   value={attribute.label}
@@ -703,7 +679,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                                 style={{ padding: '4px', marginLeft: '1.2rem' }}
                                 key={'attribute#' + attribute.key}
                               >
-                                <TextField
+                                <MuiTextField
                                   label="Attribute"
                                   disabled={true}
                                   value={attribute.label}
@@ -713,7 +689,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                               </Grid>
 
                               <Grid item xs style={{ padding: '4px' }} key={'option#' + attribute.key}>
-                                <TextField
+                                <MuiTextField
                                   label={character_format(attribute.key)}
                                   value={selectedAttributes[attribute.key].attributeValue || ''}
                                   variant="outlined"
