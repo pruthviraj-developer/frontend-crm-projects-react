@@ -24,11 +24,6 @@ const useStyles = makeStyles((theme) => ({
   filters: {
     paddingBottom: theme.spacing(2),
   },
-  clearFilters: {
-    fontSize: '10px',
-    margin: theme.spacing(1),
-    padding: '12px 0',
-  },
   paper: {
     padding: theme.spacing(2),
     textAlign: 'center',
@@ -94,10 +89,6 @@ const ProductSubtypeDashboard: FC = () => {
       },
     },
   );
-  const getUpdatedTableData = (filters: IPageType) => {
-    setFilterPage({ pageSize: filters.pageSize, pageNo: filters.pageNo });
-  };
-
   const handleAction = (data: DashboardData) => {
     const status = {
       status: data.status === 'Y' ? 'N' : 'Y',
@@ -176,7 +167,6 @@ const ProductSubtypeDashboard: FC = () => {
               variant="contained"
               color={data.status === 'Y' ? 'default' : 'primary'}
               type="button"
-              className={classes.clearFilters}
               onClick={() => handleAction(data)}
             >
               {data.status === 'Y' ? 'DISABLE' : 'ENABLE'}
@@ -196,7 +186,7 @@ const ProductSubtypeDashboard: FC = () => {
     rows: dashboardData ? dashboardData['productSubtypeList'] : [],
     rowsPerPage: filterPage.pageSize || 20,
     filterRowsPerPage: [20, 25, 30, 35],
-    fetchTableData: getUpdatedTableData,
+    fetchTableData: setFilterPage,
   };
 
   const onFiltersSubmit = (values: ISelectedValues) => {
