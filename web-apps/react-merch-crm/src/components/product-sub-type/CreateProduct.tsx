@@ -104,11 +104,8 @@ const showError = (error: Record<string, string>) => {
   let message = tryLater;
   if (error.action === 'FAILURE' && error.messageList) {
     message = error.messageList[0];
-    toast.error(message);
-  } else {
-    message = error.messageList[0];
-    toast.success(message);
   }
+  toast.error(message);
 };
 
 const initialValues: any = {
@@ -134,6 +131,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
   const history = useHistory();
   const classes = useStyles();
   const [dialogStatus, setDialogStatus] = React.useState(false);
+  const [attributes, setAttributes] = useState(initialValues);
   const [attributeListItems, setAttributeListItems] = useState<IAttributeResponse>({});
   const [selectedAttributes, setSelectedAttributes] = useState<any>({});
   const [attributeList, dispatchAttributeList] = useReducer(reducer, []);
@@ -238,25 +236,24 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
       try {
         const productTypeData: IGetProductResponse = await productSubtypeService.getProduct(params.id);
         if (productTypeData) {
-          const category = productTypeData?.data.categoryId;
-          const subCategory = productTypeData?.data.subCategoryId;
-          const productType = productTypeData?.data.productTypeId;
-          const subTypeName = productTypeData?.data.productSubTypeName || '';
+          const attributesResponseData: any = {
+            categoryId: productTypeData?.data.categoryId,
+            subcategoryId: productTypeData?.data.subCategoryId,
+            productTypeId: productTypeData?.data.productTypeId,
+            productSubtypeName: productTypeData?.data.productSubTypeName || '',
+            attributeList: [],
+          };
 
-          const attributesParamUrlResponse: IAttributeResTypeData[] = [];
+          // const attributesParamUrlResponse: IAttributeResTypeData[] = [];
           productTypeData.data.attributes.forEach((item) => {
             const obj: IAttributeResTypeData = { attributeId: item.type.key, attributeValues: [] };
             item.values.forEach((val: IValueOfSelected) => {
               obj?.attributeValues.push(val.value);
             });
-            attributesParamUrlResponse.push(obj);
+            attributesResponseData.attributeList.push(obj);
           });
 
-          (initialValues.categoryId = { ...category }),
-            (initialValues.subcategoryId = { ...subCategory }),
-            (initialValues.productTypeId = { ...productType }),
-            (initialValues.productSubtypeName = subTypeName),
-            (initialValues.attributeList = [...attributesParamUrlResponse]);
+          setAttributes({ ...attributesResponseData });
 
           // setSelectedFilters({
           //   ['categoryId']: { ...category },
@@ -427,19 +424,14 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
             params.id,
           );
           if (productPostStatus.action === 'SUCCESS') {
-            (initialValues.categoryId = ''),
-              (initialValues.subcategoryId = ''),
-              (initialValues.productTypeId = ''),
-              (initialValues.productSubtypeName = ''),
-              (initialValues.attributeList = []);
             toast.success(productPostStatus.messageList[0] || `Product ${actionMessage} successfully`);
             setTimeout(() => {
               history.push('/product-sub-types/product-sub-type');
             }, 5000);
-
             return;
           }
         } catch (error) {
+          actions.setSubmitting(false);
           showError(error);
         }
       })();
@@ -448,11 +440,6 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
         try {
           const productPostStatus: Record<string, string> = await productSubtypeService.addProduct({ ...postObject });
           if (productPostStatus.action === 'SUCCESS') {
-            (initialValues.categoryId = ''),
-              (initialValues.subcategoryId = ''),
-              (initialValues.productTypeId = ''),
-              (initialValues.productSubtypeName = ''),
-              (initialValues.attributeList = []);
             toast.success(productPostStatus.messageList[0] || `Product ${actionMessage} successfully`);
             setTimeout(() => {
               window.location.reload();
@@ -460,6 +447,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
             return;
           }
         } catch (error) {
+          actions.setSubmitting(false);
           showError(error);
         }
       })();
@@ -473,11 +461,11 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
         <FiltersWrapper className={classes.root}>
           <Formik
             enableReinitialize={true}
-            initialValues={initialValues}
+            initialValues={attributes}
             validationSchema={validationSchema}
             onSubmit={onFiltersSubmit}
           >
-            {({ values, setFieldValue, errors, touched, isValid, dirty }) => (
+            {({ values, isSubmitting, setFieldValue, errors, touched, isValid, dirty }) => (
               <Form autoComplete="off">
                 <Grid container direction="column" justify="center" spacing={1}>
                   <Paper className={clsx(classes.paper, classes.filters)} variant="outlined">
@@ -598,9 +586,9 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                                     setSelectedAttributes({ ...formValues });
                                     setFieldValue(`attributeList.${index}`, {
                                       ['attributeId']: attribute.id,
-                                      ['attributeValues']: [
-                                        newVal.length ? newVal.map((val: any) => val.value) : newVal.value,
-                                      ],
+                                      ['attributeValues']: newVal.length
+                                        ? [...newVal.map((val: any) => val.value)]
+                                        : [newVal.value],
                                     });
                                     // onDropDownChange(keyName, attribute);
                                   }}
@@ -612,6 +600,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                               <Grid item xs={1}>
                                 <Button
                                   type="button"
+                                  disabled={isSubmitting}
                                   color="primary"
                                   variant="outlined"
                                   size="small"
@@ -664,6 +653,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                               <Grid item xs={1}>
                                 <Button
                                   type="button"
+                                  disabled={isSubmitting}
                                   color="primary"
                                   variant="outlined"
                                   size="small"
@@ -695,6 +685,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                       <Grid item>
                         <Button
                           type="button"
+                          disabled={isSubmitting}
                           color="primary"
                           variant="outlined"
                           size="large"
@@ -708,7 +699,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                           type="submit"
                           color="primary"
                           variant={'contained'}
-                          disabled={!isValid || !dirty}
+                          disabled={isSubmitting || !isValid || !dirty}
                           size="large"
                         >
                           {header.indexOf('Create') > -1 ? 'Create Product' : 'Update Product'}
