@@ -21,6 +21,7 @@ import {
   Action,
   ActionType,
 } from './IDashboard';
+import { useCategory } from './UseCategory.hook';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -91,43 +92,21 @@ const ProductSubtypeDashboard: FC = () => {
   const [selectedFilters, setSelectedFilters] = useState<ISelectedValues>({});
   const [productTypeId, setProductTypeId] = useState<number>(0);
   const [filterPage, setFilterPage] = useState<IPageType>(defaultPageFilters);
+
   const queryClient = useQueryClient();
 
-  const { data: categoryData, isSuccess: isCategoryDataSuccess } = useQuery<OptionType[]>(
-    'category',
-    productSubtypeService.getCategory,
-    {
-      staleTime: Infinity,
-      onError: (error: any) => {
-        showError(error);
-      },
-    },
-  );
-
   const [categoryId, setCategoryId] = useState<string | number>('');
+  const [subCategoryId, setSubCategoryId] = useState<string | number>('');
   const {
-    data: subCategoryData,
-    isSuccess: isSubCategorySuccess,
-    isFetching: isSubCategoryFetching,
-  } = useQuery<OptionType[], Record<string, string>>(
-    ['subcategory', categoryId],
-    () => productSubtypeService.getSubCategory(categoryId),
-    { staleTime: Infinity, enabled: categoryId !== '' },
-  );
-
-  const [subcategoryId, setSubCategoryId] = useState<string | number>('');
-  const {
-    data: productTypeData,
-    isSuccess: isProductTypeDataSuccess,
-    isFetching: isProductTypeDataFetching,
-  } = useQuery<OptionType[], Record<string, string>>(
-    ['producttype', subcategoryId],
-    () => productSubtypeService.getProductType(subcategoryId),
-    {
-      staleTime: Infinity,
-      enabled: subcategoryId !== '',
-    },
-  );
+    categoryList,
+    isCategoryLoaded,
+    subCategoryList,
+    isSubCatLoaded,
+    isSubCatFetching,
+    pTList,
+    isPTSuccess,
+    isPTFetching,
+  } = useCategory({ categoryId, subCategoryId });
 
   const { data: dashboardData, isSuccess: isDashboardSuccess } = useQuery<IDashboardResponse>(
     ['dashboardData', postFilterData, filterPage],
@@ -141,59 +120,55 @@ const ProductSubtypeDashboard: FC = () => {
   );
 
   useEffect(() => {
-    if (isCategoryDataSuccess) {
+    if (isCategoryLoaded) {
       const formList: IProductTypeDropDownProps[] = [
         {
           key: 'productCategoryId',
           display: 'Category',
           input_type: 'S',
           clearFields: ['productSubCategoryId', 'productTypeId'],
-          options: categoryData,
+          options: categoryList,
           display_position: 1,
         },
       ];
       dispatch([ActionType.addItems, formList]);
     }
-  }, [categoryData, isCategoryDataSuccess]);
+  }, [categoryList, isCategoryLoaded]);
 
   useEffect(() => {
-    if (isSubCategorySuccess) {
-      if (subCategoryData && subCategoryData.length) {
+    if (isSubCatLoaded) {
+      if (subCategoryList && subCategoryList.length) {
         const subCat: IProductTypeDropDownProps = {
           key: 'productSubCategoryId',
           display: 'Sub Category',
           input_type: 'S',
           clearFields: ['productTypeId'],
-          options: subCategoryData,
+          options: subCategoryList,
           display_position: 2,
         };
         dispatch([ActionType.addItems, [subCat]]);
       } else {
-        !isSubCategoryFetching &&
-          categoryId !== '' &&
-          toast.info('Subcategory not available select different category');
+        !isSubCatFetching && categoryId !== '' && toast.info('Subcategory not available select different category');
       }
     }
-  }, [subCategoryData, categoryId, isSubCategorySuccess, isSubCategoryFetching]);
+  }, [subCategoryList, categoryId, isSubCatLoaded, isSubCatFetching]);
 
   useEffect(() => {
-    if (isProductTypeDataSuccess) {
-      if (productTypeData && productTypeData.length) {
+    if (isPTSuccess) {
+      if (pTList && pTList.length) {
         const productType: IProductTypeDropDownProps = {
           key: 'productTypeId',
           display: 'Product Type',
           input_type: 'S',
-          options: productTypeData,
+          options: pTList,
           display_position: 2,
         };
         dispatch([ActionType.addItems, [productType]]);
       } else {
-        !isProductTypeDataFetching &&
-          subcategoryId !== '' &&
-          toast.info('Product type not available select different sub category');
+        !isPTFetching && subCategoryId !== '' && toast.info('Product type not available select different sub category');
       }
     }
-  }, [productTypeData, categoryId, isProductTypeDataSuccess, isProductTypeDataFetching]);
+  }, [pTList, categoryId, isPTSuccess, isPTFetching]);
 
   const getUpdatedTableData = (filters: IPageType) => {
     setFilterPage({ pageSize: filters.pageSize, pageNo: filters.pageNo });
@@ -340,7 +315,7 @@ const ProductSubtypeDashboard: FC = () => {
               onFiltersSubmit();
             }}
           >
-            {() => (
+            {(values) => (
               <Form autoComplete="off">
                 <Grid container direction="column" justify="center" spacing={1}>
                   <Paper className={clsx(classes.paper, classes.filters)} variant="outlined">
@@ -403,6 +378,7 @@ const ProductSubtypeDashboard: FC = () => {
                     </Grid>
                   </Paper>
                 </Grid>
+                {/* <pre>{JSON.stringify(values, null, 4)}</pre> */}
               </Form>
             )}
           </Formik>
