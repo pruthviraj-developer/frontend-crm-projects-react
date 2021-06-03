@@ -24,7 +24,7 @@ const App: FC = () => {
           <MuiThemeProvider theme={LightTheme}>
             <Router basename="/react-monorepo/merch">
               <Switch>
-                <Redirect exact from="/" to="/buyer" />
+                <Redirect exact from="/" to="/product-sub-types" />
                 <Route path="/product-sub-types">
                   <Suspense fallback={<div>Loading...</div>}>
                     <ProductSubType />

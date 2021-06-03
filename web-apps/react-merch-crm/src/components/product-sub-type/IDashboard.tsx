@@ -57,25 +57,10 @@ export interface OptionType {
   second: string | number;
   first: string | number;
 }
-
-export interface Options {
-  [key: number]: OptionType[];
-}
-
 export interface ISelectedValues {
-  [key: string]: OptionType | any;
+  [key: string]: OptionType | string;
 }
-
-export enum ActionType {
-  removeItems = 'removeItem',
-  addItems = 'addItem',
-}
-
-export type Action = [ActionType.removeItems, string[]] | [ActionType.addItems, IProductTypeDropDownProps[]];
-
 export declare type IPageType = {
   pageSize: number;
   pageNo: number;
 };
-
-export {};

@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect, useReducer } from 'react';
+import React, { FC, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Formik, Field, Form } from 'formik';
 import styled from '@emotion/styled';
@@ -10,17 +10,7 @@ import { Autocomplete, AutocompleteRenderInputParams } from '@material-ui/lab';
 import { productSubtypeService } from '@hs/services';
 import { HSTableV1, HsTablePropsV1 } from '@hs/components';
 import { useQuery, useQueryClient } from 'react-query';
-import {
-  IDashboardResponse,
-  DashboardData,
-  IProductTypeDropDownProps,
-  IPageType,
-  PropsType,
-  OptionType,
-  ISelectedValues,
-  Action,
-  ActionType,
-} from './IDashboard';
+import { IDashboardResponse, DashboardData, IPageType, PropsType, OptionType, ISelectedValues } from './IDashboard';
 import { useCategory } from './UseCategory.hook';
 
 const useStyles = makeStyles((theme) => ({
@@ -72,104 +62,38 @@ const showError = (error: Record<string, string>) => {
   toast.error(message);
 };
 
-const defaultPageFilters = { pageSize: 20, pageNo: 0 };
-
-const reducer = (state: IProductTypeDropDownProps[], [type, payload]: Action): IProductTypeDropDownProps[] => {
-  switch (type) {
-    case ActionType.removeItems:
-      return state.filter((item) => !(payload as string[]).includes(item.key));
-    case ActionType.addItems:
-      return [...state, ...(payload as IProductTypeDropDownProps[])].sort(
-        (a, b) => a.display_position - b.display_position,
-      );
-  }
+const initialValues = {
+  productCategoryId: '',
+  productSubCategoryId: '',
+  productTypeId: '',
 };
+
+const defaultPageFilters = { pageSize: 20, pageNo: 0 };
 
 const ProductSubtypeDashboard: FC = () => {
   const classes = useStyles();
-  const [dropDownsList, dispatch] = useReducer(reducer, []);
   const [postFilterData, setPostFilterData] = useState({});
-  const [selectedFilters, setSelectedFilters] = useState<ISelectedValues>({});
-  const [productTypeId, setProductTypeId] = useState<number>(0);
   const [filterPage, setFilterPage] = useState<IPageType>(defaultPageFilters);
 
   const queryClient = useQueryClient();
 
   const [categoryId, setCategoryId] = useState<string | number>('');
   const [subCategoryId, setSubCategoryId] = useState<string | number>('');
-  const {
-    categoryList,
-    isCategoryLoaded,
-    subCategoryList,
-    isSubCatLoaded,
-    isSubCatFetching,
-    pTList,
-    isPTSuccess,
-    isPTFetching,
-  } = useCategory({ categoryId, subCategoryId });
+  const { categoryList, isCategoryListLoading, subCategoryList, isSubCatLoaded, pTList, isPTLoading } = useCategory({
+    categoryId,
+    subCategoryId,
+  });
 
-  const { data: dashboardData, isSuccess: isDashboardSuccess } = useQuery<IDashboardResponse>(
+  const { data: dashboardData, isSuccess: isDashboardSuccess } = useQuery<IDashboardResponse, Record<string, string>>(
     ['dashboardData', postFilterData, filterPage],
     () => productSubtypeService.getDashboardData({ ...filterPage, pageNo: filterPage.pageNo + 1 }, postFilterData),
     {
       staleTime: 2000,
-      onError: (error: any) => {
+      onError: (error) => {
         showError(error);
       },
     },
   );
-
-  useEffect(() => {
-    if (isCategoryLoaded) {
-      const formList: IProductTypeDropDownProps[] = [
-        {
-          key: 'productCategoryId',
-          display: 'Category',
-          input_type: 'S',
-          clearFields: ['productSubCategoryId', 'productTypeId'],
-          options: categoryList,
-          display_position: 1,
-        },
-      ];
-      dispatch([ActionType.addItems, formList]);
-    }
-  }, [categoryList, isCategoryLoaded]);
-
-  useEffect(() => {
-    if (isSubCatLoaded) {
-      if (subCategoryList && subCategoryList.length) {
-        const subCat: IProductTypeDropDownProps = {
-          key: 'productSubCategoryId',
-          display: 'Sub Category',
-          input_type: 'S',
-          clearFields: ['productTypeId'],
-          options: subCategoryList,
-          display_position: 2,
-        };
-        dispatch([ActionType.addItems, [subCat]]);
-      } else {
-        !isSubCatFetching && categoryId !== '' && toast.info('Subcategory not available select different category');
-      }
-    }
-  }, [subCategoryList, categoryId, isSubCatLoaded, isSubCatFetching]);
-
-  useEffect(() => {
-    if (isPTSuccess) {
-      if (pTList && pTList.length) {
-        const productType: IProductTypeDropDownProps = {
-          key: 'productTypeId',
-          display: 'Product Type',
-          input_type: 'S',
-          options: pTList,
-          display_position: 2,
-        };
-        dispatch([ActionType.addItems, [productType]]);
-      } else {
-        !isPTFetching && subCategoryId !== '' && toast.info('Product type not available select different sub category');
-      }
-    }
-  }, [pTList, categoryId, isPTSuccess, isPTFetching]);
-
   const getUpdatedTableData = (filters: IPageType) => {
     setFilterPage({ pageSize: filters.pageSize, pageNo: filters.pageNo });
   };
@@ -275,27 +199,12 @@ const ProductSubtypeDashboard: FC = () => {
     fetchTableData: getUpdatedTableData,
   };
 
-  const onDropDownChange = (key: string, formData: ISelectedValues) => {
-    const dataKey = formData[key]?.key || '';
-    if (key === 'productCategoryId') {
-      dispatch([ActionType.removeItems, ['productSubCategoryId', 'productTypeId']]);
-      setCategoryId(dataKey);
-      setSubCategoryId('');
-      setProductTypeId(0);
-    } else if (key === 'productSubCategoryId') {
-      dispatch([ActionType.removeItems, ['productTypeId']]);
-      setSubCategoryId(dataKey);
-      setProductTypeId(0);
-    } else if (key === 'productTypeId') {
-      setProductTypeId(dataKey);
-    }
-  };
-
-  const onFiltersSubmit = () => {
-    const postObject: Record<string, number> = {};
-    ['productCategoryId', 'productSubCategoryId', 'productTypeId', 'productSubtypeName'].forEach((ele: string) => {
-      if (selectedFilters[ele]) {
-        postObject[ele] = selectedFilters[ele]['key'] || selectedFilters[ele]['id'] || selectedFilters[ele];
+  const onFiltersSubmit = (values: ISelectedValues) => {
+    const postObject: Record<string, number | string> = {};
+    ['productCategoryId', 'productSubCategoryId', 'productTypeId'].forEach((ele: string) => {
+      const valueObj: OptionType = values[ele] as OptionType;
+      if (valueObj) {
+        postObject[ele] = valueObj['key'];
       }
     });
     setFilterPage({ ...defaultPageFilters });
@@ -309,61 +218,91 @@ const ProductSubtypeDashboard: FC = () => {
         <FiltersWrapper className={classes.root}>
           <Formik
             enableReinitialize={true}
-            initialValues={{}}
+            initialValues={initialValues}
             onSubmit={(values, actions) => {
               actions.setSubmitting(false);
-              onFiltersSubmit();
+              onFiltersSubmit(values);
             }}
           >
-            {(values) => (
+            {({ values, setFieldValue }) => (
               <Form autoComplete="off">
                 <Grid container direction="column" justify="center" spacing={1}>
                   <Paper className={clsx(classes.paper, classes.filters)} variant="outlined">
                     <Grid container direction="row" justify="center" spacing={2}>
-                      {dropDownsList &&
-                        dropDownsList.map((eachItem: IProductTypeDropDownProps) => {
-                          if (eachItem.input_type === 'S') {
-                            return (
-                              <Grid item xs={2} style={{ padding: '4px' }} key={eachItem.key}>
-                                <Field
-                                  value={selectedFilters[eachItem.key] || null}
-                                  variant="standard"
-                                  name={eachItem.display}
-                                  label={eachItem.display}
-                                  component={Autocomplete}
-                                  options={eachItem.options || []}
-                                  getOptionLabel={(option: IProductTypeDropDownProps) => option.value || option.key}
-                                  onChange={(event: React.ChangeEvent<HTMLInputElement>, newVal: OptionType) => {
-                                    if (event) {
-                                      const keyName = eachItem.key;
-                                      const formValues: ISelectedValues = { ...selectedFilters, [keyName]: newVal };
-                                      if (eachItem.clearFields) {
-                                        eachItem.clearFields.forEach((element: string) => {
-                                          delete formValues[element];
-                                        });
-                                      }
-
-                                      setSelectedFilters(formValues);
-                                      onDropDownChange(keyName, formValues);
-                                    }
-                                  }}
-                                  renderInput={(params: AutocompleteRenderInputParams) => (
-                                    <MuiTextField {...params} label={eachItem.display} variant="outlined" />
-                                  )}
-                                />
-                              </Grid>
-                            );
-                          } else {
-                            return false;
-                          }
-                        })}
+                      <Grid item xs={2} style={{ padding: '4px' }}>
+                        <Field
+                          id={'productCategoryId'}
+                          name={'productCategoryId'}
+                          variant="standard"
+                          label="Category"
+                          component={Autocomplete}
+                          options={categoryList || []}
+                          loading={isCategoryListLoading}
+                          value={values.productCategoryId || null}
+                          getOptionLabel={(option: OptionType) => option.value || ''}
+                          onChange={(event: React.ChangeEvent<HTMLInputElement>, newVal: OptionType) => {
+                            if (event) {
+                              setFieldValue('productCategoryId', newVal);
+                              setFieldValue('productSubCategoryId', '');
+                              setFieldValue('productTypeId', '');
+                              setCategoryId(newVal?.key || '');
+                            }
+                          }}
+                          renderInput={(params: AutocompleteRenderInputParams) => (
+                            <MuiTextField {...params} label={'Category'} variant="outlined" />
+                          )}
+                        />
+                      </Grid>
+                      <Grid item xs={2} style={{ padding: '4px' }}>
+                        <Field
+                          id={'productSubCategoryId'}
+                          name={'productSubCategoryId'}
+                          variant="standard"
+                          label="Sub Category"
+                          component={Autocomplete}
+                          options={subCategoryList || []}
+                          loading={isSubCatLoaded}
+                          value={values.productSubCategoryId || null}
+                          getOptionLabel={(option: OptionType) => option.value || ''}
+                          onChange={(event: React.ChangeEvent<HTMLInputElement>, newVal: OptionType) => {
+                            if (event) {
+                              setFieldValue('productSubCategoryId', newVal);
+                              setFieldValue('productTypeId', '');
+                              setSubCategoryId(newVal?.key || '');
+                            }
+                          }}
+                          renderInput={(params: AutocompleteRenderInputParams) => (
+                            <MuiTextField {...params} label={'Sub Category'} variant="outlined" />
+                          )}
+                        />
+                      </Grid>
+                      <Grid item xs={2} style={{ padding: '4px' }}>
+                        <Field
+                          id={'productTypeId'}
+                          name={'productTypeId'}
+                          variant="standard"
+                          label="Product Sub Type"
+                          component={Autocomplete}
+                          options={pTList || []}
+                          loading={isPTLoading}
+                          value={values.productTypeId || null}
+                          getOptionLabel={(option: OptionType) => option.value || ''}
+                          onChange={(event: React.ChangeEvent<HTMLInputElement>, newVal: OptionType) => {
+                            if (event) {
+                              setFieldValue('productTypeId', newVal);
+                            }
+                          }}
+                          renderInput={(params: AutocompleteRenderInputParams) => (
+                            <MuiTextField {...params} label={'Product Sub Type'} variant="outlined" />
+                          )}
+                        />
+                      </Grid>
                       <Grid item xs={1} style={{ padding: '4px' }}>
                         <Button
                           type="submit"
                           color="primary"
                           variant="outlined"
                           size="large"
-                          disabled={productTypeId == 0}
                           style={{
                             fontWeight: 'bold',
                             fontSize: 10,
