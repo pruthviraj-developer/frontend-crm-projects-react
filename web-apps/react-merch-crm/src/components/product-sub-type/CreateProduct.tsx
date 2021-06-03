@@ -4,6 +4,7 @@ import { Formik, Field, Form } from 'formik';
 import styled from '@emotion/styled';
 import clsx from 'clsx';
 import { toast } from 'react-toastify';
+import { Colors } from '@hs/utils';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   ICreateProductSubtypeProps,
@@ -39,6 +40,7 @@ import { IProductTypeDropDownProps, ISelectedValues } from './IDashboard';
 import { useQuery } from 'react-query';
 import { useReducer } from 'react';
 import { useHistory } from 'react-router-dom';
+import { SelectedRectAngle, DeSelectedRectAngle, SvgIcon } from '@hs/icons';
 import { useCategory } from './UseCategory.hook';
 import * as Yup from 'yup';
 const validationSchema = Yup.object().shape({
@@ -86,7 +88,16 @@ const useStyles = makeStyles((theme) => ({
     alignSelf: 'center',
     borderRadius: '5px',
   },
+  option: {
+    paddingLeft: 0,
+    fontSize: 14,
+  },
 }));
+
+const StyledIcon = styled(SvgIcon)`
+  margin: 0 20px;
+  fill: white;
+`;
 
 const ProductWrapper = styled.div`
   width: 95%;
@@ -299,6 +310,8 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
       return { ...prevState, ...newVal };
     });
 
+    const valuesOption: any = attributeItem?.values;
+    const selectAll = [{ value: 'Select All', key: 'all' }].concat(valuesOption);
     const attributeValues: IAttributeValues = {
       display: 'Attribute',
       id: attributeItem.attributeId,
@@ -307,7 +320,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
       operationType: attributeItem.operationType,
       uiType: attributeItem.uiType,
       key: attributeItem.attributeKey,
-      options: attributeItem?.values,
+      options: selectAll,
     };
     dispatchAttributeList([ActionType.removeItems, [attributeItem.attributeKey]]);
     dispatchAttributeList([ActionType.addItems, [attributeValues]]);
@@ -534,6 +547,9 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                                 disableCloseOnSelect={attribute.uiType === 'MULTI' || false}
                                 name={`attributeList.${index}.${attribute.key}`}
                                 id={'option#' + attribute.key}
+                                classes={{
+                                  option: classes.option,
+                                }}
                                 value={
                                   selectedAttributes[attribute.key].attributeValue ||
                                   values.attributeList[attribute.key] ||
@@ -548,6 +564,27 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                                   return option.key == selectedValue?.key;
                                 }}
                                 getOptionLabel={(option: IProductTypeDropDownProps) => option.value || option.key || ''}
+                                renderOption={(option: any, selectedValue: any) => {
+                                  const displayLabel = option.value || option.key;
+                                  if (displayLabel && displayLabel.toLowerCase() === 'select all') {
+                                    return (
+                                      <span style={{ color: Colors.PINK[500], fontSize: 18, paddingLeft: 20 }}>
+                                        {displayLabel}
+                                      </span>
+                                    );
+                                  } else {
+                                    return (
+                                      <span style={{ display: 'flex', alignItems: 'center' }}>
+                                        {
+                                          <StyledIcon
+                                            icon={selectedValue.selected ? SelectedRectAngle : DeSelectedRectAngle}
+                                          />
+                                        }{' '}
+                                        {displayLabel}
+                                      </span>
+                                    );
+                                  }
+                                }}
                                 onChange={(event: React.ChangeEvent<HTMLInputElement>, newVal: any) => {
                                   const keyName = attribute.key;
                                   const formValues: ISelectedValues = {
