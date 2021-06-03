@@ -16,7 +16,6 @@ import {
   IDeleteItemsType,
   IOptionsType,
   IGetProductResponse,
-  IProductDropdowns,
   IProductDropDownProps,
   IAttributeResTypeData,
   ISelectedAttributesType,
@@ -40,6 +39,7 @@ import { IProductTypeDropDownProps, ISelectedValues } from './IDashboard';
 import { useQuery } from 'react-query';
 import { useReducer } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useCategory } from './UseCategory.hook';
 import * as Yup from 'yup';
 const validationSchema = Yup.object().shape({
   categoryId: Yup.string().required('Please select category'),
@@ -54,7 +54,7 @@ const validationSchema = Yup.object().shape({
       }),
     )
     .required()
-    .min(1, 'Please add at least one attribute'),
+    .min(8, 'Attributes are mandatory'),
 });
 
 const useStyles = makeStyles((theme) => ({
@@ -147,35 +147,16 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
     setDialogStatus(false);
   };
 
-  const { data: categoryData, isSuccess: isCategoryDataSuccess } = useQuery<IOptionType[]>(
-    'category',
-    productSubtypeService.getCategory,
-    {
-      staleTime: Infinity,
-      onError: (error: any) => {
-        showError(error);
-      },
-    },
-  );
-
   const [categoryId, setCategoryId] = useState<string | number>('');
-  const { data: subCategoryData, isSuccess: isSubCategoryDataSuccess } = useQuery<
-    IOptionType[],
-    Record<string, string>
-  >(['subcategory', categoryId], () => productSubtypeService.getSubCategory(categoryId), {
-    staleTime: Infinity,
-    enabled: categoryId !== '',
+  const [subCategoryId, setSubCategoryId] = useState<string | number>('');
+  const {
+    categoryList: categoryData,
+    subCategoryList: subCategoryData,
+    pTList,
+  } = useCategory({
+    categoryId,
+    subCategoryId,
   });
-
-  const [subcategoryId, setSubCategoryId] = useState<string | number>('');
-  const { data: productTypeData, isSuccess: isProductTypeSuccess } = useQuery<IOptionType[], Record<string, string>>(
-    ['producttype', subcategoryId],
-    () => productSubtypeService.getProductType(subcategoryId),
-    {
-      staleTime: Infinity,
-      enabled: subcategoryId !== '',
-    },
-  );
 
   const { data: attributeData, isSuccess: isAttributeSuccess } = useQuery<IAttributeData, Record<string, string>>(
     ['attributes'],
@@ -210,7 +191,6 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
             attributeList: [],
           };
 
-          // const attributesParamUrlResponse: IAttributeResTypeData[] = [];
           productTypeData.data.attributes.forEach((item) => {
             const obj: IAttributeResTypeData = { attributeId: item.type.key, attributeValues: [] };
             item.values.forEach((val: IValueOfSelected) => {
@@ -220,13 +200,6 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
           });
 
           setAttributes({ ...attributesResponseData });
-
-          // setSelectedFilters({
-          //   ['categoryId']: { ...category },
-          //   ['subcategoryId']: { ...subCategory },
-          //   ['productTypeId']: { ...productType },
-          //   ['productSubtypeName']: subTypeName,
-          // });
 
           productTypeData.data.attributes.map((eachAttrib) => {
             const newVal = {
@@ -313,22 +286,6 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
     });
     setRecycleAttribute(delFromRecycledAttrib);
   };
-
-  // const character_format = (str: string) => {
-  //   str = str.charAt(0).toUpperCase() + str.slice(1);
-  //   str = str.replace(/_/g, ' ');
-  //   return str;
-  // };
-
-  // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, attributeItm: IAttributeValues) => {
-  //   const setVal = {
-  //     [attributeItm.key]: {
-  //       attributeId: attributeItm.id,
-  //       attributeValue: e.target.value,
-  //     },
-  //   };
-  //   setSelectedAttributes({ ...selectedAttributes, ...setVal });
-  // };
 
   const handleListItemClick = (attributeItem: IAttributeItems) => {
     setDialogStatus(false);
@@ -446,9 +403,10 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                           component={Autocomplete}
                           options={categoryData || []}
                           getOptionLabel={(option: IProductTypeDropDownProps) => option.value || ''}
-                          getOptionSelected={(option: IProductTypeDropDownProps, selectedValue: any) =>
-                            option.key === selectedValue
-                          }
+                          getOptionSelected={(
+                            option: IProductTypeDropDownProps,
+                            selectedValue: IProductTypeDropDownProps,
+                          ) => option.key === selectedValue.key}
                           onChange={(event: React.ChangeEvent<HTMLInputElement>, newVal: IOptionType) => {
                             if (event) {
                               setFieldValue('categoryId', newVal);
@@ -477,9 +435,10 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                           component={Autocomplete}
                           options={subCategoryData || []}
                           getOptionLabel={(option: IProductTypeDropDownProps) => option.value || ''}
-                          getOptionSelected={(option: IProductTypeDropDownProps, selectedValue: any) =>
-                            option.key === selectedValue
-                          }
+                          getOptionSelected={(
+                            option: IProductTypeDropDownProps,
+                            selectedValue: IProductTypeDropDownProps,
+                          ) => option.key === selectedValue.key}
                           onChange={(event: React.ChangeEvent<HTMLInputElement>, newVal: IOptionType) => {
                             if (event) {
                               setFieldValue('subcategoryId', newVal);
@@ -506,11 +465,12 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                           disabled={params.id ? true : false}
                           label="Product Type"
                           component={Autocomplete}
-                          options={productTypeData || []}
+                          options={pTList || []}
                           getOptionLabel={(option: IProductTypeDropDownProps) => option.value || ''}
-                          getOptionSelected={(option: IProductTypeDropDownProps, selectedValue: any) =>
-                            option.key === selectedValue
-                          }
+                          getOptionSelected={(
+                            option: IProductTypeDropDownProps,
+                            selectedValue: IProductTypeDropDownProps,
+                          ) => option.key === selectedValue.key}
                           onChange={(event: React.ChangeEvent<HTMLInputElement>, newVal: IOptionType) => {
                             if (event) {
                               setFieldValue('productTypeId', newVal);
@@ -571,6 +531,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                               <Field
                                 variant="standard"
                                 multiple={attribute.uiType === 'MULTI' || false}
+                                disableCloseOnSelect={attribute.uiType === 'MULTI' || false}
                                 name={`attributeList.${index}.${attribute.key}`}
                                 id={'option#' + attribute.key}
                                 value={
@@ -667,7 +628,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                     </Grid>
                   </Paper>
                 </Grid>
-                <pre>{JSON.stringify(values) + '\n'}</pre>
+                {/* <pre>{JSON.stringify(values) + '\n'}</pre> */}
               </Form>
             )}
           </Formik>
