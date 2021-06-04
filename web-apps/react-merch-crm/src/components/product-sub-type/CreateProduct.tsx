@@ -320,7 +320,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
       operationType: attributeItem.operationType,
       uiType: attributeItem.uiType,
       key: attributeItem.attributeKey,
-      options: selectAll,
+      options: attributeItem.uiType === 'MULTI' ? selectAll : valuesOption,
     };
     dispatchAttributeList([ActionType.removeItems, [attributeItem.attributeKey]]);
     dispatchAttributeList([ActionType.addItems, [attributeValues]]);
@@ -388,6 +388,17 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
         }
       })();
     }
+  };
+
+  const getAllAttributes = (attribute_key: string) => {
+    let attributesObject: any = {};
+    Object.keys(attributeData?.data.attributes).find((obj: any) => {
+      if (attributeData?.data.attributes[obj].attributeKey === attribute_key) {
+        attributesObject = attributeData?.data.attributes[obj];
+      }
+    });
+    const options = attributesObject && attributesObject.values;
+    return options || [];
   };
 
   return (
@@ -517,6 +528,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                     </Grid>
                     <Grid container direction="column" justify="center" spacing={3} style={{ marginTop: '1rem' }}>
                       {attributeList &&
+                        attributeData &&
                         attributeList.map((attribute: IAttributeValues, index: number) => (
                           <Grid
                             container
@@ -558,7 +570,11 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                                 label="Select"
                                 component={Autocomplete}
                                 options={
-                                  attributeData?.data.attributes[attribute.key]['values'] || attribute.options || []
+                                  attribute.uiType === 'MULTI'
+                                    ? [{ value: 'Select All', key: 'all' }].concat(
+                                        attributeData?.data.attributes[attribute.key]['values'],
+                                      )
+                                    : attributeData?.data.attributes[attribute.key]['values'] || attribute.options || []
                                 }
                                 getOptionSelected={(option: IOptionsType, selectedValue: IOptionsType) => {
                                   return option.key == selectedValue?.key;
@@ -586,20 +602,31 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                                   }
                                 }}
                                 onChange={(event: React.ChangeEvent<HTMLInputElement>, newVal: any) => {
+                                  let filteredValues: any = [];
+                                  if (attribute.uiType === 'MULTI' && newVal && newVal.length) {
+                                    const indx = newVal.findIndex((obj: any) => obj.key === 'all');
+                                    if (indx > -1) {
+                                      filteredValues = getAllAttributes(attribute.key);
+                                    }
+                                  }
                                   const keyName = attribute.key;
                                   const formValues: ISelectedValues = {
                                     ...selectedAttributes,
                                     [keyName]: {
                                       attributeId: attribute.id,
-                                      attributeValue: newVal,
+                                      attributeValue: filteredValues.length ? filteredValues : newVal,
                                     },
                                   };
                                   setSelectedAttributes({ ...formValues });
+
                                   setFieldValue(`attributeList.${index}`, {
                                     ['attributeId']: attribute.id,
-                                    ['attributeValues']: newVal.length
-                                      ? [...newVal.map((val: any) => val.value)]
-                                      : [newVal.value],
+                                    ['attributeValues']:
+                                      filteredValues.length > 0
+                                        ? filteredValues.map((val: any) => val.value)
+                                        : newVal.length
+                                        ? [...newVal.map((val: any) => val.value)]
+                                        : [newVal.value],
                                   });
                                   // onDropDownChange(keyName, attribute);
                                 }}
@@ -665,7 +692,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                     </Grid>
                   </Paper>
                 </Grid>
-                {/* <pre>{JSON.stringify(values) + '\n'}</pre> */}
+                {/* <pre>{JSON.stringify(values)}</pre> */}
               </Form>
             )}
           </Formik>
