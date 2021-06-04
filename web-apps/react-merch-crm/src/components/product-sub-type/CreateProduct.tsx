@@ -10,54 +10,19 @@ import {
   ICreateProductSubtypeProps,
   IUrlParamsEntity,
   IOptionType,
-  IAttributeData,
-  IAttributeItems,
-  IAttributeValues,
-  IAttributeResponse,
-  IDeleteItemsType,
   IOptionsType,
   IGetProductResponse,
-  IProductDropDownProps,
-  IAttributeResTypeData,
-  ISelectedAttributesType,
-  IValueOfSelected,
-  Action,
-  ActionType,
 } from './ICreateProduct';
 import { TextField as MuiTextField, Grid, Paper, Button } from '@material-ui/core';
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import { TextField } from 'formik-material-ui';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Dialog from '@material-ui/core/Dialog';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
-import { useTheme } from '@material-ui/core/styles';
 import { Autocomplete, AutocompleteRenderInputParams } from 'formik-material-ui-lab';
 import { productSubtypeService } from '@hs/services';
-import { IProductTypeDropDownProps, ISelectedValues } from './IDashboard';
+import { IProductTypeDropDownProps } from './IDashboard';
 import { useQuery } from 'react-query';
-import { useReducer } from 'react';
 import { useHistory } from 'react-router-dom';
 import { SelectedRectAngle, DeSelectedRectAngle, SvgIcon } from '@hs/icons';
 import { useCategory } from './UseCategory.hook';
 import * as Yup from 'yup';
-const validationSchema = Yup.object().shape({
-  categoryId: Yup.string().required('Please select category'),
-  subcategoryId: Yup.string().required('Please select sub category'),
-  productTypeId: Yup.string().required('Please select product type'),
-  productSubtypeName: Yup.string().required('Product sub type name is required'),
-  attributeList: Yup.array()
-    .of(
-      Yup.object().shape({
-        attributeId: Yup.string(),
-        attributeValues: Yup.array().of(Yup.string()),
-      }),
-    )
-    .required()
-    .min(8, 'Attributes are mandatory'),
-});
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -127,36 +92,30 @@ const initialValues: any = {
   attributeList: [],
 };
 
-const reducer = (state: IProductDropDownProps[], [type, payload]: Action): IProductDropDownProps[] => {
-  switch (type) {
-    case ActionType.removeItems:
-      return state.filter((item) => !(payload as string[]).includes(item.key));
-    case ActionType.addItems:
-      return [...state, ...(payload as IProductDropDownProps[])].sort(
-        (a, b) => a.display_position - b.display_position,
-      );
-  }
-};
-
 const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
   const history = useHistory();
   const classes = useStyles();
-  const [dialogStatus, setDialogStatus] = React.useState(false);
   const [attributes, setAttributes] = useState(initialValues);
-  const [attributeListItems, setAttributeListItems] = useState<IAttributeResponse>({});
-  const [selectedAttributes, setSelectedAttributes] = useState<any>({});
-  const [attributeList, dispatchAttributeList] = useReducer(reducer, []);
+  const [attributeList, setAttributeList] = useState<any>([]);
   const [productTypeId, setProductTypeId] = useState<string | number>('');
-  const [recycleAttribute, setRecycleAttribute] = useState<IAttributeResponse>({});
-
-  const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
   const params = useParams<IUrlParamsEntity>();
 
-  const handleClose = () => {
-    setDialogStatus(false);
-  };
+  const validationSchema = Yup.object().shape({
+    categoryId: Yup.string().required('Please select category'),
+    subcategoryId: Yup.string().required('Please select sub category'),
+    productTypeId: Yup.string().required('Please select product type'),
+    productSubtypeName: Yup.string().required('Product sub type name is required'),
+    attributeList: Yup.array()
+      .of(
+        Yup.object().shape({
+          attributeId: Yup.string(),
+          attributeValues: Yup.array().of(Yup.string()),
+        }),
+      )
+      .required()
+      .min(1, 'Attributes are mandatory'),
+  });
 
   const [categoryId, setCategoryId] = useState<string | number>('');
   const [subCategoryId, setSubCategoryId] = useState<string | number>('');
@@ -169,9 +128,9 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
     subCategoryId,
   });
 
-  const { data: attributeData, isSuccess: isAttributeSuccess } = useQuery<IAttributeData, Record<string, string>>(
+  const { data: attributeListData, isSuccess: isAttributeSuccess } = useQuery<any, Record<string, string>>(
     ['attributes'],
-    () => productSubtypeService.getAttributesList(),
+    () => productSubtypeService.getAttributesList(productTypeId),
     {
       staleTime: Infinity,
     },
@@ -179,9 +138,9 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
 
   useEffect(() => {
     if (isAttributeSuccess) {
-      setAttributeListItems(attributeData?.data?.attributes);
+      setAttributeList(attributeListData.attributes);
     }
-  }, [attributeData, isAttributeSuccess]);
+  }, [attributeListData, isAttributeSuccess]);
 
   useEffect(() => {
     if (params.id) {
@@ -203,57 +162,11 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
           };
 
           productTypeData.data.attributes.forEach((item) => {
-            const obj: IAttributeResTypeData = { attributeId: item.type.key, attributeValues: [] };
-            item.values.forEach((val: IValueOfSelected) => {
-              obj?.attributeValues.push(val.value);
-            });
+            const obj: any = { attributeId: item.type.key, attributeValues: item.values };
             attributesResponseData.attributeList.push(obj);
           });
 
           setAttributes({ ...attributesResponseData });
-
-          productTypeData.data.attributes.map((eachAttrib) => {
-            const newVal = {
-              [eachAttrib.type.value]: {
-                attributeId: eachAttrib.type.key,
-                attributeValue: eachAttrib.uiType === 'MULTI' ? eachAttrib.values : eachAttrib.values[0],
-              },
-            };
-            setSelectedAttributes((prevState: ISelectedAttributesType) => {
-              return { ...prevState, ...newVal };
-            });
-            const attributeValues: IAttributeValues = {
-              display: 'Attribute',
-              id: eachAttrib.type.key,
-              label: eachAttrib.type.value,
-              display_position: 5,
-              operationType: [],
-              uiType: eachAttrib.uiType,
-              key: eachAttrib.type.value,
-              options: eachAttrib.values,
-            };
-            dispatchAttributeList([ActionType.addItems, [attributeValues]]);
-
-            const recycle: IAttributeResponse = {};
-            Object.keys(attributeListItems).forEach((item) => {
-              if (attributeListItems[item].attributeKey === eachAttrib.type.value) {
-                recycle[item] = { ...attributeListItems[item] };
-              }
-            });
-            setRecycleAttribute((prevState: IAttributeResponse) => {
-              return { ...prevState, ...recycle };
-            });
-
-            const recycleList: IAttributeResponse = {};
-            Object.keys(attributeListItems).forEach((item) => {
-              if (attributeListItems[item].attributeKey !== eachAttrib.type.value) {
-                recycleList[item] = { ...attributeListItems[item] };
-              }
-            });
-            setAttributeListItems((prevState: IAttributeResponse) => {
-              return { ...prevState, ...recycleList };
-            });
-          });
         }
       } catch (error) {
         showError(error);
@@ -271,77 +184,6 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
     }
   };
 
-  const handleDelete = (attributeDelete: IDeleteItemsType) => {
-    const notAllowed = [attributeDelete.key];
-    dispatchAttributeList([ActionType.removeItems, [attributeDelete.key]]);
-    const filtered = Object.keys(selectedAttributes)
-      .filter((key) => !notAllowed.includes(key))
-      .reduce((obj: any, key) => {
-        obj[key] = selectedAttributes[key];
-        return obj;
-      }, {});
-    setSelectedAttributes(filtered);
-    const recycledAttribList: IAttributeResponse = {};
-    Object.keys(recycleAttribute).forEach((item) => {
-      if (recycleAttribute[item].attributeKey === attributeDelete.key) {
-        recycledAttribList[item] = { ...recycleAttribute[item] };
-      }
-    });
-    setAttributeListItems({ ...attributeListItems, ...recycledAttribList });
-
-    const delFromRecycledAttrib: IAttributeResponse = {};
-    Object.keys(recycleAttribute).forEach((item) => {
-      if (recycleAttribute[item].attributeKey !== attributeDelete.key) {
-        delFromRecycledAttrib[item] = { ...recycleAttribute[item] };
-      }
-    });
-    setRecycleAttribute(delFromRecycledAttrib);
-  };
-
-  const handleListItemClick = (attributeItem: IAttributeItems) => {
-    setDialogStatus(false);
-    const newVal = {
-      [attributeItem.attributeKey]: {
-        attributeId: attributeItem.attributeId,
-        attributeValue: attributeItem.uiType === 'MULTI' || attributeItem.uiType === 'SINGLE' ? [] : '',
-      },
-    };
-    setSelectedAttributes((prevState: IAttributeValues) => {
-      return { ...prevState, ...newVal };
-    });
-
-    const valuesOption: any = attributeItem?.values;
-    const selectAll = [{ value: 'Select All', key: 'all' }].concat(valuesOption);
-    const attributeValues: IAttributeValues = {
-      display: 'Attribute',
-      id: attributeItem.attributeId,
-      label: attributeItem.attributeName,
-      display_position: 5,
-      operationType: attributeItem.operationType,
-      uiType: attributeItem.uiType,
-      key: attributeItem.attributeKey,
-      options: attributeItem.uiType === 'MULTI' ? selectAll : valuesOption,
-    };
-    dispatchAttributeList([ActionType.removeItems, [attributeItem.attributeKey]]);
-    dispatchAttributeList([ActionType.addItems, [attributeValues]]);
-
-    const recycle: IAttributeResponse = {};
-    Object.keys(attributeListItems).forEach((item) => {
-      if (attributeListItems[item].attributeKey === attributeItem.attributeKey) {
-        recycle[item] = { ...attributeListItems[item] };
-      }
-    });
-    setRecycleAttribute({ ...recycleAttribute, ...recycle });
-
-    const recycleList: IAttributeResponse = {};
-    Object.keys(attributeListItems).forEach((item) => {
-      if (attributeListItems[item].attributeKey !== attributeItem.attributeKey) {
-        recycleList[item] = { ...attributeListItems[item] };
-      }
-    });
-    setAttributeListItems(recycleList);
-  };
-
   const onFiltersSubmit = (values: any, actions: any) => {
     const actionMessage = header.indexOf('Create') > -1 ? 'added' : 'updated';
     let postObject: Record<string, number> = {};
@@ -350,7 +192,13 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
         postObject[ele] = values[ele]['key'] || values[ele]['attributeName'] || values[ele];
       }
     });
-    postObject = { ...values, ...postObject };
+
+    const attributeList: any = [...values.attributeList];
+    attributeList.forEach((itm: any) => {
+      itm.attributeValues = itm.attributeValues.map((val: any) => val.value);
+    });
+
+    postObject = { ...postObject, attributeList: attributeList };
 
     if (actionMessage === 'updated') {
       (async () => {
@@ -391,14 +239,13 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
   };
 
   const getAllAttributes = (attribute_key: string) => {
-    let attributesObject: any = {};
-    Object.keys(attributeData?.data.attributes).find((obj: any) => {
-      if (attributeData?.data.attributes[obj].attributeKey === attribute_key) {
-        attributesObject = attributeData?.data.attributes[obj];
+    let attributesObject: any = [];
+    attributeList.find((obj: any) => {
+      if (obj.attributeKey === attribute_key) {
+        attributesObject = obj.values;
       }
     });
-    const options = attributesObject && attributesObject.values;
-    return options || [];
+    return attributesObject || [];
   };
 
   return (
@@ -526,58 +373,56 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                         />
                       </Grid>
                     </Grid>
-                    <Grid container direction="column" justify="center" spacing={3} style={{ marginTop: '1rem' }}>
+                    <Grid container direction="column" justify="center" spacing={3}>
                       {attributeList &&
-                        attributeData &&
-                        attributeList.map((attribute: IAttributeValues, index: number) => (
+                        attributeList.map((attribute: any, index: number) => (
                           <Grid
                             container
                             direction="row"
                             spacing={3}
-                            style={{ marginTop: '1rem' }}
-                            key={'attribute#' + attribute.key}
+                            style={{ marginTop: '2rem' }}
+                            key={'attributeContainer-' + attribute.attributeKey}
                           >
                             <Grid
                               item
                               xs={3}
-                              style={{ padding: '4px', marginLeft: '1.2rem' }}
-                              key={'attribute#' + attribute.key}
+                              style={{ padding: '4px', marginLeft: '1.2rem', marginTop: '0.5rem' }}
+                              key={'attributeLabel' + attribute.attributeKey}
                             >
                               <MuiTextField
                                 label="Attribute"
                                 disabled={true}
-                                value={attribute.label}
+                                value={attribute.attributeKey}
                                 variant="outlined"
                                 fullWidth={true}
                               />
                             </Grid>
 
-                            <Grid item xs style={{ padding: '4px' }} key={'option#' + attribute.key}>
+                            <Grid
+                              item
+                              xs
+                              style={{ padding: '4px', marginRight: '12px', marginTop: '0.5rem' }}
+                              key={'attributeValue-' + attribute.attributeKey}
+                            >
                               <Field
                                 variant="standard"
                                 multiple={attribute.uiType === 'MULTI' || false}
                                 disableCloseOnSelect={attribute.uiType === 'MULTI' || false}
-                                name={`attributeList.${index}.${attribute.key}`}
-                                id={'option#' + attribute.key}
+                                name={`attributeList.${index}.${attribute.attributeKey}`}
+                                id={attribute.attributeKey}
                                 classes={{
                                   option: classes.option,
                                 }}
-                                value={
-                                  selectedAttributes[attribute.key].attributeValue ||
-                                  values.attributeList[attribute.key] ||
-                                  (attribute.uiType === 'MULTI' || attribute.uiType === 'SINGLE' ? [] : null)
-                                }
+                                value={values.attributeList[index] && values.attributeList[index]['attributeValues']}
                                 label="Select"
                                 component={Autocomplete}
                                 options={
-                                  attribute.uiType === 'MULTI'
-                                    ? [{ value: 'Select All', key: 'all' }].concat(
-                                        attributeData?.data.attributes[attribute.key]['values'],
-                                      )
-                                    : attributeData?.data.attributes[attribute.key]['values'] || attribute.options || []
+                                  [{ value: 'Select All', key: 'all' }].concat(attributeList[index].values) ||
+                                  attribute.values ||
+                                  []
                                 }
                                 getOptionSelected={(option: IOptionsType, selectedValue: IOptionsType) => {
-                                  return option.key == selectedValue?.key;
+                                  return option.key === selectedValue.key;
                                 }}
                                 getOptionLabel={(option: IProductTypeDropDownProps) => option.value || option.key || ''}
                                 renderOption={(option: any, selectedValue: any) => {
@@ -606,54 +451,23 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                                   if (attribute.uiType === 'MULTI' && newVal && newVal.length) {
                                     const indx = newVal.findIndex((obj: any) => obj.key === 'all');
                                     if (indx > -1) {
-                                      filteredValues = getAllAttributes(attribute.key);
+                                      filteredValues = getAllAttributes(attribute.attributeKey);
                                     }
                                   }
-                                  const keyName = attribute.key;
-                                  const formValues: ISelectedValues = {
-                                    ...selectedAttributes,
-                                    [keyName]: {
-                                      attributeId: attribute.id,
-                                      attributeValue: filteredValues.length ? filteredValues : newVal,
-                                    },
-                                  };
-                                  setSelectedAttributes({ ...formValues });
-
                                   setFieldValue(`attributeList.${index}`, {
-                                    ['attributeId']: attribute.id,
+                                    ['attributeId']: attribute.attributeId,
                                     ['attributeValues']:
                                       filteredValues.length > 0
-                                        ? filteredValues.map((val: any) => val.value)
-                                        : newVal.length
-                                        ? [...newVal.map((val: any) => val.value)]
-                                        : [newVal.value],
+                                        ? [...filteredValues]
+                                        : newVal && newVal.length
+                                        ? [...newVal]
+                                        : [newVal],
                                   });
-                                  // onDropDownChange(keyName, attribute);
                                 }}
                                 renderInput={(params: AutocompleteRenderInputParams) => (
                                   <MuiTextField {...params} label="Select" variant="outlined" />
                                 )}
                               />
-                            </Grid>
-                            <Grid item xs={1}>
-                              <Button
-                                type="button"
-                                disabled={isSubmitting}
-                                color="primary"
-                                variant="outlined"
-                                size="small"
-                                className={classes.crossBtn}
-                                style={{ top: '-9px' }}
-                                onClick={() => {
-                                  const attributeItemFilter = values.attributeList.filter(
-                                    (attr: any) => attr.attributeId !== attribute.id,
-                                  );
-                                  setFieldValue('attributeList', attributeItemFilter);
-                                  handleDelete(attribute);
-                                }}
-                              >
-                                <DeleteForeverIcon fontSize="large" />
-                              </Button>
                             </Grid>
                           </Grid>
                         ))}
@@ -668,18 +482,6 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                     >
                       <Grid item>
                         <Button
-                          type="button"
-                          disabled={isSubmitting}
-                          color="primary"
-                          variant="outlined"
-                          size="large"
-                          onClick={() => setDialogStatus(true)}
-                        >
-                          Add Attribute
-                        </Button>
-                      </Grid>
-                      <Grid item>
-                        <Button
                           type="submit"
                           color="primary"
                           variant={'contained'}
@@ -692,35 +494,10 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                     </Grid>
                   </Paper>
                 </Grid>
-                {/* <pre>{JSON.stringify(values)}</pre> */}
+                <pre>{JSON.stringify(values)}</pre>
               </Form>
             )}
           </Formik>
-
-          <Dialog
-            fullScreen={fullScreen}
-            onClose={handleClose}
-            aria-labelledby="attribute-dialog"
-            open={dialogStatus}
-            maxWidth={'lg'}
-          >
-            <DialogTitle id="attribute-dialog" style={{ textAlign: 'center', borderBottom: '1px solid' }}>
-              Select Attribute
-            </DialogTitle>
-            <List>
-              {attributeListItems &&
-                Object.keys(attributeListItems).map((eachAttributeListItem: string) => (
-                  <ListItem
-                    button
-                    onClick={() => handleListItemClick(attributeListItems[eachAttributeListItem])}
-                    key={eachAttributeListItem}
-                  >
-                    <ListItemText primary={attributeListItems[eachAttributeListItem]['attributeName']} />
-                  </ListItem>
-                ))}
-              {!isAttributeSuccess ? 'No Data' : ''}
-            </List>
-          </Dialog>
         </FiltersWrapper>
       </ProductWrapper>
     </>
