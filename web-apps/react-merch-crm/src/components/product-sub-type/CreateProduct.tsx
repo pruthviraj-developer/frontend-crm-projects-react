@@ -114,7 +114,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
         }),
       )
       .required()
-      .min(1, 'Attributes are mandatory'),
+      .min(attributeList && attributeList.length, 'All attributes are mandatory'),
   });
 
   const [categoryId, setCategoryId] = useState<string | number>('');
@@ -223,6 +223,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
       (async () => {
         try {
           const productPostStatus: Record<string, string> = await productSubtypeService.addProduct({ ...postObject });
+          setAttributes(initialValues);
           if (productPostStatus.action === 'SUCCESS') {
             toast.success(productPostStatus.messageList[0] || `Product ${actionMessage} successfully`);
             setTimeout(() => {
@@ -406,14 +407,16 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                             >
                               <Field
                                 variant="standard"
-                                multiple={attribute.uiType === 'MULTI' || false}
-                                disableCloseOnSelect={attribute.uiType === 'MULTI' || false}
-                                name={`attributeList.${index}.${attribute.attributeKey}`}
+                                multiple={true}
+                                disableCloseOnSelect={true}
+                                name={`attributeList.${index}.${attribute.attributeId}`}
                                 id={attribute.attributeKey}
                                 classes={{
                                   option: classes.option,
                                 }}
-                                value={values.attributeList[index] && values.attributeList[index]['attributeValues']}
+                                value={
+                                  (values.attributeList[index] && values.attributeList[index]['attributeValues']) || []
+                                }
                                 label="Select"
                                 component={Autocomplete}
                                 options={
@@ -424,6 +427,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                                 getOptionSelected={(option: IOptionsType, selectedValue: IOptionsType) => {
                                   return option.key === selectedValue.key;
                                 }}
+                                defaultValue={[]}
                                 getOptionLabel={(option: IProductTypeDropDownProps) => option.value || option.key || ''}
                                 renderOption={(option: any, selectedValue: any) => {
                                   const displayLabel = option.value || option.key;
@@ -448,7 +452,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                                 }}
                                 onChange={(event: React.ChangeEvent<HTMLInputElement>, newVal: any) => {
                                   let filteredValues: any = [];
-                                  if (attribute.uiType === 'MULTI' && newVal && newVal.length) {
+                                  if (newVal && newVal.length) {
                                     const indx = newVal.findIndex((obj: any) => obj.key === 'all');
                                     if (indx > -1) {
                                       filteredValues = getAllAttributes(attribute.attributeKey);
@@ -461,7 +465,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                                         ? [...filteredValues]
                                         : newVal && newVal.length
                                         ? [...newVal]
-                                        : [newVal],
+                                        : [],
                                   });
                                 }}
                                 renderInput={(params: AutocompleteRenderInputParams) => (
