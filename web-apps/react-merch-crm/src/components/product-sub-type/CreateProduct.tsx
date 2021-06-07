@@ -506,7 +506,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                     </Grid>
                   </Paper>
                 </Grid>
-                <pre>{JSON.stringify(values)}</pre>
+                {/* <pre>{JSON.stringify(values)}</pre> */}
               </Form>
             )}
           </Formik>
