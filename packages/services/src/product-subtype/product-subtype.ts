@@ -21,10 +21,7 @@ const getProductType = <P, R>(subcategoryId: P): Promise<R> => {
 };
 
 const getAttributesList = <P, R>(productTypeId: P): Promise<R> => {
-  // const url = '/crm-api/intranet/productsubtype/creation-setup';
-  const url =
-    'https://run.mocky.io/v3/2882acf4-4931-409b-bdcc-7ae14c12eba4/' +
-    productTypeId;
+  const url = `/crm-api/intranet/productsubtype/creation-setup/${productTypeId}`;
   return httpService.get<R>({ url });
 };
 

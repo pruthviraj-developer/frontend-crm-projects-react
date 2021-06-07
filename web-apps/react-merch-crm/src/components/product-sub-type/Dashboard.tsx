@@ -143,17 +143,21 @@ const ProductSubtypeDashboard: FC = () => {
           return row.productSubtypeName;
         }
         if (row) {
-          return (
-            <>
-              <NavLink
-                to={{
-                  pathname: `edit-product-subtype/${row.productSubtypeId}`,
-                }}
-              >
-                {row.productSubtypeName}
-              </NavLink>
-            </>
-          );
+          if (row.productSubtypeName !== 'Default') {
+            return (
+              <>
+                <NavLink
+                  to={{
+                    pathname: `edit-product-subtype/${row.productSubtypeId}`,
+                  }}
+                >
+                  {row.productSubtypeName}
+                </NavLink>
+              </>
+            );
+          } else {
+            return row.productSubtypeName;
+          }
         }
         return '--';
       },

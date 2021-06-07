@@ -78,8 +78,8 @@ const FiltersWrapper = styled.div`
 const tryLater = 'Please try later';
 const showError = (error: Record<string, string>) => {
   let message = tryLater;
-  if (error.action === 'FAILURE' && error.messageList) {
-    message = error.messageList[0];
+  if (error.action === 'FAILURE' && error.message) {
+    message = error.message;
   }
   toast.error(message);
 };
@@ -95,7 +95,7 @@ const initialValues: any = {
 const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
   const history = useHistory();
   const classes = useStyles();
-  const [attributes, setAttributes] = useState(initialValues);
+  const [initialData, setInitialData] = useState(initialValues);
   const [attributeList, setAttributeList] = useState<any>([]);
   const [productTypeId, setProductTypeId] = useState<string | number>('');
 
@@ -129,10 +129,14 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
   });
 
   const { data: attributeListData, isSuccess: isAttributeSuccess } = useQuery<any, Record<string, string>>(
-    ['attributes'],
+    ['attributesGet', productTypeId],
     () => productSubtypeService.getAttributesList(productTypeId),
     {
-      staleTime: Infinity,
+      staleTime: 2000,
+      enabled: productTypeId !== '',
+      onError: (error: Record<string, string>) => {
+        showError(error);
+      },
     },
   );
 
@@ -161,12 +165,16 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
             attributeList: [],
           };
 
+          setCategoryId(attributesResponseData.categoryId.key);
+          setSubCategoryId(attributesResponseData.subcategoryId.key);
+          setProductTypeId(attributesResponseData.productTypeId.key);
+
           productTypeData.data.attributes.forEach((item) => {
             const obj: any = { attributeId: item.type.key, attributeValues: item.values };
             attributesResponseData.attributeList.push(obj);
           });
 
-          setAttributes({ ...attributesResponseData });
+          setInitialData({ ...attributesResponseData });
         }
       } catch (error) {
         showError(error);
@@ -179,7 +187,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
       setCategoryId(id);
     } else if (key === 'subcategoryId') {
       setSubCategoryId(id);
-    } else if (key === 'productType') {
+    } else if (key === 'productTypeId') {
       setProductTypeId(id);
     }
   };
@@ -223,7 +231,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
       (async () => {
         try {
           const productPostStatus: Record<string, string> = await productSubtypeService.addProduct({ ...postObject });
-          setAttributes(initialValues);
+          setInitialData(initialValues);
           if (productPostStatus.action === 'SUCCESS') {
             toast.success(productPostStatus.messageList[0] || `Product ${actionMessage} successfully`);
             setTimeout(() => {
@@ -256,7 +264,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
         <FiltersWrapper className={classes.root}>
           <Formik
             enableReinitialize={true}
-            initialValues={attributes}
+            initialValues={initialData}
             validationSchema={validationSchema}
             onSubmit={onFiltersSubmit}
           >
