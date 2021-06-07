@@ -32,7 +32,7 @@ interface CardEntityProps {
   attributes?: AttributesEntity[] | null;
 }
 
-interface AttributesEntity {
+export interface AttributesEntity {
   label: string;
   value: string | number;
 }

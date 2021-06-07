@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from '@emotion/styled';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { Button, Grid } from '@material-ui/core';
-import { CardProps } from './Icard';
+import { CardProps, AttributesEntity } from './Icard';
 import Carousel from 'react-elastic-carousel';
 import clsx from 'clsx';
 
@@ -52,7 +52,7 @@ const useStyles = makeStyles(() =>
       pointerEvents: 'none',
       maxHeight: 200,
       minHeight: 200,
-      minWidth: 200
+      minWidth: 200,
     },
     'card-button': {
       borderRadius: '0 0 6px 6px',
@@ -64,11 +64,10 @@ const useStyles = makeStyles(() =>
     carousel: {
       margin: '0 20px',
     },
-    'image-container': {
-    },
+    'image-container': {},
     'catalog-attribute': {
       color: '#ED54A4',
-    }
+    },
   })
 );
 
@@ -105,17 +104,39 @@ export const Card = ({
     const nextArrow = type === 'NEXT';
     const pointer = previousArrow ? '<' : '>';
     const cardsLength = (cardsList?.length || 0) < 4 ? true : false;
-    const disabledPreviousArrow = previousArrow && (page === 0);
-    const disableBoth = (page === 0) && cardsLength;
-    const disabledNextArrow = nextArrow && (totalRecords - (page + 1) * 4  > 0 ? false : true);
+    const disabledPreviousArrow = previousArrow && page === 0;
+    const disableBoth = page === 0 && cardsLength;
+    const disabledNextArrow =
+      nextArrow && (totalRecords - (page + 1) * 4 > 0 ? false : true);
     return (
-      <Button style={{fontSize:'35px', color: (disabledPreviousArrow || disableBoth || disabledNextArrow) ? '#00000042' : '#ED54A4'}} 
-      onClick={onClick}
-      disabled={disabledPreviousArrow || disableBoth || disabledNextArrow}>
+      <Button
+        style={{
+          fontSize: '35px',
+          color:
+            disabledPreviousArrow || disableBoth || disabledNextArrow
+              ? '#00000042'
+              : '#ED54A4',
+        }}
+        onClick={onClick}
+        disabled={disabledPreviousArrow || disableBoth || disabledNextArrow}
+      >
         {pointer}
       </Button>
-    )
-  }
+    );
+  };
+
+  const getAttributesText = (
+    obj: AttributesEntity,
+    index: string | number = 'pid'
+  ) => {
+    return (
+      <span key={index} style={{ display: 'block', textAlign: 'left' }}>
+        {obj.label}:{' '}
+        <b className={classes['catalog-attribute']}>{obj.value || 'NA'}</b>{' '}
+      </span>
+    );
+  };
+
   return (
     <Grid container>
       <Carousel
@@ -162,15 +183,11 @@ export const Card = ({
                     />
                   </ImageContainer>
                   <Description>
+                    {getAttributesText({ label: 'Pid', value: data.pid })}
                     {data.attributes &&
-                      data.attributes.map((obj, keyIndex) => (
-                        <span key={keyIndex} style={{display: 'block', textAlign: 'left'}} >
-                          {obj.label}:{' '}
-                          <b className={classes['catalog-attribute']}>
-                            {obj.value || 'NA'}
-                          </b>{' '}
-                        </span>
-                      ))}
+                      data.attributes.map((obj, keyIndex) =>
+                        getAttributesText(obj, keyIndex)
+                      )}
                   </Description>
                 </CardBodyContainer>
                 <Button
@@ -184,7 +201,10 @@ export const Card = ({
                       selectedData[carouselKey][data.pid],
                   })}
                   onClick={() => {
-                    selectPid(carouselKey, { updateDecisionType, pid: data.pid });
+                    selectPid(carouselKey, {
+                      updateDecisionType,
+                      pid: data.pid,
+                    });
                   }}
                 >
                   {selectedData[carouselKey] &&
