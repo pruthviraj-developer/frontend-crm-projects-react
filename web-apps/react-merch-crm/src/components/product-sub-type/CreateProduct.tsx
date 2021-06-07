@@ -409,7 +409,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                                 variant="standard"
                                 multiple={true}
                                 disableCloseOnSelect={true}
-                                name={`attributeList.${index}.${attribute.attributeId}`}
+                                name={`attributeList`}
                                 id={attribute.attributeKey}
                                 classes={{
                                   option: classes.option,
