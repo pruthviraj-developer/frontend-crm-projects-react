@@ -85,7 +85,7 @@ const tryLater = 'Please try later';
 const showError = (error: Record<string, string>) => {
   let message = tryLater;
   if (error.action === 'FAILURE' && error.message) {
-    message = error.message;
+    message = error.message[0];
   } else {
     message = error.messageList[0];
   }
