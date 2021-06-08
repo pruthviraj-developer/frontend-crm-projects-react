@@ -54,9 +54,56 @@ export interface ProductDataType {
   subCategoryId: IValueOfSelected;
 }
 
+export interface IValuesType {
+  attributeList: ProductAttributeType[] | [];
+  categoryId: IValueOfSelected;
+  productSubTypeName: string;
+  productTypeId: IValueOfSelected;
+  subCategoryId: IValueOfSelected;
+}
+
 export interface IGetProductResponse {
   action: string;
   data: ProductDataType;
   messageList?: string | null;
   statusCode: number;
+}
+
+export interface IAttributePostValue {
+  attributeId: string | number;
+  attributeValues: IValueOfSelected[];
+}
+
+export interface IAttributePostValueType {
+  attributeId: string | number;
+  attributeValues: Array<string> | [];
+}
+
+export interface IPostValues {
+  categoryId: IValueOfSelected;
+  subcategoryId: IValueOfSelected;
+  productTypeId: IValueOfSelected;
+  productSubtypeName: string;
+  attributeList: IAttributePostValue[];
+}
+
+export interface IAttributesData {
+  attributeId: string | number;
+  attributeKey: string;
+  attributeName: string;
+  label: string;
+  note?: string;
+  operationType?: string;
+  prefix?: string;
+  suffix?: string;
+  uiType: string;
+  valueType: string;
+  validations?: Array<string>;
+  values: IValueOfSelected[];
+}
+
+export interface IAttributeListDataResponse {
+  action: string;
+  attributes: IAttributesData[] | [];
+  message?: Array<string>;
 }

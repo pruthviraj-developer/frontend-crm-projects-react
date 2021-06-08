@@ -12,6 +12,12 @@ import {
   IOptionType,
   IOptionsType,
   IGetProductResponse,
+  IAttributePostValueType,
+  IAttributePostValue,
+  IValueOfSelected,
+  IPostValues,
+  IAttributesData,
+  IAttributeListDataResponse,
 } from './ICreateProduct';
 import { TextField as MuiTextField, Grid, Paper, Button } from '@material-ui/core';
 import { TextField } from 'formik-material-ui';
@@ -80,14 +86,16 @@ const showError = (error: Record<string, string>) => {
   let message = tryLater;
   if (error.action === 'FAILURE' && error.message) {
     message = error.message;
+  } else {
+    message = error.messageList[0];
   }
   toast.error(message);
 };
 
-const initialValues: any = {
-  categoryId: '',
-  subcategoryId: '',
-  productTypeId: '',
+const initialValues: IPostValues = {
+  categoryId: '' || { key: '', value: '' },
+  subcategoryId: '' || { key: '', value: '' },
+  productTypeId: '' || { key: '', value: '' },
   productSubtypeName: '',
   attributeList: [],
 };
@@ -96,7 +104,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
   const history = useHistory();
   const classes = useStyles();
   const [initialData, setInitialData] = useState(initialValues);
-  const [attributeList, setAttributeList] = useState<any>([]);
+  const [attributeList, setAttributeList] = useState<IAttributesData[]>([]);
   const [productTypeId, setProductTypeId] = useState<string | number>('');
 
   const params = useParams<IUrlParamsEntity>();
@@ -128,21 +136,26 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
     subCategoryId,
   });
 
-  const { data: attributeListData, isSuccess: isAttributeSuccess } = useQuery<any, Record<string, string>>(
-    ['attributesGet', productTypeId],
-    () => productSubtypeService.getAttributesList(productTypeId),
-    {
-      staleTime: 2000,
-      enabled: productTypeId !== '',
-      onError: (error: Record<string, string>) => {
-        showError(error);
-      },
+  const { data: attributeListData, isSuccess: isAttributeSuccess } = useQuery<
+    IAttributeListDataResponse,
+    Record<string, string>
+  >(['attributesGet', productTypeId], () => productSubtypeService.getAttributesList(productTypeId), {
+    staleTime: 2000,
+    enabled: productTypeId !== '',
+    onError: (error: Record<string, string>) => {
+      showError(error);
     },
-  );
+  });
 
   useEffect(() => {
     if (isAttributeSuccess) {
-      setAttributeList(attributeListData.attributes);
+      attributeListData?.attributes.sort((a: IAttributesData, b: IAttributesData) => {
+        if (a.attributeName < b.attributeName) return -1;
+        return a.attributeName > b.attributeName ? 1 : 0;
+      });
+      if (attributeListData) {
+        setAttributeList(attributeListData.attributes);
+      }
     }
   }, [attributeListData, isAttributeSuccess]);
 
@@ -156,8 +169,13 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
     (async () => {
       try {
         const productTypeData: IGetProductResponse = await productSubtypeService.getProduct(params.id);
+        productTypeData.data.attributes.sort((a, b) => {
+          if (a.type.value < b.type.value) return -1;
+          return a.type.value > b.type.value ? 1 : 0;
+        });
+
         if (productTypeData) {
-          const attributesResponseData: any = {
+          const attributesResponseData: IPostValues = {
             categoryId: productTypeData?.data.categoryId,
             subcategoryId: productTypeData?.data.subCategoryId,
             productTypeId: productTypeData?.data.productTypeId,
@@ -170,7 +188,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
           setProductTypeId(attributesResponseData.productTypeId.key);
 
           productTypeData.data.attributes.forEach((item) => {
-            const obj: any = { attributeId: item.type.key, attributeValues: item.values };
+            const obj: IAttributePostValue = { attributeId: item.type.key, attributeValues: item.values };
             attributesResponseData.attributeList.push(obj);
           });
 
@@ -194,20 +212,23 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
 
   const onFiltersSubmit = (values: any, actions: any) => {
     const actionMessage = header.indexOf('Create') > -1 ? 'added' : 'updated';
-    let postObject: Record<string, number> = {};
+    let postObject: any = {};
     ['categoryId', 'subcategoryId', 'productTypeId', 'productSubtypeName'].forEach((ele: string) => {
       if (values[ele]) {
-        postObject[ele] = values[ele]['key'] || values[ele]['attributeName'] || values[ele];
+        postObject[ele] = values[ele]['key'] || values[ele];
       }
     });
 
-    const attributeList: any = [...values.attributeList];
-    attributeList.forEach((itm: any) => {
-      itm.attributeValues = itm.attributeValues.map((val: any) => val.value);
+    const attrList: IAttributePostValue[] = [...values.attributeList];
+    const valObj: IAttributePostValueType[] = [];
+    attrList.forEach((itm: IAttributePostValue) => {
+      if (itm && itm.attributeValues) {
+        const fObj: IAttributePostValueType = { attributeId: itm.attributeId, attributeValues: [] };
+        fObj.attributeValues = [...fObj.attributeValues, ...itm.attributeValues.map((val) => val.value)];
+        valObj.push(fObj);
+      }
     });
-
-    postObject = { ...postObject, attributeList: attributeList };
-
+    postObject = { ...postObject, attributeList: valObj };
     if (actionMessage === 'updated') {
       (async () => {
         try {
@@ -248,8 +269,8 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
   };
 
   const getAllAttributes = (attribute_key: string) => {
-    let attributesObject: any = [];
-    attributeList.find((obj: any) => {
+    let attributesObject: IValueOfSelected[] = [];
+    attributeList.find((obj: IAttributesData) => {
       if (obj.attributeKey === attribute_key) {
         attributesObject = obj.values;
       }
@@ -384,7 +405,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                     </Grid>
                     <Grid container direction="column" justify="center" spacing={3}>
                       {attributeList &&
-                        attributeList.map((attribute: any, index: number) => (
+                        attributeList.map((attribute: IAttributesData, index: number) => (
                           <Grid
                             container
                             direction="row"
@@ -437,7 +458,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                                 }}
                                 defaultValue={[]}
                                 getOptionLabel={(option: IProductTypeDropDownProps) => option.value || option.key || ''}
-                                renderOption={(option: any, selectedValue: any) => {
+                                renderOption={(option: IValueOfSelected, selectedValue: any) => {
                                   const displayLabel = option.value || option.key;
                                   if (displayLabel && displayLabel.toLowerCase() === 'select all') {
                                     return (
@@ -458,10 +479,10 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                                     );
                                   }
                                 }}
-                                onChange={(event: React.ChangeEvent<HTMLInputElement>, newVal: any) => {
-                                  let filteredValues: any = [];
+                                onChange={(event: React.ChangeEvent<HTMLInputElement>, newVal: IValueOfSelected[]) => {
+                                  let filteredValues: IValueOfSelected[] = [];
                                   if (newVal && newVal.length) {
-                                    const indx = newVal.findIndex((obj: any) => obj.key === 'all');
+                                    const indx = newVal.findIndex((obj: IValueOfSelected) => obj.key === 'all');
                                     if (indx > -1) {
                                       filteredValues = getAllAttributes(attribute.attributeKey);
                                     }
