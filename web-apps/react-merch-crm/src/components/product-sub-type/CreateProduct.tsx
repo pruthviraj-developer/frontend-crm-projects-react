@@ -518,7 +518,15 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                           type="submit"
                           color="primary"
                           variant={'contained'}
-                          disabled={isSubmitting || !isValid || !dirty}
+                          disabled={
+                            isSubmitting ||
+                            !isValid ||
+                            !dirty ||
+                            (values.attributeList.length > 0 &&
+                            values.attributeList.find((item) => item.attributeValues.length == 0)
+                              ? true
+                              : false)
+                          }
                           size="large"
                         >
                           {header.indexOf('Create') > -1 ? 'Create Product' : 'Update Product'}
