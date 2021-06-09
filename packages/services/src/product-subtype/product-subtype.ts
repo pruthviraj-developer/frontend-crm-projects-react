@@ -55,7 +55,7 @@ const getDashboardData = <P, R>(
 };
 
 const updateAction = <R>(id: number, data: any): Promise<R> => {
-  const url = `/crm-api/intranet/productsubtype/changestatus/${id}`;
+  const url = `/crm-api/intranet/productsubtype/statuschange/${id}`;
   return httpService.post<R>({ url, data });
 };
 

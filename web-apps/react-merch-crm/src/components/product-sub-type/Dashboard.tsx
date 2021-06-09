@@ -51,8 +51,8 @@ const FiltersWrapper = styled.div`
 const tryLater = 'Please try later';
 const showError = (error: Record<string, string>) => {
   let message = tryLater;
-  if (error.action === 'failure' && error.message) {
-    message = error.message;
+  if (error.action === 'FAILURE' && error.messageList[0]) {
+    message = error.messageList[0];
   }
   toast.error(message);
 };
@@ -91,21 +91,21 @@ const ProductSubtypeDashboard: FC = () => {
   );
   const handleAction = (data: DashboardData) => {
     const status = {
-      status: data.status === 'Y' ? 'N' : 'Y',
+      action: data.status === 'Y' ? 'DISABLE' : 'ENABLE',
     };
     (async () => {
       try {
         const actionStatus: Record<string, string> = await productSubtypeService.updateAction(
-          data.productCategoryId,
+          data.productSubtypeId,
           status,
         );
-        if (actionStatus.status === 'SUCCESS') {
-          toast.success(actionStatus.messageList || 'Status updated successfully');
+        if (actionStatus.action === 'SUCCESS') {
+          toast.success(actionStatus.messageList[0] || 'Status updated successfully');
           setFilterPage(defaultPageFilters);
           queryClient.invalidateQueries('dashboardData');
           return;
         }
-        showError(actionStatus);
+        // showError(actionStatus);
       } catch (error) {
         showError(error);
       }
