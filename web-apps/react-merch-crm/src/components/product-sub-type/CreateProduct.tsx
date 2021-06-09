@@ -118,7 +118,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
       .of(
         Yup.object().shape({
           attributeId: Yup.string(),
-          attributeValues: Yup.array().of(Yup.string()),
+          attributeValues: Yup.array().of(Yup.string()).required().min(1, 'At least one attribute value is required'),
         }),
       )
       .required()
@@ -140,7 +140,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
     IAttributeListDataResponse,
     Record<string, string>
   >(['attributesGet', productTypeId], () => productSubtypeService.getAttributesList(productTypeId), {
-    staleTime: 2000,
+    staleTime: Infinity,
     enabled: productTypeId !== '',
     onError: (error: Record<string, string>) => {
       showError(error);
@@ -518,15 +518,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                           type="submit"
                           color="primary"
                           variant={'contained'}
-                          disabled={
-                            isSubmitting ||
-                            !isValid ||
-                            !dirty ||
-                            (values.attributeList.length > 0 &&
-                            values.attributeList.find((item) => item.attributeValues.length == 0)
-                              ? true
-                              : false)
-                          }
+                          disabled={isSubmitting || !isValid || !dirty}
                           size="large"
                         >
                           {header.indexOf('Create') > -1 ? 'Create Product' : 'Update Product'}
