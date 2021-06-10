@@ -141,6 +141,8 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
     Record<string, string>
   >(['attributesGet', productTypeId], () => productSubtypeService.getAttributesList(productTypeId), {
     staleTime: Infinity,
+    retry: false,
+    refetchOnWindowFocus: false,
     enabled: productTypeId !== '',
     onError: (error: Record<string, string>) => {
       showError(error);
@@ -311,6 +313,8 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                           onChange={(event: React.ChangeEvent<HTMLInputElement>, newVal: IOptionType) => {
                             if (event) {
                               setFieldValue('categoryId', newVal);
+                              setFieldValue('subcategoryId', '');
+                              setFieldValue('productTypeId', '');
                               newVal && onDropDownChange('categoryId', newVal.key);
                             }
                           }}
@@ -343,6 +347,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                           onChange={(event: React.ChangeEvent<HTMLInputElement>, newVal: IOptionType) => {
                             if (event) {
                               setFieldValue('subcategoryId', newVal);
+                              setFieldValue('productTypeId', '');
                               newVal && onDropDownChange('subcategoryId', newVal.key);
                             }
                           }}
@@ -488,7 +493,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                                     }
                                   }
                                   setFieldValue(`attributeList.${index}`, {
-                                    ['attributeId']: attribute.attributeId,
+                                    ['attributeId']: attribute.attributeId.toString(),
                                     ['attributeValues']:
                                       filteredValues.length > 0
                                         ? [...filteredValues]
@@ -518,7 +523,7 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
                           type="submit"
                           color="primary"
                           variant={'contained'}
-                          disabled={isSubmitting || !isValid || !dirty}
+                          disabled={isSubmitting || !isValid || !dirty || initialData == values}
                           size="large"
                         >
                           {header.indexOf('Create') > -1 ? 'Create Product' : 'Update Product'}
