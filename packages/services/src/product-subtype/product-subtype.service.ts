@@ -1,5 +1,4 @@
 import { httpService } from '../http';
-import queryString from 'query-string';
 
 const getCategory = <R>(): Promise<R> => {
   const url = '/crm-api/assortment-plan-api/util/category';
@@ -7,9 +6,9 @@ const getCategory = <R>(): Promise<R> => {
 };
 
 const getSubCategory = <P, R>(categoryId: P): Promise<R> => {
-  const url =
-    '/crm-api/assortment-plan-api/util/sub-category?category-id=' + categoryId;
-  return httpService.get<R>({ url });
+  const url = '/crm-api/assortment-plan-api/util/sub-category';
+  const params = { 'category-id': categoryId };
+  return httpService.get<R>({ url, params });
 };
 
 const getProductType = <P, R>(subcategoryId: P): Promise<R> => {
@@ -47,11 +46,8 @@ const getDashboardData = <P, R>(
   params: Record<symbol, unknown>,
   data: P
 ): Promise<R> => {
-  const url = queryString.stringifyUrl({
-    url: '/crm-api/intranet/productsubtype/search',
-    query: { ...params },
-  });
-  return httpService.post<R>({ url, data });
+  const url = '/crm-api/intranet/productsubtype/search';
+  return httpService.post<R>({ url, params, data });
 };
 
 const updateAction = <R>(id: number, data: any): Promise<R> => {

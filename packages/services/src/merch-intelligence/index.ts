@@ -1,1 +1,1 @@
-export * from './merch-intelligence';
+export * from './merch-intelligence.service';
