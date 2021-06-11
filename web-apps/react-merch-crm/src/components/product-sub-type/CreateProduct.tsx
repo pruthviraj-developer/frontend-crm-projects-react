@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { FC, useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { Formik, Field, Form } from 'formik';
 import styled from '@emotion/styled';
@@ -28,6 +28,7 @@ import { useQuery } from 'react-query';
 import { useHistory } from 'react-router-dom';
 import { SelectedRectAngle, DeSelectedRectAngle, SvgIcon } from '@hs/icons';
 import { useCategory } from './UseCategory.hook';
+import { Helmet } from 'react-helmet';
 import * as Yup from 'yup';
 
 const useStyles = makeStyles((theme) => ({
@@ -100,7 +101,7 @@ const initialValues: IPostValues = {
   attributeList: [],
 };
 
-const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
+const CreateProduct: FC<{ header: string }> = ({ header }: ICreateProductSubtypeProps) => {
   const history = useHistory();
   const classes = useStyles();
   const [initialData, setInitialData] = useState(initialValues);
@@ -282,6 +283,9 @@ const CreateProduct = ({ header }: ICreateProductSubtypeProps) => {
 
   return (
     <>
+      <Helmet>
+        <title>{header}</title>
+      </Helmet>
       <ProductWrapper>
         <h1>{header}</h1>
         <FiltersWrapper className={classes.root}>

@@ -12,6 +12,9 @@ import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 import { VendorList, CurrencyList, ListType, BrandList } from './IUploadScreens';
 
+import { Helmet } from 'react-helmet';
+import { ICreateProductSubtypeProps } from '../product-sub-type/ICreateProduct';
+
 const StyledCntnr = styled.div`
   margin-left: 90px;
   width: auto;
@@ -57,7 +60,7 @@ const TransferVendorValidation = Yup.object().shape({
   currency: Yup.string().required('Currency is required'),
 });
 
-export const TransferVendorWithRevisedData: FC = () => {
+export const TransferVendorWithRevisedData: FC<{ header: string }> = ({ header }: ICreateProductSubtypeProps) => {
   const [brandsList, setBrandsList] = useState<ListType>([] as unknown as ListType);
   const [vendorList, setVendorList] = useState<ListType>([] as unknown as ListType);
   const [currencyList, setCurrencyList] = useState<ListType>([] as unknown as ListType);
@@ -132,21 +135,26 @@ export const TransferVendorWithRevisedData: FC = () => {
   };
 
   return (
-    <StyledCntnr>
-      <h1>Transfer PID to New Vendor: Modify PID details</h1>
-      <FileUploadPage
-        acceptType={['xlsx']}
-        onSubmit={onSubmit}
-        onExport={onExport}
-        onDropDownChange={onDropDownChange}
-        sideBar={[
-          { ...vendorSideBarOption, options: vendorList },
-          { ...brandSideBarOption, options: brandsList },
-          { ...currencySideBarOption, options: currencyList },
-        ]}
-        validationSchema={TransferVendorValidation}
-        initialValues={initialValues}
-      ></FileUploadPage>
-    </StyledCntnr>
+    <>
+      <Helmet>
+        <title>{header}</title>
+      </Helmet>
+      <StyledCntnr>
+        <h1>Transfer PID to New Vendor: Modify PID details</h1>
+        <FileUploadPage
+          acceptType={['xlsx']}
+          onSubmit={onSubmit}
+          onExport={onExport}
+          onDropDownChange={onDropDownChange}
+          sideBar={[
+            { ...vendorSideBarOption, options: vendorList },
+            { ...brandSideBarOption, options: brandsList },
+            { ...currencySideBarOption, options: currencyList },
+          ]}
+          validationSchema={TransferVendorValidation}
+          initialValues={initialValues}
+        ></FileUploadPage>
+      </StyledCntnr>
+    </>
   );
 };

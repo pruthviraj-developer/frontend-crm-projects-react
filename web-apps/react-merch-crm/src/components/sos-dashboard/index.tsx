@@ -30,22 +30,22 @@ const Dashboard: FC = () => {
       <Switch>
         <Redirect exact from="/sos" to="/sos/sos-dashboard" />
         <Route path={`${path}/merchandisers`}>
-          <Merchandisers />
+          <Merchandisers header="Merchandisers DashBoard" />
         </Route>
         <Route path={`${path}/mark-non-procurable`}>
-          <NonProcurable />
+          <NonProcurable header="Mark NonProcurable" />
         </Route>
         <Route path={`${path}/modify-fulfillment-status`}>
-          <NonProcurableCurrentVendor />
+          <NonProcurableCurrentVendor header="Modify Fulfillment Status" />
         </Route>
         <Route path={`${path}/transfer-pid`}>
-          <TransferVendor />
+          <TransferVendor header="Transfer PID to New Vendor: No Details Modification" />
         </Route>
         <Route path={`${path}/transfer-revised-pids`}>
-          <TransferVendorWithRevisedData />
+          <TransferVendorWithRevisedData header="Transfer PID to New Vendor: Modify PID details" />
         </Route>
         <Route path={`${path}/sos-dashboard`}>
-          <SosDashboard />
+          <SosDashboard header="SOS DashBoard" />
         </Route>
         <Redirect to="/sos/sos-dashboard" />
       </Switch>

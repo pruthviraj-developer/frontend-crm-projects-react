@@ -20,6 +20,9 @@ import { HSTableV1, HsTableProps } from '@hs/components';
 import { sosService, sosTableData, sosErrorMessage, sosTableParams, tableParams, updateSosParams } from '@hs/services';
 import { toast } from 'react-toastify';
 
+import { Helmet } from 'react-helmet';
+import { ICreateProductSubtypeProps } from '../product-sub-type/ICreateProduct';
+
 const DashBoardWrapper = styled.div`
   margin-left: 90px;
 `;
@@ -46,7 +49,7 @@ const useStyles = makeStyles({
     padding: '0 16px 16px',
   },
 });
-const SosDashboard: FC = () => {
+const SosDashboard: FC<{ header: string }> = ({ header }: ICreateProductSubtypeProps) => {
   const location = useLocation();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [sosData, setTableData] = useState<sosTableData>({});
@@ -303,37 +306,42 @@ const SosDashboard: FC = () => {
   }, [filterParams, pathName]);
 
   return (
-    <DashBoardWrapper>
-      <h1>SOS DashBoard</h1>
-      {count > 0 && <HSTableV1 {...TableData} />}
-      {count === 0 && <h5> {status}</h5>}
-      <Dialog
-        open={sosPopup}
-        TransitionComponent={Transition}
-        keepMounted
-        onClose={handleSosPopupClose}
-        aria-labelledby="alert-dialog-slide-title"
-        aria-describedby="alert-dialog-slide-description"
-        className={classes.cancelpopup}
-      >
-        <DialogTitle id="alert-dialog-slide-title" style={{ padding: '16px 24px 0 24px' }}>
-          <span className={classes.popuptitle}>Cancel SOS</span>
-        </DialogTitle>
-        <DialogContent style={{ padding: '0px 24px 10px' }}>
-          <DialogContentText style={{ marginBottom: '0' }} id="alert-dialog-slide-description">
-            <p style={{ fontSize: '15px', fontWeight: 'bold' }}>Do you want to cancel the SOS?</p>
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions className={classes.actionbuttons}>
-          <Button variant="contained" color="primary" onClick={handleSosPopupClose}>
-            No
-          </Button>
-          <Button variant="contained" color="primary" onClick={handleSosPopupCloseSuccess}>
-            Yes
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </DashBoardWrapper>
+    <>
+      <Helmet>
+        <title>{header}</title>
+      </Helmet>
+      <DashBoardWrapper>
+        <h1>SOS DashBoard</h1>
+        {count > 0 && <HSTableV1 {...TableData} />}
+        {count === 0 && <h5> {status}</h5>}
+        <Dialog
+          open={sosPopup}
+          TransitionComponent={Transition}
+          keepMounted
+          onClose={handleSosPopupClose}
+          aria-labelledby="alert-dialog-slide-title"
+          aria-describedby="alert-dialog-slide-description"
+          className={classes.cancelpopup}
+        >
+          <DialogTitle id="alert-dialog-slide-title" style={{ padding: '16px 24px 0 24px' }}>
+            <span className={classes.popuptitle}>Cancel SOS</span>
+          </DialogTitle>
+          <DialogContent style={{ padding: '0px 24px 10px' }}>
+            <DialogContentText style={{ marginBottom: '0' }} id="alert-dialog-slide-description">
+              <p style={{ fontSize: '15px', fontWeight: 'bold' }}>Do you want to cancel the SOS?</p>
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions className={classes.actionbuttons}>
+            <Button variant="contained" color="primary" onClick={handleSosPopupClose}>
+              No
+            </Button>
+            <Button variant="contained" color="primary" onClick={handleSosPopupCloseSuccess}>
+              Yes
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </DashBoardWrapper>
+    </>
   );
 };
 

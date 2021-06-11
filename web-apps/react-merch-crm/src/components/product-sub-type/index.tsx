@@ -20,7 +20,7 @@ const ProductSubType: FC = () => {
       <Switch>
         <Redirect exact from="/product-sub-types" to="/product-sub-types/dash-board" />
         <Route path={`${path}/dash-board`}>
-          <DashBoard />
+          <DashBoard header="Product Subtype Dashboard" />
         </Route>
         <Route path={`${path}/create-product`}>
           <CreateProduct header="Create Product Subtype" key={'Create'} />

@@ -11,7 +11,9 @@ import { productSubtypeService } from '@hs/services';
 import { HSTableV1, HsTablePropsV1 } from '@hs/components';
 import { useQuery, useQueryClient } from 'react-query';
 import { IDashboardResponse, DashboardData, IPageType, PropsType, OptionType, ISelectedValues } from './IDashboard';
+import { ICreateProductSubtypeProps } from './ICreateProduct';
 import { useCategory } from './UseCategory.hook';
+import { Helmet } from 'react-helmet';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -65,7 +67,7 @@ const initialValues = {
 
 const defaultPageFilters = { pageSize: 20, pageNo: 0 };
 
-const ProductSubtypeDashboard: FC = () => {
+const ProductSubtypeDashboard: FC<{ header: string }> = ({ header }: ICreateProductSubtypeProps) => {
   const classes = useStyles();
   const [postFilterData, setPostFilterData] = useState({});
   const [filterPage, setFilterPage] = useState<IPageType>(defaultPageFilters);
@@ -207,6 +209,9 @@ const ProductSubtypeDashboard: FC = () => {
 
   return (
     <>
+      <Helmet>
+        <title>{header}</title>
+      </Helmet>
       <DashBoardWrapper>
         <h1 className={classes.header}>Product SubType Dashboard</h1>
         <FiltersWrapper className={classes.root}>

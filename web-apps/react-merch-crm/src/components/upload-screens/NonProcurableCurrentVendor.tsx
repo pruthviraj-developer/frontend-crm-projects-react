@@ -6,6 +6,9 @@ import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 import { InstockList, ListType } from './IUploadScreens';
 
+import { Helmet } from 'react-helmet';
+import { ICreateProductSubtypeProps } from '../product-sub-type/ICreateProduct';
+
 const StyledCntnr = styled.div`
   margin-left: 90px;
   width: auto;
@@ -40,7 +43,7 @@ const NonProcurableValidation = Yup.object().shape({
   fulfillmentstatus: Yup.string().required('Fulfilment Status is required'),
 });
 
-export const NonProcurableCurrentVendor: FC = () => {
+export const NonProcurableCurrentVendor: FC<{ header: string }> = ({ header }: ICreateProductSubtypeProps) => {
   const [list, setList] = useState<ListType>([] as unknown as ListType);
 
   useEffect(() => {
@@ -93,16 +96,21 @@ export const NonProcurableCurrentVendor: FC = () => {
   // toast('🦄 Wow so easy!');
   // toast('🦄 Wow so easy!');
   return (
-    <StyledCntnr>
-      <h1>Modify Fulfillment Status</h1>
-      <FileUploadPage
-        acceptType={['xlsx']}
-        onSubmit={onSubmit}
-        onExport={onExport}
-        sideBar={[{ ...reasonSideBarOption, options: list }, remarkSideBarOption]}
-        validationSchema={NonProcurableValidation}
-        initialValues={initialValues}
-      ></FileUploadPage>
-    </StyledCntnr>
+    <>
+      <Helmet>
+        <title>{header}</title>
+      </Helmet>
+      <StyledCntnr>
+        <h1>Modify Fulfillment Status</h1>
+        <FileUploadPage
+          acceptType={['xlsx']}
+          onSubmit={onSubmit}
+          onExport={onExport}
+          sideBar={[{ ...reasonSideBarOption, options: list }, remarkSideBarOption]}
+          validationSchema={NonProcurableValidation}
+          initialValues={initialValues}
+        ></FileUploadPage>
+      </StyledCntnr>
+    </>
   );
 };
