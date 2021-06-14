@@ -280,7 +280,7 @@ const ProductSubtypeDashboard: FC<{ header: string }> = ({ header }: ICreateProd
                           id={'productTypeId'}
                           name={'productTypeId'}
                           variant="standard"
-                          label="Product Sub Type"
+                          label="Product Type"
                           component={Autocomplete}
                           options={pTList || []}
                           loading={isPTLoading}
@@ -292,7 +292,7 @@ const ProductSubtypeDashboard: FC<{ header: string }> = ({ header }: ICreateProd
                             }
                           }}
                           renderInput={(params: AutocompleteRenderInputParams) => (
-                            <MuiTextField {...params} label={'Product Sub Type'} variant="outlined" />
+                            <MuiTextField {...params} label={'Product Type'} variant="outlined" />
                           )}
                         />
                       </Grid>
