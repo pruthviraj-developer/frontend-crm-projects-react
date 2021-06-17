@@ -142,8 +142,6 @@ const CreateProduct: FC<{ header: string }> = ({ header }: ICreateProductSubtype
     Record<string, string>
   >(['attributesGet', productTypeId], () => productSubtypeService.getAttributesList(productTypeId), {
     staleTime: Infinity,
-    retry: false,
-    refetchOnWindowFocus: false,
     enabled: productTypeId !== '',
     onError: (error: Record<string, string>) => {
       showError(error);
@@ -431,7 +429,7 @@ const CreateProduct: FC<{ header: string }> = ({ header }: ICreateProductSubtype
                               <MuiTextField
                                 label="Attribute"
                                 disabled={true}
-                                value={attribute.attributeKey}
+                                value={attribute.attributeKey + '*'}
                                 variant="outlined"
                                 fullWidth={true}
                               />

@@ -15,7 +15,14 @@ const ProductSubType = React.lazy(
 const BuyerDashboard = React.lazy(
   () => import(/* webpackChunkName: 'product-sub-type' */ './components/buyer-dashboard'),
 );
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 const App: FC = () => {
   return (
     <QueryClientProvider client={queryClient}>
