@@ -321,7 +321,7 @@ const ProductSubtypeDashboard: FC<{ header: string }> = ({ header }: ICreateProd
             )}
           </Formik>
         </FiltersWrapper>
-        <TableWrapper>{isDashboardSuccess && tableData.rows.length > 0 && <HSTableV1 {...tableData} />}</TableWrapper>
+        <TableWrapper>{isDashboardSuccess && tableData.rows?.length > 0 && <HSTableV1 {...tableData} />}</TableWrapper>
       </DashBoardWrapper>
     </>
   );
