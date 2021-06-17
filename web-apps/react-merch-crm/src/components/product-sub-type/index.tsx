@@ -8,7 +8,7 @@ import CreateProduct from './CreateProduct';
 const navItems: LeftNavBarProps = {
   navList: [
     { linkUrl: '/product-sub-types/product-sub-type', linkText: 'Product SubType Dashboard', icon: DashBoardIcon },
-    { linkUrl: '/product-sub-types/create-product', linkText: 'Create Product Subtype', icon: DashBoardIcon },
+    { linkUrl: '/product-sub-types/create-product-subtype', linkText: 'Create Product Subtype', icon: DashBoardIcon },
   ],
 };
 
@@ -22,7 +22,7 @@ const ProductSubType: FC = () => {
         <Route path={`${path}/dash-board`}>
           <DashBoard header="Product Subtype Dashboard" />
         </Route>
-        <Route path={`${path}/create-product`}>
+        <Route path={`${path}/create-product-subtype`}>
           <CreateProduct header="Create Product Subtype" key={'Create'} />
         </Route>
         <Route path={`${path}/edit-product-subtype/:id`}>

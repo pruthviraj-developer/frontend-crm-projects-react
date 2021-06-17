@@ -446,6 +446,7 @@ const CreateProduct: FC<{ header: string }> = ({ header }: ICreateProductSubtype
                                 multiple={true}
                                 disableCloseOnSelect={true}
                                 name={`attributeList`}
+                                limitTags={5}
                                 id={attribute.attributeKey}
                                 classes={{
                                   option: classes.option,
@@ -528,7 +529,7 @@ const CreateProduct: FC<{ header: string }> = ({ header }: ICreateProductSubtype
                           disabled={isSubmitting || !isValid || !dirty || initialData == values}
                           size="large"
                         >
-                          {header.indexOf('Create') > -1 ? 'Create Product' : 'Update Product'}
+                          {header.indexOf('Create') > -1 ? 'Create Product Subtype' : 'Update Product Subtype'}
                         </Button>
                       </Grid>
                     </Grid>
