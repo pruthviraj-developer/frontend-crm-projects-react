@@ -57,7 +57,7 @@ const getTemplateDownloadLink = (
   return httpService
     .get<downloadTemplateUrlObject>({ url, params })
     .then(async (response) => {
-      if (!response.isAvailable && delay < 7) {
+      if (!response.isAvailable && delay < 100) {
         await new Promise((resolve) => setTimeout(resolve, delay * 1000));
         return await getTemplateDownloadLink(params, delay + 2);
       }
