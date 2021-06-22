@@ -58,7 +58,7 @@ const App: FC = () => {
           closeOnClick={false}
           draggable={false}
           newestOnTop={true}
-          style={{ fontSize: '1rem' }}
+          style={{ fontSize: '1.4rem' }}
         />
       </div>
     </QueryClientProvider>
