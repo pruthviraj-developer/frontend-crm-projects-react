@@ -23,6 +23,10 @@ const queryClient = new QueryClient({
     },
   },
 });
+const toastContext = {
+  fontSize: '1rem',
+};
+
 const App: FC = () => {
   return (
     <QueryClientProvider client={queryClient}>
@@ -52,7 +56,13 @@ const App: FC = () => {
             </Router>
           </MuiThemeProvider>
         </ThemeProvider>
-        <ToastContainer autoClose={10000} closeOnClick={false} draggable={false} newestOnTop={true} />
+        <ToastContainer
+          autoClose={10000}
+          closeOnClick={false}
+          draggable={false}
+          newestOnTop={true}
+          style={{ fontSize: '1.4rem' }}
+        />
       </div>
     </QueryClientProvider>
   );
