@@ -23,9 +23,6 @@ const queryClient = new QueryClient({
     },
   },
 });
-const toastContext = {
-  fontSize: '1rem',
-};
 
 const App: FC = () => {
   return (
@@ -61,7 +58,7 @@ const App: FC = () => {
           closeOnClick={false}
           draggable={false}
           newestOnTop={true}
-          style={{ fontSize: '1.4rem' }}
+          style={{ fontSize: '1rem' }}
         />
       </div>
     </QueryClientProvider>
