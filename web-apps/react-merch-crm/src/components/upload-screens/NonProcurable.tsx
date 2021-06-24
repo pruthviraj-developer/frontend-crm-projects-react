@@ -6,6 +6,9 @@ import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 import { ReasonList, ListType } from './IUploadScreens';
 
+import { Helmet } from 'react-helmet';
+import { ICreateProductSubtypeProps } from '../product-sub-type/ICreateProduct';
+
 const StyledCntnr = styled.div`
   margin-left: 90px;
   width: auto;
@@ -40,7 +43,7 @@ const NonProcurableValidation = Yup.object().shape({
   reasonId: Yup.string().required('Reason is required'),
 });
 
-export const NonProcurable: FC = () => {
+export const NonProcurable: FC<{ header: string }> = ({ header }: ICreateProductSubtypeProps) => {
   const [list, setList] = useState<ListType>([] as unknown as ListType);
 
   useEffect(() => {
@@ -93,16 +96,21 @@ export const NonProcurable: FC = () => {
   // toast('🦄 Wow so easy!');
   // toast('🦄 Wow so easy!');
   return (
-    <StyledCntnr>
-      <h1>Mark NonProcurable</h1>
-      <FileUploadPage
-        acceptType={['xlsx']}
-        onSubmit={onSubmit}
-        onExport={onExport}
-        sideBar={[{ ...reasonSideBarOption, options: list }]}
-        validationSchema={NonProcurableValidation}
-        initialValues={initialValues}
-      ></FileUploadPage>
-    </StyledCntnr>
+    <>
+      <Helmet>
+        <title>{header}</title>
+      </Helmet>
+      <StyledCntnr>
+        <h1>Mark NonProcurable</h1>
+        <FileUploadPage
+          acceptType={['xlsx']}
+          onSubmit={onSubmit}
+          onExport={onExport}
+          sideBar={[{ ...reasonSideBarOption, options: list }]}
+          validationSchema={NonProcurableValidation}
+          initialValues={initialValues}
+        ></FileUploadPage>
+      </StyledCntnr>
+    </>
   );
 };

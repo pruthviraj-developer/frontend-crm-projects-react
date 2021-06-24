@@ -12,6 +12,9 @@ import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 import { VendorList, ListType, BrandList } from './IUploadScreens';
 
+import { Helmet } from 'react-helmet';
+import { ICreateProductSubtypeProps } from '../product-sub-type/ICreateProduct';
+
 const StyledCntnr = styled.div`
   margin-left: 90px;
   width: auto;
@@ -43,7 +46,7 @@ const TransferVendorValidation = Yup.object().shape({
   brandId: Yup.string().required('Brand is required'),
 });
 
-export const TransferVendor: FC = () => {
+export const TransferVendor: FC<{ header: string }> = ({ header }: ICreateProductSubtypeProps) => {
   const [brandsList, setBrandsList] = useState<ListType>([] as unknown as ListType);
   const [vendorList, setVendorList] = useState<ListType>([] as unknown as ListType);
   // const [currencyList, setCurrencyList] = useState<ListType>(([] as unknown) as ListType);
@@ -112,20 +115,25 @@ export const TransferVendor: FC = () => {
   };
 
   return (
-    <StyledCntnr>
-      <h1>Transfer PID to New Vendor: No Details Modification</h1>
-      <FileUploadPage
-        acceptType={['xlsx']}
-        onSubmit={onSubmit}
-        onExport={onExport}
-        onDropDownChange={onDropDownChange}
-        sideBar={[
-          { ...vendorSideBarOption, options: vendorList },
-          { ...brandSideBarOption, options: brandsList },
-        ]}
-        validationSchema={TransferVendorValidation}
-        initialValues={initialValues}
-      ></FileUploadPage>
-    </StyledCntnr>
+    <>
+      <Helmet>
+        <title>{header}</title>
+      </Helmet>
+      <StyledCntnr>
+        <h1>Transfer PID to New Vendor: No Details Modification</h1>
+        <FileUploadPage
+          acceptType={['xlsx']}
+          onSubmit={onSubmit}
+          onExport={onExport}
+          onDropDownChange={onDropDownChange}
+          sideBar={[
+            { ...vendorSideBarOption, options: vendorList },
+            { ...brandSideBarOption, options: brandsList },
+          ]}
+          validationSchema={TransferVendorValidation}
+          initialValues={initialValues}
+        ></FileUploadPage>
+      </StyledCntnr>
+    </>
   );
 };
