@@ -11,7 +11,8 @@ import ICDeSelectedRectAngle from './crm-icons/ic-deselected-rectangle.svg';
 import ICFAQ from './crm-icons/ic-faq.svg';
 import ICNonProc from './crm-icons/ic-non-proc.svg';
 import ICTransfer from './crm-icons/ic-transfer.svg';
-
+import HopScotch from './images/hopscotch.svg';
+import ICCart from './images/ic-cart.svg';
 export const CreateIcon = ICCreate;
 export const BackIcon = ICBack;
 export const DashBoardIcon = ICDashBoard;
@@ -24,3 +25,5 @@ export const DeSelectedRectAngle = ICDeSelectedRectAngle;
 export const FAQIcon = ICFAQ;
 export const NonProcIcon = ICNonProc;
 export const TransferIcon = ICTransfer;
+export const HopScotchIcon = HopScotch;
+export const CartIcon = ICCart;

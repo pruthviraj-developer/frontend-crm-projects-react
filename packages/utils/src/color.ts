@@ -67,6 +67,10 @@ export const Colors = {
   },
 };
 
+export const HsTextAlign = {
+  center: 'center',
+};
+
 export const getHexCode = (name: string): string | undefined => {
   const value = name && name.toLowerCase();
   return toHex(value);
