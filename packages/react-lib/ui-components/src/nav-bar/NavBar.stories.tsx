@@ -5,7 +5,7 @@ import { NavBar } from './NavBar';
 import { INavBarProps } from './INavBar';
 
 export default {
-  title: 'NavBar Component',
+  title: 'NavBar',
   component: NavBar,
 };
 
