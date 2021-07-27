@@ -6,6 +6,7 @@ export * from './hs-table-v2';
 export * from './snack-bar';
 export * from './md-viewer';
 export * from './file-upload';
+export * from './filter-pan';
 export * from './error-panel';
 export * from './hs-selectable-table';
 export * from './hs-filters';
