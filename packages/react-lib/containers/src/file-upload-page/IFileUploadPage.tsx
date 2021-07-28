@@ -30,7 +30,6 @@ export interface FileUploadSideBarOption {
   resetField?: string;
   options?: FileUploadListOption[];
   key?: string;
-  disableInput?: boolean;
 }
 
 export interface FileDownloadOption {
