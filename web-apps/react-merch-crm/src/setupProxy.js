@@ -7,7 +7,7 @@ module.exports = function (app) {
       pathRewrite: function (path) {
         return path.replace('/crm-api', '');
       },
-      target: 'https://crm.qa.hopscotch.in',
+      target: 'http://crm.qa.hopscotch.in',
       secure: false,
       changeOrigin: true,
     }),
@@ -16,7 +16,7 @@ module.exports = function (app) {
   app.use(
     '/intranet/login/',
     createProxyMiddleware({
-      target: 'https://crm.qa.hopscotch.in/',
+      target: 'http://crm.qa.hopscotch.in/',
       secure: false,
       changeOrigin: true,
     }),
