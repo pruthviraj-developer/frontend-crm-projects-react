@@ -35,6 +35,9 @@ export const FileUploadPage: FC<FileUploadPageProps> = ({
   sideBar,
   validationSchema,
   initialValues,
+  buttonLabel,
+  disableSubmit,
+  disableUpload,
 }: FileUploadPageProps) => {
   const [templateLoaderIndex, setTemplateLoaderIndex] = useState<number>(-1);
   const [templateLoader, setTemplateLoader] = useState<boolean>(false);
@@ -143,6 +146,7 @@ export const FileUploadPage: FC<FileUploadPageProps> = ({
                                 type="text"
                                 name={sideBarOption.name}
                                 label={sideBarOption.label}
+                                disabled={sideBarOption.disableInput || false}
                                 variant={'outlined'}
                                 fullWidth
                               ></Field>
@@ -160,6 +164,7 @@ export const FileUploadPage: FC<FileUploadPageProps> = ({
                       id={`file-upload`}
                       component={FileUpload}
                       name={`file`}
+                      disableButton={disableUpload}
                       onChange={(value: FileListType) => {
                         try {
                           setFieldValue(`file`, value[0]);
@@ -211,11 +216,11 @@ export const FileUploadPage: FC<FileUploadPageProps> = ({
                 <Button
                   color={'primary'}
                   variant={'contained'}
-                  disabled={isSubmitting || !isValid || !dirty}
+                  disabled={isSubmitting || !isValid || !dirty || disableSubmit}
                   size={'large'}
                   type="submit"
                 >
-                  {isSubmitting ? 'Submitting' : 'Submit'}
+                  {isSubmitting ? 'Submitting' : buttonLabel || 'Submit'}
                   {isSubmitting && <StyledCircularProgress size={18} />}
                 </Button>
               </Grid>

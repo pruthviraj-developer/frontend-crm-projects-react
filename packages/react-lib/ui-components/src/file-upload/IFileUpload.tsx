@@ -1,4 +1,5 @@
 export interface FileUploadProps {
+  disableButton?: boolean;
   multiple?: boolean;
   acceptType?: Array<string>;
   maxNumber?: number;

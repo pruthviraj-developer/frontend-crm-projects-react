@@ -16,12 +16,13 @@ const defaultErrors: ErrorsType = {
 };
 
 export const FileUpload = ({
+  disableButton,
   multiple,
   acceptType,
   maxNumber,
   maxFileSize,
   onChange,
-  reset = false,
+  reset = !disableButton || false,
 }: FileUploadProps) => {
   const [fileList, setFileList] = useState<FileListType>([]);
   const [, setErrors] = useState<ErrorsType>({ ...defaultErrors });
@@ -124,6 +125,7 @@ export const FileUpload = ({
             style={{ display: 'none' }}
             id="file-upload-input"
             ref={inputFileEle}
+            disabled={disableButton || false}
           />
           <label htmlFor="file-upload-input">
             <Button
@@ -132,6 +134,7 @@ export const FileUpload = ({
               startIcon={<CloudUploadOutlinedIcon />}
               component="span"
               size={'large'}
+              disabled={disableButton || false}
             >
               Choose File
             </Button>

@@ -21,6 +21,9 @@ export interface FileUploadPageProps {
   downloadOption?: FileDownloadOption[];
   sideBar?: FileUploadSideBarOption[];
   validationSchema?: unknown;
+  buttonLabel?: string;
+  disableSubmit?: boolean;
+  disableUpload?: boolean;
 }
 
 export interface FileUploadSideBarOption {
@@ -30,6 +33,7 @@ export interface FileUploadSideBarOption {
   resetField?: string;
   options?: FileUploadListOption[];
   key?: string;
+  disableInput?: boolean;
 }
 
 export interface FileDownloadOption {

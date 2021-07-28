@@ -157,6 +157,8 @@ const CreateProduct: FC<{ header: string }> = ({ header }: ICreateProductSubtype
       if (attributeListData) {
         setAttributeList(attributeListData.attributes);
       }
+    } else {
+      setAttributeList([]);
     }
   }, [attributeListData, isAttributeSuccess]);
 
