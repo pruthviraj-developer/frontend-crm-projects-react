@@ -30,16 +30,4 @@ module.exports = function (app) {
   //     changeOrigin: true,
   //   }),
   // );
-
-  // http://procurement-service.qa.hs.internal:9011/v1/sos/merchplatform/filters
-
-  // app.use(
-  //   '/react-monorepo/sos/intranet/',
-  //   createProxyMiddleware({
-  //     pathRewrite: { '^/react-monorepo/sos/intranet': '/intranet' },
-  //     target: 'http://qa.hopscotch.in',
-  //     secure: false,
-  //     changeOrigin: true,
-  //   }),
-  // );
 };
