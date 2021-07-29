@@ -4,29 +4,53 @@ export interface IVendors {
 export interface IVendorsOption {
   id: number;
   display: string;
-  email: string;
 }
 
-export interface OptionsType {
-  id: number;
+export interface OptionType {
+  id: number | undefined;
   name: string;
 }
 
-export interface IDashboardResponse {
-  action?: string;
-  message?: string;
-  params?: string;
-  statusCode?: number;
-  data: OptionsType[];
+export interface IVendorDetailsResponse {
+  action: string;
+  message?: null;
+  params?: null;
+  statusCode: number;
+  data: IVendorDetails;
 }
 
-export interface IInitialProductTypes {
-  vendor: number | null;
-  emailIds: (string)[] | null;
-  vendorDetails: (VendorDetailsEntity)[] | null;
+export interface IVendorDetails {
+  vendor: IVendorsOption | string | undefined;
+  emailIds: Array<string>;
+  vendorDetails: IVendorDetailsEntity[];
 }
-interface VendorDetailsEntity {
-  categoryId: OptionsType | {};
-  subCategoryId: OptionsType;
-  productTypeId: (OptionsType)[] | null;
+
+export interface IVendorDetailsEntity {
+  categoryId: number | undefined;
+  subCategoryId: number | undefined;
+  productTypeId: number[];
+}
+export interface ProductTypeIdEntityOrCategoryIdOrSubCategoryId {
+  key: number;
+  value: string;
+  second: string;
+  first: number;
+}
+export interface CategoryPropsType {
+  categoryIdName: string;
+  subCategoryIdName: string;
+  productTypeIdName: string;
+  values: any;
+  disabled?: boolean;
+}
+
+export interface ISendemail {
+  action: string;
+  message: string;
+  params?: null;
+  statusCode: number;
+}
+
+export interface ShareToVendorProps {
+  header: string;
 }

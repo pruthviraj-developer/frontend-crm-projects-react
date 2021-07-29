@@ -27,3 +27,7 @@ export interface BrandList {
 export interface InstockList {
   inStockList: ListType;
 }
+
+export interface UploadScreenProps {
+  header: string;
+}

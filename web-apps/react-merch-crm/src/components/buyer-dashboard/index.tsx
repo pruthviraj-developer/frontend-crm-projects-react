@@ -3,11 +3,13 @@ import { Route, Redirect, Switch, useRouteMatch } from 'react-router-dom';
 import { DashBoardIcon } from '@hs/icons';
 import { LeftNavBar, LeftNavBarProps } from '@hs/components';
 import ShareToVendor from './ShareToVendor';
+import Dashboard from './Dashboard';
+import Images from './Images';
 
 const navItems: LeftNavBarProps = {
   navList: [
     {
-      linkUrl: '/buyer/buyer-dashboard',
+      linkUrl: '/buyer/dashboard',
       linkText: 'Buyer Dashboard',
       icon: DashBoardIcon,
     },
@@ -25,16 +27,17 @@ const BuyerDashboard: FC = () => {
     <>
       <LeftNavBar {...navItems}></LeftNavBar>
       <Switch>
-        <Redirect exact from="/buyer" to="/buyer/buyer-dashboard" />
+        <Redirect exact from="/buyer" to="/buyer/dashboard" />
         <Route path={`${path}/dashboard`}>
-          <h5>Dashboard</h5>
+          <Dashboard header={'Buyer dashboard'} />
         </Route>
         <Route path={`${path}/share`}>
-          <h5>
-            <ShareToVendor />
-          </h5>
+          <ShareToVendor header={'Share to vendor'} />
         </Route>
-        <Redirect to="/buyer/buyer-dashboard" />
+        <Route path={`${path}/images/:pid`}>
+          <Images header={'Upload Images'} />
+        </Route>
+        <Redirect to="/buyer/dashboard" />
       </Switch>
     </>
   );

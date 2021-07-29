@@ -1,5 +1,5 @@
 export interface OptionType {
-  ids: string | number;
+  id: number;
   name: string;
 }
 export interface IUseCategoryProps {

@@ -1,11 +1,18 @@
 import { useQuery } from 'react-query';
 import { commonService } from '@hs/services';
 import { IUseCategoryProps, OptionType } from './IUseCategory';
+import { useState } from 'react';
 
 export const useCategory = ({
-  categoryId,
-  subCategoryId,
+  categoryId: categoryProp,
+  subCategoryId: SubcategoryProp,
 }: IUseCategoryProps) => {
+  const [categoryId, setCategoryId] = useState<number | undefined>(
+    () => categoryProp
+  );
+  const [subCategoryId, setSubCategoryId] = useState<number | undefined>(
+    () => SubcategoryProp
+  );
   const {
     data: categoryList,
     isSuccess: isCategoryLoaded,
@@ -51,12 +58,14 @@ export const useCategory = ({
     isCategoryLoaded,
     isCategoryListLoading,
     categoryError,
-    subCategoryList,
+    setCategoryId,
+    subCategoryList: categoryId ? subCategoryList : [],
     isSubCategoryListLoading,
     isSubCatLoaded,
     isSubCatFetching,
     subCatError,
-    pTList,
+    setSubCategoryId,
+    pTList: subCategoryId ? pTList : [],
     isPTSuccess,
     isPTFetching,
     isPTLoading,

@@ -10,10 +10,8 @@ import {
 import { merchStatusChangeService } from '@hs/services';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
-import { VendorList, CurrencyList, ListType, BrandList } from './IUploadScreens';
-
+import { VendorList, CurrencyList, ListType, BrandList, UploadScreenProps } from './IUploadScreens';
 import { Helmet } from 'react-helmet';
-import { ICreateProductSubtypeProps } from '../product-sub-type/ICreateProduct';
 
 const StyledCntnr = styled.div`
   margin-left: 90px;
@@ -60,7 +58,7 @@ const TransferVendorValidation = Yup.object().shape({
   currency: Yup.string().required('Currency is required'),
 });
 
-export const TransferVendorWithRevisedData: FC<{ header: string }> = ({ header }: ICreateProductSubtypeProps) => {
+export const TransferVendorWithRevisedData: FC<UploadScreenProps> = ({ header }: UploadScreenProps) => {
   const [brandsList, setBrandsList] = useState<ListType>([] as unknown as ListType);
   const [vendorList, setVendorList] = useState<ListType>([] as unknown as ListType);
   const [currencyList, setCurrencyList] = useState<ListType>([] as unknown as ListType);
@@ -135,26 +133,24 @@ export const TransferVendorWithRevisedData: FC<{ header: string }> = ({ header }
   };
 
   return (
-    <>
+    <StyledCntnr>
       <Helmet>
         <title>{header}</title>
       </Helmet>
-      <StyledCntnr>
-        <h1>Transfer PID to New Vendor: Modify PID details</h1>
-        <FileUploadPage
-          acceptType={['xlsx']}
-          onSubmit={onSubmit}
-          onExport={onExport}
-          onDropDownChange={onDropDownChange}
-          sideBar={[
-            { ...vendorSideBarOption, options: vendorList },
-            { ...brandSideBarOption, options: brandsList },
-            { ...currencySideBarOption, options: currencyList },
-          ]}
-          validationSchema={TransferVendorValidation}
-          initialValues={initialValues}
-        ></FileUploadPage>
-      </StyledCntnr>
-    </>
+      <h1>{header}</h1>
+      <FileUploadPage
+        acceptType={['xlsx']}
+        onSubmit={onSubmit}
+        onExport={onExport}
+        onDropDownChange={onDropDownChange}
+        sideBar={[
+          { ...vendorSideBarOption, options: vendorList },
+          { ...brandSideBarOption, options: brandsList },
+          { ...currencySideBarOption, options: currencyList },
+        ]}
+        validationSchema={TransferVendorValidation}
+        initialValues={initialValues}
+      ></FileUploadPage>
+    </StyledCntnr>
   );
 };
