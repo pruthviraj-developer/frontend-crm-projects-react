@@ -1,10 +1,19 @@
 import React, { FC } from 'react';
 import { IFooterProps } from './Ifooter';
-import { AppleIcon, PlayIcon, MailIcon, InfoIcon } from '@hs/icons';
+import {
+  AppleIcon,
+  PlayIcon,
+  MailIcon,
+  InfoIcon,
+  TwitterIcon,
+  FacebookIcon,
+  InstagramIcon,
+  PIntrestIcon,
+} from '@hs/icons';
 import {
   Copyright,
   DownloadApps,
-  DownloadIcons,
+  LinkIcons,
   DownloadIcon,
   FooterWrapper,
   FooterSection,
@@ -36,22 +45,48 @@ export const Footer: FC<IFooterProps> = ({}: IFooterProps) => {
         <FooterBlock>
           <FooterBlockTitle>Download our apps</FooterBlockTitle>
           <DownloadApps>
-            <DownloadIcons
+            <LinkIcons
               href="https://itunes.apple.com/in/app/hopscotch-find-something-new/id945949424"
               target="_blank"
             >
               <DownloadIcon icon={AppleIcon}></DownloadIcon>
-            </DownloadIcons>
-            <DownloadIcons
+            </LinkIcons>
+            <LinkIcons
               href="https://play.google.com/store/apps/details?id=in.hopscotch.android"
               target="_blank"
             >
               <DownloadIcon icon={PlayIcon}></DownloadIcon>
-            </DownloadIcons>
+            </LinkIcons>
           </DownloadApps>
         </FooterBlock>
         <FooterBlock>
           <FooterBlockTitle>Connect with us</FooterBlockTitle>
+          <DownloadApps>
+            <LinkIcons
+              href="https://www.facebook.com/Hopscotch.India"
+              target="_blank"
+            >
+              <DownloadIcon icon={FacebookIcon}></DownloadIcon>
+            </LinkIcons>
+            <LinkIcons
+              href="https://twitter.com/Hopscotchindia"
+              target="_blank"
+            >
+              <DownloadIcon icon={TwitterIcon}></DownloadIcon>
+            </LinkIcons>
+            <LinkIcons
+              href="https://www.instagram.com/hopscotch.in/"
+              target="_blank"
+            >
+              <DownloadIcon icon={InstagramIcon}></DownloadIcon>
+            </LinkIcons>
+            <LinkIcons
+              href="https://www.pinterest.com/hopscotchindia/"
+              target="_blank"
+            >
+              <DownloadIcon icon={PIntrestIcon}></DownloadIcon>
+            </LinkIcons>
+          </DownloadApps>
         </FooterBlock>
       </FooterSection>
       <FooterLinks>

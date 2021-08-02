@@ -71,7 +71,7 @@ const DownloadApps = styled.div`
   color: ${secondaryColor[300]}px;
 `;
 
-const DownloadIcons = styled('a')`
+const LinkIcons = styled('a')`
   border: 1px solid ${Colors.MERCURY};
   border-radius: 14px;
   padding: 0;
@@ -88,7 +88,7 @@ const DownloadIcon = styled(SvgIcon)`
 export {
   Copyright,
   DownloadApps,
-  DownloadIcons,
+  LinkIcons,
   DownloadIcon,
   FooterWrapper,
   FooterSection,
