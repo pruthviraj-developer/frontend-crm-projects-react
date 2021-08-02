@@ -23,12 +23,36 @@ import {
   Link,
   LinkWithIcons,
   FooterBlock,
+  PopularSearches,
+  PopularSearchesTitle,
+  PopularSearchesLinks,
+  PopularSearchesLink,
   StyledIcon,
 } from './FooterCss';
 export const Footer: FC<IFooterProps> = ({}: IFooterProps) => {
   const currentYear = new Date().getFullYear();
   return (
     <FooterWrapper>
+      <PopularSearches>
+        <PopularSearchesTitle>Popular Searches</PopularSearchesTitle>
+        <PopularSearchesLinks>
+          <PopularSearchesLink href="/products/15172/boys-sherwani">
+            Boys Sherwani
+          </PopularSearchesLink>
+          <PopularSearchesLink href="/products/15864/girls-party-wear-dresses">
+            Girls Party Wear Dresses
+          </PopularSearchesLink>
+          <PopularSearchesLink href="/products/16270/girls-casual-dresses">
+            Girls Casual Dresses
+          </PopularSearchesLink>
+          <PopularSearchesLink href="/products/16320/girls-gowns">
+            Girls Gowns
+          </PopularSearchesLink>
+          <PopularSearchesLink href="/products/16416/baby-boy-onesies">
+            Baby Boy Onesies
+          </PopularSearchesLink>
+        </PopularSearchesLinks>
+      </PopularSearches>
       <FooterSection>
         <FooterBlock>
           <LinkWithIcons href="/helpcenter">

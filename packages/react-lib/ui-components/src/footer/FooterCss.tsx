@@ -6,14 +6,15 @@ const FooterWrapper = styled.footer`
   font-size: ${typography.size.s1}px;
   line-height: 13px;
   font-weight: ${typography.weight.medium};
-  text-align: ${HsTextAlign.center};
   background-color: ${Colors.WHITE};
+  margin-top: ${typography.size.m4}px;
 `;
 
 const FooterSection = styled.section`
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
+  text-align: ${HsTextAlign.center};
   > div {
     flex: 50%;
   }
@@ -50,6 +51,8 @@ const LinkWithIcons = styled('a')`
 const Copyright = styled.div`
   color: ${Colors.DARKGRAY};
   font-weight: ${typography.weight.regular};
+  font-size: 9px;
+  line-height: 11px;
   padding-bottom: ${typography.size.s3}px;
   text-align: ${HsTextAlign.center};
 `;
@@ -67,7 +70,7 @@ const FooterBlockTitle = styled.h5`
 
 const DownloadApps = styled.div`
   line-height: 16px;
-  margin: 10px 10px 15px;
+  margin: ${typography.size.s3}px ${typography.size.s3}px 15px;
   color: ${secondaryColor[300]}px;
 `;
 
@@ -85,6 +88,40 @@ const DownloadIcon = styled(SvgIcon)`
   fill: white;
   max-width: ${typography.size.s3}px;
 `;
+
+const PopularSearches = styled.section`
+  margin: 5px ${typography.size.s3}px;
+  padding: 5px;
+  border-bottom: 1px solid ${Colors.MERCURY};
+`;
+
+const PopularSearchesLinks = styled.div`
+  margin-top: 7px;
+  margin-bottom: 7px;
+  display: inline-flex;
+  flex-wrap: wrap;
+`;
+
+const PopularSearchesTitle = styled.div`
+  font-size: ${typography.size.s1}px;
+  line-height: ${typography.size.s3}px;
+`;
+
+const PopularSearchesLink = styled('a')`
+  color: ${secondaryColor[100]};
+  font-size: ${typography.size.s0}px;
+  font-weight: ${typography.weight.regular};
+  text-decoration: none;
+  line-height: ${typography.size.s3}px;
+  &:after {
+    content: '|';
+    margin-left: 1px;
+  }
+  &:last-child:after {
+    content: '';
+  }
+`;
+
 export {
   Copyright,
   DownloadApps,
@@ -98,5 +135,9 @@ export {
   FooterLink,
   Link,
   LinkWithIcons,
+  PopularSearches,
+  PopularSearchesLinks,
+  PopularSearchesTitle,
+  PopularSearchesLink,
   StyledIcon,
 };
