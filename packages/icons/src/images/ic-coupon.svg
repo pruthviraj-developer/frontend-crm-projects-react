@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: sketchtool 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>8FF7B8D9-994D-4C62-8932-61E84ADF2902</title>
+    <desc>Created with sketchtool.</desc>
+    <defs></defs>
+    <g id="Icons-&amp;-Illustrations" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Design-Language-Icons" transform="translate(-360.000000, -862.000000)">
+            <g id="Checkout" transform="translate(80.000000, 768.000000)">
+                <g id="ic_coupon" transform="translate(280.000000, 94.000000)">
+                    <rect id="Path" x="0" y="0" width="24" height="24"></rect>
+                    <path d="M2.9,8.94142999 C4.14355253,9.37973938 5.025,10.5917868 5.025,12 C5.025,13.4082132 4.14355253,14.6202606 2.9,15.05857 L2.9,18.0059397 C2.9,18.609483 3.3894184,19.1 3.99079514,19.1 L20.0092049,19.1 C20.6072672,19.1 21.1,18.6076383 21.1,18.0059397 L21.1,15.05857 C19.8564475,14.6202606 18.975,13.4082132 18.975,12 C18.975,10.5917868 19.8564475,9.37973938 21.1,8.94142999 L21.1,5.99406028 C21.1,5.39051702 20.6105816,4.9 20.0092049,4.9 L3.99079514,4.9 C3.3927328,4.9 2.9,5.39236166 2.9,5.99406028 L2.9,8.94142999 Z" id="Combined-Shape" stroke="#000000" stroke-width="1.8"></path>
+                    <g id="cross" transform="translate(8.880001, 8.880005)" stroke="#000000" stroke-linecap="round">
+                        <path d="M5.11999893,5.11999512 L5.11999893,5.11999512" id="dot" stroke-width="2" stroke-linejoin="round"></path>
+                        <path d="M1,5.24264069 L5.24264069,1" id="Line" stroke-width="1.6"></path>
+                        <path d="M1.11999893,1.11999512 L1.11999893,1.11999512" id="dot" stroke-width="2" stroke-linejoin="round"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
