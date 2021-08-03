@@ -69,7 +69,7 @@ const FooterBlockTitle = styled.h5`
   font-weight: ${typography.weight.medium};
 `;
 
-const DownloadApps = styled.div`
+const ConnectToApps = styled.div`
   line-height: 16px;
   margin: ${typography.size.s3}px ${typography.size.s3}px 15px;
   color: ${secondaryColor[300]}px;
@@ -125,7 +125,7 @@ const PopularSearchesLink = styled('a')`
 
 export {
   Copyright,
-  DownloadApps,
+  ConnectToApps,
   LinkIcons,
   DownloadIcon,
   FooterWrapper,

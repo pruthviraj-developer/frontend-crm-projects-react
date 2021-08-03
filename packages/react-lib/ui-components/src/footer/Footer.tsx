@@ -12,7 +12,7 @@ import {
 } from '@hs/icons';
 import {
   Copyright,
-  DownloadApps,
+  ConnectToApps,
   LinkIcons,
   DownloadIcon,
   FooterWrapper,
@@ -28,7 +28,7 @@ import {
   PopularSearchesLinks,
   PopularSearchesLink,
   StyledIcon,
-} from './FooterCss';
+} from './StyledFooter';
 export const Footer: FC<IFooterProps> = ({}: IFooterProps) => {
   const currentYear = new Date().getFullYear();
   return (
@@ -68,7 +68,7 @@ export const Footer: FC<IFooterProps> = ({}: IFooterProps) => {
         </FooterBlock>
         <FooterBlock>
           <FooterBlockTitle>Download our apps</FooterBlockTitle>
-          <DownloadApps>
+          <ConnectToApps>
             <LinkIcons
               href="https://itunes.apple.com/in/app/hopscotch-find-something-new/id945949424"
               target="_blank"
@@ -81,11 +81,11 @@ export const Footer: FC<IFooterProps> = ({}: IFooterProps) => {
             >
               <DownloadIcon icon={PlayIcon}></DownloadIcon>
             </LinkIcons>
-          </DownloadApps>
+          </ConnectToApps>
         </FooterBlock>
         <FooterBlock>
           <FooterBlockTitle>Connect with us</FooterBlockTitle>
-          <DownloadApps>
+          <ConnectToApps>
             <LinkIcons
               href="https://www.facebook.com/Hopscotch.India"
               target="_blank"
@@ -110,7 +110,7 @@ export const Footer: FC<IFooterProps> = ({}: IFooterProps) => {
             >
               <DownloadIcon icon={PIntrestIcon}></DownloadIcon>
             </LinkIcons>
-          </DownloadApps>
+          </ConnectToApps>
         </FooterBlock>
       </FooterSection>
       <FooterLinks>
