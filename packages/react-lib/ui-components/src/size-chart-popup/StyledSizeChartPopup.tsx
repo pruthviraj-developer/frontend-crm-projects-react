@@ -10,10 +10,6 @@ const SizeChartWrapper = styled.footer`
 `;
 
 const SizeChartHeader = styled.div`
-  text-align: ${HsTextAlign.center};
-  font-weight: ${typography.weight.medium};
-  font-size: ${typography.size.s2}px;
-  line-height: ${typography.size.s3}px;
   border-bottom: 1px solid ${Colors.MERCURY};
   padding: ${typography.size.s3}px 0;
   position: relative;
@@ -30,10 +26,26 @@ const SizeChartHeaderCloseIcon = styled.div`
 const SizeChartCloseIcon = styled(SvgIcon)`
   fill: #bbb;
 `;
+
+const SizeChartHeaderWrapper = styled.div`
+  text-align: ${HsTextAlign.center};
+  font-weight: ${typography.weight.medium};
+  font-size: ${typography.size.s2}px;
+  line-height: ${typography.size.s3}px;
+`;
+
+const SizeChartHeaderProductName = styled.div`
+  color: ${Colors.GRAY20};
+  border-bottom: 1px solid ${Colors.MERCURY};
+  padding: ${typography.size.s1}px;
+`;
+
 export {
   SizeChartWrapper,
+  SizeChartHeaderWrapper,
   SizeChartHeader,
   SizeChartHeaderTitle,
   SizeChartHeaderCloseIcon,
+  SizeChartHeaderProductName,
   SizeChartCloseIcon,
 };
