@@ -13,6 +13,9 @@ import {
   SizeChartDetailImages,
   ChartDetailImageIllustration,
   ImageLink,
+  SizeTableWrapper,
+  SizeOptionTypeLengthHeader,
+  SizeOptionType,
 } from './StyledSizeChartPopup';
 import { IconClose } from '@hs/icons';
 export const SizeChartPopup: FC<ISizeChartPopup> = ({}: ISizeChartPopup) => {
@@ -22,10 +25,7 @@ export const SizeChartPopup: FC<ISizeChartPopup> = ({}: ISizeChartPopup) => {
         <SizeChartHeader>
           <SizeChartHeaderTitle>SIZE CHART</SizeChartHeaderTitle>
           <SizeChartHeaderCloseIcon>
-            <SizeChartCloseIcon
-              icon={IconClose}
-              fill={'#bbb'}
-            ></SizeChartCloseIcon>
+            <SizeChartCloseIcon icon={IconClose} fill={'#bbb'} />
           </SizeChartHeaderCloseIcon>
         </SizeChartHeader>
         <SizeChartHeaderProductName>
@@ -39,6 +39,13 @@ export const SizeChartPopup: FC<ISizeChartPopup> = ({}: ISizeChartPopup) => {
               <ImageLink src="https://static.hopscotch.in/fstatic/product/201507/ed6f256e-b839-4974-95ea-4cc5280ecfa0_full.png?version=1437372205447" />
             </SizeChartDetailImage>
           </SizeChartDetailImages>
+          <SizeTableWrapper>
+            <SizeOptionTypeLengthHeader>
+              Length
+              <SizeOptionType>cm</SizeOptionType>
+              <SizeOptionType className={'active'}>in</SizeOptionType>
+            </SizeOptionTypeLengthHeader>
+          </SizeTableWrapper>
         </SizeChartDetailsWrapper>
       </SizeChartHeaderWrapper>
     </SizeChartWrapper>

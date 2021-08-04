@@ -66,6 +66,30 @@ const ImageLink = styled.img`
   top: 0;
   left: 0;
 `;
+
+const SizeTableWrapper = styled.div``;
+
+const SizeTableHeader = styled.div`
+  padding: ${typography.size.s08}px 0;
+`;
+
+const SizeOptionTypeLengthHeader = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const SizeOptionType = styled.div`
+  padding: ${typography.size.s08}px 6px 4px;
+  margin: ${typography.size.s08}px;
+  color: ${Colors.PINK[500]};
+  font-weight: ${typography.weight.regular};
+  cursor: pointer;
+  &.active {
+    border-bottom: 3px solid ${Colors.PINK[500]};
+    font-weight: ${typography.weight.medium};
+  }
+`;
+
 export {
   SizeChartWrapper,
   SizeChartDetail,
@@ -78,6 +102,10 @@ export {
   SizeChartHeaderCloseIcon,
   SizeChartHeaderProductName,
   SizeChartCloseIcon,
+  SizeTableWrapper,
+  SizeTableHeader,
+  SizeOptionType,
+  SizeOptionTypeLengthHeader,
   ChartDetailImageIllustration,
   ImageLink,
 };
