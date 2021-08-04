@@ -40,12 +40,44 @@ const SizeChartHeaderProductName = styled.div`
   padding: ${typography.size.s1}px;
 `;
 
+const SizeChartDetailsWrapper = styled.div`
+  max-height: 86.5vh;
+`;
+
+const SizeChartDetail = styled.div`
+  margin: 8px 0 0;
+  border-bottom: 1px solid #e6e6e6;
+`;
+
+const SizeChartDetailImages = styled.div``;
+
+const SizeChartDetailImage = styled.div`
+  position: relative;
+`;
+
+const ChartDetailImageIllustration = styled.img`
+  position: relative;
+  width: 100%;
+`;
+
+const ImageLink = styled.img`
+  position: absolute;
+  width: 100%;
+  top: 0;
+  left: 0;
+`;
 export {
   SizeChartWrapper,
+  SizeChartDetail,
+  SizeChartDetailImage,
+  SizeChartDetailImages,
+  SizeChartDetailsWrapper,
   SizeChartHeaderWrapper,
   SizeChartHeader,
   SizeChartHeaderTitle,
   SizeChartHeaderCloseIcon,
   SizeChartHeaderProductName,
   SizeChartCloseIcon,
+  ChartDetailImageIllustration,
+  ImageLink,
 };
