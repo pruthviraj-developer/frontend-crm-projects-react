@@ -129,6 +129,20 @@ const SizeTableRowTableData = styled.td`
   }
 `;
 
+const SizeTips = styled.div`
+  padding: 16px 0 16px 16px;
+`;
+
+const SizeTipsTitle = styled.div`
+  font-weight: ${typography.weight.medium};
+`;
+
+const SizeTipsList = styled.ul`
+  padding-left: 16px;
+`;
+
+const SizeTipsListItem = styled.li``;
+
 export {
   SizeChartWrapper,
   SizeChartDetail,
@@ -152,4 +166,8 @@ export {
   SizeTableBody,
   SizeTableRow,
   SizeTableRowTableData,
+  SizeTips,
+  SizeTipsTitle,
+  SizeTipsList,
+  SizeTipsListItem,
 };

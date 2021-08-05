@@ -21,6 +21,10 @@ import {
   SizeTableBody,
   SizeTableRow,
   SizeTableRowTableData,
+  SizeTips,
+  SizeTipsTitle,
+  SizeTipsList,
+  SizeTipsListItem,
 } from './StyledSizeChartPopup';
 import { IconClose } from '@hs/icons';
 export const SizeChartPopup: FC<ISizeChartPopup> = ({}: ISizeChartPopup) => {
@@ -130,8 +134,15 @@ export const SizeChartPopup: FC<ISizeChartPopup> = ({}: ISizeChartPopup) => {
             </SizeTableDetail>
           </SizeTable>
         </SizeTableWrapper>
+        <SizeTips>
+          <SizeTipsTitle>Size notes and fitting tips:</SizeTipsTitle>
+          <SizeTipsList>
+            <SizeTipsListItem>
+              The Size may vary from child to child.
+            </SizeTipsListItem>
+          </SizeTipsList>
+        </SizeTips>
       </SizeChartDetailsWrapper>
-      {/* .size-tips */}
     </SizeChartWrapper>
   );
 };
