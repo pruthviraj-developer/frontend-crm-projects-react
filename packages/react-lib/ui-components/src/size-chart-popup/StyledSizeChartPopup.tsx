@@ -67,7 +67,10 @@ const ImageLink = styled.img`
   left: 0;
 `;
 
-const SizeTableWrapper = styled.div``;
+const SizeTableWrapper = styled.div`
+  position: relative;
+  margin-bottom: 16px;
+`;
 
 const SizeTableHeader = styled.div`
   padding: ${typography.size.s08}px 0;
@@ -76,6 +79,7 @@ const SizeTableHeader = styled.div`
 const SizeOptionTypeLengthHeader = styled.div`
   display: flex;
   align-items: center;
+  padding: 8px 0 8px 12px;
 `;
 
 const SizeOptionType = styled.div`
@@ -87,6 +91,41 @@ const SizeOptionType = styled.div`
   &.active {
     border-bottom: 3px solid ${Colors.PINK[500]};
     font-weight: ${typography.weight.medium};
+  }
+`;
+
+const SizeTable = styled.div`
+  font-size: ${typography.size.s2}px;
+  line-height: ${typography.size.m4}px;
+  overflow-x: scroll;
+`;
+
+const SizeTableDetail = styled.table`
+  margin: ${typography.size.s08}px 0 0 108px;
+  text-align: center;
+  width: calc(100% - 128px);
+  border-collapse: collapse;
+  border-spacing: 0;
+`;
+
+const SizeTableBody = styled.tbody``;
+
+const SizeTableRow = styled.tr`
+  font-weight: ${typography.weight.regular};
+  &:first-child td {
+    background: #f5f5f5;
+  }
+`;
+
+const SizeTableRowTableData = styled.td`
+  font-weight: ${typography.weight.regular};
+  background: #fff;
+  border: 1px solid #e6e6e6;
+  min-width: 120px;
+  &:first-child {
+    position: absolute;
+    min-width: 130px;
+    left: 0;
   }
 `;
 
@@ -108,4 +147,9 @@ export {
   SizeOptionTypeLengthHeader,
   ChartDetailImageIllustration,
   ImageLink,
+  SizeTable,
+  SizeTableDetail,
+  SizeTableBody,
+  SizeTableRow,
+  SizeTableRowTableData,
 };
