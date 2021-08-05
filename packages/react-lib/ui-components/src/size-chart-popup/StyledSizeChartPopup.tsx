@@ -42,6 +42,7 @@ const SizeChartHeaderProductName = styled.div`
 
 const SizeChartDetailsWrapper = styled.div`
   max-height: 86.5vh;
+  overflow-y: scroll;
 `;
 
 const SizeChartDetail = styled.div`
@@ -112,7 +113,7 @@ const SizeTableBody = styled.tbody``;
 
 const SizeTableRow = styled.tr`
   font-weight: ${typography.weight.regular};
-  &:first-child td {
+  &:first-of-type td {
     background: #f5f5f5;
   }
 `;
@@ -122,7 +123,7 @@ const SizeTableRowTableData = styled.td`
   background: #fff;
   border: 1px solid #e6e6e6;
   min-width: 120px;
-  &:first-child {
+  &:first-of-type {
     position: absolute;
     min-width: 130px;
     left: 0;
