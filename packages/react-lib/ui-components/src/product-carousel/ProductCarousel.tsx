@@ -2,108 +2,53 @@ import React, { FC } from 'react';
 import { CarouselWrapper } from './StyledProductCarousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Carousel } from 'react-responsive-carousel';
+import { IProductCarouselProps } from './IProductCarousel';
 
-export const ProductCarousel: FC<{}> = ({}: {}) => {
+export const ProductCarousel: FC<IProductCarouselProps> = ({
+  autoPlay,
+  dynamicHeight,
+  showArrows,
+  showThumbs,
+  showStatus,
+}: IProductCarouselProps) => {
   return (
     <CarouselWrapper>
-      <Carousel autoPlay>
+      <Carousel
+        autoPlay={autoPlay || false}
+        dynamicHeight={dynamicHeight || true}
+        showArrows={showArrows || false}
+        showThumbs={showThumbs || false}
+        showStatus={showStatus || false}
+      >
         <div>
-          <img
-            alt=""
-            src="http://lorempixel.com/output/cats-q-c-640-480-1.jpg"
-          />
-          <p className="legend">Legend 1</p>
+          <img alt="" src="http://placehold.it/375x375" />
         </div>
         <div>
-          <img
-            alt=""
-            src="http://lorempixel.com/output/cats-q-c-640-480-2.jpg"
-          />
-          <p className="legend">Legend 2</p>
+          <img alt="" src="http://placehold.it/375x375" />
         </div>
         <div>
-          <img
-            alt=""
-            src="http://lorempixel.com/output/cats-q-c-640-480-3.jpg"
-          />
-          <p className="legend">Legend 3</p>
+          <img alt="" src="http://placehold.it/375x375" />
         </div>
         <div>
-          <img
-            alt=""
-            src="http://lorempixel.com/output/cats-q-c-640-480-4.jpg"
-          />
-          <p className="legend">Legend 4</p>
+          <img alt="" src="http://placehold.it/375x375" />
         </div>
         <div>
-          <img
-            alt=""
-            src="http://lorempixel.com/output/cats-q-c-640-480-5.jpg"
-          />
-          <p className="legend">Legend 5</p>
+          <img alt="" src="http://placehold.it/375x375" />
         </div>
         <div>
-          <img
-            alt=""
-            src="http://lorempixel.com/output/cats-q-c-640-480-6.jpg"
-          />
-          <p className="legend">Legend 6</p>
+          <img alt="" src="http://placehold.it/375x375" />
         </div>
         <div>
-          <img
-            alt=""
-            src="http://lorempixel.com/output/cats-q-c-640-480-7.jpg"
-          />
-          <p className="legend">Legend 7</p>
+          <img alt="" src="http://placehold.it/375x375" />
         </div>
         <div>
-          <img
-            alt=""
-            src="http://lorempixel.com/output/cats-q-c-640-480-8.jpg"
-          />
-          <p className="legend">Legend 8</p>
+          <img alt="" src="http://placehold.it/375x375" />
         </div>
         <div>
-          <img
-            alt=""
-            src="http://lorempixel.com/output/cats-q-c-640-480-9.jpg"
-          />
-          <p className="legend">Legend 9</p>
+          <img alt="" src="http://placehold.it/375x375" />
         </div>
         <div>
-          <img
-            alt=""
-            src="http://lorempixel.com/output/cats-q-c-640-480-10.jpg"
-          />
-          <p className="legend">Legend 10</p>
-        </div>
-        <div>
-          <img
-            alt=""
-            src="http://lorempixel.com/output/cats-q-c-640-480-11.jpg"
-          />
-          <p className="legend">Legend 11</p>
-        </div>
-        <div>
-          <img
-            alt=""
-            src="http://lorempixel.com/output/cats-q-c-640-480-12.jpg"
-          />
-          <p className="legend">Legend 12</p>
-        </div>
-        <div>
-          <img
-            alt=""
-            src="http://lorempixel.com/output/cats-q-c-640-480-13.jpg"
-          />
-          <p className="legend">Legend 13</p>
-        </div>
-        <div>
-          <img
-            alt=""
-            src="http://lorempixel.com/output/cats-q-c-640-480-14.jpg"
-          />
-          <p className="legend">Legend 14</p>
+          <img alt="" src="http://placehold.it/375x375" />
         </div>
       </Carousel>
     </CarouselWrapper>
