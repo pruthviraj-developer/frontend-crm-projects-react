@@ -2,7 +2,7 @@ import React from 'react';
 import { ThemeProvider } from 'emotion-theming';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
-import { LeftNavBar, LeftNavBarProps } from '@hs/components';
+import { LeftNavBar, LeftNavBarProps } from '@hs-crm/components';
 import { DashBoardIcon, CreateIcon, ArchiveIcon, FAQIcon } from '@hs/icons';
 import { LightTheme } from '@hs/utils';
 import './App.css';

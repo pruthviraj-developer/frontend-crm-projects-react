@@ -57,7 +57,8 @@
   "workspaces": {
     "packages": [
       "packages/*",
-      "packages/react-lib/*",
+      "packages/lib-react/*",
+      "packages/lib-react-crm/*",
       "web-apps/*"
     ],
     "nohoist": [

@@ -1,0 +1,76 @@
+{
+  "version": "1.0.0",
+  "license": "MIT",
+  "main": "dist/components.esm.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "engines": {
+    "node": ">=12"
+  },
+  "scripts": {
+    "start": "cross-env NODE_ENV=development tsdx watch --format esm --verbose",
+    "build": "tsdx build --format esm",
+    "test": "tsdx test --passWithNoTests",
+    "lint": "tsdx lint",
+    "prepare": "tsdx build --format esm"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "tsdx lint"
+    }
+  },
+  "prettier": {
+    "printWidth": 80,
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
+  "name": "@hs-crm/components",
+  "author": "Rishikant Tiwari",
+  "module": "dist/components.esm.js",
+  "peerDependencies": {
+    "react": "^17.0.0",
+    "react-dom": "^17.0.0",
+    "react-router": "5.2.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.10.3",
+    "@hs/services": "^1.0.0",
+    "@types/react": "17.0.6",
+    "@types/react-datepicker": "^3.1.1",
+    "@types/react-dom": "17.0.5",
+    "@types/react-router-dom": "5.1.4",
+    "babel-loader": "^8.1.0",
+    "babel-plugin-emotion": "^10.0.33",
+    "cross-env": "^7.0.2",
+    "eslint-config-react-app": "^5.2.1",
+    "husky": "6.0.0",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-router-dom": "^5.2.0",
+    "tsdx": "0.14.1",
+    "tslib": "2.2.0",
+    "typescript": "4.1.2"
+  },
+  "dependencies": {
+    "@emotion/react": "11.1.5",
+    "@emotion/styled": "11.0.0",
+    "@hs/icons": "^1.0.0",
+    "@hs/utils": "^1.0.0",
+    "@material-ui/core": "4.11.4",
+    "@material-ui/icons": "4.11.2",
+    "@material-ui/lab": "4.0.0-alpha.58",
+    "date-fns": "^2.15.0",
+    "formik-material-ui": "3.0.1",
+    "material-table": "1.69.3",
+    "material-ui-popup-state": "1.8.3",
+    "react-datepicker": "^3.1.3",
+    "react-elastic-carousel": "0.11.5",
+    "react-markdown": "^4.3.1",
+    "react-responsive-carousel": "^3.2.20",
+    "styled-components": "^5.2.1"
+  }
+}

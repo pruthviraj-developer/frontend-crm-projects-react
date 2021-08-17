@@ -1,4 +1,4 @@
-import { FileUploadListOption } from '@hs/containers';
+import { FileUploadListOption } from '@hs-crm/containers';
 
 interface currency {
   currencyCode: string;

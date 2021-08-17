@@ -16,7 +16,7 @@ import { TransitionProps } from '@material-ui/core/transitions';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 
-import { HSTableV1, HsTableProps } from '@hs/components';
+import { HSTableV1, HsTableProps } from '@hs-crm/components';
 import { sosService, sosTableData, sosErrorMessage, sosTableParams, tableParams, updateSosParams } from '@hs/services';
 import { toast } from 'react-toastify';
 import { SosDashboardProps } from './ISosDashboard';

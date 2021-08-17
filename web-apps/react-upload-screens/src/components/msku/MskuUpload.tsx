@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
-import { LeftNavBar, LeftNavBarProps } from '@hs/components';
+import { LeftNavBar, LeftNavBarProps } from '@hs-crm/components';
 import { DashBoardIcon, CreateIcon, ArchiveIcon, UploadIcon } from '@hs/icons';
 import BulkUploadScreen from '../common/BulkUploadScreen';
 

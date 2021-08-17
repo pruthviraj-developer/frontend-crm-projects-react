@@ -1,4 +1,4 @@
-import { ReorderFiltersProps, ReorderFiltersOptions } from '@hs/components';
+import { ReorderFiltersProps, ReorderFiltersOptions } from '@hs-crm/components';
 
 export interface FilterType {
   bucket?: OptionType[] | null;

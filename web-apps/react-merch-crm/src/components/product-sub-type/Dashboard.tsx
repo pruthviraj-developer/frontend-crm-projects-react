@@ -8,7 +8,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { TextField as MuiTextField, Grid, Paper, Button } from '@material-ui/core';
 import { Autocomplete, AutocompleteRenderInputParams } from '@material-ui/lab';
 import { productSubtypeService } from '@hs/services';
-import { HSTableV1, HsTablePropsV1 } from '@hs/components';
+import { HSTableV1, HsTablePropsV1 } from '@hs-crm/components';
 import { useQuery, useQueryClient } from 'react-query';
 import { IDashboardResponse, DashboardData, IPageType, PropsType, OptionType, ISelectedValues } from './IDashboard';
 import { ICreateProductSubtypeProps } from './ICreateProduct';
