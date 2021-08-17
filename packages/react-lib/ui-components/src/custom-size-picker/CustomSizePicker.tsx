@@ -5,7 +5,7 @@ import {
   Size,
   Sizes,
   SizePill,
-} from './CustomSizePickerCss';
+} from './StyledCustomSizePicker';
 
 export const CustomSizePicker: FC<ICustomSizePicker> =
   ({}: ICustomSizePicker) => {

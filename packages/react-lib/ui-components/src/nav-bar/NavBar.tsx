@@ -7,7 +7,7 @@ import {
   CartIconWrapper,
   CartIconQuantity,
   Link,
-} from './NavBarCss';
+} from './StyledNavBar';
 import { CartIcon, HopScotchIcon } from '@hs/icons';
 
 export const NavBar: FC<INavBarProps> = ({}: INavBarProps) => {

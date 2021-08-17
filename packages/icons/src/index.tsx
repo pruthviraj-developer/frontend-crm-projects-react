@@ -23,6 +23,7 @@ import ICFacebookIcon from './footer-icons/facebook-icon.svg';
 import ICTwitterIcon from './footer-icons/twitter-icon.svg';
 import ICInstagramIcon from './footer-icons/instagram-icon.svg';
 import ICPIntrestIcon from './footer-icons/pinterest-icon.svg';
+import ICIconClose from './images/icon-close.svg';
 
 export const CreateIcon = ICCreate;
 export const BackIcon = ICBack;
@@ -48,3 +49,4 @@ export const FacebookIcon = ICFacebookIcon;
 export const TwitterIcon = ICTwitterIcon;
 export const InstagramIcon = ICInstagramIcon;
 export const PIntrestIcon = ICPIntrestIcon;
+export const IconClose = ICIconClose;
