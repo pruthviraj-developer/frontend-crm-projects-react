@@ -15,7 +15,9 @@
     "build": "tsdx build --format esm",
     "test": "tsdx test",
     "lint": "tsdx lint",
-    "prepare": "tsdx build --format esm"
+    "prepare": "tsdx build --format esm",
+    "size": "size-limit",
+    "analyze": "size-limit --why"
   },
   "peerDependencies": {
     "react": "17.0.2",
@@ -35,8 +37,16 @@
   },
   "name": "@hs/utils",
   "author": "Rishikant Tiwari",
-  "module": "dist/util.esm.js",
+  "module": "dist/utils.esm.js",
+  "size-limit": [
+    {
+      "path": "dist/utils.esm.js",
+      "limit": "10 KB"
+    }
+  ],
   "devDependencies": {
+    "@size-limit/preset-small-lib": "^5.0.3",
+    "size-limit": "^5.0.3",
     "@types/colornames": "^1.1.1",
     "husky": "6.0.0",
     "tsdx": "0.14.1",

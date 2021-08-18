@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { IFooterProps } from './Ifooter';
+import { IFooterProps } from './IFooter';
 import {
   AppleIcon,
   PlayIcon,
@@ -29,8 +29,8 @@ import {
   PopularSearchesLink,
   StyledIcon,
 } from './StyledFooter';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const Footer: FC<IFooterProps> = ({ label }: IFooterProps) => {
+// eslint-disable-next-line no-empty-pattern
+export const Footer: FC<IFooterProps> = ({}: IFooterProps) => {
   const currentYear = new Date().getFullYear();
   return (
     <FooterWrapper>

@@ -15,7 +15,9 @@
     "build": "tsdx build --format esm",
     "test": "tsdx test --passWithNoTests",
     "lint": "tsdx lint",
-    "prepare": "tsdx build --format esm"
+    "prepare": "tsdx build --format esm",
+    "size": "size-limit",
+    "analyze": "size-limit --why"
   },
   "peerDependencies": {
     "react": "17.0.2"
@@ -34,7 +36,15 @@
   "name": "@hs-crm/hooks",
   "author": "Rishikant Tiwari",
   "module": "dist/hooks.esm.js",
+  "size-limit": [
+    {
+      "path": "dist/hooks.esm.js",
+      "limit": "10 KB"
+    }
+  ],
   "devDependencies": {
+    "@size-limit/preset-small-lib": "^5.0.3",
+    "size-limit": "^5.0.3",
     "@types/react": "17.0.6",
     "@types/react-dom": "17.0.5",
     "husky": "6.0.0",

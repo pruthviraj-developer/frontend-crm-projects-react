@@ -60,7 +60,7 @@ const Copyright = styled.div`
 
 const StyledIcon = styled(SvgIcon)`
   margin: 0 5px;
-  fill: white;
+  fill: ${Colors.WHITE};
   max-width: ${typography.size.s3}px;
 `;
 
@@ -86,7 +86,7 @@ const LinkIcons = styled('a')`
 
 const DownloadIcon = styled(SvgIcon)`
   margin: 0 5px;
-  fill: white;
+  fill: ${Colors.WHITE};
   max-width: ${typography.size.s3}px;
 `;
 
