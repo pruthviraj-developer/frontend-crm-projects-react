@@ -1,14 +1,17 @@
-import { configure, addParameters, addDecorator } from '@storybook/react';
+//import { configure, addParameters } from '@storybook/react';
 import '@storybook/addon-console';
 import { setConsoleOptions } from '@storybook/addon-console';
 import StoryRouter from 'storybook-react-router';
 import hsTheme from './hsTheme';
-import StylesDecorator from './styles-decorator';
-import ReinspectDecorator from './reinspect-decorator';
+import { muiTheme } from 'storybook-addon-material-ui';
+import { LightTheme } from '@hs/utils';
+import { DarkTheme } from '@hs/utils';
+// import ReinspectDecorator from './reinspect-decorator';
 
-addDecorator(StoryRouter());
-addDecorator(StylesDecorator);
-addDecorator(ReinspectDecorator);
+export const decorators = [StoryRouter(), muiTheme([LightTheme, DarkTheme])];
+// addDecorator();
+// addDecorator(StylesDecorator);
+// addDecorator(ReinspectDecorator);
 
 export const parameters = {
   docs: {

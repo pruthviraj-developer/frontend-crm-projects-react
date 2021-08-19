@@ -8,9 +8,9 @@ module.exports = {
     '@storybook/addon-links/register',
     '@storybook/addon-backgrounds',
     '@storybook/addon-docs',
-    '@storybook/addon-viewport/register',
+    '@storybook/addon-viewport',
     '@storybook/addon-storysource',
-    '@storybook/addon-knobs/register',
+    'storybook-addon-material-ui',
   ],
 
   webpackFinal: async (config) => {
@@ -39,7 +39,7 @@ module.exports = {
     config.resolve.extensions.push('.ts', '.tsx');
     config.resolve.plugins = [
       new TsconfigPathsPlugin({
-        configFile: path.resolve(__dirname, '../packages/react-lib/ui-components/tsconfig.json'),
+        configFile: path.resolve(__dirname, '../packages/lib-react/components/tsconfig.json'),
       }),
     ];
     return config;

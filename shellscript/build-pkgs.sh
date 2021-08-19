@@ -1,1 +1,1 @@
-lerna run build --scope "@hs-crm/*"
+lerna run build --scope "@hs*/*"
