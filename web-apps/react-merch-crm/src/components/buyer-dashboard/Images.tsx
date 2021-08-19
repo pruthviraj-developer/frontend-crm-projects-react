@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import styled from '@emotion/styled';
 import { toast } from 'react-toastify';
 import { useLocation, useParams, useHistory } from 'react-router-dom';
-import { ImageListType, ImageUploadMultiple, ImageType } from '@hs/components';
+import { ImageListType, ImageUploadMultiple, ImageType } from '@hs-crm/components';
 import { buyerService } from '@hs/services';
 import { Grid, Paper } from '@material-ui/core';
 import { ImageUploadRes, UpdateImageUrls, IPid, UploadImageProps } from './IImages';

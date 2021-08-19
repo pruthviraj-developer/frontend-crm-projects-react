@@ -1,1 +1,1 @@
-lerna run build --scope "@hs/*"
+lerna run build --scope "@hs*/*"

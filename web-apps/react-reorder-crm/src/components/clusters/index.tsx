@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { LeftNavBar, LeftNavBarProps } from '@hs/components';
+import { LeftNavBar, LeftNavBarProps } from '@hs-crm/components';
 import { DashBoardIcon } from '@hs/icons';
 import { Route, Switch } from 'react-router-dom';
 import CreateCluster from './CreateCluster';

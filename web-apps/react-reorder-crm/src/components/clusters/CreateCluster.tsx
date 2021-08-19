@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { toast } from 'react-toastify';
 import { reorderService } from '@hs/services';
-import { ReorderFiltersList, ReorderFiltersObjectProps, ReorderFiltersOptions } from '@hs/components';
+import { ReorderFiltersList, ReorderFiltersObjectProps, ReorderFiltersOptions } from '@hs-crm/components';
 import { useQuery } from 'react-query';
 import { useHistory } from 'react-router-dom';
 import {
@@ -243,7 +243,17 @@ const CreateCluster = ({ header }: ICreateClusterProps) => {
       if (colorsList && colorsList.options && colorsList.options.length) {
         dispatch([
           ActionType.addItems,
-          [{ ...colorsList, options:[{value:'Select All', key:'all', first:'all', second:'all'}, ...colorsList.options], key: 'color_constraints', type: 'autoselectall', input_type: 'autoselectall',  display: 'Color *', display_position: 8 }],
+          [
+            {
+              ...colorsList,
+              options: [{ value: 'Select All', key: 'all', first: 'all', second: 'all' }, ...colorsList.options],
+              key: 'color_constraints',
+              type: 'autoselectall',
+              input_type: 'autoselectall',
+              display: 'Color *',
+              display_position: 8,
+            },
+          ],
         ]);
       } else {
         !isColorsListFetching &&

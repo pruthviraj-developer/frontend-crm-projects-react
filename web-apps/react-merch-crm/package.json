@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@hs/components": "^1.0.0",
-    "@hs/containers": "^1.0.0",
-    "@hs/hooks": "^1.0.0",
+    "@hs-crm/components": "^1.0.0",
+    "@hs-crm/containers": "^1.0.0",
+    "@hs-crm/hooks": "^1.0.0",
     "@hs/icons": "^1.0.0",
     "@hs/services": "^1.0.0",
     "@hs/utils": "^1.0.0",

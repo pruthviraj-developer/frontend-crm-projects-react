@@ -3,7 +3,7 @@ import { useFormikContext } from 'formik';
 import { Field } from 'formik';
 import { Autocomplete, AutocompleteRenderInputParams } from 'formik-material-ui-lab';
 import { Grid, TextField as MuiTextField } from '@material-ui/core';
-import { useCategory, OptionType } from '@hs/hooks';
+import { useCategory, OptionType } from '@hs-crm/hooks';
 import { CategoryPropsType } from './IShareToVendor';
 
 const Categories = ({

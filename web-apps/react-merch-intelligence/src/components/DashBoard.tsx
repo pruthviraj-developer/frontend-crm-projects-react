@@ -4,9 +4,16 @@ import styled from '@emotion/styled';
 import clsx from 'clsx';
 import { toast } from 'react-toastify';
 import { Colors } from '@hs/utils';
-import { ReorderFiltersProps, ReorderFiltersOptions } from '@hs/components';
+import { ReorderFiltersProps, ReorderFiltersOptions } from '@hs-crm/components';
 import { merchIntelligenceService, reorderService } from '@hs/services';
-import { LeftNavBar, LeftNavBarProps, Card, CardButtonTypeProps, ProgressBar, ProgressBarProps } from '@hs/components';
+import {
+  LeftNavBar,
+  LeftNavBarProps,
+  Card,
+  CardButtonTypeProps,
+  ProgressBar,
+  ProgressBarProps,
+} from '@hs-crm/components';
 import { DashBoardIcon } from '@hs/icons';
 import { Formik, Form, Field } from 'formik';
 import { Autocomplete, AutocompleteRenderInputParams } from 'formik-material-ui-lab';
