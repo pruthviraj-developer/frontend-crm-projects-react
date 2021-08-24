@@ -1,4 +1,4 @@
-export interface UserInfo {
+export interface UserInfoProps {
   action: string;
   userId: number;
   firstName: string;

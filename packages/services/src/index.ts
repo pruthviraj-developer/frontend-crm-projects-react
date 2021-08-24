@@ -9,3 +9,4 @@ export * from './product-subtype';
 export * from './common';
 export * from './product-details';
 export * from './time';
+export * from './store';
