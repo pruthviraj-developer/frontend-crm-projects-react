@@ -22,12 +22,12 @@ const checkForPincode = <P, R>(pid: P, pincode: P): Promise<R> => {
   });
 };
 
-const searchProducts = <P, R>(urlParams: P, canceller: P): Promise<R> => {
-  const suggestedSearchText = urlParams['keyWord'] ? '' : urlParams['searchBy'];
+const searchProducts = <P, R>(urlParams: P): Promise<R> => {
+  // const suggestedSearchText:strong = urlParams['keyWord'] ? '' : urlParams['searchBy'];
   const params = {
     pageNo: 1,
     pageSize: 72,
-    suggestedSearchText: suggestedSearchText,
+    // suggestedSearchText: suggestedSearchText,
     ...urlParams,
   };
   //  canceller ?
@@ -60,6 +60,37 @@ const getProductDetails = <P, R>(productId: P): Promise<R> => {
   return httpService.get<R>({ url: `/api/product/${productId}`, params });
 };
 
+const getUserInfo = <P, R>(params: P): Promise<R> => {
+  const url = '/api/customer/info';
+  return httpService.get<R>({ url, params });
+  // let _self = this;
+  // this._CustomerService.getUserInfo().then(resp => {
+  //     this.showPlaceholder = false;
+  //     if (!resp.data.hasGuestData && this.isMobieDevice()) {
+  //         this.signedOutUser = true;
+  //     } else {
+  //         this.isGUwithDetails = true;
+  //         this.phoneNumber = resp.data.phoneNumber || '' ;
+  //         this.action = resp.data.actionText || '' ;
+  //         this._actionDetails = this._DeeplinkParser.getParamsObject(resp.data.actionURI || '');
+  //       //   console.log(resp.data.actionURI, this._actionDetails);
+
+  //         // this.userName = CustomerService.getCustomerFirstName();
+  //         // this.userInfo = CustomerService.getCustomerInfo();
+  //         // this.email = CustomerService.getCustomerEmail();
+  //         // if(this.userInfo.facebookProfile && this.userInfo.facebookProfile.profilePhoto) {
+  //         //     this.userInfo.profilePhoto = this.userInfo.facebookProfile.profilePhoto;
+  //         // } else {
+  //         //     // this.nameInitial = this.userInfo.firstName.substr(0, 1) + this.userInfo.lastName.substr(0, 1);
+  //         //     this.nameInitial = this.userInfo.firstName.substr(0, 1);
+  //         // }
+  //     }
+
+  //     _self.updateMenuLockStatus();
+  // }, err => {
+  // })
+};
+
 export const productDetailsService = {
   addToWishlist,
   deleteFromWishlist,
@@ -67,4 +98,5 @@ export const productDetailsService = {
   searchProducts,
   getProductDetails,
   getSimilarProducts,
+  getUserInfo,
 };
