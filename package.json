@@ -85,6 +85,7 @@
   },
   "dependencies": {
     "chromatic": "^5.7.0",
+    "react-cookie": "^4.1.1",
     "storybook-addon-material-ui": "^0.9.0-alpha.24"
   },
   "scripts": {
