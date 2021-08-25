@@ -33,20 +33,20 @@ export const userInfo = () => {
     };
     if (userData.isLoggedIn) {
       cookiesService.setCookies({
-        name: CUSTOMER_INFO_COOKIE_NAME,
+        key: CUSTOMER_INFO_COOKIE_NAME,
         value: userData,
         options: expireProp,
       });
     } else {
       cookiesService.setCookies({
-        name: GUEST_CUSTOMER_INFO,
+        key: GUEST_CUSTOMER_INFO,
         value: userData,
         options: expireProp,
       });
     }
     if (userData.cartItemQty !== undefined) {
       cookiesService.setCookies({
-        name: CART_ITEM_QTY_COOKIE_NAME,
+        key: CART_ITEM_QTY_COOKIE_NAME,
         value: userData.cartItemQty,
       });
     }
