@@ -34,13 +34,13 @@ export const userInfo = () => {
     if (userData.isLoggedIn) {
       cookiesService.setCookies({
         key: CUSTOMER_INFO_COOKIE_NAME,
-        value: userData,
+        value: { ...userData },
         options: expireProp,
       });
     } else {
       cookiesService.setCookies({
         key: GUEST_CUSTOMER_INFO,
-        value: userData,
+        value: { ...userData },
         options: expireProp,
       });
     }

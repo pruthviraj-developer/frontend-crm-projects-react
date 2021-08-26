@@ -7,7 +7,7 @@ import {
   ProductVendorPrice,
   ProductDiscountPrice,
 } from './StyledProductNamePrice';
-import 'react-responsive-carousel/lib/styles/carousel.min.css';
+// import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { IProductNamePriceProps } from './IProductNamePrice';
 
 export const ProductNamePrice: FC<IProductNamePriceProps> =

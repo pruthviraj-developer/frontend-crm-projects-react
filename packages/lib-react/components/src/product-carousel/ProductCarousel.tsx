@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { CarouselWrapper } from './StyledProductCarousel';
-import 'react-responsive-carousel/lib/styles/carousel.min.css';
+// import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Carousel } from 'react-responsive-carousel';
 import { IProductCarouselProps } from './IProductCarousel';
 
