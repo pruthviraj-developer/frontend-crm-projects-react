@@ -2,10 +2,12 @@ import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { NavBar } from '@hs/components';
+import { IProductProps, urlParamsProps } from './IProduct';
 
 const Product: NextPage = () => {
   const router = useRouter();
-  const { productId } = router.query;
+  const urlParams = router.query as unknown as IProductProps;
+  const [productId, ignoredName] = [...(urlParams.urlParams || [])];
   return (
     <div>
       <Head>
@@ -19,6 +21,7 @@ const Product: NextPage = () => {
       <main>
         <NavBar></NavBar>
         <p>Product Id: {productId}</p>
+        <p>Product Name: {ignoredName}</p>
       </main>
     </div>
   );
