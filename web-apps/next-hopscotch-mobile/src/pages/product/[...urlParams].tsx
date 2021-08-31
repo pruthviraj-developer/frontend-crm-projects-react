@@ -2,7 +2,7 @@ import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { NavBar } from '@hs/components';
-import { IProductProps, urlParamsProps } from '@/interfaces/IProduct';
+import { IProductProps, urlParamsProps } from '@/types';
 
 const Product: NextPage = () => {
   const router = useRouter();
