@@ -24,6 +24,7 @@ import ICTwitterIcon from './footer-icons/twitter-icon.svg';
 import ICInstagramIcon from './footer-icons/instagram-icon.svg';
 import ICPIntrestIcon from './footer-icons/pinterest-icon.svg';
 import ICIconClose from './images/icon-close.svg';
+import ICIconWishList from './images/icon-wish-list.svg';
 
 export const CreateIcon = ICCreate;
 export const BackIcon = ICBack;
@@ -50,3 +51,4 @@ export const TwitterIcon = ICTwitterIcon;
 export const InstagramIcon = ICInstagramIcon;
 export const PIntrestIcon = ICPIntrestIcon;
 export const IconClose = ICIconClose;
+export const IconWishList = ICIconWishList;
