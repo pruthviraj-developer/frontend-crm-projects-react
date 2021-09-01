@@ -3,34 +3,9 @@ import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { NavBar } from '@hs/components';
 import { IProductProps } from '@/types';
-import { QueryClient } from 'react-query';
+import { QueryClient, useQuery } from 'react-query';
 import { dehydrate } from 'react-query/hydration';
-import { reorderService, httpService } from '@hs/services';
-// // Next.js pre-renders a page on each request if async `getServerSideProps` is exported from that page.
-// // 👀 https://nextjs.org/docs/basic-features/data-fetching#getserversideprops-server-side-rendering
-// export async function getServerSideProps() {
-//   // `QueryCache` manages the state, caching, lifecycle and everything related to fetching, revalidating of the queries.
-//   // 👀 https://react-query.tanstack.com/docs/api#querycache
-//   const queryCache = new QueryCache();
-
-//   // The next line should be uncommented if we want to use approach 1. `posts` will contain all the data that the API endpoint returns.
-//   // const posts = await getPosts();
-
-//   // `prefetchQuery` is an asynchronous function that can fetch and cache a query response before it is needed or rendered with `useQuery`.
-//   // 👀 https://react-query.tanstack.com/docs/api#querycacheprefetchquery
-//   await queryCache.prefetchQuery('posts', getPosts);
-
-//   return {
-//     props: {
-//       // `dehydrate` creates a frozen representation of a `queryCache` that can later be hydrated with `useHydrate`, `hydrate` or `Hydrate`.
-//       // 👀 https://react-query.tanstack.com/docs/api#hydrationdehydrate
-//       dehydratedState: dehydrate(queryCache),
-
-//       // The next line should be uncommented if we want to use approach 1.
-//       // posts,
-//     },
-//   };
-// }
+import { httpService } from '@hs/services';
 
 export async function getStaticPaths() {
   return {
@@ -42,8 +17,8 @@ export async function getStaticPaths() {
   };
 }
 
-export async function getColors() {
-  return await httpService.get({ url: 'api/product/948332?currentTime=1630480606085' });
+export function getColors() {
+  return httpService.get({ url: '/api/product/948332' });
 }
 
 export async function getStaticProps() {
@@ -61,6 +36,8 @@ const Product: NextPage = () => {
   const router = useRouter();
   const urlParams = router.query as unknown as IProductProps;
   const [productId, ignoredName] = [...(urlParams.urlParams || [])];
+  const { data } = useQuery('Colors', getColors);
+
   return (
     <div>
       <Head>
@@ -76,6 +53,7 @@ const Product: NextPage = () => {
         <p>Product Id: {productId}</p>
         <p>Product Name: {ignoredName}</p>
       </main>
+      <pre>{JSON.stringify(data, null, 4)}</pre>
     </div>
   );
 };
