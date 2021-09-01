@@ -5,7 +5,7 @@ import { NavBar } from '@hs/components';
 import { IProductProps } from '@/types';
 import { QueryClient } from 'react-query';
 import { dehydrate } from 'react-query/hydration';
-import { reorderService } from '@hs/services';
+import { reorderService, httpService } from '@hs/services';
 // // Next.js pre-renders a page on each request if async `getServerSideProps` is exported from that page.
 // // 👀 https://nextjs.org/docs/basic-features/data-fetching#getserversideprops-server-side-rendering
 // export async function getServerSideProps() {
@@ -43,7 +43,7 @@ export async function getStaticPaths() {
 }
 
 export async function getColors() {
-  return await reorderService.getColors();
+  return await httpService.get({ url: 'api/product/948332?currentTime=1630480606085' });
 }
 
 export async function getStaticProps() {
