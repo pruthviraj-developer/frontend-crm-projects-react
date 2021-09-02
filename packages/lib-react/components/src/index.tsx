@@ -6,3 +6,4 @@ export * from './product-name-price';
 export * from './size-chart-popup';
 export * from './next-nav-link';
 export * from './sold-product-price';
+export * from './delivery-details';
