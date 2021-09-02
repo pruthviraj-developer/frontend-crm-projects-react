@@ -1,5 +1,5 @@
 import { httpService } from '../http';
-import queryString from 'query-string';
+// import queryString from 'query-string';
 
 import {
   ICreateClusterType,
@@ -11,11 +11,13 @@ const createConstraint = (
   params: IReorderCreateConstraintParams,
   data: ICreateClusterType
 ): Promise<IReorderCreateConstraint> => {
-  const url = queryString.stringifyUrl({
-    url: '/crm-api/assortment-plan-api/reorder-take-action/vendor-constraint-service/age-color-constraint',
-    query: { ...params },
-  });
-  return httpService.post<IReorderCreateConstraint>({ url, data });
+  const url =
+    '/crm-api/assortment-plan-api/reorder-take-action/vendor-constraint-service/age-color-constraint';
+  // queryString.stringifyUrl({
+  //   url: '/crm-api/assortment-plan-api/reorder-take-action/vendor-constraint-service/age-color-constraint',
+  //   query: { ...params },
+  // });
+  return httpService.post<IReorderCreateConstraint>({ url, params, data });
 };
 
 const getConstraint = <P, R>(params: P): Promise<R> => {

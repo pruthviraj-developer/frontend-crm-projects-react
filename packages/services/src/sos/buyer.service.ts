@@ -1,5 +1,5 @@
 import { httpService } from '../http';
-import queryString from 'query-string';
+// import queryString from 'query-string';
 import { CarouselImageUpload, ImageUploadRes } from './Ibuyer.service';
 
 const getVendorList = <T>(): Promise<T> => {
@@ -26,11 +26,12 @@ const postData = <P, R>(
   params: Record<symbol, unknown>,
   data: P
 ): Promise<R> => {
-  const url = queryString.stringifyUrl({
-    url: '/crm-api/intranet/bulk-uploader-service/post',
-    query: { ...params },
-  });
-  return httpService.post<R>({ url, data });
+  const url = '/crm-api/intranet/bulk-uploader-service/post';
+  // queryString.stringifyUrl({
+  //   url: '/crm-api/intranet/bulk-uploader-service/post',
+  //   query: { ...params },
+  // });
+  return httpService.post<R>({ url, data, params });
 };
 
 const imageUpload = ({
