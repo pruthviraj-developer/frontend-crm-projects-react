@@ -1,13 +1,16 @@
 import toHex from 'colornames';
+
 export const primaryColor = {
   100: '#ed54a4',
   200: '#ee65ad',
 };
+
 export const secondaryColor = {
   100: '#777',
   300: '#707070',
   200: '#22e6c5bd',
 };
+
 export const tertiaryColor = {
   100: '#204265',
   200: '#09ADE0',

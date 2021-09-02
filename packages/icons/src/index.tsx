@@ -25,6 +25,8 @@ import ICInstagramIcon from './footer-icons/instagram-icon.svg';
 import ICPIntrestIcon from './footer-icons/pinterest-icon.svg';
 import ICIconClose from './images/icon-close.svg';
 import ICIconWishList from './images/icon-wish-list.svg';
+import ICIconTick from './images/icon-tick.svg';
+import ICIconCrossRed from './images/icon-cross-red.svg';
 
 export const CreateIcon = ICCreate;
 export const BackIcon = ICBack;
@@ -52,3 +54,5 @@ export const InstagramIcon = ICInstagramIcon;
 export const PIntrestIcon = ICPIntrestIcon;
 export const IconClose = ICIconClose;
 export const IconWishList = ICIconWishList;
+export const IconTick = ICIconTick;
+export const IconCrossRed = ICIconCrossRed;
