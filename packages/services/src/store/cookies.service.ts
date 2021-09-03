@@ -1,17 +1,14 @@
-import { useCookies } from 'react-cookie';
+import Cookies from 'js-cookie';
 import { SetCookieProps, GetCookieProps } from './Icookies.service';
 
-const [cookies, setCookie] = useCookies();
-
 const getCookies = (params: GetCookieProps) => {
-  // @ts-ignore: Unreachable code error
-  return cookies(params.key);
+  return Cookies.get(params.key);
 };
 
-const setCookies = (params: SetCookieProps) => {
-  return setCookie(`${params.key}`, params.value, {
+const setCookies = ({ key, value, options }: SetCookieProps) => {
+  return Cookies.set(`${key}`, value, {
     path: '/',
-    ...params.options,
+    ...options,
   });
 };
 
