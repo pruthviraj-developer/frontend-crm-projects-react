@@ -1,6 +1,6 @@
 export interface SetCookieProps {
   key: string;
-  value: Record<string, unknown> | number;
+  value: any;
   options?: Record<string, unknown>;
 }
 

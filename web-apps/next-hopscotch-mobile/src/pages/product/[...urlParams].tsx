@@ -5,7 +5,7 @@ import { NavBar } from '@hs/components';
 import { IProductProps } from '@/types';
 import { QueryClient, useQuery } from 'react-query';
 import { dehydrate } from 'react-query/hydration';
-import { httpService } from '@hs/services';
+import { httpService, cookiesService } from '@hs/services';
 
 export async function getStaticPaths() {
   return {
@@ -37,7 +37,7 @@ const Product: NextPage = () => {
   const urlParams = router.query as unknown as IProductProps;
   const [productId, ignoredName] = [...(urlParams.urlParams || [])];
   const { data } = useQuery('Colors', getColors);
-
+  cookiesService.setCookies({ key: 'test', value: 'test value' });
   return (
     <div>
       <Head>
