@@ -1,3 +1,3 @@
 export interface INavBarProps {
-  list?: Array<string>;
+  count?: number;
 }
