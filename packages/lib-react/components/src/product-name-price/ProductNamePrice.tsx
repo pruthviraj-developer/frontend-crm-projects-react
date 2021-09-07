@@ -12,15 +12,34 @@ import { IProductNamePriceProps } from './IProductNamePrice';
 
 export const ProductNamePrice: FC<IProductNamePriceProps> =
   // eslint-disable-next-line no-empty-pattern
-  ({ name }: IProductNamePriceProps) => {
-    return (
-      <ProductNamePriceWrapper>
-        <ProductPrice>₹299</ProductPrice>
-        <ProductOfferPrice>
-          <ProductVendorPrice>₹499</ProductVendorPrice>
-          <ProductDiscountPrice>40% off</ProductDiscountPrice>
-        </ProductOfferPrice>
-        <ProductName>{name}</ProductName>
-      </ProductNamePriceWrapper>
-    );
+  ({
+    name,
+    retailPrice,
+    retailPriceMax,
+    regularPrice,
+    discount,
+    selectedSku,
+  }: IProductNamePriceProps) => {
+    if (retailPrice) {
+      return (
+        <ProductNamePriceWrapper>
+          <ProductPrice>₹{retailPrice}</ProductPrice>
+          {retailPriceMax && !selectedSku && retailPrice != retailPriceMax && (
+            <ProductPrice> - ₹{retailPriceMax}</ProductPrice>
+          )}
+          {!(retailPriceMax && !selectedSku) && (
+            <>
+              {regularPrice > retailPrice && discount > 2 && (
+                <ProductOfferPrice>
+                  <ProductVendorPrice>₹{regularPrice}</ProductVendorPrice>
+                  <ProductDiscountPrice>{discount}% off</ProductDiscountPrice>
+                </ProductOfferPrice>
+              )}
+            </>
+          )}
+          <ProductName>{name}</ProductName>
+        </ProductNamePriceWrapper>
+      );
+    }
+    return <div style={{ display: 'none' }}></div>;
   };

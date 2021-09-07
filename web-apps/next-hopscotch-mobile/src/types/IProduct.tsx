@@ -13,7 +13,12 @@ export interface IProductDetails {
   action: string;
   id: number;
   productDesc: string;
-  simpleSkus?: SimpleSkusEntity[] | null;
+  productName?: string;
+  isProductSoldOut?: boolean;
+  hasSamePrice?: boolean;
+  isDefault?: boolean;
+  selectedSkuId?: string;
+  simpleSkus: SimpleSkusEntity[];
   imgurls?: ImgurlsEntity[] | null;
   brandName: string;
   hasSizeChart: boolean;
