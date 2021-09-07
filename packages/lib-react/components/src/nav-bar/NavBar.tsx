@@ -21,7 +21,7 @@ export const NavBar: FC<INavBarProps> = ({ count }: INavBarProps) => {
         <NextNavLink href="/helpcenter" name="Help" />
         <CartIconWrapper>
           <CartIcon />
-          {count && <CartIconQuantity>{count}</CartIconQuantity>}
+          {count > 0 && <CartIconQuantity>{count}</CartIconQuantity>}
         </CartIconWrapper>
       </RightContent>
     </NavBarWrapper>

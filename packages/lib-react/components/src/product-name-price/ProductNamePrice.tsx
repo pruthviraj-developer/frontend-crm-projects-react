@@ -12,7 +12,7 @@ import { IProductNamePriceProps } from './IProductNamePrice';
 
 export const ProductNamePrice: FC<IProductNamePriceProps> =
   // eslint-disable-next-line no-empty-pattern
-  ({}: IProductNamePriceProps) => {
+  ({ name }: IProductNamePriceProps) => {
     return (
       <ProductNamePriceWrapper>
         <ProductPrice>₹299</ProductPrice>
@@ -20,7 +20,7 @@ export const ProductNamePrice: FC<IProductNamePriceProps> =
           <ProductVendorPrice>₹499</ProductVendorPrice>
           <ProductDiscountPrice>40% off</ProductDiscountPrice>
         </ProductOfferPrice>
-        <ProductName>Black Polka on Pink Leggings</ProductName>
+        <ProductName>{name}</ProductName>
       </ProductNamePriceWrapper>
     );
   };
