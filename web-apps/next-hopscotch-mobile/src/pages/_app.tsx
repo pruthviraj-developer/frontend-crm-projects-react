@@ -3,6 +3,7 @@ import type { AppProps } from 'next/app';
 import { globalStyles } from '@/styles';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Hydrate } from 'react-query/hydration';
+import GoogleTagManager from '@/components/google-tag-manager/GoogleTagManager';
 function MyApp({ Component, pageProps }: AppProps) {
   const [queryClient] = useState(
     () =>
@@ -21,7 +22,9 @@ function MyApp({ Component, pageProps }: AppProps) {
       {globalStyles}
       <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps.dehydratedState}>
-          <Component {...pageProps} />
+          <GoogleTagManager>
+            <Component {...pageProps} />
+          </GoogleTagManager>
         </Hydrate>
       </QueryClientProvider>
     </>
