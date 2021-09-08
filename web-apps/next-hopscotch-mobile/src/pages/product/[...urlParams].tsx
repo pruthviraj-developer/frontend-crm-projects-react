@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
-import { NavBar, ProductNamePrice, DeliveryDetails } from '@hs/components';
+import { NavBar, ProductNamePrice, DeliveryDetails, CustomSizePicker } from '@hs/components';
 import { IProductProps, IProductDetails, IProductFormProps, SimpleSkusEntity } from '@/types';
 import { useQuery } from 'react-query';
 import { httpService, cookiesService, productDetailsService } from '@hs/services';
@@ -17,6 +17,7 @@ export async function getStaticPaths() {
   };
 }
 const ADD_TO_CART_BUTTON = 'Add to cart button';
+const SIZE_LIST_UPFRONT = 'Size list upfront';
 const getProductDetails = <P, R>(): Promise<R> => {
   const params = { currentTime: new Date().getTime() };
   // return httpService.get<R>({ url: `/api/product/${productId}`, params });
@@ -33,6 +34,8 @@ const Product: NextPage = () => {
   const router = useRouter();
   const urlParams = router.query as unknown as IProductProps;
   const [productId, ignoredName] = [...(urlParams.urlParams || [])];
+  const [isSelected, setIsSelected] = useState<boolean>(false);
+  const [selectedSkuId, setSelectedSkuId] = useState<string>('');
   const [product, setProduct] = useState<any>({});
   const [productInfo, setProductInfo] = useState<IProductDetails | any>({});
   const [productForm, setProductForm] = useState<IProductFormProps | any>({});
@@ -73,11 +76,11 @@ const Product: NextPage = () => {
           fromLocation?: string,
         ) => {
           const productForm: IProductFormProps | any = {};
-          // if (isfirst) {
-          //   this._$scope.isSelected = false;
-          // } else {
-          //   this._$scope.isSelected = true;
-          // }
+          if (isfirst) {
+            setIsSelected(false);
+          } else {
+            setIsSelected(true);
+          }
 
           productDetails.isDefault = isDefault;
           // this.showSizeError = false;
@@ -85,7 +88,7 @@ const Product: NextPage = () => {
             return;
           }
           if (!isfirst) {
-            // this.selectedSkuId = sku.skuId;
+            setSelectedSkuId(sku.skuId);
             // this.showSizeSelectorOption = false;
             productForm['selectedSku'] = sku;
             productForm['retailPrice'] = sku.retailPrice;
@@ -206,6 +209,9 @@ const Product: NextPage = () => {
                 discount: productForm.discount,
               }}
             ></ProductNamePrice>
+            <CustomSizePicker
+              {...{ simpleSkus: productInfo.simpleSkus, selectedSkuId, isSelected, sizeListUpfront: SIZE_LIST_UPFRONT }}
+            ></CustomSizePicker>
             <DeliveryDetails
               {...{
                 deliveryDetails: productInfo.deliveryMessages,
