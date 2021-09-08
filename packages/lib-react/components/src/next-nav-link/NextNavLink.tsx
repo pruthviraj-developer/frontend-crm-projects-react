@@ -6,10 +6,11 @@ import Link from 'next/link';
 export const NextNavLink: FC<INextNavLinkProps> = ({
   href,
   name,
+  color = '#FFFFFF',
 }: INextNavLinkProps) => {
   return (
     <Link href={href} passHref>
-      <LinkTag>{name}</LinkTag>
+      <LinkTag color={color}>{name}</LinkTag>
     </Link>
   );
 };

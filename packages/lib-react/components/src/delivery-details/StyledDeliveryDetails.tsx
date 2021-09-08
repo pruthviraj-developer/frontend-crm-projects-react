@@ -67,7 +67,7 @@ const DeliverIcon = styled(SvgIcon)`
 const PreOrderInfo = styled.span`
   display: inline-block;
   vertical-align: middle;
-  &a {
+  & > a {
     text-decoration: underline;
     color: ${secondaryColor[300]};
     padding-left: ${typography.size.s04}px;

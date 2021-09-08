@@ -2,7 +2,7 @@ import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { NavBar, ProductNamePrice, DeliveryDetails } from '@hs/components';
-import { IProductProps, IProductDetails, SimpleSkusEntity, AttrsEntity } from '@/types';
+import { IProductProps, IProductDetails, IProductFormProps, SimpleSkusEntity } from '@/types';
 import { useQuery } from 'react-query';
 import { httpService, cookiesService, productDetailsService } from '@hs/services';
 import { useState, useEffect } from 'react';
@@ -34,8 +34,8 @@ const Product: NextPage = () => {
   const urlParams = router.query as unknown as IProductProps;
   const [productId, ignoredName] = [...(urlParams.urlParams || [])];
   const [product, setProduct] = useState<any>({});
-  const [productInfo, setProductInfo] = useState<any>({});
-  const [productForm, setProductForm] = useState<any>({});
+  const [productInfo, setProductInfo] = useState<IProductDetails | any>({});
+  const [productForm, setProductForm] = useState<IProductFormProps | any>({});
   // const [quantity, setQuantity] = useState<number>(0);
   // const showNewPromo = _self._AbTestService.isOnNewPromo();
   // const SHOW_RFYP = true;
@@ -72,7 +72,7 @@ const Product: NextPage = () => {
           isDefault: boolean = false,
           fromLocation?: string,
         ) => {
-          const productForm: any = {};
+          const productForm: IProductFormProps | any = {};
           // if (isfirst) {
           //   this._$scope.isSelected = false;
           // } else {

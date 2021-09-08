@@ -137,3 +137,15 @@ export interface ProductSubAttrListEntity {
   attributeValue: string;
   isShowAttrName: boolean;
 }
+
+export interface IProductFormProps {
+  selectedSku: SimpleSkusEntity;
+  retailPrice: number;
+  regularPrice: number;
+  discount: number;
+  isPresale: number;
+  finalSale: number;
+  qtyLeft: number;
+  deliveryMsg: string;
+  retailPriceMax: number;
+}

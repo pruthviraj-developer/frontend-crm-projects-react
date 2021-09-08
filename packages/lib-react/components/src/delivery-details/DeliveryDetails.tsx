@@ -13,11 +13,11 @@ import {
   PreOrderInfo,
 } from './StyledDeliveryDetails';
 import { IDeliveryDetailsProps, DetailProps } from './IDeliveryDetails';
+import { NextNavLink } from '../next-nav-link';
 
 export const DeliveryDetails: FC<IDeliveryDetailsProps> = (
   props: IDeliveryDetailsProps
 ) => {
-  debugger;
   return (
     <DeliveryDetailsWrapper>
       <DeliveryTitle>
@@ -51,9 +51,11 @@ export const DeliveryDetails: FC<IDeliveryDetailsProps> = (
           )}
           {props.selectedSku && props.selectedSku.isInternationalPreorder && (
             <PreOrderInfo>
-              <a target="_blank" href={props.selectedSku.preorderAction}>
-                {props.selectedSku.preorderInfo}
-              </a>
+              <NextNavLink
+                color={'#707070'}
+                name={props.selectedSku.preorderInfo}
+                href={props.selectedSku.preorderAction}
+              ></NextNavLink>
             </PreOrderInfo>
           )}
           {props.productDetail && props.productDetail.isInternationalPreorder && (

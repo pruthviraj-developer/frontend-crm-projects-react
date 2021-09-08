@@ -12,4 +12,8 @@ export default {
 const Template: Story<INextNavLinkProps> = (args) => <NextNavLink {...args} />;
 export const WebNavBarComponent = Template.bind({});
 
-WebNavBarComponent.args = { href: '/accounts/order', name: 'Orders' };
+WebNavBarComponent.args = {
+  href: '/accounts/order',
+  name: 'Orders',
+  color: 'red',
+};
