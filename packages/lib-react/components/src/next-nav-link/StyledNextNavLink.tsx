@@ -1,8 +1,10 @@
 import styled from '@emotion/styled';
-import { Colors, typography } from '@hs/utils';
+import { typography } from '@hs/utils';
 
-const LinkTag = styled.a`
-  color: ${Colors.WHITE};
+const LinkTag = styled.a<{
+  color: string;
+}>`
+  color: ${(props) => props.color};
   font-weight: ${typography.weight.medium};
   float: left;
   padding: 8px 6px;

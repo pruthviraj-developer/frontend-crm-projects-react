@@ -10,7 +10,7 @@ import {
 } from './StyledNavBar';
 import { CartIcon, HopScotchIcon } from '@hs/icons';
 
-export const NavBar: FC<INavBarProps> = () => {
+export const NavBar: FC<INavBarProps> = ({ count }: INavBarProps) => {
   return (
     <NavBarWrapper>
       <HopscotchImage>
@@ -21,7 +21,7 @@ export const NavBar: FC<INavBarProps> = () => {
         <NextNavLink href="/helpcenter" name="Help" />
         <CartIconWrapper>
           <CartIcon />
-          <CartIconQuantity>5</CartIconQuantity>
+          {count > 0 && <CartIconQuantity>{count}</CartIconQuantity>}
         </CartIconWrapper>
       </RightContent>
     </NavBarWrapper>

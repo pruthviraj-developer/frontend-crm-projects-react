@@ -1,4 +1,8 @@
 export interface IProductNamePriceProps {
   name?: string;
-  price?: string;
+  retailPrice: number;
+  retailPriceMax: number;
+  selectedSku?: any;
+  regularPrice: number;
+  discount: number;
 }

@@ -12,4 +12,6 @@ export default {
 const Template: Story<INavBarProps> = (args) => <NavBar {...args} />;
 export const WebNavBarComponent = Template.bind({});
 
-WebNavBarComponent.args = {};
+WebNavBarComponent.args = {
+  count: 29,
+};
