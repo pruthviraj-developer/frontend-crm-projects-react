@@ -60,7 +60,11 @@ export const DeliveryDetails: FC<IDeliveryDetailsProps> = (
           )}
           {props.productDetail && props.productDetail.isInternationalPreorder && (
             <PreOrderInfo>
-              <a target="_blank" href={props.productDetail.preorderAction}>
+              <a
+                target="_blank"
+                href={props.productDetail.preorderAction}
+                rel="noreferrer"
+              >
                 {props.productDetail.preorderInfo}
               </a>
             </PreOrderInfo>
@@ -77,8 +81,8 @@ export const DeliveryDetails: FC<IDeliveryDetailsProps> = (
           </div>
         */}
 
-        {props.deliveryDetails.map((data: DetailProps) => (
-          <Delivery>
+        {props.deliveryDetails.map((data: DetailProps, index: number) => (
+          <Delivery key={index}>
             <DeliverIcon
               icon={data.type ? IconTick : IconCrossRed}
               fill={'#bbb'}
