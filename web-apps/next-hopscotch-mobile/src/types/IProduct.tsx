@@ -67,6 +67,7 @@ export interface IProductDetails {
   brandId: number;
   isWishlisted: boolean;
 }
+
 export interface SimpleSkusEntity {
   productName: string;
   skuId: string;
@@ -97,6 +98,7 @@ export interface SimpleSkusEntity {
   merchType: string;
   deliveryMessage: DeliveryMessageOrDeliveryMessagesEntity;
 }
+
 export interface AttrsEntity {
   name: string;
   value: string;
@@ -106,6 +108,7 @@ export interface DeliveryMessageOrDeliveryMessagesEntity {
   msg: string;
   type: number;
 }
+
 export interface ImgurlsEntity {
   imgUrl: string;
   imgUrlLarge: string;
@@ -121,12 +124,14 @@ export interface ImgurlsEntity {
   imgUrlThumbnailHeight: number;
   imgUrlThumbnailWidth: number;
 }
+
 export interface ProductLevelAttrListEntity {
   attributeName: string;
   isShowAttr: boolean;
   productSubAttrList?: ProductSubAttrListEntity[] | null;
   attributeValue?: string | null;
 }
+
 export interface ProductSubAttrListEntity {
   subAttributeName: string;
   attributeValue: string;

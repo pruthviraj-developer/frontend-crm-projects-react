@@ -1,14 +1,12 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
-import { NavBar, ProductNamePrice } from '@hs/components';
+import { NavBar, ProductNamePrice, DeliveryDetails } from '@hs/components';
 import { IProductProps, IProductDetails, SimpleSkusEntity, AttrsEntity } from '@/types';
-import { QueryClient, useQuery } from 'react-query';
-import { dehydrate } from 'react-query/hydration';
+import { useQuery } from 'react-query';
 import { httpService, cookiesService, productDetailsService } from '@hs/services';
 import { useState, useEffect } from 'react';
 import sortBy from 'lodash/sortBy';
-import chain from 'lodash/chain';
 export async function getStaticPaths() {
   return {
     paths: [
@@ -26,12 +24,8 @@ const getProductDetails = <P, R>(): Promise<R> => {
 };
 
 export async function getStaticProps() {
-  const queryClient = new QueryClient();
-  await queryClient.prefetchQuery('ProductDetail', getProductDetails);
   return {
-    props: {
-      dehydratedState: dehydrate(queryClient),
-    },
+    props: {},
   };
 }
 
@@ -75,8 +69,8 @@ const Product: NextPage = () => {
         const updateProductDetail = (
           sku: SimpleSkusEntity,
           isfirst: boolean,
-          isDefault: boolean,
-          fromLocation: string,
+          isDefault: boolean = false,
+          fromLocation?: string,
         ) => {
           const productForm: any = {};
           // if (isfirst) {
@@ -212,6 +206,13 @@ const Product: NextPage = () => {
                 discount: productForm.discount,
               }}
             ></ProductNamePrice>
+            <DeliveryDetails
+              {...{
+                deliveryDetails: productInfo.deliveryMessages,
+                selectedSku: productForm.selectedSku,
+                productDetail: productInfo,
+              }}
+            ></DeliveryDetails>
             <p>Product Id: {productId}</p>
             <p>Product Name: {ignoredName}</p>
           </div>

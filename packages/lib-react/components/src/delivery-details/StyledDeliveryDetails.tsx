@@ -32,15 +32,19 @@ const DeliveryDetailsContent = styled.div`
   margin-top: ${typography.size.s1}px;
 `;
 
-const DeliveryBadge = styled.span`
+const DeliveryBadge = styled.span<{
+  color: string;
+  bgColor: string;
+}>`
   font-size: ${typography.size.s1}px;
-  background-color: #ffcc33;
-  color: rgb(51, 51, 51);
+  background-color: ${(props) => props.bgColor};
+  color: ${(props) => props.color || 'rgb(51, 51, 51)'};
   line-height: ${typography.size.s3}px;
   font-weight: ${typography.weight.medium};
   border-radius: ${typography.size.s04}px;
   margin-left: ${typography.size.s04}px;
   padding: ${typography.size.s03}px ${typography.size.s08}px;
+  display: inline-block;
 `;
 
 const Delivery = styled.div`
@@ -60,6 +64,16 @@ const DeliverIcon = styled(SvgIcon)`
   margin-right: ${typography.size.s02}px;
 `;
 
+const PreOrderInfo = styled.span`
+  display: inline-block;
+  vertical-align: middle;
+  &a {
+    text-decoration: underline;
+    color: ${secondaryColor[300]};
+    padding-left: ${typography.size.s04}px;
+  }
+`;
+
 export {
   DeliveryDetailsWrapper,
   DeliveryDetailsContent,
@@ -70,4 +84,5 @@ export {
   Title,
   PinCode,
   DeliverIcon,
+  PreOrderInfo,
 };
