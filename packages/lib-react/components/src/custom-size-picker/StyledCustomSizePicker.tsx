@@ -8,6 +8,7 @@ const CustomSizeWrapper = styled.div`
 
 const Sizes = styled.div`
   white-space: nowrap;
+  padding: 0 ${typography.size.s3}px;
 `;
 
 const SizePill = styled.div`

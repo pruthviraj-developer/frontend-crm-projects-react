@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
-import { NavBar, ProductNamePrice, DeliveryDetails, CustomSizePicker } from '@hs/components';
+import { NavBar, ProductNamePrice, DeliveryDetails, CustomSizePicker, SizeAndChartLabels } from '@hs/components';
 import { IProductProps, IProductDetails, IProductFormProps, SimpleSkusEntity } from '@/types';
 import { useQuery } from 'react-query';
 import { httpService, cookiesService, productDetailsService } from '@hs/services';
@@ -20,6 +20,8 @@ export async function getStaticPaths() {
 }
 const ADD_TO_CART_BUTTON = 'Add to cart button';
 const SIZE_LIST_UPFRONT = 'Size list upfront';
+const ONE_SIZE = 'one size';
+const ONESIZE = 'onesize';
 const getProductDetails = <P, R>(): Promise<R> => {
   const params = { currentTime: new Date().getTime() };
   // return httpService.get<R>({ url: `/api/product/${productId}`, params });
@@ -165,13 +167,20 @@ const Product: NextPage = () => {
           // productDetails.hasSamePrice =
           // chain(productDetails.simpleSkus)?.map('retailPrice')?.uniq()?.value()?.length == 1;
           productDetails.productName = productDetails.simpleSkus[0] && productDetails.simpleSkus[0].productName;
+          productDetails.isOneSize =
+            productDetails.simpleSkus.length == 1 &&
+            [ONESIZE, ONE_SIZE].includes(
+              productDetails.simpleSkus[0] &&
+                productDetails.simpleSkus[0].attributes &&
+                productDetails.simpleSkus[0].attributes.size.toLowerCase(),
+            );
           setProductInfo(productDetails);
-          // TODO(parth): Check if this condition holds true. Might not be for SKUs where size is one, but multiple skus exist
-          // _self.productDetail.isOneSize =
-          //   _self.productDetail.simpleSkus.length == 1 &&
-          //   (_self.productDetail.simpleSkus[0].attributes.size.toLowerCase() == _self.configService.products.ONE_SIZE ||
-          //     _self.productDetail.simpleSkus[0].attributes.size.toLowerCase() == _self.configService.products.ONESIZE);
+          // (_self.productDetail.simpleSkus[0].attributes.size.toLowerCase() ==
+          //   _self.configService.products.ONE_SIZE ||
+          //   _self.productDetail.simpleSkus[0].attributes.size.toLowerCase() ==
+          //   _self.configService.products.ONESIZE);
         };
+
         // const brandName = productDetails.brandName;
         // const price = productDetail.retailPrice;
         // const defaultTitle = `Shop Online ${productName} at ₹${price}`;
@@ -212,14 +221,17 @@ const Product: NextPage = () => {
                   discount: productForm.discount,
                 }}
               ></ProductNamePrice>
-              <CustomSizePicker
-                {...{
-                  simpleSkus: productInfo.simpleSkus,
-                  selectedSkuId,
-                  isSelected,
-                  sizeListUpfront: SIZE_LIST_UPFRONT,
-                }}
-              ></CustomSizePicker>
+              <SizeAndChartLabels></SizeAndChartLabels>
+              {!productInfo.isOneSize && (
+                <CustomSizePicker
+                  {...{
+                    simpleSkus: productInfo.simpleSkus,
+                    selectedSkuId,
+                    isSelected,
+                    sizeListUpfront: SIZE_LIST_UPFRONT,
+                  }}
+                ></CustomSizePicker>
+              )}
               <DeliveryDetails
                 {...{
                   deliveryDetails: productInfo.deliveryMessages,
