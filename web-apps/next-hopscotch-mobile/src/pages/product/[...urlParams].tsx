@@ -7,6 +7,8 @@ import { useQuery } from 'react-query';
 import { httpService, cookiesService, productDetailsService } from '@hs/services';
 import { useState, useEffect } from 'react';
 import sortBy from 'lodash/sortBy';
+import { ProductDetailsWrapper } from './StyledUrlParams';
+
 export async function getStaticPaths() {
   return {
     paths: [
@@ -199,32 +201,39 @@ const Product: NextPage = () => {
         {productInfo && productInfo.action === 'success' && (
           <div>
             <NavBar count={productInfo && productInfo.quantity}></NavBar>
-            <ProductNamePrice
-              {...{
-                name: productInfo.productName,
-                retailPrice: productForm.retailPrice,
-                retailPriceMax: productForm.retailPriceMax,
-                selectedSku: productForm.selectedSku,
-                regularPrice: productForm.regularPrice,
-                discount: productForm.discount,
-              }}
-            ></ProductNamePrice>
-            <CustomSizePicker
-              {...{ simpleSkus: productInfo.simpleSkus, selectedSkuId, isSelected, sizeListUpfront: SIZE_LIST_UPFRONT }}
-            ></CustomSizePicker>
-            <DeliveryDetails
-              {...{
-                deliveryDetails: productInfo.deliveryMessages,
-                selectedSku: productForm.selectedSku,
-                productDetail: productInfo,
-              }}
-            ></DeliveryDetails>
+            <ProductDetailsWrapper>
+              <ProductNamePrice
+                {...{
+                  name: productInfo.productName,
+                  retailPrice: productForm.retailPrice,
+                  retailPriceMax: productForm.retailPriceMax,
+                  selectedSku: productForm.selectedSku,
+                  regularPrice: productForm.regularPrice,
+                  discount: productForm.discount,
+                }}
+              ></ProductNamePrice>
+              <CustomSizePicker
+                {...{
+                  simpleSkus: productInfo.simpleSkus,
+                  selectedSkuId,
+                  isSelected,
+                  sizeListUpfront: SIZE_LIST_UPFRONT,
+                }}
+              ></CustomSizePicker>
+              <DeliveryDetails
+                {...{
+                  deliveryDetails: productInfo.deliveryMessages,
+                  selectedSku: productForm.selectedSku,
+                  productDetail: productInfo,
+                }}
+              ></DeliveryDetails>
+            </ProductDetailsWrapper>
             <p>Product Id: {productId}</p>
             <p>Product Name: {ignoredName}</p>
           </div>
         )}
       </main>
-      <pre>{JSON.stringify(productInfo, null, 4)}</pre>
+      <pre style={{ width: '250px', overflowX: 'scroll' }}>{JSON.stringify(productInfo, null, 4)}</pre>
     </div>
   );
 };

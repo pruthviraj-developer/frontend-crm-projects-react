@@ -1,8 +1,14 @@
 import styled from '@emotion/styled';
 import { typography, Colors } from '@hs/utils';
+import { SvgIcon } from '@hs/icons';
+const ProductPricingWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding: 16px 16px 0;
+`;
 
 const ProductNamePriceWrapper = styled.div`
-  padding: 16px 16px 0;
+  width: 90%;
 `;
 
 const ProductPrice = styled.span`
@@ -40,11 +46,23 @@ const ProductName = styled.h1`
   font-weight: ${typography.weight.regular};
 `;
 
+const WishListWrapper = styled.div`
+  height: 40px;
+`;
+
+const WishListIcon = styled(SvgIcon)`
+  fill: #bbb;
+  opacity: 0.5;
+`;
+
 export {
+  ProductPricingWrapper,
   ProductNamePriceWrapper,
   ProductDiscountPrice,
   ProductVendorPrice,
   ProductOfferPrice,
   ProductPrice,
   ProductName,
+  WishListWrapper,
+  WishListIcon,
 };
