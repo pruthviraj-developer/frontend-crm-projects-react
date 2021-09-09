@@ -23,4 +23,5 @@ const ViewSizeChart = styled.span`
   cursor: pointer;
   text-transform: uppercase;
 `;
+
 export { SizeAndChartLabelsWrapper, Size, ViewSizeChart };

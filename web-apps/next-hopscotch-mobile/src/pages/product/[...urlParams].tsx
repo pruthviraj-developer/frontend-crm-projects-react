@@ -221,7 +221,14 @@ const Product: NextPage = () => {
                   discount: productForm.discount,
                 }}
               ></ProductNamePrice>
-              <SizeAndChartLabels></SizeAndChartLabels>
+              <SizeAndChartLabels
+                {...{
+                  isOneSize: productInfo.isOneSize,
+                  hasSizeChart: productInfo.hasSizeChart,
+                  qtyLeft: productForm.qtyLeft,
+                  simpleSkus: productInfo.simpleSkus,
+                }}
+              ></SizeAndChartLabels>
               {!productInfo.isOneSize && (
                 <CustomSizePicker
                   {...{

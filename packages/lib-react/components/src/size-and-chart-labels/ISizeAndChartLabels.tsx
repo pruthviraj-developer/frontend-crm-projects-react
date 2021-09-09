@@ -1,3 +1,6 @@
 export interface ISizeAndChartLabelsProps {
-  label?: string;
+  isOneSize: boolean;
+  hasSizeChart: boolean;
+  qtyLeft: number;
+  simpleSkus: Array<Record<string, string>>;
 }
