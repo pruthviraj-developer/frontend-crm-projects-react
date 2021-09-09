@@ -8,6 +8,7 @@ const CustomSizeWrapper = styled.div`
 
 const Sizes = styled.div`
   white-space: nowrap;
+  padding: 0 ${typography.size.s3}px;
 `;
 
 const SizePill = styled.div`
@@ -20,6 +21,7 @@ const SizePill = styled.div`
 
 const Size = styled.div<{
   selected: boolean;
+  disabled: boolean;
 }>`
   display: inline-block;
   font-size: ${typography.size.s2}px;
@@ -32,7 +34,12 @@ const Size = styled.div<{
   border-radius: ${typography.size.m2}px;
   background-color: ${Colors.WHITE};
   color: ${(props) => (props.selected ? Colors.PINK[500] : Colors.BLACK)};
-  opacity: 0.8;
+  opacity: ${(props) => (props.disabled ? '0.36' : '0.8')};
+  pointer-events: ${(props) => (props.disabled ? 'none' : 'auto')};
 `;
 
-export { CustomSizeWrapper, SizePill, Sizes, Size };
+const LeftQuantity = styled.div`
+  color: #f44;
+  text-align: center;
+`;
+export { CustomSizeWrapper, SizePill, Sizes, Size, LeftQuantity };

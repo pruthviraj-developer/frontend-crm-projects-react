@@ -15,6 +15,7 @@ export interface IProductDetails {
   productDesc: string;
   productName?: string;
   isProductSoldOut?: boolean;
+  isOneSize?: boolean;
   hasSamePrice?: boolean;
   isDefault?: boolean;
   selectedSkuId?: string;
@@ -69,6 +70,7 @@ export interface IProductDetails {
 }
 
 export interface SimpleSkusEntity {
+  attributes: any;
   productName: string;
   skuId: string;
   attrs?: AttrsEntity[] | null;

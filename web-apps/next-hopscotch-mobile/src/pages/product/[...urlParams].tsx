@@ -1,12 +1,14 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
-import { NavBar, ProductNamePrice, DeliveryDetails } from '@hs/components';
+import { NavBar, ProductNamePrice, DeliveryDetails, CustomSizePicker, SizeAndChartLabels } from '@hs/components';
 import { IProductProps, IProductDetails, IProductFormProps, SimpleSkusEntity } from '@/types';
 import { useQuery } from 'react-query';
 import { httpService, cookiesService, productDetailsService } from '@hs/services';
 import { useState, useEffect } from 'react';
 import sortBy from 'lodash/sortBy';
+import { ProductDetailsWrapper } from './StyledUrlParams';
+
 export async function getStaticPaths() {
   return {
     paths: [
@@ -17,6 +19,9 @@ export async function getStaticPaths() {
   };
 }
 const ADD_TO_CART_BUTTON = 'Add to cart button';
+const SIZE_LIST_UPFRONT = 'Size list upfront';
+const ONE_SIZE = 'one size';
+const ONESIZE = 'onesize';
 const getProductDetails = <P, R>(): Promise<R> => {
   const params = { currentTime: new Date().getTime() };
   // return httpService.get<R>({ url: `/api/product/${productId}`, params });
@@ -33,6 +38,8 @@ const Product: NextPage = () => {
   const router = useRouter();
   const urlParams = router.query as unknown as IProductProps;
   const [productId, ignoredName] = [...(urlParams.urlParams || [])];
+  const [isSelected, setIsSelected] = useState<boolean>(false);
+  const [selectedSkuId, setSelectedSkuId] = useState<string>('');
   const [product, setProduct] = useState<any>({});
   const [productInfo, setProductInfo] = useState<IProductDetails | any>({});
   const [productForm, setProductForm] = useState<IProductFormProps | any>({});
@@ -73,11 +80,11 @@ const Product: NextPage = () => {
           fromLocation?: string,
         ) => {
           const productForm: IProductFormProps | any = {};
-          // if (isfirst) {
-          //   this._$scope.isSelected = false;
-          // } else {
-          //   this._$scope.isSelected = true;
-          // }
+          if (isfirst) {
+            setIsSelected(false);
+          } else {
+            setIsSelected(true);
+          }
 
           productDetails.isDefault = isDefault;
           // this.showSizeError = false;
@@ -85,7 +92,7 @@ const Product: NextPage = () => {
             return;
           }
           if (!isfirst) {
-            // this.selectedSkuId = sku.skuId;
+            setSelectedSkuId(sku.skuId);
             // this.showSizeSelectorOption = false;
             productForm['selectedSku'] = sku;
             productForm['retailPrice'] = sku.retailPrice;
@@ -160,13 +167,20 @@ const Product: NextPage = () => {
           // productDetails.hasSamePrice =
           // chain(productDetails.simpleSkus)?.map('retailPrice')?.uniq()?.value()?.length == 1;
           productDetails.productName = productDetails.simpleSkus[0] && productDetails.simpleSkus[0].productName;
+          productDetails.isOneSize =
+            productDetails.simpleSkus.length == 1 &&
+            [ONESIZE, ONE_SIZE].includes(
+              productDetails.simpleSkus[0] &&
+                productDetails.simpleSkus[0].attributes &&
+                productDetails.simpleSkus[0].attributes.size.toLowerCase(),
+            );
           setProductInfo(productDetails);
-          // TODO(parth): Check if this condition holds true. Might not be for SKUs where size is one, but multiple skus exist
-          // _self.productDetail.isOneSize =
-          //   _self.productDetail.simpleSkus.length == 1 &&
-          //   (_self.productDetail.simpleSkus[0].attributes.size.toLowerCase() == _self.configService.products.ONE_SIZE ||
-          //     _self.productDetail.simpleSkus[0].attributes.size.toLowerCase() == _self.configService.products.ONESIZE);
+          // (_self.productDetail.simpleSkus[0].attributes.size.toLowerCase() ==
+          //   _self.configService.products.ONE_SIZE ||
+          //   _self.productDetail.simpleSkus[0].attributes.size.toLowerCase() ==
+          //   _self.configService.products.ONESIZE);
         };
+
         // const brandName = productDetails.brandName;
         // const price = productDetail.retailPrice;
         // const defaultTitle = `Shop Online ${productName} at ₹${price}`;
@@ -196,29 +210,49 @@ const Product: NextPage = () => {
         {productInfo && productInfo.action === 'success' && (
           <div>
             <NavBar count={productInfo && productInfo.quantity}></NavBar>
-            <ProductNamePrice
-              {...{
-                name: productInfo.productName,
-                retailPrice: productForm.retailPrice,
-                retailPriceMax: productForm.retailPriceMax,
-                selectedSku: productForm.selectedSku,
-                regularPrice: productForm.regularPrice,
-                discount: productForm.discount,
-              }}
-            ></ProductNamePrice>
-            <DeliveryDetails
-              {...{
-                deliveryDetails: productInfo.deliveryMessages,
-                selectedSku: productForm.selectedSku,
-                productDetail: productInfo,
-              }}
-            ></DeliveryDetails>
+            <ProductDetailsWrapper>
+              <ProductNamePrice
+                {...{
+                  name: productInfo.productName,
+                  retailPrice: productForm.retailPrice,
+                  retailPriceMax: productForm.retailPriceMax,
+                  selectedSku: productForm.selectedSku,
+                  regularPrice: productForm.regularPrice,
+                  discount: productForm.discount,
+                }}
+              ></ProductNamePrice>
+              <SizeAndChartLabels
+                {...{
+                  isOneSize: productInfo.isOneSize,
+                  hasSizeChart: productInfo.hasSizeChart,
+                  qtyLeft: productForm.qtyLeft,
+                  simpleSkus: productInfo.simpleSkus,
+                }}
+              ></SizeAndChartLabels>
+              {!productInfo.isOneSize && (
+                <CustomSizePicker
+                  {...{
+                    simpleSkus: productInfo.simpleSkus,
+                    selectedSkuId,
+                    isSelected,
+                    sizeListUpfront: SIZE_LIST_UPFRONT,
+                  }}
+                ></CustomSizePicker>
+              )}
+              <DeliveryDetails
+                {...{
+                  deliveryDetails: productInfo.deliveryMessages,
+                  selectedSku: productForm.selectedSku,
+                  productDetail: productInfo,
+                }}
+              ></DeliveryDetails>
+            </ProductDetailsWrapper>
             <p>Product Id: {productId}</p>
             <p>Product Name: {ignoredName}</p>
           </div>
         )}
       </main>
-      <pre>{JSON.stringify(productInfo, null, 4)}</pre>
+      <pre style={{ width: '250px', overflowX: 'scroll' }}>{JSON.stringify(productInfo, null, 4)}</pre>
     </div>
   );
 };

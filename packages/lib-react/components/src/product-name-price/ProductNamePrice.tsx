@@ -1,27 +1,28 @@
 import React, { FC } from 'react';
 import {
+  ProductPricingWrapper,
   ProductNamePriceWrapper,
   ProductName,
   ProductPrice,
   ProductOfferPrice,
   ProductVendorPrice,
   ProductDiscountPrice,
+  WishListWrapper,
+  WishListIcon,
 } from './StyledProductNamePrice';
-// import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { IProductNamePriceProps } from './IProductNamePrice';
-
-export const ProductNamePrice: FC<IProductNamePriceProps> =
-  // eslint-disable-next-line no-empty-pattern
-  ({
-    name,
-    retailPrice,
-    retailPriceMax,
-    regularPrice,
-    discount,
-    selectedSku,
-  }: IProductNamePriceProps) => {
-    if (retailPrice) {
-      return (
+import { IconWishList } from '@hs/icons';
+export const ProductNamePrice: FC<IProductNamePriceProps> = ({
+  name,
+  retailPrice,
+  retailPriceMax,
+  regularPrice,
+  discount,
+  selectedSku,
+}: IProductNamePriceProps) => {
+  if (retailPrice) {
+    return (
+      <ProductPricingWrapper>
         <ProductNamePriceWrapper>
           <ProductPrice>₹{retailPrice}</ProductPrice>
           {retailPriceMax && !selectedSku && retailPrice != retailPriceMax && (
@@ -39,7 +40,11 @@ export const ProductNamePrice: FC<IProductNamePriceProps> =
           )}
           <ProductName>{name}</ProductName>
         </ProductNamePriceWrapper>
-      );
-    }
-    return <div style={{ display: 'none' }}></div>;
-  };
+        <WishListWrapper>
+          <WishListIcon icon={IconWishList} fill={'#bbb'} />
+        </WishListWrapper>
+      </ProductPricingWrapper>
+    );
+  }
+  return <div style={{ display: 'none' }}></div>;
+};

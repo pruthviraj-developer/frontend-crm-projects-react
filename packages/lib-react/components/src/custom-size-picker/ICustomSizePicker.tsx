@@ -1,3 +1,6 @@
 export interface ICustomSizePicker {
-  label?: string;
+  isSelected: boolean;
+  selectedSkuId: string;
+  sizeListUpfront: string;
+  simpleSkus: any; // parent SimpleSkusEntity props
 }

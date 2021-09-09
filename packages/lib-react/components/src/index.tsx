@@ -7,3 +7,4 @@ export * from './size-chart-popup';
 export * from './next-nav-link';
 export * from './sold-product-price';
 export * from './delivery-details';
+export * from './size-and-chart-labels';

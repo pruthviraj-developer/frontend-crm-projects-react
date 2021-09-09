@@ -5,10 +5,8 @@ import { SvgIcon } from '@hs/icons';
 const DeliveryDetailsWrapper = styled.div`
   background-color: ${Colors.WHITE};
   box-shadow: 0 1px 0 0 ${Colors.MERCURY}, 0 -1px 0 0 ${Colors.MERCURY};
-  padding-top: ${typography.size.s24}px;
-  padding-right: ${typography.size.s3}px;
-  padding-bottom: ${typography.size.s2}px;
-  padding-left: ${typography.size.s3}px;
+  padding: ${typography.size.s24}px ${typography.size.s3}px
+    ${typography.size.s2}px;
   margin: 0px;
 `;
 
