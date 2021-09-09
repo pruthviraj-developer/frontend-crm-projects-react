@@ -1,7 +1,14 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
-import { NavBar, ProductNamePrice, DeliveryDetails, CustomSizePicker, SizeAndChartLabels } from '@hs/components';
+import {
+  Accordian,
+  NavBar,
+  ProductNamePrice,
+  DeliveryDetails,
+  CustomSizePicker,
+  SizeAndChartLabels,
+} from '@hs/components';
 import { IProductProps, IProductDetails, IProductFormProps, SimpleSkusEntity } from '@/types';
 import { useQuery } from 'react-query';
 import { httpService, cookiesService, productDetailsService } from '@hs/services';
@@ -246,13 +253,14 @@ const Product: NextPage = () => {
                   productDetail: productInfo,
                 }}
               ></DeliveryDetails>
+              {productInfo.id && <Accordian {...{ productInfo }}></Accordian>}
             </ProductDetailsWrapper>
             <p>Product Id: {productId}</p>
             <p>Product Name: {ignoredName}</p>
           </div>
         )}
       </main>
-      <pre style={{ width: '250px', overflowX: 'scroll' }}>{JSON.stringify(productInfo, null, 4)}</pre>
+      <pre style={{ width: '60%', overflowX: 'scroll' }}>{JSON.stringify(productInfo, null, 4)}</pre>
     </div>
   );
 };
