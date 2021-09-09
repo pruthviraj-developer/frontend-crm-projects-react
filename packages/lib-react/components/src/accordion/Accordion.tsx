@@ -7,44 +7,76 @@ import {
   AccordionContent,
   AccordianDescription,
   DetailsDescription,
-  DescriptionList,
-  DescriptionListItem,
+  // DescriptionList,
+  // DescriptionListItem,
   OtherDetails,
+  FeatureAttributesList,
+  FeatureAttributesListItem,
+  DetailsDescriptionTitle,
 } from './StyledAccordion';
 
 // eslint-disable-next-line no-empty-pattern
-export const Accordian: FC<IAccordianProps> = ({}: IAccordianProps) => {
+export const Accordian: FC<IAccordianProps> = ({
+  productInfo,
+}: IAccordianProps) => {
   return (
     <AccordianWrapper>
       <AccordionTitle>Item details</AccordionTitle>
       <AccordionContent>
         <AccordianDescription>
+          {productInfo.productDesc && (
+            <DetailsDescription
+              dangerouslySetInnerHTML={{ __html: productInfo.productDesc }}
+            ></DetailsDescription>
+          )}
           <DetailsDescription>
-            <b>FEATURES:</b>
-            <DescriptionList>
-              <DescriptionListItem>Material: 100% Cotton</DescriptionListItem>
-              <DescriptionListItem>
-                The actual product may differ slightly in color from the one
-                illustrated in the images..
-              </DescriptionListItem>
-            </DescriptionList>
-            <b>WHAT'S INCLUDED:</b>
-            <DescriptionList>
-              <DescriptionListItem>1 T-Shirt</DescriptionListItem>
-            </DescriptionList>
-            <b>CARE:</b>
-            <DescriptionList>
-              <DescriptionListItem>Gentle Wash</DescriptionListItem>
-            </DescriptionList>
             <OtherDetails>
               <b>Suitable for</b>
-              <div className={'content'}>Boy's</div>
+              <div className={'content'}>
+                {productInfo.simpleSkus[0] && productInfo.simpleSkus[0].gender}
+              </div>
             </OtherDetails>
             <OtherDetails>
               <b>Colour</b>
-              <div className={'content'}>White</div>
+              <div className={'content'}>
+                {productInfo.simpleSkus[0] &&
+                  productInfo.simpleSkus[0].attributes.colour}
+              </div>
             </OtherDetails>
           </DetailsDescription>
+          {productInfo.productLevelAttrList &&
+            productInfo.productLevelAttrList.length &&
+            productInfo.productLevelAttrList.map((subAttr, index: number) => {
+              return (
+                subAttr.isShowAttr && (
+                  <DetailsDescription margin={true} key={index}>
+                    <b>{subAttr.attributeName}</b>
+                    {subAttr.attributeValue && (
+                      <DetailsDescriptionTitle>
+                        {subAttr.attributeValue}
+                      </DetailsDescriptionTitle>
+                    )}
+                    <FeatureAttributesList>
+                      {subAttr.productSubAttrList &&
+                        subAttr.productSubAttrList.length &&
+                        subAttr.productSubAttrList.map(
+                          (featureAttr, subIndex) => {
+                            return (
+                              featureAttr.attributeValue && (
+                                <FeatureAttributesListItem key={subIndex}>
+                                  {(featureAttr.isShowAttrName
+                                    ? `${featureAttr.subAttributeName} : `
+                                    : '') + featureAttr.attributeValue}
+                                </FeatureAttributesListItem>
+                              )
+                            );
+                          }
+                        )}
+                    </FeatureAttributesList>
+                  </DetailsDescription>
+                )
+              );
+            })}
         </AccordianDescription>
       </AccordionContent>
     </AccordianWrapper>

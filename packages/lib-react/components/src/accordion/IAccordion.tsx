@@ -1,3 +1,3 @@
 export interface IAccordianProps {
-  label?: string;
+  productInfo: any; // parent product props
 }

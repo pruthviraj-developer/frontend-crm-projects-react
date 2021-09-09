@@ -29,7 +29,8 @@ const AccordionContent = styled.div`
 
 const AccordianDescription = styled.div``;
 
-const DetailsDescription = styled.div`
+const DetailsDescription = styled.div<{ margin?: boolean }>`
+  margin-top: ${(props) => (props.margin ? typography.size.s3 : 0)}px;
   &b {
     font-size: ${typography.size.s2}px;
     line-height: ${typography.size.s4}px;
@@ -54,6 +55,25 @@ const OtherDetails = styled.div`
   }
 `;
 
+const FeatureAttributesList = styled.ul`
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  padding-left: 24px;
+  margin: 0;
+`;
+
+const FeatureAttributesListItem = styled.li`
+  list-style-type: disc;
+`;
+
+const DetailsDescriptionTitle = styled.div`
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  margin-top: 16px;
+`;
+
 export {
   AccordianWrapper,
   AccordionTitle,
@@ -63,4 +83,7 @@ export {
   DescriptionList,
   DescriptionListItem,
   OtherDetails,
+  FeatureAttributesList,
+  FeatureAttributesListItem,
+  DetailsDescriptionTitle,
 };
