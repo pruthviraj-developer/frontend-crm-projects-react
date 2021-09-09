@@ -54,6 +54,24 @@ const OtherDetails = styled.div`
   }
 `;
 
+const FeatureAttributesList = styled.ul`
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  padding-left: 24px;
+`;
+
+const FeatureAttributesListItem = styled.li`
+  list-style-type: disc;
+`;
+
+const DetailsDescriptionTitle = styled.div`
+  font-size: 14px;
+  line-height: 18px;
+  font-weight: 600;
+  margin-top: 16px;
+`;
+
 export {
   AccordianWrapper,
   AccordionTitle,
@@ -63,4 +81,7 @@ export {
   DescriptionList,
   DescriptionListItem,
   OtherDetails,
+  FeatureAttributesList,
+  FeatureAttributesListItem,
+  DetailsDescriptionTitle,
 };
