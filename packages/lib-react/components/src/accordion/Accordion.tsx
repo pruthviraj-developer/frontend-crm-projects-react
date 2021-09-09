@@ -47,40 +47,38 @@ export const Accordian: FC<IAccordianProps> = ({
           {productInfo.productLevelAttrList &&
             productInfo.productLevelAttrList.length &&
             productInfo.productLevelAttrList.map((subAttr, index: number) => {
-              <DetailsDescription key={index}>
-                <b>{subAttr.attributeName}</b>
-                <DetailsDescriptionTitle>
-                  {subAttr.attributeValue}
-                </DetailsDescriptionTitle>
-                <FeatureAttributesList>
-                  {subAttr.productSubAttrList &&
-                    subAttr.productSubAttrList.length &&
-                    subAttr.productSubAttrList.map((featureAttr, subIndex) => {
-                      <FeatureAttributesListItem key={subIndex}>
-                        {(featureAttr.isShowAttrName
-                          ? `${featureAttr.subAttributeName} : `
-                          : '') + featureAttr.attributeValue}
-                      </FeatureAttributesListItem>;
-                    })}
-                </FeatureAttributesList>
-              </DetailsDescription>;
+              return (
+                subAttr.isShowAttr && (
+                  <DetailsDescription margin={true} key={index}>
+                    <b>{subAttr.attributeName}</b>
+                    {subAttr.attributeValue && (
+                      <DetailsDescriptionTitle>
+                        {subAttr.attributeValue}
+                      </DetailsDescriptionTitle>
+                    )}
+                    <FeatureAttributesList>
+                      {subAttr.productSubAttrList &&
+                        subAttr.productSubAttrList.length &&
+                        subAttr.productSubAttrList.map(
+                          (featureAttr, subIndex) => {
+                            return (
+                              featureAttr.attributeValue && (
+                                <FeatureAttributesListItem key={subIndex}>
+                                  {(featureAttr.isShowAttrName
+                                    ? `${featureAttr.subAttributeName} : `
+                                    : '') + featureAttr.attributeValue}
+                                </FeatureAttributesListItem>
+                              )
+                            );
+                          }
+                        )}
+                    </FeatureAttributesList>
+                  </DetailsDescription>
+                )
+              );
             })}
         </AccordianDescription>
       </AccordionContent>
     </AccordianWrapper>
   );
 };
-
-{
-  /* <div class="detail" ng-repeat="subAttr in vm.product.productLevelAttrList">
-<div class="heading" ng-bind="::subAttr.attributeName"></div>
-<div class="content">
-  <div class="content" ng-bind-html="::subAttr.attributeValue"></div>
-  <ul>
-    <li ng-repeat="featureAttr in subAttr.productSubAttrList"
-      ng-bind="::((featureAttr.isShowAttrName ? featureAttr.subAttributeName + ' : ' : '') + featureAttr.attributeValue)">
-    </li>
-  </ul>
-</div>
-</div> */
-}
