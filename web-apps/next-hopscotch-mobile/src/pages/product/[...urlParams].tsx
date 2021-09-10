@@ -253,7 +253,7 @@ const Product: NextPage = () => {
                   productDetail: productInfo,
                 }}
               ></DeliveryDetails>
-              {productInfo.id && <Accordian {...{ productInfo }}></Accordian>}
+              {productInfo.id && <Accordian {...{ productInfo, sku: productForm.selectedSku }}></Accordian>}
             </ProductDetailsWrapper>
             <p>Product Id: {productId}</p>
             <p>Product Name: {ignoredName}</p>

@@ -18,6 +18,7 @@ import {
 // eslint-disable-next-line no-empty-pattern
 export const Accordian: FC<IAccordianProps> = ({
   productInfo,
+  sku,
 }: IAccordianProps) => {
   return (
     <>
@@ -82,6 +83,49 @@ export const Accordian: FC<IAccordianProps> = ({
           </AccordianDescription>
         </AccordionContent>
       </AccordianWrapper>
+
+      {productInfo.showShippingInfo && (
+        <AccordianWrapper>
+          <AccordionTitle>Shipping and returns</AccordionTitle>
+          <AccordionContent>
+            {productInfo.isReturnable && (
+              <AccordianDescription>
+                <DetailsDescription
+                  dangerouslySetInnerHTML={{
+                    __html:
+                      (sku && sku.shippingReturnInfoForSku) ||
+                      productInfo.shippingReturnInfo,
+                  }}
+                ></DetailsDescription>
+              </AccordianDescription>
+            )}
+            {!productInfo.isReturnable && (
+              <AccordianDescription>
+                <DetailsDescription
+                  dangerouslySetInnerHTML={{
+                    __html: productInfo.shippingReturnInfo,
+                  }}
+                ></DetailsDescription>
+              </AccordianDescription>
+            )}
+            {productInfo.isPresale && productInfo.preOrderDescription && (
+              <AccordianDescription>
+                <DetailsDescription>
+                  <OtherDetails>
+                    <b>Pre-order</b>
+                    <div
+                      className={'content'}
+                      dangerouslySetInnerHTML={{
+                        __html: productInfo.preOrderDescription,
+                      }}
+                    ></div>
+                  </OtherDetails>
+                </DetailsDescription>
+              </AccordianDescription>
+            )}
+          </AccordionContent>
+        </AccordianWrapper>
+      )}
 
       {productInfo.showBrandDetails && productInfo.brandDescription && (
         <AccordianWrapper>

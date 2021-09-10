@@ -4,6 +4,7 @@ import { globalStyles } from '@/styles';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Hydrate } from 'react-query/hydration';
 import GoogleTagManager from '@/components/google-tag-manager/GoogleTagManager';
+import { ReactQueryDevtools } from 'react-query/devtools';
 function MyApp({ Component, pageProps }: AppProps) {
   const [queryClient] = useState(
     () =>
@@ -26,6 +27,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             <Component {...pageProps} />
           </GoogleTagManager>
         </Hydrate>
+        <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </>
   );
