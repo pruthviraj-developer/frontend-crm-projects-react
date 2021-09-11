@@ -83,7 +83,6 @@ export const Accordian: FC<IAccordianProps> = ({
           </AccordianDescription>
         </AccordionContent>
       </AccordianWrapper>
-
       {productInfo.showShippingInfo && (
         <AccordianWrapper>
           <AccordionTitle>Shipping and returns</AccordionTitle>
@@ -126,7 +125,6 @@ export const Accordian: FC<IAccordianProps> = ({
           </AccordionContent>
         </AccordianWrapper>
       )}
-
       {productInfo.showBrandDetails && productInfo.brandDescription && (
         <AccordianWrapper>
           <AccordionTitle>About {productInfo.brandName}</AccordionTitle>
@@ -139,6 +137,27 @@ export const Accordian: FC<IAccordianProps> = ({
               ></DetailsDescription>
             </AccordianDescription>
           </AccordionContent>
+        </AccordianWrapper>
+      )}
+      {!(productInfo.showBrandDetails || productInfo.brandDescription) && (
+        <AccordianWrapper>
+          <AccordionTitle>By brand {productInfo.brandName}</AccordionTitle>
+        </AccordianWrapper>
+      )}
+      {productInfo.moreInfo && (
+        <AccordianWrapper>
+          <AccordionTitle>More Info</AccordionTitle>
+          {productInfo.moreInfo && (
+            <AccordionContent>
+              <AccordianDescription>
+                <DetailsDescription
+                  dangerouslySetInnerHTML={{
+                    __html: productInfo.moreInfo,
+                  }}
+                ></DetailsDescription>
+              </AccordianDescription>
+            </AccordionContent>
+          )}
         </AccordianWrapper>
       )}
     </>
