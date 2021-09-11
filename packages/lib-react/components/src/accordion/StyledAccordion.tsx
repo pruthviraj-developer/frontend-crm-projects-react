@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { typography, Colors, secondaryColor, primaryColor } from '@hs/utils';
 
 const AccordianWrapper = styled.div`
-  margin: ${typography.size.s3}px auto;
+  margin: auto;
 `;
 
 const AccordionTitle = styled.div`
