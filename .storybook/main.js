@@ -11,8 +11,14 @@ module.exports = {
     '@storybook/addon-viewport',
     '@storybook/addon-storysource',
     'storybook-addon-material-ui',
+    'storybook-addon-next-router',
   ],
-
+  typescript: {
+    // Disable docgeneration due to TypeScript 2.3.x incompatability.
+    // TODO: Fix this once https://github.com/styleguidist/react-docgen-typescript/issues/356
+    // is addressed
+    reactDocgen: 'none',
+  },
   webpackFinal: async (config) => {
     config.module.rules.push({
       test: /\.(ts|tsx|woff|woff2)$/,
@@ -23,9 +29,9 @@ module.exports = {
             transpileOnly: true,
           },
         },
-        {
-          loader: require.resolve('react-docgen-typescript-loader'),
-        },
+        // {
+        //   loader: require.resolve('react-docgen-typescript-loader'),
+        // },
         {
           loader: require.resolve('babel-loader'),
           options: {

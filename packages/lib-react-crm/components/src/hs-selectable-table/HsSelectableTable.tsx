@@ -656,8 +656,8 @@ export const HsSelectableTable: FC<SelectableTableProps> = ({
             count={totalRowsCount}
             rowsPerPage={rowsPerPage}
             page={page}
-            onChangePage={handleChangePage}
-            onChangeRowsPerPage={handleChangeRowsPerPage}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
             classes={{
               toolbar: classes.toolbar,
               caption: classes.caption,

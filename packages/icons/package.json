@@ -32,9 +32,9 @@
   "author": "Rishikant Tiwari",
   "module": "dist/icons.esm.js",
   "devDependencies": {
-    "@rollup/plugin-url": "^5.0.1",
+    "@rollup/plugin-url": "6.1.0",
     "@size-limit/preset-small-lib": "^5.0.3",
-    "@svgr/rollup": "^5.4.0",
+    "@svgr/rollup": "5.5.0",
     "@types/react": "17.0.19",
     "@types/react-dom": "17.0.5",
     "husky": "6.0.0",
