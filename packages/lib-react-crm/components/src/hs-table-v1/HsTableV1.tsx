@@ -183,8 +183,8 @@ export const HSTableV1: FC<HsTablePropsV1> = (props: HsTablePropsV1) => {
           count={props.count}
           rowsPerPage={rowsPerPage}
           page={page}
-          onChangePage={handleChangePage}
-          onChangeRowsPerPage={handleChangeRowsPerPage}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </StyledHsTable>
     </div>
