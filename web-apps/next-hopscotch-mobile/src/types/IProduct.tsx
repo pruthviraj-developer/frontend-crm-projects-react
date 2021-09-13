@@ -36,6 +36,7 @@ export interface IProductDetails {
   canPreSale: number;
   isPresale: number;
   maxDeliveryDays: number;
+  moreInfo: string;
   edd: string;
   highlightEDD: number;
   categoryName: string;

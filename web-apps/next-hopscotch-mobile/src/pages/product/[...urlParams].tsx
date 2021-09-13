@@ -181,6 +181,8 @@ const Product: NextPage = () => {
                 productDetails.simpleSkus[0].attributes &&
                 productDetails.simpleSkus[0].attributes.size.toLowerCase(),
             );
+          // productDetails.moreInfo =
+          // '<div>\n<p><b>Country of Origin: </b> China</p>\n\n<b>Manufacturer Details:</b>\n<ul style="margin-bottom: 10px;">\n   <li>Mucheng,China</li>\n</ul>\n\n<b>Importer Details:</b>\n<ul>\n   <li>Hopscotch Wholesale Trading Pvt. Ltd,Mumbai</li>\n</ul>\n\n<b>Packer Details:</b>\n<ul>\n   <li>Mucheng,China</li>\n</ul>\n\n</div>';
           setProductInfo(productDetails);
           // (_self.productDetail.simpleSkus[0].attributes.size.toLowerCase() ==
           //   _self.configService.products.ONE_SIZE ||
@@ -253,7 +255,7 @@ const Product: NextPage = () => {
                   productDetail: productInfo,
                 }}
               ></DeliveryDetails>
-              {productInfo.id && <Accordian {...{ productInfo }}></Accordian>}
+              {productInfo.id && <Accordian {...{ productInfo, sku: productForm.selectedSku }}></Accordian>}
             </ProductDetailsWrapper>
             <p>Product Id: {productId}</p>
             <p>Product Name: {ignoredName}</p>
