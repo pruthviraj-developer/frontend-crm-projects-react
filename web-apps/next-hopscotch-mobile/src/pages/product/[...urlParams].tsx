@@ -9,12 +9,26 @@ import {
   CustomSizePicker,
   SizeAndChartLabels,
 } from '@hs/components';
-import { IProductProps, IProductDetails, IProductFormProps, SimpleSkusEntity } from '@/types';
+import {
+  IProductProps,
+  IProductDetails,
+  IProductFormProps,
+  IRecommendMatchingDetailListEntity,
+  SimpleSkusEntity,
+  IRecommendedProducts,
+} from '@/types';
 import { useQuery } from 'react-query';
-import { httpService, cookiesService, productDetailsService } from '@hs/services';
+import { cookiesService, productDetailsService } from '@hs/services';
 import { useState, useEffect } from 'react';
 import sortBy from 'lodash/sortBy';
-import { ProductDetailsWrapper } from './StyledUrlParams';
+import {
+  ProductDetailsWrapper,
+  RecommendedProducts,
+  RecommendedProductsTitle,
+  RecommendedMatching,
+  RecommendedMatchingProduct,
+  RecommendedMatchingProductLink,
+} from './StyledUrlParams';
 
 export async function getStaticPaths() {
   return {
@@ -25,15 +39,15 @@ export async function getStaticPaths() {
     fallback: true,
   };
 }
-const ADD_TO_CART_BUTTON = 'Add to cart button';
+// const ADD_TO_CART_BUTTON = 'Add to cart button';
 const SIZE_LIST_UPFRONT = 'Size list upfront';
 const ONE_SIZE = 'one size';
 const ONESIZE = 'onesize';
-const getProductDetails = <P, R>(): Promise<R> => {
-  const params = { currentTime: new Date().getTime() };
-  // return httpService.get<R>({ url: `/api/product/${productId}`, params });
-  return httpService.get<R>({ url: '/api/product/948332', params });
-};
+// const getProductDetails = <P, R>(): Promise<R> => {
+//   const params = { currentTime: new Date().getTime() };
+//   // return httpService.get<R>({ url: `/api/product/${productId}`, params });
+//   return httpService.get<R>({ url: '/api/product/948332', params });
+// };
 
 export async function getStaticProps() {
   return {
@@ -44,12 +58,15 @@ export async function getStaticProps() {
 const Product: NextPage = () => {
   const router = useRouter();
   const urlParams = router.query as unknown as IProductProps;
-  const [productId, ignoredName] = [...(urlParams.urlParams || [])];
+  const [productId] = [...(urlParams.urlParams || [])];
   const [isSelected, setIsSelected] = useState<boolean>(false);
   const [selectedSkuId, setSelectedSkuId] = useState<string>('');
   const [product, setProduct] = useState<any>({});
   const [productInfo, setProductInfo] = useState<IProductDetails | any>({});
   const [productForm, setProductForm] = useState<IProductFormProps | any>({});
+  const [recommendedProducts, setRecommendedProducts] = useState<IRecommendedProducts | any>({});
+  const [similarProducts, setSimilarProducts] = useState<IRecommendedProducts | any>({});
+
   // const [quantity, setQuantity] = useState<number>(0);
   // const showNewPromo = _self._AbTestService.isOnNewPromo();
   // const SHOW_RFYP = true;
@@ -63,23 +80,29 @@ const Product: NextPage = () => {
     },
   );
 
+  const { data: recommendedProductDetails, isSuccess: isRecommendedProductsSuccess } = useQuery<IRecommendedProducts>(
+    ['RecommendedProducts', productId],
+    () => productDetailsService.getRecommendedProducts(productId, { boutiqueId: undefined }),
+    {
+      staleTime: Infinity,
+      enabled: productId !== undefined,
+    },
+  );
+
+  const { data: similarProductDetails, isSuccess: isSimilarProductSuccess } = useQuery<IRecommendedProducts>(
+    ['SimilarProducts', productId],
+    () => productDetailsService.getSimilarProducts(productId, { boutiqueId: undefined }),
+    {
+      staleTime: Infinity,
+      enabled: productId !== undefined,
+    },
+  );
+
+  // setSimilarProducts
+
   useEffect(() => {
     if (isProductDetailsSuccess) {
       if (productDetails && productDetails.action === 'success') {
-        const originalRetailPrice = productDetails.retailPrice;
-        // const productDetail = respone;
-        const getProductDesc = (htmlText: string) => {
-          let descText = '';
-          try {
-            const productDescription = htmlText.replace(/<(?:.|\n)*?>/gm, '');
-            const description = productDescription.split('FEATURES');
-            if (description && description.length) {
-              descText = description[0];
-            }
-          } catch (e) {}
-          return descText;
-        };
-
         const updateProductDetail = (
           sku: SimpleSkusEntity,
           isfirst: boolean,
@@ -202,7 +225,46 @@ const Product: NextPage = () => {
     }
 
     // return () => {};
-  }, [isProductDetailsSuccess]);
+  }, [isProductDetailsSuccess, product, productDetails]);
+
+  useEffect(() => {
+    if (isRecommendedProductsSuccess) {
+      if (recommendedProductDetails && recommendedProductDetails.action === 'success') {
+        const recommendedProducts = {
+          details: recommendedProductDetails.recommendProductDetailList,
+          matching: recommendedProductDetails.recommendMatchingDetailList,
+          title: recommendedProductDetails.recommendationTitle,
+        };
+        setRecommendedProducts(recommendedProducts);
+        console.log('isRecommendedProductsSuccess', recommendedProducts);
+      }
+      // // Based on condition available on view.
+      // _self.checkstatus = '#productrecommendations';
+      // if (_self.recommendedProducts.details && _self.recommendedProducts.details.length <= 6) {
+      //   //  _self.SHOW_RFYP = false;
+      //   _self.checkstatus = '#similarproducts';
+      //   _self.productDetail.showRfypCue = false;
+      // }
+    }
+  }, [isRecommendedProductsSuccess, recommendedProductDetails]);
+
+  useEffect(() => {
+    if (isSimilarProductSuccess) {
+      if (similarProductDetails && similarProductDetails.action === 'success') {
+        const similarProducts = {
+          details: similarProductDetails.recommendProductDetailList,
+          matching: similarProductDetails.recommendMatchingDetailList,
+          title: similarProductDetails.recommendationTitle,
+        };
+        setSimilarProducts(similarProducts);
+        // Based on condition available on view.
+        // if (_self.similarProducts.details && _self.similarProducts.details.length <= 6) {
+        //   _self.SHOW_RFYP = false;
+        //   _self.productDetail.showRfypCue = false;
+        // }
+      }
+    }
+  }, [isSimilarProductSuccess, similarProductDetails]);
 
   cookiesService.setCookies({ key: 'test', value: 'test value' });
   return (
@@ -256,13 +318,50 @@ const Product: NextPage = () => {
                 }}
               ></DeliveryDetails>
               {productInfo.id && <Accordian {...{ productInfo, sku: productForm.selectedSku }}></Accordian>}
+
+              <RecommendedProducts>
+                {recommendedProducts.details && recommendedProducts.details.length && (
+                  <RecommendedProductsTitle>{recommendedProducts.title}</RecommendedProductsTitle>
+                )}
+                <RecommendedMatching>
+                  <RecommendedMatchingProduct>
+                    <RecommendedMatchingProductLink></RecommendedMatchingProductLink>
+                  </RecommendedMatchingProduct>
+                  <RecommendedMatchingProduct>
+                    <RecommendedMatchingProductLink></RecommendedMatchingProductLink>
+                  </RecommendedMatchingProduct>
+                  <RecommendedMatchingProduct>
+                    <RecommendedMatchingProductLink></RecommendedMatchingProductLink>
+                  </RecommendedMatchingProduct>
+                </RecommendedMatching>
+              </RecommendedProducts>
+              <RecommendedProducts>
+                {similarProducts.details && similarProducts.details.length && (
+                  <RecommendedProductsTitle>{similarProducts.title}</RecommendedProductsTitle>
+                )}
+                <RecommendedMatching>
+                  {similarProducts.details &&
+                    similarProducts.matching.map((data: IRecommendMatchingDetailListEntity, index: number) => {
+                      return (
+                        <RecommendedMatchingProduct key={index}>
+                          <RecommendedMatchingProductLink> {data.name}</RecommendedMatchingProductLink>
+                        </RecommendedMatchingProduct>
+                      );
+                    })}
+
+                  {/* <RecommendedMatchingProduct>
+                    <RecommendedMatchingProductLink></RecommendedMatchingProductLink>
+                  </RecommendedMatchingProduct>
+                  <RecommendedMatchingProduct>
+                    <RecommendedMatchingProductLink></RecommendedMatchingProductLink>
+                  </RecommendedMatchingProduct> */}
+                </RecommendedMatching>
+              </RecommendedProducts>
             </ProductDetailsWrapper>
-            <p>Product Id: {productId}</p>
-            <p>Product Name: {ignoredName}</p>
           </div>
         )}
       </main>
-      <pre style={{ width: '60%', overflowX: 'scroll' }}>{JSON.stringify(productInfo, null, 4)}</pre>
+      {/* <pre style={{ width: '60%', overflowX: 'scroll' }}>{JSON.stringify(similarProducts, null, 4)}</pre> */}
     </div>
   );
 };
