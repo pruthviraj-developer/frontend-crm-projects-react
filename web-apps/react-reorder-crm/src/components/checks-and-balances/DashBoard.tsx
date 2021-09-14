@@ -7,7 +7,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { FilterListPage, FiltersListPageProps } from '@hs/containers';
-import { HsSelectableTable, SelectableTableProps } from '@hs/components';
+import { HsSelectableTable, SelectableTableProps, ChecksBalanceTableToolbar } from '@hs/components';
 import styled from '@emotion/styled';
 import { toast } from 'react-toastify';
 import { makeStyles } from '@material-ui/core/styles';
@@ -261,31 +261,6 @@ const DashBoard = () => {
   const onSort = (params: any) => {
     // console.log(params);
   };
-  const descendingComparator = (a: string, b: string, orderBy: any) => {
-    if (b[orderBy] < a[orderBy]) {
-      return -1;
-    }
-    if (b[orderBy] > a[orderBy]) {
-      return 1;
-    }
-    return 0;
-  };
-
-  const getComparator = (order: any, orderBy: any) => {
-    return order === 'desc'
-      ? (a: any, b: any) => descendingComparator(a, b, orderBy)
-      : (a: any, b: any) => -descendingComparator(a, b, orderBy);
-  };
-
-  const stableSort = (array: any, comparator: any) => {
-    const stabilizedThis = array.map((el: any, index: any) => [el, index]);
-    stabilizedThis.sort((a: any, b: any) => {
-      const order = comparator(a[0], b[0]);
-      if (order !== 0) return order;
-      return a[1] - b[1];
-    });
-    return stabilizedThis.map((el: any) => el[0]);
-  };
 
   useEffect(() => {
     const filtersList = [
@@ -396,42 +371,75 @@ const DashBoard = () => {
     })();
   }, [filterParams, selectedFilters]);
 
-  const selectTableData: SelectableTableProps = {
-    columns: [
-      'SKU',
-      'PID',
-      'Country',
-      'Season',
-      'Age Class',
-      'ASV present',
-      'ASV Previous Week',
-      'Cost',
-      'Reason',
-      'Quantity',
-      'Modified Quantity',
-    ],
-    rowKeys: [
-      'sku',
-      'pid',
-      'country',
-      'season',
-      'age_class',
-      'asv_present',
-      'asv_previous_week',
-      'cost_price',
-      'reason',
-      'quantity',
-      'modified_quantity',
-    ],
-    rows: data && data['records'] ? data['records'] : [],
-    selectId: 'sku',
-    fetchTableData: fetchTableData,
+  const ChecksBalanceTableToolbarProps = {
     deleteColumn: deleteColumn,
     exportColumn: exportColumn,
     modifySelectedColumns: modifySelectedColumns,
-    stableSort: stableSort,
-    showFilters,
-    getComparator: getComparator,
+    showFilters: showFilters,
+  };
+
+  const selectTableData: SelectableTableProps = {
+    columns: [
+      {
+        id: 'sku',
+        key: 'sku',
+        label: 'SKU',
+      },
+      {
+        id: 'pid',
+        key: 'pid',
+        label: 'PID',
+      },
+      {
+        id: 'country',
+        key: 'country',
+        label: 'Country',
+      },
+      {
+        id: 'season',
+        key: 'season',
+        label: 'Season',
+      },
+      {
+        id: 'age_class',
+        key: 'age_class',
+        label: 'Age Class',
+      },
+      {
+        id: 'asv_present',
+        key: 'asv_present',
+        label: 'ASV present',
+      },
+      {
+        id: 'asv_previous_week',
+        key: 'asv_previous_week',
+        label: 'ASV Previous Week',
+      },
+      {
+        id: 'cost_price',
+        key: 'cost_price',
+        label: 'Cost',
+      },
+      {
+        id: 'reason',
+        key: 'reason',
+        label: 'Reason',
+      },
+      {
+        id: 'quantity',
+        key: 'quantity',
+        label: 'Quantity',
+      },
+      {
+        id: 'modified_quantity',
+        key: 'modified_quantity',
+        label: 'Modified Quantity',
+      },
+    ],
+    rows: data && data['records'] ? data['records'] : [],
+    selectId: 'sku',
+    sortingId: 'sku',
+    fetchTableData: fetchTableData,
     onSort: onSort,
     rowsPerPageOptions: [5, 10, 15, 20],
     displayRowsPerPage: filterParams.page_size || 10,
@@ -441,6 +449,13 @@ const DashBoard = () => {
       asv_previous_week: 40,
       asv_present: 30,
     },
+    tableToolbar: (numSelected = 0, rowsSelected = []) => (
+      <ChecksBalanceTableToolbar
+        numSelected={numSelected}
+        rowsSelected={rowsSelected}
+        {...ChecksBalanceTableToolbarProps}
+      />
+    ),
   };
   const filtersData: FiltersListPageProps = {
     sideBar: [...sideBarFilters],

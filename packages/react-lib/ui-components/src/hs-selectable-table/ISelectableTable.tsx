@@ -1,3 +1,4 @@
+import { ReactChild } from 'react';
 export interface STableAction {
   url: string;
   display: string;
@@ -10,21 +11,24 @@ interface filterQueryParams {
   pageNo: number;
 }
 
+export interface ChecksBalanceTableToolbarProps {
+  numSelected: number;
+  rowsSelected: any;
+  deleteColumn?: (event: any) => void;
+  exportColumn?: (event: any) => void;
+  modifySelectedColumns?: (event: any) => void;
+  showFilters?: (event: any) => void;
+  selectedColumns?: (event: any) => void;
+}
+
 export interface SelectableTableProps {
-  columns: Array<string>;
+  columns: Array<Record<string, unknown>>;
   rows: Array<any>;
-  rowKeys: Array<string>;
   disableExport?: boolean;
-  deleteColumn?: (event: (string | Record<string, string>)[]) => void;
-  exportColumn?: (event: (string | Record<string, string>)[]) => void;
-  modifySelectedColumns?: (event: (string | Record<string, string>)[]) => void;
-  showFilters?: (event: (boolean | Record<string, string>)[]) => void;
   fetchTableData: (data: any) => void;
-  stableSort?: (array: any, comparator: any) => number;
   onSort?: (filterQueryParams) => void;
-  getComparator?: (a: any, b: any) => any;
   tableActions?: STableAction[];
-  sortingId?: string;
+  sortingId: string;
   selectId?: string;
   sorting?: boolean;
   rowsPerPageOptions: Array<number>;
@@ -32,4 +36,5 @@ export interface SelectableTableProps {
   displayRowsPerPage: number;
   totalRowsCount: number;
   setColumnsWidth?: any;
+  tableToolbar?: (numSelected: number, rowsSelected: any) => ReactChild;
 }

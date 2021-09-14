@@ -11,7 +11,7 @@ import {
   ITableDataType,
   IPostDataType,
 } from './IDashboard';
-import { FilterProps } from '@hs/components';
+import { FilterPanProps } from '@hs/components';
 import { financeAccountingService } from '@hs/services';
 import { useQuery } from 'react-query';
 import { Helmet } from 'react-helmet';
@@ -145,7 +145,7 @@ const FinanceAccountDashboard: FC<{ header: string }> = ({ header }: IHeaderType
     setPostFilterData(data);
   };
 
-  const filterData: FilterProps = {
+  const filterData: FilterPanProps = {
     data: filtersData ? filtersData.data : [],
     onChange: onChangeHandler,
   };

@@ -1,7 +1,7 @@
 import React from 'react';
 import { action } from '@storybook/addon-actions';
 import { FilterPan } from './FilterPan';
-import { FilterProps } from './IFilterPan';
+import { FilterPanProps } from './IFilterPan';
 import { Story } from '@storybook/react/types-6-0';
 
 export default {
@@ -56,12 +56,12 @@ const data = [
   },
 ];
 
-const filterData: FilterProps = {
+const filterData: FilterPanProps = {
   data: [...data],
   onChange: handleChange,
 };
 
-const Template: Story<FilterProps> = (args) => <FilterPan {...args} />;
+const Template: Story<FilterPanProps> = (args) => <FilterPan {...args} />;
 
 export const FilterPanComponent = Template.bind({});
 FilterPanComponent.args = { ...filterData };

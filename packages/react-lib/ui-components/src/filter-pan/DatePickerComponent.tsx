@@ -5,9 +5,9 @@ import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from '@material-ui/pickers';
-import { IFilterPropsType } from './IFilterPan';
+import { FilterPanOptionPropsType } from './IFilterPan';
 
-const DatePickerComponent = (props: IFilterPropsType) => {
+const DatePickerComponent = (props: FilterPanOptionPropsType) => {
   const { filter, setSelectedFilter } = props;
   const [dateValue, setDateValue] = useState(null);
 
@@ -34,7 +34,7 @@ const DatePickerComponent = (props: IFilterPropsType) => {
             });
             // }
           }}
-          style={{ marginTop: '0rem' }}
+          style={{ ...filter.customCss, marginTop: '0rem' }}
         />
       </MuiPickersUtilsProvider>
     </Grid>

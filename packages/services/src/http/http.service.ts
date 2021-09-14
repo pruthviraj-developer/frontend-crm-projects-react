@@ -52,7 +52,7 @@ const get = <T>({ url, params }: IHttpService): Promise<T> => {
     method: 'get',
     url,
     headers: { ...httpHeaders },
-    params: params,
+    params,
   };
   return processRequest(reqConfig);
 };

@@ -1,23 +1,34 @@
 import React from 'react';
 import { Grid, TextField } from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
-import { IOptionType, IFilterPropsType } from './IFilterPan';
+import { FilterPanOptionType, FilterPanOptionPropsType } from './IFilterPan';
 
-const FilterSelect = (props: IFilterPropsType) => {
+const FilterSelect = (props: FilterPanOptionPropsType) => {
   const { filter, setSelectedFilter } = props;
 
-  const returnArrValues = (arr: IOptionType[]) => {
+  const returnArrValues = (arr: FilterPanOptionType[]) => {
     const values: any = [];
-    arr.forEach((item: IOptionType) => {
+    arr.forEach((item: FilterPanOptionType) => {
       if (!values.includes(item.key || item)) {
         values.push(item.key || item);
       }
     });
 
     if (values.length > 0) {
-      return values;
+      if (filter.isString) {
+        return values.toString();
+      } else {
+        return values;
+      }
     }
     return;
+  };
+
+  const returnSingleValues = (val: string) => {
+    if (filter.isString) {
+      return val;
+    }
+    return [val];
   };
 
   return (
@@ -29,16 +40,18 @@ const FilterSelect = (props: IFilterPropsType) => {
         disableCloseOnSelect={filter.multiSelect ? true : false}
         options={filter.options}
         getOptionLabel={(option) => option.display}
-        getOptionSelected={(option: IOptionType, selectedValue: IOptionType) =>
-          option.key == selectedValue?.key
-        }
+        getOptionSelected={(
+          option: FilterPanOptionType,
+          selectedValue: FilterPanOptionType
+        ) => option.key == selectedValue?.key}
+        style={filter.customCss}
         onChange={(e: any, values: any) => {
           if (e) {
             setSelectedFilter({
               [filter.key]: values
                 ? Array.isArray(values)
                   ? returnArrValues(values)
-                  : [values.key]
+                  : returnSingleValues(values.key)
                 : undefined,
             });
           }

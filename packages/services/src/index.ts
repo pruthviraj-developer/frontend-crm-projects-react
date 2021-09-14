@@ -7,3 +7,4 @@ export * from './finance-accounting';
 export * from './merch-intelligence';
 export * from './product-subtype';
 export * from './common';
+export * from './recommendation';

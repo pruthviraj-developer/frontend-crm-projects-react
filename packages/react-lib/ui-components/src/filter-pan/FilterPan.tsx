@@ -4,7 +4,7 @@ import { Grid, Paper } from '@material-ui/core';
 import { FilterSelect } from './FilterSelect';
 import { DatePickerComponent } from './DatePickerComponent';
 import { Textfield } from './Textfield';
-import { FilterProps, DataType } from './IFilterPan';
+import { FilterPanProps, FilterPanDataType } from './IFilterPan';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const FilterPan = ({ data, onChange }: FilterProps) => {
+const FilterPan = ({ data, onChange }: FilterPanProps) => {
   const classes = useStyles();
   const [selectedFilter, setSelectedFilter] = useState({});
 
@@ -43,7 +43,11 @@ const FilterPan = ({ data, onChange }: FilterProps) => {
     onChange(postData);
   }, [selectedFilter]);
 
-  const getFilter = (fieldType: string, index, eachFilter) => {
+  const getFilter = (
+    fieldType: FilterPanDataType['fieldType'] = 'SelectBox',
+    index: number,
+    eachFilter: FilterPanDataType
+  ) => {
     switch (fieldType) {
       case 'InputText':
         return (
@@ -65,7 +69,7 @@ const FilterPan = ({ data, onChange }: FilterProps) => {
           />
         );
 
-      default:
+      case 'SelectBox':
         return (
           <FilterSelect
             key={eachFilter.key + index}
@@ -82,7 +86,7 @@ const FilterPan = ({ data, onChange }: FilterProps) => {
       <form autoComplete="off">
         <Grid direction="row" container spacing={3}>
           {data &&
-            data.map((eachFilter: DataType, index: number) =>
+            data.map((eachFilter: FilterPanDataType, index: number) =>
               getFilter(eachFilter.fieldType, index, eachFilter)
             )}
         </Grid>

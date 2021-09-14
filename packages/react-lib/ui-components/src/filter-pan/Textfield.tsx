@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Grid, TextField } from '@material-ui/core';
-import { IFilterPropsType } from './IFilterPan';
+import { FilterPanOptionPropsType } from './IFilterPan';
 
-const Textfield = (props: IFilterPropsType) => {
+const Textfield = (props: FilterPanOptionPropsType) => {
   const { filter, setSelectedFilter } = props;
   const [inputValue, setInputValue] = useState<string>('');
   return (
@@ -14,6 +14,7 @@ const Textfield = (props: IFilterPropsType) => {
         variant="outlined"
         fullWidth={true}
         value={inputValue}
+        style={filter.customCss}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
           setInputValue(e.target.value);
         }}
