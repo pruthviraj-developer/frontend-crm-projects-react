@@ -66,6 +66,7 @@ const Product: NextPage = () => {
   const [productForm, setProductForm] = useState<IProductFormProps | any>({});
   const [recommendedProducts, setRecommendedProducts] = useState<IRecommendedProducts | any>({});
   const [similarProducts, setSimilarProducts] = useState<IRecommendedProducts | any>({});
+  const [showRfyp, setShowRfyp] = useState<boolean>(false);
 
   // const [quantity, setQuantity] = useState<number>(0);
   // const showNewPromo = _self._AbTestService.isOnNewPromo();
@@ -221,6 +222,7 @@ const Product: NextPage = () => {
         // keywords.push(productName.replace(/-|:|_/gi, ' '));
         // keywords.push('online shopping for ' + productName.replace(/-|:|_/gi, ' '));
         setDetails();
+        setShowRfyp(true);
       }
     }
 
@@ -237,16 +239,17 @@ const Product: NextPage = () => {
         };
         setRecommendedProducts(recommendedProducts);
         console.log('isRecommendedProductsSuccess', recommendedProducts);
+
+        // // Based on condition available on view.
+        // _self.checkstatus = '#productrecommendations';
+        if (recommendedProducts.details && recommendedProducts.details.length <= 6) {
+          // _self.checkstatus = '#similarproducts';
+          setShowRfyp(false);
+          setProductInfo({ ...productDetails, showRfypCue: false });
+        }
       }
-      // // Based on condition available on view.
-      // _self.checkstatus = '#productrecommendations';
-      // if (_self.recommendedProducts.details && _self.recommendedProducts.details.length <= 6) {
-      //   //  _self.SHOW_RFYP = false;
-      //   _self.checkstatus = '#similarproducts';
-      //   _self.productDetail.showRfypCue = false;
-      // }
     }
-  }, [isRecommendedProductsSuccess, recommendedProductDetails]);
+  }, [isRecommendedProductsSuccess, recommendedProductDetails, productDetails]);
 
   useEffect(() => {
     if (isSimilarProductSuccess) {
@@ -256,15 +259,14 @@ const Product: NextPage = () => {
           matching: similarProductDetails.recommendMatchingDetailList,
           title: similarProductDetails.recommendationTitle,
         };
+        if (similarProducts.details && similarProducts.details.length <= 6) {
+          setShowRfyp(false);
+          setProductInfo({ ...productDetails, showRfypCue: false });
+        }
         setSimilarProducts(similarProducts);
-        // Based on condition available on view.
-        // if (_self.similarProducts.details && _self.similarProducts.details.length <= 6) {
-        //   _self.SHOW_RFYP = false;
-        //   _self.productDetail.showRfypCue = false;
-        // }
       }
     }
-  }, [isSimilarProductSuccess, similarProductDetails]);
+  }, [isSimilarProductSuccess, similarProductDetails, productDetails]);
 
   cookiesService.setCookies({ key: 'test', value: 'test value' });
   return (
@@ -335,13 +337,17 @@ const Product: NextPage = () => {
                   </RecommendedMatchingProduct>
                 </RecommendedMatching>
               </RecommendedProducts>
-              <RecommendedProducts>
-                {similarProducts.details && similarProducts.details.length && (
+              {similarProducts.details && similarProducts.details.length > 6 && (
+                <RecommendedProducts
+                  section="'RFYP'"
+                  showmatching="true"
+                  recommended="vm.similarProducts"
+                  id="similarproducts"
+                  pid="vm.productDetail.id"
+                >
                   <RecommendedProductsTitle>{similarProducts.title}</RecommendedProductsTitle>
-                )}
-                <RecommendedMatching>
-                  {similarProducts.details &&
-                    similarProducts.matching.map((data: IRecommendMatchingDetailListEntity, index: number) => {
+                  <RecommendedMatching>
+                    {similarProducts.matching.map((data: IRecommendMatchingDetailListEntity, index: number) => {
                       return (
                         <RecommendedMatchingProduct key={index}>
                           <RecommendedMatchingProductLink> {data.name}</RecommendedMatchingProductLink>
@@ -349,14 +355,15 @@ const Product: NextPage = () => {
                       );
                     })}
 
-                  {/* <RecommendedMatchingProduct>
+                    {/* <RecommendedMatchingProduct>
                     <RecommendedMatchingProductLink></RecommendedMatchingProductLink>
                   </RecommendedMatchingProduct>
                   <RecommendedMatchingProduct>
                     <RecommendedMatchingProductLink></RecommendedMatchingProductLink>
                   </RecommendedMatchingProduct> */}
-                </RecommendedMatching>
-              </RecommendedProducts>
+                  </RecommendedMatching>
+                </RecommendedProducts>
+              )}
             </ProductDetailsWrapper>
           </div>
         )}

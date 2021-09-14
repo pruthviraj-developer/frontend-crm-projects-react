@@ -18,6 +18,7 @@ export interface IProductDetails {
   isOneSize?: boolean;
   hasSamePrice?: boolean;
   isDefault?: boolean;
+  showRfypCue?: boolean;
   selectedSkuId?: string;
   simpleSkus: SimpleSkusEntity[];
   imgurls?: ImgurlsEntity[] | null;
