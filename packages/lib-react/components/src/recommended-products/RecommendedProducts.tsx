@@ -1,11 +1,13 @@
 import React, { FC } from 'react';
 import { RecommendedMatching } from '../recommended-matching';
+import { ProductCarouselList } from '../product-carousel-list';
 import {
   IRecommendedProductsProps,
   IRecommendMatchingDetailListEntity,
 } from './IRecommendedProducts';
 import {
   RecommendedProductsWrapper,
+  RecommendedProductWrapper,
   RecommendedProductsTitle,
   RecommendedMatchingWrapper,
 } from './StyledRecommendedProducts';
@@ -21,6 +23,15 @@ export const RecommendedProducts: FC<IRecommendedProductsProps> = ({
   return (
     <RecommendedProductsWrapper>
       <RecommendedProductsTitle>{recommended.title}</RecommendedProductsTitle>
+      <RecommendedProductWrapper>
+        <ProductCarouselList
+          products={recommended.details}
+          section="'RFYP'"
+          id="similarproducts"
+          pid={id}
+          subsection="'Carousel'"
+        ></ProductCarouselList>
+      </RecommendedProductWrapper>
       {showmatching && recommended.matching && recommended.matching.length && (
         <RecommendedMatchingWrapper>
           {recommended.matching.map(

@@ -10,7 +10,15 @@ import {
   SizeAndChartLabels,
   RecommendedProducts,
 } from '@hs/components';
-import { IProductProps, IProductDetails, IProductFormProps, SimpleSkusEntity, IRecommendedProducts } from '@/types';
+import {
+  IProductProps,
+  IProductDetails,
+  IProductFormProps,
+  SimpleSkusEntity,
+  IRecommendedProducts,
+  IRecommendedProductsCarousel,
+  urlParamsProps,
+} from '@/types';
 import { useQuery } from 'react-query';
 import { cookiesService, productDetailsService } from '@hs/services';
 import { useState, useEffect } from 'react';
@@ -45,14 +53,14 @@ export async function getStaticProps() {
 const Product: NextPage = () => {
   const router = useRouter();
   const urlParams = router.query as unknown as IProductProps;
-  const [productId] = [...(urlParams.urlParams || [])];
+  const [productId]: urlParamsProps | any = [...(urlParams.urlParams || [])];
   const [isSelected, setIsSelected] = useState<boolean>(false);
   const [selectedSkuId, setSelectedSkuId] = useState<string>('');
   const [product, setProduct] = useState<any>({});
   const [productInfo, setProductInfo] = useState<IProductDetails | any>({});
   const [productForm, setProductForm] = useState<IProductFormProps | any>({});
-  const [recommendedProducts, setRecommendedProducts] = useState<IRecommendedProducts | any>({});
-  const [similarProducts, setSimilarProducts] = useState<IRecommendedProducts | any>({});
+  const [recommendedProducts, setRecommendedProducts] = useState<IRecommendedProductsCarousel | any>({});
+  const [similarProducts, setSimilarProducts] = useState<IRecommendedProductsCarousel>();
   const [showRfyp, setShowRfyp] = useState<boolean>(false);
 
   // const [quantity, setQuantity] = useState<number>(0);
@@ -308,23 +316,17 @@ const Product: NextPage = () => {
               ></DeliveryDetails>
               {productInfo.id && <Accordian {...{ productInfo, sku: productForm.selectedSku }}></Accordian>}
 
-              {/* <RecommendedProducts>
-                {recommendedProducts.details && recommendedProducts.details.length && (
-                  <RecommendedProductsTitle>{recommendedProducts.title}</RecommendedProductsTitle>
-                )}
-                <RecommendedMatching>
-                  <RecommendedMatchingProduct>
-                    <RecommendedMatchingProductLink></RecommendedMatchingProductLink>
-                  </RecommendedMatchingProduct>
-                  <RecommendedMatchingProduct>
-                    <RecommendedMatchingProductLink></RecommendedMatchingProductLink>
-                  </RecommendedMatchingProduct>
-                  <RecommendedMatchingProduct>
-                    <RecommendedMatchingProductLink></RecommendedMatchingProductLink>
-                  </RecommendedMatchingProduct>
-                </RecommendedMatching>
-              </RecommendedProducts> */}
-              {similarProducts.details && similarProducts.details.length > 6 && (
+              {recommendedProducts && recommendedProducts.details && recommendedProducts.details.length > 6 && (
+                <RecommendedProducts
+                  section="UserRecoPDP"
+                  showmatching={false}
+                  recommended={recommendedProducts}
+                  id="productrecommendations"
+                  pid={productInfo.id}
+                ></RecommendedProducts>
+              )}
+
+              {similarProducts && similarProducts.details && similarProducts.details.length > 6 && (
                 <RecommendedProducts
                   section="'RFYP'"
                   showmatching={true}
@@ -337,7 +339,9 @@ const Product: NextPage = () => {
           </div>
         )}
       </main>
-      {/* <pre style={{ width: '60%', overflowX: 'scroll' }}>{JSON.stringify(similarProducts, null, 4)}</pre> */}
+      <pre style={{ width: '60%', overflowX: 'scroll' }}>
+        {JSON.stringify(similarProducts && similarProducts.details, null, 4)}
+      </pre>
     </div>
   );
 };

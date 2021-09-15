@@ -148,6 +148,13 @@ export interface IRecommendedProducts {
   recommendProductDetailList?: IRecommendProductDetailListEntity[] | null;
   recommendMatchingDetailList?: IRecommendMatchingDetailListEntity[] | null;
 }
+
+export interface IRecommendedProductsCarousel {
+  details?: IRecommendProductDetailListEntity[] | null;
+  matching?: IRecommendMatchingDetailListEntity[] | null;
+  title: string;
+}
+
 export interface IRecommendProductDetailListEntity {
   id: number;
   imageUrl: string;

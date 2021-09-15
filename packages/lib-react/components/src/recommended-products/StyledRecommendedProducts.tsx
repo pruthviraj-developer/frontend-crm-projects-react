@@ -17,8 +17,15 @@ const RecommendedMatchingWrapper = styled.div`
   line-height: 20px;
 `;
 
+const RecommendedProductWrapper = styled.div`
+  left: -12px;
+  width: calc(100% + 12px);
+  max-width: 100%;
+  overflow-x: scroll;
+`;
 export {
   RecommendedProductsWrapper,
+  RecommendedProductWrapper,
   RecommendedProductsTitle,
   RecommendedMatchingWrapper,
 };
