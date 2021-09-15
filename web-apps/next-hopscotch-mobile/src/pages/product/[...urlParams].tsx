@@ -8,27 +8,14 @@ import {
   DeliveryDetails,
   CustomSizePicker,
   SizeAndChartLabels,
+  RecommendedProducts,
 } from '@hs/components';
-import {
-  IProductProps,
-  IProductDetails,
-  IProductFormProps,
-  IRecommendMatchingDetailListEntity,
-  SimpleSkusEntity,
-  IRecommendedProducts,
-} from '@/types';
+import { IProductProps, IProductDetails, IProductFormProps, SimpleSkusEntity, IRecommendedProducts } from '@/types';
 import { useQuery } from 'react-query';
 import { cookiesService, productDetailsService } from '@hs/services';
 import { useState, useEffect } from 'react';
 import sortBy from 'lodash/sortBy';
-import {
-  ProductDetailsWrapper,
-  RecommendedProducts,
-  RecommendedProductsTitle,
-  RecommendedMatching,
-  RecommendedMatchingProduct,
-  RecommendedMatchingProductLink,
-} from './StyledUrlParams';
+import { ProductDetailsWrapper } from './StyledUrlParams';
 
 export async function getStaticPaths() {
   return {
@@ -321,7 +308,7 @@ const Product: NextPage = () => {
               ></DeliveryDetails>
               {productInfo.id && <Accordian {...{ productInfo, sku: productForm.selectedSku }}></Accordian>}
 
-              <RecommendedProducts>
+              {/* <RecommendedProducts>
                 {recommendedProducts.details && recommendedProducts.details.length && (
                   <RecommendedProductsTitle>{recommendedProducts.title}</RecommendedProductsTitle>
                 )}
@@ -336,33 +323,15 @@ const Product: NextPage = () => {
                     <RecommendedMatchingProductLink></RecommendedMatchingProductLink>
                   </RecommendedMatchingProduct>
                 </RecommendedMatching>
-              </RecommendedProducts>
+              </RecommendedProducts> */}
               {similarProducts.details && similarProducts.details.length > 6 && (
                 <RecommendedProducts
                   section="'RFYP'"
-                  showmatching="true"
-                  recommended="vm.similarProducts"
+                  showmatching={true}
+                  recommended={similarProducts}
                   id="similarproducts"
-                  pid="vm.productDetail.id"
-                >
-                  <RecommendedProductsTitle>{similarProducts.title}</RecommendedProductsTitle>
-                  <RecommendedMatching>
-                    {similarProducts.matching.map((data: IRecommendMatchingDetailListEntity, index: number) => {
-                      return (
-                        <RecommendedMatchingProduct key={index}>
-                          <RecommendedMatchingProductLink> {data.name}</RecommendedMatchingProductLink>
-                        </RecommendedMatchingProduct>
-                      );
-                    })}
-
-                    {/* <RecommendedMatchingProduct>
-                    <RecommendedMatchingProductLink></RecommendedMatchingProductLink>
-                  </RecommendedMatchingProduct>
-                  <RecommendedMatchingProduct>
-                    <RecommendedMatchingProductLink></RecommendedMatchingProductLink>
-                  </RecommendedMatchingProduct> */}
-                  </RecommendedMatching>
-                </RecommendedProducts>
+                  pid={productInfo.id}
+                ></RecommendedProducts>
               )}
             </ProductDetailsWrapper>
           </div>
