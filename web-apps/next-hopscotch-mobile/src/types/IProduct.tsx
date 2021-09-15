@@ -18,6 +18,7 @@ export interface IProductDetails {
   isOneSize?: boolean;
   hasSamePrice?: boolean;
   isDefault?: boolean;
+  showRfypCue?: boolean;
   selectedSkuId?: string;
   simpleSkus: SimpleSkusEntity[];
   imgurls?: ImgurlsEntity[] | null;
@@ -139,6 +140,34 @@ export interface ProductSubAttrListEntity {
   subAttributeName: string;
   attributeValue: string;
   isShowAttrName: boolean;
+}
+
+export interface IRecommendedProducts {
+  action: string;
+  recommendationTitle: string;
+  recommendProductDetailList?: IRecommendProductDetailListEntity[] | null;
+  recommendMatchingDetailList?: IRecommendMatchingDetailListEntity[] | null;
+}
+export interface IRecommendProductDetailListEntity {
+  id: number;
+  imageUrl: string;
+  productName: string;
+  brandName: string;
+  salePrice: number;
+}
+
+export interface IRecommendMatchingDetailListEntity {
+  name: string;
+  searchParams: SearchParams;
+  recoType: string;
+  screenName: string;
+}
+
+export interface SearchParams {
+  subCategorys: number;
+  brandId?: number | null;
+  filterQuery: string;
+  colour?: string | null;
 }
 
 export interface IProductFormProps {

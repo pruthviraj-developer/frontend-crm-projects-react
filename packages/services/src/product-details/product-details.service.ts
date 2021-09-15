@@ -34,7 +34,10 @@ const searchProducts = <P, R>(urlParams: P): Promise<R> => {
   return httpService.get<R>({ url: '/api/search/product/v2', params });
 };
 
-const getSimilarProducts = <P, R>(productId: P, urlParams: P): Promise<R> => {
+const getSimilarProducts = <P, R>(
+  productId: string,
+  urlParams: P
+): Promise<R> => {
   const params = {
     retryAndShow503Modal: false,
     pageNo: 1,
@@ -43,6 +46,23 @@ const getSimilarProducts = <P, R>(productId: P, urlParams: P): Promise<R> => {
     ...urlParams,
   };
   return httpService.get<R>({ url: `/api/reco/product/${productId}`, params });
+};
+
+const getRecommendedProducts = <P, R>(
+  productId: string,
+  urlParams: P
+): Promise<R> => {
+  const params = {
+    retryAndShow503Modal: false,
+    pageNo: 1,
+    pageSize: 12,
+    fromPlp: 'boutique',
+    ...urlParams,
+  };
+  return httpService.get<R>({
+    url: `/api/reco/collaborative/product/${productId}`,
+    params,
+  });
 };
 
 const getProductDetails = <P, R>(productId: P): Promise<R> => {
@@ -98,5 +118,6 @@ export const productDetailsService = {
   searchProducts,
   getProductDetails,
   getSimilarProducts,
+  getRecommendedProducts,
   getUserInfo,
 };
