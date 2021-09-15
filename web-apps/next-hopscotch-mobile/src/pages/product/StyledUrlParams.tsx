@@ -5,11 +5,5 @@ const ProductDetailsWrapper = styled.div`
   min-height: 0;
   background: ${Colors.WHITE};
 `;
-const RecommendedProductWrapper = styled.div`
-  left: -12px;
-  width: calc(100% + 12px);
-  max-width: 100%;
-  overflow-x: scroll;
-`;
 
-export { ProductDetailsWrapper, RecommendedProductWrapper };
+export { ProductDetailsWrapper };

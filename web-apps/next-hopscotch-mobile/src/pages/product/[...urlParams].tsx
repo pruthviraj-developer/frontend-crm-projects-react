@@ -9,7 +9,6 @@ import {
   CustomSizePicker,
   SizeAndChartLabels,
   RecommendedProducts,
-  ProductCarouselList,
 } from '@hs/components';
 import {
   IProductProps,
@@ -18,12 +17,13 @@ import {
   SimpleSkusEntity,
   IRecommendedProducts,
   IRecommendedProductsCarousel,
+  urlParamsProps,
 } from '@/types';
 import { useQuery } from 'react-query';
 import { cookiesService, productDetailsService } from '@hs/services';
 import { useState, useEffect } from 'react';
 import sortBy from 'lodash/sortBy';
-import { ProductDetailsWrapper, RecommendedProductWrapper } from './StyledUrlParams';
+import { ProductDetailsWrapper } from './StyledUrlParams';
 
 export async function getStaticPaths() {
   return {
@@ -53,7 +53,7 @@ export async function getStaticProps() {
 const Product: NextPage = () => {
   const router = useRouter();
   const urlParams = router.query as unknown as IProductProps;
-  const [productId] = [...(urlParams.urlParams || [])];
+  const [productId]: urlParamsProps | any = [...(urlParams.urlParams || [])];
   const [isSelected, setIsSelected] = useState<boolean>(false);
   const [selectedSkuId, setSelectedSkuId] = useState<string>('');
   const [product, setProduct] = useState<any>({});
@@ -315,32 +315,15 @@ const Product: NextPage = () => {
                 }}
               ></DeliveryDetails>
               {productInfo.id && <Accordian {...{ productInfo, sku: productForm.selectedSku }}></Accordian>}
-              {/* <RecommendedProducts>
-                {recommendedProducts.details && recommendedProducts.details.length && (
-                  <RecommendedProductsTitle>{recommendedProducts.title}</RecommendedProductsTitle>
-                )}
-                <RecommendedMatching>
-                  <RecommendedMatchingProduct>
-                    <RecommendedMatchingProductLink></RecommendedMatchingProductLink>
-                  </RecommendedMatchingProduct>
-                  <RecommendedMatchingProduct>
-                    <RecommendedMatchingProductLink></RecommendedMatchingProductLink>
-                  </RecommendedMatchingProduct>
-                  <RecommendedMatchingProduct>
-                    <RecommendedMatchingProductLink></RecommendedMatchingProductLink>
-                  </RecommendedMatchingProduct>
-                </RecommendedMatching>
-              </RecommendedProducts> */}
-              {similarProducts && similarProducts.details && similarProducts.details.length > 6 && (
-                <RecommendedProductWrapper>
-                  <ProductCarouselList
-                    products={similarProducts.details}
-                    section="'RFYP'"
-                    id="similarproducts"
-                    pid={productInfo.id}
-                    subsection="'Carousel'"
-                  ></ProductCarouselList>
-                </RecommendedProductWrapper>
+
+              {recommendedProducts && recommendedProducts.details && recommendedProducts.details.length > 6 && (
+                <RecommendedProducts
+                  section="UserRecoPDP"
+                  showmatching={false}
+                  recommended={recommendedProducts}
+                  id="productrecommendations"
+                  pid={productInfo.id}
+                ></RecommendedProducts>
               )}
 
               {similarProducts && similarProducts.details && similarProducts.details.length > 6 && (
