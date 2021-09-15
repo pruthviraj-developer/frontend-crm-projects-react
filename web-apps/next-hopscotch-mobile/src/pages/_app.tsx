@@ -5,6 +5,8 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { Hydrate } from 'react-query/hydration';
 import GoogleTagManager from '@/components/google-tag-manager/GoogleTagManager';
 import { ReactQueryDevtools } from 'react-query/devtools';
+import Head from 'next/head';
+
 function MyApp({ Component, pageProps }: AppProps) {
   const [queryClient] = useState(
     () =>
@@ -20,6 +22,10 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <>
+      <Head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+      </Head>
+
       {globalStyles}
       <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps.dehydratedState}>

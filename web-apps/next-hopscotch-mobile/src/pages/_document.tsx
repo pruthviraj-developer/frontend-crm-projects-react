@@ -6,6 +6,21 @@ export default class MyDocument extends Document {
     return (
       <Html>
         <Head>
+          <meta name="theme-color" content="#ed54a4" />
+          <meta name="apple-mobile-web-app-status-bar-style" content="#ed54a4" />
+          <meta property="fb:app_id" content="501471509943731" />
+          <meta property="og:site_name" content="Hopscotch.India" />
+          <meta name="twitter:card" content="summary" />
+          <meta name="twitter:site" content="@Hopscotchindia" />
+          <meta name="twitter:card" content="app" />
+          <meta name="twitter:site" content="@Hopscotchindia" />
+          <meta name="twitter:app:country" content="IN" />
+          <meta name="twitter:app:name:iphone" content="Hopscotch" />
+          <meta name="twitter:app:id:iphone" content="945949424" />
+          <meta name="twitter:app:id:googleplay" content="in.hopscotch.android" />
+          <meta name="msapplication-TileImage" content="images/icon-144.png" />
+          <meta name="msapplication-TileColor" content="#ed54a4" />
+          <meta name="apple-mobile-web-app-title" content="Hopscotch"></meta>
           {/* Google Tag Manager - Global base code */}
           <script
             dangerouslySetInnerHTML={{
