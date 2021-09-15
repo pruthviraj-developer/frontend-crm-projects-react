@@ -6,8 +6,8 @@ export const RecommendedMatching: FC<IRecommendedMatchingProps> = ({
   section,
   product,
 }: IRecommendedMatchingProps) => {
-  let subSection = 'More',
-    brand = 'Brand',
+  let subSection = 'More';
+  const brand = 'Brand',
     category = 'Category',
     colour = 'Colour';
   if (product.searchParams && product.searchParams.brandId) {
@@ -51,6 +51,8 @@ export const RecommendedMatching: FC<IRecommendedMatchingProps> = ({
         name={product.name}
         queryParams={paramsList}
         color="#777"
+        padding="0 12px"
+        margin="0"
       />
     </RecommendedMatchingWrapper>
   );
