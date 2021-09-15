@@ -7,8 +7,8 @@ export interface IRecommendedProductsProps {
 }
 
 export interface ISimilarProducts {
-  details: IRecommendProductDetailListEntity[];
-  matching: IRecommendMatchingDetailListEntity[];
+  details?: IRecommendProductDetailListEntity[] | null;
+  matching?: IRecommendMatchingDetailListEntity[] | null;
   title: string;
 }
 

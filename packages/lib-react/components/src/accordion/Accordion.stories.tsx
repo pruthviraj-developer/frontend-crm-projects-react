@@ -12,4 +12,9 @@ export default {
 const Template: Story<IAccordianProps> = (args) => <Accordian {...args} />;
 export const AccordianComponent = Template.bind({});
 
-AccordianComponent.args = {};
+AccordianComponent.args = {
+  productInfo: {
+    productDesc: 'test string',
+  },
+  sku: {},
+};

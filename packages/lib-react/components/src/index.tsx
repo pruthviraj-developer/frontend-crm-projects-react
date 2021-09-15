@@ -10,3 +10,5 @@ export * from './delivery-details';
 export * from './size-and-chart-labels';
 export * from './recommended-matching';
 export * from './recommended-products';
+export * from './product-carousel';
+export * from './product-carousel-list';
