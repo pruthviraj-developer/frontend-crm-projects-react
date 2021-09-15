@@ -8,6 +8,8 @@ export const NextNavLink: FC<INextNavLinkProps> = ({
   name,
   queryParams,
   color = '#FFFFFF',
+  padding = '8px 6px',
+  margin = '16px 0 0 0',
 }: INextNavLinkProps) => {
   return (
     <Link
@@ -17,7 +19,9 @@ export const NextNavLink: FC<INextNavLinkProps> = ({
       }}
       passHref
     >
-      <LinkTag color={color}>{name}</LinkTag>
+      <LinkTag color={color} margin={margin} padding={padding}>
+        {name}
+      </LinkTag>
     </Link>
   );
 };

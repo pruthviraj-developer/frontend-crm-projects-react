@@ -1,11 +1,9 @@
 import styled from '@emotion/styled';
+import { typography } from '@hs/utils';
 
 const RecommendedMatchingWrapper = styled.div`
-  margin-bottom: 16px;
-  display: block;
-  font-size: 14px;
-  line-height: 20px;
-  padding: 0 12px;
+  margin-bottom: ${typography.size.s3}px;
+  text-transform: uppercase;
 `;
 
 export { RecommendedMatchingWrapper };
