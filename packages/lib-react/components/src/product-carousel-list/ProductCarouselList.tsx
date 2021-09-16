@@ -1,9 +1,12 @@
 import React, { FC } from 'react';
+import { useRouter } from 'next/router';
 import Image from 'next/image';
 import {
   CarouselListWrapper,
+  CarouselList,
   SaleRetailPrice,
   ImageWrapper,
+  TransparentImgOverlay,
 } from './StyledProductCarouselList';
 import {
   IProductCarouselListProps,
@@ -12,34 +15,60 @@ import {
 export const ProductCarouselList: FC<IProductCarouselListProps> = ({
   products,
   section,
-  id,
-  pid,
   subsection,
 }: IProductCarouselListProps) => {
+  const router = useRouter();
   const imageSize = 360;
-  console.log(section, id, pid, subsection);
+
+  const getDashedParameter = (product: IRecommendProductDetailListEntity) => {
+    let dashSeparatedUrlProductName = '';
+    if (product.brandName || product.brand) {
+      dashSeparatedUrlProductName = (product.brandName || product.brand) + '-';
+    }
+    dashSeparatedUrlProductName += product.name || product.productName;
+    dashSeparatedUrlProductName = dashSeparatedUrlProductName
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-');
+    return dashSeparatedUrlProductName;
+  };
+
+  const gotoProductDetailsPage = (
+    product: IRecommendProductDetailListEntity
+  ) => {
+    router.push({
+      pathname: `/product/${product.id}/${getDashedParameter(product)}`,
+      query: { section, subsection },
+    });
+  };
+
   return (
     <CarouselListWrapper>
       {products &&
         products.map(
           (product: IRecommendProductDetailListEntity, index: number) => (
-            <ImageWrapper key={index}>
-              <Image
-                loader={() =>
-                  `${product.imageUrl}&w=${imageSize}&h=${imageSize}`
-                }
-                src={product.imageUrl}
-                alt={product.productName}
-                placeholder="blur"
-                blurDataURL="https://static.hopscotch.in/web2/images/boutique-pattern.png"
-                width={imageSize}
-                height={imageSize}
-                objectFit="cover"
-              />
+            <CarouselList key={index}>
+              <ImageWrapper
+                onClick={() => gotoProductDetailsPage(product)}
+                key={index}
+              >
+                <Image
+                  loader={() =>
+                    `${product.imageUrl}&w=${imageSize}&h=${imageSize}`
+                  }
+                  src={product.imageUrl}
+                  alt={product.productName}
+                  placeholder="blur"
+                  blurDataURL="https://static.hopscotch.in/web2/images/boutique-pattern.png"
+                  width={imageSize}
+                  height={imageSize}
+                  objectFit="cover"
+                />
+                <TransparentImgOverlay></TransparentImgOverlay>
+              </ImageWrapper>
               <SaleRetailPrice>
                 ₹{product.salePrice || product.retailPrice}
               </SaleRetailPrice>
-            </ImageWrapper>
+            </CarouselList>
           )
         )}
     </CarouselListWrapper>

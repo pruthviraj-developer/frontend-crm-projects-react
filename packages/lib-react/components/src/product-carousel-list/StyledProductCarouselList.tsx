@@ -14,6 +14,7 @@ const ImageWrapper = styled.div`
   height: 150px;
   display: inline-block;
   margin: 0 0 8px 8px;
+  position: relative;
 `;
 
 const SaleRetailPrice = styled.h3`
@@ -24,4 +25,23 @@ const SaleRetailPrice = styled.h3`
   text-align: center;
 `;
 
-export { CarouselListWrapper, ImageWrapper, SaleRetailPrice };
+const TransparentImgOverlay = styled.div`
+  width: 100%;
+  height: 100%;
+  background: #00000000;
+  position: absolute;
+  top: 0;
+  left: 0;
+`;
+
+const CarouselList = styled.div`
+  display: inline-block;
+`;
+
+export {
+  CarouselListWrapper,
+  CarouselList,
+  ImageWrapper,
+  TransparentImgOverlay,
+  SaleRetailPrice,
+};

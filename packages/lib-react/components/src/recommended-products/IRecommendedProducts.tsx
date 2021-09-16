@@ -1,8 +1,9 @@
 export interface IRecommendedProductsProps {
   section: string;
+  subsection: string;
   showmatching: boolean;
   recommended: ISimilarProducts;
-  id: string;
+  id?: string;
   pid: string;
 }
 

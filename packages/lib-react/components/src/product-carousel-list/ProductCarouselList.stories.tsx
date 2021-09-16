@@ -260,7 +260,5 @@ CarouselListComponent.args = {
     },
   ],
   section: 'RFYP',
-  id: 'similarproducts',
-  pid: '12345',
   subsection: 'Carousel',
 };
