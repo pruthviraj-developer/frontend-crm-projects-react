@@ -18,6 +18,7 @@ const FooterSection = styled.section`
   text-align: ${HsTextAlign.center};
   > div {
     flex: 50%;
+    box-sizing: border-box;
   }
 `;
 

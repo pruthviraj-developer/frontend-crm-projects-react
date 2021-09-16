@@ -13,23 +13,20 @@ import {
 } from './StyledRecommendedProducts';
 export const RecommendedProducts: FC<IRecommendedProductsProps> = ({
   section,
+  subsection,
   showmatching,
   recommended,
   id,
   pid,
 }: IRecommendedProductsProps) => {
-  console.log(id);
-  console.log(pid);
   return (
-    <RecommendedProductsWrapper>
+    <RecommendedProductsWrapper id={id || pid}>
       <RecommendedProductsTitle>{recommended.title}</RecommendedProductsTitle>
       <RecommendedProductWrapper>
         <ProductCarouselList
           products={recommended.details}
-          section="'RFYP'"
-          id="similarproducts"
-          pid={id}
-          subsection="'Carousel'"
+          section={section}
+          subsection={subsection}
         ></ProductCarouselList>
       </RecommendedProductWrapper>
       {showmatching && recommended.matching && recommended.matching.length && (
