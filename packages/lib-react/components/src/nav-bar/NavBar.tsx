@@ -17,8 +17,12 @@ export const NavBar: FC<INavBarProps> = ({ count }: INavBarProps) => {
         <HopScotchIcon></HopScotchIcon>
       </HopscotchImage>
       <RightContent>
-        <NextNavLink href="/my/account/orders/" name="Account" />
-        <NextNavLink href="/helpcenter" name="Help" />
+        <NextNavLink
+          href="/my/account/orders/"
+          name="Account"
+          display="inline-block"
+        />
+        <NextNavLink href="/helpcenter" name="Help" display="inline-block" />
         <CartIconWrapper>
           <CartIcon />
           {count > 0 && <CartIconQuantity>{count}</CartIconQuantity>}

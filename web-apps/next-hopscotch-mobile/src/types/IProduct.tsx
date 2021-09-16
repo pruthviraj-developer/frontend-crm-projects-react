@@ -188,3 +188,8 @@ export interface IProductFormProps {
   deliveryMsg: string;
   retailPriceMax: number;
 }
+
+export interface IPopularSearchUrlProps {
+  displayName: string;
+  link: string;
+}

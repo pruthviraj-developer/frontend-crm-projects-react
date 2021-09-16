@@ -6,6 +6,7 @@ import Link from 'next/link';
 export const NextNavLink: FC<INextNavLinkProps> = ({
   href,
   name,
+  display = 'inherit',
   queryParams,
   color = '#FFFFFF',
   padding = '8px 6px',
@@ -19,7 +20,12 @@ export const NextNavLink: FC<INextNavLinkProps> = ({
       }}
       passHref
     >
-      <LinkTag color={color} margin={margin} padding={padding}>
+      <LinkTag
+        color={color}
+        display={display}
+        margin={margin}
+        padding={padding}
+      >
         {name}
       </LinkTag>
     </Link>
