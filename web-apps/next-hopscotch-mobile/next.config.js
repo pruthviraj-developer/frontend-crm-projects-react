@@ -10,6 +10,14 @@ module.exports = {
         source: '/api/:path*',
         destination: process.env.API_HOST + '/:path*',
       },
+      {
+        source: '/product/:path*',
+        destination: '/product/:path*',
+      },
+      {
+        source: '/:path*',
+        destination: process.env.WEB_HOST + '/:path*',
+      },
     ];
   },
 };
