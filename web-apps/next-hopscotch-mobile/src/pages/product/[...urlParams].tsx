@@ -267,10 +267,22 @@ const Product: NextPage = () => {
   return (
     <div>
       <Head>
-        <title>Product details</title>
+        <title>{`Shop Online ${productInfo.productName} at ₹${productForm.retailPrice}`}</title>
         <meta
           name="description"
-          content="'Online shopping store for kids & baby products. Buy kids clothes, footwear, toys at hopscotch.in . &#x2714;Cash on Delivery, &#x2714;Latest Designs, &#x2714;Pan India shipping.'"
+          content={`Buy ${productInfo.productName} online in India at ₹${productForm.retailPrice}. &#x2714;15 Days Easy Returns, &#x2714;Cash on Delivery, &#x2714;Latest Designs, &#x2714;Pan India shipping.`}
+        />
+        <meta property="og:title" content={`Shop Online ${productInfo.productName} at ₹${productForm.retailPrice}`} />
+        <meta
+          property="og:description"
+          content={`Buy ${productInfo.productName} online in India at ₹${productForm.retailPrice}. &#x2714;15 Days Easy Returns, &#x2714;Cash on Delivery, &#x2714;Latest Designs, &#x2714;Pan India shipping.`}
+        />
+        <meta
+          name="keywords"
+          content={`${productInfo.productName.replace(
+            /-|:|_/gi,
+            ' ',
+          )},online shopping for ${productInfo.productName.replace(/-|:|_/gi, ' ')}`}
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
