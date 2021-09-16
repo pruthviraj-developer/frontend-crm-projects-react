@@ -1,3 +1,8 @@
 export interface IFooterProps {
-  label?: string;
+  urls: IPopularSearchUrlProps[];
+}
+
+export interface IPopularSearchUrlProps {
+  displayName: string;
+  link: string;
 }

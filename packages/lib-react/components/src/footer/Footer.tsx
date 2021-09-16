@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { IFooterProps } from './IFooter';
+import { IFooterProps, IPopularSearchUrlProps } from './IFooter';
 import {
   AppleIcon,
   PlayIcon,
@@ -30,28 +30,19 @@ import {
   StyledIcon,
 } from './StyledFooter';
 // eslint-disable-next-line no-empty-pattern
-export const Footer: FC<IFooterProps> = ({}: IFooterProps) => {
+export const Footer: FC<IFooterProps> = ({ urls }: IFooterProps) => {
   const currentYear = new Date().getFullYear();
   return (
     <FooterWrapper>
       <PopularSearches>
         <PopularSearchesTitle>Popular Searches</PopularSearchesTitle>
         <PopularSearchesLinks>
-          <PopularSearchesLink href="/products/15172/boys-sherwani">
-            Boys Sherwani
-          </PopularSearchesLink>
-          <PopularSearchesLink href="/products/15864/girls-party-wear-dresses">
-            Girls Party Wear Dresses
-          </PopularSearchesLink>
-          <PopularSearchesLink href="/products/16270/girls-casual-dresses">
-            Girls Casual Dresses
-          </PopularSearchesLink>
-          <PopularSearchesLink href="/products/16320/girls-gowns">
-            Girls Gowns
-          </PopularSearchesLink>
-          <PopularSearchesLink href="/products/16416/baby-boy-onesies">
-            Baby Boy Onesies
-          </PopularSearchesLink>
+          {urls &&
+            urls.map((data: IPopularSearchUrlProps, index: number) => (
+              <PopularSearchesLink key={index} href={data.link}>
+                {data.displayName}
+              </PopularSearchesLink>
+            ))}
         </PopularSearchesLinks>
       </PopularSearches>
       <FooterSection>

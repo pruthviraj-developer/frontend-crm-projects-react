@@ -9,6 +9,7 @@ import {
   CustomSizePicker,
   SizeAndChartLabels,
   RecommendedProducts,
+  Footer,
 } from '@hs/components';
 import {
   IProductProps,
@@ -17,6 +18,7 @@ import {
   SimpleSkusEntity,
   IRecommendedProducts,
   IRecommendedProductsCarousel,
+  IPopularSearchUrlProps,
   urlParamsProps,
 } from '@/types';
 import { useQuery } from 'react-query';
@@ -38,6 +40,31 @@ export async function getStaticPaths() {
 const SIZE_LIST_UPFRONT = 'Size list upfront';
 const ONE_SIZE = 'one size';
 const ONESIZE = 'onesize';
+const POPULAR_URL = [
+  { displayName: 'Boys Sherwani', link: '/products/15172/boys-sherwani' },
+  { displayName: ' Girls Party Wear Dresses', link: '/products/15864/girls-party-wear-dresses' },
+  { displayName: 'Girls Jackets', link: '/products/15935/girls-jackets' },
+  { displayName: ' Girls Frocks', link: '/products/15936/girls-frocks' },
+  { displayName: 'Boys Jackets', link: '/products/15966/boys-jackets' },
+  { displayName: 'Girls Leggings', link: '/products/15971/girls-leggings' },
+  { displayName: 'Girls Casual Dresses', link: '/products/16270/girls-casual-dresses' },
+  { displayName: 'Girls Gowns', link: '/products/16320/girls-gowns' },
+  { displayName: 'Baby Girl Onesies ', link: '/products/16415/baby-girl-onesies' },
+  { displayName: 'Baby Boy Onesies ', link: '/products/16416/baby-boy-onesies' },
+  { displayName: 'Baby Girls Rompers', link: '/products/16417/baby-girl-rompers' },
+  { displayName: 'Baby Boy Rompers', link: '/products/16418/baby-boy-rompers' },
+  { displayName: 'Baby Clothes ', link: '/baby' },
+  { displayName: 'Girls Clothes ', link: '/girls' },
+  { displayName: 'Boys Clothes ', link: '/boys' },
+  { displayName: 'Boys Tshirts ', link: '/clothing/boys/tshirts' },
+  { displayName: 'Girls Tops ', link: '/clothing/girls/tops' },
+  { displayName: 'Boys Jeans', link: '/clothing/boys/jeans' },
+  { displayName: 'Girls Jeans ', link: '/clothing/girls/jeans' },
+  { displayName: 'Boys Shirts ', link: '/clothing/boys/shirts' },
+  { displayName: 'Girls Tshirts ', link: '/clothing/girls/tshirts' },
+  { displayName: 'Girls Dresses', link: '/clothing/girls/dresses' },
+];
+
 // const getProductDetails = <P, R>(): Promise<R> => {
 //   const params = { currentTime: new Date().getTime() };
 //   // return httpService.get<R>({ url: `/api/product/${productId}`, params });
@@ -62,6 +89,7 @@ const Product: NextPage = () => {
   const [recommendedProducts, setRecommendedProducts] = useState<IRecommendedProductsCarousel | any>({});
   const [similarProducts, setSimilarProducts] = useState<IRecommendedProductsCarousel>();
   const [showRfyp, setShowRfyp] = useState<boolean>(false);
+  const [popularSearchUrl, setPopularSearchUrl] = useState<IPopularSearchUrlProps[]>([]);
 
   // const [quantity, setQuantity] = useState<number>(0);
   // const showNewPromo = _self._AbTestService.isOnNewPromo();
@@ -94,15 +122,19 @@ const Product: NextPage = () => {
     },
   );
 
-  // setSimilarProducts
+  useEffect(() => {
+    const popularSUrl = POPULAR_URL.filter((item) => item.link !== router.asPath.split('?')[0]);
+    setPopularSearchUrl(popularSUrl);
+  }, [router.asPath]);
 
+  // setSimilarProducts
   useEffect(() => {
     if (isProductDetailsSuccess) {
       if (productDetails && productDetails.action === 'success') {
         const updateProductDetail = (
           sku: SimpleSkusEntity,
           isfirst: boolean,
-          isDefault: boolean = false,
+          isDefault = false,
           fromLocation?: string,
         ) => {
           const productForm: IProductFormProps | any = {};
@@ -156,7 +188,7 @@ const Product: NextPage = () => {
 
         const setAttrObject = () => {
           for (let i = 0; i < productDetails.simpleSkus.length; i++) {
-            var sku: any = productDetails.simpleSkus[i];
+            const sku: any = productDetails.simpleSkus[i];
             sku.attributes = {};
             for (let j = 0; j < sku.attrs.length; j++) {
               sku.attributes[sku.attrs[j].name.toLowerCase()] = sku.attrs[j].value;
@@ -172,8 +204,8 @@ const Product: NextPage = () => {
 
           // TODO: Logic to show default selection of sku and checking quantity > 0
           const selectSku = (skuList: SimpleSkusEntity[]) => {
-            for (var i = 0; i < skuList.length; i++) {
-              var sku = skuList[i];
+            for (let i = 0; i < skuList.length; i++) {
+              const sku = skuList[i];
               if (sku.availableQuantity > 0) {
                 productDetails.isProductSoldOut = false;
                 if (skuList.length > 1) {
@@ -233,7 +265,6 @@ const Product: NextPage = () => {
           title: recommendedProductDetails.recommendationTitle,
         };
         setRecommendedProducts(recommendedProducts);
-        console.log('isRecommendedProductsSuccess', recommendedProducts);
 
         // // Based on condition available on view.
         // _self.checkstatus = '#productrecommendations';
@@ -352,6 +383,7 @@ const Product: NextPage = () => {
                   pid={productInfo.id}
                 ></RecommendedProducts>
               )}
+              <Footer urls={popularSearchUrl}></Footer>
             </ProductDetailsWrapper>
           </div>
         )}
