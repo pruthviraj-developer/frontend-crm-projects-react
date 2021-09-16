@@ -3,10 +3,12 @@ import { typography } from '@hs/utils';
 
 const LinkTag = styled.a<{
   color: string;
+  display: string;
   padding: string;
   margin: string;
 }>`
   color: ${(props) => props.color};
+  display: ${(props) => props.display};
   font-weight: ${typography.weight.medium};
   padding: ${(props) => props.padding};
   margin: ${(props) => props.margin || `${typography.size.s3}px 0 0 0`};

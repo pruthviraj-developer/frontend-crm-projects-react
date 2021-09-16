@@ -266,29 +266,32 @@ const Product: NextPage = () => {
   cookiesService.setCookies({ key: 'test', value: 'test value' });
   return (
     <div>
-      <Head>
-        <title>{`Shop Online ${productInfo.productName} at ₹${productForm.retailPrice}`}</title>
-        <meta
-          name="description"
-          content={`Buy ${productInfo.productName} online in India at ₹${productForm.retailPrice}. &#x2714;15 Days Easy Returns, &#x2714;Cash on Delivery, &#x2714;Latest Designs, &#x2714;Pan India shipping.`}
-        />
-        <meta property="og:title" content={`Shop Online ${productInfo.productName} at ₹${productForm.retailPrice}`} />
-        <meta
-          property="og:description"
-          content={`Buy ${productInfo.productName} online in India at ₹${productForm.retailPrice}. &#x2714;15 Days Easy Returns, &#x2714;Cash on Delivery, &#x2714;Latest Designs, &#x2714;Pan India shipping.`}
-        />
-        <meta
-          name="keywords"
-          content={`${productInfo.productName.replace(
-            /-|:|_/gi,
-            ' ',
-          )},online shopping for ${productInfo.productName.replace(/-|:|_/gi, ' ')}`}
-        />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
       <main>
         {productInfo && productInfo.action === 'success' && (
           <div>
+            <Head>
+              <title>{`Shop Online ${productInfo.productName} at ₹${productForm.retailPrice}`}</title>
+              <meta
+                name="description"
+                content={`Buy ${productInfo.productName} online in India at ₹${productForm.retailPrice}. &#x2714;15 Days Easy Returns, &#x2714;Cash on Delivery, &#x2714;Latest Designs, &#x2714;Pan India shipping.`}
+              />
+              <meta
+                property="og:title"
+                content={`Shop Online ${productInfo.productName} at ₹${productForm.retailPrice}`}
+              />
+              <meta
+                property="og:description"
+                content={`Buy ${productInfo.productName} online in India at ₹${productForm.retailPrice}. &#x2714;15 Days Easy Returns, &#x2714;Cash on Delivery, &#x2714;Latest Designs, &#x2714;Pan India shipping.`}
+              />
+              <meta
+                name="keywords"
+                content={`${productInfo.productName.replace(
+                  /-|:|_/gi,
+                  ' ',
+                )},online shopping for ${productInfo.productName.replace(/-|:|_/gi, ' ')}`}
+              />
+              <link rel="icon" href="/favicon.ico" />
+            </Head>
             <NavBar count={productInfo && productInfo.quantity}></NavBar>
             <ProductDetailsWrapper>
               <ProductNamePrice
@@ -331,6 +334,7 @@ const Product: NextPage = () => {
               {recommendedProducts && recommendedProducts.details && recommendedProducts.details.length > 6 && (
                 <RecommendedProducts
                   section="UserRecoPDP"
+                  subsection="Carousel"
                   showmatching={false}
                   recommended={recommendedProducts}
                   id="productrecommendations"
@@ -340,7 +344,8 @@ const Product: NextPage = () => {
 
               {similarProducts && similarProducts.details && similarProducts.details.length > 6 && (
                 <RecommendedProducts
-                  section="'RFYP'"
+                  section="RFYP"
+                  subsection="Carousel"
                   showmatching={true}
                   recommended={similarProducts}
                   id="similarproducts"
