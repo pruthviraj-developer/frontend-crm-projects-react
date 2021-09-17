@@ -3,12 +3,13 @@ module.exports = {
   reactStrictMode: true,
   images: {
     domains: ['hopscotch.in'],
+    imageSizes: [360, 480, 720, 1080],
   },
   async rewrites() {
     return [
       {
         source: '/api/:path*',
-        destination: process.env.API_HOST + '/:path*',
+        destination: process.env.WEB_HOST + '/api/:path*',
       },
       {
         source: '/product/:path*',

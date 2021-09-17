@@ -1,4 +1,4 @@
-import type { NextPage } from 'next';
+import type { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import {
@@ -21,21 +21,12 @@ import {
   IPopularSearchUrlProps,
   urlParamsProps,
 } from '@/types';
-import { useQuery } from 'react-query';
+import { dehydrate, QueryClient, useQuery } from 'react-query';
 import { cookiesService, productDetailsService } from '@hs/services';
 import { useState, useEffect } from 'react';
 import sortBy from 'lodash/sortBy';
 import { ProductDetailsWrapper } from './StyledUrlParams';
 
-export async function getStaticPaths() {
-  return {
-    paths: [
-      // String variant:
-      '/product/94829348/test',
-    ],
-    fallback: true,
-  };
-}
 // const ADD_TO_CART_BUTTON = 'Add to cart button';
 const SIZE_LIST_UPFRONT = 'Size list upfront';
 const ONE_SIZE = 'one size';
@@ -71,13 +62,37 @@ const POPULAR_URL = [
 //   return httpService.get<R>({ url: '/api/product/948332', params });
 // };
 
-export async function getStaticProps() {
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const queryClient = new QueryClient();
+  const productId = context.params?.urlParams?.[0] || '';
+  await queryClient.prefetchQuery(
+    ['ProductDetail', productId],
+    () => productDetailsService.getProductDetails(productId, process.env.WEB_HOST),
+    {
+      staleTime: Infinity,
+    },
+  );
+  await queryClient.prefetchQuery(
+    ['RecommendedProducts', productId],
+    () => productDetailsService.getRecommendedProducts(productId, { boutiqueId: undefined }, process.env.WEB_HOST),
+    {
+      staleTime: Infinity,
+    },
+  );
+  await queryClient.prefetchQuery(
+    ['SimilarProducts', productId],
+    () => productDetailsService.getSimilarProducts(productId, { boutiqueId: undefined }, process.env.WEB_HOST),
+    {
+      staleTime: Infinity,
+    },
+  );
   return {
-    props: {},
+    props: {
+      dehydratedState: dehydrate(queryClient),
+    },
   };
-}
-
-const Product: NextPage = () => {
+};
+const Product: NextPage = (props) => {
   const router = useRouter();
   const urlParams = router.query as unknown as IProductProps;
   const [productId]: urlParamsProps | any = [...(urlParams.urlParams || [])];
@@ -388,9 +403,9 @@ const Product: NextPage = () => {
           </div>
         )}
       </main>
-      <pre style={{ width: '60%', overflowX: 'scroll' }}>
+      {/* <pre style={{ width: '60%', overflowX: 'scroll' }}>
         {JSON.stringify(similarProducts && similarProducts.details, null, 4)}
-      </pre>
+      </pre> */}
     </div>
   );
 };

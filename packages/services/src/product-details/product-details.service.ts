@@ -36,7 +36,8 @@ const searchProducts = <P, R>(urlParams: P): Promise<R> => {
 
 const getSimilarProducts = <P, R>(
   productId: string,
-  urlParams: P
+  urlParams: P,
+  baseURL = ''
 ): Promise<R> => {
   const params = {
     retryAndShow503Modal: false,
@@ -45,12 +46,15 @@ const getSimilarProducts = <P, R>(
     fromPlp: 'boutique',
     ...urlParams,
   };
-  return httpService.get<R>({ url: `/api/reco/product/${productId}`, params });
+  let url = `/api/reco/product/${productId}`;
+  if (baseURL) url = baseURL + url;
+  return httpService.get<R>({ url, params });
 };
 
 const getRecommendedProducts = <P, R>(
   productId: string,
-  urlParams: P
+  urlParams: P,
+  baseURL = ''
 ): Promise<R> => {
   const params = {
     retryAndShow503Modal: false,
@@ -59,14 +63,18 @@ const getRecommendedProducts = <P, R>(
     fromPlp: 'boutique',
     ...urlParams,
   };
+  let url = `/api/reco/collaborative/product/${productId}`;
+  if (baseURL) url = baseURL + url;
   return httpService.get<R>({
-    url: `/api/reco/collaborative/product/${productId}`,
+    url,
     params,
   });
 };
 
-const getProductDetails = <P, R>(productId: P): Promise<R> => {
+const getProductDetails = <P, R>(productId: P, baseURL = ''): Promise<R> => {
   const params = { currentTime: new Date().getTime() };
+  let url = `/api/product/${productId}`;
+  if (baseURL) url = baseURL + url;
   // if (self._ConfigService.tiles.customTilesId) {
   //   params.customTilesId = self._ConfigService.tiles.customTilesId;
   //   params.from = self._ConfigService.tiles.from;
@@ -77,7 +85,10 @@ const getProductDetails = <P, R>(productId: P): Promise<R> => {
   //   self._ConfigService.tiles.cptId = null;
   // }
 
-  return httpService.get<R>({ url: `/api/product/${productId}`, params });
+  return httpService.get<R>({
+    url,
+    params,
+  });
 };
 
 const getUserInfo = <P, R>(params: P): Promise<R> => {
