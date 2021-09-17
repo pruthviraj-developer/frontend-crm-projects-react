@@ -6,4 +6,7 @@ export interface IProductNamePriceProps {
   regularPrice: number;
   discount: number;
   isProductSoldOut: boolean;
+  wishlistId?: number;
+  addToWishlist: () => void;
+  deleteFromWishlist: () => void;
 }

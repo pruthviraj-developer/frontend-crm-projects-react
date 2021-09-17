@@ -21,6 +21,7 @@ import {
   IRecommendedProductsCarousel,
   IPopularSearchUrlProps,
   urlParamsProps,
+  IWishListProps,
 } from '@/types';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
 import { cookiesService, productDetailsService } from '@hs/services';
@@ -149,6 +150,138 @@ const Product: NextPage = (props) => {
       currentRefElement &&
         currentRefElement.current &&
         currentRefElement.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const addToWishlist = () => {
+    if (1) {
+      // check for login
+      addToWishlistAfterModalClose();
+    }
+    // else {
+    //   this.toastr.info('Sign in to add this item to your Wishlist.');
+    //   self._ModalService.showLoginModal(
+    //     null,
+    //     false,
+    //     { message: 'Helllo' },
+    //     this.addToWishlistAfterModalClose.bind(self, product),
+    //   );
+    // }
+  };
+
+  const deleteFromWishlist = () => {
+    if (1) {
+      (async () => {
+        try {
+          const wishListStatus: IWishListProps = await productDetailsService.deleteFromWishlist(productInfo.wishlistId);
+          if (wishListStatus.action === 'success') {
+            setProductInfo({ ...productInfo, wishlistId: 0 });
+            if (navigator && navigator.vibrate) {
+              navigator.vibrate(200);
+            }
+            // self._ProductService.invalidateCategoryProductsV2Cache();
+            // self._ProductService.invalidateSearchProductsV2Cache();
+            // TODO: triggering PRODUCT_REMOVED_FROM_WISHLIST segment event
+            // let segmentData = {};
+            // if (angular.isDefined(self.productForm.selectedSku)) {
+            //   segmentData = self.generateReqData(self.productForm.selectedSku);
+            //   segmentData.sku = self.productForm.selectedSku.skuId;
+            // } else {
+            //   segmentData.sku = '';
+            // }
+            // segmentData.low_inventory =
+            //   self.productForm.qtyLeft < 1 ? 'Sold out' : self.productForm.qtyLeft < 4 ? 'yes' : null;
+            // segmentData.from_screen = 'Wishlist';
+            // segmentData.from_location = 'Product tile';
+            // segmentData.product_id = product.id;
+            // segmentData.category = product.categoryName;
+            // segmentData.subcategory = product.subcategoryName;
+            // segmentData.brand = product.brandName;
+            //segmentData.price_status = 'Same';
+            // let extraSegData = self.getSegExtraData();
+            // segmentData = Object.assign({},  segmentData, extraSegData);
+            // self._SegmentService.track(self._SegmentService.EVENTS.PRODUCT_REMOVED_FROM_WISHLIST, segmentData);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      })();
+    } else {
+      // delete wishlist method will be executed
+      // if and only if user logged in and made the product as wishlist
+      // self._ModalService.showLoginModal();
+    }
+  };
+
+  const addToWishlistAfterModalClose = () => {
+    if (1) {
+      // check for login
+      // let cookiesUserType = self._$cookies.get(WEBSITE_CUSTOMER_SEGMENT);
+      // let atc_user = self._SegmentService.getATCUser(self._CustomerService.isLoggedIn(), cookiesUserType);
+      // let oa_data = self.SessionStorageService.getData('oa_data') || {};
+      let skuId = '';
+      let retailPrice = 0;
+      if (productForm.selectedSku) {
+        skuId = productForm.selectedSku.skuId;
+        retailPrice = productForm.selectedSku.retailPrice;
+      } else {
+        retailPrice = productInfo.retailPrice;
+      }
+      let wishlistItem = {
+        sku: skuId,
+        productId: productInfo.id,
+        price: retailPrice,
+        attribution: {
+          // source: oa_data['source'],
+          // funnel: oa_data['funnel'],
+          // funnel_tile: oa_data['funnel_tile'],
+          // funnel_section: oa_data['funnel_section'],
+          funnel_row: '',
+          // section: oa_data['section'],
+          subSection: 'CT3006',
+          // plp: oa_data['plp'],
+          sortBar: 'All',
+          sortBarGroup: 'All',
+          sortBy: 'System',
+          // quick_shop: oa_data['quickshop'],
+          // atc_user: atc_user,
+        },
+      };
+
+      (async () => {
+        try {
+          const wishListStatus: IWishListProps = await productDetailsService.addToWishlist(wishlistItem);
+          if (wishListStatus.action === 'success') {
+            setProductInfo({ ...productInfo, wishlistId: wishListStatus.wishlistItemId });
+            if (navigator && navigator.vibrate) {
+              navigator.vibrate(200);
+            }
+            // self._ProductService.invalidateCategoryProductsV2Cache();
+            // self._ProductService.invalidateSearchProductsV2Cache();
+            // // haptic feedback 200ms
+
+            // // TODO: triggering PRODUCT_ADDED_TO_WISHLIST segment event
+            // let segmentData = {};
+            // let selectedData = {};
+            // if (angular.isDefined(self.productForm.selectedSku)) {
+            //   selectedData = self.generateReqData(self.productForm.selectedSku);
+            //   segmentData = Object.assign({}, selectedData.segmentData, selectedData.cartData);
+            // } else {
+            //   segmentData.sku = '';
+            // }
+            // segmentData.from_screen = 'Product details';
+            // segmentData.from_location = 'Wishlist icon';
+            // segmentData.atc_user = atc_user;
+            // let extraSegData = self.getSegExtraData();
+            // segmentData = Object.assign({}, segmentData, extraSegData, {
+            //   subproduct_type: self.productDetail.subProductTypeName,
+            // });
+            // self._SegmentService.track(self._SegmentService.EVENTS.PRODUCT_ADDED_TO_WISHLIST, segmentData);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      })();
     }
   };
 
@@ -361,6 +494,8 @@ const Product: NextPage = (props) => {
                   selectedSku: productForm.selectedSku,
                   regularPrice: productForm.regularPrice,
                   discount: productForm.discount,
+                  addToWishlist,
+                  deleteFromWishlist,
                 }}
               ></ProductNamePrice>
               <SizeAndChartLabels
