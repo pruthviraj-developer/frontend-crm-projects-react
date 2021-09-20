@@ -5,4 +5,5 @@ export interface IProductNamePriceProps {
   selectedSku?: any;
   regularPrice: number;
   discount: number;
+  isProductSoldOut: boolean;
 }

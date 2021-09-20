@@ -55,6 +55,18 @@ const WishListIcon = styled(SvgIcon)`
   opacity: 0.5;
 `;
 
+const ProductSold = styled.div`
+  padding: ${typography.size.s04}px ${typography.size.s06}px;
+  font-size: ${typography.size.s2}px;
+  line-height: ${typography.size.s3}px;
+  font-weight: ${typography.weight.medium};
+  background-color: #f44;
+  margin: ${typography.size.s3}px 0 0 ${typography.size.s3}px;
+  color: ${Colors.WHITE};
+  display: inline-block;
+  border-radius: ${typography.size.s04}px;
+`;
+
 export {
   ProductPricingWrapper,
   ProductNamePriceWrapper,
@@ -62,6 +74,7 @@ export {
   ProductVendorPrice,
   ProductOfferPrice,
   ProductPrice,
+  ProductSold,
   ProductName,
   WishListWrapper,
   WishListIcon,
