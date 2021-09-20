@@ -10,6 +10,7 @@ import {
   SizeAndChartLabels,
   RecommendedProducts,
   Footer,
+  RecommendedProductsLinks,
 } from '@hs/components';
 import {
   IProductProps,
@@ -263,8 +264,10 @@ const Product: NextPage = (props) => {
         // const keywords = [];
         // keywords.push(productName.replace(/-|:|_/gi, ' '));
         // keywords.push('online shopping for ' + productName.replace(/-|:|_/gi, ' '));
-        setDetails();
         setShowRfyp(true);
+        const soldOutSkus = productDetails.simpleSkus.find((sku) => !(sku.availableQuantity > 0));
+        productDetails.showRfypCue = !!soldOutSkus;
+        setDetails();
       }
     }
 
@@ -343,6 +346,7 @@ const Product: NextPage = (props) => {
               <ProductNamePrice
                 {...{
                   name: productInfo.productName,
+                  isProductSoldOut: productInfo.isProductSoldOut,
                   retailPrice: productForm.retailPrice,
                   retailPriceMax: productForm.retailPriceMax,
                   selectedSku: productForm.selectedSku,
@@ -367,6 +371,11 @@ const Product: NextPage = (props) => {
                     sizeListUpfront: SIZE_LIST_UPFRONT,
                   }}
                 ></CustomSizePicker>
+              )}
+              {productInfo.showRfypCue && (
+                <RecommendedProductsLinks
+                  {...{ isProductSoldOut: productInfo.isProductSoldOut }}
+                ></RecommendedProductsLinks>
               )}
               <DeliveryDetails
                 {...{
@@ -403,9 +412,7 @@ const Product: NextPage = (props) => {
           </div>
         )}
       </main>
-      {/* <pre style={{ width: '60%', overflowX: 'scroll' }}>
-        {JSON.stringify(similarProducts && similarProducts.details, null, 4)}
-      </pre> */}
+      <pre style={{ width: '60%', overflowX: 'scroll' }}>{JSON.stringify(productInfo, null, 4)}</pre>
     </div>
   );
 };
