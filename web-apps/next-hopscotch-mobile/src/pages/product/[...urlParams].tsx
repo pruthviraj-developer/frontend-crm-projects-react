@@ -24,7 +24,7 @@ import {
 } from '@/types';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
 import { cookiesService, productDetailsService } from '@hs/services';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import sortBy from 'lodash/sortBy';
 import { ProductDetailsWrapper } from './StyledUrlParams';
 
@@ -95,6 +95,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 const Product: NextPage = (props) => {
   const router = useRouter();
+  const similarProductsLink = useRef<HTMLDivElement>(null);
+  const recommendedProductsLink = useRef<HTMLDivElement>(null);
   const urlParams = router.query as unknown as IProductProps;
   const [productId]: urlParamsProps | any = [...(urlParams.urlParams || [])];
   const [isSelected, setIsSelected] = useState<boolean>(false);
@@ -137,6 +139,18 @@ const Product: NextPage = (props) => {
       enabled: productId !== undefined,
     },
   );
+
+  const goToProductRecommendation = (fromLocation: string) => {
+    if (fromLocation) {
+      const currentRefElement =
+        recommendedProducts.details && recommendedProducts.details.length > 5
+          ? recommendedProductsLink
+          : similarProductsLink;
+      currentRefElement &&
+        currentRefElement.current &&
+        currentRefElement.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   useEffect(() => {
     const popularSUrl = POPULAR_URL.filter((item) => item.link !== router.asPath.split('?')[0]);
@@ -270,8 +284,6 @@ const Product: NextPage = (props) => {
         setDetails();
       }
     }
-
-    // return () => {};
   }, [isProductDetailsSuccess, product, productDetails]);
 
   useEffect(() => {
@@ -284,10 +296,7 @@ const Product: NextPage = (props) => {
         };
         setRecommendedProducts(recommendedProducts);
 
-        // // Based on condition available on view.
-        // _self.checkstatus = '#productrecommendations';
         if (recommendedProducts.details && recommendedProducts.details.length <= 6) {
-          // _self.checkstatus = '#similarproducts';
           setShowRfyp(false);
           setProductInfo({ ...productDetails, showRfypCue: false });
         }
@@ -374,7 +383,7 @@ const Product: NextPage = (props) => {
               )}
               {productInfo.showRfypCue && (
                 <RecommendedProductsLinks
-                  {...{ isProductSoldOut: productInfo.isProductSoldOut }}
+                  {...{ isProductSoldOut: productInfo.isProductSoldOut, goToProductRecommendation }}
                 ></RecommendedProductsLinks>
               )}
               <DeliveryDetails
@@ -387,25 +396,31 @@ const Product: NextPage = (props) => {
               {productInfo.id && <Accordian {...{ productInfo, sku: productForm.selectedSku }}></Accordian>}
 
               {recommendedProducts && recommendedProducts.details && recommendedProducts.details.length > 6 && (
-                <RecommendedProducts
-                  section="UserRecoPDP"
-                  subsection="Carousel"
-                  showmatching={false}
-                  recommended={recommendedProducts}
-                  id="productrecommendations"
-                  pid={productInfo.id}
-                ></RecommendedProducts>
+                <div ref={recommendedProductsLink}>
+                  <RecommendedProducts
+                    section="UserRecoPDP"
+                    subsection="Carousel"
+                    showmatching={false}
+                    recommended={recommendedProducts}
+                    id="productrecommendations"
+                    pid={productInfo.id}
+                  ></RecommendedProducts>
+                </div>
               )}
 
               {similarProducts && similarProducts.details && similarProducts.details.length > 6 && (
-                <RecommendedProducts
-                  section="RFYP"
-                  subsection="Carousel"
-                  showmatching={true}
-                  recommended={similarProducts}
-                  id="similarproducts"
-                  pid={productInfo.id}
-                ></RecommendedProducts>
+                <div ref={similarProductsLink}>
+                  <RecommendedProducts
+                    {...{
+                      section: 'RFYP',
+                      subsection: 'Carousel',
+                      showmatching: true,
+                      recommended: similarProducts,
+                      id: 'similarproducts',
+                      pid: productInfo.id,
+                    }}
+                  ></RecommendedProducts>
+                </div>
               )}
               <Footer urls={popularSearchUrl}></Footer>
             </ProductDetailsWrapper>
