@@ -343,10 +343,10 @@ const Product: NextPage = (props) => {
               />
               <meta
                 name="keywords"
-                content={`${productInfo.productName.replace(
+                content={`${productInfo?.productName?.replace(
                   /-|:|_/gi,
                   ' ',
-                )},online shopping for ${productInfo.productName.replace(/-|:|_/gi, ' ')}`}
+                )},online shopping for ${productInfo?.productName?.replace(/-|:|_/gi, ' ')}`}
               />
               <link rel="icon" href="/favicon.ico" />
             </Head>
