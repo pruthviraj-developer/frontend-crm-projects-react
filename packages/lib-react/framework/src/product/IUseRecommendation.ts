@@ -1,10 +1,21 @@
-export interface IRecommendedProductsProps {
-  section: string;
-  subsection: string;
+export interface IRecommendedProps {
+  recommended?: IRecommendedProducts;
   showmatching: boolean;
-  id?: string;
+  id: string;
   pid: string;
-  products?: IRecommendProductDetailListEntity[] | null;
+  section: string;
+}
+
+export interface IRecommendedProducts {
+  action: string;
+  recommendationTitle: string;
+  recoType: string;
+  recommendProductDetailList?: IRecommendProductDetailListEntity[] | null;
+  recommendMatchingDetailList?: IRecommendMatchingDetailListEntity[] | null;
+}
+
+export interface IRecommendedProductsCarousel {
+  details?: IRecommendProductDetailListEntity[] | null;
   matching?: IRecommendMatchingDetailListEntity[] | null;
   title: string;
 }
