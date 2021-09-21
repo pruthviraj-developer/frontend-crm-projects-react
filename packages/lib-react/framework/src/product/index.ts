@@ -1,2 +1,1 @@
-export * from './UseRecommendation';
-export * from './IUseRecommendation';
+export * from './use-recommendation';
