@@ -17,8 +17,6 @@ import {
   IProductDetails,
   IProductFormProps,
   SimpleSkusEntity,
-  IRecommendedProducts,
-  IRecommendedProductsCarousel,
   IPopularSearchUrlProps,
   urlParamsProps,
 } from '@/types';
@@ -27,6 +25,7 @@ import { cookiesService, productDetailsService } from '@hs/services';
 import { useState, useEffect, useRef } from 'react';
 import sortBy from 'lodash/sortBy';
 import { ProductDetailsWrapper } from './StyledUrlParams';
+import { useRecommendation, IRecommendedProducts } from '@hs/framework';
 
 // const ADD_TO_CART_BUTTON = 'Add to cart button';
 const SIZE_LIST_UPFRONT = 'Size list upfront';
@@ -104,9 +103,6 @@ const Product: NextPage = (props) => {
   const [product, setProduct] = useState<any>({});
   const [productInfo, setProductInfo] = useState<IProductDetails | any>({});
   const [productForm, setProductForm] = useState<IProductFormProps | any>({});
-  const [recommendedProducts, setRecommendedProducts] = useState<IRecommendedProductsCarousel | any>({});
-  const [similarProducts, setSimilarProducts] = useState<IRecommendedProductsCarousel>();
-  const [showRfyp, setShowRfyp] = useState<boolean>(false);
   const [popularSearchUrl, setPopularSearchUrl] = useState<IPopularSearchUrlProps[]>([]);
 
   // const [quantity, setQuantity] = useState<number>(0);
@@ -122,33 +118,40 @@ const Product: NextPage = (props) => {
     },
   );
 
-  const { data: recommendedProductDetails, isSuccess: isRecommendedProductsSuccess } = useQuery<IRecommendedProducts>(
+  const { data: recommendedProductDetails } = useQuery<IRecommendedProducts>(
     ['RecommendedProducts', productId],
     () => productDetailsService.getRecommendedProducts(productId, { boutiqueId: undefined }),
     {
-      staleTime: Infinity,
       enabled: productId !== undefined,
     },
   );
 
-  const { data: similarProductDetails, isSuccess: isSimilarProductSuccess } = useQuery<IRecommendedProducts>(
+  const { data: similarProductDetails } = useQuery<IRecommendedProducts>(
     ['SimilarProducts', productId],
     () => productDetailsService.getSimilarProducts(productId, { boutiqueId: undefined }),
     {
-      staleTime: Infinity,
       enabled: productId !== undefined,
     },
   );
+  const { canShow: showSimilarProducts, ...similarProducts } = useRecommendation({
+    section: 'RFYP',
+    showmatching: true,
+    recommended: similarProductDetails,
+    id: 'similarproducts',
+    pid: productInfo.id,
+  });
+  const { canShow: showRFYP, ...recommendedForYou } = useRecommendation({
+    section: 'UserRecoPDP',
+    showmatching: false,
+    recommended: recommendedProductDetails,
+    id: 'productrecommendations',
+    pid: productInfo.id,
+  });
 
   const goToProductRecommendation = (fromLocation: string) => {
     if (fromLocation) {
-      const currentRefElement =
-        recommendedProducts.details && recommendedProducts.details.length > 5
-          ? recommendedProductsLink
-          : similarProductsLink;
-      currentRefElement &&
-        currentRefElement.current &&
-        currentRefElement.current.scrollIntoView({ behavior: 'smooth' });
+      const currentRefElement = showRFYP ? recommendedProductsLink : similarProductsLink;
+      currentRefElement?.current?.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
@@ -278,7 +281,7 @@ const Product: NextPage = (props) => {
         // const keywords = [];
         // keywords.push(productName.replace(/-|:|_/gi, ' '));
         // keywords.push('online shopping for ' + productName.replace(/-|:|_/gi, ' '));
-        setShowRfyp(true);
+        // setShowRfyp(true);
         const soldOutSkus = productDetails.simpleSkus.find((sku) => !(sku.availableQuantity > 0));
         productDetails.showRfypCue = !!soldOutSkus;
         setDetails();
@@ -286,40 +289,40 @@ const Product: NextPage = (props) => {
     }
   }, [isProductDetailsSuccess, product, productDetails]);
 
-  useEffect(() => {
-    if (isRecommendedProductsSuccess) {
-      if (recommendedProductDetails && recommendedProductDetails.action === 'success') {
-        const recommendedProducts = {
-          details: recommendedProductDetails.recommendProductDetailList,
-          matching: recommendedProductDetails.recommendMatchingDetailList,
-          title: recommendedProductDetails.recommendationTitle,
-        };
-        setRecommendedProducts(recommendedProducts);
+  // useEffect(() => {
+  //   if (isRecommendedProductsSuccess) {
+  //     if (recommendedProductDetails && recommendedProductDetails.action === 'success') {
+  //       const recommendedProducts = {
+  //         details: recommendedProductDetails.recommendProductDetailList,
+  //         matching: recommendedProductDetails.recommendMatchingDetailList,
+  //         title: recommendedProductDetails.recommendationTitle,
+  //       };
+  //       setRecommendedProducts(recommendedProducts);
 
-        if (recommendedProducts.details && recommendedProducts.details.length <= 6) {
-          setShowRfyp(false);
-          setProductInfo({ ...productDetails, showRfypCue: false });
-        }
-      }
-    }
-  }, [isRecommendedProductsSuccess, recommendedProductDetails, productDetails]);
+  //       if (recommendedProducts.details && recommendedProducts.details.length <= 6) {
+  //         setShowRfyp(false);
+  //         setProductInfo({ ...productDetails, showRfypCue: false });
+  //       }
+  //     }
+  //   }
+  // }, [isRecommendedProductsSuccess, recommendedProductDetails, productDetails]);
 
-  useEffect(() => {
-    if (isSimilarProductSuccess) {
-      if (similarProductDetails && similarProductDetails.action === 'success') {
-        const similarProducts = {
-          details: similarProductDetails.recommendProductDetailList,
-          matching: similarProductDetails.recommendMatchingDetailList,
-          title: similarProductDetails.recommendationTitle,
-        };
-        if (similarProducts.details && similarProducts.details.length <= 6) {
-          setShowRfyp(false);
-          setProductInfo({ ...productDetails, showRfypCue: false });
-        }
-        setSimilarProducts(similarProducts);
-      }
-    }
-  }, [isSimilarProductSuccess, similarProductDetails, productDetails]);
+  // useEffect(() => {
+  //   if (isSimilarProductSuccess) {
+  //     if (similarProductDetails && similarProductDetails.action === 'success') {
+  //       const similarProducts = {
+  //         details: similarProductDetails.recommendProductDetailList,
+  //         matching: similarProductDetails.recommendMatchingDetailList,
+  //         title: similarProductDetails.recommendationTitle,
+  //       };
+  //       if (similarProducts.details && similarProducts.details.length <= 6) {
+  //         setShowRfyp(false);
+  //         setProductInfo({ ...productDetails, showRfypCue: false });
+  //       }
+  //       setSimilarProducts(similarProducts);
+  //     }
+  //   }
+  // }, [isSimilarProductSuccess, similarProductDetails, productDetails]);
 
   cookiesService.setCookies({ key: 'test', value: 'test value' });
   return (
@@ -381,7 +384,7 @@ const Product: NextPage = (props) => {
                   }}
                 ></CustomSizePicker>
               )}
-              {productInfo.showRfypCue && (
+              {productInfo.showRfypCue && showRFYP && (
                 <RecommendedProductsLinks
                   {...{ isProductSoldOut: productInfo.isProductSoldOut, goToProductRecommendation }}
                 ></RecommendedProductsLinks>
@@ -395,31 +398,15 @@ const Product: NextPage = (props) => {
               ></DeliveryDetails>
               {productInfo.id && <Accordian {...{ productInfo, sku: productForm.selectedSku }}></Accordian>}
 
-              {recommendedProducts && recommendedProducts.details && recommendedProducts.details.length > 6 && (
+              {showRFYP && (
                 <div ref={recommendedProductsLink}>
-                  <RecommendedProducts
-                    section="UserRecoPDP"
-                    subsection="Carousel"
-                    showmatching={false}
-                    recommended={recommendedProducts}
-                    id="productrecommendations"
-                    pid={productInfo.id}
-                  ></RecommendedProducts>
+                  <RecommendedProducts {...recommendedForYou}></RecommendedProducts>
                 </div>
               )}
 
-              {similarProducts && similarProducts.details && similarProducts.details.length > 6 && (
+              {showSimilarProducts && (
                 <div ref={similarProductsLink}>
-                  <RecommendedProducts
-                    {...{
-                      section: 'RFYP',
-                      subsection: 'Carousel',
-                      showmatching: true,
-                      recommended: similarProducts,
-                      id: 'similarproducts',
-                      pid: productInfo.id,
-                    }}
-                  ></RecommendedProducts>
+                  <RecommendedProducts {...similarProducts}></RecommendedProducts>
                 </div>
               )}
               <Footer urls={popularSearchUrl}></Footer>
@@ -427,7 +414,7 @@ const Product: NextPage = (props) => {
           </div>
         )}
       </main>
-      <pre style={{ width: '60%', overflowX: 'scroll' }}>{JSON.stringify(productInfo, null, 4)}</pre>
+      <pre style={{ width: '60%', overflowX: 'scroll' }}>{JSON.stringify(similarProducts, null, 4)}</pre>
     </div>
   );
 };
