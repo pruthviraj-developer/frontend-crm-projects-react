@@ -23,6 +23,8 @@ import {
   IPopularSearchUrlProps,
   urlParamsProps,
   IWishListProps,
+  ISizeChartProps,
+  ISizeChartDTOListEntityProps,
 } from '@/types';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
 import { cookiesService, productDetailsService } from '@hs/services';
@@ -35,6 +37,9 @@ import { useModal } from 'react-hooks-use-modal';
 const SIZE_LIST_UPFRONT = 'Size list upfront';
 const ONE_SIZE = 'one size';
 const ONESIZE = 'onesize';
+const SUCCESS = 'success';
+const CM_TO_INCH = 2.54;
+const KG_TO_LB = 2.20462;
 const POPULAR_URL = [
   { displayName: 'Boys Sherwani', link: '/products/15172/boys-sherwani' },
   { displayName: ' Girls Party Wear Dresses', link: '/products/15864/girls-party-wear-dresses' },
@@ -111,7 +116,8 @@ const Product: NextPage = (props) => {
   const [similarProducts, setSimilarProducts] = useState<IRecommendedProductsCarousel>();
   const [showRfyp, setShowRfyp] = useState<boolean>(false);
   const [popularSearchUrl, setPopularSearchUrl] = useState<IPopularSearchUrlProps[]>([]);
-
+  const [chartData, setChartData] = useState<ISizeChartDTOListEntityProps[] | null>([]);
+  const [chartTableData, setChartTableData] = useState<any>([]);
   // const [quantity, setQuantity] = useState<number>(0);
   // const showNewPromo = _self._AbTestService.isOnNewPromo();
   // const SHOW_RFYP = true;
@@ -148,9 +154,59 @@ const Product: NextPage = (props) => {
     },
   );
 
-  // const onSizeChartClick = () => {
-  //   open();
-  // };
+  const onSizeChartClick = () => {
+    (async () => {
+      try {
+        const sizesData: ISizeChartProps = await productDetailsService.getSizes(productInfo.id);
+        if (sizesData.action === SUCCESS) {
+          const sizeChartData = sizesData.sizeChartDTOList;
+          const showWeightBlock = [true, true];
+          const showLengthBlock = [true, true];
+          const isLengthActive = [];
+          const isWeightActive = [];
+          const tableData: any = [];
+          // _self.productName = parentData.productName;
+
+          const prepareTableData = () => {
+            if (sizeChartData && sizeChartData[0].sizeChartParameterValueDTOList) {
+              for (var index = 0; index < sizeChartData.length; index++) {
+                if (
+                  sizeChartData[index] &&
+                  sizeChartData[index].parameterMeasureTypeList &&
+                  (sizeChartData[index].parameterMeasureTypeList || '').indexOf('W') === -1
+                ) {
+                  showWeightBlock[index] = false;
+                }
+                if (
+                  sizeChartData[index] &&
+                  sizeChartData[index].parameterMeasureTypeList &&
+                  (sizeChartData[index].parameterMeasureTypeList || '').indexOf('L') === -1
+                ) {
+                  showLengthBlock[index] = false;
+                }
+                isLengthActive[index] = sizeChartData[index].lengthUnit;
+                isWeightActive[index] = sizeChartData[index].weightUnit;
+                tableData[index] = [
+                  {
+                    valueList: sizeChartData[index].parameterNamesList,
+                  },
+                ];
+                if (sizeChartData[index].sizeChartParameterValueDTOList) {
+                  tableData[index] = tableData[index].concat(sizeChartData[index].sizeChartParameterValueDTOList);
+                }
+              }
+              setChartTableData(tableData);
+            }
+          };
+          prepareTableData();
+          setChartData(sizeChartData);
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    })();
+    open();
+  };
 
   const goToProductRecommendation = (fromLocation: string) => {
     if (fromLocation) {
@@ -185,7 +241,7 @@ const Product: NextPage = (props) => {
       (async () => {
         try {
           const wishListStatus: IWishListProps = await productDetailsService.deleteFromWishlist(productInfo.wishlistId);
-          if (wishListStatus.action === 'success') {
+          if (wishListStatus.action === SUCCESS) {
             setProductInfo({ ...productInfo, wishlistId: 0 });
             if (navigator && navigator.vibrate) {
               navigator.vibrate(200);
@@ -262,7 +318,7 @@ const Product: NextPage = (props) => {
       (async () => {
         try {
           const wishListStatus: IWishListProps = await productDetailsService.addToWishlist(wishlistItem);
-          if (wishListStatus.action === 'success') {
+          if (wishListStatus.action === SUCCESS) {
             setProductInfo({ ...productInfo, wishlistId: wishListStatus.wishlistItemId });
             if (navigator && navigator.vibrate) {
               navigator.vibrate(200);
@@ -302,7 +358,7 @@ const Product: NextPage = (props) => {
   // setSimilarProducts
   useEffect(() => {
     if (isProductDetailsSuccess) {
-      if (productDetails && productDetails.action === 'success') {
+      if (productDetails && productDetails.action === SUCCESS) {
         const updateProductDetail = (
           sku: SimpleSkusEntity,
           isfirst: boolean,
@@ -430,14 +486,13 @@ const Product: NextPage = (props) => {
 
   useEffect(() => {
     if (isRecommendedProductsSuccess) {
-      if (recommendedProductDetails && recommendedProductDetails.action === 'success') {
+      if (recommendedProductDetails && recommendedProductDetails.action === SUCCESS) {
         const recommendedProducts = {
           details: recommendedProductDetails.recommendProductDetailList,
           matching: recommendedProductDetails.recommendMatchingDetailList,
           title: recommendedProductDetails.recommendationTitle,
         };
         setRecommendedProducts(recommendedProducts);
-
         if (recommendedProducts.details && recommendedProducts.details.length <= 6) {
           setShowRfyp(false);
           setProductInfo({ ...productDetails, showRfypCue: false });
@@ -448,7 +503,7 @@ const Product: NextPage = (props) => {
 
   useEffect(() => {
     if (isSimilarProductSuccess) {
-      if (similarProductDetails && similarProductDetails.action === 'success') {
+      if (similarProductDetails && similarProductDetails.action === SUCCESS) {
         const similarProducts = {
           details: similarProductDetails.recommendProductDetailList,
           matching: similarProductDetails.recommendMatchingDetailList,
@@ -467,7 +522,7 @@ const Product: NextPage = (props) => {
   return (
     <div>
       <main>
-        {productInfo && productInfo.action === 'success' && (
+        {productInfo && productInfo.action === SUCCESS && (
           <div>
             <Head>
               <title>{`Shop Online ${productInfo.productName} at ₹${productForm.retailPrice}`}</title>
@@ -513,7 +568,7 @@ const Product: NextPage = (props) => {
                   hasSizeChart: productInfo.hasSizeChart,
                   qtyLeft: productForm.qtyLeft,
                   simpleSkus: productInfo.simpleSkus,
-                  onSizeChartClick: open,
+                  onSizeChartClick,
                 }}
               ></SizeAndChartLabels>
               {!productInfo.isOneSize && (
@@ -572,7 +627,14 @@ const Product: NextPage = (props) => {
           </div>
         )}
         <Modal>
-          <SizeChartPopup onClickClose={close}></SizeChartPopup>
+          <SizeChartPopup
+            {...{
+              productName: productInfo.productName,
+              onClickClose: close,
+              sizeChartData: chartData,
+              chartTableData,
+            }}
+          ></SizeChartPopup>
         </Modal>
       </main>
       <pre style={{ width: '60%', overflowX: 'scroll' }}>{JSON.stringify(productInfo, null, 4)}</pre>

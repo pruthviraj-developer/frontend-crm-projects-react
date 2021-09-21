@@ -122,6 +122,12 @@ const getUserInfo = <P, R>(params: P): Promise<R> => {
   // })
 };
 
+const getSizes = <P, R>(productId: P, baseURL = ''): Promise<R> => {
+  let url = `/api/sizeChart/${productId}`;
+  if (baseURL) url = baseURL + url;
+  return httpService.get<R>({ url });
+};
+
 export const productDetailsService = {
   addToWishlist,
   deleteFromWishlist,
@@ -131,4 +137,5 @@ export const productDetailsService = {
   getSimilarProducts,
   getRecommendedProducts,
   getUserInfo,
+  getSizes,
 };
