@@ -1,10 +1,10 @@
 import type { NextPage } from 'next';
 import { SizeChartPopup } from '@hs/components';
+import { ISizeComponentProps } from '@/types';
 import { productDetailsService } from '@hs/services';
 import { useState, useEffect, useRef, FC } from 'react';
 import { useModal } from 'react-hooks-use-modal';
 
-import { ISizeComponentProps } from '@/types';
 const SUCCESS = 'success';
 const SizeChart: FC<ISizeComponentProps> = ({ productName, id, response }: ISizeComponentProps) => {
   const [Modal, open, close] = useModal('root', {

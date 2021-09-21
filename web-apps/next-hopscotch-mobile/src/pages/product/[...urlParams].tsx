@@ -116,8 +116,12 @@ const Product: NextPage = (props) => {
   const [similarProducts, setSimilarProducts] = useState<IRecommendedProductsCarousel>();
   const [showRfyp, setShowRfyp] = useState<boolean>(false);
   const [popularSearchUrl, setPopularSearchUrl] = useState<IPopularSearchUrlProps[]>([]);
-  const [chartData, setChartData] = useState<ISizeChartDTOListEntityProps[] | null>([]);
+  const [chartData, setChartData] = useState<ISizeChartDTOListEntityProps[]>([]);
   const [chartTableData, setChartTableData] = useState<any>([]);
+  const [isLengthActive, setLengthActive] = useState<Array<string>>([]);
+  const [isWeightActive, setWeightActive] = useState<Array<string>>([]);
+  const [showWeightBlock, setWeightBlock] = useState<Array<boolean>>([]);
+  const [showLengthBlock, setLengthBlock] = useState<Array<boolean>>([]);
   // const [quantity, setQuantity] = useState<number>(0);
   // const showNewPromo = _self._AbTestService.isOnNewPromo();
   // const SHOW_RFYP = true;
@@ -154,6 +158,27 @@ const Product: NextPage = (props) => {
     },
   );
 
+  const setWeight = (index: number, unit: string) => {
+    if (isWeightActive[index] !== unit) {
+      // let _converterIndex = unit === 'kg' ? 1 / KG_TO_LB : KG_TO_LB;
+      isWeightActive[index] = unit;
+      let list = [...isWeightActive];
+      list[index] = unit;
+      setWeightActive(list);
+      // this.convertUnit('W', _converterIndex, index);
+    }
+  };
+
+  const setLength = (index: number, unit: string) => {
+    if (isLengthActive[index] !== unit) {
+      // let _converterIndex = unit === 'cm' ? CM_TO_INCH : 1 / CM_TO_INCH;
+      let list = [...isLengthActive];
+      list[index] = unit;
+      setLengthActive(list);
+      // this.convertUnit('L', _converterIndex, index);
+    }
+  };
+
   const onSizeChartClick = () => {
     (async () => {
       try {
@@ -162,11 +187,9 @@ const Product: NextPage = (props) => {
           const sizeChartData = sizesData.sizeChartDTOList;
           const showWeightBlock = [true, true];
           const showLengthBlock = [true, true];
-          const isLengthActive = [];
-          const isWeightActive = [];
+          const isLengthActive: Array<string> = [];
+          const isWeightActive: Array<string> = [];
           const tableData: any = [];
-          // _self.productName = parentData.productName;
-
           const prepareTableData = () => {
             if (sizeChartData && sizeChartData[0].sizeChartParameterValueDTOList) {
               for (var index = 0; index < sizeChartData.length; index++) {
@@ -195,6 +218,10 @@ const Product: NextPage = (props) => {
                   tableData[index] = tableData[index].concat(sizeChartData[index].sizeChartParameterValueDTOList);
                 }
               }
+              setLengthActive(isLengthActive);
+              setWeightActive(isWeightActive);
+              setWeightBlock(showWeightBlock);
+              setLengthBlock(showLengthBlock);
               setChartTableData(tableData);
             }
           };
@@ -633,6 +660,12 @@ const Product: NextPage = (props) => {
               onClickClose: close,
               sizeChartData: chartData,
               chartTableData,
+              setLength,
+              setWeight,
+              showWeightBlock,
+              showLengthBlock,
+              isLengthActive,
+              isWeightActive,
             }}
           ></SizeChartPopup>
         </Modal>

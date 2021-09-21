@@ -1,8 +1,14 @@
 export interface ISizeChartPopup {
   onClickClose: () => void;
+  setLength: (number, string) => void;
+  setWeight: (number, string) => void;
   sizeChartData: SizeChartDTOListEntity[];
   productName: string;
   chartTableData: IChartTablePropsEntity;
+  showWeightBlock: Array<boolean>;
+  showLengthBlock: Array<boolean>;
+  isLengthActive: Array<string>;
+  isWeightActive: Array<string>;
 }
 
 export interface SizeChartDTOListEntity {

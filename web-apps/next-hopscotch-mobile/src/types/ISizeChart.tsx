@@ -6,7 +6,7 @@ export interface ISizeComponentProps {
 
 export interface ISizeChartProps {
   action: string;
-  sizeChartDTOList: ISizeChartDTOListEntityProps[] | null;
+  sizeChartDTOList: ISizeChartDTOListEntityProps[];
 }
 
 export interface ISizeChartDTOListEntityProps {

@@ -18,7 +18,7 @@ import {
   ChartDetailImageIllustration,
   ImageLink,
   SizeTableWrapper,
-  SizeOptionTypeLengthHeader,
+  SizeOptionTypeLengthOrWidthHeader,
   SizeOptionType,
   SizeTable,
   SizeTableDetail,
@@ -31,12 +31,17 @@ import {
   SizeTipsListItem,
 } from './StyledSizeChartPopup';
 import { IconClose } from '@hs/icons';
-// eslint-disable-next-line no-empty-pattern
 export const SizeChartPopup: FC<ISizeChartPopup> = ({
   onClickClose,
   sizeChartData,
   productName,
   chartTableData,
+  setLength,
+  setWeight,
+  showWeightBlock = [],
+  showLengthBlock = [],
+  isLengthActive = [],
+  isWeightActive = [],
 }: ISizeChartPopup) => {
   return (
     <SizeChartWrapper>
@@ -64,7 +69,6 @@ export const SizeChartPopup: FC<ISizeChartPopup> = ({
                       <ChartDetailImageIllustration
                         src={sizeChart.illustrationImageUrl}
                       />
-
                       {sizeChart.cueImageUrlList?.map(
                         (cueImg: string, ind: number) => (
                           <ImageLink key={ind} src={cueImg} />
@@ -74,13 +78,60 @@ export const SizeChartPopup: FC<ISizeChartPopup> = ({
                   </SizeChartDetailImages>
                 )}
                 <SizeTableWrapper>
-                  {/* {sizeChart.sizeChartParameterValueDTOList &&
-                    sizeChart.sizeChartParameterValueDTOList.map()} */}
-                  <SizeOptionTypeLengthHeader>
-                    Length
-                    <SizeOptionType>cm</SizeOptionType>
-                    <SizeOptionType className={'active'}>in</SizeOptionType>
-                  </SizeOptionTypeLengthHeader>
+                  {sizeChart.sizeChartParameterValueDTOList && (
+                    <>
+                      {showLengthBlock[index] && (
+                        <SizeOptionTypeLengthOrWidthHeader>
+                          Length:
+                          <SizeOptionType
+                            onClick={() => {
+                              setLength(index, 'cm');
+                            }}
+                            className={
+                              isLengthActive[index] === 'cm' ? 'active' : ''
+                            }
+                          >
+                            cm
+                          </SizeOptionType>
+                          <SizeOptionType
+                            onClick={() => {
+                              setLength(index, 'in');
+                            }}
+                            className={
+                              isLengthActive[index] === 'in' ? 'active' : ''
+                            }
+                          >
+                            in
+                          </SizeOptionType>
+                        </SizeOptionTypeLengthOrWidthHeader>
+                      )}
+                      {showWeightBlock[index] && (
+                        <SizeOptionTypeLengthOrWidthHeader>
+                          Weight:
+                          <SizeOptionType
+                            onClick={() => {
+                              setWeight(index, 'kg');
+                            }}
+                            className={
+                              isWeightActive[index] === 'kg' ? 'active' : ''
+                            }
+                          >
+                            kg
+                          </SizeOptionType>
+                          <SizeOptionType
+                            onClick={() => {
+                              setWeight(index, 'lb');
+                            }}
+                            className={
+                              isWeightActive[index] === 'lb' ? 'active' : ''
+                            }
+                          >
+                            lb
+                          </SizeOptionType>
+                        </SizeOptionTypeLengthOrWidthHeader>
+                      )}
+                    </>
+                  )}
                   <SizeTable>
                     <SizeTableDetail>
                       <SizeTableBody>

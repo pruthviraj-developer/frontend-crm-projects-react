@@ -79,7 +79,7 @@ const SizeTableHeader = styled.div`
   padding: ${typography.size.s08}px 0;
 `;
 
-const SizeOptionTypeLengthHeader = styled.div`
+const SizeOptionTypeLengthOrWidthHeader = styled.div`
   display: flex;
   align-items: center;
   padding: 8px 0 8px 12px;
@@ -161,7 +161,7 @@ export {
   SizeTableWrapper,
   SizeTableHeader,
   SizeOptionType,
-  SizeOptionTypeLengthHeader,
+  SizeOptionTypeLengthOrWidthHeader,
   ChartDetailImageIllustration,
   ImageLink,
   SizeTable,
