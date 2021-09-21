@@ -289,41 +289,6 @@ const Product: NextPage = (props) => {
     }
   }, [isProductDetailsSuccess, product, productDetails]);
 
-  // useEffect(() => {
-  //   if (isRecommendedProductsSuccess) {
-  //     if (recommendedProductDetails && recommendedProductDetails.action === 'success') {
-  //       const recommendedProducts = {
-  //         details: recommendedProductDetails.recommendProductDetailList,
-  //         matching: recommendedProductDetails.recommendMatchingDetailList,
-  //         title: recommendedProductDetails.recommendationTitle,
-  //       };
-  //       setRecommendedProducts(recommendedProducts);
-
-  //       if (recommendedProducts.details && recommendedProducts.details.length <= 6) {
-  //         setShowRfyp(false);
-  //         setProductInfo({ ...productDetails, showRfypCue: false });
-  //       }
-  //     }
-  //   }
-  // }, [isRecommendedProductsSuccess, recommendedProductDetails, productDetails]);
-
-  // useEffect(() => {
-  //   if (isSimilarProductSuccess) {
-  //     if (similarProductDetails && similarProductDetails.action === 'success') {
-  //       const similarProducts = {
-  //         details: similarProductDetails.recommendProductDetailList,
-  //         matching: similarProductDetails.recommendMatchingDetailList,
-  //         title: similarProductDetails.recommendationTitle,
-  //       };
-  //       if (similarProducts.details && similarProducts.details.length <= 6) {
-  //         setShowRfyp(false);
-  //         setProductInfo({ ...productDetails, showRfypCue: false });
-  //       }
-  //       setSimilarProducts(similarProducts);
-  //     }
-  //   }
-  // }, [isSimilarProductSuccess, similarProductDetails, productDetails]);
-
   cookiesService.setCookies({ key: 'test', value: 'test value' });
   return (
     <div>
