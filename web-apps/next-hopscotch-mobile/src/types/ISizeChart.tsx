@@ -16,12 +16,12 @@ export interface ISizeChartDTOListEntityProps {
   weightUnit: string;
   notesList?: string[] | null;
   cueImageUrlList?: string[] | null;
-  sizeChartParameterValueDTOList?: SizeChartParameterValueDTOListEntity[] | null;
+  sizeChartParameterValueDTOList: SizeChartParameterValueDTOListEntity[];
   parameterNamesList?: string[] | null;
-  parameterMeasureTypeList?: string[] | null;
+  parameterMeasureTypeList: string[];
   importantInfo: string;
 }
 
 export interface SizeChartParameterValueDTOListEntity {
-  valueList?: string[] | null;
+  valueList: string[] | any;
 }

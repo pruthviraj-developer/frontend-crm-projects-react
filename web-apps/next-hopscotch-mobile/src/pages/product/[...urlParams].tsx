@@ -160,22 +160,41 @@ const Product: NextPage = (props) => {
 
   const setWeight = (index: number, unit: string) => {
     if (isWeightActive[index] !== unit) {
-      // let _converterIndex = unit === 'kg' ? 1 / KG_TO_LB : KG_TO_LB;
+      const _converterIndex = unit === 'kg' ? 1 / KG_TO_LB : KG_TO_LB;
       isWeightActive[index] = unit;
       let list = [...isWeightActive];
       list[index] = unit;
       setWeightActive(list);
-      // this.convertUnit('W', _converterIndex, index);
+      convertUnit('W', _converterIndex, index);
     }
   };
 
   const setLength = (index: number, unit: string) => {
     if (isLengthActive[index] !== unit) {
-      // let _converterIndex = unit === 'cm' ? CM_TO_INCH : 1 / CM_TO_INCH;
+      const _converterIndex = unit === 'cm' ? CM_TO_INCH : 1 / CM_TO_INCH;
       let list = [...isLengthActive];
       list[index] = unit;
       setLengthActive(list);
-      // this.convertUnit('L', _converterIndex, index);
+      convertUnit('L', _converterIndex, index);
+    }
+  };
+
+  const convertUnit = (unitType: string, unitIndex: number, index: number) => {
+    const sizeChartData = [...chartData];
+    if (sizeChartData?.[index]?.sizeChartParameterValueDTOList?.length) {
+      sizeChartData[index].sizeChartParameterValueDTOList.map(function (row) {
+        row.valueList.forEach(function (colValue: string, colIndex: number) {
+          if (sizeChartData[index].parameterMeasureTypeList[colIndex] == unitType) {
+            let colArray: any = colValue.replace(/\s/g, '').split('-');
+            colArray.forEach(function (rangeValue: any, rangeIndex: number) {
+              colArray[rangeIndex] = Math.round(rangeValue * unitIndex * 10) / 10;
+            });
+            row.valueList[colIndex] = colArray.join(' - ');
+          }
+        });
+        return row;
+      });
+      setChartData(sizeChartData);
     }
   };
 
