@@ -25,12 +25,6 @@ const SIZE_LIST_UPFRONT = 'Size list upfront';
 const ONE_SIZE = 'one size';
 const ONESIZE = 'onesize';
 
-// const getProductDetails = <P, R>(): Promise<R> => {
-//   const params = { currentTime: new Date().getTime() };
-//   // return httpService.get<R>({ url: `/api/product/${productId}`, params });
-//   return httpService.get<R>({ url: '/api/product/948332', params });
-// };
-
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const queryClient = new QueryClient();
   const productId = context.params?.urlParams?.[0] || '';
