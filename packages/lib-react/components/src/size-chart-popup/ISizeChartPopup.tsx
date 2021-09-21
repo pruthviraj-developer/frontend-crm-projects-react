@@ -1,3 +1,3 @@
 export interface ISizeChartPopup {
-  label?: string;
+  onClickClose: () => void;
 }

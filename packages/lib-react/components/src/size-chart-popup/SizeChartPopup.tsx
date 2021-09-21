@@ -28,13 +28,19 @@ import {
 } from './StyledSizeChartPopup';
 import { IconClose } from '@hs/icons';
 // eslint-disable-next-line no-empty-pattern
-export const SizeChartPopup: FC<ISizeChartPopup> = ({}: ISizeChartPopup) => {
+export const SizeChartPopup: FC<ISizeChartPopup> = ({
+  onClickClose,
+}: ISizeChartPopup) => {
   return (
     <SizeChartWrapper>
       <SizeChartHeaderWrapper>
         <SizeChartHeader>
           <SizeChartHeaderTitle>SIZE CHART</SizeChartHeaderTitle>
-          <SizeChartHeaderCloseIcon>
+          <SizeChartHeaderCloseIcon
+            onClick={() => {
+              onClickClose();
+            }}
+          >
             <SizeChartCloseIcon icon={IconClose} fill={'#bbb'} />
           </SizeChartHeaderCloseIcon>
         </SizeChartHeader>

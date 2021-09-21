@@ -3,4 +3,5 @@ export interface ISizeAndChartLabelsProps {
   hasSizeChart: boolean;
   qtyLeft: number;
   simpleSkus: Array<Record<string, string>>;
+  onSizeChartClick: () => void;
 }

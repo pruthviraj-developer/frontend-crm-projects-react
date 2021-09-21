@@ -10,6 +10,7 @@ export const SizeAndChartLabels: FC<ISizeAndChartLabelsProps> = ({
   hasSizeChart,
   qtyLeft,
   simpleSkus,
+  onSizeChartClick,
 }: ISizeAndChartLabelsProps) => {
   return (
     <>
@@ -17,25 +18,18 @@ export const SizeAndChartLabels: FC<ISizeAndChartLabelsProps> = ({
         <SizeAndChartLabelsWrapper>
           <div>{!isOneSize && <Size>Size</Size>}</div>
           <div>
-            {hasSizeChart && <ViewSizeChart>View size chart</ViewSizeChart>}
+            {hasSizeChart && (
+              <ViewSizeChart
+                onClick={() => {
+                  onSizeChartClick();
+                }}
+              >
+                View size chart
+              </ViewSizeChart>
+            )}
           </div>
         </SizeAndChartLabelsWrapper>
       )}
     </>
   );
 };
-
-//   <div class="row qty-chart"
-//   ng-if="!vm.productDetail.isOneSize || vm.productDetail.hasSizeChart"
-//    ng-show="vm.productForm.qtyLeft < 6 || vm.productDetail.hasSizeChart || !vm.productDetail.isOneSize || vm.productDetail.simpleSkus.length < 2">
-//   <div class="medium-6 large-6 small-6 columns">
-//       <span class="float-left">
-//           <span ng-hide="vm.productDetail.isOneSize">Size </span>
-//       </span>
-//   </div>
-//   <div class="medium-6 large-6 small-6 columns">
-//       <span class="size-chart float-right" ng-if="::vm.productDetail.hasSizeChart" ng-click="vm.showSizeChart()">
-//           View size chart
-//       </span>
-//   </div>
-// </div>

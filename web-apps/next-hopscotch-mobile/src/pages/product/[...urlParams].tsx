@@ -11,6 +11,7 @@ import {
   RecommendedProducts,
   Footer,
   RecommendedProductsLinks,
+  SizeChartPopup,
 } from '@hs/components';
 import {
   IProductProps,
@@ -28,6 +29,7 @@ import { cookiesService, productDetailsService } from '@hs/services';
 import { useState, useEffect, useRef } from 'react';
 import sortBy from 'lodash/sortBy';
 import { ProductDetailsWrapper } from './StyledUrlParams';
+import { useModal } from 'react-hooks-use-modal';
 
 // const ADD_TO_CART_BUTTON = 'Add to cart button';
 const SIZE_LIST_UPFRONT = 'Size list upfront';
@@ -114,6 +116,11 @@ const Product: NextPage = (props) => {
   // const showNewPromo = _self._AbTestService.isOnNewPromo();
   // const SHOW_RFYP = true;
 
+  const [Modal, open, close] = useModal('root', {
+    preventScroll: false,
+    closeOnOverlayClick: true,
+  });
+
   const { data: productDetails, isSuccess: isProductDetailsSuccess } = useQuery<IProductDetails>(
     ['ProductDetail', productId],
     () => productDetailsService.getProductDetails(productId),
@@ -140,6 +147,10 @@ const Product: NextPage = (props) => {
       enabled: productId !== undefined,
     },
   );
+
+  // const onSizeChartClick = () => {
+  //   open();
+  // };
 
   const goToProductRecommendation = (fromLocation: string) => {
     if (fromLocation) {
@@ -278,9 +289,7 @@ const Product: NextPage = (props) => {
             // });
             // self._SegmentService.track(self._SegmentService.EVENTS.PRODUCT_ADDED_TO_WISHLIST, segmentData);
           }
-        } catch (error) {
-          console.log(error);
-        }
+        } catch (e) {}
       })();
     }
   };
@@ -504,6 +513,7 @@ const Product: NextPage = (props) => {
                   hasSizeChart: productInfo.hasSizeChart,
                   qtyLeft: productForm.qtyLeft,
                   simpleSkus: productInfo.simpleSkus,
+                  onSizeChartClick: open,
                 }}
               ></SizeAndChartLabels>
               {!productInfo.isOneSize && (
@@ -561,6 +571,9 @@ const Product: NextPage = (props) => {
             </ProductDetailsWrapper>
           </div>
         )}
+        <Modal>
+          <SizeChartPopup onClickClose={close}></SizeChartPopup>
+        </Modal>
       </main>
       <pre style={{ width: '60%', overflowX: 'scroll' }}>{JSON.stringify(productInfo, null, 4)}</pre>
     </div>
