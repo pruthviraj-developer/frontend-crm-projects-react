@@ -12,14 +12,7 @@ import {
   Footer,
   RecommendedProductsLinks,
 } from '@hs/components';
-import {
-  IProductProps,
-  IProductDetails,
-  IProductFormProps,
-  SimpleSkusEntity,
-  IPopularSearchUrlProps,
-  urlParamsProps,
-} from '@/types';
+import { IProductProps, IProductDetails, IProductFormProps, SimpleSkusEntity, urlParamsProps } from '@/types';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
 import { cookiesService, productDetailsService } from '@hs/services';
 import { useState, useEffect, useRef } from 'react';
@@ -31,30 +24,6 @@ import { useRecommendation, IRecommendedProducts } from '@hs/framework';
 const SIZE_LIST_UPFRONT = 'Size list upfront';
 const ONE_SIZE = 'one size';
 const ONESIZE = 'onesize';
-const POPULAR_URL = [
-  { displayName: 'Boys Sherwani', link: '/products/15172/boys-sherwani' },
-  { displayName: ' Girls Party Wear Dresses', link: '/products/15864/girls-party-wear-dresses' },
-  { displayName: 'Girls Jackets', link: '/products/15935/girls-jackets' },
-  { displayName: ' Girls Frocks', link: '/products/15936/girls-frocks' },
-  { displayName: 'Boys Jackets', link: '/products/15966/boys-jackets' },
-  { displayName: 'Girls Leggings', link: '/products/15971/girls-leggings' },
-  { displayName: 'Girls Casual Dresses', link: '/products/16270/girls-casual-dresses' },
-  { displayName: 'Girls Gowns', link: '/products/16320/girls-gowns' },
-  { displayName: 'Baby Girl Onesies ', link: '/products/16415/baby-girl-onesies' },
-  { displayName: 'Baby Boy Onesies ', link: '/products/16416/baby-boy-onesies' },
-  { displayName: 'Baby Girls Rompers', link: '/products/16417/baby-girl-rompers' },
-  { displayName: 'Baby Boy Rompers', link: '/products/16418/baby-boy-rompers' },
-  { displayName: 'Baby Clothes ', link: '/baby' },
-  { displayName: 'Girls Clothes ', link: '/girls' },
-  { displayName: 'Boys Clothes ', link: '/boys' },
-  { displayName: 'Boys Tshirts ', link: '/clothing/boys/tshirts' },
-  { displayName: 'Girls Tops ', link: '/clothing/girls/tops' },
-  { displayName: 'Boys Jeans', link: '/clothing/boys/jeans' },
-  { displayName: 'Girls Jeans ', link: '/clothing/girls/jeans' },
-  { displayName: 'Boys Shirts ', link: '/clothing/boys/shirts' },
-  { displayName: 'Girls Tshirts ', link: '/clothing/girls/tshirts' },
-  { displayName: 'Girls Dresses', link: '/clothing/girls/dresses' },
-];
 
 // const getProductDetails = <P, R>(): Promise<R> => {
 //   const params = { currentTime: new Date().getTime() };
@@ -103,7 +72,7 @@ const Product: NextPage = (props) => {
   const [product, setProduct] = useState<any>({});
   const [productInfo, setProductInfo] = useState<IProductDetails | any>({});
   const [productForm, setProductForm] = useState<IProductFormProps | any>({});
-  const [popularSearchUrl, setPopularSearchUrl] = useState<IPopularSearchUrlProps[]>([]);
+  // const [popularSearchUrl, setPopularSearchUrl] = useState<IPopularSearchUrlProps[]>([]);
 
   // const [quantity, setQuantity] = useState<number>(0);
   // const showNewPromo = _self._AbTestService.isOnNewPromo();
@@ -155,10 +124,10 @@ const Product: NextPage = (props) => {
     }
   };
 
-  useEffect(() => {
-    const popularSUrl = POPULAR_URL.filter((item) => item.link !== router.asPath.split('?')[0]);
-    setPopularSearchUrl(popularSUrl);
-  }, [router.asPath]);
+  // useEffect(() => {
+  //   const popularSUrl = POPULAR_URL.filter((item) => item.link !== router.asPath.split('?')[0]);
+  //   setPopularSearchUrl(popularSUrl);
+  // }, [router.asPath]);
 
   // setSimilarProducts
   useEffect(() => {
@@ -374,7 +343,7 @@ const Product: NextPage = (props) => {
                   <RecommendedProducts {...similarProducts}></RecommendedProducts>
                 </div>
               )}
-              <Footer urls={popularSearchUrl}></Footer>
+              <Footer />
             </ProductDetailsWrapper>
           </div>
         )}
