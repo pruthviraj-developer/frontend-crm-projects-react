@@ -18,9 +18,19 @@ import {
 } from './IDeliveryDetails';
 import { NextNavLink } from '../next-nav-link';
 
-export const DeliveryDetails: FC<IDeliveryDetailsProps> = (
-  props: IDeliveryDetailsProps
-) => {
+export const DeliveryDetails: FC<IDeliveryDetailsProps> = ({
+  deliveryDetails,
+  isSkuInternational,
+  skuInternationalPreOrderInfo,
+  skuInternationalPreOrderAction,
+  isProductInternational,
+  productInternationalPreOrderInfo,
+  productInternationalPreOrderAction,
+  eddColor,
+  eddTextColor,
+  eddPrefix,
+  deliveryMsg,
+}: IDeliveryDetailsProps) => {
   return (
     <DeliveryDetailsWrapper>
       <DeliveryTitle>
@@ -30,61 +40,36 @@ export const DeliveryDetails: FC<IDeliveryDetailsProps> = (
       <DeliveryDetailsContent>
         <Delivery>
           <DeliverIcon icon={IconTick} fill={'#bbb'} />
-          {props.sku && (
-            <DeliveryInfo>
-              {props.sku.eddPrefix}
-              <DeliveryBadge
-                color={props.sku.eddTextColor}
-                bgColor={props.sku.eddColor}
-              >
-                {props.sku.deliveryMsg}
-              </DeliveryBadge>
-            </DeliveryInfo>
-          )}
-          {!props.sku && (
-            <DeliveryInfo>
-              {props.productDetail.eddPrefix}
-              <DeliveryBadge
-                color={props.productDetail.eddTextColor}
-                bgColor={props.productDetail.eddColor}
-              >
-                {props.productDetail.edd}
-              </DeliveryBadge>
-            </DeliveryInfo>
-          )}
-          {props.sku && props.sku.isInternationalPreorder && (
+          <DeliveryInfo>
+            {eddPrefix}
+            <DeliveryBadge color={eddTextColor} bgColor={eddColor}>
+              {deliveryMsg}
+            </DeliveryBadge>
+          </DeliveryInfo>
+
+          {isSkuInternational && (
             <PreOrderInfo>
               <NextNavLink
                 color={'#707070'}
-                name={props.sku.preorderInfo}
-                href={props.sku.preorderAction}
+                name={skuInternationalPreOrderInfo}
+                href={skuInternationalPreOrderAction}
               ></NextNavLink>
             </PreOrderInfo>
           )}
-          {props.productDetail && props.productDetail.isInternationalPreorder && (
+          {isProductInternational && (
             <PreOrderInfo>
               <a
                 target="_blank"
-                href={props.productDetail.preorderAction}
+                href={productInternationalPreOrderAction}
                 rel="noreferrer"
               >
-                {props.productDetail.preorderInfo}
+                {productInternationalPreOrderInfo}
               </a>
             </PreOrderInfo>
           )}
         </Delivery>
 
-        {/* 
-          <div class="point delivery">
-              <span class="delivery-badge" ng-style="{'background-color': vm.productForm.sku.eddColor, 'color': vm.productForm.sku.eddTextColor}" ng-bind="vm.productForm.sku.deliveryMsg"></span>
-              <span class="delivery-badge" ng-style="{'background-color': vm.productDetail.eddColor, 'color': vm.productDetail.eddTextColor}" ng-bind="vm.productDetail.edd"></span>
-              <span class ="international-preorder" ng-if="vm.showInternationaPreorder()"><a target="_blank" ng-href="{{vm.productForm.sku.preorderAction || vm.productDetail.preorderAction}}">{{vm.productForm.sku.preorderInfo
-                  || vm.productDetail.preorderInfo}}</a>
-              </span>
-          </div>
-        */}
-
-        {props.deliveryDetails.map(
+        {deliveryDetails.map(
           (data: DeliveryMessageOrDeliveryMessagesEntity, index: number) => (
             <Delivery key={index}>
               <DeliverIcon
