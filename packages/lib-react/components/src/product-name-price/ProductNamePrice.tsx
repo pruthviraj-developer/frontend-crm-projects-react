@@ -12,7 +12,7 @@ import {
   WishListIcon,
 } from './StyledProductNamePrice';
 import { IProductNamePriceProps } from './IProductNamePrice';
-import { IconWishList } from '@hs/icons';
+import { IconWishList, IconWishListFilled } from '@hs/icons';
 export const ProductNamePrice: FC<IProductNamePriceProps> = ({
   name,
   retailPrice,
@@ -21,6 +21,9 @@ export const ProductNamePrice: FC<IProductNamePriceProps> = ({
   discount,
   selectedSku,
   isProductSoldOut,
+  wishlistId = 0,
+  addToWishlist,
+  deleteFromWishlist,
 }: IProductNamePriceProps) => {
   if (retailPrice) {
     return (
@@ -47,7 +50,17 @@ export const ProductNamePrice: FC<IProductNamePriceProps> = ({
             <ProductName>{name}</ProductName>
           </ProductNamePriceWrapper>
           <WishListWrapper>
-            <WishListIcon icon={IconWishList} fill={'#bbb'} />
+            <WishListIcon
+              onClick={() => {
+                if (wishlistId) {
+                  deleteFromWishlist();
+                  return;
+                }
+                addToWishlist();
+              }}
+              icon={wishlistId ? IconWishListFilled : IconWishList}
+              fill={wishlistId ? '#ED54A4' : '#bbb'}
+            />
           </WishListWrapper>
         </ProductPricingWrapper>
       </>

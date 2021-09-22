@@ -1,5 +1,6 @@
 import type { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
+import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import {
   Accordian,
@@ -12,18 +13,37 @@ import {
   Footer,
   RecommendedProductsLinks,
 } from '@hs/components';
-import { IProductProps, IProductDetails, IProductFormProps, SimpleSkusEntity, urlParamsProps } from '@/types';
+import {
+  IProductProps,
+  IProductDetails,
+  IProductFormProps,
+  SimpleSkusEntity,
+  urlParamsProps,
+  IWishListProps,
+} from '@/types';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
 import { cookiesService, productDetailsService } from '@hs/services';
 import { useState, useEffect, useRef } from 'react';
 import sortBy from 'lodash/sortBy';
 import { ProductDetailsWrapper } from './StyledUrlParams';
+import { useModal } from 'react-hooks-use-modal';
+
+const SizeChartPopupComponent = dynamic(() => import('../../components/size-chart/SizeChart'), {
+  ssr: false,
+});
 import { useRecommendation, IRecommendedProducts } from '@hs/framework';
 
 // const ADD_TO_CART_BUTTON = 'Add to cart button';
 const SIZE_LIST_UPFRONT = 'Size list upfront';
 const ONE_SIZE = 'one size';
 const ONESIZE = 'onesize';
+const SUCCESS = 'success';
+
+// const getProductDetails = <P, R>(): Promise<R> => {
+//   const params = { currentTime: new Date().getTime() };
+//   // return httpService.get<R>({ url: `/api/product/${productId}`, params });
+//   return httpService.get<R>({ url: '/api/product/948332', params });
+// };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const queryClient = new QueryClient();
@@ -66,11 +86,16 @@ const Product: NextPage = (props) => {
   const [product, setProduct] = useState<any>({});
   const [productInfo, setProductInfo] = useState<IProductDetails | any>({});
   const [productForm, setProductForm] = useState<IProductFormProps | any>({});
-  // const [popularSearchUrl, setPopularSearchUrl] = useState<IPopularSearchUrlProps[]>([]);
+  const [showRfyp, setShowRfyp] = useState<boolean>(false);
 
   // const [quantity, setQuantity] = useState<number>(0);
   // const showNewPromo = _self._AbTestService.isOnNewPromo();
   // const SHOW_RFYP = true;
+
+  const [Modal, open, close, isOpenBool] = useModal('root', {
+    preventScroll: false,
+    closeOnOverlayClick: true,
+  });
 
   const { data: productDetails, isSuccess: isProductDetailsSuccess } = useQuery<IProductDetails>(
     ['ProductDetail', productId],
@@ -118,15 +143,140 @@ const Product: NextPage = (props) => {
     }
   };
 
-  // useEffect(() => {
-  //   const popularSUrl = POPULAR_URL.filter((item) => item.link !== router.asPath.split('?')[0]);
-  //   setPopularSearchUrl(popularSUrl);
-  // }, [router.asPath]);
+  const addToWishlist = () => {
+    if (1) {
+      // check for login
+      addToWishlistAfterModalClose();
+    }
+    // else {
+    //   this.toastr.info('Sign in to add this item to your Wishlist.');
+    //   self._ModalService.showLoginModal(
+    //     null,
+    //     false,
+    //     { message: 'Helllo' },
+    //     this.addToWishlistAfterModalClose.bind(self, product),
+    //   );
+    // }
+  };
+
+  const deleteFromWishlist = () => {
+    if (1) {
+      (async () => {
+        try {
+          const wishListStatus: IWishListProps = await productDetailsService.deleteFromWishlist(productInfo.wishlistId);
+          if (wishListStatus.action === SUCCESS) {
+            setProductInfo({ ...productInfo, wishlistId: 0 });
+            if (navigator && navigator.vibrate) {
+              navigator.vibrate(200);
+            }
+            // self._ProductService.invalidateCategoryProductsV2Cache();
+            // self._ProductService.invalidateSearchProductsV2Cache();
+            // TODO: triggering PRODUCT_REMOVED_FROM_WISHLIST segment event
+            // let segmentData = {};
+            // if (angular.isDefined(self.productForm.selectedSku)) {
+            //   segmentData = self.generateReqData(self.productForm.selectedSku);
+            //   segmentData.sku = self.productForm.selectedSku.skuId;
+            // } else {
+            //   segmentData.sku = '';
+            // }
+            // segmentData.low_inventory =
+            //   self.productForm.qtyLeft < 1 ? 'Sold out' : self.productForm.qtyLeft < 4 ? 'yes' : null;
+            // segmentData.from_screen = 'Wishlist';
+            // segmentData.from_location = 'Product tile';
+            // segmentData.product_id = product.id;
+            // segmentData.category = product.categoryName;
+            // segmentData.subcategory = product.subcategoryName;
+            // segmentData.brand = product.brandName;
+            //segmentData.price_status = 'Same';
+            // let extraSegData = self.getSegExtraData();
+            // segmentData = Object.assign({},  segmentData, extraSegData);
+            // self._SegmentService.track(self._SegmentService.EVENTS.PRODUCT_REMOVED_FROM_WISHLIST, segmentData);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      })();
+    } else {
+      // delete wishlist method will be executed
+      // if and only if user logged in and made the product as wishlist
+      // self._ModalService.showLoginModal();
+    }
+  };
+
+  const addToWishlistAfterModalClose = () => {
+    if (1) {
+      // check for login
+      // let cookiesUserType = self._$cookies.get(WEBSITE_CUSTOMER_SEGMENT);
+      // let atc_user = self._SegmentService.getATCUser(self._CustomerService.isLoggedIn(), cookiesUserType);
+      // let oa_data = self.SessionStorageService.getData('oa_data') || {};
+      let skuId = '';
+      let retailPrice = 0;
+      if (productForm.selectedSku) {
+        skuId = productForm.selectedSku.skuId;
+        retailPrice = productForm.selectedSku.retailPrice;
+      } else {
+        retailPrice = productInfo.retailPrice;
+      }
+      let wishlistItem = {
+        sku: skuId,
+        productId: productInfo.id,
+        price: retailPrice,
+        attribution: {
+          // source: oa_data['source'],
+          // funnel: oa_data['funnel'],
+          // funnel_tile: oa_data['funnel_tile'],
+          // funnel_section: oa_data['funnel_section'],
+          funnel_row: '',
+          // section: oa_data['section'],
+          subSection: 'CT3006',
+          // plp: oa_data['plp'],
+          sortBar: 'All',
+          sortBarGroup: 'All',
+          sortBy: 'System',
+          // quick_shop: oa_data['quickshop'],
+          // atc_user: atc_user,
+        },
+      };
+
+      (async () => {
+        try {
+          const wishListStatus: IWishListProps = await productDetailsService.addToWishlist(wishlistItem);
+          if (wishListStatus.action === SUCCESS) {
+            setProductInfo({ ...productInfo, wishlistId: wishListStatus.wishlistItemId });
+            if (navigator && navigator.vibrate) {
+              navigator.vibrate(200);
+            }
+            // self._ProductService.invalidateCategoryProductsV2Cache();
+            // self._ProductService.invalidateSearchProductsV2Cache();
+            // // haptic feedback 200ms
+
+            // // TODO: triggering PRODUCT_ADDED_TO_WISHLIST segment event
+            // let segmentData = {};
+            // let selectedData = {};
+            // if (angular.isDefined(self.productForm.selectedSku)) {
+            //   selectedData = self.generateReqData(self.productForm.selectedSku);
+            //   segmentData = Object.assign({}, selectedData.segmentData, selectedData.cartData);
+            // } else {
+            //   segmentData.sku = '';
+            // }
+            // segmentData.from_screen = 'Product details';
+            // segmentData.from_location = 'Wishlist icon';
+            // segmentData.atc_user = atc_user;
+            // let extraSegData = self.getSegExtraData();
+            // segmentData = Object.assign({}, segmentData, extraSegData, {
+            //   subproduct_type: self.productDetail.subProductTypeName,
+            // });
+            // self._SegmentService.track(self._SegmentService.EVENTS.PRODUCT_ADDED_TO_WISHLIST, segmentData);
+          }
+        } catch (e) {}
+      })();
+    }
+  };
 
   // setSimilarProducts
   useEffect(() => {
     if (isProductDetailsSuccess) {
-      if (productDetails && productDetails.action === 'success') {
+      if (productDetails && productDetails.action === SUCCESS) {
         const updateProductDetail = (
           sku: SimpleSkusEntity,
           isfirst: boolean,
@@ -256,7 +406,7 @@ const Product: NextPage = (props) => {
   return (
     <div>
       <main>
-        {productInfo && productInfo.action === 'success' && (
+        {productInfo && productInfo.action === SUCCESS && (
           <div>
             <Head>
               <title>{`Shop Online ${productInfo.productName} at ₹${productForm.retailPrice}`}</title>
@@ -292,6 +442,8 @@ const Product: NextPage = (props) => {
                   selectedSku: productForm.selectedSku,
                   regularPrice: productForm.regularPrice,
                   discount: productForm.discount,
+                  addToWishlist,
+                  deleteFromWishlist,
                 }}
               ></ProductNamePrice>
               <SizeAndChartLabels
@@ -300,6 +452,7 @@ const Product: NextPage = (props) => {
                   hasSizeChart: productInfo.hasSizeChart,
                   qtyLeft: productForm.qtyLeft,
                   simpleSkus: productInfo.simpleSkus,
+                  onSizeChartClick: open,
                 }}
               ></SizeAndChartLabels>
               {!productInfo.isOneSize && (
@@ -341,6 +494,17 @@ const Product: NextPage = (props) => {
             </ProductDetailsWrapper>
           </div>
         )}
+        <Modal>
+          {isOpenBool && (
+            <SizeChartPopupComponent
+              {...{
+                id: productInfo.id,
+                productName: productInfo.productName,
+                onClickClose: close,
+              }}
+            ></SizeChartPopupComponent>
+          )}
+        </Modal>
       </main>
       <pre style={{ width: '60%', overflowX: 'scroll' }}>{JSON.stringify(similarProducts, null, 4)}</pre>
     </div>

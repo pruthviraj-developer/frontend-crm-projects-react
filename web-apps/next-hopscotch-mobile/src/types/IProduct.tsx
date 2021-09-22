@@ -68,7 +68,7 @@ export interface IProductDetails {
   showSizePickerDropdown: boolean;
   sizePickerDropdownLabel: string;
   brandId: number;
-  isWishlisted: boolean;
+  wishlistId: number;
 }
 
 export interface SimpleSkusEntity {
@@ -156,4 +156,10 @@ export interface IProductFormProps {
 export interface IPopularSearchUrlProps {
   displayName: string;
   link: string;
+}
+
+export interface IWishListProps {
+  action: string;
+  message: string;
+  wishlistItemId: string;
 }

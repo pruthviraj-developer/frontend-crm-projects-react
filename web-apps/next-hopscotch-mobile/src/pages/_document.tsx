@@ -43,7 +43,9 @@ export default class MyDocument extends Document {
               style={{ display: 'none', visibility: 'hidden' }}
             />
           </noscript>
-          <Main />
+          <div id="root">
+            <Main />
+          </div>
           <NextScript />
         </body>
       </Html>

@@ -2,11 +2,13 @@ import styled from '@emotion/styled';
 import { typography, Colors, HsTextAlign } from '@hs/utils';
 import { SvgIcon } from '@hs/icons';
 
-const SizeChartWrapper = styled.footer`
+const SizeChartWrapper = styled.div`
   font-size: ${typography.size.s1}px;
   line-height: ${typography.size.s2}px;
   font-weight: ${typography.weight.regular};
   background-color: ${Colors.WHITE};
+  display: grid;
+  min-height: 100%;
 `;
 
 const SizeChartHeader = styled.div`
@@ -41,7 +43,7 @@ const SizeChartHeaderProductName = styled.div`
 `;
 
 const SizeChartDetailsWrapper = styled.div`
-  max-height: 86.5vh;
+  max-height: 88.6vh;
   overflow-y: scroll;
 `;
 
@@ -77,7 +79,7 @@ const SizeTableHeader = styled.div`
   padding: ${typography.size.s08}px 0;
 `;
 
-const SizeOptionTypeLengthHeader = styled.div`
+const SizeOptionTypeLengthOrWidthHeader = styled.div`
   display: flex;
   align-items: center;
   padding: 8px 0 8px 12px;
@@ -159,7 +161,7 @@ export {
   SizeTableWrapper,
   SizeTableHeader,
   SizeOptionType,
-  SizeOptionTypeLengthHeader,
+  SizeOptionTypeLengthOrWidthHeader,
   ChartDetailImageIllustration,
   ImageLink,
   SizeTable,
