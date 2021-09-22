@@ -1,10 +1,18 @@
 export interface IDeliveryDetailsProps {
-  deliveryDetails: DetailProps[];
-  selectedSku?: Record<string, string>; // parent SimpleSkusEntity props
-  productDetail: Record<string, string>; // parent IProductDetails props
+  deliveryDetails: DeliveryMessageOrDeliveryMessagesEntity[];
+  isSkuInternational: boolean;
+  skuInternationalPreOrderInfo: string;
+  skuInternationalPreOrderAction: string;
+  isProductInternational: boolean;
+  productInternationalPreOrderInfo: string;
+  productInternationalPreOrderAction: string;
+  eddColor: string;
+  eddTextColor: string;
+  eddPrefix: string;
+  deliveryMsg: string;
 }
 
-export interface DetailProps {
+export interface DeliveryMessageOrDeliveryMessagesEntity {
   action: string;
   msg: string;
   type: number;

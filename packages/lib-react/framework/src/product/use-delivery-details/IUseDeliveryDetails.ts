@@ -1,10 +1,6 @@
-export interface IProductProps {
-  urlParams: urlParamsProps[];
-}
-
-export interface urlParamsProps {
-  productId: number;
-  ignoredName: string;
+export interface IDeliveryDetailsProps {
+  selectedSku: ISimpleSkusEntityProps; // parent SimpleSkusEntity props
+  productDetails: IProductDetails; // parent IProductDetails props
 }
 
 export interface IProductDetails {
@@ -107,10 +103,24 @@ export interface AttrsEntity {
   name: string;
   value: string;
 }
+
 export interface DeliveryMessageOrDeliveryMessagesEntity {
   action: string;
   msg: string;
   type: number;
+}
+
+export interface ProductLevelAttrListEntity {
+  attributeName: string;
+  isShowAttr: boolean;
+  productSubAttrList?: ProductSubAttrListEntity[] | null;
+  attributeValue?: string | null;
+}
+
+export interface ProductSubAttrListEntity {
+  subAttributeName: string;
+  attributeValue: string;
+  isShowAttrName: boolean;
 }
 
 export interface ImgurlsEntity {
@@ -127,40 +137,4 @@ export interface ImgurlsEntity {
   imgUrlFullWidth: number;
   imgUrlThumbnailHeight: number;
   imgUrlThumbnailWidth: number;
-}
-
-export interface ProductLevelAttrListEntity {
-  attributeName: string;
-  isShowAttr: boolean;
-  productSubAttrList?: ProductSubAttrListEntity[] | null;
-  attributeValue?: string | null;
-}
-
-export interface ProductSubAttrListEntity {
-  subAttributeName: string;
-  attributeValue: string;
-  isShowAttrName: boolean;
-}
-
-export interface IProductFormProps {
-  selectedSku: ISimpleSkusEntityProps;
-  retailPrice: number;
-  regularPrice: number;
-  discount: number;
-  isPresale: number;
-  finalSale: number;
-  qtyLeft: number;
-  deliveryMsg: string;
-  retailPriceMax: number;
-}
-
-export interface IPopularSearchUrlProps {
-  displayName: string;
-  link: string;
-}
-
-export interface IWishListProps {
-  action: string;
-  message: string;
-  wishlistItemId: string;
 }

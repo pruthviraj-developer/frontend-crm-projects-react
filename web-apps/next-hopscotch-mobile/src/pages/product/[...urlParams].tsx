@@ -17,7 +17,7 @@ import {
   IProductProps,
   IProductDetails,
   IProductFormProps,
-  SimpleSkusEntity,
+  ISimpleSkusEntityProps,
   urlParamsProps,
   IWishListProps,
 } from '@/types';
@@ -31,7 +31,7 @@ import { useModal } from 'react-hooks-use-modal';
 const SizeChartPopupComponent = dynamic(() => import('../../components/size-chart/SizeChart'), {
   ssr: false,
 });
-import { useRecommendation, IRecommendedProducts } from '@hs/framework';
+import { useRecommendation, IRecommendedProducts, useDeliveryDetails } from '@hs/framework';
 
 // const ADD_TO_CART_BUTTON = 'Add to cart button';
 const SIZE_LIST_UPFRONT = 'Size list upfront';
@@ -83,10 +83,10 @@ const Product: NextPage = (props) => {
   const [productId]: urlParamsProps | any = [...(urlParams.urlParams || [])];
   const [isSelected, setIsSelected] = useState<boolean>(false);
   const [selectedSkuId, setSelectedSkuId] = useState<string>('');
+  const [selectedSku, setSelectedSku] = useState<ISimpleSkusEntityProps>();
   const [product, setProduct] = useState<any>({});
-  const [productInfo, setProductInfo] = useState<IProductDetails | any>({});
+  const [productInfo, setProductInfo] = useState<IProductDetails | any>({}); // productDetails with modification
   const [productForm, setProductForm] = useState<IProductFormProps | any>({});
-  const [showRfyp, setShowRfyp] = useState<boolean>(false);
 
   // const [quantity, setQuantity] = useState<number>(0);
   // const showNewPromo = _self._AbTestService.isOnNewPromo();
@@ -121,6 +121,7 @@ const Product: NextPage = (props) => {
       enabled: productId !== undefined,
     },
   );
+
   const { canShow: showSimilarProducts, ...similarProducts } = useRecommendation({
     section: 'RFYP',
     showmatching: true,
@@ -128,12 +129,18 @@ const Product: NextPage = (props) => {
     id: 'similarproducts',
     pid: productInfo.id,
   });
+
   const { canShow: showRFYP, ...recommendedForYou } = useRecommendation({
     section: 'UserRecoPDP',
     showmatching: false,
     recommended: recommendedProductDetails,
     id: 'productrecommendations',
     pid: productInfo.id,
+  });
+
+  const deliveryDetailsData = useDeliveryDetails({
+    selectedSku,
+    productDetails: productInfo,
   });
 
   const goToProductRecommendation = (fromLocation: string) => {
@@ -278,7 +285,7 @@ const Product: NextPage = (props) => {
     if (isProductDetailsSuccess) {
       if (productDetails && productDetails.action === SUCCESS) {
         const updateProductDetail = (
-          sku: SimpleSkusEntity,
+          sku: ISimpleSkusEntityProps,
           isfirst: boolean,
           isDefault = false,
           fromLocation?: string,
@@ -299,6 +306,7 @@ const Product: NextPage = (props) => {
             setSelectedSkuId(sku.skuId);
             // this.showSizeSelectorOption = false;
             productForm['selectedSku'] = sku;
+            setSelectedSku(sku);
             productForm['retailPrice'] = sku.retailPrice;
           } else {
             // this.showSizeSelectorOption = true;
@@ -344,12 +352,12 @@ const Product: NextPage = (props) => {
 
         const setDetails = () => {
           setAttrObject();
-          productDetails.simpleSkus = sortBy(productDetails.simpleSkus, function (skus: SimpleSkusEntity) {
+          productDetails.simpleSkus = sortBy(productDetails.simpleSkus, function (skus: ISimpleSkusEntityProps) {
             return !(skus.availableQuantity > 0);
           });
 
           // TODO: Logic to show default selection of sku and checking quantity > 0
-          const selectSku = (skuList: SimpleSkusEntity[]) => {
+          const selectSku = (skuList: ISimpleSkusEntityProps[]) => {
             for (let i = 0; i < skuList.length; i++) {
               const sku = skuList[i];
               if (sku.availableQuantity > 0) {
@@ -470,13 +478,7 @@ const Product: NextPage = (props) => {
                   {...{ isProductSoldOut: productInfo.isProductSoldOut, goToProductRecommendation }}
                 ></RecommendedProductsLinks>
               )}
-              <DeliveryDetails
-                {...{
-                  deliveryDetails: productInfo.deliveryMessages,
-                  selectedSku: productForm.selectedSku,
-                  productDetail: productInfo,
-                }}
-              ></DeliveryDetails>
+              <DeliveryDetails {...deliveryDetailsData}></DeliveryDetails>
               {productInfo.id && <Accordian {...{ productInfo, sku: productForm.selectedSku }}></Accordian>}
 
               {showRFYP && (
