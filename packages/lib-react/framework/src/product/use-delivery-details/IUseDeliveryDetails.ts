@@ -1,5 +1,5 @@
 export interface IDeliveryDetailsProps {
-  selectedSku: ISimpleSkusEntityProps; // parent SimpleSkusEntity props
+  selectedSku?: ISimpleSkusEntityProps; // parent SimpleSkusEntity props
   productDetails: IProductDetails; // parent IProductDetails props
 }
 
