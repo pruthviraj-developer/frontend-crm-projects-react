@@ -1,6 +1,6 @@
-export interface IFooterProps {
-  urls: IPopularSearchUrlProps[];
-}
+// export interface IFooterProps {
+//   urls: IPopularSearchUrlProps[];
+// }
 
 export interface IPopularSearchUrlProps {
   displayName: string;
