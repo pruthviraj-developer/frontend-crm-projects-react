@@ -140,7 +140,7 @@ const Product: NextPage = (props) => {
 
   const deliveryDetailsData = useDeliveryDetails({
     selectedSku,
-    productDetails,
+    productDetails: productInfo,
   });
 
   const goToProductRecommendation = (fromLocation: string) => {
