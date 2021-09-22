@@ -1,12 +1,6 @@
 export interface IDeliveryDetailsProps {
-  deliveryDetails: DeliveryMessageOrDeliveryMessagesEntity[];
-  sku?: ISimpleSkusEntityProps; // parent SimpleSkusEntity props
-  productDetail: IProductDetails; // parent IProductDetails props
-}
-
-export interface AttrsEntity {
-  name: string;
-  value: string;
+  selectedSku?: ISimpleSkusEntityProps; // parent SimpleSkusEntity props
+  productDetails: IProductDetails; // parent IProductDetails props
 }
 
 export interface IProductDetails {
@@ -103,6 +97,11 @@ export interface ISimpleSkusEntityProps {
   preorderInfo: string;
   merchType: string;
   deliveryMessage: DeliveryMessageOrDeliveryMessagesEntity;
+}
+
+export interface AttrsEntity {
+  name: string;
+  value: string;
 }
 
 export interface DeliveryMessageOrDeliveryMessagesEntity {

@@ -12,7 +12,10 @@ import {
   PinCode,
   PreOrderInfo,
 } from './StyledDeliveryDetails';
-import { IDeliveryDetailsProps, DetailProps } from './IDeliveryDetails';
+import {
+  IDeliveryDetailsProps,
+  DeliveryMessageOrDeliveryMessagesEntity,
+} from './IDeliveryDetails';
 import { NextNavLink } from '../next-nav-link';
 
 export const DeliveryDetails: FC<IDeliveryDetailsProps> = (
@@ -27,18 +30,18 @@ export const DeliveryDetails: FC<IDeliveryDetailsProps> = (
       <DeliveryDetailsContent>
         <Delivery>
           <DeliverIcon icon={IconTick} fill={'#bbb'} />
-          {props.selectedSku && (
+          {props.sku && (
             <DeliveryInfo>
-              {props.selectedSku.eddPrefix}
+              {props.sku.eddPrefix}
               <DeliveryBadge
-                color={props.selectedSku.eddTextColor}
-                bgColor={props.selectedSku.eddColor}
+                color={props.sku.eddTextColor}
+                bgColor={props.sku.eddColor}
               >
-                {props.selectedSku.deliveryMsg}
+                {props.sku.deliveryMsg}
               </DeliveryBadge>
             </DeliveryInfo>
           )}
-          {!props.selectedSku && (
+          {!props.sku && (
             <DeliveryInfo>
               {props.productDetail.eddPrefix}
               <DeliveryBadge
@@ -49,12 +52,12 @@ export const DeliveryDetails: FC<IDeliveryDetailsProps> = (
               </DeliveryBadge>
             </DeliveryInfo>
           )}
-          {props.selectedSku && props.selectedSku.isInternationalPreorder && (
+          {props.sku && props.sku.isInternationalPreorder && (
             <PreOrderInfo>
               <NextNavLink
                 color={'#707070'}
-                name={props.selectedSku.preorderInfo}
-                href={props.selectedSku.preorderAction}
+                name={props.sku.preorderInfo}
+                href={props.sku.preorderAction}
               ></NextNavLink>
             </PreOrderInfo>
           )}
@@ -73,23 +76,25 @@ export const DeliveryDetails: FC<IDeliveryDetailsProps> = (
 
         {/* 
           <div class="point delivery">
-              <span class="delivery-badge" ng-style="{'background-color': vm.productForm.selectedSku.eddColor, 'color': vm.productForm.selectedSku.eddTextColor}" ng-bind="vm.productForm.selectedSku.deliveryMsg"></span>
+              <span class="delivery-badge" ng-style="{'background-color': vm.productForm.sku.eddColor, 'color': vm.productForm.sku.eddTextColor}" ng-bind="vm.productForm.sku.deliveryMsg"></span>
               <span class="delivery-badge" ng-style="{'background-color': vm.productDetail.eddColor, 'color': vm.productDetail.eddTextColor}" ng-bind="vm.productDetail.edd"></span>
-              <span class ="international-preorder" ng-if="vm.showInternationaPreorder()"><a target="_blank" ng-href="{{vm.productForm.selectedSku.preorderAction || vm.productDetail.preorderAction}}">{{vm.productForm.selectedSku.preorderInfo
+              <span class ="international-preorder" ng-if="vm.showInternationaPreorder()"><a target="_blank" ng-href="{{vm.productForm.sku.preorderAction || vm.productDetail.preorderAction}}">{{vm.productForm.sku.preorderInfo
                   || vm.productDetail.preorderInfo}}</a>
               </span>
           </div>
         */}
 
-        {props.deliveryDetails.map((data: DetailProps, index: number) => (
-          <Delivery key={index}>
-            <DeliverIcon
-              icon={data.type ? IconTick : IconCrossRed}
-              fill={'#bbb'}
-            />
-            <DeliveryInfo>{data.msg}</DeliveryInfo>
-          </Delivery>
-        ))}
+        {props.deliveryDetails.map(
+          (data: DeliveryMessageOrDeliveryMessagesEntity, index: number) => (
+            <Delivery key={index}>
+              <DeliverIcon
+                icon={data.type ? IconTick : IconCrossRed}
+                fill={'#bbb'}
+              />
+              <DeliveryInfo>{data.msg}</DeliveryInfo>
+            </Delivery>
+          )
+        )}
       </DeliveryDetailsContent>
     </DeliveryDetailsWrapper>
   );

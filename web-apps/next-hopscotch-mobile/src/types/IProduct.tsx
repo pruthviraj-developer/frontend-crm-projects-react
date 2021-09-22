@@ -20,7 +20,7 @@ export interface IProductDetails {
   isDefault?: boolean;
   showRfypCue?: boolean;
   selectedSkuId?: string;
-  simpleSkus: SimpleSkusEntity[];
+  simpleSkus: ISimpleSkusEntityProps[];
   imgurls?: ImgurlsEntity[] | null;
   brandName: string;
   hasSizeChart: boolean;
@@ -71,7 +71,7 @@ export interface IProductDetails {
   wishlistId: number;
 }
 
-export interface SimpleSkusEntity {
+export interface ISimpleSkusEntityProps {
   attributes: any;
   productName: string;
   skuId: string;
@@ -97,8 +97,8 @@ export interface SimpleSkusEntity {
   eddTextColor: string;
   isFastEdd: boolean;
   isInternationalPreorder: boolean;
-  preorderAction?: string | null;
-  preorderInfo?: string | null;
+  preorderAction: string;
+  preorderInfo: string;
   merchType: string;
   deliveryMessage: DeliveryMessageOrDeliveryMessagesEntity;
 }
@@ -141,8 +141,9 @@ export interface ProductSubAttrListEntity {
   attributeValue: string;
   isShowAttrName: boolean;
 }
+
 export interface IProductFormProps {
-  selectedSku: SimpleSkusEntity;
+  selectedSku: ISimpleSkusEntityProps;
   retailPrice: number;
   regularPrice: number;
   discount: number;
