@@ -6,23 +6,23 @@ export const useDeliveryDetails = ({
 }: IDeliveryDetailsProps) => {
   const isSku = selectedSku ? true : false;
   const isSkuInternational = isSku
-    ? selectedSku.isInternationalPreorder
+    ? selectedSku?.isInternationalPreorder
     : false;
-  const eddPrefix = isSku ? selectedSku.eddPrefix : productDetails.eddPrefix;
+  const eddPrefix = isSku ? selectedSku?.eddPrefix : productDetails.eddPrefix;
   const eddTextColor = isSku
-    ? selectedSku.eddTextColor
+    ? selectedSku?.eddTextColor
     : productDetails.eddTextColor;
-  const eddColor = isSku ? selectedSku.eddColor : productDetails.eddColor;
-  const deliveryMsg = isSku ? selectedSku.deliveryMsg : productDetails.edd;
+  const eddColor = isSku ? selectedSku?.eddColor : productDetails.eddColor;
+  const deliveryMsg = isSku ? selectedSku?.deliveryMsg : productDetails.edd;
   const isProductInternational = productDetails.isInternationalPreorder
     ? productDetails.isInternationalPreorder
     : false;
 
   const skuInternationalPreOrderInfo = isSkuInternational
-    ? selectedSku.preorderInfo
+    ? selectedSku?.preorderInfo
     : '';
   const skuInternationalPreOrderAction = isSkuInternational
-    ? selectedSku.preorderAction
+    ? selectedSku?.preorderAction
     : '';
 
   const productInternationalPreOrderInfo = isProductInternational
