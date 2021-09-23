@@ -13,14 +13,7 @@ import {
   Footer,
   RecommendedProductsLinks,
 } from '@hs/components';
-import {
-  IProductProps,
-  IProductDetails,
-  IProductFormProps,
-  ISimpleSkusEntityProps,
-  urlParamsProps,
-  IWishListProps,
-} from '@/types';
+import { IProductProps, IProductDetails, ISimpleSkusEntityProps, urlParamsProps, IWishListProps } from '@/types';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
 import { cookiesService, productDetailsService } from '@hs/services';
 import { useState, useEffect, useRef } from 'react';
@@ -31,7 +24,7 @@ import { useModal } from 'react-hooks-use-modal';
 const SizeChartPopupComponent = dynamic(() => import('../../components/size-chart/SizeChart'), {
   ssr: false,
 });
-import { useRecommendation, IRecommendedProducts, useDeliveryDetails } from '@hs/framework';
+import { useRecommendation, IRecommendedProducts, useDeliveryDetails, useSelectedProduct } from '@hs/framework';
 
 // const ADD_TO_CART_BUTTON = 'Add to cart button';
 const SIZE_LIST_UPFRONT = 'Size list upfront';
@@ -82,11 +75,8 @@ const Product: NextPage = (props) => {
   const urlParams = router.query as unknown as IProductProps;
   const [productId]: urlParamsProps | any = [...(urlParams.urlParams || [])];
   const [isSelected, setIsSelected] = useState<boolean>(false);
-  const [selectedSkuId, setSelectedSkuId] = useState<string>('');
-  const [selectedSku, setSelectedSku] = useState<ISimpleSkusEntityProps>();
-  const [product, setProduct] = useState<any>({});
+  const [sku, setSku] = useState<ISimpleSkusEntityProps | any>();
   const [productInfo, setProductInfo] = useState<IProductDetails | any>({}); // productDetails with modification
-  const [productForm, setProductForm] = useState<IProductFormProps | any>({});
 
   // const [quantity, setQuantity] = useState<number>(0);
   // const showNewPromo = _self._AbTestService.isOnNewPromo();
@@ -138,6 +128,22 @@ const Product: NextPage = (props) => {
     pid: productInfo.id,
   });
 
+  const {
+    // deliveryMsg,
+    discount,
+    // finalSale,
+    // isPresale,
+    qtyLeft,
+    retailPrice,
+    retailPriceMax,
+    regularPrice,
+    selectedSku,
+    selectedSkuId,
+  } = useSelectedProduct({
+    productInfo,
+    sku,
+  }); // productForm
+
   const deliveryDetailsData = useDeliveryDetails({
     selectedSku,
     productDetails: productInfo,
@@ -176,28 +182,6 @@ const Product: NextPage = (props) => {
             if (navigator && navigator.vibrate) {
               navigator.vibrate(200);
             }
-            // self._ProductService.invalidateCategoryProductsV2Cache();
-            // self._ProductService.invalidateSearchProductsV2Cache();
-            // TODO: triggering PRODUCT_REMOVED_FROM_WISHLIST segment event
-            // let segmentData = {};
-            // if (angular.isDefined(self.productForm.selectedSku)) {
-            //   segmentData = self.generateReqData(self.productForm.selectedSku);
-            //   segmentData.sku = self.productForm.selectedSku.skuId;
-            // } else {
-            //   segmentData.sku = '';
-            // }
-            // segmentData.low_inventory =
-            //   self.productForm.qtyLeft < 1 ? 'Sold out' : self.productForm.qtyLeft < 4 ? 'yes' : null;
-            // segmentData.from_screen = 'Wishlist';
-            // segmentData.from_location = 'Product tile';
-            // segmentData.product_id = product.id;
-            // segmentData.category = product.categoryName;
-            // segmentData.subcategory = product.subcategoryName;
-            // segmentData.brand = product.brandName;
-            //segmentData.price_status = 'Same';
-            // let extraSegData = self.getSegExtraData();
-            // segmentData = Object.assign({},  segmentData, extraSegData);
-            // self._SegmentService.track(self._SegmentService.EVENTS.PRODUCT_REMOVED_FROM_WISHLIST, segmentData);
           }
         } catch (error) {
           console.log(error);
@@ -216,16 +200,14 @@ const Product: NextPage = (props) => {
       // let cookiesUserType = self._$cookies.get(WEBSITE_CUSTOMER_SEGMENT);
       // let atc_user = self._SegmentService.getATCUser(self._CustomerService.isLoggedIn(), cookiesUserType);
       // let oa_data = self.SessionStorageService.getData('oa_data') || {};
-      let skuId = '';
       let retailPrice = 0;
-      if (productForm.selectedSku) {
-        skuId = productForm.selectedSku.skuId;
-        retailPrice = productForm.selectedSku.retailPrice;
+      if (selectedSku) {
+        retailPrice = selectedSku.retailPrice;
       } else {
         retailPrice = productInfo.retailPrice;
       }
       let wishlistItem = {
-        sku: skuId,
+        sku: selectedSkuId,
         productId: productInfo.id,
         price: retailPrice,
         attribution: {
@@ -253,29 +235,8 @@ const Product: NextPage = (props) => {
             if (navigator && navigator.vibrate) {
               navigator.vibrate(200);
             }
-            // self._ProductService.invalidateCategoryProductsV2Cache();
-            // self._ProductService.invalidateSearchProductsV2Cache();
-            // // haptic feedback 200ms
-
-            // // TODO: triggering PRODUCT_ADDED_TO_WISHLIST segment event
-            // let segmentData = {};
-            // let selectedData = {};
-            // if (angular.isDefined(self.productForm.selectedSku)) {
-            //   selectedData = self.generateReqData(self.productForm.selectedSku);
-            //   segmentData = Object.assign({}, selectedData.segmentData, selectedData.cartData);
-            // } else {
-            //   segmentData.sku = '';
-            // }
-            // segmentData.from_screen = 'Product details';
-            // segmentData.from_location = 'Wishlist icon';
-            // segmentData.atc_user = atc_user;
-            // let extraSegData = self.getSegExtraData();
-            // segmentData = Object.assign({}, segmentData, extraSegData, {
-            //   subproduct_type: self.productDetail.subProductTypeName,
-            // });
-            // self._SegmentService.track(self._SegmentService.EVENTS.PRODUCT_ADDED_TO_WISHLIST, segmentData);
           }
-        } catch (e) {}
+        } catch {}
       })();
     }
   };
@@ -284,60 +245,14 @@ const Product: NextPage = (props) => {
   useEffect(() => {
     if (isProductDetailsSuccess) {
       if (productDetails && productDetails.action === SUCCESS) {
-        const updateProductDetail = (
-          sku: ISimpleSkusEntityProps,
-          isfirst: boolean,
-          isDefault = false,
-          fromLocation?: string,
-        ) => {
-          const productForm: IProductFormProps | any = {};
-          if (isfirst) {
-            setIsSelected(false);
-          } else {
-            setIsSelected(true);
-          }
-
+        const updateProductDetail = (sku: ISimpleSkusEntityProps, isfirst: boolean, isDefault = false) => {
+          setIsSelected(isfirst ? false : true);
           productDetails.isDefault = isDefault;
-          // this.showSizeError = false;
+          productDetails.isfirst = isfirst;
           if (!sku) {
             return;
           }
-          if (!isfirst) {
-            setSelectedSkuId(sku.skuId);
-            // this.showSizeSelectorOption = false;
-            productForm['selectedSku'] = sku;
-            setSelectedSku(sku);
-            productForm['retailPrice'] = sku.retailPrice;
-          } else {
-            // this.showSizeSelectorOption = true;
-            productForm['retailPrice'] = productDetails.retailPrice || sku.retailPrice;
-          }
-          // if (!this._$scope.isSelected) {
-          //   this.showSizeSelectorOption = true;
-          // }
-          productForm['regularPrice'] = sku.regularPrice;
-          //TODO: to be replaced by api variable once discount available in api
-          productForm['discount'] = sku.discount;
-          productForm['qtyLeft'] = sku.availableQuantity;
-          // productForm['size'] = sku.attributes.size;
-          productForm['isPresale'] = sku.isPresale;
-          productForm['finalSale'] = sku.finalSale;
-          productForm['deliveryMsg'] =
-            isDefault && productDetails.edd ? productDetails.edd.split('Get it ').join('') : sku.deliveryMsg;
-          productDetails.selectedSkuId = sku.skuId;
-          setProductForm(productForm);
-          // if (!isfirst && !isDefault) {
-          //   var { segmentData, finalSegData } = this.generateReqData(sku);
-          //   let extraSegData = this.getSegExtraData();
-          //   finalSegData = Object.assign({}, segmentData, extraSegData);
-          //   delete finalSegData.subtotal;
-          //   delete finalSegData.sku;
-          //   // Here "showSizePickerDropdown" flag is used for AB-Test EDD on PDP
-          //   if (productDetails.showSizePickerDropdown) {
-          //     finalSegData.from_location = fromLocation ? fromLocation : ADD_TO_CART_BUTTON;
-          //   }
-          //   this._SegmentService.track(this._SegmentService.EVENTS.SIZE_CLICKED, finalSegData);
-          // }
+          setSku(sku);
         };
 
         const setAttrObject = () => {
@@ -373,9 +288,7 @@ const Product: NextPage = (props) => {
             updateProductDetail(skuList[0], false);
             productDetails.isProductSoldOut = true;
           };
-          if (!product.id) {
-            selectSku(productDetails.simpleSkus);
-          }
+          selectSku(productDetails.simpleSkus);
           // productDetails.hasSamePrice =
           // chain(productDetails.simpleSkus)?.map('retailPrice')?.uniq()?.value()?.length == 1;
           productDetails.productName = productDetails.simpleSkus[0] && productDetails.simpleSkus[0].productName;
@@ -408,7 +321,7 @@ const Product: NextPage = (props) => {
         setDetails();
       }
     }
-  }, [isProductDetailsSuccess, product, productDetails]);
+  }, [isProductDetailsSuccess, productDetails]);
 
   cookiesService.setCookies({ key: 'test', value: 'test value' });
   return (
@@ -417,18 +330,15 @@ const Product: NextPage = (props) => {
         {productInfo && productInfo.action === SUCCESS && (
           <div>
             <Head>
-              <title>{`Shop Online ${productInfo.productName} at ₹${productForm.retailPrice}`}</title>
+              <title>{`Shop Online ${productInfo.productName} at ₹${retailPrice}`}</title>
               <meta
                 name="description"
-                content={`Buy ${productInfo.productName} online in India at ₹${productForm.retailPrice}. &#x2714;15 Days Easy Returns, &#x2714;Cash on Delivery, &#x2714;Latest Designs, &#x2714;Pan India shipping.`}
+                content={`Buy ${productInfo.productName} online in India at ₹${retailPrice}. &#x2714;15 Days Easy Returns, &#x2714;Cash on Delivery, &#x2714;Latest Designs, &#x2714;Pan India shipping.`}
               />
-              <meta
-                property="og:title"
-                content={`Shop Online ${productInfo.productName} at ₹${productForm.retailPrice}`}
-              />
+              <meta property="og:title" content={`Shop Online ${productInfo.productName} at ₹${retailPrice}`} />
               <meta
                 property="og:description"
-                content={`Buy ${productInfo.productName} online in India at ₹${productForm.retailPrice}. &#x2714;15 Days Easy Returns, &#x2714;Cash on Delivery, &#x2714;Latest Designs, &#x2714;Pan India shipping.`}
+                content={`Buy ${productInfo.productName} online in India at ₹${retailPrice}. &#x2714;15 Days Easy Returns, &#x2714;Cash on Delivery, &#x2714;Latest Designs, &#x2714;Pan India shipping.`}
               />
               <meta
                 name="keywords"
@@ -443,13 +353,14 @@ const Product: NextPage = (props) => {
             <ProductDetailsWrapper>
               <ProductNamePrice
                 {...{
-                  name: productInfo.productName,
+                  productName: productInfo.productName,
                   isProductSoldOut: productInfo.isProductSoldOut,
-                  retailPrice: productForm.retailPrice,
-                  retailPriceMax: productForm.retailPriceMax,
-                  selectedSku: productForm.selectedSku,
-                  regularPrice: productForm.regularPrice,
-                  discount: productForm.discount,
+                  wishlistId: productInfo.wishlistId,
+                  retailPrice,
+                  retailPriceMax,
+                  selectedSku,
+                  regularPrice,
+                  discount,
                   addToWishlist,
                   deleteFromWishlist,
                 }}
@@ -458,7 +369,7 @@ const Product: NextPage = (props) => {
                 {...{
                   isOneSize: productInfo.isOneSize,
                   hasSizeChart: productInfo.hasSizeChart,
-                  qtyLeft: productForm.qtyLeft,
+                  qtyLeft,
                   simpleSkus: productInfo.simpleSkus,
                   onSizeChartClick: open,
                 }}
@@ -479,7 +390,7 @@ const Product: NextPage = (props) => {
                 ></RecommendedProductsLinks>
               )}
               <DeliveryDetails {...deliveryDetailsData}></DeliveryDetails>
-              {productInfo.id && <Accordian {...{ productInfo, sku: productForm.selectedSku }}></Accordian>}
+              {productInfo.id && <Accordian {...{ productInfo, sku: selectedSku }}></Accordian>}
 
               {showRFYP && (
                 <div ref={recommendedProductsLink}>
@@ -508,7 +419,7 @@ const Product: NextPage = (props) => {
           )}
         </Modal>
       </main>
-      <pre style={{ width: '60%', overflowX: 'scroll' }}>{JSON.stringify(similarProducts, null, 4)}</pre>
+      <pre style={{ width: '60%', overflowX: 'scroll' }}>{JSON.stringify(productDetails, null, 4)}</pre>
     </div>
   );
 };

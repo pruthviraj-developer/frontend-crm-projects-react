@@ -14,7 +14,7 @@ import {
 import { IProductNamePriceProps } from './IProductNamePrice';
 import { IconWishList, IconWishListFilled } from '@hs/icons';
 export const ProductNamePrice: FC<IProductNamePriceProps> = ({
-  name,
+  productName,
   retailPrice,
   retailPriceMax,
   regularPrice,
@@ -47,7 +47,7 @@ export const ProductNamePrice: FC<IProductNamePriceProps> = ({
                 )}
               </>
             )}
-            <ProductName>{name}</ProductName>
+            <ProductName>{productName}</ProductName>
           </ProductNamePriceWrapper>
           <WishListWrapper>
             <WishListIcon
