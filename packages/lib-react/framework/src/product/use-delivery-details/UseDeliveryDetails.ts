@@ -2,21 +2,20 @@ import { IDeliveryDetailsProps } from './IUseDeliveryDetails';
 
 export const useDeliveryDetails = ({
   selectedSku,
-  productDetails,
+  productData,
 }: IDeliveryDetailsProps) => {
   let skuInternationalPreOrderInfo = '';
   let skuInternationalPreOrderAction = '';
-  let { eddPrefix, eddTextColor, eddColor, edd: deliveryMsg } = productDetails;
+  let { eddPrefix, eddTextColor, eddColor, edd: deliveryMsg } = productData;
   const isSkuInternational =
     (selectedSku && selectedSku.isInternationalPreorder) || false;
-  const isProductInternational =
-    productDetails.isInternationalPreorder || false;
+  const isProductInternational = productData.isInternationalPreorder || false;
   const productInternationalPreOrderInfo = isProductInternational
-    ? productDetails.preorderInfo
+    ? productData.preorderInfo
     : '';
 
   const productInternationalPreOrderAction = isProductInternational
-    ? productDetails.preorderAction
+    ? productData.preorderAction
     : '';
 
   if (isSkuInternational && selectedSku) {
@@ -31,7 +30,7 @@ export const useDeliveryDetails = ({
   }
 
   return {
-    deliveryDetails: productDetails.deliveryMessages || [],
+    deliveryDetails: productData.deliveryMessages || [],
     isSkuInternational,
     skuInternationalPreOrderInfo,
     skuInternationalPreOrderAction,

@@ -1,6 +1,9 @@
 import { IProductFormProps } from './IUseSelectedProduct';
 
-export const useSelectedProduct = ({ sku, productInfo }: IProductFormProps) => {
+export const useSelectedProduct = ({
+  selectedSku,
+  productData,
+}: IProductFormProps) => {
   let {
     regularPrice,
     discount,
@@ -8,17 +11,17 @@ export const useSelectedProduct = ({ sku, productInfo }: IProductFormProps) => {
     isPresale,
     finalSale,
     skuId: selectedSkuId,
-  } = sku || {};
+  } = selectedSku || {};
 
-  let rPrice = sku && sku.retailPrice;
-  const retailPrice = productInfo.isfirst
-    ? productInfo.retailPrice || rPrice
+  let rPrice = selectedSku && selectedSku.retailPrice;
+  const retailPrice = productData.isfirst
+    ? productData.retailPrice || rPrice
     : rPrice;
 
   const deliveryMsg =
-    productInfo.isDefault && productInfo.edd
-      ? productInfo.edd.split('Get it ').join('')
-      : sku && sku.deliveryMsg;
+    productData.isDefault && productData.edd
+      ? productData.edd.split('Get it ').join('')
+      : selectedSku && selectedSku.deliveryMsg;
 
   return {
     deliveryMsg,
@@ -27,9 +30,9 @@ export const useSelectedProduct = ({ sku, productInfo }: IProductFormProps) => {
     isPresale,
     qtyLeft,
     retailPrice,
-    retailPriceMax: productInfo.retailPriceMax,
+    retailPriceMax: productData.retailPriceMax,
     regularPrice,
-    selectedSku: productInfo.isfirst ? undefined : sku,
+    selectedSku: productData.isfirst ? undefined : selectedSku,
     selectedSkuId,
   };
 };

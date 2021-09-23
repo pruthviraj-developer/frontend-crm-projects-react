@@ -1,10 +1,10 @@
 export interface IProductNamePriceProps {
   productName?: string;
-  retailPrice: number;
-  retailPriceMax: number;
-  selectedSku: ISimpleSkusEntityProps;
-  regularPrice: number;
-  discount: number;
+  retailPrice?: number;
+  retailPriceMax?: number;
+  selectedSku?: ISimpleSkusEntityProps;
+  regularPrice?: number;
+  discount?: number;
   isProductSoldOut: boolean;
   wishlistId?: number;
   addToWishlist: () => void;

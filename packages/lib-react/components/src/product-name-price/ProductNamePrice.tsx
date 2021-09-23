@@ -39,12 +39,17 @@ export const ProductNamePrice: FC<IProductNamePriceProps> = ({
               )}
             {!(retailPriceMax && !selectedSku) && (
               <>
-                {regularPrice > retailPrice && discount > 2 && (
-                  <ProductOfferPrice>
-                    <ProductVendorPrice>₹{regularPrice}</ProductVendorPrice>
-                    <ProductDiscountPrice>{discount}% off</ProductDiscountPrice>
-                  </ProductOfferPrice>
-                )}
+                {regularPrice &&
+                  discount &&
+                  regularPrice > retailPrice &&
+                  discount > 2 && (
+                    <ProductOfferPrice>
+                      <ProductVendorPrice>₹{regularPrice}</ProductVendorPrice>
+                      <ProductDiscountPrice>
+                        {discount}% off
+                      </ProductDiscountPrice>
+                    </ProductOfferPrice>
+                  )}
               </>
             )}
             <ProductName>{productName}</ProductName>

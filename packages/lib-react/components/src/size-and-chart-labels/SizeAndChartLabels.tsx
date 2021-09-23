@@ -14,7 +14,10 @@ export const SizeAndChartLabels: FC<ISizeAndChartLabelsProps> = ({
 }: ISizeAndChartLabelsProps) => {
   return (
     <>
-      {(!isOneSize || hasSizeChart || qtyLeft < 6 || simpleSkus.length < 2) && (
+      {(!isOneSize ||
+        hasSizeChart ||
+        (qtyLeft && qtyLeft < 6) ||
+        simpleSkus.length < 2) && (
         <SizeAndChartLabelsWrapper>
           <div>{!isOneSize && <Size>Size</Size>}</div>
           <div>
