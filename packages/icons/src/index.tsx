@@ -28,6 +28,7 @@ import ICIconWishList from './images/icon-wish-list.svg';
 import ICIconWishListFilled from './images/ic-wish-filled.svg';
 import ICIconTick from './images/icon-tick.svg';
 import ICIconCrossRed from './images/icon-cross-red.svg';
+import ICIconAngleDown from './images/icon-angle-down-v2.svg';
 
 export const CreateIcon = ICCreate;
 export const BackIcon = ICBack;
@@ -58,3 +59,4 @@ export const IconWishList = ICIconWishList;
 export const IconWishListFilled = ICIconWishListFilled;
 export const IconTick = ICIconTick;
 export const IconCrossRed = ICIconCrossRed;
+export const IconAngleDown = ICIconAngleDown;

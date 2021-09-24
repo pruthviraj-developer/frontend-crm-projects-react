@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { typography, Colors, secondaryColor, primaryColor } from '@hs/utils';
+import { SvgIcon } from '@hs/icons';
 
 const AccordianWrapper = styled.div`
   margin: auto;
@@ -8,13 +9,17 @@ const AccordianWrapper = styled.div`
 const AccordionTitle = styled.div`
   font-size: ${typography.size.s2}px;
   line-height: ${typography.size.s3}px;
-  padding-top: ${typography.size.s1}px;
-  padding-right: 0;
-  padding-bottom: ${typography.size.s1}px;
-  padding-left: ${typography.size.s2}px;
+  padding: 12px 12px 12px 14px;
   border: 1px solid ${Colors.MERCURY};
   font-weight: ${typography.weight.medium};
   color: ${Colors.GRAY20};
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const AccordionIcon = styled(SvgIcon)<{ active: boolean }>`
+  transform: scaleY(${(props) => (props.active ? -1 : 1)});
 `;
 
 const AccordionContent = styled.div`
@@ -84,6 +89,7 @@ const DetailsDescriptionTitle = styled.div`
 export {
   AccordianWrapper,
   AccordionTitle,
+  AccordionIcon,
   AccordionContent,
   AccordianDescription,
   DetailsDescription,
