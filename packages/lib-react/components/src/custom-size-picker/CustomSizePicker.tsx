@@ -11,7 +11,8 @@ import {
 export const CustomSizePicker: FC<ICustomSizePicker> = ({
   isSelected,
   selectedSkuId,
-  simpleSkus,
+  simpleSkus = [],
+  skuAttributes = [],
 }: ICustomSizePicker) => {
   return (
     <CustomSizeWrapper>
@@ -24,7 +25,7 @@ export const CustomSizePicker: FC<ICustomSizePicker> = ({
                   selected={isSelected && sku.skuId === selectedSkuId}
                   disabled={sku.availableQuantity == 0}
                 >
-                  {sku.attributes.size}
+                  {skuAttributes[index].size}
                 </Size>
                 {isSelected &&
                   sku.availableQuantity > 0 &&

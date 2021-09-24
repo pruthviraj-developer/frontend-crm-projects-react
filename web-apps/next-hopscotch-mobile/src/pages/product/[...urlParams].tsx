@@ -148,9 +148,11 @@ const Product: NextPage = (props) => {
     selectedSku: sku,
   }); // productForm
 
-  const { isOneSize, productName } = useOneSize({
+  const { isOneSize, productName, skuAttributes } = useOneSize({
     productData: productInfo,
   });
+
+  console.log('skuAttributes', skuAttributes);
 
   const deliveryDetailsData = useDeliveryDetails({
     selectedSku,
@@ -367,6 +369,7 @@ const Product: NextPage = (props) => {
                 <CustomSizePicker
                   {...{
                     simpleSkus: productInfo.simpleSkus,
+                    skuAttributes,
                     selectedSkuId,
                     isSelected,
                     sizeListUpfront: SIZE_LIST_UPFRONT,
@@ -379,7 +382,9 @@ const Product: NextPage = (props) => {
                 ></RecommendedProductsLinks>
               )}
               <DeliveryDetails {...deliveryDetailsData}></DeliveryDetails>
-              {productInfo.id && <Accordian {...{ productInfo, sku: selectedSku }}></Accordian>}
+              {productInfo.id && (
+                <Accordian {...{ productData: productInfo, skuAttributes, sku: selectedSku }}></Accordian>
+              )}
 
               {showRFYP && (
                 <div ref={recommendedProductsLink}>
