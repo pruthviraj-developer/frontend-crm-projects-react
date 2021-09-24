@@ -18,6 +18,7 @@ export interface IProductDetails {
   isOneSize?: boolean;
   hasSamePrice?: boolean;
   isDefault?: boolean;
+  isfirst?: boolean;
   showRfypCue?: boolean;
   selectedSkuId?: string;
   simpleSkus: ISimpleSkusEntityProps[];
@@ -107,6 +108,7 @@ export interface AttrsEntity {
   name: string;
   value: string;
 }
+
 export interface DeliveryMessageOrDeliveryMessagesEntity {
   action: string;
   msg: string;
@@ -141,19 +143,7 @@ export interface ProductSubAttrListEntity {
   attributeValue: string;
   isShowAttrName: boolean;
 }
-
-export interface IProductFormProps {
-  selectedSku: ISimpleSkusEntityProps;
-  retailPrice: number;
-  regularPrice: number;
-  discount: number;
-  isPresale: number;
-  finalSale: number;
-  qtyLeft: number;
-  deliveryMsg: string;
-  retailPriceMax: number;
-}
-
+  
 export interface IPopularSearchUrlProps {
   displayName: string;
   link: string;
