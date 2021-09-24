@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { IAccordianProps } from './IAccordion';
 import {
   AccordianWrapper,
@@ -14,17 +14,38 @@ import {
   DetailsDescriptionTitle,
 } from './StyledAccordion';
 
+const ACTIVE = 'active';
 // eslint-disable-next-line no-empty-pattern
 export const Accordian: FC<IAccordianProps> = ({
   productData,
   skuAttributes = [],
   sku,
 }: IAccordianProps) => {
+  const [toggleAccordions, setToggleAccordions] = useState({
+    item: false,
+    shipping: false,
+    about: false,
+    more: false,
+  });
+  const toggle = (name: string) => {
+    setToggleAccordions({
+      ...toggleAccordions,
+      [name]: !toggleAccordions[name],
+    });
+  };
   return (
     <>
       <AccordianWrapper>
-        <AccordionTitle>Item details</AccordionTitle>
-        <AccordionContent>
+        <AccordionTitle
+          onClick={() => {
+            toggle('item');
+          }}
+        >
+          Item details
+        </AccordionTitle>
+        <AccordionContent
+          className={toggleAccordions.item ? `${ACTIVE} Pruthvi` : ''}
+        >
           <AccordianDescription>
             {productData.productDesc && (
               <DetailsDescription
@@ -84,8 +105,14 @@ export const Accordian: FC<IAccordianProps> = ({
       </AccordianWrapper>
       {productData.showShippingInfo && (
         <AccordianWrapper>
-          <AccordionTitle>Shipping and returns</AccordionTitle>
-          <AccordionContent>
+          <AccordionTitle
+            onClick={() => {
+              toggle('shipping');
+            }}
+          >
+            Shipping and returns
+          </AccordionTitle>
+          <AccordionContent className={toggleAccordions.shipping ? ACTIVE : ''}>
             {productData.isReturnable && (
               <AccordianDescription>
                 <DetailsDescription
@@ -126,8 +153,14 @@ export const Accordian: FC<IAccordianProps> = ({
       )}
       {productData.showBrandDetails && productData.brandDescription && (
         <AccordianWrapper>
-          <AccordionTitle>About {productData.brandName}</AccordionTitle>
-          <AccordionContent>
+          <AccordionTitle
+            onClick={() => {
+              toggle('about');
+            }}
+          >
+            About {productData.brandName}
+          </AccordionTitle>
+          <AccordionContent className={toggleAccordions.about ? ACTIVE : ''}>
             <AccordianDescription>
               <DetailsDescription
                 dangerouslySetInnerHTML={{
@@ -145,9 +178,15 @@ export const Accordian: FC<IAccordianProps> = ({
       )}
       {productData.moreInfo && (
         <AccordianWrapper>
-          <AccordionTitle>More Info</AccordionTitle>
+          <AccordionTitle
+            onClick={() => {
+              toggle('more');
+            }}
+          >
+            More Info
+          </AccordionTitle>
           {productData.moreInfo && (
-            <AccordionContent>
+            <AccordionContent className={toggleAccordions.more ? ACTIVE : ''}>
               <AccordianDescription>
                 <DetailsDescription
                   dangerouslySetInnerHTML={{
