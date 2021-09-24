@@ -75,11 +75,8 @@ const Product: NextPage = (props) => {
   const urlParams = router.query as unknown as IProductProps;
   const [productId]: urlParamsProps | any = [...(urlParams.urlParams || [])];
   const [isSelected, setIsSelected] = useState<boolean>(false);
-  const [selectedSkuId, setSelectedSkuId] = useState<string>('');
-  const [selectedSku, setSelectedSku] = useState<ISimpleSkusEntityProps>();
-  const [product, setProduct] = useState<any>({});
+  const [sku, setSku] = useState<ISimpleSkusEntityProps>();
   const [productInfo, setProductInfo] = useState<IProductDetails | any>({}); // productDetails with modification
-  const [productForm, setProductForm] = useState<IProductFormProps | any>({});
 
   // const [quantity, setQuantity] = useState<number>(0);
   // const showNewPromo = _self._AbTestService.isOnNewPromo();
