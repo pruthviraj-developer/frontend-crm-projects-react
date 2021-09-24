@@ -1,9 +1,7 @@
-export interface IDeliveryDetailsProps {
-  selectedSku?: ISimpleSkusEntityProps; // parent SimpleSkusEntity props
-  productData: IProductDetails; // parent IProductDetails props
+export interface IOneSizeProps {
+  productData: IOneSizeProductDetails;
 }
-
-export interface IProductDetails {
+export interface IOneSizeProductDetails {
   isReturnable: number;
   subProductTypeId: number;
   action: string;
@@ -14,10 +12,11 @@ export interface IProductDetails {
   isOneSize?: boolean;
   hasSamePrice?: boolean;
   isDefault?: boolean;
+  isfirst?: boolean;
   showRfypCue?: boolean;
   selectedSkuId?: string;
-  simpleSkus: ISimpleSkusEntityProps[];
-  imgurls?: ImgurlsEntity[] | null;
+  simpleSkus: IOneSizeSimpleSkusEntityProps[];
+  imgurls?: IOneSizeImgurlsEntity[] | null;
   brandName: string;
   hasSizeChart: boolean;
   quantity: number;
@@ -26,7 +25,7 @@ export interface IProductDetails {
   canWishList: number;
   restTime: number;
   preOrderDescription: string;
-  productLevelAttrList?: ProductLevelAttrListEntity[] | null;
+  productLevelAttrList?: IOneProductLevelAttrListEntity[] | null;
   categoryId: number;
   subCategoryId: number;
   productTypeId: number;
@@ -42,7 +41,7 @@ export interface IProductDetails {
   onSale: number;
   fromAge: number;
   toAge: number;
-  deliveryMessages?: DeliveryMessageOrDeliveryMessagesEntity[] | null;
+  deliveryMessages?: IOneDeliveryMessageOrDeliveryMessagesEntity[] | null;
   showProductDetails: boolean;
   showBrandDetails: boolean;
   showPreOrderInfo: boolean;
@@ -67,11 +66,11 @@ export interface IProductDetails {
   wishlistId: number;
 }
 
-export interface ISimpleSkusEntityProps {
+export interface IOneSizeSimpleSkusEntityProps {
   attributes: any;
   productName: string;
   skuId: string;
-  attrs?: AttrsEntity[] | null;
+  attrs?: IOneAttrsEntity[] | null;
   retailPrice: number;
   regularPrice: number;
   availableQuantity: number;
@@ -96,34 +95,21 @@ export interface ISimpleSkusEntityProps {
   preorderAction: string;
   preorderInfo: string;
   merchType: string;
-  deliveryMessage: DeliveryMessageOrDeliveryMessagesEntity;
+  deliveryMessage: IOneDeliveryMessageOrDeliveryMessagesEntity;
 }
 
-export interface AttrsEntity {
+export interface IOneAttrsEntity {
   name: string;
   value: string;
 }
 
-export interface DeliveryMessageOrDeliveryMessagesEntity {
+export interface IOneDeliveryMessageOrDeliveryMessagesEntity {
   action: string;
   msg: string;
   type: number;
 }
 
-export interface ProductLevelAttrListEntity {
-  attributeName: string;
-  isShowAttr: boolean;
-  productSubAttrList?: ProductSubAttrListEntity[] | null;
-  attributeValue?: string | null;
-}
-
-export interface ProductSubAttrListEntity {
-  subAttributeName: string;
-  attributeValue: string;
-  isShowAttrName: boolean;
-}
-
-export interface ImgurlsEntity {
+export interface IOneSizeImgurlsEntity {
   imgUrl: string;
   imgUrlLarge: string;
   imgUrlFull: string;
@@ -137,4 +123,36 @@ export interface ImgurlsEntity {
   imgUrlFullWidth: number;
   imgUrlThumbnailHeight: number;
   imgUrlThumbnailWidth: number;
+}
+
+export interface IOneProductLevelAttrListEntity {
+  attributeName: string;
+  isShowAttr: boolean;
+  productSubAttrList?: IOneProductSubAttrListEntity[] | null;
+  attributeValue?: string | null;
+}
+
+export interface IOneProductSubAttrListEntity {
+  subAttributeName: string;
+  attributeValue: string;
+  isShowAttrName: boolean;
+}
+
+export interface ISkuAttributes {
+  closure?: string;
+  gender?: string;
+  colour?: string;
+  'from age'?: string;
+  hbt?: string;
+  'hem length'?: string;
+  neckline?: string;
+  occasion?: string;
+  print?: string;
+  season?: string;
+  size?: string;
+  sleeves?: string;
+  taste?: string;
+  'to age'?: string;
+  'units per sets'?: string;
+  year?: string;
 }

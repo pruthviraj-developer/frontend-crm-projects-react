@@ -1,6 +1,6 @@
 export interface IProductFormProps {
-  sku?: ISelectedSimpleSkusEntityProps;
-  productInfo: ISelectedProductDetails;
+  selectedSku?: ISelectedSimpleSkusEntityProps;
+  productData: ISelectedProductDetails;
 }
 
 export interface ISelectedSimpleSkusEntityProps {

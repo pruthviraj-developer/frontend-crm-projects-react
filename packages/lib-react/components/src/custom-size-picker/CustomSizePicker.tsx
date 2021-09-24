@@ -8,28 +8,29 @@ import {
   LeftQuantity,
 } from './StyledCustomSizePicker';
 
-export const CustomSizePicker: FC<ICustomSizePicker> = (
-  props: ICustomSizePicker
-) => {
+export const CustomSizePicker: FC<ICustomSizePicker> = ({
+  isSelected,
+  selectedSkuId,
+  simpleSkus = [],
+  skuAttributes = [],
+}: ICustomSizePicker) => {
   return (
     <CustomSizeWrapper>
       <Sizes>
-        {props.simpleSkus &&
-          props.simpleSkus.map((sku, index) => {
+        {simpleSkus &&
+          simpleSkus.map((sku, index) => {
             return (
               <SizePill key={index}>
                 <Size
-                  selected={
-                    props.isSelected && sku.skuId === props.selectedSkuId
-                  }
+                  selected={isSelected && sku.skuId === selectedSkuId}
                   disabled={sku.availableQuantity == 0}
                 >
-                  {sku.attributes.size}
+                  {skuAttributes[index].size}
                 </Size>
-                {props.isSelected &&
+                {isSelected &&
                   sku.availableQuantity > 0 &&
                   sku.availableQuantity < 4 &&
-                  sku.skuId === props.selectedSkuId && (
+                  sku.skuId === selectedSkuId && (
                     <LeftQuantity>
                       Only {sku.availableQuantity} left
                     </LeftQuantity>

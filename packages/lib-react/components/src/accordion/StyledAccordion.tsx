@@ -18,13 +18,17 @@ const AccordionTitle = styled.div`
 `;
 
 const AccordionContent = styled.div`
-  opacity: 1;
-  animation: display-none-transition 0.5s;
-  display: block;
+  opacity: 0;
+  display: none;
   color: ${secondaryColor[300]};
   padding: 1rem;
   border: none;
   background-color: ${Colors.WHITE};
+  &.active {
+    display: block;
+    opacity: 1;
+    transition: opacity 5s ease-in-out;
+  }
 `;
 
 const AccordianDescription = styled.div``;
