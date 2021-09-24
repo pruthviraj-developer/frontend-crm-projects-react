@@ -52,15 +52,12 @@ export const ProductCarouselList: FC<IProductCarouselListProps> = ({
                 key={index}
               >
                 <Image
-                  loader={({ src, width }) =>
-                    `${src}&tr=w-${width / 2},c-at_max,dpr-2,n-medium`
-                  }
-                  src={product.imageUrl}
+                  src={`${product.imageUrl}&tr=w-${imageSize},c-at_max,dpr-2,n-medium`}
                   alt={product.productName}
                   placeholder="blur"
                   blurDataURL="https://static.hopscotch.in/web2/images/boutique-pattern.png"
-                  width={imageSize}
-                  height={imageSize}
+                  layout="fill"
+                  unoptimized
                   // objectFit="cover"
                 />
                 <TransparentImgOverlay></TransparentImgOverlay>
