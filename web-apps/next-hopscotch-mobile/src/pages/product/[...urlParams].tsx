@@ -24,12 +24,16 @@ import { useModal } from 'react-hooks-use-modal';
 const SizeChartPopupComponent = dynamic(() => import('../../components/size-chart/SizeChart'), {
   ssr: false,
 });
-import { useRecommendation, IRecommendedProducts, useDeliveryDetails, useSelectedProduct } from '@hs/framework';
+import {
+  useRecommendation,
+  IRecommendedProducts,
+  useDeliveryDetails,
+  useSelectedProduct,
+  useOneSize,
+} from '@hs/framework';
 
 // const ADD_TO_CART_BUTTON = 'Add to cart button';
 const SIZE_LIST_UPFRONT = 'Size list upfront';
-const ONE_SIZE = 'one size';
-const ONESIZE = 'onesize';
 const SUCCESS = 'success';
 
 // const getProductDetails = <P, R>(): Promise<R> => {
@@ -144,6 +148,10 @@ const Product: NextPage = (props) => {
     selectedSku: sku,
   }); // productForm
 
+  const { isOneSize, productName } = useOneSize({
+    productData: productInfo,
+  });
+
   const deliveryDetailsData = useDeliveryDetails({
     selectedSku,
     productData: productInfo,
@@ -255,18 +263,7 @@ const Product: NextPage = (props) => {
           setSku(sku);
         };
 
-        const setAttrObject = () => {
-          for (let i = 0; i < productDetails.simpleSkus.length; i++) {
-            const sku: any = productDetails.simpleSkus[i];
-            sku.attributes = {};
-            for (let j = 0; j < sku.attrs.length; j++) {
-              sku.attributes[sku.attrs[j].name.toLowerCase()] = sku.attrs[j].value;
-            }
-          }
-        };
-
         const setDetails = () => {
-          setAttrObject();
           productDetails.simpleSkus = sortBy(productDetails.simpleSkus, function (skus: ISimpleSkusEntityProps) {
             return !(skus.availableQuantity > 0);
           });
@@ -291,14 +288,6 @@ const Product: NextPage = (props) => {
           selectSku(productDetails.simpleSkus);
           // productDetails.hasSamePrice =
           // chain(productDetails.simpleSkus)?.map('retailPrice')?.uniq()?.value()?.length == 1;
-          productDetails.productName = productDetails.simpleSkus[0] && productDetails.simpleSkus[0].productName;
-          productDetails.isOneSize =
-            productDetails.simpleSkus.length == 1 &&
-            [ONESIZE, ONE_SIZE].includes(
-              productDetails.simpleSkus[0] &&
-                productDetails.simpleSkus[0].attributes &&
-                productDetails.simpleSkus[0].attributes.size.toLowerCase(),
-            );
           // productDetails.moreInfo =
           // '<div>\n<p><b>Country of Origin: </b> China</p>\n\n<b>Manufacturer Details:</b>\n<ul style="margin-bottom: 10px;">\n   <li>Mucheng,China</li>\n</ul>\n\n<b>Importer Details:</b>\n<ul>\n   <li>Hopscotch Wholesale Trading Pvt. Ltd,Mumbai</li>\n</ul>\n\n<b>Packer Details:</b>\n<ul>\n   <li>Mucheng,China</li>\n</ul>\n\n</div>';
           setProductInfo(productDetails);
@@ -330,15 +319,15 @@ const Product: NextPage = (props) => {
         {productInfo && productInfo.action === SUCCESS && (
           <div>
             <Head>
-              <title>{`Shop Online ${productInfo.productName} at ₹${retailPrice}`}</title>
+              <title>{`Shop Online ${productName} at ₹${retailPrice}`}</title>
               <meta
                 name="description"
-                content={`Buy ${productInfo.productName} online in India at ₹${retailPrice}. &#x2714;15 Days Easy Returns, &#x2714;Cash on Delivery, &#x2714;Latest Designs, &#x2714;Pan India shipping.`}
+                content={`Buy ${productName} online in India at ₹${retailPrice}. &#x2714;15 Days Easy Returns, &#x2714;Cash on Delivery, &#x2714;Latest Designs, &#x2714;Pan India shipping.`}
               />
-              <meta property="og:title" content={`Shop Online ${productInfo.productName} at ₹${retailPrice}`} />
+              <meta property="og:title" content={`Shop Online ${productName} at ₹${retailPrice}`} />
               <meta
                 property="og:description"
-                content={`Buy ${productInfo.productName} online in India at ₹${retailPrice}. &#x2714;15 Days Easy Returns, &#x2714;Cash on Delivery, &#x2714;Latest Designs, &#x2714;Pan India shipping.`}
+                content={`Buy ${productName} online in India at ₹${retailPrice}. &#x2714;15 Days Easy Returns, &#x2714;Cash on Delivery, &#x2714;Latest Designs, &#x2714;Pan India shipping.`}
               />
               <meta
                 name="keywords"
@@ -353,7 +342,7 @@ const Product: NextPage = (props) => {
             <ProductDetailsWrapper>
               <ProductNamePrice
                 {...{
-                  productName: productInfo.productName,
+                  productName: productName,
                   isProductSoldOut: productInfo.isProductSoldOut,
                   wishlistId: productInfo.wishlistId,
                   retailPrice,
@@ -367,14 +356,14 @@ const Product: NextPage = (props) => {
               ></ProductNamePrice>
               <SizeAndChartLabels
                 {...{
-                  isOneSize: productInfo.isOneSize,
+                  isOneSize,
                   hasSizeChart: productInfo.hasSizeChart,
                   qtyLeft,
                   simpleSkus: productInfo.simpleSkus,
                   onSizeChartClick: open,
                 }}
               ></SizeAndChartLabels>
-              {!productInfo.isOneSize && (
+              {!isOneSize && (
                 <CustomSizePicker
                   {...{
                     simpleSkus: productInfo.simpleSkus,
@@ -412,7 +401,7 @@ const Product: NextPage = (props) => {
             <SizeChartPopupComponent
               {...{
                 id: productInfo.id,
-                productName: productInfo.productName,
+                productName: productName,
                 onClickClose: close,
               }}
             ></SizeChartPopupComponent>
