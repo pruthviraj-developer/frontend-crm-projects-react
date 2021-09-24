@@ -1,5 +1,6 @@
 export interface IUseSegmentProps {
-  data?: IProperties;
+  properties?: IProperties;
+  traits?: ITraits;
 }
 
 export interface IProperties {
@@ -34,23 +35,23 @@ export interface IProperties {
   pattern?: string;
   character: string;
   weave?: string;
-  universal: string;
+  universal?: string;
   '[time] hour_of_day'?: number;
   '[time] day_of_week'?: number;
   '[time] day_of_month'?: number;
   '[time] month_of_year'?: number;
   '[time] week_of_year'?: number;
-  funnel: string;
-  funnel_tile: string;
-  funnel_section: string;
-  source: string;
-  section: string | null;
-  subsection: string;
-  plp: string;
-  _session_start_time: string;
+  funnel?: string;
+  funnel_tile?: string;
+  funnel_section?: string;
+  source?: string;
+  section?: string | null;
+  subsection?: string;
+  plp?: string;
+  _session_start_time?: string;
   sortbar?: string;
-  sortbar_group: string;
-  sort_by: string;
+  sortbar_group?: string;
+  sort_by?: string;
   track?: string[];
 }
 export interface ContextData {
@@ -72,21 +73,21 @@ export interface OsOrLibrary {
   version?: string;
 }
 export interface ITraits {
-  user_type: string;
-  hs_device_id: string;
-  hs_site: string;
-  utm_source: string;
-  utm_medium: string;
-  utm_campaign: string;
-  utm_term: string;
-  utm_content: string;
-  utm_date: string;
-  last_visit_date: string;
-  days_since_last_visit: string;
+  user_type?: string;
+  hs_device_id?: string;
+  hs_site?: string;
+  utm_source?: string;
+  utm_medium?: string;
+  utm_campaign?: string;
+  utm_term?: string;
+  utm_content?: string;
+  utm_date?: string;
+  last_visit_date?: string;
+  days_since_last_visit?: string;
   experiments?: string[] | null;
-  in_app_browser: string;
-  user_agent: string;
-  hs_referrer: string;
+  in_app_browser?: string;
+  user_agent?: string;
+  hs_referrer?: string;
 }
 export interface Page {
   path: string;

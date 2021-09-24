@@ -6,10 +6,13 @@ import {
 } from './IUseSegment';
 import Parser from 'ua-parser-js';
 import { useEffect, useState } from 'react';
-export const useSegment = ({ data }: IUseSegmentProps) => {
+export const useSegment = ({
+  properties: initialProperties,
+  traits: initialTraits,
+}: IUseSegmentProps) => {
   const [deviceDetail, setDeviceDetail] = useState<Parser.IResult>();
   const [contextData, setContextData] = useState<ContextData>();
-  const [traits, setTraits] = useState<ITraits>();
+  const [traits, setTraits] = useState<ITraits>(() => initialTraits || {});
   const [properties, setProperties] = useState<IProperties>(() => ({
     funnel: '',
     funnel_tile: '',
@@ -24,7 +27,7 @@ export const useSegment = ({ data }: IUseSegmentProps) => {
     sort_by: 'User',
     universal: 'None',
     _session_start_time: '',
-    ...data,
+    ...initialProperties,
   }));
 
   const getWeek = (date: Date) => {
@@ -90,5 +93,16 @@ export const useSegment = ({ data }: IUseSegmentProps) => {
     });
   }, []);
 
-  return { contextData, traits, properties };
+  const setSegmentData = ({ properties, traits }: IUseSegmentProps) => {
+    setProperties((prevState) => ({ ...prevState, ...properties }));
+    setTraits((prevState) => ({ ...prevState, ...traits }));
+  };
+  return [
+    {
+      contextData,
+      traits,
+      properties,
+    },
+    setSegmentData,
+  ] as const;
 };
