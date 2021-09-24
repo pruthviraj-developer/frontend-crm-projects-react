@@ -151,8 +151,8 @@ const Product: NextPage = (props) => {
   const { isOneSize, productName, skuAttributes } = useOneSize({
     productData: productInfo,
   });
-
-  console.log('skuAttributes', skuAttributes);
+  console.log(JSON.stringify(productInfo));
+  console.log(JSON.stringify(skuAttributes));
 
   const deliveryDetailsData = useDeliveryDetails({
     selectedSku,
@@ -288,25 +288,8 @@ const Product: NextPage = (props) => {
             productDetails.isProductSoldOut = true;
           };
           selectSku(productDetails.simpleSkus);
-          // productDetails.hasSamePrice =
-          // chain(productDetails.simpleSkus)?.map('retailPrice')?.uniq()?.value()?.length == 1;
-          // productDetails.moreInfo =
-          // '<div>\n<p><b>Country of Origin: </b> China</p>\n\n<b>Manufacturer Details:</b>\n<ul style="margin-bottom: 10px;">\n   <li>Mucheng,China</li>\n</ul>\n\n<b>Importer Details:</b>\n<ul>\n   <li>Hopscotch Wholesale Trading Pvt. Ltd,Mumbai</li>\n</ul>\n\n<b>Packer Details:</b>\n<ul>\n   <li>Mucheng,China</li>\n</ul>\n\n</div>';
           setProductInfo(productDetails);
-          // (_self.productDetail.simpleSkus[0].attributes.size.toLowerCase() ==
-          //   _self.configService.products.ONE_SIZE ||
-          //   _self.productDetail.simpleSkus[0].attributes.size.toLowerCase() ==
-          //   _self.configService.products.ONESIZE);
         };
-
-        // const brandName = productDetails.brandName;
-        // const price = productDetail.retailPrice;
-        // const defaultTitle = `Shop Online ${productName} at ₹${price}`;
-        // const description = `Buy ${productName} online in India at ₹${price}. &#x2714;15 Days Easy Returns, &#x2714;Cash on Delivery, &#x2714;Latest Designs, &#x2714;Pan India shipping.`;
-        // const keywords = [];
-        // keywords.push(productName.replace(/-|:|_/gi, ' '));
-        // keywords.push('online shopping for ' + productName.replace(/-|:|_/gi, ' '));
-        // setShowRfyp(true);
         const soldOutSkus = productDetails.simpleSkus.find((sku) => !(sku.availableQuantity > 0));
         productDetails.showRfypCue = !!soldOutSkus;
         setDetails();
