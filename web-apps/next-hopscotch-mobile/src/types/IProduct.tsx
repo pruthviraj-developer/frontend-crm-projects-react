@@ -143,7 +143,7 @@ export interface ProductSubAttrListEntity {
   attributeValue: string;
   isShowAttrName: boolean;
 }
-
+  
 export interface IPopularSearchUrlProps {
   displayName: string;
   link: string;

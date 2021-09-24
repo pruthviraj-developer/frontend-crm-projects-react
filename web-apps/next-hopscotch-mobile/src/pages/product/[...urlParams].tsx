@@ -75,8 +75,11 @@ const Product: NextPage = (props) => {
   const urlParams = router.query as unknown as IProductProps;
   const [productId]: urlParamsProps | any = [...(urlParams.urlParams || [])];
   const [isSelected, setIsSelected] = useState<boolean>(false);
-  const [sku, setSku] = useState<ISimpleSkusEntityProps | any>();
+  const [selectedSkuId, setSelectedSkuId] = useState<string>('');
+  const [selectedSku, setSelectedSku] = useState<ISimpleSkusEntityProps>();
+  const [product, setProduct] = useState<any>({});
   const [productInfo, setProductInfo] = useState<IProductDetails | any>({}); // productDetails with modification
+  const [productForm, setProductForm] = useState<IProductFormProps | any>({});
 
   // const [quantity, setQuantity] = useState<number>(0);
   // const showNewPromo = _self._AbTestService.isOnNewPromo();
@@ -143,7 +146,6 @@ const Product: NextPage = (props) => {
     productInfo,
     sku,
   }); // productForm
-
   const deliveryDetailsData = useDeliveryDetails({
     selectedSku,
     productDetails: productInfo,
@@ -391,7 +393,6 @@ const Product: NextPage = (props) => {
               )}
               <DeliveryDetails {...deliveryDetailsData}></DeliveryDetails>
               {productInfo.id && <Accordian {...{ productInfo, sku: selectedSku }}></Accordian>}
-
               {showRFYP && (
                 <div ref={recommendedProductsLink}>
                   <RecommendedProducts {...recommendedForYou}></RecommendedProducts>
