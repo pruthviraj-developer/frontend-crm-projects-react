@@ -1,5 +1,6 @@
 import React, { FC, useState } from 'react';
 import { IAccordianProps } from './IAccordion';
+import { IconAngleDown } from '@hs/icons';
 import {
   AccordianWrapper,
   AccordionTitle,
@@ -12,6 +13,7 @@ import {
   FeatureAttributesList,
   FeatureAttributesListItem,
   DetailsDescriptionTitle,
+  AccordionIcon,
 } from './StyledAccordion';
 
 const ACTIVE = 'active';
@@ -41,7 +43,11 @@ export const Accordian: FC<IAccordianProps> = ({
             toggle('item');
           }}
         >
-          Item details
+          <span>Item details</span>
+          <AccordionIcon
+            active={toggleAccordions.item ? true : false}
+            icon={IconAngleDown}
+          />
         </AccordionTitle>
         <AccordionContent
           className={toggleAccordions.item ? `${ACTIVE} Pruthvi` : ''}
@@ -110,7 +116,11 @@ export const Accordian: FC<IAccordianProps> = ({
               toggle('shipping');
             }}
           >
-            Shipping and returns
+            <span>Shipping and returns</span>
+            <AccordionIcon
+              active={toggleAccordions.item ? true : false}
+              icon={IconAngleDown}
+            />
           </AccordionTitle>
           <AccordionContent className={toggleAccordions.shipping ? ACTIVE : ''}>
             {productData.isReturnable && (
@@ -158,7 +168,11 @@ export const Accordian: FC<IAccordianProps> = ({
               toggle('about');
             }}
           >
-            About {productData.brandName}
+            <span>About {productData.brandName}</span>
+            <AccordionIcon
+              active={toggleAccordions.item ? true : false}
+              icon={IconAngleDown}
+            />
           </AccordionTitle>
           <AccordionContent className={toggleAccordions.about ? ACTIVE : ''}>
             <AccordianDescription>
@@ -183,7 +197,11 @@ export const Accordian: FC<IAccordianProps> = ({
               toggle('more');
             }}
           >
-            More Info
+            <span>More Info</span>
+            <AccordionIcon
+              active={toggleAccordions.item ? true : false}
+              icon={IconAngleDown}
+            />
           </AccordionTitle>
           {productData.moreInfo && (
             <AccordionContent className={toggleAccordions.more ? ACTIVE : ''}>
