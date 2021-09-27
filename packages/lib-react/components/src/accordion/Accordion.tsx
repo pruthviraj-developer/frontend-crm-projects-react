@@ -1,14 +1,15 @@
 import React, { FC, useState } from 'react';
-import { IAccordianProps } from './IAccordion';
+import {
+  IAccordionProps,
+  AccordionProductSubAttrListEntityProps,
+} from './IAccordion';
 import { IconAngleDown } from '@hs/icons';
 import {
-  AccordianWrapper,
+  AccordionWrapper,
   AccordionTitle,
   AccordionContent,
-  AccordianDescription,
+  AccordionDescription,
   DetailsDescription,
-  // DescriptionList,
-  // DescriptionListItem,
   OtherDetails,
   FeatureAttributesList,
   FeatureAttributesListItem,
@@ -17,65 +18,116 @@ import {
 } from './StyledAccordion';
 
 const ACTIVE = 'active';
-// eslint-disable-next-line no-empty-pattern
-export const Accordian: FC<IAccordianProps> = ({
-  productData,
+export const Accordion: FC<IAccordionProps> = ({
   skuAttributes = [],
-  sku,
-}: IAccordianProps) => {
+  selectedSku,
+  productDesc,
+  moreInfo,
+  showBrandDetails,
+  brandDescription,
+  brandName,
+  isPresale,
+  preOrderDescription,
+  productLevelAttrList = [],
+  shippingReturnInfo,
+  showShippingInfo,
+  showBrandInfo,
+  simpleSkus = [],
+  isReturnable,
+}: IAccordionProps) => {
   const [toggleAccordions, setToggleAccordions] = useState({
     item: false,
     shipping: false,
     about: false,
     more: false,
   });
+
   const toggle = (name: string) => {
     setToggleAccordions({
       ...toggleAccordions,
       [name]: !toggleAccordions[name],
     });
   };
+
+  const getAccordionDetails = (content: string) => {
+    return (
+      <AccordionDescription>
+        <DetailsDescription
+          dangerouslySetInnerHTML={{
+            __html: content,
+          }}
+        ></DetailsDescription>
+      </AccordionDescription>
+    );
+  };
+
+  const getOtherDetails = (title: string, content?: string) => {
+    return (
+      <OtherDetails>
+        <b>{title}</b>
+        <div className={'content'}>{content}</div>
+      </OtherDetails>
+    );
+  };
+
+  const getAccordionTitle = (toggleElement: string, title: string) => {
+    return (
+      <AccordionTitle
+        onClick={() => {
+          toggle(toggleElement);
+        }}
+      >
+        <span>{title}</span>
+        <AccordionIcon
+          active={toggleAccordions[toggleElement] ? true : false}
+          icon={IconAngleDown}
+        />
+      </AccordionTitle>
+    );
+  };
+
+  const getFeatureAttributesList = (
+    productSubAttrList: AccordionProductSubAttrListEntityProps[] = []
+  ) => {
+    return productSubAttrList.length ? (
+      <FeatureAttributesList>
+        {productSubAttrList.map((featureAttr, subIndex) => {
+          return (
+            featureAttr.attributeValue && (
+              <FeatureAttributesListItem key={subIndex}>
+                {(featureAttr.isShowAttrName
+                  ? `${featureAttr.subAttributeName} : `
+                  : '') + featureAttr.attributeValue}
+              </FeatureAttributesListItem>
+            )
+          );
+        })}
+      </FeatureAttributesList>
+    ) : (
+      ''
+    );
+  };
+
   return (
     <>
-      <AccordianWrapper>
-        <AccordionTitle
-          onClick={() => {
-            toggle('item');
-          }}
-        >
-          <span>Item details</span>
-          <AccordionIcon
-            active={toggleAccordions.item ? true : false}
-            icon={IconAngleDown}
-          />
-        </AccordionTitle>
-        <AccordionContent
-          className={toggleAccordions.item ? `${ACTIVE} Pruthvi` : ''}
-        >
-          <AccordianDescription>
-            {productData.productDesc && (
+      <AccordionWrapper>
+        {getAccordionTitle('item', 'Item details')}
+        <AccordionContent className={toggleAccordions.item ? `${ACTIVE}` : ''}>
+          <AccordionDescription>
+            {productDesc && (
               <DetailsDescription
-                dangerouslySetInnerHTML={{ __html: productData.productDesc }}
+                dangerouslySetInnerHTML={{ __html: productDesc }}
               ></DetailsDescription>
             )}
             <DetailsDescription>
-              <OtherDetails>
-                <b>Suitable for</b>
-                <div className={'content'}>
-                  {productData.simpleSkus[0] &&
-                    productData.simpleSkus[0].gender}
-                </div>
-              </OtherDetails>
-              <OtherDetails>
-                <b>Colour</b>
-                <div className={'content'}>
-                  {productData.simpleSkus[0] && skuAttributes[0].colour}
-                </div>
-              </OtherDetails>
+              {getOtherDetails(
+                'Suitable for',
+                simpleSkus[0] && simpleSkus[0].gender
+              )}
+              {getOtherDetails('Colour', skuAttributes[0].colour)}
             </DetailsDescription>
-            {productData.productLevelAttrList &&
-              productData.productLevelAttrList.length &&
-              productData.productLevelAttrList.map((subAttr, index: number) => {
+            {productLevelAttrList.length &&
+              productLevelAttrList.map((subAttr, index: number) => {
                 return (
                   subAttr.isShowAttr && (
                     <DetailsDescription margin={true} key={index}>
@@ -85,136 +137,66 @@ export const Accordian: FC<IAccordianProps> = ({
                           {subAttr.attributeValue}
                         </DetailsDescriptionTitle>
                       )}
-                      <FeatureAttributesList>
-                        {subAttr.productSubAttrList &&
-                          subAttr.productSubAttrList.length &&
-                          subAttr.productSubAttrList.map(
-                            (featureAttr, subIndex) => {
-                              return (
-                                featureAttr.attributeValue && (
-                                  <FeatureAttributesListItem key={subIndex}>
-                                    {(featureAttr.isShowAttrName
-                                      ? `${featureAttr.subAttributeName} : `
-                                      : '') + featureAttr.attributeValue}
-                                  </FeatureAttributesListItem>
-                                )
-                              );
-                            }
-                          )}
-                      </FeatureAttributesList>
+                      {getFeatureAttributesList(
+                        (subAttr && subAttr.productSubAttrList) || []
+                      )}
                     </DetailsDescription>
                   )
                 );
               })}
-          </AccordianDescription>
+          </AccordionDescription>
         </AccordionContent>
-      </AccordianWrapper>
-      {productData.showShippingInfo && (
-        <AccordianWrapper>
-          <AccordionTitle
-            onClick={() => {
-              toggle('shipping');
-            }}
-          >
-            <span>Shipping and returns</span>
-            <AccordionIcon
-              active={toggleAccordions.item ? true : false}
-              icon={IconAngleDown}
-            />
-          </AccordionTitle>
+      </AccordionWrapper>
+      {showShippingInfo && (
+        <AccordionWrapper>
+          {getAccordionTitle('shipping', 'Shipping and returns')}
           <AccordionContent className={toggleAccordions.shipping ? ACTIVE : ''}>
-            {productData.isReturnable && (
-              <AccordianDescription>
-                <DetailsDescription
-                  dangerouslySetInnerHTML={{
-                    __html:
-                      (sku && sku.shippingReturnInfoForSku) ||
-                      productData.shippingReturnInfo,
-                  }}
-                ></DetailsDescription>
-              </AccordianDescription>
-            )}
-            {!productData.isReturnable && (
-              <AccordianDescription>
-                <DetailsDescription
-                  dangerouslySetInnerHTML={{
-                    __html: productData.shippingReturnInfo,
-                  }}
-                ></DetailsDescription>
-              </AccordianDescription>
-            )}
-            {productData.isPresale && productData.preOrderDescription && (
-              <AccordianDescription>
+            {isReturnable &&
+              getAccordionDetails(
+                (selectedSku && selectedSku.shippingReturnInfoForSku) ||
+                  shippingReturnInfo
+              )}
+            {!isReturnable && getAccordionDetails(shippingReturnInfo)}
+            {isPresale && preOrderDescription && (
+              <AccordionDescription>
                 <DetailsDescription>
                   <OtherDetails>
                     <b>Pre-order</b>
                     <div
                       className={'content'}
                       dangerouslySetInnerHTML={{
-                        __html: productData.preOrderDescription,
+                        __html: preOrderDescription,
                       }}
                     ></div>
                   </OtherDetails>
                 </DetailsDescription>
-              </AccordianDescription>
+              </AccordionDescription>
             )}
           </AccordionContent>
-        </AccordianWrapper>
+        </AccordionWrapper>
       )}
-      {productData.showBrandDetails && productData.brandDescription && (
-        <AccordianWrapper>
-          <AccordionTitle
-            onClick={() => {
-              toggle('about');
-            }}
-          >
-            <span>About {productData.brandName}</span>
-            <AccordionIcon
-              active={toggleAccordions.item ? true : false}
-              icon={IconAngleDown}
-            />
-          </AccordionTitle>
+      {showBrandInfo && (
+        <AccordionWrapper>
+          {getAccordionTitle('about', `About ${brandName}`)}
           <AccordionContent className={toggleAccordions.about ? ACTIVE : ''}>
-            <AccordianDescription>
-              <DetailsDescription
-                dangerouslySetInnerHTML={{
-                  __html: productData.brandDescription,
-                }}
-              ></DetailsDescription>
-            </AccordianDescription>
+            {getAccordionDetails(brandDescription)}
           </AccordionContent>
-        </AccordianWrapper>
+        </AccordionWrapper>
       )}
-      {!(productData.showBrandDetails || productData.brandDescription) && (
-        <AccordianWrapper>
-          <AccordionTitle>By brand {productData.brandName}</AccordionTitle>
-        </AccordianWrapper>
+      {!(showBrandDetails || brandDescription) && (
+        <AccordionWrapper>
+          <AccordionTitle>By brand {brandName}</AccordionTitle>
+        </AccordionWrapper>
       )}
-      {productData.moreInfo && (
-        <AccordianWrapper>
-          <AccordionTitle
-            onClick={() => {
-              toggle('more');
-            }}
-          >
-            <span>More Info</span>
-            <AccordionIcon
-              active={toggleAccordions.item ? true : false}
-              icon={IconAngleDown}
-            />
-          </AccordionTitle>
-          {productData.moreInfo && (
+      {moreInfo && (
+        <AccordionWrapper>
+          {getAccordionTitle('more', 'More Info')}
+          {moreInfo && (
             <AccordionContent className={toggleAccordions.more ? ACTIVE : ''}>
-              <AccordianDescription>
-                <DetailsDescription
-                  dangerouslySetInnerHTML={{
-                    __html: productData.moreInfo,
-                  }}
-                ></DetailsDescription>
-              </AccordianDescription>
+              {getAccordionDetails(moreInfo)}
             </AccordionContent>
           )}
-        </AccordianWrapper>
+        </AccordionWrapper>
       )}
     </>
   );

@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import {
-  Accordian,
+  Accordion,
   NavBar,
   ProductNamePrice,
   DeliveryDetails,
@@ -25,6 +25,7 @@ const SizeChartPopupComponent = dynamic(() => import('../../components/size-char
   ssr: false,
 });
 import {
+  useProduct,
   useRecommendation,
   IRecommendedProducts,
   useDeliveryDetails,
@@ -115,6 +116,8 @@ const Product: NextPage = (props) => {
       enabled: productId !== undefined,
     },
   );
+
+  const { ...product } = useProduct({ productData: productInfo });
 
   const { canShow: showSimilarProducts, ...similarProducts } = useRecommendation({
     section: 'RFYP',
@@ -364,7 +367,7 @@ const Product: NextPage = (props) => {
               )}
               <DeliveryDetails {...deliveryDetailsData}></DeliveryDetails>
               {productInfo.id && (
-                <Accordian {...{ productData: productInfo, skuAttributes, sku: selectedSku }}></Accordian>
+                <Accordion {...{ productData: productInfo, skuAttributes, selectedSku, ...product }}></Accordion>
               )}
 
               {showRFYP && (

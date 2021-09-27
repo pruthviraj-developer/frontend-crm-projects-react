@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { typography, Colors, secondaryColor, primaryColor } from '@hs/utils';
 import { SvgIcon } from '@hs/icons';
 
-const AccordianWrapper = styled.div`
+const AccordionWrapper = styled.div`
   margin: auto;
 `;
 
@@ -36,7 +36,7 @@ const AccordionContent = styled.div`
   }
 `;
 
-const AccordianDescription = styled.div``;
+const AccordionDescription = styled.div``;
 
 const DetailsDescription = styled.div<{ margin?: boolean }>`
   margin-top: ${(props) => (props.margin ? typography.size.s3 : 0)}px;
@@ -50,14 +50,6 @@ const DetailsDescription = styled.div<{ margin?: boolean }>`
   }
 `;
 
-const DescriptionList = styled.ul`
-  margin: 0 0 10px 0;
-  padding: 0 0 0 24px;
-`;
-
-const DescriptionListItem = styled.li`
-  list-style-type: disc;
-`;
 const OtherDetails = styled.div`
   margin-top: ${typography.size.s3}px;
   &.content {
@@ -83,18 +75,15 @@ const DetailsDescriptionTitle = styled.div`
   font-size: 14px;
   line-height: 20px;
   font-weight: 400;
-  margin-top: 16px;
 `;
 
 export {
-  AccordianWrapper,
+  AccordionWrapper,
   AccordionTitle,
   AccordionIcon,
   AccordionContent,
-  AccordianDescription,
+  AccordionDescription,
   DetailsDescription,
-  DescriptionList,
-  DescriptionListItem,
   OtherDetails,
   FeatureAttributesList,
   FeatureAttributesListItem,
