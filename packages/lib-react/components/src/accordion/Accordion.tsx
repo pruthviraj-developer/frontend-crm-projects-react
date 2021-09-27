@@ -1,5 +1,8 @@
 import React, { FC, useState } from 'react';
-import { IAccordionProps } from './IAccordion';
+import {
+  IAccordionProps,
+  AccordionProductSubAttrListEntityProps,
+} from './IAccordion';
 import { IconAngleDown } from '@hs/icons';
 import {
   AccordionWrapper,
@@ -28,6 +31,7 @@ export const Accordion: FC<IAccordionProps> = ({
   productLevelAttrList = [],
   shippingReturnInfo,
   showShippingInfo,
+  showBrandInfo,
   simpleSkus = [],
   isReturnable,
 }: IAccordionProps) => {
@@ -37,6 +41,7 @@ export const Accordion: FC<IAccordionProps> = ({
     about: false,
     more: false,
   });
+
   const toggle = (name: string) => {
     setToggleAccordions({
       ...toggleAccordions,
@@ -81,6 +86,28 @@ export const Accordion: FC<IAccordionProps> = ({
     );
   };
 
+  const getFeatureAttributesList = (
+    productSubAttrList: AccordionProductSubAttrListEntityProps[] = []
+  ) => {
+    return productSubAttrList.length ? (
+      <FeatureAttributesList>
+        {productSubAttrList.map((featureAttr, subIndex) => {
+          return (
+            featureAttr.attributeValue && (
+              <FeatureAttributesListItem key={subIndex}>
+                {(featureAttr.isShowAttrName
+                  ? `${featureAttr.subAttributeName} : `
+                  : '') + featureAttr.attributeValue}
+              </FeatureAttributesListItem>
+            )
+          );
+        })}
+      </FeatureAttributesList>
+    ) : (
+      ''
+    );
+  };
+
   return (
     <>
       <AccordionWrapper>
@@ -97,10 +124,7 @@ export const Accordion: FC<IAccordionProps> = ({
                 'Suitable for',
                 simpleSkus[0] && simpleSkus[0].gender
               )}
-              {getOtherDetails(
-                'Colour',
-                simpleSkus[0] && skuAttributes[0].colour
-              )}
+              {getOtherDetails('Colour', skuAttributes[0].colour)}
             </DetailsDescription>
             {productLevelAttrList.length &&
               productLevelAttrList.map((subAttr, index: number) => {
@@ -113,23 +137,9 @@ export const Accordion: FC<IAccordionProps> = ({
                           {subAttr.attributeValue}
                         </DetailsDescriptionTitle>
                       )}
-                      <FeatureAttributesList>
-                        {subAttr.productSubAttrList &&
-                          subAttr.productSubAttrList.length &&
-                          subAttr.productSubAttrList.map(
-                            (featureAttr, subIndex) => {
-                              return (
-                                featureAttr.attributeValue && (
-                                  <FeatureAttributesListItem key={subIndex}>
-                                    {(featureAttr.isShowAttrName
-                                      ? `${featureAttr.subAttributeName} : `
-                                      : '') + featureAttr.attributeValue}
-                                  </FeatureAttributesListItem>
-                                )
-                              );
-                            }
-                          )}
-                      </FeatureAttributesList>
+                      {getFeatureAttributesList(
+                        (subAttr && subAttr.productSubAttrList) || []
+                      )}
                     </DetailsDescription>
                   )
                 );
@@ -165,7 +175,7 @@ export const Accordion: FC<IAccordionProps> = ({
           </AccordionContent>
         </AccordionWrapper>
       )}
-      {showBrandDetails && brandDescription && (
+      {showBrandInfo && (
         <AccordionWrapper>
           {getAccordionTitle('about', `About ${brandName}`)}
           <AccordionContent className={toggleAccordions.about ? ACTIVE : ''}>

@@ -1,7 +1,7 @@
 import { ProductProps } from './IUseProduct';
 
 export const useProduct = ({ productData }: ProductProps) => {
-  let {
+  const {
     productDesc,
     showShippingInfo,
     shippingReturnInfo,
@@ -25,6 +25,7 @@ export const useProduct = ({ productData }: ProductProps) => {
     preOrderDescription,
     productLevelAttrList,
     showBrandDetails,
+    showBrandInfo: showBrandDetails && brandDescription,
     brandDescription,
     brandName,
     moreInfo,

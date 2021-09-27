@@ -3,6 +3,7 @@ export interface IAccordionProps {
   productName: string;
   productDesc: string;
   showShippingInfo: boolean;
+  showBrandInfo: boolean;
   isReturnable: number;
   isPresale: number;
   preOrderDescription: string;
