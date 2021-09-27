@@ -1,4 +1,4 @@
-export interface IAccordianProps {
+export interface IAccordionProps {
   skuAttributes?: ISkuAttributes[];
   productName: string;
   productDesc: string;
