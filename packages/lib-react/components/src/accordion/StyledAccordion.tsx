@@ -50,14 +50,6 @@ const DetailsDescription = styled.div<{ margin?: boolean }>`
   }
 `;
 
-const DescriptionList = styled.ul`
-  margin: 0 0 10px 0;
-  padding: 0 0 0 24px;
-`;
-
-const DescriptionListItem = styled.li`
-  list-style-type: disc;
-`;
 const OtherDetails = styled.div`
   margin-top: ${typography.size.s3}px;
   &.content {
@@ -93,8 +85,6 @@ export {
   AccordionContent,
   AccordianDescription,
   DetailsDescription,
-  DescriptionList,
-  DescriptionListItem,
   OtherDetails,
   FeatureAttributesList,
   FeatureAttributesListItem,

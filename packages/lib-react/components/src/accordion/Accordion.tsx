@@ -7,8 +7,6 @@ import {
   AccordionContent,
   AccordianDescription,
   DetailsDescription,
-  // DescriptionList,
-  // DescriptionListItem,
   OtherDetails,
   FeatureAttributesList,
   FeatureAttributesListItem,
@@ -17,11 +15,21 @@ import {
 } from './StyledAccordion';
 
 const ACTIVE = 'active';
-// eslint-disable-next-line no-empty-pattern
 export const Accordian: FC<IAccordianProps> = ({
-  productData,
   skuAttributes = [],
-  sku,
+  selectedSku,
+  productDesc,
+  moreInfo,
+  showBrandDetails,
+  brandDescription,
+  brandName,
+  isPresale,
+  preOrderDescription,
+  productLevelAttrList = [],
+  shippingReturnInfo,
+  showShippingInfo,
+  simpleSkus = [],
+  isReturnable,
 }: IAccordianProps) => {
   const [toggleAccordions, setToggleAccordions] = useState({
     item: false,
@@ -49,33 +57,29 @@ export const Accordian: FC<IAccordianProps> = ({
             icon={IconAngleDown}
           />
         </AccordionTitle>
-        <AccordionContent
-          className={toggleAccordions.item ? `${ACTIVE} Pruthvi` : ''}
-        >
+        <AccordionContent className={toggleAccordions.item ? `${ACTIVE}` : ''}>
           <AccordianDescription>
-            {productData.productDesc && (
+            {productDesc && (
               <DetailsDescription
-                dangerouslySetInnerHTML={{ __html: productData.productDesc }}
+                dangerouslySetInnerHTML={{ __html: productDesc }}
               ></DetailsDescription>
             )}
             <DetailsDescription>
               <OtherDetails>
                 <b>Suitable for</b>
                 <div className={'content'}>
-                  {productData.simpleSkus[0] &&
-                    productData.simpleSkus[0].gender}
+                  {simpleSkus[0] && simpleSkus[0].gender}
                 </div>
               </OtherDetails>
               <OtherDetails>
                 <b>Colour</b>
                 <div className={'content'}>
-                  {productData.simpleSkus[0] && skuAttributes[0].colour}
+                  {simpleSkus[0] && skuAttributes[0].colour}
                 </div>
               </OtherDetails>
             </DetailsDescription>
-            {productData.productLevelAttrList &&
-              productData.productLevelAttrList.length &&
-              productData.productLevelAttrList.map((subAttr, index: number) => {
+            {productLevelAttrList.length &&
+              productLevelAttrList.map((subAttr, index: number) => {
                 return (
                   subAttr.isShowAttr && (
                     <DetailsDescription margin={true} key={index}>
@@ -109,7 +113,7 @@ export const Accordian: FC<IAccordianProps> = ({
           </AccordianDescription>
         </AccordionContent>
       </AccordianWrapper>
-      {productData.showShippingInfo && (
+      {showShippingInfo && (
         <AccordianWrapper>
           <AccordionTitle
             onClick={() => {
@@ -123,27 +127,27 @@ export const Accordian: FC<IAccordianProps> = ({
             />
           </AccordionTitle>
           <AccordionContent className={toggleAccordions.shipping ? ACTIVE : ''}>
-            {productData.isReturnable && (
+            {isReturnable && (
               <AccordianDescription>
                 <DetailsDescription
                   dangerouslySetInnerHTML={{
                     __html:
-                      (sku && sku.shippingReturnInfoForSku) ||
-                      productData.shippingReturnInfo,
+                      (selectedSku && selectedSku.shippingReturnInfoForSku) ||
+                      shippingReturnInfo,
                   }}
                 ></DetailsDescription>
               </AccordianDescription>
             )}
-            {!productData.isReturnable && (
+            {!isReturnable && (
               <AccordianDescription>
                 <DetailsDescription
                   dangerouslySetInnerHTML={{
-                    __html: productData.shippingReturnInfo,
+                    __html: shippingReturnInfo,
                   }}
                 ></DetailsDescription>
               </AccordianDescription>
             )}
-            {productData.isPresale && productData.preOrderDescription && (
+            {isPresale && preOrderDescription && (
               <AccordianDescription>
                 <DetailsDescription>
                   <OtherDetails>
@@ -151,7 +155,7 @@ export const Accordian: FC<IAccordianProps> = ({
                     <div
                       className={'content'}
                       dangerouslySetInnerHTML={{
-                        __html: productData.preOrderDescription,
+                        __html: preOrderDescription,
                       }}
                     ></div>
                   </OtherDetails>
@@ -161,14 +165,14 @@ export const Accordian: FC<IAccordianProps> = ({
           </AccordionContent>
         </AccordianWrapper>
       )}
-      {productData.showBrandDetails && productData.brandDescription && (
+      {showBrandDetails && brandDescription && (
         <AccordianWrapper>
           <AccordionTitle
             onClick={() => {
               toggle('about');
             }}
           >
-            <span>About {productData.brandName}</span>
+            <span>About {brandName}</span>
             <AccordionIcon
               active={toggleAccordions.item ? true : false}
               icon={IconAngleDown}
@@ -178,19 +182,19 @@ export const Accordian: FC<IAccordianProps> = ({
             <AccordianDescription>
               <DetailsDescription
                 dangerouslySetInnerHTML={{
-                  __html: productData.brandDescription,
+                  __html: brandDescription,
                 }}
               ></DetailsDescription>
             </AccordianDescription>
           </AccordionContent>
         </AccordianWrapper>
       )}
-      {!(productData.showBrandDetails || productData.brandDescription) && (
+      {!(showBrandDetails || brandDescription) && (
         <AccordianWrapper>
-          <AccordionTitle>By brand {productData.brandName}</AccordionTitle>
+          <AccordionTitle>By brand {brandName}</AccordionTitle>
         </AccordianWrapper>
       )}
-      {productData.moreInfo && (
+      {moreInfo && (
         <AccordianWrapper>
           <AccordionTitle
             onClick={() => {
@@ -203,12 +207,12 @@ export const Accordian: FC<IAccordianProps> = ({
               icon={IconAngleDown}
             />
           </AccordionTitle>
-          {productData.moreInfo && (
+          {moreInfo && (
             <AccordionContent className={toggleAccordions.more ? ACTIVE : ''}>
               <AccordianDescription>
                 <DetailsDescription
                   dangerouslySetInnerHTML={{
-                    __html: productData.moreInfo,
+                    __html: moreInfo,
                   }}
                 ></DetailsDescription>
               </AccordianDescription>

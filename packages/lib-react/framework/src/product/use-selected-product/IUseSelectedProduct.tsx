@@ -31,6 +31,7 @@ export interface ISelectedSimpleSkusEntityProps {
   isInternationalPreorder: boolean;
   preorderAction: string;
   preorderInfo: string;
+  shippingReturnInfoForSku: string;
   merchType: string;
   deliveryMessage: ISelectedDeliveryMessageOrDeliveryMessagesEntity;
 }
@@ -70,7 +71,7 @@ export interface ISelectedProductDetails {
   canWishList: number;
   restTime: number;
   preOrderDescription: string;
-  productLevelAttrList?: ISelectedProductLevelAttrListEntity[] | null;
+  productLevelAttrList?: ISelectedProductLevelAttrListEntity[];
   categoryId: number;
   subCategoryId: number;
   productTypeId: number;

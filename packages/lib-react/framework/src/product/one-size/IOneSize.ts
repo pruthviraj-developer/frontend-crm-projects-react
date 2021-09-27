@@ -25,7 +25,7 @@ export interface IOneSizeProductDetails {
   canWishList: number;
   restTime: number;
   preOrderDescription: string;
-  productLevelAttrList?: IOneProductLevelAttrListEntity[] | null;
+  productLevelAttrList?: IOneProductLevelAttrListEntity[];
   categoryId: number;
   subCategoryId: number;
   productTypeId: number;
