@@ -65,20 +65,26 @@ export const Accordion: FC<IAccordionProps> = ({
     );
   };
 
+  const getAccordionTitle = (toggleElement: string, title: string) => {
+    return (
+      <AccordionTitle
+        onClick={() => {
+          toggle(toggleElement);
+        }}
+      >
+        <span>{title}</span>
+        <AccordionIcon
+          active={toggleAccordions[toggleElement] ? true : false}
+          icon={IconAngleDown}
+        />
+      </AccordionTitle>
+    );
+  };
+
   return (
     <>
       <AccordionWrapper>
-        <AccordionTitle
-          onClick={() => {
-            toggle('item');
-          }}
-        >
-          <span>Item details</span>
-          <AccordionIcon
-            active={toggleAccordions.item ? true : false}
-            icon={IconAngleDown}
-          />
-        </AccordionTitle>
+        {getAccordionTitle('item', 'Item details')}
         <AccordionContent className={toggleAccordions.item ? `${ACTIVE}` : ''}>
           <AccordionDescription>
             {productDesc && (
@@ -133,17 +139,7 @@ export const Accordion: FC<IAccordionProps> = ({
       </AccordionWrapper>
       {showShippingInfo && (
         <AccordionWrapper>
-          <AccordionTitle
-            onClick={() => {
-              toggle('shipping');
-            }}
-          >
-            <span>Shipping and returns</span>
-            <AccordionIcon
-              active={toggleAccordions.item ? true : false}
-              icon={IconAngleDown}
-            />
-          </AccordionTitle>
+          {getAccordionTitle('shipping', 'Shipping and returns')}
           <AccordionContent className={toggleAccordions.shipping ? ACTIVE : ''}>
             {isReturnable &&
               getAccordionDetails(
@@ -171,17 +167,7 @@ export const Accordion: FC<IAccordionProps> = ({
       )}
       {showBrandDetails && brandDescription && (
         <AccordionWrapper>
-          <AccordionTitle
-            onClick={() => {
-              toggle('about');
-            }}
-          >
-            <span>About {brandName}</span>
-            <AccordionIcon
-              active={toggleAccordions.item ? true : false}
-              icon={IconAngleDown}
-            />
-          </AccordionTitle>
+          {getAccordionTitle('about', `About ${brandName}`)}
           <AccordionContent className={toggleAccordions.about ? ACTIVE : ''}>
             {getAccordionDetails(brandDescription)}
           </AccordionContent>
@@ -194,17 +180,7 @@ export const Accordion: FC<IAccordionProps> = ({
       )}
       {moreInfo && (
         <AccordionWrapper>
-          <AccordionTitle
-            onClick={() => {
-              toggle('more');
-            }}
-          >
-            <span>More Info</span>
-            <AccordionIcon
-              active={toggleAccordions.item ? true : false}
-              icon={IconAngleDown}
-            />
-          </AccordionTitle>
+          {getAccordionTitle('more', 'More Info')}
           {moreInfo && (
             <AccordionContent className={toggleAccordions.more ? ACTIVE : ''}>
               {getAccordionDetails(moreInfo)}

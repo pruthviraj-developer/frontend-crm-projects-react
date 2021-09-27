@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import {
-  Accordian,
+  Accordion,
   NavBar,
   ProductNamePrice,
   DeliveryDetails,
@@ -367,7 +367,7 @@ const Product: NextPage = (props) => {
               )}
               <DeliveryDetails {...deliveryDetailsData}></DeliveryDetails>
               {productInfo.id && (
-                <Accordian {...{ productData: productInfo, skuAttributes, selectedSku, ...product }}></Accordian>
+                <Accordion {...{ productData: productInfo, skuAttributes, selectedSku, ...product }}></Accordion>
               )}
 
               {showRFYP && (
