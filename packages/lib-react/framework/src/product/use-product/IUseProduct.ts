@@ -22,6 +22,7 @@ export interface IProductDetailsProps {
   hasSizeChart: boolean;
   quantity: number;
   shippingReturnInfo: string;
+  shippingReturnInfoForSku: string;
   brandDescription: string;
   canWishList: number;
   restTime: number;

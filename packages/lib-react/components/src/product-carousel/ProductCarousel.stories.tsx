@@ -10,12 +10,16 @@ export default {
 const Template: Story<IProductCarouselProps> = (args) => (
   <ProductCarousel {...args} />
 );
-export const CarouselComponent = Template.bind({});
+export const Carousel = Template.bind({});
 
-CarouselComponent.args = {
+Carousel.args = {
   showArrows: false,
-  dynamicHeight: false,
-  showThumbs: false,
-  showStatus: false,
   autoPlay: true,
+  draggable: false,
+  focusOnSelect: false,
+  renderButtonGroupOutside: false,
+  renderDotsOutside: false,
+  slidesToSlide: 1,
+  swipeable: false,
+  showDots: false,
 };

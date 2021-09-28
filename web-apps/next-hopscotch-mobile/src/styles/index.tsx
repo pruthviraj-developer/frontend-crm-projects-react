@@ -1,5 +1,5 @@
 import { css, Global } from '@emotion/react';
-import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import 'react-multi-carousel/lib/styles.css';
 export const globalStyles = (
   <Global
     styles={css`

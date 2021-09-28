@@ -1,5 +1,5 @@
 export interface IAccordionProps {
-  skuAttributes?: ISkuAttributes[];
+  skuAttributes?: IAccordionSkuAttributes[];
   productName: string;
   productDesc: string;
   showShippingInfo: boolean;
@@ -51,7 +51,7 @@ export interface ISelectedSimpleSkusEntityProps {
   deliveryMessage: AccordionDeliveryMessageOrDeliveryMessagesEntityProps;
 }
 
-export interface ISkuAttributes {
+export interface IAccordionSkuAttributes {
   closure?: string;
   gender?: string;
   colour?: string;

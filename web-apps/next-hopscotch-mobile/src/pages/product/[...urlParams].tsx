@@ -6,6 +6,7 @@ import {
   Accordion,
   NavBar,
   ProductNamePrice,
+  ProductCarousel,
   DeliveryDetails,
   CustomSizePicker,
   SizeAndChartLabels,
@@ -325,6 +326,19 @@ const Product: NextPage = (props) => {
               <link rel="icon" href="/favicon.ico" />
             </Head>
             <NavBar count={productInfo && productInfo.quantity}></NavBar>
+            <ProductCarousel
+              {...{
+                showArrows: false,
+                autoPlay: true,
+                draggable: false,
+                focusOnSelect: false,
+                renderButtonGroupOutside: false,
+                renderDotsOutside: false,
+                slidesToSlide: 1,
+                swipeable: false,
+                showDots: true,
+              }}
+            ></ProductCarousel>
             <ProductDetailsWrapper>
               <ProductNamePrice
                 {...{
@@ -367,7 +381,9 @@ const Product: NextPage = (props) => {
               )}
               <DeliveryDetails {...deliveryDetailsData}></DeliveryDetails>
               {productInfo.id && (
-                <Accordion {...{ productData: productInfo, skuAttributes, selectedSku, ...product }}></Accordion>
+                <Accordion
+                  {...{ productData: productInfo, productName, skuAttributes, selectedSku, ...product }}
+                ></Accordion>
               )}
 
               {showRFYP && (

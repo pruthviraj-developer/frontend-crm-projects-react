@@ -124,7 +124,10 @@ export const Accordion: FC<IAccordionProps> = ({
                 'Suitable for',
                 simpleSkus[0] && simpleSkus[0].gender
               )}
-              {getOtherDetails('Colour', skuAttributes[0].colour)}
+              {getOtherDetails(
+                'Colour',
+                skuAttributes[0] && skuAttributes[0].colour
+              )}
             </DetailsDescription>
             {productLevelAttrList.length &&
               productLevelAttrList.map((subAttr, index: number) => {
