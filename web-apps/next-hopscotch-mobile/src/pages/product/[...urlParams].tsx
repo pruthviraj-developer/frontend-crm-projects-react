@@ -6,7 +6,6 @@ import {
   Accordion,
   NavBar,
   ProductNamePrice,
-  ProductCarousel,
   DeliveryDetails,
   CustomSizePicker,
   SizeAndChartLabels,
@@ -14,6 +13,8 @@ import {
   Footer,
   RecommendedProductsLinks,
 } from '@hs/components';
+
+import { ProductCarousel } from './../../components/product-carousel';
 import { IProductProps, IProductDetails, ISimpleSkusEntityProps, urlParamsProps, IWishListProps } from '@/types';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
 import { cookiesService, productDetailsService } from '@hs/services';
@@ -382,9 +383,7 @@ const Product: NextPage = (props) => {
               )}
               <DeliveryDetails {...deliveryDetailsData}></DeliveryDetails>
               {productInfo.id && (
-                <Accordion
-                  {...{ productData: productInfo, productName, skuAttributes, selectedSku, ...product }}
-                ></Accordion>
+                <Accordion {...{ productData: productInfo, skuAttributes, selectedSku, ...product }}></Accordion>
               )}
 
               {showRFYP && (

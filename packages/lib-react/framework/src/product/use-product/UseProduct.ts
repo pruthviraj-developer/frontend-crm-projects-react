@@ -27,7 +27,7 @@ export const useProduct = ({ productData }: ProductProps) => {
     preOrderDescription,
     productLevelAttrList,
     showBrandDetails,
-    showBrandInfo: showBrandDetails && brandDescription,
+    showBrandInfo: showBrandDetails && brandDescription ? true : false,
     brandDescription,
     brandName,
     moreInfo,

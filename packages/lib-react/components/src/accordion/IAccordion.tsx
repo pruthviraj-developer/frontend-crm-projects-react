@@ -1,6 +1,5 @@
 export interface IAccordionProps {
   skuAttributes?: IAccordionSkuAttributes[];
-  productName: string;
   productDesc: string;
   showShippingInfo: boolean;
   showBrandInfo: boolean;
