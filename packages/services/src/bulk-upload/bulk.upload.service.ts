@@ -10,7 +10,7 @@ const downloadTemplate = (
   params: templateDownloadParam,
   delay = 1
 ): Promise<templateDownloadRes> => {
-  const url = '/crm-api/intranet/bulk-uploader-service/get';
+  const url = '/crm-api/intranet/msku-service/get';
   return httpService
     .get<templateDownloadRes>({ url, params })
     .then(async (response) => {
@@ -30,7 +30,7 @@ const bulkUpload = ({
   if (file) {
     data.append('file', file);
   }
-  const url = '/crm-api/intranet/bulk-uploader-service/multipart';
+  const url = '/crm-api/intranet/msku-service/multipart';
   return httpService.fileUpload<bulkUploadRes>({ url, data, params });
 };
 

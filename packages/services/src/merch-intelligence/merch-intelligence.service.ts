@@ -1,18 +1,17 @@
 import { httpService } from '../http';
 
 const getTableData = <P, R>(params: P): Promise<R> => {
-  const url = '/crm-api/intranet/bulk-uploader-service/get';
+  const url = '/crm-api/intranet/msku-service/get';
   return httpService.get<R>({ url, params });
 };
 
 const getMskus = <P, R>(data: P): Promise<R> => {
-  const url =
-    '/crm-api/intranet/bulk-uploader-service/post?action=merchPlatformSetup';
+  const url = '/crm-api/intranet/msku-service/post?action=merchPlatformSetup';
   return httpService.post<R>({ url, data });
 };
 
 const getProgressData = <P, R>(params: P): Promise<R> => {
-  const url = '/crm-api/intranet/bulk-uploader-service/get';
+  const url = '/crm-api/intranet/msku-service/get';
   return httpService.get({
     url,
     params: { action: 'saleAssortmentInfo', ...params },
@@ -20,7 +19,7 @@ const getProgressData = <P, R>(params: P): Promise<R> => {
 };
 
 const getChartsData = <P, R>(params: P): Promise<R> => {
-  const url = `/crm-api/intranet/bulk-uploader-service/get`;
+  const url = `/crm-api/intranet/msku-service/get`;
   return httpService.get({
     url,
     params: { action: 'merchPlatformAttributeBifurcation', ...params },
@@ -29,12 +28,12 @@ const getChartsData = <P, R>(params: P): Promise<R> => {
 
 const postDashboardData = <P, R>(data: P): Promise<R> => {
   const url =
-    '/crm-api/intranet/bulk-uploader-service/post?action=changeStatusKeepOrCull';
+    '/crm-api/intranet/msku-service/post?action=changeStatusKeepOrCull';
   return httpService.post<R>({ url, data });
 };
 
 const getCarouselData = <P, R>(params: P): Promise<R> => {
-  const url = '/crm-api/intranet/bulk-uploader-service/get';
+  const url = '/crm-api/intranet/msku-service/get';
   return httpService.get({
     url,
     params: { action: 'merchPlatformDashboard', ...params },

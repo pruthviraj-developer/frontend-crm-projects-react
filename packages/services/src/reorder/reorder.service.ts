@@ -12,7 +12,7 @@ const createConstraint = (
   data: ICreateClusterType
 ): Promise<IReorderCreateConstraint> => {
   const url = queryString.stringifyUrl({
-    url: '/crm-api/assortment-plan-api/reorder-take-action/vendor-constraint-service/age-color-constraint',
+    url: '/crm-api/inventory-mgmt-service/assortment-plan-api/protected/vendor-constraint-service/age-color-constraint',
     query: { ...params },
   });
   return httpService.post<IReorderCreateConstraint>({ url, data });
@@ -20,38 +20,42 @@ const createConstraint = (
 
 const getConstraint = <P, R>(params: P): Promise<R> => {
   const url =
-    '/crm-api/assortment-plan-api/reorder-take-action/vendor-constraint-service/age-color-constraint';
+    '/crm-api/inventory-mgmt-service/assortment-plan-api/protected/vendor-constraint-service/age-color-constraint';
   return httpService.get<R>({ url, params });
 };
 
 const getColors = <R>(): Promise<R> => {
   const url =
-    '/crm-api/assortment-plan-api/util/vendor-constraint-service/color';
+    '/crm-api/inventory-mgmt-service/assortment-plan-api/util/vendor-constraint-service/color';
   return httpService.get<R>({ url });
 };
 
 const getFilters = <R>(): Promise<R> => {
-  const url = '/crm-api/assortment-plan-api/util/v2/filters';
+  const url =
+    '/crm-api/inventory-mgmt-service/assortment-plan-api/util/v2/filters';
   return httpService.get<R>({ url });
 };
 
 const getSubCategories = <P, R>(data: P): Promise<R> => {
-  const url = '/crm-api/assortment-plan-api/sub_cats';
+  const url = '/crm-api/inventory-mgmt-service/assortment-plan-api/sub_cats';
   return httpService.post<R>({ url, data });
 };
 
 const getProductTypes = <P, R>(data: P): Promise<R> => {
-  const url = '/crm-api/assortment-plan-api/prodcuct_types';
+  const url =
+    '/crm-api/inventory-mgmt-service/assortment-plan-api/prodcuct_types';
   return httpService.post<R>({ url, data });
 };
 
 const getTableData = <P, R>(data: P): Promise<R> => {
-  const url = '/crm-api/assortment-plan-api/reorder-dashboard';
+  const url =
+    '/crm-api/inventory-mgmt-service/assortment-plan-api/reorder-dashboard';
   return httpService.post<R>({ url, data });
 };
 
 const updateOrders = <P, R>(data: P): Promise<R> => {
-  const url = '/crm-api/assortment-plan-api/reorder-take-action';
+  const url =
+    '/crm-api/inventory-mgmt-service/assortment-plan-api/protected/reorder-take-action';
   return httpService.post<R>({ url, data });
 };
 
@@ -61,13 +65,14 @@ const getBrands = <P, R>(params: P): Promise<R> => {
 };
 
 const getDashboardData = <P, R>(params?: P): Promise<R> => {
-  const url = '/crm-api/assortment-plan-api/util/dashboard';
+  const url =
+    '/crm-api/inventory-mgmt-service/assortment-plan-api/util/dashboard';
   return httpService.get<R>({ url, params });
 };
 
 const updateDashboardAction = <P, R>(data: P): Promise<R> => {
   const url =
-    '/crm-api/assortment-plan-api/reorder-take-action/vendor-constraint-service/age-color-constraint';
+    '/crm-api/inventory-mgmt-service/assortment-plan-api/protected/vendor-constraint-service/age-color-constraint';
   return httpService.patch({ url, params: { ...data } });
 };
 

@@ -1,19 +1,21 @@
 import { httpService } from '../http';
 
 const getCategory = <R>(): Promise<R> => {
-  const url = '/crm-api/assortment-plan-api/util/category';
+  const url =
+    '/crm-api/inventory-mgmt-service/assortment-plan-api/util/category';
   return httpService.get<R>({ url });
 };
 
 const getSubCategory = <P, R>(categoryId: P): Promise<R> => {
-  const url = '/crm-api/assortment-plan-api/util/sub-category';
+  const url =
+    '/crm-api/inventory-mgmt-service/assortment-plan-api/util/sub-category';
   const params = { 'category-id': categoryId };
   return httpService.get<R>({ url, params });
 };
 
 const getProductType = <P, R>(subcategoryId: P): Promise<R> => {
   const url =
-    '/crm-api/assortment-plan-api/util/product-type?sub-category-ids=[' +
+    '/crm-api/inventory-mgmt-service/assortment-plan-api/util/product-type?sub-category-ids=[' +
     subcategoryId +
     ']';
   return httpService.get<R>({ url });

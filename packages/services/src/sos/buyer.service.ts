@@ -13,7 +13,7 @@ const getVendorDetails = <P, R>(params: P): Promise<R> => {
 };
 
 const getTableData = <P, R>(params: P): Promise<R> => {
-  const url = '/crm-api/intranet/bulk-uploader-service/get';
+  const url = '/crm-api/intranet/msku-service/get';
   return httpService.get<R>({ url, params });
 };
 
@@ -27,7 +27,7 @@ const postData = <P, R>(
   data: P
 ): Promise<R> => {
   const url = queryString.stringifyUrl({
-    url: '/crm-api/intranet/bulk-uploader-service/post',
+    url: '/crm-api/intranet/msku-service/post',
     query: { ...params },
   });
   return httpService.post<R>({ url, data });
