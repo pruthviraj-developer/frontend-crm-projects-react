@@ -1,34 +1,34 @@
 import {
-  IProperties,
   IUseSegmentProps,
-  ContextData,
-  ITraits,
+  IContextData,
+  ISegmentProperties,
+  IUtmParam,
 } from './IUseSegment';
 import Parser from 'ua-parser-js';
 import { useEffect, useState } from 'react';
-export const useSegment = ({
-  properties: initialProperties,
-  traits: initialTraits,
-}: IUseSegmentProps) => {
+import { COOKIE_DATA } from '../storage';
+import { cookiesService } from '@hs/services';
+
+const getSessionInfo = (sessionInfostr: string) => {
+  const infoArr = sessionInfostr.split(',');
+  const sessionInfo = new Map<string, string>();
+  for (let i = 0; i < infoArr.length; i++) {
+    const arr = infoArr[i].split('=');
+    sessionInfo.set(arr[0], arr[1]);
+  }
+  return sessionInfo;
+};
+
+export const useSegment = () => {
   const [deviceDetail, setDeviceDetail] = useState<Parser.IResult>();
-  const [contextData, setContextData] = useState<ContextData>();
-  const [traits, setTraits] = useState<ITraits>(() => initialTraits || {});
-  const [properties, setProperties] = useState<IProperties>(() => ({
-    funnel: '',
-    funnel_tile: '',
-    funnel_section: '',
-    source: '',
-    section: null,
-    subsection: '',
-    plp: '',
-    sortbar_group: '',
-    preorder: null,
-    character: 'Not applicable',
-    sort_by: 'User',
-    universal: 'None',
-    _session_start_time: '',
-    ...initialProperties,
-  }));
+  const [contextData, setContextData] = useState<IContextData>();
+  const [properties, setProperties] = useState<ISegmentProperties>();
+
+  const getFormattedExperiments = () => {
+    const experiments =
+      cookiesService.getCookies(COOKIE_DATA.EXPERIMENTS) || 'none';
+    return experiments.replace(/['"]+/g, '');
+  };
 
   const getWeek = (date: Date) => {
     const onejan = new Date(date.getFullYear(), 0, 1);
@@ -40,67 +40,88 @@ export const useSegment = ({
 
   useEffect(() => {
     setDeviceDetail({ ...new Parser().getResult() });
-    const currentTime = new Date();
-    const currentOffset = currentTime.getTimezoneOffset();
-    const ISTOffset = 330; // IST offset UTC +5:30
-    const d = new Date(
-      currentTime.getTime() + (ISTOffset + currentOffset) * 60000
-    );
-    setProperties((prevState) => {
-      return {
-        ...prevState,
-        '[time] hour_of_day': d.getHours(),
-        '[time] day_of_week': (d.getDay() + 1) % 7,
-        '[time] day_of_month': d.getDate(),
-        '[time] month_of_year': d.getMonth() + 1,
-        '[time] week_of_year': getWeek(d),
-      };
-    });
   }, []);
 
   useEffect(() => {
-    setContextData({
-      device: {
-        model: deviceDetail?.device.model || deviceDetail?.os.name,
-        manufacturer: deviceDetail?.device.vendor,
-        id: 'VISITOR_ID',
-      },
-      os: {
-        name: deviceDetail?.browser.name,
-        version: deviceDetail?.browser.version,
-      },
-      hs_site: deviceDetail?.device.type === 'mobile' ? 'Mobile' : 'Web',
-    });
-  }, []);
-
-  useEffect(() => {
-    setTraits({
-      user_type: 'string',
-      hs_device_id: 'string',
-      hs_site: deviceDetail?.device.type === 'mobile' ? 'Mobile' : 'Web',
-      utm_source: 'string' || 'none',
-      utm_medium: 'string' || 'none',
-      utm_campaign: 'string' || 'none',
-      utm_term: 'string' || 'none',
-      utm_content: 'string' || 'none',
-      utm_date: 'string' || 'none',
-      last_visit_date: 'string',
-      days_since_last_visit: 'string',
-      experiments: ['string', 'string'],
-      in_app_browser: '',
-      user_agent: deviceDetail?.ua || '',
-      hs_referrer: 'string' || 'direct',
-    });
-  }, []);
-
+    if (deviceDetail) {
+      const currentTime = new Date();
+      const currentOffset = currentTime.getTimezoneOffset();
+      const ISTOffset = 330; // IST offset UTC +5:30
+      const d = new Date(
+        currentTime.getTime() + (ISTOffset + currentOffset) * 60000
+      );
+      const sessionInfo = getSessionInfo(
+        cookiesService.getCookies(COOKIE_DATA.OTHER_SESSION_INFO) || ''
+      );
+      const utmData = cookiesService.getCookieData<IUtmParam>(
+        COOKIE_DATA.HS_UTM_PARAMS
+      );
+      setProperties(() => {
+        return {
+          funnel: '',
+          funnel_tile: '',
+          funnel_section: '',
+          source: '',
+          section: null,
+          subsection: '',
+          plp: '',
+          sortbar_group: '',
+          preorder: null,
+          character: 'Not applicable',
+          sort_by: 'User',
+          universal: 'None',
+          _session_start_time: sessionInfo.get(COOKIE_DATA.SESSION_START_TIME),
+          '[time] hour_of_day': d.getHours(),
+          '[time] day_of_week': (d.getDay() + 1) % 7,
+          '[time] day_of_month': d.getDate(),
+          '[time] month_of_year': d.getMonth() + 1,
+          '[time] week_of_year': getWeek(d),
+        };
+      });
+      setContextData({
+        device: {
+          model: deviceDetail?.device.model || deviceDetail?.os.name,
+          manufacturer: deviceDetail?.device.vendor,
+          id: cookiesService.getCookies(COOKIE_DATA.VISITOR_ID) || '',
+        },
+        os: {
+          name: deviceDetail?.browser.name,
+          version: deviceDetail?.browser.version,
+        },
+        hs_site: deviceDetail?.device.type === 'mobile' ? 'Mobile' : 'Web',
+        traits: {
+          user_type: cookiesService.getCookies(
+            COOKIE_DATA.WEBSITE_CUSTOMER_SEGMENT
+          ),
+          hs_device_id: cookiesService.getCookies(COOKIE_DATA.VISITOR_ID),
+          hs_site: deviceDetail?.device.type === 'mobile' ? 'Mobile' : 'Web',
+          utm_source: utmData['utm-source'] || 'none',
+          utm_medium: utmData['utm-medium'] || 'none',
+          utm_campaign: utmData['utm-campaign'] || 'none',
+          utm_term: utmData['utm-term'] || 'none',
+          utm_content: utmData['utm-content'] || 'none',
+          utm_date: utmData['utm-date'] || 'none',
+          last_visit_date: sessionInfo.get(COOKIE_DATA.LAST_VISIT_DATE) || '',
+          days_since_last_visit:
+            sessionInfo.get(COOKIE_DATA.DAYS_SINCE_LAST_VISIT) || '',
+          experiments: getFormattedExperiments(),
+          in_app_browser: '',
+          user_agent: deviceDetail?.ua || '',
+          hs_referrer: 'string' || 'direct',
+        },
+      });
+    }
+  }, [deviceDetail]);
   const setSegmentData = ({ properties, traits }: IUseSegmentProps) => {
     setProperties((prevState) => ({ ...prevState, ...properties }));
-    setTraits((prevState) => ({ ...prevState, ...traits }));
+    setContextData((prevState) => ({
+      ...prevState,
+      ...{ ...prevState?.traits, ...traits },
+    }));
   };
   return [
     {
       contextData,
-      traits,
       properties,
     },
     setSegmentData,

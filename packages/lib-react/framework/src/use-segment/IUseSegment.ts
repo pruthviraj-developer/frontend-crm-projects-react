@@ -1,9 +1,9 @@
 export interface IUseSegmentProps {
-  properties?: IProperties;
-  traits?: ITraits;
+  properties?: ISegmentProperties;
+  traits?: ISegmentTraits;
 }
 
-export interface IProperties {
+export interface ISegmentProperties {
   product_id?: number;
   sku?: string[];
   name?: string;
@@ -33,7 +33,7 @@ export interface IProperties {
   style?: string;
   season?: string;
   pattern?: string;
-  character: string;
+  character?: string;
   weave?: string;
   universal?: string;
   '[time] hour_of_day'?: number;
@@ -54,11 +54,11 @@ export interface IProperties {
   sort_by?: string;
   track?: string[];
 }
-export interface ContextData {
-  device: Device;
-  os: OsOrLibrary;
-  hs_site: string;
-  traits?: ITraits;
+export interface IContextData {
+  device?: Device;
+  os?: OsOrLibrary;
+  hs_site?: string;
+  traits?: ISegmentTraits;
   page?: Page;
   userAgent?: string;
   library?: OsOrLibrary;
@@ -72,7 +72,7 @@ export interface OsOrLibrary {
   name?: string;
   version?: string;
 }
-export interface ITraits {
+export interface ISegmentTraits {
   user_type?: string;
   hs_device_id?: string;
   hs_site?: string;
@@ -84,7 +84,7 @@ export interface ITraits {
   utm_date?: string;
   last_visit_date?: string;
   days_since_last_visit?: string;
-  experiments?: string[] | null;
+  experiments?: string;
   in_app_browser?: string;
   user_agent?: string;
   hs_referrer?: string;
@@ -95,4 +95,13 @@ export interface Page {
   search: string;
   title: string;
   url: string;
+}
+
+export interface IUtmParam {
+  'utm-source'?: string;
+  'utm-medium'?: string;
+  'utm-campaign'?: string;
+  'utm-term'?: string;
+  'utm-content'?: string;
+  'utm-date'?: string;
 }

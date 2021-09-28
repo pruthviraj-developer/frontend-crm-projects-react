@@ -3,7 +3,3 @@ export interface SetCookieProps {
   value: any;
   options?: Record<string, unknown>;
 }
-
-export interface GetCookieProps {
-  key: string;
-}

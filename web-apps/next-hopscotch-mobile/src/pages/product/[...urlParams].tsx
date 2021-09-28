@@ -31,8 +31,10 @@ import {
   useDeliveryDetails,
   useSelectedProduct,
   useOneSize,
+  useSegment,
 } from '@hs/framework';
 
+import * as segment from '@/components/segment-analytic';
 // const ADD_TO_CART_BUTTON = 'Add to cart button';
 const SIZE_LIST_UPFRONT = 'Size list upfront';
 const SUCCESS = 'success';
@@ -166,6 +168,16 @@ const Product: NextPage = (props) => {
       currentRefElement?.current?.scrollIntoView({ behavior: 'smooth' });
     }
   };
+  const [{ contextData, properties }] = useSegment();
+
+  useEffect(() => {
+    // setAnalyticData({ traits: { days_since_last_visit: '7' } });
+    console.table(contextData);
+    // console.dir(contextdata);
+    // console.dir(properties);;
+    if (contextData && properties)
+      segment.trackEvent({ evtName: segment.PDP_TRACKING_EVENTS.PRODUCT_VIEWED, properties, contextData: contextData });
+  }, [contextData, properties]);
 
   const addToWishlist = () => {
     if (1) {
