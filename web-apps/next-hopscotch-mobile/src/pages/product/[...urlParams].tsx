@@ -6,6 +6,7 @@ import {
   Accordion,
   NavBar,
   ProductNamePrice,
+  ProductCarousel,
   DeliveryDetails,
   CustomSizePicker,
   SizeAndChartLabels,
@@ -14,7 +15,6 @@ import {
   RecommendedProductsLinks,
 } from '@hs/components';
 
-import { ProductCarousel } from './../../components/product-carousel';
 import { IProductProps, IProductDetails, ISimpleSkusEntityProps, urlParamsProps, IWishListProps } from '@/types';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
 import { cookiesService, productDetailsService } from '@hs/services';
@@ -339,6 +339,7 @@ const Product: NextPage = (props) => {
                 swipeable: false,
                 showDots: true,
                 imgUrls: productInfo.imgurls,
+                goToProductRecommendation,
               }}
             ></ProductCarousel>
             <ProductDetailsWrapper>

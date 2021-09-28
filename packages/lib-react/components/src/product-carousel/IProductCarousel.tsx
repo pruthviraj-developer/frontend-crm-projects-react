@@ -9,6 +9,7 @@ export interface IProductCarouselProps {
   swipeable?: boolean;
   showDots?: boolean;
   imgUrls: IImageUrlProps[];
+  goToProductRecommendation: (a: string) => void;
 }
 
 export interface IImageUrlProps {
@@ -25,4 +26,18 @@ export interface IImageUrlProps {
   imgUrlFullWidth: number;
   imgUrlThumbnailHeight: number;
   imgUrlThumbnailWidth: number;
+}
+
+export interface IProductCarouselBreakPoints {
+  desktop: DesktopOrMobileOrTablet;
+  mobile: DesktopOrMobileOrTablet;
+  tablet: DesktopOrMobileOrTablet;
+}
+export interface DesktopOrMobileOrTablet {
+  breakpoint: Breakpoint;
+  items: number;
+}
+export interface Breakpoint {
+  max: number;
+  min: number;
 }
