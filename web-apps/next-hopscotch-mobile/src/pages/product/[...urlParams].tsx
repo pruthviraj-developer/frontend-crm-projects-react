@@ -6,6 +6,7 @@ import {
   Accordion,
   NavBar,
   ProductNamePrice,
+  ProductCarousel,
   DeliveryDetails,
   CustomSizePicker,
   SizeAndChartLabels,
@@ -13,6 +14,7 @@ import {
   Footer,
   RecommendedProductsLinks,
 } from '@hs/components';
+
 import { IProductProps, IProductDetails, ISimpleSkusEntityProps, urlParamsProps, IWishListProps } from '@/types';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
 import { cookiesService, productDetailsService } from '@hs/services';
@@ -337,6 +339,21 @@ const Product: NextPage = (props) => {
               <link rel="icon" href="/favicon.ico" />
             </Head>
             <NavBar count={productInfo && productInfo.quantity}></NavBar>
+            <ProductCarousel
+              {...{
+                showArrows: false,
+                autoPlay: true,
+                draggable: false,
+                focusOnSelect: false,
+                renderButtonGroupOutside: false,
+                renderDotsOutside: false,
+                slidesToSlide: 1,
+                swipeable: false,
+                showDots: true,
+                imgUrls: productInfo.imgurls,
+                goToProductRecommendation,
+              }}
+            ></ProductCarousel>
             <ProductDetailsWrapper>
               <ProductNamePrice
                 {...{

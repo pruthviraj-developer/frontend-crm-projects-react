@@ -50,10 +50,7 @@ const WishListWrapper = styled.div`
   height: 40px;
 `;
 
-const WishListIcon = styled(SvgIcon)`
-  fill: #bbb;
-  opacity: 0.5;
-`;
+const WishListIcon = styled(SvgIcon)``;
 
 const ProductSold = styled.div`
   padding: ${typography.size.s04}px ${typography.size.s06}px;

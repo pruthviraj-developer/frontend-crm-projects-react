@@ -39,10 +39,7 @@ const WishListWrapper = styled.div`
   height: 40px;
 `;
 
-const WishListIcon = styled(SvgIcon)`
-  fill: #bbb;
-  opacity: 0.5;
-`;
+const WishListIcon = styled(SvgIcon)``;
 
 export {
   ProductWrapper,

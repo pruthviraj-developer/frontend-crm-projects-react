@@ -22,6 +22,7 @@ export const typography = {
     s02: 2,
     s03: 3,
     s04: 4,
+    s05: 5,
     s06: 6,
     s07: 7,
     s08: 8,
