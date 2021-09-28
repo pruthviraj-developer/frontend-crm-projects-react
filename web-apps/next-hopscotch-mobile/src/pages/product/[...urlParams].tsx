@@ -337,6 +337,7 @@ const Product: NextPage = (props) => {
                 slidesToSlide: 1,
                 swipeable: false,
                 showDots: true,
+                imgUrls: productInfo.imgurls,
               }}
             ></ProductCarousel>
             <ProductDetailsWrapper>

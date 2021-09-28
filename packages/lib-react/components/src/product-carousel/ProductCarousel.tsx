@@ -1,7 +1,10 @@
 import React, { FC } from 'react';
-import { CarouselWrapper } from './StyledProductCarousel';
+import {
+  CarouselWrapper,
+  ProductImageContainer,
+} from './StyledProductCarousel';
 import Carousel from 'react-multi-carousel';
-import { IProductCarouselProps } from './IProductCarousel';
+import { IProductCarouselProps, IImageUrlProps } from './IProductCarousel';
 export const ProductCarousel: FC<IProductCarouselProps> = ({
   focusOnSelect,
   showArrows,
@@ -11,7 +14,9 @@ export const ProductCarousel: FC<IProductCarouselProps> = ({
   slidesToSlide,
   swipeable,
   showDots,
+  imgUrls,
 }: IProductCarouselProps) => {
+  const imageSize = 360;
   const responsive: any = {
     desktop: { breakpoint: { max: 3000, min: 1024 }, items: 1 },
     mobile: { breakpoint: { max: 464, min: 0 }, items: 1 },
@@ -20,13 +25,13 @@ export const ProductCarousel: FC<IProductCarouselProps> = ({
   return (
     <CarouselWrapper>
       <Carousel
+        ssr
         responsive={responsive}
         additionalTransfrom={0}
         arrows={showArrows}
         autoPlaySpeed={3000}
         centerMode={false}
         className=""
-        dotListClass=""
         draggable={draggable}
         focusOnSelect={focusOnSelect}
         infinite={false}
@@ -39,37 +44,35 @@ export const ProductCarousel: FC<IProductCarouselProps> = ({
         sliderClass=""
         slidesToSlide={slidesToSlide}
         swipeable={swipeable}
+        dotListClass="product-carousel-dot-list"
       >
-        <div>
-          <img alt="" src="http://placehold.it/375x375" />
-        </div>
-        <div>
-          <img alt="" src="http://placehold.it/375x375" />
-        </div>
-        <div>
-          <img alt="" src="http://placehold.it/375x375" />
-        </div>
-        <div>
-          <img alt="" src="http://placehold.it/375x375" />
-        </div>
-        <div>
-          <img alt="" src="http://placehold.it/375x375" />
-        </div>
-        <div>
-          <img alt="" src="http://placehold.it/375x375" />
-        </div>
-        <div>
-          <img alt="" src="http://placehold.it/375x375" />
-        </div>
-        <div>
-          <img alt="" src="http://placehold.it/375x375" />
-        </div>
-        <div>
-          <img alt="" src="http://placehold.it/375x375" />
-        </div>
-        <div>
-          <img alt="" src="http://placehold.it/375x375" />
-        </div>
+        {imgUrls &&
+          imgUrls.map((img: IImageUrlProps, index: number) => {
+            return (
+              <ProductImageContainer key={index}>
+                {/* <Image
+                  key={index}
+                  src={`${img.imgUrlFull}&tr=w-${imageSize},c-at_max,dpr-2,n-medium`}
+                  placeholder="blur"
+                  blurDataURL="https://static.hopscotch.in/web2/images/boutique-pattern.png"
+                  layout="fill"
+                  unoptimized
+                /> */}
+                <img
+                  alt=""
+                  draggable={false}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    position: 'relative',
+                    maxWidth: '325px',
+                    maxHeight: '325px',
+                  }}
+                  src={`${img.imgUrlFull}&tr=w-${imageSize},c-at_max,dpr-2,n-medium`}
+                />
+              </ProductImageContainer>
+            );
+          })}
       </Carousel>
 
       {/* <Carousel

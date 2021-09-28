@@ -21,7 +21,23 @@ export const globalStyles = (
         color: inherit;
         text-decoration: none;
       }
-
+      .product-carousel-dot-list li button {
+        width: 8px;
+        height: 8px;
+        margin-right: 6px;
+        background-color: #e6e6e6;
+        border: 1px solid #e6e6e6;
+        border-radius: 6px;
+      }
+      .product-carousel-dot-list {
+        bottom: 9px;
+        text-align: left;
+        margin-left: 16px;
+        justify-content: start;
+      }
+      .product-carousel-dot-list li.active button {
+        background-color: #707070;
+      }
       * {
         box-sizing: border-box;
       }
