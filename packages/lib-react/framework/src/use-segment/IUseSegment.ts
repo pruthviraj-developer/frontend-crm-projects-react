@@ -53,6 +53,7 @@ export interface ISegmentProperties {
   sortbar_group?: string;
   sort_by?: string;
   track?: string[];
+  from_screen?: string;
 }
 export interface IContextData {
   device?: Device;

@@ -131,7 +131,7 @@ const Product: NextPage = (props) => {
     showmatching: true,
     recommended: similarProductDetails,
     id: 'similarproducts',
-    pid: productInfo.id,
+    pid: productId,
   });
 
   const { canShow: showRFYP, ...recommendedForYou } = useRecommendation({
@@ -139,7 +139,7 @@ const Product: NextPage = (props) => {
     showmatching: false,
     recommended: recommendedProductDetails,
     id: 'productrecommendations',
-    pid: productInfo.id,
+    pid: productId,
   });
 
   const {
@@ -171,6 +171,17 @@ const Product: NextPage = (props) => {
     if (fromLocation) {
       const currentRefElement = showRFYP ? recommendedProductsLink : similarProductsLink;
       currentRefElement?.current?.scrollIntoView({ behavior: 'smooth' });
+      segment.trackEvent({
+        evtName: segment.PDP_TRACKING_EVENTS.PDP_SEE_SIMILAR_CLICKED,
+        properties: {
+          ...properties,
+          from_screen: 'Product details',
+          reco_type: 'Similar products',
+          product_id: productId,
+          from_location: fromLocation,
+        },
+        contextData,
+      });
     }
   };
   const [{ contextData, properties }] = useSegment();
