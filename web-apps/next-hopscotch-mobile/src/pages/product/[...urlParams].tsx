@@ -15,7 +15,7 @@ import {
   RecommendedProductsLinks,
 } from '@hs/components';
 
-import { IProductProps, IProductDetails, ISimpleSkusEntityProps, urlParamsProps, IWishListProps } from '@/types';
+import { IProductProps, urlParamsProps, IWishListProps } from '@/types';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
 import { cookiesService, productDetailsService } from '@hs/services';
 import { useState, useEffect, useRef } from 'react';
@@ -34,6 +34,9 @@ import {
   useSelectedProduct,
   useOneSize,
   useSegment,
+  IProductDetails,
+  ISimpleSkusEntityProps,
+  useProductTracking,
 } from '@hs/framework';
 
 import * as segment from '@/components/segment-analytic';
@@ -171,15 +174,16 @@ const Product: NextPage = (props) => {
     }
   };
   const [{ contextData, properties }] = useSegment();
+  const pdpTrackingData = useProductTracking({ productDetails });
 
   useEffect(() => {
-    // setAnalyticData({ traits: { days_since_last_visit: '7' } });
-    console.table(contextData);
-    // console.dir(contextdata);
-    // console.dir(properties);;
-    if (contextData && properties)
-      segment.trackEvent({ evtName: segment.PDP_TRACKING_EVENTS.PRODUCT_VIEWED, properties, contextData: contextData });
-  }, [contextData, properties]);
+    if (contextData && properties && pdpTrackingData.product_id == productId)
+      segment.trackEvent({
+        evtName: segment.PDP_TRACKING_EVENTS.PRODUCT_VIEWED,
+        properties: { ...properties, ...pdpTrackingData, addFrom: 'current=' + location.pathname },
+        contextData,
+      });
+  }, [contextData, pdpTrackingData, productId, properties]);
 
   const addToWishlist = () => {
     if (1) {
@@ -312,7 +316,7 @@ const Product: NextPage = (props) => {
     }
   }, [isProductDetailsSuccess, productDetails]);
 
-  cookiesService.setCookies({ key: 'test', value: 'test value' });
+  // cookiesService.setCookies({ key: 'test', value: 'test value' });
   return (
     <div>
       <main>
