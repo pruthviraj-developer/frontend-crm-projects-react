@@ -1,23 +1,36 @@
 import { useEffect, useState } from 'react';
 
-type Value<T> = T | null;
+type Value<T> = Map<string, T | null>;
 
-export function useReadLocalStorage<T>(key: string): Value<T> {
+export function useReadLocalStorage<T>(keys: string[]): Value<T> {
   // Get from local storage then
   // parse stored json or return initialValue
   const readValue = (): Value<T> => {
     // Prevent build error "window is undefined" but keep keep working
     if (typeof window === 'undefined') {
-      return null;
+      const items = new Map<string, T | null>();
+      for (let i = 0; i < keys.length; i++) {
+        items.set(keys[i], null);
+      }
+      return items;
     }
 
     try {
-      const item = window.localStorage.getItem(key);
-      return item ? (JSON.parse(item) as T) : null;
+      const items = new Map<string, T | null>();
+      for (let i = 0; i < keys.length; i++) {
+        const item = window.localStorage.getItem(keys[i]);
+        items.set(keys[i], item ? (JSON.parse(item) as T) : null);
+      }
+
+      return items;
     } catch (error) {
       // eslint-disable-next-line no-console
-      console.warn(`Error reading localStorage key “${key}”:`, error);
-      return null;
+      console.warn(`Error reading localStorage key “${keys}”:`, error);
+      const items = new Map<string, T | null>();
+      for (let i = 0; i < keys.length; i++) {
+        items.set(keys[i], null);
+      }
+      return items;
     }
   };
 

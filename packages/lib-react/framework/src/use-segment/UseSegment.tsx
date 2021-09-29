@@ -3,10 +3,11 @@ import {
   IContextData,
   ISegmentProperties,
   IUtmParam,
+  IFunnelData,
 } from './IUseSegment';
 import Parser from 'ua-parser-js';
 import { useEffect, useState } from 'react';
-import { COOKIE_DATA } from '../storage';
+import { COOKIE_DATA, SESSION_DATA, useSessionStorage } from '../storage';
 import { cookiesService } from '@hs/services';
 
 const getSessionInfo = (sessionInfostr: string) => {
@@ -18,24 +19,41 @@ const getSessionInfo = (sessionInfostr: string) => {
   }
   return sessionInfo;
 };
+const IN_APP_BROWSER_MAP = new Map<string, string>([
+  ['Instagram', 'INSTAGRAM'],
+  ['FBAN', 'FACEBOOK'],
+  ['FBAV', 'FACEBOOK'],
+]);
+
+const getInAppBrowser = (ua: string) => {
+  let browser = '';
+  IN_APP_BROWSER_MAP.forEach((value: string, key: string) => {
+    if (ua.indexOf(key) > -1) browser = value;
+  });
+  return browser;
+};
+
+const getWeek = (date: Date) => {
+  const onejan = new Date(date.getFullYear(), 0, 1);
+  const week = Math.ceil(
+    ((date.getTime() - onejan.getTime()) / 86400000 + onejan.getDay() + 1) / 7
+  );
+  return week;
+};
 
 export const useSegment = () => {
   const [deviceDetail, setDeviceDetail] = useState<Parser.IResult>();
   const [contextData, setContextData] = useState<IContextData>();
   const [properties, setProperties] = useState<ISegmentProperties>();
+  const [funnelData] = useSessionStorage<IFunnelData>(
+    SESSION_DATA.OA_DATA,
+    null
+  );
 
   const getFormattedExperiments = () => {
     const experiments =
       cookiesService.getCookies(COOKIE_DATA.EXPERIMENTS) || 'none';
-    return experiments.replace(/['"]+/g, '');
-  };
-
-  const getWeek = (date: Date) => {
-    const onejan = new Date(date.getFullYear(), 0, 1);
-    const week = Math.ceil(
-      ((date.getTime() - onejan.getTime()) / 86400000 + onejan.getDay() + 1) / 7
-    );
-    return week;
+    return experiments.split(',');
   };
 
   useEffect(() => {
@@ -58,13 +76,13 @@ export const useSegment = () => {
       );
       setProperties(() => {
         return {
-          funnel: '',
-          funnel_tile: '',
-          funnel_section: '',
-          source: '',
-          section: null,
-          subsection: '',
-          plp: '',
+          funnel: funnelData?.funnel || 'DIRECT',
+          funnel_tile: funnelData?.funnel_tile || '',
+          funnel_section: funnelData?.funnel_section || '',
+          source: funnelData?.source || '',
+          section: funnelData?.section,
+          subsection: funnelData?.sub_section || '',
+          plp: funnelData?.plp || '',
           sortbar_group: '',
           preorder: null,
           character: 'Not applicable',
@@ -105,7 +123,7 @@ export const useSegment = () => {
           days_since_last_visit:
             sessionInfo.get(COOKIE_DATA.DAYS_SINCE_LAST_VISIT) || '',
           experiments: getFormattedExperiments(),
-          in_app_browser: '',
+          in_app_browser: getInAppBrowser(deviceDetail?.ua),
           user_agent: deviceDetail?.ua || '',
           hs_referrer: 'string' || 'direct',
         },

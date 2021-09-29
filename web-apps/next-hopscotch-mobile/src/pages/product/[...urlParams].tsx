@@ -426,7 +426,7 @@ const Product: NextPage = (props) => {
           )}
         </Modal>
       </main>
-      <pre style={{ width: '60%', overflowX: 'scroll' }}>{JSON.stringify(productDetails, null, 4)}</pre>
+      {/* <pre style={{ width: '60%', overflowX: 'scroll' }}>{JSON.stringify(productDetails, null, 4)}</pre> */}
     </div>
   );
 };

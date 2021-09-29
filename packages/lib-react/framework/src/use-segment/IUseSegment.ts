@@ -84,7 +84,7 @@ export interface ISegmentTraits {
   utm_date?: string;
   last_visit_date?: string;
   days_since_last_visit?: string;
-  experiments?: string;
+  experiments?: string[];
   in_app_browser?: string;
   user_agent?: string;
   hs_referrer?: string;
@@ -104,4 +104,14 @@ export interface IUtmParam {
   'utm-term'?: string;
   'utm-content'?: string;
   'utm-date'?: string;
+}
+export interface IFunnelData {
+  funnel: string;
+  funnel_tile: string;
+  funnel_section: string;
+  section: string;
+  sub_section: string;
+  source: string;
+  plp: string;
+  quickshop: string;
 }
