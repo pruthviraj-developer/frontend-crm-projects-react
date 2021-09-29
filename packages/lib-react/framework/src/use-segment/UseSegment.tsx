@@ -84,6 +84,7 @@ export const useSegment = () => {
           subsection: funnelData?.sub_section || '',
           plp: funnelData?.plp || '',
           sortbar_group: '',
+          sortbar: '',
           preorder: null,
           character: 'Not applicable',
           sort_by: 'User',
