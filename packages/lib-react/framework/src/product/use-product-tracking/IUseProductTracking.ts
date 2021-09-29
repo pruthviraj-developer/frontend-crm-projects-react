@@ -1,6 +1,6 @@
 import { IProductDetails, ISimpleSkusEntityProps } from 'product/types';
 
-export interface IProductFormProps {
+export interface IProductTrackingProps {
   selectedSku?: ISimpleSkusEntityProps;
-  productData: IProductDetails;
+  productDetails: IProductDetails;
 }

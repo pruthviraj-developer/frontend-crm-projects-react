@@ -1,4 +1,5 @@
-import { IOneSizeProps, IOneAttrsEntity, ISkuAttributes } from './IOneSize';
+import { IProductDetailsAttrsEntity } from 'product/types';
+import { IOneSizeProps, ISkuAttributes } from './IOneSize';
 
 const SIZE = 'size';
 const ONE_SIZE = 'one size';
@@ -9,7 +10,7 @@ export const useOneSize = ({ productData }: IOneSizeProps) => {
   const skuAttributes: ISkuAttributes[] = [];
   if (simpleSkus && simpleSkus.length) {
     for (let i = 0; i < simpleSkus.length; i++) {
-      var attrs = simpleSkus[i].attrs || [];
+      const attrs = simpleSkus[i].attrs || [];
       const attributes: ISkuAttributes | any = {};
       for (let j = 0; j < attrs.length; j++) {
         attributes[attrs[j].name.toLowerCase()] = attrs[j].value;
@@ -17,7 +18,7 @@ export const useOneSize = ({ productData }: IOneSizeProps) => {
       skuAttributes.push(attributes);
     }
     if (simpleSkus.length === 1) {
-      const findSize = (list: IOneAttrsEntity[]) => {
+      const findSize = (list: IProductDetailsAttrsEntity[]) => {
         const attribute = list.find((data) => data.name.toLowerCase() === SIZE);
         return attribute ? attribute.value.toLowerCase() : '';
       };

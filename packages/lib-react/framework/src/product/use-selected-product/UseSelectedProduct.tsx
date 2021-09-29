@@ -4,7 +4,7 @@ export const useSelectedProduct = ({
   selectedSku,
   productData,
 }: IProductFormProps) => {
-  let {
+  const {
     regularPrice,
     discount,
     availableQuantity: qtyLeft,
@@ -13,7 +13,7 @@ export const useSelectedProduct = ({
     skuId: selectedSkuId,
   } = selectedSku || {};
 
-  let rPrice = selectedSku && selectedSku.retailPrice;
+  const rPrice = selectedSku && selectedSku.retailPrice;
   const retailPrice = productData.isfirst
     ? productData.retailPrice || rPrice
     : rPrice;
