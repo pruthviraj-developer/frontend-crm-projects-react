@@ -63,7 +63,6 @@ export const SizeSelectorPopup: FC<ISizeSelectorPopupProps> = ({
               onSizeChartClick();
             }}
           >
-            {' '}
             View size chart
           </ViewSizeChart>
         </Header>

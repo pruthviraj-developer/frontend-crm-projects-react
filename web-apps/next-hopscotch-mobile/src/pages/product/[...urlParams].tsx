@@ -27,6 +27,11 @@ import { useModal } from 'react-hooks-use-modal';
 const SizeChartPopupComponent = dynamic(() => import('../../components/size-chart/SizeChart'), {
   ssr: false,
 });
+
+const SizeSelectorPopupComponent = dynamic(() => import('../../components/size-selector/SizeSelector'), {
+  ssr: false,
+});
+
 import {
   useProduct,
   useRecommendation,
@@ -88,14 +93,21 @@ const Product: NextPage = (props) => {
   const urlParams = router.query as unknown as IProductProps;
   const [productId]: urlParamsProps | any = [...(urlParams.urlParams || [])];
   const [isSelected, setIsSelected] = useState<boolean>(false);
-  const [sku, setSku] = useState<ISimpleSkusEntityProps>();
+  const [sku, setSku] = useState<ISimpleSkusEntityProps>(() => {
+    return simpleSkus && simpleSkus[0];
+  });
   const [productInfo, setProductInfo] = useState<IProductDetails | any>({}); // productDetails with modification
 
   // const [quantity, setQuantity] = useState<number>(0);
   // const showNewPromo = _self._AbTestService.isOnNewPromo();
   // const SHOW_RFYP = true;
 
-  const [Modal, open, close, isOpenBool] = useModal('root', {
+  const [SizeChartPopupModal, openSizeChartPopup, closeSizeChartPopup, isSizeChartPopupOpen] = useModal('root', {
+    preventScroll: false,
+    closeOnOverlayClick: true,
+  });
+
+  const [SizeSelectorPopupModal, openSizeSelector, closeSizeSelector, isSizeSelectorPopupOpen] = useModal('root', {
     preventScroll: false,
     closeOnOverlayClick: true,
   });
@@ -210,6 +222,14 @@ const Product: NextPage = (props) => {
     //     this.addToWishlistAfterModalClose.bind(self, product),
     //   );
     // }
+  };
+
+  const addProductToCart = () => {
+    openSizeSelector();
+  };
+
+  const onSizeSelect = (sku: ISimpleSkusEntityProps) => {
+    console.log(sku);
   };
 
   const deleteFromWishlist = () => {
@@ -390,7 +410,7 @@ const Product: NextPage = (props) => {
                   hasSizeChart: productInfo.hasSizeChart,
                   qtyLeft,
                   simpleSkus,
-                  onSizeChartClick: open,
+                  onSizeChartClick: openSizeChartPopup,
                 }}
               ></SizeAndChartLabels>
               {!isOneSize && (
@@ -426,20 +446,36 @@ const Product: NextPage = (props) => {
               )}
               <Footer />
             </ProductDetailsWrapper>
-            <AddToCart {...{ show: true, disabled: false }}></AddToCart>
+            <AddToCart {...{ show: true, disabled: false, addProductToCart }}></AddToCart>
           </div>
         )}
-        <Modal>
-          {isOpenBool && (
+        <SizeChartPopupModal>
+          {isSizeChartPopupOpen && (
             <SizeChartPopupComponent
               {...{
                 id: productInfo.id,
                 productName: productName,
-                onClickClose: close,
+                onClickClose: closeSizeChartPopup,
               }}
             ></SizeChartPopupComponent>
           )}
-        </Modal>
+        </SizeChartPopupModal>
+
+        <SizeSelectorPopupModal>
+          {isSizeSelectorPopupOpen && (
+            <SizeSelectorPopupComponent
+              {...{
+                showRfypCue: productInfo.showRfypCue,
+                showAddToCart: true,
+                onSizeChartClick: openSizeChartPopup,
+                simpleSkus,
+                selectedSku: sku,
+                onSizeSelect,
+                goToProductRecommendation,
+              }}
+            ></SizeSelectorPopupComponent>
+          )}
+        </SizeSelectorPopupModal>
       </main>
       {/* <pre style={{ width: '60%', overflowX: 'scroll' }}>{JSON.stringify(productDetails, null, 4)}</pre> */}
     </div>

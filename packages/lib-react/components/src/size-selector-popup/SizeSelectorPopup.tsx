@@ -1,10 +1,8 @@
 import React, { FC } from 'react';
 import { IconRadio, IconRadioActive } from '@hs/icons';
-import {
-  ISizeSelectorPopupProps,
-  ISimpleSkusEntityProps,
-} from './ISizeSelectorPopup';
-import { AddToCart } from '../add-to-cart';
+import { ISizeSelectorPopupProps } from './ISizeSelectorPopup';
+import { AddToCart } from '@hs/components';
+import { ISimpleSkusEntityProps } from '@hs/framework';
 import {
   SizeSelectorPopupWrapper,
   SeeSimilarProducts,
@@ -34,6 +32,7 @@ export const SizeSelectorPopup: FC<ISizeSelectorPopupProps> = ({
   simpleSkus,
   selectedSku,
   showAddToCart,
+  goToProductRecommendation,
   onSizeChartClick,
   onSizeSelect,
 }: ISizeSelectorPopupProps) => {
@@ -42,7 +41,13 @@ export const SizeSelectorPopup: FC<ISizeSelectorPopupProps> = ({
       {showRfypCue && (
         <SeeSimilarProducts>
           <SizeSoldOut>Size sold out?</SizeSoldOut>
-          <SeeSimilar>See similar products</SeeSimilar>
+          <SeeSimilar
+            onClick={() => {
+              goToProductRecommendation('Add to cart');
+            }}
+          >
+            See similar products
+          </SeeSimilar>
         </SeeSimilarProducts>
       )}
       <SizeWrapper>
@@ -58,7 +63,6 @@ export const SizeSelectorPopup: FC<ISizeSelectorPopupProps> = ({
               onSizeChartClick();
             }}
           >
-            {' '}
             View size chart
           </ViewSizeChart>
         </Header>

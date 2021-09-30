@@ -7,6 +7,7 @@ export interface ISizeSelectorPopupProps {
   simpleSkus: ISimpleSkusEntityProps[];
   selectedSku: ISimpleSkusEntityProps;
   onSizeSelect: (ISimpleSkusEntityProps) => void;
+  goToProductRecommendation: (args: string) => void;
 }
 
 export interface ISimpleSkusEntityProps {
