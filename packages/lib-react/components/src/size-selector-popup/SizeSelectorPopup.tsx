@@ -1,6 +1,9 @@
 import React, { FC } from 'react';
 import { IconRadio, IconRadioActive } from '@hs/icons';
-import { ISizeSelectorPopupProps } from './ISizeSelectorPopup';
+import {
+  ISizeSelectorPopupProps,
+  ISizeSelectorSkuProps,
+} from './ISizeSelectorPopup';
 import { AddToCart } from '../add-to-cart';
 import {
   SizeSelectorPopupWrapper,
@@ -29,6 +32,8 @@ export const SizeSelectorPopup: FC<ISizeSelectorPopupProps> = ({
   simpleSkus,
   selectedSku,
   onSizeChartClick,
+  onSizeSelect,
+  skuAttributes,
 }: ISizeSelectorPopupProps) => {
   console.log(showRfypCue, pinCode, simpleSkus, selectedSku);
   return (
@@ -50,17 +55,42 @@ export const SizeSelectorPopup: FC<ISizeSelectorPopupProps> = ({
           </ViewSizeChart>
         </Header>
         <OptionsContainer>
-          <Option selected={true}>
-            <SizeSelector>
-              <SizeLabel>6-12 months</SizeLabel>
-              <SvgIconsElement icon={IconRadio} />
-            </SizeSelector>
-            <DeliveryMessageWrapper>
-              <DeliveryMessage>Get it in 4-5 weeks</DeliveryMessage>
-              <DeliveryMessageOval></DeliveryMessageOval>
-              <QuantityLeftOut>1 left</QuantityLeftOut>
-            </DeliveryMessageWrapper>
-          </Option>
+          {simpleSkus &&
+            simpleSkus.map((sku: ISizeSelectorSkuProps, index: number) => {
+              return (
+                <Option
+                  selected={sku.skuId === selectedSku.skuId}
+                  onClick={() => {
+                    if (sku.availableQuantity > 0) {
+                      onSizeSelect(sku);
+                    }
+                  }}
+                >
+                  <SizeSelector>
+                    <SizeLabel>{skuAttributes[index].size}</SizeLabel>
+                    <SvgIconsElement icon={IconRadio} />
+                    <SoldOutWrapper>
+                      {sku.availableQuantity < 1 && <SoldOut>Sold out</SoldOut>}
+                      <SvgIconsElement
+                        icon={
+                          sku.skuId === selectedSku.skuId
+                            ? IconRadioActive
+                            : IconRadio
+                        }
+                      />
+                    </SoldOutWrapper>
+                  </SizeSelector>
+                  <DeliveryMessageWrapper>
+                    <DeliveryMessage>
+                      {sku.eddPrefix + ' ' + sku.deliveryMsg}
+                      Get it in 4-5 weeks
+                    </DeliveryMessage>
+                    <DeliveryMessageOval></DeliveryMessageOval>
+                    <QuantityLeftOut>1 left</QuantityLeftOut>
+                  </DeliveryMessageWrapper>
+                </Option>
+              );
+            })}
           <Option selected={false}>
             <SizeSelector>
               <SizeLabel>1-2 years</SizeLabel>

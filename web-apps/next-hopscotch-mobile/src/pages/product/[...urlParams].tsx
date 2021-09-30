@@ -124,8 +124,7 @@ const Product: NextPage = (props) => {
     },
   );
 
-  const { ...product } = useProduct({ productData: productInfo });
-
+  const { productName, simpleSkus, ...product } = useProduct({ productData: productInfo });
   const { canShow: showSimilarProducts, ...similarProducts } = useRecommendation({
     section: 'RFYP',
     showmatching: true,
@@ -158,7 +157,7 @@ const Product: NextPage = (props) => {
     selectedSku: sku,
   }); // productForm
 
-  const { isOneSize, productName, skuAttributes } = useOneSize({
+  const { isOneSize } = useOneSize({
     productData: productInfo,
   });
 
@@ -389,15 +388,14 @@ const Product: NextPage = (props) => {
                   isOneSize,
                   hasSizeChart: productInfo.hasSizeChart,
                   qtyLeft,
-                  simpleSkus: productInfo.simpleSkus,
+                  simpleSkus,
                   onSizeChartClick: open,
                 }}
               ></SizeAndChartLabels>
               {!isOneSize && (
                 <CustomSizePicker
                   {...{
-                    simpleSkus: productInfo.simpleSkus,
-                    skuAttributes,
+                    simpleSkus,
                     selectedSkuId,
                     isSelected,
                     sizeListUpfront: SIZE_LIST_UPFRONT,
@@ -411,7 +409,7 @@ const Product: NextPage = (props) => {
               )}
               <DeliveryDetails {...deliveryDetailsData}></DeliveryDetails>
               {productInfo.id && (
-                <Accordion {...{ productData: productInfo, skuAttributes, selectedSku, ...product }}></Accordion>
+                <Accordion {...{ productData: productInfo, simpleSkus, selectedSku, ...product }}></Accordion>
               )}
 
               {showRFYP && (

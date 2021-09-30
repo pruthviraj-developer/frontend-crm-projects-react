@@ -1,9 +1,12 @@
+import { ISkuAttributes } from 'types';
 export interface ISizeSelectorPopupProps {
   showRfypCue: boolean;
   pinCode?: string;
   onSizeChartClick: () => void;
   simpleSkus: ISizeSelectorSkuProps[];
-  selectedSku?: ISizeSelectorSkuProps;
+  selectedSku: ISizeSelectorSkuProps;
+  onSizeSelect: (ISizeSelectorSkuProps) => void;
+  skuAttributes: ISkuAttributes[];
 }
 
 export interface ISizeSelectorSkuProps {

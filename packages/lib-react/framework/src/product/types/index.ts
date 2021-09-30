@@ -68,7 +68,7 @@ export interface IProductDetails {
 }
 
 export interface ISimpleSkusEntityProps {
-  attributes: any;
+  attributes: ISkuAttributes;
   productName: string;
   skuId: string;
   attrs?: IProductDetailsAttrsEntity[] | null;
@@ -137,4 +137,34 @@ export interface IProductSubAttrListEntity {
   subAttributeName: string;
   attributeValue: string;
   isShowAttrName: boolean;
+}
+
+export interface ISkuAttributes {
+  accents?: string;
+  character?: string;
+  closure?: string;
+  gender?: string;
+  colour?: string;
+  'from age'?: string;
+  hbt?: string;
+  'hem length'?: string;
+  neckline?: string;
+  occasion?: string;
+  print?: string;
+  season?: string;
+  size?: string;
+  sleeves?: string;
+  taste?: string;
+  'to age'?: string;
+  'units per sets'?: string;
+  count?: string;
+  'country of origin'?: string;
+  embellishment?: string;
+  'fabric content'?: string;
+  'fabric type'?: string;
+  'sleeve length'?: string;
+  stitch?: string;
+  'value pack'?: string;
+  weave?: string;
+  year?: string;
 }
