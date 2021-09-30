@@ -35,22 +35,24 @@ export const SizeSelectorPopup: FC<ISizeSelectorPopupProps> = ({
   goToProductRecommendation,
   onSizeChartClick,
   onSizeSelect,
+  closePopup,
 }: ISizeSelectorPopupProps) => {
   return (
     <SizeSelectorPopupWrapper>
-      {showRfypCue && (
-        <SeeSimilarProducts>
-          <SizeSoldOut>Size sold out?</SizeSoldOut>
-          <SeeSimilar
-            onClick={() => {
-              goToProductRecommendation('Add to cart');
-            }}
-          >
-            See similar products
-          </SeeSimilar>
-        </SeeSimilarProducts>
-      )}
       <SizeWrapper>
+        {showRfypCue && (
+          <SeeSimilarProducts>
+            <SizeSoldOut>Size sold out?</SizeSoldOut>
+            <SeeSimilar
+              onClick={() => {
+                closePopup();
+                goToProductRecommendation('Add to cart');
+              }}
+            >
+              See similar products
+            </SeeSimilar>
+          </SeeSimilarProducts>
+        )}
         {pinCode && (
           <DeliveryPincodeContainer>
             <DeliveryPincode>Delivery to {pinCode}</DeliveryPincode>

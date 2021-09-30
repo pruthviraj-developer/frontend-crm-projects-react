@@ -55,6 +55,7 @@ const SeeSimilarProducts = styled.div`
   bottom: calc(100% + ${typography.size.s5}px);
   text-align: center;
   letter-spacing: 0.2px;
+  position: absolute;
 `;
 
 const SizeSoldOut = styled.span`
@@ -80,6 +81,7 @@ const SizeWrapper = styled.div`
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   left: 0;
+  background: #fff;
 `;
 
 const Size = styled.span`

@@ -7,10 +7,11 @@ const SizeSelector: FC<ISizeSelectorProps> = ({
   showRfypCue,
   pinCode,
   showAddToCart,
-  onSizeChartClick,
   simpleSkus,
   selectedSku,
+  closePopup,
   onSizeSelect,
+  onSizeChartClick,
   goToProductRecommendation,
 }: ISizeSelectorProps) => {
   return (
@@ -25,6 +26,7 @@ const SizeSelector: FC<ISizeSelectorProps> = ({
           selectedSku,
           onSizeSelect,
           goToProductRecommendation,
+          closePopup,
         }}
       ></SizeSelectorPopup>
     </SizeSelectorWrapper>
