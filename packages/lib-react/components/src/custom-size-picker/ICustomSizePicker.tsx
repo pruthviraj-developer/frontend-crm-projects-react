@@ -1,8 +1,7 @@
 import { ISimpleSkusEntityProps } from 'types';
 
 export interface ICustomSizePicker {
-  isSelected: boolean;
-  selectedSkuId?: string;
-  sizeListUpfront: string;
+  onSizeSelect: (a: ISimpleSkusEntityProps, b: string) => void;
+  selectedSku: ISimpleSkusEntityProps;
   simpleSkus: ISimpleSkusEntityProps[];
 }

@@ -47,7 +47,6 @@ import {
 
 import * as segment from '@/components/segment-analytic';
 // const ADD_TO_CART_BUTTON = 'Add to cart button';
-const SIZE_LIST_UPFRONT = 'Size list upfront';
 const SUCCESS = 'success';
 
 // const getProductDetails = <P, R>(): Promise<R> => {
@@ -92,68 +91,7 @@ const Product: NextPage = (props) => {
   const recommendedProductsLink = useRef<HTMLDivElement>(null);
   const urlParams = router.query as unknown as IProductProps;
   const [productId]: urlParamsProps | any = [...(urlParams.urlParams || [])];
-  const [isSelected, setIsSelected] = useState<boolean>(false);
-  const [sku, setSku] = useState<ISimpleSkusEntityProps>(() => {
-    return (
-      {
-        productName: 'Hello Applique Bow Formal Shirt and Pant Set 123',
-        skuId: 'LTL-1989283',
-        attributes: {
-          accents: 'Embellished',
-          character: 'Not applicable',
-          colour: 'Red',
-          count: '1',
-          'country of origin': 'ROW',
-          embellishment: 'Foil',
-          'fabric content': 'Cotton-blend',
-          'fabric type': 'Jersey',
-          hbt: 'H2',
-          'hem length': 'Waist',
-          neckline: 'Round Neck',
-          occasion: 'piyush',
-          season: 'Winter',
-          size: '1-2 years',
-          'sleeve length': 'Full Sleeves',
-          stitch: 'Readymade',
-          taste: 'City Look',
-          'value pack': 'No',
-          weave: 'Knit',
-          year: '2019',
-        },
-        preorderAction: 'test',
-        preorderInfo: 'test',
-        shippingReturnInfoForSku: 'test',
-        retailPrice: 799.0,
-        regularPrice: 1049.0,
-        availableQuantity: 10,
-        saleType: 'PO',
-        deliveryMsg: '4-5 days',
-        rackStatus: 'Y',
-        gender: "Boy's",
-        discount: 24,
-        isPresale: 0,
-        canWishList: 1,
-        maxDeliveryDays: 5,
-        highlightEDD: 0,
-        onSale: 1,
-        finalSale: 0,
-        fromAge: 6,
-        toAge: 12,
-        eddPrefix: 'Get it in ',
-        eddColor: '#35b35d',
-        eddTextColor: '#ffffff',
-        isFastEdd: true,
-        isInternationalPreorder: false,
-        merchType: 'Catalog',
-        deliveryMessage: {
-          action: 'success',
-          msg: '15 days return ',
-          type: 1,
-        },
-      } ||
-      (simpleSkus && simpleSkus[0])
-    );
-  });
+
   const [productInfo, setProductInfo] = useState<IProductDetails | any>({}); // productDetails with modification
 
   // const [quantity, setQuantity] = useState<number>(0);
@@ -196,6 +134,9 @@ const Product: NextPage = (props) => {
   );
 
   const { productName, simpleSkus, ...product } = useProduct({ productData: productInfo });
+  const [sku, setSku] = useState<ISimpleSkusEntityProps>(() => {
+    return simpleSkus && simpleSkus[0];
+  });
   const { canShow: showSimilarProducts, ...similarProducts } = useRecommendation({
     section: 'RFYP',
     showmatching: true,
@@ -286,8 +227,8 @@ const Product: NextPage = (props) => {
     openSizeSelector();
   };
 
-  const onSizeSelect = (sku: ISimpleSkusEntityProps) => {
-    console.log(sku);
+  const onSizeSelect = (sku: ISimpleSkusEntityProps, fromLocation: string) => {
+    setSku(sku);
   };
 
   const deleteFromWishlist = () => {
@@ -364,7 +305,6 @@ const Product: NextPage = (props) => {
     if (isProductDetailsSuccess) {
       if (productDetails && productDetails.action === SUCCESS) {
         const updateProductDetail = (sku: ISimpleSkusEntityProps, isfirst: boolean, isDefault = false) => {
-          setIsSelected(isfirst ? false : true);
           productDetails.isDefault = isDefault;
           productDetails.isfirst = isfirst;
           if (!sku) {
@@ -475,9 +415,8 @@ const Product: NextPage = (props) => {
                 <CustomSizePicker
                   {...{
                     simpleSkus,
-                    selectedSkuId,
-                    isSelected,
-                    sizeListUpfront: SIZE_LIST_UPFRONT,
+                    selectedSku: sku,
+                    onSizeSelect,
                   }}
                 ></CustomSizePicker>
               )}

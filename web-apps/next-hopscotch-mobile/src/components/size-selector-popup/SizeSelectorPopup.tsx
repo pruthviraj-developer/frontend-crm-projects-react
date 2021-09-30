@@ -78,7 +78,7 @@ export const SizeSelectorPopup: FC<ISizeSelectorPopupProps> = ({
                   selected={isSelected}
                   onClick={() => {
                     if (sku.availableQuantity > 0) {
-                      onSizeSelect(sku);
+                      onSizeSelect(sku, '');
                     }
                   }}
                 >

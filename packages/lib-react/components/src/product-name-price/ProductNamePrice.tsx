@@ -56,6 +56,7 @@ export const ProductNamePrice: FC<IProductNamePriceProps> = ({
           </ProductNamePriceWrapper>
           <WishListWrapper>
             <WishListIcon
+              isSelected={wishlistId}
               onClick={() => {
                 if (wishlistId) {
                   deleteFromWishlist();
