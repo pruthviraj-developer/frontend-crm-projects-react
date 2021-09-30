@@ -9,7 +9,7 @@ export const useProduct = ({ productData }: ProductProps) => {
     for (let j = 0; j < attrs.length; j++) {
       attributes[attrs[j].name.toLowerCase()] = attrs[j].value;
     }
-    simpleSkus[i].attributes = { ...attributes };
+    simpleSkus[i].attributes = attributes;
   }
 
   const {

@@ -97,6 +97,7 @@ export interface ISimpleSkusEntityProps {
   preorderInfo: string;
   merchType: string;
   deliveryMessage: IProductDetailsDeliveryMessageOrDeliveryMessagesEntity;
+  shippingReturnInfoForSku: string;
 }
 
 export interface IProductDetailsAttrsEntity {

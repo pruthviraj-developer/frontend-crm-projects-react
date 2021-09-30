@@ -72,7 +72,7 @@ const FooterBlockTitle = styled.h5`
 
 const ConnectToApps = styled.div`
   line-height: 16px;
-  margin: ${typography.size.s3}px ${typography.size.s3}px 15px;
+  margin: ${typography.size.s1}px auto;
   color: ${secondaryColor[300]}px;
 `;
 

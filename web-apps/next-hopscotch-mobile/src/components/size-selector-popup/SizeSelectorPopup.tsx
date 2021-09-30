@@ -1,10 +1,8 @@
 import React, { FC } from 'react';
 import { IconRadio, IconRadioActive } from '@hs/icons';
-import {
-  ISizeSelectorPopupProps,
-  ISimpleSkusEntityProps,
-} from './ISizeSelectorPopup';
-import { AddToCart } from '../add-to-cart';
+import { ISizeSelectorPopupProps } from './ISizeSelectorPopup';
+import { AddToCart } from '@hs/components';
+import { ISimpleSkusEntityProps } from '@hs/framework';
 import {
   SizeSelectorPopupWrapper,
   SeeSimilarProducts,
@@ -34,6 +32,7 @@ export const SizeSelectorPopup: FC<ISizeSelectorPopupProps> = ({
   simpleSkus,
   selectedSku,
   showAddToCart,
+  goToProductRecommendation,
   onSizeChartClick,
   onSizeSelect,
 }: ISizeSelectorPopupProps) => {
@@ -42,7 +41,13 @@ export const SizeSelectorPopup: FC<ISizeSelectorPopupProps> = ({
       {showRfypCue && (
         <SeeSimilarProducts>
           <SizeSoldOut>Size sold out?</SizeSoldOut>
-          <SeeSimilar>See similar products</SeeSimilar>
+          <SeeSimilar
+            onClick={() => {
+              goToProductRecommendation('Add to cart');
+            }}
+          >
+            See similar products
+          </SeeSimilar>
         </SeeSimilarProducts>
       )}
       <SizeWrapper>
@@ -80,22 +85,16 @@ export const SizeSelectorPopup: FC<ISizeSelectorPopupProps> = ({
                     <SizeLabel>{sku.attributes.size}</SizeLabel>
                     <SoldOutWrapper>
                       {sku.availableQuantity < 1 && <SoldOut>Sold out</SoldOut>}
-                      <SvgIconsElement
-                        icon={isSelected ? IconRadioActive : IconRadio}
-                      />
+                      <SvgIconsElement icon={isSelected ? IconRadioActive : IconRadio} />
                     </SoldOutWrapper>
                   </SizeSelector>
                   {sku.availableQuantity > 0 && isSelected && (
                     <DeliveryMessageWrapper>
-                      <DeliveryMessage>
-                        {sku.eddPrefix + ' ' + sku.deliveryMsg}
-                      </DeliveryMessage>
+                      <DeliveryMessage>{sku.eddPrefix + ' ' + sku.deliveryMsg}</DeliveryMessage>
                       {sku.availableQuantity < 4 && sku.availableQuantity > 0 && (
                         <>
                           <DeliveryMessageOval></DeliveryMessageOval>
-                          <QuantityLeftOut>
-                            {sku.availableQuantity} left
-                          </QuantityLeftOut>
+                          <QuantityLeftOut>{sku.availableQuantity} left</QuantityLeftOut>
                         </>
                       )}
                     </DeliveryMessageWrapper>
@@ -110,9 +109,7 @@ export const SizeSelectorPopup: FC<ISizeSelectorPopupProps> = ({
             </SizeSelector>
           </Option> */}
         </OptionsContainer>
-        <AddToCart
-          {...{ show: showAddToCart || false, disabled: !selectedSku.skuId }}
-        ></AddToCart>
+        <AddToCart {...{ show: showAddToCart || false, disabled: !selectedSku.skuId }}></AddToCart>
       </SizeWrapper>
     </SizeSelectorPopupWrapper>
   );

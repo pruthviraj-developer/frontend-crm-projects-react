@@ -1,25 +1,19 @@
 import React from 'react';
 import { Story } from '@storybook/react/types-6-0';
+
 import { SizeSelectorPopup } from './SizeSelectorPopup';
 import { ISizeSelectorPopupProps } from './ISizeSelectorPopup';
-import { action } from '@storybook/addon-actions';
 
 export default {
   title: 'Size Selector Popup',
   component: SizeSelectorPopup,
 };
 
-const onSizeChartClick = () => {
-  action('sizechart')();
-};
-
-const Template: Story<ISizeSelectorPopupProps> = (args) => (
-  <SizeSelectorPopup {...args} />
-);
+const onSizeChartClick = () => {};
+const Template: Story<ISizeSelectorPopupProps> = (args) => <SizeSelectorPopup {...args} />;
 export const SizeSelectorPopupComponent = Template.bind({});
 
 SizeSelectorPopupComponent.args = {
-  pinCode: '110001',
   showRfypCue: true,
   showAddToCart: true,
   selectedSku: {
@@ -286,4 +280,5 @@ SizeSelectorPopupComponent.args = {
     },
   ],
   onSizeChartClick,
+  goToProductRecommendation: onSizeChartClick,
 };

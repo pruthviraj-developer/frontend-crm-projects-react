@@ -2,18 +2,18 @@ import { ISkuAttributes } from 'types';
 export interface ISizeSelectorPopupProps {
   showRfypCue: boolean;
   pinCode?: string;
+  showAddToCart: boolean;
   onSizeChartClick: () => void;
-  simpleSkus: ISizeSelectorSkuProps[];
-  selectedSku: ISizeSelectorSkuProps;
-  onSizeSelect: (ISizeSelectorSkuProps) => void;
-  skuAttributes: ISkuAttributes[];
+  simpleSkus: ISimpleSkusEntityProps[];
+  selectedSku: ISimpleSkusEntityProps;
+  onSizeSelect: (ISimpleSkusEntityProps) => void;
 }
 
-export interface ISizeSelectorSkuProps {
-  attributes: any;
+export interface ISimpleSkusEntityProps {
+  attributes: ISkuAttributes;
   productName: string;
   skuId: string;
-  attrs?: ISizeSelectorSkuAttrsEntity[] | null;
+  attrs?: IProductDetailsAttrsEntity[] | null;
   retailPrice: number;
   regularPrice: number;
   availableQuantity: number;
@@ -38,16 +38,16 @@ export interface ISizeSelectorSkuProps {
   preorderAction: string;
   preorderInfo: string;
   merchType: string;
-  deliveryMessage: ISizeSelectorSkuDeliveryMessageOrDeliveryMessagesEntity;
+  deliveryMessage: IProductDetailsDeliveryMessageOrDeliveryMessagesEntity;
   shippingReturnInfoForSku: string;
 }
 
-export interface ISizeSelectorSkuAttrsEntity {
+export interface IProductDetailsAttrsEntity {
   name: string;
   value: string;
 }
 
-export interface ISizeSelectorSkuDeliveryMessageOrDeliveryMessagesEntity {
+export interface IProductDetailsDeliveryMessageOrDeliveryMessagesEntity {
   action: string;
   msg: string;
   type: number;

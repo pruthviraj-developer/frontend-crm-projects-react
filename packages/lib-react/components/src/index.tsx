@@ -11,4 +11,4 @@ export * from './recommended-products';
 export * from './product-carousel';
 export * from './product-carousel-list';
 export * from './recommended-products-links';
-export * from './size-selector-popup';
+export * from './add-to-cart';

@@ -32,7 +32,7 @@ export interface ISimpleSkusEntityProps {
   attributes: ISkuAttributes;
   productName: string;
   skuId: string;
-  attrs?: ISimpleSkusAttrsProps[] | null;
+  attrs?: IProductDetailsAttrsEntity[] | null;
   retailPrice: number;
   regularPrice: number;
   availableQuantity: number;
@@ -57,15 +57,15 @@ export interface ISimpleSkusEntityProps {
   preorderAction: string;
   preorderInfo: string;
   merchType: string;
-  deliveryMessage: ISimpleSkusDeliveryMessageOrDeliveryMessagesEntity;
+  deliveryMessage: IProductDetailsDeliveryMessageOrDeliveryMessagesEntity;
 }
 
-export interface ISimpleSkusAttrsProps {
+export interface IProductDetailsAttrsEntity {
   name: string;
   value: string;
 }
 
-export interface ISimpleSkusDeliveryMessageOrDeliveryMessagesEntity {
+export interface IProductDetailsDeliveryMessageOrDeliveryMessagesEntity {
   action: string;
   msg: string;
   type: number;

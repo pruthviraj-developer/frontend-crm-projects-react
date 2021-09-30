@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import {
+  AddToCart,
   Accordion,
   NavBar,
   ProductNamePrice,
@@ -17,7 +18,7 @@ import {
 
 import { IProductProps, urlParamsProps, IWishListProps } from '@/types';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
-import { cookiesService, productDetailsService } from '@hs/services';
+import { productDetailsService } from '@hs/services';
 import { useState, useEffect, useRef } from 'react';
 import sortBy from 'lodash/sortBy';
 import { ProductDetailsWrapper } from './StyledUrlParams';
@@ -425,6 +426,7 @@ const Product: NextPage = (props) => {
               )}
               <Footer />
             </ProductDetailsWrapper>
+            <AddToCart {...{ show: true, disabled: false }}></AddToCart>
           </div>
         )}
         <Modal>

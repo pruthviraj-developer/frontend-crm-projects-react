@@ -1,6 +1,6 @@
 import {
-  ISimpleSkusAttrsProps,
-  ISimpleSkusDeliveryMessageOrDeliveryMessagesEntity,
+  IProductDetailsAttrsEntity,
+  IProductDetailsDeliveryMessageOrDeliveryMessagesEntity,
   ISimpleSkusEntityProps,
 } from 'types';
 
@@ -26,7 +26,7 @@ export interface ISelectedSimpleSkusEntityProps {
   attributes: any;
   productName: string;
   skuId: string;
-  attrs?: ISimpleSkusAttrsProps[] | null;
+  attrs?: IProductDetailsAttrsEntity[] | null;
   retailPrice: number;
   regularPrice: number;
   availableQuantity: number;
@@ -52,7 +52,7 @@ export interface ISelectedSimpleSkusEntityProps {
   preorderInfo: string;
   merchType: string;
   shippingReturnInfoForSku: string;
-  deliveryMessage: ISimpleSkusDeliveryMessageOrDeliveryMessagesEntity;
+  deliveryMessage: IProductDetailsDeliveryMessageOrDeliveryMessagesEntity;
 }
 
 export interface AccordionProductLevelAttrListEntityProps {

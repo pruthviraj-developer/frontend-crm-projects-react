@@ -28,8 +28,7 @@ const Header = styled.div`
   font-weight: ${typography.weight.medium};
   font-size: ${typography.size.s2}px;
   line-height: ${typography.size.s3}px;
-  padding: ${typography.size.s4}px ${typography.size.s3}px
-    ${typography.size.s15}px;
+  padding: ${typography.size.s4}px ${typography.size.s3}px ${typography.size.s15}px;
   display: flex;
   justify-content: space-between;
 `;
@@ -37,8 +36,7 @@ const Header = styled.div`
 const SizeSelectorPopupWrapper = styled.div`
   display: flex;
   justify-content: space-between;
-  padding: ${typography.size.s24}px ${typography.size.s3}px 0
-    ${typography.size.s3}px;
+  padding: ${typography.size.s24}px ${typography.size.s3}px 0 ${typography.size.s3}px;
   font-size: ${typography.size.s2}px;
   line-height: ${typography.size.s3}px;
   font-weight: ${typography.weight.medium};
@@ -106,8 +104,7 @@ const OptionsContainer = styled.div`
 const Option = styled.div<{ selected: boolean }>`
   padding: 16px;
   padding-bottom: ${(props) => (props.selected ? 12 : 16)}px;
-  background-color: ${(props) =>
-    props.selected ? 'rgba(237, 84, 164, 0.04)' : 'inherit'};
+  background-color: ${(props) => (props.selected ? 'rgba(237, 84, 164, 0.04)' : 'inherit')};
 `;
 
 const SizeSelector = styled.div<{ selected?: boolean }>`
