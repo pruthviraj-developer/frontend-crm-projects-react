@@ -3,11 +3,15 @@ import {
   IContextData,
   ISegmentProperties,
   IUtmParam,
-  IFunnelData,
 } from './IUseSegment';
 import Parser from 'ua-parser-js';
 import { useEffect, useState } from 'react';
-import { COOKIE_DATA, SESSION_DATA, useSessionStorage } from '../storage';
+import {
+  COOKIE_DATA,
+  SESSION_DATA,
+  useSessionStorage,
+  IFunnelData,
+} from '../storage';
 import { cookiesService } from '@hs/services';
 
 const getSessionInfo = (sessionInfostr: string) => {
