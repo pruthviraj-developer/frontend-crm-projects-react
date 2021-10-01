@@ -15,8 +15,5 @@ const Template: Story<ICustomSizePicker> = (args) => (
 export const CustomSizePickerComponent = Template.bind({});
 
 CustomSizePickerComponent.args = {
-  isSelected: true,
-  selectedSkuId: 'PDO-222',
-  sizeListUpfront: 'test',
   simpleSkus: [],
 };

@@ -18,7 +18,7 @@ export const CustomSizePicker: FC<ICustomSizePicker> = ({
       <Sizes>
         {simpleSkus &&
           simpleSkus.map((sku, index) => {
-            const isSelected = sku.skuId === (selectedSku && selectedSku.skuId);
+            const selected = sku.skuId === (selectedSku && selectedSku.skuId);
             return (
               <SizePill
                 key={index}
@@ -28,13 +28,10 @@ export const CustomSizePicker: FC<ICustomSizePicker> = ({
                   }
                 }}
               >
-                <Size
-                  selected={isSelected}
-                  disabled={sku.availableQuantity == 0}
-                >
+                <Size selected={selected} disabled={sku.availableQuantity == 0}>
                   {sku.attributes.size}
                 </Size>
-                {isSelected &&
+                {selected &&
                   sku.availableQuantity > 0 &&
                   sku.availableQuantity < 4 && (
                     <LeftQuantity>

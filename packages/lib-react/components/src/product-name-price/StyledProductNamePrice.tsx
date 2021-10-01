@@ -50,8 +50,8 @@ const WishListWrapper = styled.div`
   height: 40px;
 `;
 
-const WishListIcon = styled(SvgIcon)<{ isSelected: number }>`
-  opacity: ${(props) => (props.isSelected ? 1 : 0.5)};
+const WishListIcon = styled(SvgIcon)<{ selected: number }>`
+  opacity: ${(props) => (props.selected ? 1 : 0.5)};
 `;
 
 const ProductSold = styled.div`

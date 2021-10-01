@@ -10,4 +10,5 @@ export interface ISizeSelectorProps {
   onSizeSelect: (a: ISimpleSkusEntityProps, b: string) => void;
   goToProductRecommendation: (args: string) => void;
   closePopup: () => void;
+  addProductToCart: () => void;
 }

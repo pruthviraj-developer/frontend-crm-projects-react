@@ -94,10 +94,6 @@ const Product: NextPage = (props) => {
 
   const [productInfo, setProductInfo] = useState<IProductDetails | any>({}); // productDetails with modification
 
-  // const [quantity, setQuantity] = useState<number>(0);
-  // const showNewPromo = _self._AbTestService.isOnNewPromo();
-  // const SHOW_RFYP = true;
-
   const [SizeChartPopupModal, openSizeChartPopup, closeSizeChartPopup, isSizeChartPopupOpen] = useModal('root', {
     preventScroll: false,
     closeOnOverlayClick: true,
@@ -134,9 +130,17 @@ const Product: NextPage = (props) => {
   );
 
   const { productName, simpleSkus, ...product } = useProduct({ productData: productInfo });
-  const [sku, setSku] = useState<ISimpleSkusEntityProps>(() => {
-    return simpleSkus && simpleSkus[0];
-  });
+
+  // const [sku, setSku] = useState<ISimpleSkusEntityProps | any>(() => {
+  //   const sku = simpleSkus && simpleSkus[0];
+  //   if (sku && sku.availableQuantity === 1) {
+  //     return sku;
+  //   }
+  //   return;
+  // });
+
+  const [sku, setSku] = useState<ISimpleSkusEntityProps | any>();
+
   const { canShow: showSimilarProducts, ...similarProducts } = useRecommendation({
     section: 'RFYP',
     showmatching: true,
@@ -195,6 +199,7 @@ const Product: NextPage = (props) => {
       });
     }
   };
+
   const [{ contextData, properties }] = useSegment();
   const pdpTrackingData = useProductTracking({ productDetails });
 
@@ -224,6 +229,9 @@ const Product: NextPage = (props) => {
   };
 
   const addProductToCart = () => {
+    if (sku) {
+      return;
+    }
     openSizeSelector();
   };
 
@@ -304,15 +312,6 @@ const Product: NextPage = (props) => {
   useEffect(() => {
     if (isProductDetailsSuccess) {
       if (productDetails && productDetails.action === SUCCESS) {
-        const updateProductDetail = (sku: ISimpleSkusEntityProps, isfirst: boolean, isDefault = false) => {
-          productDetails.isDefault = isDefault;
-          productDetails.isfirst = isfirst;
-          if (!sku) {
-            return;
-          }
-          setSku(sku);
-        };
-
         const setDetails = () => {
           productDetails.simpleSkus = sortBy(productDetails.simpleSkus, function (skus: ISimpleSkusEntityProps) {
             return !(skus.availableQuantity > 0);
@@ -324,15 +323,13 @@ const Product: NextPage = (props) => {
               const sku = skuList[i];
               if (sku.availableQuantity > 0) {
                 productDetails.isProductSoldOut = false;
-                if (skuList.length > 1) {
-                  updateProductDetail(sku, true, true);
-                } else {
-                  updateProductDetail(sku, false, true);
+                if (skuList.length === 1) {
+                  setSku(sku);
                 }
                 return;
               }
             }
-            updateProductDetail(skuList[0], false);
+            setSku(skuList[0]);
             productDetails.isProductSoldOut = true;
           };
           selectSku(productDetails.simpleSkus);
@@ -420,6 +417,7 @@ const Product: NextPage = (props) => {
                   }}
                 ></CustomSizePicker>
               )}
+              <pre style={{ width: '60%', overflowX: 'scroll' }}>{JSON.stringify(sku, null, 4)}</pre>
               {productInfo.showRfypCue && showRFYP && (
                 <RecommendedProductsLinks
                   {...{ isProductSoldOut: productInfo.isProductSoldOut, goToProductRecommendation }}
@@ -470,6 +468,7 @@ const Product: NextPage = (props) => {
                 selectedSku: sku,
                 onSizeSelect,
                 goToProductRecommendation,
+                addProductToCart,
               }}
             ></SizeSelectorPopupComponent>
           )}
