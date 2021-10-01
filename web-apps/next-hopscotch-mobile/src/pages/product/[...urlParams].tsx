@@ -16,7 +16,7 @@ import {
   RecommendedProductsLinks,
 } from '@hs/components';
 
-import { IProductProps, urlParamsProps, IWishListProps } from '@/types';
+import { IProductProps, urlParamsProps, IWishListProps, ICartAPIResponse } from '@/types';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
 import { productDetailsService } from '@hs/services';
 import { useState, useEffect, useRef } from 'react';
@@ -92,6 +92,7 @@ const Product: NextPage = (props) => {
   const urlParams = router.query as unknown as IProductProps;
   const [productId]: urlParamsProps | any = [...(urlParams.urlParams || [])];
 
+  const [cartItemQty, setCartItemQty] = useState<number>(0);
   const [productInfo, setProductInfo] = useState<IProductDetails | any>({}); // productDetails with modification
 
   const [SizeChartPopupModal, openSizeChartPopup, closeSizeChartPopup, isSizeChartPopupOpen] = useModal('root', {
@@ -230,6 +231,18 @@ const Product: NextPage = (props) => {
 
   const addProductToCart = () => {
     if (sku) {
+      const data = { sku: sku.skuId, quantity: 1 };
+      (async () => {
+        try {
+          const addToCartResponse: ICartAPIResponse = await productDetailsService.addItemToCart(data);
+          if (addToCartResponse.action === SUCCESS) {
+            setCartItemQty(addToCartResponse.cartItemQty);
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      })();
+
       return;
     }
     openSizeSelector();
@@ -337,6 +350,7 @@ const Product: NextPage = (props) => {
         };
         const soldOutSkus = productDetails.simpleSkus.find((sku) => !(sku.availableQuantity > 0));
         productDetails.showRfypCue = !!soldOutSkus;
+        setCartItemQty(productDetails.quantity);
         setDetails();
       }
     }
@@ -368,7 +382,7 @@ const Product: NextPage = (props) => {
               />
               <link rel="icon" href="/favicon.ico" />
             </Head>
-            <NavBar count={productInfo && productInfo.quantity}></NavBar>
+            <NavBar count={cartItemQty}></NavBar>
             <ProductCarousel
               {...{
                 showArrows: false,
@@ -417,7 +431,6 @@ const Product: NextPage = (props) => {
                   }}
                 ></CustomSizePicker>
               )}
-              <pre style={{ width: '60%', overflowX: 'scroll' }}>{JSON.stringify(sku, null, 4)}</pre>
               {productInfo.showRfypCue && showRFYP && (
                 <RecommendedProductsLinks
                   {...{ isProductSoldOut: productInfo.isProductSoldOut, goToProductRecommendation }}

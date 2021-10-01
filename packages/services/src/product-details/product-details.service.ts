@@ -8,6 +8,13 @@ const addToWishlist = <P, R>(wishItem: P): Promise<R> => {
   });
 };
 
+const addItemToCart = <P, R>(cartData: P): Promise<R> => {
+  return httpService.post<R>({
+    url: '/api/shopping-cart/add-product/v2',
+    data: cartData,
+  });
+};
+
 const deleteFromWishlist = <P, R>(wishlistId: P): Promise<R> => {
   // params is added because when api request fails (400), to restrict retry call
   return httpService.delete({
@@ -94,32 +101,6 @@ const getProductDetails = <P, R>(productId: P, baseURL = ''): Promise<R> => {
 const getUserInfo = <P, R>(params: P): Promise<R> => {
   const url = '/api/customer/info';
   return httpService.get<R>({ url, params });
-  // let _self = this;
-  // this._CustomerService.getUserInfo().then(resp => {
-  //     this.showPlaceholder = false;
-  //     if (!resp.data.hasGuestData && this.isMobieDevice()) {
-  //         this.signedOutUser = true;
-  //     } else {
-  //         this.isGUwithDetails = true;
-  //         this.phoneNumber = resp.data.phoneNumber || '' ;
-  //         this.action = resp.data.actionText || '' ;
-  //         this._actionDetails = this._DeeplinkParser.getParamsObject(resp.data.actionURI || '');
-  //       //   console.log(resp.data.actionURI, this._actionDetails);
-
-  //         // this.userName = CustomerService.getCustomerFirstName();
-  //         // this.userInfo = CustomerService.getCustomerInfo();
-  //         // this.email = CustomerService.getCustomerEmail();
-  //         // if(this.userInfo.facebookProfile && this.userInfo.facebookProfile.profilePhoto) {
-  //         //     this.userInfo.profilePhoto = this.userInfo.facebookProfile.profilePhoto;
-  //         // } else {
-  //         //     // this.nameInitial = this.userInfo.firstName.substr(0, 1) + this.userInfo.lastName.substr(0, 1);
-  //         //     this.nameInitial = this.userInfo.firstName.substr(0, 1);
-  //         // }
-  //     }
-
-  //     _self.updateMenuLockStatus();
-  // }, err => {
-  // })
 };
 
 const getSizes = <P, R>(productId: P, baseURL = ''): Promise<R> => {
@@ -129,6 +110,7 @@ const getSizes = <P, R>(productId: P, baseURL = ''): Promise<R> => {
 };
 
 export const productDetailsService = {
+  addItemToCart,
   addToWishlist,
   deleteFromWishlist,
   checkForPincode,
