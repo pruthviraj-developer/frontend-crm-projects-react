@@ -1,7 +1,9 @@
+import { ISimpleSkusEntityProps } from '@hs/framework';
+
 export interface ISizeAndChartLabelsProps {
   isOneSize: boolean;
   hasSizeChart: boolean;
   qtyLeft?: number;
-  simpleSkus: Array<Record<string, string>>;
+  simpleSkus: ISimpleSkusEntityProps[];
   onSizeChartClick: () => void;
 }

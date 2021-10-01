@@ -41,5 +41,6 @@ const Size = styled.div<{
 const LeftQuantity = styled.div`
   color: #f44;
   text-align: center;
+  font-size: ${typography.size.s2}px;
 `;
 export { CustomSizeWrapper, SizePill, Sizes, Size, LeftQuantity };

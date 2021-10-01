@@ -19,7 +19,6 @@ import {
 
 const ACTIVE = 'active';
 export const Accordion: FC<IAccordionProps> = ({
-  skuAttributes = [],
   selectedSku,
   productDesc,
   moreInfo,
@@ -126,7 +125,7 @@ export const Accordion: FC<IAccordionProps> = ({
               )}
               {getOtherDetails(
                 'Colour',
-                skuAttributes[0] && skuAttributes[0].colour
+                simpleSkus[0] && simpleSkus[0].attributes.colour
               )}
             </DetailsDescription>
             {productLevelAttrList.length &&

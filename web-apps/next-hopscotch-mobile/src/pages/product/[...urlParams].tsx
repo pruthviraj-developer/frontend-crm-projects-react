@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import {
+  AddToCart,
   Accordion,
   NavBar,
   ProductNamePrice,
@@ -17,7 +18,7 @@ import {
 
 import { IProductProps, urlParamsProps, IWishListProps } from '@/types';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
-import { cookiesService, productDetailsService } from '@hs/services';
+import { productDetailsService } from '@hs/services';
 import { useState, useEffect, useRef } from 'react';
 import sortBy from 'lodash/sortBy';
 import { ProductDetailsWrapper } from './StyledUrlParams';
@@ -26,6 +27,11 @@ import { useModal } from 'react-hooks-use-modal';
 const SizeChartPopupComponent = dynamic(() => import('../../components/size-chart/SizeChart'), {
   ssr: false,
 });
+
+const SizeSelectorPopupComponent = dynamic(() => import('../../components/size-selector/SizeSelector'), {
+  ssr: false,
+});
+
 import {
   useProduct,
   useRecommendation,
@@ -41,7 +47,6 @@ import {
 
 import * as segment from '@/components/segment-analytic';
 // const ADD_TO_CART_BUTTON = 'Add to cart button';
-const SIZE_LIST_UPFRONT = 'Size list upfront';
 const SUCCESS = 'success';
 
 // const getProductDetails = <P, R>(): Promise<R> => {
@@ -86,15 +91,19 @@ const Product: NextPage = (props) => {
   const recommendedProductsLink = useRef<HTMLDivElement>(null);
   const urlParams = router.query as unknown as IProductProps;
   const [productId]: urlParamsProps | any = [...(urlParams.urlParams || [])];
-  const [isSelected, setIsSelected] = useState<boolean>(false);
-  const [sku, setSku] = useState<ISimpleSkusEntityProps>();
+
   const [productInfo, setProductInfo] = useState<IProductDetails | any>({}); // productDetails with modification
 
   // const [quantity, setQuantity] = useState<number>(0);
   // const showNewPromo = _self._AbTestService.isOnNewPromo();
   // const SHOW_RFYP = true;
 
-  const [Modal, open, close, isOpenBool] = useModal('root', {
+  const [SizeChartPopupModal, openSizeChartPopup, closeSizeChartPopup, isSizeChartPopupOpen] = useModal('root', {
+    preventScroll: false,
+    closeOnOverlayClick: true,
+  });
+
+  const [SizeSelectorPopupModal, openSizeSelector, closeSizeSelector, isSizeSelectorPopupOpen] = useModal('root', {
     preventScroll: false,
     closeOnOverlayClick: true,
   });
@@ -124,8 +133,10 @@ const Product: NextPage = (props) => {
     },
   );
 
-  const { ...product } = useProduct({ productData: productInfo });
-
+  const { productName, simpleSkus, ...product } = useProduct({ productData: productInfo });
+  const [sku, setSku] = useState<ISimpleSkusEntityProps>(() => {
+    return simpleSkus && simpleSkus[0];
+  });
   const { canShow: showSimilarProducts, ...similarProducts } = useRecommendation({
     section: 'RFYP',
     showmatching: true,
@@ -158,7 +169,7 @@ const Product: NextPage = (props) => {
     selectedSku: sku,
   }); // productForm
 
-  const { isOneSize, productName, skuAttributes } = useOneSize({
+  const { isOneSize } = useOneSize({
     productData: productInfo,
   });
 
@@ -210,6 +221,14 @@ const Product: NextPage = (props) => {
     //     this.addToWishlistAfterModalClose.bind(self, product),
     //   );
     // }
+  };
+
+  const addProductToCart = () => {
+    openSizeSelector();
+  };
+
+  const onSizeSelect = (sku: ISimpleSkusEntityProps, fromLocation: string) => {
+    setSku(sku);
   };
 
   const deleteFromWishlist = () => {
@@ -286,7 +305,6 @@ const Product: NextPage = (props) => {
     if (isProductDetailsSuccess) {
       if (productDetails && productDetails.action === SUCCESS) {
         const updateProductDetail = (sku: ISimpleSkusEntityProps, isfirst: boolean, isDefault = false) => {
-          setIsSelected(isfirst ? false : true);
           productDetails.isDefault = isDefault;
           productDetails.isfirst = isfirst;
           if (!sku) {
@@ -389,18 +407,16 @@ const Product: NextPage = (props) => {
                   isOneSize,
                   hasSizeChart: productInfo.hasSizeChart,
                   qtyLeft,
-                  simpleSkus: productInfo.simpleSkus,
-                  onSizeChartClick: open,
+                  simpleSkus,
+                  onSizeChartClick: openSizeChartPopup,
                 }}
               ></SizeAndChartLabels>
               {!isOneSize && (
                 <CustomSizePicker
                   {...{
-                    simpleSkus: productInfo.simpleSkus,
-                    skuAttributes,
-                    selectedSkuId,
-                    isSelected,
-                    sizeListUpfront: SIZE_LIST_UPFRONT,
+                    simpleSkus,
+                    selectedSku: sku,
+                    onSizeSelect,
                   }}
                 ></CustomSizePicker>
               )}
@@ -411,7 +427,7 @@ const Product: NextPage = (props) => {
               )}
               <DeliveryDetails {...deliveryDetailsData}></DeliveryDetails>
               {productInfo.id && (
-                <Accordion {...{ productData: productInfo, skuAttributes, selectedSku, ...product }}></Accordion>
+                <Accordion {...{ productData: productInfo, simpleSkus, selectedSku, ...product }}></Accordion>
               )}
 
               {showRFYP && (
@@ -427,19 +443,37 @@ const Product: NextPage = (props) => {
               )}
               <Footer />
             </ProductDetailsWrapper>
+            <AddToCart {...{ show: true, disabled: false, addProductToCart }}></AddToCart>
           </div>
         )}
-        <Modal>
-          {isOpenBool && (
+        <SizeChartPopupModal>
+          {isSizeChartPopupOpen && (
             <SizeChartPopupComponent
               {...{
                 id: productInfo.id,
                 productName: productName,
-                onClickClose: close,
+                onClickClose: closeSizeChartPopup,
               }}
             ></SizeChartPopupComponent>
           )}
-        </Modal>
+        </SizeChartPopupModal>
+
+        <SizeSelectorPopupModal>
+          {isSizeSelectorPopupOpen && (
+            <SizeSelectorPopupComponent
+              {...{
+                closePopup: closeSizeSelector,
+                showRfypCue: true,
+                showAddToCart: true,
+                onSizeChartClick: openSizeChartPopup,
+                simpleSkus,
+                selectedSku: sku,
+                onSizeSelect,
+                goToProductRecommendation,
+              }}
+            ></SizeSelectorPopupComponent>
+          )}
+        </SizeSelectorPopupModal>
       </main>
       {/* <pre style={{ width: '60%', overflowX: 'scroll' }}>{JSON.stringify(productDetails, null, 4)}</pre> */}
     </div>

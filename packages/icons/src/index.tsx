@@ -30,6 +30,8 @@ import ICIconTick from './images/icon-tick.svg';
 import ICIconCrossRed from './images/icon-cross-red.svg';
 import ICIconAngleDown from './images/icon-angle-down-v2.svg';
 import ICIconSeeSimilar from './images/icon-see-similar.svg';
+import ICIconRadio from './images/ic-radio.svg';
+import ICIconRadioActive from './images/ic-radio-active.svg';
 
 export const CreateIcon = ICCreate;
 export const BackIcon = ICBack;
@@ -62,3 +64,5 @@ export const IconTick = ICIconTick;
 export const IconCrossRed = ICIconCrossRed;
 export const IconAngleDown = ICIconAngleDown;
 export const IconSeeSimilar = ICIconSeeSimilar;
+export const IconRadio = ICIconRadio;
+export const IconRadioActive = ICIconRadioActive;

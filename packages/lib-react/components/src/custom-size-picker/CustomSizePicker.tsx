@@ -7,30 +7,36 @@ import {
   SizePill,
   LeftQuantity,
 } from './StyledCustomSizePicker';
-
+const SIZE_LIST_UPFRONT = 'Size list upfront';
 export const CustomSizePicker: FC<ICustomSizePicker> = ({
-  isSelected,
-  selectedSkuId,
-  simpleSkus = [],
-  skuAttributes = [],
+  onSizeSelect,
+  selectedSku,
+  simpleSkus,
 }: ICustomSizePicker) => {
   return (
     <CustomSizeWrapper>
       <Sizes>
         {simpleSkus &&
           simpleSkus.map((sku, index) => {
+            const isSelected = sku.skuId === (selectedSku && selectedSku.skuId);
             return (
-              <SizePill key={index}>
+              <SizePill
+                key={index}
+                onClick={() => {
+                  if (sku.availableQuantity > 0) {
+                    onSizeSelect(sku, SIZE_LIST_UPFRONT);
+                  }
+                }}
+              >
                 <Size
-                  selected={isSelected && sku.skuId === selectedSkuId}
+                  selected={isSelected}
                   disabled={sku.availableQuantity == 0}
                 >
-                  {skuAttributes[index].size}
+                  {sku.attributes.size}
                 </Size>
                 {isSelected &&
                   sku.availableQuantity > 0 &&
-                  sku.availableQuantity < 4 &&
-                  sku.skuId === selectedSkuId && (
+                  sku.availableQuantity < 4 && (
                     <LeftQuantity>
                       Only {sku.availableQuantity} left
                     </LeftQuantity>
