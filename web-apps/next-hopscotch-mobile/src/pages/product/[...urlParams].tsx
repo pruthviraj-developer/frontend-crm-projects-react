@@ -223,8 +223,23 @@ const Product: NextPage = (props) => {
   }, [contextData, pdpTrackingData, productId, properties]);
 
   const addToWishlist = () => {
+    toast.info('Sign in to add this item to your Wishlist.', {
+      hideProgressBar: true,
+      closeButton: false,
+      icon: false,
+      autoClose: 2250,
+      style: {
+        backgroundColor: '#00aff0',
+        color: '#fff',
+        textAlign: 'center',
+        fontWeight: 600,
+        fontSize: '14px',
+        lineHeight: '16px',
+      },
+    });
     if (1) {
       // check for login
+      return;
       addToWishlistAfterModalClose();
     }
     // else {
