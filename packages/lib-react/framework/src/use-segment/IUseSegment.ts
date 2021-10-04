@@ -97,7 +97,6 @@ export interface Page {
   title: string;
   url: string;
 }
-
 export interface IUtmParam {
   'utm-source'?: string;
   'utm-medium'?: string;
@@ -105,14 +104,4 @@ export interface IUtmParam {
   'utm-term'?: string;
   'utm-content'?: string;
   'utm-date'?: string;
-}
-export interface IFunnelData {
-  funnel: string;
-  funnel_tile: string;
-  funnel_section: string;
-  section: string;
-  sub_section: string;
-  source: string;
-  plp: string;
-  quickshop: string;
 }

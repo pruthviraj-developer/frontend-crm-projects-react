@@ -26,5 +26,5 @@ export const COOKIE_DATA = {
 
 export const SESSION_DATA = {
   OA_DATA: 'oa_data',
-  BACKUP: 'oa_data_backup',
+  SEGMENT_DATA: 'SEGMENT_DATA',
 };
