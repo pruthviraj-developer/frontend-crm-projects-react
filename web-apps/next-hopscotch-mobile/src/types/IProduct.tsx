@@ -20,4 +20,5 @@ export interface IWishListProps {
 export interface ICartAPIResponse {
   action: string;
   cartItemQty: number;
+  message: string;
 }

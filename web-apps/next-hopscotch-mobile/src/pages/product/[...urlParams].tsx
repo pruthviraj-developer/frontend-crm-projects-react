@@ -16,12 +16,21 @@ import {
   RecommendedProductsLinks,
 } from '@hs/components';
 
+import { toast } from 'react-toastify';
 import { IProductProps, urlParamsProps, IWishListProps, ICartAPIResponse } from '@/types';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
 import { productDetailsService } from '@hs/services';
 import { useState, useEffect, useRef } from 'react';
 import sortBy from 'lodash/sortBy';
-import { ProductDetailsWrapper } from './StyledUrlParams';
+import {
+  ProductDetailsWrapper,
+  CartLink,
+  CartNotification,
+  CartNotificationDetails,
+  CartHeader,
+  CartMessage,
+  CartLinkText,
+} from './StyledUrlParams';
 import { useModal } from 'react-hooks-use-modal';
 
 const SizeChartPopupComponent = dynamic(() => import('../../components/size-chart/SizeChart'), {
@@ -48,7 +57,7 @@ import {
 import * as segment from '@/components/segment-analytic';
 // const ADD_TO_CART_BUTTON = 'Add to cart button';
 const SUCCESS = 'success';
-
+const tryLater = 'Try Later';
 // const getProductDetails = <P, R>(): Promise<R> => {
 //   const params = { currentTime: new Date().getTime() };
 //   // return httpService.get<R>({ url: `/api/product/${productId}`, params });
@@ -229,6 +238,32 @@ const Product: NextPage = (props) => {
     // }
   };
 
+  const goToCart = (path = '/v2/cart') => {
+    console.log(`${window.location.protocol}//${window.location.host}${path}`);
+    window.location.href = `${window.location.protocol}//${window.location.host}${path}`;
+  };
+
+  const getToasterContent = (response: ICartAPIResponse) => {
+    return (
+      <>
+        <CartNotification>
+          <CartLink
+            onClick={() => {
+              goToCart();
+            }}
+          >
+            <img src={`${productInfo.imgurls[0] && productInfo.imgurls[0].imgUrlThumbnail}`} alt={`${productName}`} />
+            <CartNotificationDetails>
+              {!isOneSize && <CartHeader>{`${sku.attrs[0].name} : ${sku.attrs[0].value}`}</CartHeader>}
+              <CartMessage>Added to your Cart!</CartMessage>
+              <CartLinkText>View cart</CartLinkText>
+            </CartNotificationDetails>
+          </CartLink>
+        </CartNotification>
+      </>
+    );
+  };
+
   const addProductToCart = () => {
     if (sku) {
       const data = { sku: sku.skuId, quantity: 1 };
@@ -237,9 +272,33 @@ const Product: NextPage = (props) => {
           const addToCartResponse: ICartAPIResponse = await productDetailsService.addItemToCart(data);
           if (addToCartResponse.action === SUCCESS) {
             setCartItemQty(addToCartResponse.cartItemQty);
+
+            toast(getToasterContent(addToCartResponse), {
+              position: toast.POSITION.TOP_RIGHT,
+              closeButton: false,
+              hideProgressBar: true,
+              autoClose: 2250,
+              toastId: 'cartQuantiyChangeToaster',
+              bodyClassName: 'cartQuantiyChangeBodyToaster',
+            });
+            return;
           }
-        } catch (e) {
-          console.error(e);
+        } catch (error: any) {
+          const errorMessage = error ? error.message : tryLater;
+          toast.error(errorMessage, {
+            hideProgressBar: true,
+            closeButton: false,
+            icon: false,
+            autoClose: 2250,
+            style: {
+              backgroundColor: '#f44',
+              color: '#fff',
+              textAlign: 'center',
+              fontWeight: 600,
+              fontSize: '14px',
+              lineHeight: '16px',
+            },
+          });
         }
       })();
 
