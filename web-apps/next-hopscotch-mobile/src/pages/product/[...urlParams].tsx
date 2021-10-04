@@ -55,6 +55,7 @@ import {
 } from '@hs/framework';
 
 import * as segment from '@/components/segment-analytic';
+import { LoginModal } from '@/components/login-modal';
 // const ADD_TO_CART_BUTTON = 'Add to cart button';
 const SUCCESS = 'success';
 const tryLater = 'Try Later';
@@ -103,6 +104,11 @@ const Product: NextPage = (props) => {
 
   const [cartItemQty, setCartItemQty] = useState<number>(0);
   const [productInfo, setProductInfo] = useState<IProductDetails | any>({}); // productDetails with modification
+
+  const [LoginPopupModal, openLoginPopup, closeLoginPopup, isLoginPopupOpen] = useModal('root', {
+    preventScroll: false,
+    closeOnOverlayClick: true,
+  });
 
   const [SizeChartPopupModal, openSizeChartPopup, closeSizeChartPopup, isSizeChartPopupOpen] = useModal('root', {
     preventScroll: false,
@@ -221,6 +227,10 @@ const Product: NextPage = (props) => {
         contextData,
       });
   }, [contextData, pdpTrackingData, productId, properties]);
+
+  useEffect(() => {
+    openLoginPopup();
+  }, [openLoginPopup]);
 
   const addToWishlist = () => {
     toast.info('Sign in to add this item to your Wishlist.', {
@@ -560,6 +570,8 @@ const Product: NextPage = (props) => {
             ></SizeSelectorPopupComponent>
           )}
         </SizeSelectorPopupModal>
+
+        <LoginPopupModal>{isLoginPopupOpen && <LoginModal></LoginModal>}</LoginPopupModal>
       </main>
       {/* <pre style={{ width: '60%', overflowX: 'scroll' }}>{JSON.stringify(productDetails, null, 4)}</pre> */}
     </div>

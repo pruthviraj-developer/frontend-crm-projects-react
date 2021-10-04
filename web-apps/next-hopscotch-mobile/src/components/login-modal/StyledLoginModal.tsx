@@ -7,8 +7,12 @@ const LoginModalHeaderIcon = styled(SvgIcon)`
 `;
 
 const LoginModalWrapper = styled.div`
-  padding-top: ${typography.size.s24}px;
-  height: 100vh;
+  position: fixed;
+  width: 100%;
+  left: 0;
+  bottom: 0;
+  top: ${typography.size.s24}px;
+  height: 100%;
   overflow-y: auto;
   font-weight: ${typography.weight.regular};
   font-size: ${typography.size.s2}px;
@@ -16,10 +20,16 @@ const LoginModalWrapper = styled.div`
   letter-spacing: 0.2px;
   color: rgba(0, 0, 0, 0.8);
   background-color: ${Colors.WHITE};
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
 `;
 
 const SignInContainer = styled.div`
   padding: 0 ${typography.size.s5}px ${typography.size.s5}px;
+`;
+
+const SignInWrapper = styled.div`
+  margin-top: 20px;
 `;
 
 const HeaderWrapper = styled.div<{ active: boolean }>`
@@ -48,6 +58,7 @@ const FooterWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-top: 14px;
 `;
 const FooterDescription = styled.div`
   font-weight: 400;
@@ -70,6 +81,7 @@ export {
   HeaderWrapper,
   HeaderTitle,
   SignInContainer,
+  SignInWrapper,
   SubHeaderWrapper,
   FooterWrapper,
   FooterDescription,
