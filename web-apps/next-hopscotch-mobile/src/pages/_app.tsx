@@ -6,6 +6,7 @@ import { Hydrate } from 'react-query/hydration';
 import GoogleTagManager from '@/components/google-tag-manager/GoogleTagManager';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import Head from 'next/head';
+import { ToastContainer } from 'react-toastify';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [queryClient] = useState(
@@ -37,6 +38,13 @@ function MyApp({ Component, pageProps }: AppProps) {
         </Hydrate>
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
+      <ToastContainer
+        style={{ fontFamily: 'inherit' }}
+        autoClose={2250}
+        closeOnClick={false}
+        draggable={false}
+        newestOnTop={true}
+      />
     </>
   );
 }

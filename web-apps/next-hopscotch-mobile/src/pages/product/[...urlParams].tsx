@@ -16,12 +16,21 @@ import {
   RecommendedProductsLinks,
 } from '@hs/components';
 
-import { IProductProps, urlParamsProps, IWishListProps } from '@/types';
+import { toast } from 'react-toastify';
+import { IProductProps, urlParamsProps, IWishListProps, ICartAPIResponse } from '@/types';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
 import { productDetailsService } from '@hs/services';
 import { useState, useEffect, useRef } from 'react';
 import sortBy from 'lodash/sortBy';
-import { ProductDetailsWrapper } from './StyledUrlParams';
+import {
+  ProductDetailsWrapper,
+  CartLink,
+  CartNotification,
+  CartNotificationDetails,
+  CartHeader,
+  CartMessage,
+  CartLinkText,
+} from './StyledUrlParams';
 import { useModal } from 'react-hooks-use-modal';
 
 const SizeChartPopupComponent = dynamic(() => import('../../components/size-chart/SizeChart'), {
@@ -48,7 +57,7 @@ import {
 import * as segment from '@/components/segment-analytic';
 // const ADD_TO_CART_BUTTON = 'Add to cart button';
 const SUCCESS = 'success';
-
+const tryLater = 'Try Later';
 // const getProductDetails = <P, R>(): Promise<R> => {
 //   const params = { currentTime: new Date().getTime() };
 //   // return httpService.get<R>({ url: `/api/product/${productId}`, params });
@@ -92,11 +101,8 @@ const Product: NextPage = (props) => {
   const urlParams = router.query as unknown as IProductProps;
   const [productId]: urlParamsProps | any = [...(urlParams.urlParams || [])];
 
+  const [cartItemQty, setCartItemQty] = useState<number>(0);
   const [productInfo, setProductInfo] = useState<IProductDetails | any>({}); // productDetails with modification
-
-  // const [quantity, setQuantity] = useState<number>(0);
-  // const showNewPromo = _self._AbTestService.isOnNewPromo();
-  // const SHOW_RFYP = true;
 
   const [SizeChartPopupModal, openSizeChartPopup, closeSizeChartPopup, isSizeChartPopupOpen] = useModal('root', {
     preventScroll: false,
@@ -134,9 +140,17 @@ const Product: NextPage = (props) => {
   );
 
   const { productName, simpleSkus, ...product } = useProduct({ productData: productInfo });
-  const [sku, setSku] = useState<ISimpleSkusEntityProps>(() => {
-    return simpleSkus && simpleSkus[0];
-  });
+
+  // const [sku, setSku] = useState<ISimpleSkusEntityProps | any>(() => {
+  //   const sku = simpleSkus && simpleSkus[0];
+  //   if (sku && sku.availableQuantity === 1) {
+  //     return sku;
+  //   }
+  //   return;
+  // });
+
+  const [sku, setSku] = useState<ISimpleSkusEntityProps | any>();
+
   const { canShow: showSimilarProducts, ...similarProducts } = useRecommendation({
     section: 'RFYP',
     showmatching: true,
@@ -195,6 +209,7 @@ const Product: NextPage = (props) => {
       });
     }
   };
+
   const [{ contextData, properties }] = useSegment();
   const pdpTrackingData = useProductTracking({ productDetails });
 
@@ -223,7 +238,72 @@ const Product: NextPage = (props) => {
     // }
   };
 
+  const goToCart = (path = '/v2/cart') => {
+    console.log(`${window.location.protocol}//${window.location.host}${path}`);
+    window.location.href = `${window.location.protocol}//${window.location.host}${path}`;
+  };
+
+  const getToasterContent = (response: ICartAPIResponse) => {
+    return (
+      <>
+        <CartNotification>
+          <CartLink
+            onClick={() => {
+              goToCart();
+            }}
+          >
+            <img src={`${productInfo.imgurls[0] && productInfo.imgurls[0].imgUrlThumbnail}`} alt={`${productName}`} />
+            <CartNotificationDetails>
+              {!isOneSize && <CartHeader>{`${sku.attrs[0].name} : ${sku.attrs[0].value}`}</CartHeader>}
+              <CartMessage>Added to your Cart!</CartMessage>
+              <CartLinkText>View cart</CartLinkText>
+            </CartNotificationDetails>
+          </CartLink>
+        </CartNotification>
+      </>
+    );
+  };
+
   const addProductToCart = () => {
+    if (sku) {
+      const data = { sku: sku.skuId, quantity: 1 };
+      (async () => {
+        try {
+          const addToCartResponse: ICartAPIResponse = await productDetailsService.addItemToCart(data);
+          if (addToCartResponse.action === SUCCESS) {
+            setCartItemQty(addToCartResponse.cartItemQty);
+
+            toast(getToasterContent(addToCartResponse), {
+              position: toast.POSITION.TOP_RIGHT,
+              closeButton: false,
+              hideProgressBar: true,
+              autoClose: 2250,
+              toastId: 'cartQuantiyChangeToaster',
+              bodyClassName: 'cartQuantiyChangeBodyToaster',
+            });
+            return;
+          }
+        } catch (error: any) {
+          const errorMessage = error ? error.message : tryLater;
+          toast.error(errorMessage, {
+            hideProgressBar: true,
+            closeButton: false,
+            icon: false,
+            autoClose: 2250,
+            style: {
+              backgroundColor: '#f44',
+              color: '#fff',
+              textAlign: 'center',
+              fontWeight: 600,
+              fontSize: '14px',
+              lineHeight: '16px',
+            },
+          });
+        }
+      })();
+
+      return;
+    }
     openSizeSelector();
   };
 
@@ -304,15 +384,6 @@ const Product: NextPage = (props) => {
   useEffect(() => {
     if (isProductDetailsSuccess) {
       if (productDetails && productDetails.action === SUCCESS) {
-        const updateProductDetail = (sku: ISimpleSkusEntityProps, isfirst: boolean, isDefault = false) => {
-          productDetails.isDefault = isDefault;
-          productDetails.isfirst = isfirst;
-          if (!sku) {
-            return;
-          }
-          setSku(sku);
-        };
-
         const setDetails = () => {
           productDetails.simpleSkus = sortBy(productDetails.simpleSkus, function (skus: ISimpleSkusEntityProps) {
             return !(skus.availableQuantity > 0);
@@ -324,15 +395,13 @@ const Product: NextPage = (props) => {
               const sku = skuList[i];
               if (sku.availableQuantity > 0) {
                 productDetails.isProductSoldOut = false;
-                if (skuList.length > 1) {
-                  updateProductDetail(sku, true, true);
-                } else {
-                  updateProductDetail(sku, false, true);
+                if (skuList.length === 1) {
+                  setSku(sku);
                 }
                 return;
               }
             }
-            updateProductDetail(skuList[0], false);
+            setSku(skuList[0]);
             productDetails.isProductSoldOut = true;
           };
           selectSku(productDetails.simpleSkus);
@@ -340,6 +409,7 @@ const Product: NextPage = (props) => {
         };
         const soldOutSkus = productDetails.simpleSkus.find((sku) => !(sku.availableQuantity > 0));
         productDetails.showRfypCue = !!soldOutSkus;
+        setCartItemQty(productDetails.quantity);
         setDetails();
       }
     }
@@ -371,7 +441,7 @@ const Product: NextPage = (props) => {
               />
               <link rel="icon" href="/favicon.ico" />
             </Head>
-            <NavBar count={productInfo && productInfo.quantity}></NavBar>
+            <NavBar count={cartItemQty}></NavBar>
             <ProductCarousel
               {...{
                 showArrows: false,
@@ -470,6 +540,7 @@ const Product: NextPage = (props) => {
                 selectedSku: sku,
                 onSizeSelect,
                 goToProductRecommendation,
+                addProductToCart,
               }}
             ></SizeSelectorPopupComponent>
           )}

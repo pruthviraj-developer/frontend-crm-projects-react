@@ -32,11 +32,17 @@ export const SizeSelectorPopup: FC<ISizeSelectorPopupProps> = ({
   simpleSkus,
   selectedSku,
   showAddToCart,
+  addProductToCart,
   goToProductRecommendation,
   onSizeChartClick,
   onSizeSelect,
   closePopup,
 }: ISizeSelectorPopupProps) => {
+  const selectedSkuId = selectedSku && selectedSku.skuId;
+  const addProduct = () => {
+    closePopup();
+    addProductToCart();
+  };
   return (
     <SizeSelectorPopupWrapper>
       <SizeWrapper>
@@ -71,7 +77,7 @@ export const SizeSelectorPopup: FC<ISizeSelectorPopupProps> = ({
         <OptionsContainer>
           {simpleSkus &&
             simpleSkus.map((sku: ISimpleSkusEntityProps, index: number) => {
-              const isSelected = sku.skuId === selectedSku.skuId;
+              const isSelected = sku.skuId === selectedSkuId;
               return (
                 <Option
                   key={index}
@@ -110,7 +116,9 @@ export const SizeSelectorPopup: FC<ISizeSelectorPopupProps> = ({
             </SizeSelector>
           </Option> */}
         </OptionsContainer>
-        <AddToCart {...{ show: showAddToCart || false, disabled: !selectedSku.skuId }}></AddToCart>
+        <AddToCart
+          {...{ show: showAddToCart || false, addProductToCart: addProduct, disabled: !selectedSkuId }}
+        ></AddToCart>
       </SizeWrapper>
     </SizeSelectorPopupWrapper>
   );

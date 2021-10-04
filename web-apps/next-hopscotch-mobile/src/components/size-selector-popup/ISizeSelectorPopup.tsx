@@ -4,6 +4,7 @@ export interface ISizeSelectorPopupProps {
   showRfypCue: boolean;
   pinCode?: string;
   showAddToCart: boolean;
+  addProductToCart: () => void;
   closePopup: () => void;
   onSizeChartClick: () => void;
   simpleSkus: ISimpleSkusEntityProps[];

@@ -1,4 +1,5 @@
 import { css, Global } from '@emotion/react';
+import 'react-toastify/dist/ReactToastify.css';
 export const globalStyles = (
   <Global
     styles={css`
@@ -14,6 +15,22 @@ export const globalStyles = (
           Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
+      }
+
+      #cartQuantiyChangeToaster {
+        max-width: 240px;
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 0;
+        border-radius: 4px;
+        margin-top: 16px;
+        margin-right: 16px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+      }
+
+      .cartQuantiyChangeBodyToaster {
+        padding: 0;
       }
 
       a {
