@@ -20,7 +20,7 @@ const SizeChart: FC<ISizeChartDtoProps> = ({ productName, id, onClickClose }: IS
     if (isWeightActive[index] !== unit) {
       const _converterIndex = unit === 'kg' ? 1 / KG_TO_LB : KG_TO_LB;
       isWeightActive[index] = unit;
-      let list = [...isWeightActive];
+      const list = [...isWeightActive];
       list[index] = unit;
       setWeightActive(list);
       convertUnit('W', _converterIndex, index);
@@ -30,7 +30,7 @@ const SizeChart: FC<ISizeChartDtoProps> = ({ productName, id, onClickClose }: IS
   const setLength = (index: number, unit: string) => {
     if (isLengthActive[index] !== unit) {
       const _converterIndex = unit === 'cm' ? CM_TO_INCH : 1 / CM_TO_INCH;
-      let list = [...isLengthActive];
+      const list = [...isLengthActive];
       list[index] = unit;
       setLengthActive(list);
       convertUnit('L', _converterIndex, index);
@@ -43,7 +43,7 @@ const SizeChart: FC<ISizeChartDtoProps> = ({ productName, id, onClickClose }: IS
       sizeChartData[index].sizeChartParameterValueDTOList.map(function (row) {
         row.valueList.forEach(function (colValue: string, colIndex: number) {
           if (sizeChartData[index].parameterMeasureTypeList[colIndex] == unitType) {
-            let colArray: any = colValue.replace(/\s/g, '').split('-');
+            const colArray: any = colValue.replace(/\s/g, '').split('-');
             colArray.forEach(function (rangeValue: any, rangeIndex: number) {
               colArray[rangeIndex] = Math.round(rangeValue * unitIndex * 10) / 10;
             });
@@ -69,7 +69,7 @@ const SizeChart: FC<ISizeChartDtoProps> = ({ productName, id, onClickClose }: IS
           const tableData: any = [];
           const prepareTableData = () => {
             if (sizeChartData && sizeChartData[0].sizeChartParameterValueDTOList) {
-              for (var index = 0; index < sizeChartData.length; index++) {
+              for (let index = 0; index < sizeChartData.length; index++) {
                 if (
                   sizeChartData[index] &&
                   sizeChartData[index].parameterMeasureTypeList &&
