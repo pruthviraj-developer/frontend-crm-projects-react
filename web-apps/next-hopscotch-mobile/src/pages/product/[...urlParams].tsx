@@ -100,7 +100,7 @@ const Product: NextPage = (props) => {
   const recommendedProductsLink = useRef<HTMLDivElement>(null);
   const urlParams = router.query as unknown as IProductProps;
   const [productId]: urlParamsProps | any = [...(urlParams.urlParams || [])];
-
+  const prevProductId = useRef<string>('');
   const [cartItemQty, setCartItemQty] = useState<number>(0);
   const [productInfo, setProductInfo] = useState<IProductDetails | any>({}); // productDetails with modification
 
@@ -211,16 +211,18 @@ const Product: NextPage = (props) => {
   };
 
   const [{ contextData, properties }] = useSegment();
-  const pdpTrackingData = useProductTracking({ productDetails });
+  const pdpTrackingData = useProductTracking({ selectedSku, productDetails });
 
   useEffect(() => {
-    if (contextData && properties && pdpTrackingData.product_id == productId)
+    if (contextData && properties && pdpTrackingData && pdpTrackingData.product_id != prevProductId.current) {
       segment.trackEvent({
         evtName: segment.PDP_TRACKING_EVENTS.PRODUCT_VIEWED,
         properties: { ...properties, ...pdpTrackingData, addFrom: 'current=' + location.pathname },
         contextData,
       });
-  }, [contextData, pdpTrackingData, productId, properties]);
+      prevProductId.current = pdpTrackingData.product_id;
+    }
+  }, [contextData, properties, pdpTrackingData]);
 
   const addToWishlist = () => {
     if (1) {
@@ -280,6 +282,11 @@ const Product: NextPage = (props) => {
               autoClose: 2250,
               toastId: 'cartQuantiyChangeToaster',
               bodyClassName: 'cartQuantiyChangeBodyToaster',
+            });
+            segment.trackEvent({
+              evtName: segment.PDP_TRACKING_EVENTS.ADDED_TO_CART,
+              properties: { ...properties, ...pdpTrackingData, addFrom: 'current=' + location.pathname },
+              contextData,
             });
             return;
           }
