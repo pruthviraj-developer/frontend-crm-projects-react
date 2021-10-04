@@ -8,7 +8,11 @@ import {
   SvgIconsElement,
 } from './StyledProductCarousel';
 import Carousel from 'react-multi-carousel';
-import { IProductCarouselProps, IImageUrlProps, IProductCarouselBreakPoints } from './IProductCarousel';
+import {
+  IProductCarouselProps,
+  IImageUrlProps,
+  IProductCarouselBreakPoints,
+} from './IProductCarousel';
 import { IconSeeSimilar } from '@hs/icons';
 export const ProductCarousel: FC<IProductCarouselProps> = ({
   focusOnSelect,
@@ -28,7 +32,8 @@ export const ProductCarousel: FC<IProductCarouselProps> = ({
     mobile: { breakpoint: { max: 464, min: 0 }, items: 1 },
     tablet: { breakpoint: { max: 1024, min: 464 }, items: 1 },
   };
-  const [similarItemsDisplayWith, setSimilarItemsDisplayWith] = useState<number>(140);
+  const [similarItemsDisplayWith, setSimilarItemsDisplayWith] =
+    useState<number>(140);
   setTimeout(() => {
     setSimilarItemsDisplayWith(38);
   }, 2000);
@@ -84,7 +89,9 @@ export const ProductCarousel: FC<IProductCarouselProps> = ({
           goToProductRecommendation('Size list');
         }}
       >
-        <SimilarTextElement width={similarItemsDisplayWith}>SEE SIMILAR</SimilarTextElement>
+        <SimilarTextElement width={similarItemsDisplayWith}>
+          SEE SIMILAR
+        </SimilarTextElement>
         <SvgIconsElement icon={IconSeeSimilar} />
       </SimilarItemsLinkWrapper>
     </ProductCarouselWrapper>

@@ -12,32 +12,37 @@ import {
   IProductCarouselListProps,
   IRecommendProductDetailListEntity,
 } from './IProductCarouselList';
+import { IFunnelData, SESSION_DATA, useSessionStorage } from '@hs/framework';
+
+const getDashedParameter = (product: IRecommendProductDetailListEntity) => {
+  let dashSeparatedUrlProductName = '';
+  if (product.brandName || product.brand) {
+    dashSeparatedUrlProductName = (product.brandName || product.brand) + '-';
+  }
+  dashSeparatedUrlProductName += product.name || product.productName;
+  dashSeparatedUrlProductName = dashSeparatedUrlProductName
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-');
+  return dashSeparatedUrlProductName;
+};
 export const ProductCarouselList: FC<IProductCarouselListProps> = ({
   products,
   section,
   subsection,
 }: IProductCarouselListProps) => {
   const router = useRouter();
+  const [funnelData] = useSessionStorage<IFunnelData>(
+    SESSION_DATA.OA_DATA,
+    null
+  );
   const imageSize = 360;
-
-  const getDashedParameter = (product: IRecommendProductDetailListEntity) => {
-    let dashSeparatedUrlProductName = '';
-    if (product.brandName || product.brand) {
-      dashSeparatedUrlProductName = (product.brandName || product.brand) + '-';
-    }
-    dashSeparatedUrlProductName += product.name || product.productName;
-    dashSeparatedUrlProductName = dashSeparatedUrlProductName
-      .replace(/\s+/g, '-')
-      .replace(/-+/g, '-');
-    return dashSeparatedUrlProductName;
-  };
 
   const gotoProductDetailsPage = (
     product: IRecommendProductDetailListEntity
   ) => {
     router.push({
       pathname: `/product/${product.id}/${getDashedParameter(product)}`,
-      query: { section, subsection },
+      query: { ...funnelData, ...{ section, subsection } },
     });
   };
 
