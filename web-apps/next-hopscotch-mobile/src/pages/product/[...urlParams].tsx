@@ -100,7 +100,7 @@ const Product: NextPage = (props) => {
   const recommendedProductsLink = useRef<HTMLDivElement>(null);
   const urlParams = router.query as unknown as IProductProps;
   const [productId]: urlParamsProps | any = [...(urlParams.urlParams || [])];
-  const prevProductId = useRef<string>('');
+  const prevProductId = useRef<number>();
   const [cartItemQty, setCartItemQty] = useState<number>(0);
   const [productInfo, setProductInfo] = useState<IProductDetails | any>({}); // productDetails with modification
 
@@ -315,6 +315,16 @@ const Product: NextPage = (props) => {
   };
 
   const onSizeSelect = (sku: ISimpleSkusEntityProps, fromLocation: string) => {
+    segment.trackEvent({
+      evtName: segment.PDP_TRACKING_EVENTS.SIZE_CLICKED,
+      properties: {
+        ...properties,
+        ...pdpTrackingData,
+        addFrom: 'current=' + location.pathname,
+        from_location: fromLocation,
+      },
+      contextData,
+    });
     setSku(sku);
   };
 

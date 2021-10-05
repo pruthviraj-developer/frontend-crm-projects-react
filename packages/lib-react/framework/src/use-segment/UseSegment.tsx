@@ -11,6 +11,9 @@ import {
   SESSION_DATA,
   useSessionStorage,
   IFunnelData,
+  ISegmentData,
+  LOCAL_DATA,
+  useReadLocalStorage,
 } from '../storage';
 import { cookiesService } from '@hs/services';
 
@@ -53,6 +56,13 @@ export const useSegment = () => {
     SESSION_DATA.OA_DATA,
     null
   );
+  const [segmentData] = useSessionStorage<ISegmentData>(
+    SESSION_DATA.SEGMENT_DATA,
+    null
+  );
+  const screenMap = useReadLocalStorage<Record<string, string>>([
+    LOCAL_DATA.SEGMENT_SCREEN_MAP,
+  ]).get(LOCAL_DATA.SEGMENT_SCREEN_MAP);
 
   const getFormattedExperiments = () => {
     const experiments =
@@ -87,6 +97,10 @@ export const useSegment = () => {
           section: funnelData?.section,
           subsection: funnelData?.sub_section || '',
           plp: funnelData?.plp || '',
+          from_screen:
+            segmentData?.from_screen != null
+              ? screenMap?.[segmentData.from_screen]
+              : '',
           sortbar_group: '',
           sortbar: '',
           preorder: null,

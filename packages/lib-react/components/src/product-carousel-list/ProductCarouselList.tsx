@@ -42,7 +42,10 @@ export const ProductCarouselList: FC<IProductCarouselListProps> = ({
   ) => {
     router.push({
       pathname: `/product/${product.id}/${getDashedParameter(product)}`,
-      query: { ...funnelData, ...{ section, subsection } },
+      query: {
+        ...funnelData,
+        ...{ section, subsection, from_screen: 'product' },
+      },
     });
   };
 
