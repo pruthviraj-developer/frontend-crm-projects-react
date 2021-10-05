@@ -571,7 +571,7 @@ const Product: NextPage = (props) => {
           )}
         </SizeSelectorPopupModal>
 
-        <LoginPopupModal>{isLoginPopupOpen && <LoginModal></LoginModal>}</LoginPopupModal>
+        <LoginPopupModal>{isLoginPopupOpen && <LoginModal {...{ closeLoginPopup }}></LoginModal>}</LoginPopupModal>
       </main>
       {/* <pre style={{ width: '60%', overflowX: 'scroll' }}>{JSON.stringify(productDetails, null, 4)}</pre> */}
     </div>

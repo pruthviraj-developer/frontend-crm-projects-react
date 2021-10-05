@@ -5,17 +5,22 @@ import { LoginModalWrapper, SignInContainer, SignInWrapper } from './StyledLogin
 import { Header } from './Header';
 import { SubHeader } from './SubHeader';
 import { Footer } from './Footer';
+import { Mobile } from './Mobile';
 const SIGNIN = 'signin';
 const JOIN = 'join';
-export const LoginModal: FC<ILoginModalProps> = ({}: ILoginModalProps) => {
+export const LoginModal: FC<ILoginModalProps> = ({ closeLoginPopup }: ILoginModalProps) => {
   const subTitle = 'Sign In';
 
   const [state, setState] = useState(SIGNIN);
   const back = () => {
-    console.log('back');
+    if (state === JOIN) {
+      setState(state === JOIN ? SIGNIN : JOIN);
+      return;
+    }
+    closeLoginPopup();
   };
 
-  const signInOrJoin = (linkTo: string) => {
+  const signInOrJoin = () => {
     setState(state === JOIN ? SIGNIN : JOIN);
   };
 
@@ -34,11 +39,13 @@ export const LoginModal: FC<ILoginModalProps> = ({}: ILoginModalProps) => {
   };
   return (
     <LoginModalWrapper>
-      <Header active={false} back={back} />
+      <Header active={state === SIGNIN ? false : true} back={back} />
       <SignInContainer>
         <SubHeader title={subTitle} />
-        <SignInWrapper></SignInWrapper>
-        <Footer {...(state === JOIN ? signIn : joinUs)} />
+        <SignInWrapper>
+          <Mobile />
+        </SignInWrapper>
+        <Footer {...(state === SIGNIN ? joinUs : signIn)} />
       </SignInContainer>
     </LoginModalWrapper>
   );

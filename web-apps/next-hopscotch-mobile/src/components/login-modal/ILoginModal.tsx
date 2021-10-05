@@ -1,4 +1,6 @@
-export interface ILoginModalProps {}
+export interface ILoginModalProps {
+  closeLoginPopup: () => void;
+}
 
 export interface IHeaderProps {
   active: boolean;
@@ -13,5 +15,7 @@ export interface IFooterProps {
   footerDescription: string;
   footerLink: string;
   footerLinkText: string;
-  signInOrJoin: (args: string) => void;
+  signInOrJoin: () => void;
 }
+
+export interface IMobileProps {}
