@@ -6,6 +6,7 @@ const REGEX_PATTERNS = {
   PINCODE: /(^\d{6}$)/,
   ONLY_TEXT: /^[A-Za-z\s]+$/,
   CARD_EXPIRY: /^[0-9]{2}\/[0-9]{2}$/,
+  REGEX_MOBILE_NO: /^\d{10}$/,
 };
 
 const FORM_ERROR_CODES: any = {

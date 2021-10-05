@@ -11,7 +11,7 @@ const LoginModalWrapper = styled.div`
   width: 100%;
   left: 0;
   bottom: 0;
-  min-height: calc(100% - 40px);
+  min-height: calc(100% - 24px);
   overflow-y: auto;
   font-weight: ${typography.weight.regular};
   font-size: ${typography.size.s2}px;
@@ -37,7 +37,18 @@ const Description = styled.div`
   margin-top: 12px;
 `;
 
-const HeaderWrapper = styled.div``;
+const HeaderWrapper = styled.div<{ active: boolean }>`
+  align-items: center;
+  box-shadow: ${(props) => (props.active ? ' 0 1px 0 0 rgb(0 0 0 / 12%)' : 'none')};
+  display: flex;
+`;
+
+const HeaderTitle = styled.div`
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.2px;
+`;
 
 const SubHeaderWrapper = styled.div`
   color: rgba(0, 0, 0, 0.8);
@@ -51,6 +62,7 @@ export {
   LoginModalWrapper,
   LoginModalHeaderIcon,
   HeaderWrapper,
+  HeaderTitle,
   SignInContainer,
   SignInWrapper,
   SubHeaderWrapper,

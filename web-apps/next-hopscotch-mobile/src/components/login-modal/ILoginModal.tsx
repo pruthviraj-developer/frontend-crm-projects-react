@@ -4,6 +4,8 @@ export interface ILoginModalProps {
 
 export interface IHeaderProps {
   closeLoginPopup: () => void;
+  active: boolean;
+  back: () => void;
 }
 
 export interface ISubHeaderProps {
@@ -17,7 +19,9 @@ export interface IFooterProps {
   signInOrJoin: () => void;
 }
 
-export interface IMobileProps {}
+export interface IMobileProps {
+  updateForm: (args: IVerifiedDataProps) => void;
+}
 
 export interface ILoginErrorResponse {
   action: string;
@@ -31,4 +35,10 @@ export interface ILoginErrorMessageBar {
   actionLink: string;
   messageUIType: string;
   messageDisplayTime: string;
+}
+
+export interface IVerifiedDataProps {
+  loginId?: string;
+  otpReason?: string;
+  type?: string;
 }

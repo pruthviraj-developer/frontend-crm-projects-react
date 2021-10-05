@@ -1,31 +1,43 @@
 import React, { FC, useState } from 'react';
-import { ILoginModalProps } from './ILoginModal';
+import { ILoginModalProps, IVerifiedDataProps } from './ILoginModal';
 import { LoginModalWrapper, SignInContainer, SignInWrapper, Description } from './StyledLoginModal';
 import { Header } from './Header';
 import { SubHeader } from './SubHeader';
 import { Mobile } from './Mobile';
+import { Verify } from './Verify';
 const SIGNIN = 'signin';
-const JOIN = 'join';
+const VERIFY = 'verify';
 export const LoginModal: FC<ILoginModalProps> = ({ closeLoginPopup }: ILoginModalProps) => {
   const subTitle = 'Sign In';
 
-  const [state, setState] = useState(SIGNIN);
+  const [state, setState] = useState(VERIFY);
+  const [verified, verifiedData] = useState<IVerifiedDataProps | any>({
+    type: 'SMS',
+    loginId: '7411498813',
+    otpReason: SIGNIN,
+  });
+
+  const updateForm = (data: IVerifiedDataProps) => {
+    verifiedData(data);
+    useState(VERIFY);
+  };
+
   const back = () => {
-    if (state === JOIN) {
-      setState(state === JOIN ? SIGNIN : JOIN);
+    if (state === VERIFY) {
+      setState(state === VERIFY ? SIGNIN : VERIFY);
       return;
     }
     closeLoginPopup();
   };
 
   const signInOrJoin = () => {
-    setState(state === JOIN ? SIGNIN : JOIN);
+    setState(state === VERIFY ? SIGNIN : VERIFY);
   };
 
-  const joinUs = {
+  const VERIFYIN = {
     footerDescription: 'New to Hopscotch?',
-    footerLink: JOIN,
-    footerLinkText: 'Join us',
+    footerLink: VERIFY,
+    footerLinkText: 'verify us',
     signInOrJoin,
   };
 
@@ -37,12 +49,17 @@ export const LoginModal: FC<ILoginModalProps> = ({ closeLoginPopup }: ILoginModa
   };
   return (
     <LoginModalWrapper>
-      <Header {...{ closeLoginPopup }} />
+      <Header {...{ closeLoginPopup, back, active: state === SIGNIN ? false : true }} />
       <SignInContainer>
-        <SubHeader title={subTitle} />
-        <Description>Your number will be your account identity.</Description>
+        {state === SIGNIN && (
+          <>
+            <SubHeader title={subTitle} />
+            <Description>Your number will be your account identity.</Description>
+          </>
+        )}
         <SignInWrapper>
-          <Mobile />
+          {state === SIGNIN && <Mobile {...{ updateForm }} />}
+          {state === VERIFY && <Verify {...verified} />}
         </SignInWrapper>
       </SignInContainer>
     </LoginModalWrapper>

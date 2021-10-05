@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import { FORM_ERROR_CODES, REGEX_PATTERNS } from './constants';
-import { IMobileProps, ILoginErrorResponse, ILoginErrorMessageBar } from './ILoginModal';
+import { IMobileProps, ILoginErrorResponse, ILoginErrorMessageBar, IVerifiedDataProps } from './ILoginModal';
 import {
   ActionText,
   MobileWrapper,
@@ -14,7 +14,9 @@ import {
 import { IconErrorMessage } from '@hs/icons';
 import { productDetailsService } from '@hs/services';
 
-export const Mobile: FC<IMobileProps> = ({}: IMobileProps) => {
+const reason = { otpReason: 'SIGN_IN', type: 'SMS' };
+
+export const Mobile: FC<IMobileProps> = ({ updateForm }: IMobileProps) => {
   const [loginId, setLoginId] = useState('');
   const [error, setErrorState] = useState<ILoginErrorMessageBar | null>(null);
 
@@ -49,10 +51,13 @@ export const Mobile: FC<IMobileProps> = ({}: IMobileProps) => {
       try {
         const response: ILoginErrorResponse = await productDetailsService.sendOtp({
           loginId,
-          otpReason: 'SIGN_IN',
+          ...reason,
         });
         if (response.action === 'success') {
-          console.log(response);
+          updateForm({
+            loginId,
+            ...reason,
+          });
         } else {
           setErrorState(response.messageBar);
         }
