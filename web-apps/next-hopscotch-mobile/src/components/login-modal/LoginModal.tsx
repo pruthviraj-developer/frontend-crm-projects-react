@@ -1,10 +1,8 @@
 import React, { FC, useState } from 'react';
-import { IconClose } from '@hs/icons';
 import { ILoginModalProps } from './ILoginModal';
-import { LoginModalWrapper, SignInContainer, SignInWrapper } from './StyledLoginModal';
+import { LoginModalWrapper, SignInContainer, SignInWrapper, Description } from './StyledLoginModal';
 import { Header } from './Header';
 import { SubHeader } from './SubHeader';
-import { Footer } from './Footer';
 import { Mobile } from './Mobile';
 const SIGNIN = 'signin';
 const JOIN = 'join';
@@ -39,13 +37,13 @@ export const LoginModal: FC<ILoginModalProps> = ({ closeLoginPopup }: ILoginModa
   };
   return (
     <LoginModalWrapper>
-      <Header active={state === SIGNIN ? false : true} back={back} />
+      <Header {...{ closeLoginPopup }} />
       <SignInContainer>
         <SubHeader title={subTitle} />
+        <Description>Your number will be your account identity.</Description>
         <SignInWrapper>
           <Mobile />
         </SignInWrapper>
-        <Footer {...(state === SIGNIN ? joinUs : signIn)} />
       </SignInContainer>
     </LoginModalWrapper>
   );

@@ -3,7 +3,7 @@ import { typography, Colors } from '@hs/utils';
 import { SvgIcon } from '@hs/icons';
 
 const LoginModalHeaderIcon = styled(SvgIcon)`
-  margin: 16px;
+  margin: 16px 16px 16px 20px;
 `;
 
 const LoginModalWrapper = styled.div`
@@ -11,8 +11,7 @@ const LoginModalWrapper = styled.div`
   width: 100%;
   left: 0;
   bottom: 0;
-  top: ${typography.size.s24}px;
-  height: 100%;
+  min-height: calc(100% - 40px);
   overflow-y: auto;
   font-weight: ${typography.weight.regular};
   font-size: ${typography.size.s2}px;
@@ -29,21 +28,16 @@ const SignInContainer = styled.div`
 `;
 
 const SignInWrapper = styled.div`
-  margin-top: 20px;
+  position: relative;
 `;
 
-const HeaderWrapper = styled.div<{ active: boolean }>`
-  box-shadow: ${(props) => (props.active ? ' 0 1px 0 0 rgb(0 0 0 / 12%)' : 'none')};
+const Description = styled.div`
+  opacity: 0.56;
+  margin-bottom: 16px;
+  margin-top: 12px;
 `;
 
-const HeaderTitle = styled.div`
-  display: inline-block;
-  padding: 16px 0 16px 72px;
-  font-size: 20px;
-  font-weight: 600;
-  line-height: 1.2;
-  letter-spacing: -0.2px;
-`;
+const HeaderWrapper = styled.div``;
 
 const SubHeaderWrapper = styled.div`
   color: rgba(0, 0, 0, 0.8);
@@ -53,37 +47,12 @@ const SubHeaderWrapper = styled.div`
   letter-spacing: -0.2px;
 `;
 
-const FooterWrapper = styled.div`
-  border-top: 1px solid rgba(0, 0, 0, 0.12);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 14px;
-`;
-const FooterDescription = styled.div`
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 1.43;
-  letter-spacing: 0.2px;
-  color: rgba(0, 0, 0, 0.8);
-`;
-const FooterDescriptionLink = styled.div`
-  font-size: 14px;
-  font-weight: bold;
-  padding: 6px;
-  line-height: 36px;
-  color: #000;
-  text-transform: uppercase;
-`;
 export {
   LoginModalWrapper,
   LoginModalHeaderIcon,
   HeaderWrapper,
-  HeaderTitle,
   SignInContainer,
   SignInWrapper,
   SubHeaderWrapper,
-  FooterWrapper,
-  FooterDescription,
-  FooterDescriptionLink,
+  Description,
 };

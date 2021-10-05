@@ -3,8 +3,7 @@ export interface ILoginModalProps {
 }
 
 export interface IHeaderProps {
-  active: boolean;
-  back: () => void;
+  closeLoginPopup: () => void;
 }
 
 export interface ISubHeaderProps {

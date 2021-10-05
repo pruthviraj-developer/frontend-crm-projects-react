@@ -1,15 +1,18 @@
 import styled from '@emotion/styled';
 import { typography, Colors } from '@hs/utils';
+import { SvgIcon } from '@hs/icons';
+
+const ErrorIcon = styled(SvgIcon)``;
 
 const MobileWrapper = styled.div`
-  margin-top: ${typography.size.s5}px;
+  postion: relative;
 `;
 
 const MobileNumber = styled.input`
   width: 100%;
   height: 48px;
   line-height: 20px;
-  padding: 14px 12px 0 12px;
+  padding: 12px;
   border-radius: 4px;
   background-color: #eff1f4;
   border: transparent;
@@ -17,17 +20,34 @@ const MobileNumber = styled.input`
   margin-bottom: 8px;
 `;
 
-const MobileNumberLabel = styled.label`
-  pointer-events: none;
-  position: absolute;
-  left: 12px;
-  top: 18px;
-  color: rgba(0, 0, 0, 0.36);
-  transition: 0.2s ease all;
+const Button = styled.button`
+  color: #fff;
+  border: 0;
+  width: 100%;
+  min-height: 48px;
+  background-color: #ed54a4;
+  border-radius: 4px;
+  text-align: center;
+  letter-spacing: 0.4px;
+  font: inherit;
+  text-transform: uppercase;
+  line-height: 1.14;
   font-size: 14px;
-  line-height: 14px;
-  padding: 0;
-  margin: 0;
+  font-weight: 700;
+  margin-top: 12px;
 `;
 
-export { MobileWrapper, MobileNumber, MobileNumberLabel };
+const MessageWrapper = styled.div`
+  padding: 8px 12px 0;
+  display: flex;
+  align-items: center;
+`;
+
+const ErrorMessage = styled.span`
+  margin-left: 8px;
+  display: inline-block;
+  color: #eb1000;
+  font-size: 12px;
+`;
+
+export { MobileWrapper, MobileNumber, MessageWrapper, Button, ErrorIcon, ErrorMessage };
