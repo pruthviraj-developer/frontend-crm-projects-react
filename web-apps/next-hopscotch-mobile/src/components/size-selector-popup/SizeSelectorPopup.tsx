@@ -26,6 +26,7 @@ import {
   DeliveryMessageOval,
   QuantityLeftOut,
 } from './StyledSizeSelectorPopup';
+const ADD_TO_CART_BUTTON = 'Add to cart button';
 export const SizeSelectorPopup: FC<ISizeSelectorPopupProps> = ({
   showRfypCue,
   pinCode,
@@ -84,7 +85,7 @@ export const SizeSelectorPopup: FC<ISizeSelectorPopupProps> = ({
                   selected={isSelected}
                   onClick={() => {
                     if (sku.availableQuantity > 0) {
-                      onSizeSelect(sku, '');
+                      onSizeSelect(sku, ADD_TO_CART_BUTTON);
                     }
                   }}
                 >
