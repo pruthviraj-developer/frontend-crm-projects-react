@@ -86,7 +86,7 @@ export const ProductCarousel: FC<IProductCarouselProps> = ({
       <SimilarItemsLinkWrapper
         width={similarItemsDisplayWith}
         onClick={() => {
-          goToProductRecommendation('Size list');
+          goToProductRecommendation('Overlay');
         }}
       >
         <SimilarTextElement width={similarItemsDisplayWith}>

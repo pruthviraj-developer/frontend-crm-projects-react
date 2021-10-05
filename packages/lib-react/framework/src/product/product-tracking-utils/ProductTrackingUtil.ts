@@ -1,13 +1,12 @@
 import { IProductDetailsAttrsEntity } from 'product/types';
-import { IProductTrackingProps } from './IUseProductTracking';
-import { useEffect, useState } from 'react';
+import { IProductTrackingProps } from './IProductTrackingUtil';
 
 const DIFFERENT_FOR_SIZES = 'Different for sizes';
-
-const getTrackingData = ({
+export const getProductTrackingData = ({
   selectedSku,
   productDetails,
 }: IProductTrackingProps) => {
+    console.dir(productDetails)
   const selectedProductSku = selectedSku || productDetails?.simpleSkus?.[0];
   const attributes = selectedProductSku?.attrs?.reduce(
     (obj: Record<string, string>, item: IProductDetailsAttrsEntity) => (
@@ -19,7 +18,8 @@ const getTrackingData = ({
   );
   const productTrackData = {
     product_id: productDetails.id,
-    sku: productDetails?.simpleSkus.map((sku) => sku.skuId),
+    sku:
+      selectedSku?.skuId || productDetails?.simpleSkus.map((sku) => sku.skuId),
     name: productDetails.productName,
     brand: productDetails.brandName,
     price: selectedProductSku.retailPrice,
@@ -50,18 +50,5 @@ const getTrackingData = ({
     merch_type: selectedProductSku.merchType,
     ...attributes,
   };
-  return productTrackData;
-};
-export const useProductTracking = ({
-  selectedSku,
-  productDetails,
-}: IProductTrackingProps) => {
-  const [productTrackData, setData] = useState(() =>
-    getTrackingData({ selectedSku, productDetails })
-  );
-  useEffect(() => {
-    setData(getTrackingData({ selectedSku, productDetails }));
-  }, [productDetails, selectedSku]);
-
   return productTrackData;
 };

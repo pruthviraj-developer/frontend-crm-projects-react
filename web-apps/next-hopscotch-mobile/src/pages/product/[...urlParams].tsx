@@ -51,7 +51,7 @@ import {
   useSegment,
   IProductDetails,
   ISimpleSkusEntityProps,
-  useProductTracking,
+  getProductTrackingData,
 } from '@hs/framework';
 
 import * as segment from '@/components/segment-analytic';
@@ -100,7 +100,6 @@ const Product: NextPage = (props) => {
   const recommendedProductsLink = useRef<HTMLDivElement>(null);
   const urlParams = router.query as unknown as IProductProps;
   const [productId]: urlParamsProps | any = [...(urlParams.urlParams || [])];
-  const prevProductId = useRef<number>();
   const [cartItemQty, setCartItemQty] = useState<number>(0);
   const [productInfo, setProductInfo] = useState<IProductDetails | any>({}); // productDetails with modification
 
@@ -200,7 +199,6 @@ const Product: NextPage = (props) => {
         evtName: segment.PDP_TRACKING_EVENTS.PDP_SEE_SIMILAR_CLICKED,
         properties: {
           ...properties,
-          from_screen: 'Product details',
           reco_type: 'Similar products',
           product_id: productId,
           from_location: fromLocation,
@@ -211,18 +209,22 @@ const Product: NextPage = (props) => {
   };
 
   const [{ contextData, properties }] = useSegment();
-  const pdpTrackingData = useProductTracking({ selectedSku, productDetails });
+  // const pdpTrackingData = useProductTracking({ selectedSku, productDetails });
 
   useEffect(() => {
-    if (contextData && properties && pdpTrackingData && pdpTrackingData.product_id != prevProductId.current) {
+    console.dir(productDetails);
+    if (contextData && properties && productDetails) {
       segment.trackEvent({
         evtName: segment.PDP_TRACKING_EVENTS.PRODUCT_VIEWED,
-        properties: { ...properties, ...pdpTrackingData, addFrom: 'current=' + location.pathname },
+        properties: {
+          ...properties,
+          ...getProductTrackingData({ productDetails }),
+          addFrom: 'current=' + location.pathname,
+        },
         contextData,
       });
-      prevProductId.current = pdpTrackingData.product_id;
     }
-  }, [contextData, properties, pdpTrackingData]);
+  }, [contextData, productDetails, properties]);
 
   const addToWishlist = () => {
     if (1) {
@@ -285,7 +287,11 @@ const Product: NextPage = (props) => {
             });
             segment.trackEvent({
               evtName: segment.PDP_TRACKING_EVENTS.ADDED_TO_CART,
-              properties: { ...properties, ...pdpTrackingData, addFrom: 'current=' + location.pathname },
+              properties: {
+                ...properties,
+                ...getProductTrackingData({ productDetails, selectedSku: sku }),
+                addFrom: 'current=' + location.pathname,
+              },
               contextData,
             });
             return;
@@ -319,7 +325,7 @@ const Product: NextPage = (props) => {
       evtName: segment.PDP_TRACKING_EVENTS.SIZE_CLICKED,
       properties: {
         ...properties,
-        ...pdpTrackingData,
+        ...getProductTrackingData({ productDetails, selectedSku: sku }),
         addFrom: 'current=' + location.pathname,
         from_location: fromLocation,
       },
