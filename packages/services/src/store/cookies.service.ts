@@ -6,7 +6,9 @@ const getCookies = (key: string) => {
 };
 
 const setCookies = ({ key, value, options }: SetCookieProps) => {
-  return Cookies.set(`${key}`, value, {
+  const storeValue =
+    typeof value === 'object' && value !== null ? JSON.stringify(value) : value;
+  return Cookies.set(`${key}`, storeValue, {
     path: '/',
     ...options,
   });

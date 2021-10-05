@@ -17,9 +17,9 @@ import {
 } from '@hs/components';
 
 import { toast } from 'react-toastify';
-import { IProductProps, urlParamsProps, IWishListProps, ICartAPIResponse } from '@/types';
+import { IProductProps, urlParamsProps, IWishListProps, ICartAPIResponse, IUserInfoProps } from '@/types';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
-import { productDetailsService } from '@hs/services';
+import { cookiesService, productDetailsService, timeService } from '@hs/services';
 import { useState, useEffect, useRef } from 'react';
 import sortBy from 'lodash/sortBy';
 import {
@@ -59,6 +59,10 @@ import { LoginModal } from '@/components/login-modal';
 // const ADD_TO_CART_BUTTON = 'Add to cart button';
 const SUCCESS = 'success';
 const tryLater = 'Try Later';
+const CUSTOMER_INFO_COOKIE_NAME = 'hs_customer_info';
+const GUEST_CUSTOMER_INFO = 'hs_guest_customer_info';
+// const CART_ITEM_QTY_COOKIE_NAME = 'cart_item_quantity';
+// const CART_TRACKING_COOKIE_NAME = 'cart_tracking_data';
 // const getProductDetails = <P, R>(): Promise<R> => {
 //   const params = { currentTime: new Date().getTime() };
 //   // return httpService.get<R>({ url: `/api/product/${productId}`, params });
@@ -230,6 +234,23 @@ const Product: NextPage = (props) => {
 
   useEffect(() => {
     openLoginPopup();
+    (async () => {
+      try {
+        const response: IUserInfoProps = await productDetailsService.getUserInfo();
+        const expireProp = { expires: new Date(timeService.getCurrentTime() + 30 * 24 * 60 * 60 * 1000) };
+        if (response.action === SUCCESS) {
+          if (response.isLoggedIn) {
+            // this._GUCartCount = null;
+            cookiesService.setCookies({ key: CUSTOMER_INFO_COOKIE_NAME, value: response, options: expireProp });
+          } else {
+            cookiesService.setCookies({ key: GUEST_CUSTOMER_INFO, value: response, options: expireProp });
+          }
+          if (response.cartItemQty !== undefined) {
+            setCartItemQty(response.cartItemQty);
+          }
+        }
+      } catch (error) {}
+    })();
   }, [openLoginPopup]);
 
   const addToWishlist = () => {

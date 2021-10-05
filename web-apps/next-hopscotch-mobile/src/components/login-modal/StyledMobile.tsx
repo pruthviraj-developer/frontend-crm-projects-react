@@ -2,7 +2,16 @@ import styled from '@emotion/styled';
 import { typography, Colors } from '@hs/utils';
 import { SvgIcon } from '@hs/icons';
 
-const ErrorIcon = styled(SvgIcon)``;
+const ActionText = styled.span`
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: underline;
+  padding-left: 4px;
+`;
+
+const ErrorIcon = styled(SvgIcon)`
+  min-width: 24px;
+`;
 
 const MobileWrapper = styled.div`
   postion: relative;
@@ -50,4 +59,4 @@ const ErrorMessage = styled.span`
   font-size: 12px;
 `;
 
-export { MobileWrapper, MobileNumber, MessageWrapper, Button, ErrorIcon, ErrorMessage };
+export { ActionText, MobileWrapper, MobileNumber, MessageWrapper, Button, ErrorIcon, ErrorMessage };

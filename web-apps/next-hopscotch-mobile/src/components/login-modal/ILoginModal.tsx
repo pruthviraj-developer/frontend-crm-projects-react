@@ -18,3 +18,17 @@ export interface IFooterProps {
 }
 
 export interface IMobileProps {}
+
+export interface ILoginErrorResponse {
+  action: string;
+  messageBar: ILoginErrorMessageBar;
+}
+
+export interface ILoginErrorMessageBar {
+  messageType: string;
+  message: string;
+  actionText: string;
+  actionLink: string;
+  messageUIType: string;
+  messageDisplayTime: string;
+}

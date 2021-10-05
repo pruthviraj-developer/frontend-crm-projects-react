@@ -1,13 +1,22 @@
 import React, { FC, useState } from 'react';
 import { FORM_ERROR_CODES, REGEX_PATTERNS } from './constants';
-import { IMobileProps } from './ILoginModal';
-import { MobileWrapper, MobileNumber, Button, MessageWrapper, ErrorMessage, ErrorIcon } from './StyledMobile';
+import { IMobileProps, ILoginErrorResponse, ILoginErrorMessageBar } from './ILoginModal';
+import {
+  ActionText,
+  MobileWrapper,
+  MobileNumber,
+  Button,
+  MessageWrapper,
+  ErrorMessage,
+  ErrorIcon,
+} from './StyledMobile';
 
 import { IconErrorMessage } from '@hs/icons';
+import { productDetailsService } from '@hs/services';
 
 export const Mobile: FC<IMobileProps> = ({}: IMobileProps) => {
   const [loginId, setLoginId] = useState('');
-  const [error, setErrorState] = useState(null);
+  const [error, setErrorState] = useState<ILoginErrorMessageBar | null>(null);
 
   const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e ? e.preventDefault() : '';
@@ -30,6 +39,28 @@ export const Mobile: FC<IMobileProps> = ({}: IMobileProps) => {
       setErrorMessage('mobile');
     }
     setErrorState(error);
+    if (!error) {
+      sendOtp();
+    }
+  };
+
+  const sendOtp = () => {
+    (async () => {
+      try {
+        const response: ILoginErrorResponse = await productDetailsService.sendOtp({
+          loginId,
+          otpReason: 'SIGN_IN',
+        });
+        if (response.action === 'success') {
+          console.log(response);
+        } else {
+          setErrorState(response.messageBar);
+        }
+      } catch (error) {
+        const errorResponse = error as unknown as ILoginErrorResponse;
+        setErrorState(errorResponse.messageBar);
+      }
+    })();
   };
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,6 +73,12 @@ export const Mobile: FC<IMobileProps> = ({}: IMobileProps) => {
     setErrorState(null);
   };
 
+  const action = () => {
+    if (error && error.actionLink) {
+      window.location.href = `${window.location.protocol}//${window.location.host}/${error.actionLink}`;
+    }
+  };
+
   return (
     <MobileWrapper>
       <form
@@ -52,9 +89,12 @@ export const Mobile: FC<IMobileProps> = ({}: IMobileProps) => {
       >
         <MobileNumber value={loginId} onChange={handleOnChange} placeholder="Mobile Number" />
         {error && (
-          <MessageWrapper>
+          <MessageWrapper onClick={action}>
             <ErrorIcon icon={IconErrorMessage} />
-            <ErrorMessage> {error && error['message']} </ErrorMessage>
+            <ErrorMessage>
+              {error.message}
+              {error.actionLink && <ActionText>{error.actionText}</ActionText>}
+            </ErrorMessage>
           </MessageWrapper>
         )}
         <Button type="submit">SEND OTP</Button>

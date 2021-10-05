@@ -98,15 +98,29 @@ const getProductDetails = <P, R>(productId: P, baseURL = ''): Promise<R> => {
   });
 };
 
-const getUserInfo = <P, R>(params: P): Promise<R> => {
+const getUserInfo = <R>(): Promise<R> => {
   const url = '/api/customer/info';
-  return httpService.get<R>({ url, params });
+  return httpService.get<R>({ url });
 };
 
 const getSizes = <P, R>(productId: P, baseURL = ''): Promise<R> => {
   let url = `/api/sizeChart/${productId}`;
   if (baseURL) url = baseURL + url;
   return httpService.get<R>({ url });
+};
+
+const sendOtp = <P, R>(user: P): Promise<R> => {
+  return httpService.post<R>({
+    url: '/api/customer/validate-sendotp',
+    data: user,
+  });
+};
+
+const verifyOtp = <P, R>(user: P): Promise<R> => {
+  return httpService.post<R>({
+    url: '/api/customer/verifyotp-delegate',
+    data: user,
+  });
 };
 
 export const productDetailsService = {
@@ -120,4 +134,6 @@ export const productDetailsService = {
   getRecommendedProducts,
   getUserInfo,
   getSizes,
+  sendOtp,
+  verifyOtp,
 };
