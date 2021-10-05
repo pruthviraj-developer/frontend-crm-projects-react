@@ -35,10 +35,29 @@ export interface ILoginErrorMessageBar {
   actionLink: string;
   messageUIType: string;
   messageDisplayTime: string;
+  code?: string;
 }
 
 export interface IVerifiedDataProps {
-  loginId?: string;
-  otpReason?: string;
-  type?: string;
+  loginId: string;
+  otpReason: string;
+  type: string;
+  back?: () => void;
+}
+
+export interface IVerifyOtpResponeProps {
+  action: string;
+  messageBar: ILoginErrorMessageBar;
+  cartItemQty: number;
+  isRegister: boolean;
+  resendOTPAuto: boolean;
+  isLoggedIn: boolean;
+}
+
+export interface VerifyOtpMessageBar {
+  messageType: string;
+  code: string;
+  message: string;
+  messageUIType: string;
+  messageDisplayTime: string;
 }
