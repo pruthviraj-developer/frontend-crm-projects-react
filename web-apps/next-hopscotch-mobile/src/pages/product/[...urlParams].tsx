@@ -57,6 +57,7 @@ import {
 import * as segment from '@/components/segment-analytic';
 import { LoginModal } from '@/components/login-modal';
 // const ADD_TO_CART_BUTTON = 'Add to cart button';
+let CUSTOMER_INFO: IUserInfoProps;
 const SUCCESS = 'success';
 const tryLater = 'Try Later';
 const CUSTOMER_INFO_COOKIE_NAME = 'hs_customer_info';
@@ -151,14 +152,6 @@ const Product: NextPage = (props) => {
 
   const { productName, simpleSkus, ...product } = useProduct({ productData: productInfo });
 
-  // const [sku, setSku] = useState<ISimpleSkusEntityProps | any>(() => {
-  //   const sku = simpleSkus && simpleSkus[0];
-  //   if (sku && sku.availableQuantity === 1) {
-  //     return sku;
-  //   }
-  //   return;
-  // });
-
   const [sku, setSku] = useState<ISimpleSkusEntityProps | any>();
 
   const { canShow: showSimilarProducts, ...similarProducts } = useRecommendation({
@@ -223,7 +216,7 @@ const Product: NextPage = (props) => {
   const [{ contextData, properties }] = useSegment();
   const pdpTrackingData = useProductTracking({ productDetails });
 
-  const closeLoginModalPopup = (quantity: number) => {
+  const closeLoginModalPopup = (quantity?: number) => {
     if (quantity) {
       setCartItemQty(quantity);
     }
@@ -240,10 +233,10 @@ const Product: NextPage = (props) => {
   }, [contextData, pdpTrackingData, productId, properties]);
 
   useEffect(() => {
-    openLoginPopup();
     (async () => {
       try {
         const response: IUserInfoProps = await productDetailsService.getUserInfo();
+        CUSTOMER_INFO = response;
         const expireProp = { expires: new Date(timeService.getCurrentTime() + 30 * 24 * 60 * 60 * 1000) };
         if (response.action === SUCCESS) {
           if (response.isLoggedIn) {
@@ -260,7 +253,10 @@ const Product: NextPage = (props) => {
             });
           }
         }
-      } catch (error) {}
+      } catch (error) {
+        const errorResponse = error as unknown as IUserInfoProps;
+        CUSTOMER_INFO = errorResponse;
+      }
     })();
   }, [openLoginPopup]);
 
@@ -279,9 +275,7 @@ const Product: NextPage = (props) => {
         lineHeight: '16px',
       },
     });
-    if (1) {
-      // check for login
-      return;
+    if (CUSTOMER_INFO.isLoggedIn) {
       addToWishlistAfterModalClose();
     }
     // else {
@@ -392,10 +386,6 @@ const Product: NextPage = (props) => {
 
   const addToWishlistAfterModalClose = () => {
     if (1) {
-      // check for login
-      // let cookiesUserType = self._$cookies.get(WEBSITE_CUSTOMER_SEGMENT);
-      // let atc_user = self._SegmentService.getATCUser(self._CustomerService.isLoggedIn(), cookiesUserType);
-      // let oa_data = self.SessionStorageService.getData('oa_data') || {};
       let retailPrice = 0;
       if (selectedSku) {
         retailPrice = selectedSku.retailPrice;
@@ -517,7 +507,7 @@ const Product: NextPage = (props) => {
             <ProductDetailsWrapper>
               <ProductNamePrice
                 {...{
-                  productName: productName,
+                  productName,
                   isProductSoldOut: productInfo.isProductSoldOut,
                   wishlistId: productInfo.wishlistId,
                   retailPrice,
