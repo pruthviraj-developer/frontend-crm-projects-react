@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { typography, Colors } from '@hs/utils';
 import { SvgIcon } from '@hs/icons';
 
 const VerifyWrapper = styled.div`

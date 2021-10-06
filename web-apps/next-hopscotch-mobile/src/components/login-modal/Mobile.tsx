@@ -13,13 +13,14 @@ import {
 
 import { IconErrorMessage } from '@hs/icons';
 import { productDetailsService } from '@hs/services';
+import { Loader } from './loader';
 
 const reason = { otpReason: 'SIGN_IN', type: 'SMS' };
 
 export const Mobile: FC<IMobileProps> = ({ updateForm }: IMobileProps) => {
   const [loginId, setLoginId] = useState('');
   const [error, setErrorState] = useState<ILoginErrorMessageBar | null>(null);
-
+  const [loading, setLoading] = useState<boolean>(false);
   const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e ? e.preventDefault() : '';
     validateUserMobile();
@@ -49,10 +50,12 @@ export const Mobile: FC<IMobileProps> = ({ updateForm }: IMobileProps) => {
   const sendOtp = () => {
     (async () => {
       try {
+        setLoading(true);
         const response: ILoginErrorResponse = await productDetailsService.sendOtp({
           loginId,
           ...reason,
         });
+        setLoading(false);
         if (response.action === 'success') {
           updateForm({
             loginId,
@@ -62,6 +65,7 @@ export const Mobile: FC<IMobileProps> = ({ updateForm }: IMobileProps) => {
           setErrorState(response.messageBar);
         }
       } catch (error) {
+        setLoading(false);
         const errorResponse = error as unknown as ILoginErrorResponse;
         setErrorState(errorResponse.messageBar);
       }
@@ -86,6 +90,7 @@ export const Mobile: FC<IMobileProps> = ({ updateForm }: IMobileProps) => {
 
   return (
     <MobileWrapper>
+      {loading && <Loader />}
       <form
         onSubmit={(e) => {
           return submitForm(e);

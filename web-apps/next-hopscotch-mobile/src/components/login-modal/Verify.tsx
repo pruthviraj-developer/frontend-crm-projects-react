@@ -16,11 +16,11 @@ import {
   ErrorIcon,
   VerifyDetails,
 } from './StyledVerify';
+import { Loader } from './loader';
 const OTP_LENGTH = 6;
-const reason = { otpReason: 'SIGN_IN' };
 export const Verify: FC<IVerifiedDataProps | any> = (props: IVerifiedDataProps) => {
-  console.log(props, 'props');
   const [otp, setOtp] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setErrorState] = useState<ILoginErrorMessageBar | null>(null);
   const convertForUI = (str = '') => {
     let pattern = new RegExp(REGEX_PATTERNS.REGEX_MOBILE_NO);
@@ -34,10 +34,12 @@ export const Verify: FC<IVerifiedDataProps | any> = (props: IVerifiedDataProps) 
   const resendOtp = () => {
     (async () => {
       try {
+        setLoading(true);
         const response: ILoginErrorResponse = await productDetailsService.sendOtp({
           ...props,
           type: undefined,
         });
+        setLoading(false);
         if (response.action === 'success') {
           setOtp('');
           setErrorState(null);
@@ -46,6 +48,7 @@ export const Verify: FC<IVerifiedDataProps | any> = (props: IVerifiedDataProps) 
         }
       } catch (error) {
         const errorRespone = error as unknown as ILoginErrorResponse;
+        setLoading(false);
         setErrorState(errorRespone.messageBar);
       }
     })();
@@ -59,17 +62,20 @@ export const Verify: FC<IVerifiedDataProps | any> = (props: IVerifiedDataProps) 
       if (otplength === OTP_LENGTH) {
         (async () => {
           try {
+            setLoading(true);
             const verifyOtpResponse: IVerifyOtpResponeProps = await productDetailsService.verifyOtp({
               ...props,
               otp,
               type: undefined,
             });
+            setLoading(false);
             if (verifyOtpResponse.action === 'success') {
             } else {
               setErrorState(verifyOtpResponse.messageBar);
             }
           } catch (error) {
             const errorRespone = error as unknown as IVerifyOtpResponeProps;
+            setLoading(false);
             setErrorState(errorRespone.messageBar);
           }
         })();
@@ -78,6 +84,7 @@ export const Verify: FC<IVerifiedDataProps | any> = (props: IVerifiedDataProps) 
   };
   return (
     <VerifyWrapper>
+      {loading && <Loader />}
       {error && (
         <MessageWrapper>
           <ErrorIcon icon={IconErrorMessage} />
