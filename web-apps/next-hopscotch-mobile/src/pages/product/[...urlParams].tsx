@@ -185,7 +185,6 @@ const Product: NextPage = (props) => {
     productData: productInfo,
     selectedSku: sku,
   }); // productForm
-
   const { isOneSize } = useOneSize({
     productData: productInfo,
   });
@@ -262,7 +261,7 @@ const Product: NextPage = (props) => {
         CUSTOMER_INFO = errorResponse;
       }
     })();
-  }, [openLoginPopup]);
+  }, []);
 
   const addToWishlist = () => {
     toast.info('Sign in to add this item to your Wishlist.', {
@@ -452,35 +451,51 @@ const Product: NextPage = (props) => {
     }
   };
 
-  // setSimilarProducts
   useEffect(() => {
     if (isProductDetailsSuccess) {
       if (productDetails && productDetails.action === SUCCESS) {
+        let showRfypCue = false;
         const setDetails = () => {
-          productDetails.simpleSkus = sortBy(productDetails.simpleSkus, function (skus: ISimpleSkusEntityProps) {
+          const simpleSkus = sortBy(productDetails.simpleSkus, function (skus: ISimpleSkusEntityProps) {
             return !(skus.availableQuantity > 0);
           });
 
-          // TODO: Logic to show default selection of sku and checking quantity > 0
+          let isfirst = false,
+            isDefault = false,
+            isProductSoldOut = false;
+
           const selectSku = (skuList: ISimpleSkusEntityProps[]) => {
             for (let i = 0; i < skuList.length; i++) {
               const sku = skuList[i];
               if (sku.availableQuantity > 0) {
-                productDetails.isProductSoldOut = false;
+                isProductSoldOut = false;
                 if (skuList.length === 1) {
-                  setSku(sku);
+                  isfirst = true;
+                  isDefault = true;
+                } else {
+                  isfirst = false;
+                  isDefault = true;
                 }
+                setSku(sku);
                 return;
               }
             }
             setSku(skuList[0]);
-            productDetails.isProductSoldOut = true;
+            isfirst = false;
+            isProductSoldOut = true;
           };
-          selectSku(productDetails.simpleSkus);
-          setProductInfo(productDetails);
+          selectSku(simpleSkus);
+          setProductInfo({
+            ...productDetails,
+            showRfypCue,
+            isfirst,
+            isDefault,
+            isProductSoldOut,
+            simpleSkus,
+          });
         };
         const soldOutSkus = productDetails.simpleSkus.find((sku) => !(sku.availableQuantity > 0));
-        productDetails.showRfypCue = !!soldOutSkus;
+        showRfypCue = !!soldOutSkus;
         setCartItemQty(productDetails.quantity);
         setDetails();
       }
