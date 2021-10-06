@@ -12,14 +12,15 @@ export const useSelectedProduct = ({
     finalSale,
     skuId: selectedSkuId,
   } = selectedSku || {};
-
   const rPrice = selectedSku && selectedSku.retailPrice;
-  const retailPrice = productData.retailPrice || rPrice;
-  const deliveryMsg = productData.edd
-    ? productData.edd.split('Get it ').join('')
-    : selectedSku && selectedSku.deliveryMsg;
+  const retailPrice = productData.isfirst
+    ? productData.retailPrice || rPrice
+    : rPrice;
 
-  debugger;
+  const deliveryMsg =
+    productData.isDefault && productData.edd
+      ? productData.edd.split('Get it ').join('')
+      : selectedSku && selectedSku.deliveryMsg;
   return {
     deliveryMsg,
     discount,

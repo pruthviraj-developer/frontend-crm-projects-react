@@ -185,7 +185,7 @@ const Product: NextPage = (props) => {
     productData: productInfo,
     selectedSku: sku,
   }); // productForm
-
+  console.log(JSON.stringify(sku), 'sku');
   const { isOneSize } = useOneSize({
     productData: productInfo,
   });
@@ -452,7 +452,6 @@ const Product: NextPage = (props) => {
     }
   };
 
-  // setSimilarProducts
   useEffect(() => {
     if (isProductDetailsSuccess) {
       if (productDetails && productDetails.action === SUCCESS) {
@@ -461,19 +460,24 @@ const Product: NextPage = (props) => {
             return !(skus.availableQuantity > 0);
           });
 
-          // TODO: Logic to show default selection of sku and checking quantity > 0
           const selectSku = (skuList: ISimpleSkusEntityProps[]) => {
             for (let i = 0; i < skuList.length; i++) {
               const sku = skuList[i];
               if (sku.availableQuantity > 0) {
                 productDetails.isProductSoldOut = false;
                 if (skuList.length === 1) {
-                  setSku(sku);
+                  productDetails.isfirst = true;
+                  productDetails.isDefault = true;
+                } else {
+                  productDetails.isfirst = false;
+                  productDetails.isDefault = true;
                 }
+                setSku(sku);
                 return;
               }
             }
             setSku(skuList[0]);
+            productDetails.isfirst = false;
             productDetails.isProductSoldOut = true;
           };
           selectSku(productDetails.simpleSkus);

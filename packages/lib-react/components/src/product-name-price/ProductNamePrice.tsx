@@ -33,29 +33,25 @@ export const ProductNamePrice: FC<IProductNamePriceProps> = ({
           <ProductNamePriceWrapper>
             <ProductPrice>₹{retailPrice.toLocaleString('en-IN')}</ProductPrice>
             {retailPriceMax &&
+              retailPriceMax > 0 &&
               !selectedSku &&
               retailPrice != retailPriceMax && (
                 <ProductPrice>
                   - ₹{retailPriceMax.toLocaleString('en-IN')}
                 </ProductPrice>
               )}
-            {!(retailPriceMax && !selectedSku) && (
-              <>
-                {regularPrice &&
-                  discount &&
-                  regularPrice > retailPrice &&
-                  discount > 2 && (
-                    <ProductOfferPrice>
-                      <ProductVendorPrice>
-                        ₹{regularPrice.toLocaleString('en-IN')}
-                      </ProductVendorPrice>
-                      <ProductDiscountPrice>
-                        {discount}% off
-                      </ProductDiscountPrice>
-                    </ProductOfferPrice>
-                  )}
-              </>
-            )}
+            {!(retailPriceMax && !selectedSku) &&
+              discount &&
+              discount > 2 &&
+              regularPrice &&
+              regularPrice > retailPrice && (
+                <ProductOfferPrice>
+                  <ProductVendorPrice>
+                    ₹{regularPrice.toLocaleString('en-IN')}
+                  </ProductVendorPrice>
+                  <ProductDiscountPrice>{discount}% off</ProductDiscountPrice>
+                </ProductOfferPrice>
+              )}
             <ProductName>{productName}</ProductName>
           </ProductNamePriceWrapper>
           <WishListWrapper>
