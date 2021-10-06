@@ -61,7 +61,7 @@ const SUCCESS = 'success';
 const tryLater = 'Try Later';
 const CUSTOMER_INFO_COOKIE_NAME = 'hs_customer_info';
 const GUEST_CUSTOMER_INFO = 'hs_guest_customer_info';
-// const CART_ITEM_QTY_COOKIE_NAME = 'cart_item_quantity';
+const CART_ITEM_QTY_COOKIE_NAME = 'cart_item_quantity';
 // const CART_TRACKING_COOKIE_NAME = 'cart_tracking_data';
 // const getProductDetails = <P, R>(): Promise<R> => {
 //   const params = { currentTime: new Date().getTime() };
@@ -223,6 +223,13 @@ const Product: NextPage = (props) => {
   const [{ contextData, properties }] = useSegment();
   const pdpTrackingData = useProductTracking({ productDetails });
 
+  const closeLoginModalPopup = (quantity: number) => {
+    if (quantity) {
+      setCartItemQty(quantity);
+    }
+    closeLoginPopup();
+  };
+
   useEffect(() => {
     if (contextData && properties && pdpTrackingData.product_id == productId)
       segment.trackEvent({
@@ -240,13 +247,17 @@ const Product: NextPage = (props) => {
         const expireProp = { expires: new Date(timeService.getCurrentTime() + 30 * 24 * 60 * 60 * 1000) };
         if (response.action === SUCCESS) {
           if (response.isLoggedIn) {
-            // this._GUCartCount = null;
             cookiesService.setCookies({ key: CUSTOMER_INFO_COOKIE_NAME, value: response, options: expireProp });
           } else {
             cookiesService.setCookies({ key: GUEST_CUSTOMER_INFO, value: response, options: expireProp });
           }
           if (response.cartItemQty !== undefined) {
             setCartItemQty(response.cartItemQty);
+            cookiesService.setCookies({
+              key: CART_ITEM_QTY_COOKIE_NAME,
+              value: response.cartItemQty,
+              options: expireProp,
+            });
           }
         }
       } catch (error) {}
@@ -592,7 +603,9 @@ const Product: NextPage = (props) => {
           )}
         </SizeSelectorPopupModal>
 
-        <LoginPopupModal>{isLoginPopupOpen && <LoginModal {...{ closeLoginPopup }}></LoginModal>}</LoginPopupModal>
+        <LoginPopupModal>
+          {isLoginPopupOpen && <LoginModal {...{ closeLoginPopup: closeLoginModalPopup }}></LoginModal>}
+        </LoginPopupModal>
       </main>
       {/* <pre style={{ width: '60%', overflowX: 'scroll' }}>{JSON.stringify(productDetails, null, 4)}</pre> */}
     </div>

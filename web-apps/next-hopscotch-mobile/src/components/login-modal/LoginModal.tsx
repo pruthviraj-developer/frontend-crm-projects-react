@@ -22,12 +22,12 @@ export const LoginModal: FC<ILoginModalProps> = ({ closeLoginPopup }: ILoginModa
     setCurrentState(VERIFY);
   };
 
-  const back = () => {
+  const back = (cartItemQty = 0) => {
     if (currentState === VERIFY) {
       setCurrentState(SIGNIN);
       return;
     }
-    closeLoginPopup();
+    closeLoginPopup(cartItemQty);
   };
 
   return (

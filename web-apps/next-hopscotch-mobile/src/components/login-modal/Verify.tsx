@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { productDetailsService } from '@hs/services';
+import { productDetailsService, cookiesService, timeService } from '@hs/services';
 import { IconErrorMessage } from '@hs/icons';
 import { REGEX_PATTERNS } from './constants';
 import { IVerifiedDataProps, ILoginErrorResponse, ILoginErrorMessageBar, IVerifyOtpResponeProps } from './ILoginModal';
@@ -17,9 +17,11 @@ import {
   VerifyDetails,
 } from './StyledVerify';
 import { Loader } from './loader';
-import { useEffect } from 'react';
 const OTP_LENGTH = 6;
-export const Verify: FC<IVerifiedDataProps | any> = (props: IVerifiedDataProps) => {
+const CUSTOMER_INFO_COOKIE_NAME = 'hs_customer_info';
+const GUEST_CUSTOMER_INFO = 'hs_guest_customer_info';
+const CART_ITEM_QTY_COOKIE_NAME = 'cart_item_quantity';
+export const Verify: FC<IVerifiedDataProps | any> = ({ back, type, ...props }: IVerifiedDataProps) => {
   const [otp, setOtp] = useState<string>('');
   const [counter, setCounter] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
@@ -42,7 +44,6 @@ export const Verify: FC<IVerifiedDataProps | any> = (props: IVerifiedDataProps) 
         clearInterval(interval);
         const response: ILoginErrorResponse = await productDetailsService.sendOtp({
           ...props,
-          type: undefined,
         });
         setLoading(false);
         if (response.action === 'success') {
@@ -83,15 +84,30 @@ export const Verify: FC<IVerifiedDataProps | any> = (props: IVerifiedDataProps) 
         (async () => {
           try {
             setLoading(true);
-            const verifyOtpResponse: IVerifyOtpResponeProps = await productDetailsService.verifyOtp({
+            const response: IVerifyOtpResponeProps = await productDetailsService.verifyOtp({
               ...props,
-              otp,
-              type: undefined,
+              otp: value,
             });
             setLoading(false);
-            if (verifyOtpResponse.action === 'success') {
+            if (response.action === 'success' && response.isLoggedIn) {
+              const expireProp = { expires: new Date(timeService.getCurrentTime() + 30 * 24 * 60 * 60 * 1000) };
+
+              cookiesService.setCookies({
+                key: CUSTOMER_INFO_COOKIE_NAME,
+                value: response,
+                options: expireProp,
+              });
+
+              if (response.cartItemQty) {
+                cookiesService.setCookies({
+                  key: CART_ITEM_QTY_COOKIE_NAME,
+                  value: response.cartItemQty,
+                  options: expireProp,
+                });
+                back && back(response.cartItemQty);
+              }
             } else {
-              setErrorState(verifyOtpResponse.messageBar);
+              setErrorState(response.messageBar);
             }
           } catch (error) {
             const errorRespone = error as unknown as IVerifyOtpResponeProps;
@@ -112,9 +128,15 @@ export const Verify: FC<IVerifiedDataProps | any> = (props: IVerifiedDataProps) 
         </MessageWrapper>
       )}
       <VerifyDetails>
-        <div>Enter the OTP sent to your {props.type == 'SMS' ? 'number' : 'email'}</div>
+        <div>Enter the OTP sent to your {type == 'SMS' ? 'number' : 'email'}</div>
         <LoggedInBy> {convertForUI(props.loginId)} &nbsp;</LoggedInBy>
-        <ChangeNumber onClick={props.back}>Change</ChangeNumber>
+        <ChangeNumber
+          onClick={() => {
+            back && back();
+          }}
+        >
+          Change
+        </ChangeNumber>
         <OtpboxWrapper>
           <OtpContainer>
             {[...Array(OTP_LENGTH)].map((x, i) => (

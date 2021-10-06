@@ -1,22 +1,15 @@
 export interface ILoginModalProps {
-  closeLoginPopup: () => void;
+  closeLoginPopup: (args?: number) => void;
 }
 
 export interface IHeaderProps {
-  closeLoginPopup: () => void;
+  closeLoginPopup: (args?: number) => void;
   active: boolean;
   back: () => void;
 }
 
 export interface ISubHeaderProps {
   title: string;
-}
-
-export interface IFooterProps {
-  footerDescription: string;
-  footerLink: string;
-  footerLinkText: string;
-  signInOrJoin: () => void;
 }
 
 export interface IMobileProps {
@@ -42,7 +35,7 @@ export interface IVerifiedDataProps {
   loginId: string;
   otpReason: string;
   type: string;
-  back?: () => void;
+  back?: (args?: number) => void;
 }
 
 export interface IVerifyOtpResponeProps {
