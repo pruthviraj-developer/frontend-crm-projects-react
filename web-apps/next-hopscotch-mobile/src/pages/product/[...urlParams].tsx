@@ -215,8 +215,9 @@ const Product: NextPage = (props) => {
   // const pdpTrackingData = useProductTracking({ selectedSku, productDetails });
 
   const closeLoginModalPopup = (quantity?: number) => {
-    if (quantity) {
+    if (quantity != undefined) {
       setCartItemQty(quantity);
+      addToWishlistAfterModalClose();
     }
     closeLoginPopup();
   };
@@ -264,32 +265,25 @@ const Product: NextPage = (props) => {
   }, []);
 
   const addToWishlist = () => {
-    toast.info('Sign in to add this item to your Wishlist.', {
-      hideProgressBar: true,
-      closeButton: false,
-      icon: false,
-      autoClose: 2250,
-      style: {
-        backgroundColor: '#00aff0',
-        color: '#fff',
-        textAlign: 'center',
-        fontWeight: 600,
-        fontSize: '14px',
-        lineHeight: '16px',
-      },
-    });
     if (CUSTOMER_INFO.isLoggedIn) {
       addToWishlistAfterModalClose();
+    } else {
+      toast.info('Sign in to add this item to your Wishlist.', {
+        hideProgressBar: true,
+        closeButton: false,
+        icon: false,
+        autoClose: 2250,
+        style: {
+          backgroundColor: '#00aff0',
+          color: '#fff',
+          textAlign: 'center',
+          fontWeight: 600,
+          fontSize: '14px',
+          lineHeight: '16px',
+        },
+      });
+      openLoginPopup();
     }
-    // else {
-    //   this.toastr.info('Sign in to add this item to your Wishlist.');
-    //   self._ModalService.showLoginModal(
-    //     null,
-    //     false,
-    //     { message: 'Helllo' },
-    //     this.addToWishlistAfterModalClose.bind(self, product),
-    //   );
-    // }
   };
 
   const goToCart = (path = '/v2/cart') => {
@@ -387,68 +381,60 @@ const Product: NextPage = (props) => {
   };
 
   const deleteFromWishlist = () => {
-    if (1) {
-      (async () => {
-        try {
-          const wishListStatus: IWishListProps = await productDetailsService.deleteFromWishlist(productInfo.wishlistId);
-          if (wishListStatus.action === SUCCESS) {
-            setProductInfo({ ...productInfo, wishlistId: 0 });
-            if (navigator && navigator.vibrate) {
-              navigator.vibrate(200);
-            }
+    (async () => {
+      try {
+        const wishListStatus: IWishListProps = await productDetailsService.deleteFromWishlist(productInfo.wishlistId);
+        if (wishListStatus.action === SUCCESS) {
+          setProductInfo({ ...productInfo, wishlistId: 0 });
+          if (navigator && navigator.vibrate) {
+            navigator.vibrate(200);
           }
-        } catch (error) {
-          console.log(error);
         }
-      })();
-    } else {
-      // delete wishlist method will be executed
-      // if and only if user logged in and made the product as wishlist
-      // self._ModalService.showLoginModal();
-    }
+      } catch (error) {
+        console.log(error);
+      }
+    })();
   };
 
   const addToWishlistAfterModalClose = () => {
-    if (1) {
-      let retailPrice = 0;
-      if (selectedSku) {
-        retailPrice = selectedSku.retailPrice;
-      } else {
-        retailPrice = productInfo.retailPrice;
-      }
-      let wishlistItem = {
-        sku: selectedSkuId,
-        productId: productInfo.id,
-        price: retailPrice,
-        attribution: {
-          // source: oa_data['source'],
-          // funnel: oa_data['funnel'],
-          // funnel_tile: oa_data['funnel_tile'],
-          // funnel_section: oa_data['funnel_section'],
-          funnel_row: '',
-          // section: oa_data['section'],
-          subSection: 'CT3006',
-          // plp: oa_data['plp'],
-          sortBar: 'All',
-          sortBarGroup: 'All',
-          sortBy: 'System',
-          // quick_shop: oa_data['quickshop'],
-          // atc_user: atc_user,
-        },
-      };
-
-      (async () => {
-        try {
-          const wishListStatus: IWishListProps = await productDetailsService.addToWishlist(wishlistItem);
-          if (wishListStatus.action === SUCCESS) {
-            setProductInfo({ ...productInfo, wishlistId: wishListStatus.wishlistItemId });
-            if (navigator && navigator.vibrate) {
-              navigator.vibrate(200);
-            }
-          }
-        } catch {}
-      })();
+    let retailPrice = 0;
+    if (selectedSku) {
+      retailPrice = selectedSku.retailPrice;
+    } else {
+      retailPrice = productInfo.retailPrice;
     }
+    let wishlistItem = {
+      sku: selectedSkuId,
+      productId: productInfo.id,
+      price: retailPrice,
+      attribution: {
+        // source: oa_data['source'],
+        // funnel: oa_data['funnel'],
+        // funnel_tile: oa_data['funnel_tile'],
+        // funnel_section: oa_data['funnel_section'],
+        funnel_row: '',
+        // section: oa_data['section'],
+        subSection: 'CT3006',
+        // plp: oa_data['plp'],
+        sortBar: 'All',
+        sortBarGroup: 'All',
+        sortBy: 'System',
+        // quick_shop: oa_data['quickshop'],
+        // atc_user: atc_user,
+      },
+    };
+
+    (async () => {
+      try {
+        const wishListStatus: IWishListProps = await productDetailsService.addToWishlist(wishlistItem);
+        if (wishListStatus.action === SUCCESS) {
+          setProductInfo({ ...productInfo, wishlistId: wishListStatus.wishlistItemId });
+          if (navigator && navigator.vibrate) {
+            navigator.vibrate(200);
+          }
+        }
+      } catch {}
+    })();
   };
 
   useEffect(() => {

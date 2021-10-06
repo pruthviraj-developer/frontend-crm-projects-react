@@ -19,7 +19,6 @@ import {
 import { Loader } from './loader';
 const OTP_LENGTH = 6;
 const CUSTOMER_INFO_COOKIE_NAME = 'hs_customer_info';
-const GUEST_CUSTOMER_INFO = 'hs_guest_customer_info';
 const CART_ITEM_QTY_COOKIE_NAME = 'cart_item_quantity';
 export const Verify: FC<IVerifiedDataProps | any> = ({ back, type, ...props }: IVerifiedDataProps) => {
   const [otp, setOtp] = useState<string>('');
@@ -104,8 +103,8 @@ export const Verify: FC<IVerifiedDataProps | any> = ({ back, type, ...props }: I
                   value: response.cartItemQty,
                   options: expireProp,
                 });
-                back && back(response.cartItemQty);
               }
+              back && back(response.cartItemQty);
             } else {
               setErrorState(response.messageBar);
             }

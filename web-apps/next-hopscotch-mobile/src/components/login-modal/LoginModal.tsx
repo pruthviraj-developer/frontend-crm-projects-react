@@ -10,7 +10,7 @@ const VERIFY = 'verify';
 export const LoginModal: FC<ILoginModalProps> = ({ closeLoginPopup }: ILoginModalProps) => {
   const subTitle = 'Sign In';
 
-  const [currentState, setCurrentState] = useState(VERIFY);
+  const [currentState, setCurrentState] = useState(SIGNIN);
   const [verified, verifiedData] = useState<IVerifiedDataProps | any>({
     type: 'SMS',
     loginId: '7411498813',
@@ -22,7 +22,7 @@ export const LoginModal: FC<ILoginModalProps> = ({ closeLoginPopup }: ILoginModa
     setCurrentState(VERIFY);
   };
 
-  const back = (cartItemQty = 0) => {
+  const back = (cartItemQty?: number) => {
     if (currentState === VERIFY) {
       setCurrentState(SIGNIN);
       return;
