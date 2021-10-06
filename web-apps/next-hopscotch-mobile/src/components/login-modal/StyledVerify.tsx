@@ -56,13 +56,13 @@ const OtpSeperator = styled.div<{ show: boolean }>`
   visibility: ${(props) => (props.show ? 'visible' : 'hidden')};
 `;
 
-const Resend = styled.button`
+const Resend = styled.button<{ convertText?: boolean }>`
   font-size: 14px;
-  font-weight: 700;
+  font-weight: ${(props) => (props.convertText ? 700 : 400)};
   line-height: 1.14;
   letter-spacing: 0.4px;
   text-align: center;
-  text-transform: uppercase;
+  text-transform: ${(props) => (props.convertText ? 'uppercase' : 'initial')};
   transition: all 0.3s ease-in-out;
   color: rgba(0, 0, 0, 0.56);
   padding: 10px 12px;

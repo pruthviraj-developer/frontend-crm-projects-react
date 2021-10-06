@@ -17,10 +17,13 @@ import {
   VerifyDetails,
 } from './StyledVerify';
 import { Loader } from './loader';
+import { useEffect } from 'react';
 const OTP_LENGTH = 6;
 export const Verify: FC<IVerifiedDataProps | any> = (props: IVerifiedDataProps) => {
   const [otp, setOtp] = useState<string>('');
+  const [counter, setCounter] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
+
   const [error, setErrorState] = useState<ILoginErrorMessageBar | null>(null);
   const convertForUI = (str = '') => {
     let pattern = new RegExp(REGEX_PATTERNS.REGEX_MOBILE_NO);
@@ -30,11 +33,13 @@ export const Verify: FC<IVerifiedDataProps | any> = (props: IVerifiedDataProps) 
       return str;
     }
   };
+  let interval: any = null;
 
   const resendOtp = () => {
     (async () => {
       try {
         setLoading(true);
+        clearInterval(interval);
         const response: ILoginErrorResponse = await productDetailsService.sendOtp({
           ...props,
           type: undefined,
@@ -42,6 +47,8 @@ export const Verify: FC<IVerifiedDataProps | any> = (props: IVerifiedDataProps) 
         setLoading(false);
         if (response.action === 'success') {
           setOtp('');
+          setCounter(30);
+          runTimer();
           setErrorState(null);
         } else {
           setErrorState(response.messageBar);
@@ -49,9 +56,22 @@ export const Verify: FC<IVerifiedDataProps | any> = (props: IVerifiedDataProps) 
       } catch (error) {
         const errorRespone = error as unknown as ILoginErrorResponse;
         setLoading(false);
+        setCounter(0);
         setErrorState(errorRespone.messageBar);
       }
     })();
+  };
+
+  const runTimer = () => {
+    let count = 30;
+    interval = setInterval(() => {
+      count--;
+      setCounter(count);
+      if (count === 0) {
+        clearInterval(interval);
+        return;
+      }
+    }, 1000);
   };
 
   const validateOtp = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -103,7 +123,12 @@ export const Verify: FC<IVerifiedDataProps | any> = (props: IVerifiedDataProps) 
             <input type="number" onChange={validateOtp} auto-complete="off" value={otp} />
           </OtpContainer>
         </OtpboxWrapper>
-        <Resend onClick={resendOtp}>Resend otp</Resend>
+        {counter > 0 && <Resend convertText={false}>Resend OTP in &nbsp;{counter}s</Resend>}
+        {counter === 0 && (
+          <Resend convertText={true} onClick={resendOtp}>
+            Resend otp
+          </Resend>
+        )}
       </VerifyDetails>
     </VerifyWrapper>
   );
