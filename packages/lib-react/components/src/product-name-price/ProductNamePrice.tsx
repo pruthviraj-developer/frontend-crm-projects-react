@@ -26,32 +26,49 @@ export const ProductNamePrice: FC<IProductNamePriceProps> = ({
   deleteFromWishlist,
 }: IProductNamePriceProps) => {
   if (retailPrice) {
+    const getDiscountDetails = () => {
+      return selectedSku &&
+        !retailPriceMax &&
+        discount &&
+        discount > 2 &&
+        regularPrice &&
+        regularPrice > retailPrice
+        ? true
+        : false;
+    };
+
+    const getRetailPrice = () => {
+      return retailPriceMax &&
+        retailPriceMax > 0 &&
+        !selectedSku &&
+        retailPrice != retailPriceMax
+        ? true
+        : false;
+    };
+
+    const getFormattedPrice = (price?: number) => {
+      return price && price.toLocaleString('en-IN');
+    };
+
     return (
       <>
         {isProductSoldOut && <ProductSold>Sold out</ProductSold>}
         <ProductPricingWrapper>
           <ProductNamePriceWrapper>
-            <ProductPrice>₹{retailPrice.toLocaleString('en-IN')}</ProductPrice>
-            {retailPriceMax &&
-              retailPriceMax > 0 &&
-              !selectedSku &&
-              retailPrice != retailPriceMax && (
-                <ProductPrice>
-                  - ₹{retailPriceMax.toLocaleString('en-IN')}
-                </ProductPrice>
-              )}
-            {!(retailPriceMax && !selectedSku) &&
-              discount &&
-              discount > 2 &&
-              regularPrice &&
-              regularPrice > retailPrice && (
-                <ProductOfferPrice>
-                  <ProductVendorPrice>
-                    ₹{regularPrice.toLocaleString('en-IN')}
-                  </ProductVendorPrice>
-                  <ProductDiscountPrice>{discount}% off</ProductDiscountPrice>
-                </ProductOfferPrice>
-              )}
+            <ProductPrice>₹{getFormattedPrice(retailPrice)}</ProductPrice>
+            {getRetailPrice() && (
+              <ProductPrice>
+                - ₹{getFormattedPrice(retailPriceMax)}
+              </ProductPrice>
+            )}
+            {getDiscountDetails() && (
+              <ProductOfferPrice>
+                <ProductVendorPrice>
+                  ₹{getFormattedPrice(regularPrice)}
+                </ProductVendorPrice>
+                <ProductDiscountPrice>{discount}% off</ProductDiscountPrice>
+              </ProductOfferPrice>
+            )}
             <ProductName>{productName}</ProductName>
           </ProductNamePriceWrapper>
           <WishListWrapper>
