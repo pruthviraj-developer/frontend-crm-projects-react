@@ -10,6 +10,7 @@ export const LOCAL_DATA = {
   SOURCE: 'source',
   PLP: 'plp',
   QUICKSHOP: 'quickshop',
+  SORT_DATA: 'sortData',
 };
 
 export const COOKIE_DATA = {
