@@ -11,6 +11,10 @@ import {
   SESSION_DATA,
   useSessionStorage,
   IFunnelData,
+  ISegmentData,
+  LOCAL_DATA,
+  useReadLocalStorage,
+  ISortData,
 } from '../storage';
 import { cookiesService } from '@hs/services';
 
@@ -22,6 +26,31 @@ const getSessionInfo = (sessionInfostr: string) => {
     sessionInfo.set(arr[0], arr[1]);
   }
   return sessionInfo;
+};
+const getSortBarData = (sortData?: ISortData) => {
+  const data = { sortbar: 'All', sortbar_group: 'All', sort_by: 'System' };
+  if (sortData && sortData.sortingTiles && sortData.sortingTiles.length > 0) {
+    for (let item = 0; item < sortData.sortingTiles.length; item++) {
+      if (sortData.sortingTiles[item].isSelected) {
+        data.sortbar_group = '';
+        data.sortbar = sortData.sortingTiles[item].name;
+        data.sort_by = 'User';
+        if (sortData.sortingTiles[item].ageGroups) {
+          for (
+            let subItem = 0;
+            subItem < sortData.sortingTiles[item].ageGroups.length;
+            subItem++
+          ) {
+            if (sortData.sortingTiles[item].ageGroups[subItem].isSelected) {
+              data.sortbar_group =
+                sortData.sortingTiles[item].ageGroups[subItem].name;
+            }
+          }
+        }
+      }
+    }
+  }
+  return data;
 };
 const IN_APP_BROWSER_MAP = new Map<string, string>([
   ['Instagram', 'INSTAGRAM'],
@@ -53,6 +82,17 @@ export const useSegment = () => {
     SESSION_DATA.OA_DATA,
     null
   );
+  const [segmentData] = useSessionStorage<ISegmentData>(
+    SESSION_DATA.SEGMENT_DATA,
+    null
+  );
+  const screenMap = useReadLocalStorage<Record<string, string>>([
+    LOCAL_DATA.SEGMENT_SCREEN_MAP,
+  ]).get(LOCAL_DATA.SEGMENT_SCREEN_MAP);
+  const sortbarData =
+    useReadLocalStorage<ISortData>([LOCAL_DATA.SORT_DATA]).get(
+      LOCAL_DATA.SORT_DATA
+    ) || undefined;
 
   const getFormattedExperiments = () => {
     const experiments =
@@ -78,6 +118,7 @@ export const useSegment = () => {
       const utmData = cookiesService.getCookieData<IUtmParam>(
         COOKIE_DATA.HS_UTM_PARAMS
       );
+      const sortTrackingData = getSortBarData(sortbarData);
       setProperties(() => {
         return {
           funnel: funnelData?.funnel || 'DIRECT',
@@ -87,11 +128,15 @@ export const useSegment = () => {
           section: funnelData?.section,
           subsection: funnelData?.sub_section || '',
           plp: funnelData?.plp || '',
-          sortbar_group: '',
-          sortbar: '',
+          from_screen:
+            segmentData?.from_screen != null
+              ? screenMap?.[segmentData.from_screen]
+              : '',
+          sortbar_group: sortTrackingData.sortbar_group,
+          sortbar: sortTrackingData.sortbar,
           preorder: null,
           character: 'Not applicable',
-          sort_by: 'User',
+          sort_by: sortTrackingData.sort_by,
           universal: 'None',
           _session_start_time: sessionInfo.get(COOKIE_DATA.SESSION_START_TIME),
           '[time] hour_of_day': d.getHours(),
@@ -100,7 +145,7 @@ export const useSegment = () => {
           '[time] month_of_year': d.getMonth() + 1,
           '[time] week_of_year': getWeek(d),
         };
-      });
+      })
       setContextData({
         device: {
           model: deviceDetail?.device.model || deviceDetail?.os.name,

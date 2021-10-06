@@ -21,7 +21,7 @@ const GoogleTagManager: FC<unknown> = ({ children }) => {
         funnel_tile,
         funnel_section,
         section,
-        sub_section,
+        subsection: sub_section,
         source = '',
         plp,
         quickshop = 'No',

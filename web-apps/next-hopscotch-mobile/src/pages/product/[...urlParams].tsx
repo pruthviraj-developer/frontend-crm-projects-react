@@ -51,7 +51,8 @@ import {
   useSegment,
   IProductDetails,
   ISimpleSkusEntityProps,
-  useProductTracking,
+  getProductTrackingData,
+  COOKIE_DATA,
 } from '@hs/framework';
 
 import * as segment from '@/components/segment-analytic';
@@ -106,7 +107,6 @@ const Product: NextPage = (props) => {
   const recommendedProductsLink = useRef<HTMLDivElement>(null);
   const urlParams = router.query as unknown as IProductProps;
   const [productId]: urlParamsProps | any = [...(urlParams.urlParams || [])];
-
   const [cartItemQty, setCartItemQty] = useState<number>(0);
   const [productInfo, setProductInfo] = useState<IProductDetails | any>({}); // productDetails with modification
 
@@ -203,7 +203,6 @@ const Product: NextPage = (props) => {
         evtName: segment.PDP_TRACKING_EVENTS.PDP_SEE_SIMILAR_CLICKED,
         properties: {
           ...properties,
-          from_screen: 'Product details',
           reco_type: 'Similar products',
           product_id: productId,
           from_location: fromLocation,
@@ -214,7 +213,7 @@ const Product: NextPage = (props) => {
   };
 
   const [{ contextData, properties }] = useSegment();
-  const pdpTrackingData = useProductTracking({ productDetails });
+  // const pdpTrackingData = useProductTracking({ selectedSku, productDetails });
 
   const closeLoginModalPopup = (quantity?: number) => {
     if (quantity) {
@@ -224,13 +223,18 @@ const Product: NextPage = (props) => {
   };
 
   useEffect(() => {
-    if (contextData && properties && pdpTrackingData.product_id == productId)
+    if (contextData && properties && productDetails) {
       segment.trackEvent({
         evtName: segment.PDP_TRACKING_EVENTS.PRODUCT_VIEWED,
-        properties: { ...properties, ...pdpTrackingData, addFrom: 'current=' + location.pathname },
+        properties: {
+          ...properties,
+          ...getProductTrackingData({ productDetails }),
+          addFrom: 'current=' + location.pathname,
+        },
         contextData,
       });
-  }, [contextData, pdpTrackingData, productId, properties]);
+    }
+  }, [contextData, productDetails, properties]);
 
   useEffect(() => {
     (async () => {
@@ -321,6 +325,7 @@ const Product: NextPage = (props) => {
       (async () => {
         try {
           const addToCartResponse: ICartAPIResponse = await productDetailsService.addItemToCart(data);
+          const atc_user = cookiesService.getCookies(COOKIE_DATA.WEBSITE_CUSTOMER_SEGMENT);
           if (addToCartResponse.action === SUCCESS) {
             setCartItemQty(addToCartResponse.cartItemQty);
 
@@ -331,6 +336,16 @@ const Product: NextPage = (props) => {
               autoClose: 2250,
               toastId: 'cartQuantiyChangeToaster',
               bodyClassName: 'cartQuantiyChangeBodyToaster',
+            });
+            segment.trackEvent({
+              evtName: segment.PDP_TRACKING_EVENTS.ADDED_TO_CART,
+              properties: {
+                ...properties,
+                ...getProductTrackingData({ productDetails, selectedSku: sku }),
+                atc_user,
+                addFrom: 'current=' + location.pathname,
+              },
+              contextData,
             });
             return;
           }
@@ -359,6 +374,16 @@ const Product: NextPage = (props) => {
   };
 
   const onSizeSelect = (sku: ISimpleSkusEntityProps, fromLocation: string) => {
+    segment.trackEvent({
+      evtName: segment.PDP_TRACKING_EVENTS.SIZE_CLICKED,
+      properties: {
+        ...properties,
+        ...getProductTrackingData({ productDetails, selectedSku: sku }),
+        addFrom: 'current=' + location.pathname,
+        from_location: fromLocation,
+      },
+      contextData,
+    });
     setSku(sku);
   };
 
@@ -481,7 +506,7 @@ const Product: NextPage = (props) => {
               />
               <meta
                 name="keywords"
-                content={`${productInfo?.productName?.replace(
+                content={`${productName?.replace(
                   /-|:|_/gi,
                   ' ',
                 )},online shopping for ${productInfo?.productName?.replace(/-|:|_/gi, ' ')}`}
