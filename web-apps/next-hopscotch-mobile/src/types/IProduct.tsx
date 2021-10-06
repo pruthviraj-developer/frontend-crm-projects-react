@@ -22,3 +22,13 @@ export interface ICartAPIResponse {
   cartItemQty: number;
   message: string;
 }
+
+export interface IUserInfoProps {
+  action: string;
+  actionURI: string;
+  cartItemQty: number;
+  isRegister: boolean;
+  isLoggedIn: boolean;
+  hasGuestData: boolean;
+  actionText: string;
+}

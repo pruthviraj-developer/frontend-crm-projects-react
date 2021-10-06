@@ -31,11 +31,13 @@ export const ProductNamePrice: FC<IProductNamePriceProps> = ({
         {isProductSoldOut && <ProductSold>Sold out</ProductSold>}
         <ProductPricingWrapper>
           <ProductNamePriceWrapper>
-            <ProductPrice>₹{retailPrice}</ProductPrice>
+            <ProductPrice>₹{retailPrice.toLocaleString('en-IN')}</ProductPrice>
             {retailPriceMax &&
               !selectedSku &&
               retailPrice != retailPriceMax && (
-                <ProductPrice> - ₹{retailPriceMax}</ProductPrice>
+                <ProductPrice>
+                  - ₹{retailPriceMax.toLocaleString('en-IN')}
+                </ProductPrice>
               )}
             {!(retailPriceMax && !selectedSku) && (
               <>
@@ -44,7 +46,9 @@ export const ProductNamePrice: FC<IProductNamePriceProps> = ({
                   regularPrice > retailPrice &&
                   discount > 2 && (
                     <ProductOfferPrice>
-                      <ProductVendorPrice>₹{regularPrice}</ProductVendorPrice>
+                      <ProductVendorPrice>
+                        ₹{regularPrice.toLocaleString('en-IN')}
+                      </ProductVendorPrice>
                       <ProductDiscountPrice>
                         {discount}% off
                       </ProductDiscountPrice>

@@ -17,9 +17,9 @@ import {
 } from '@hs/components';
 
 import { toast } from 'react-toastify';
-import { IProductProps, urlParamsProps, IWishListProps, ICartAPIResponse } from '@/types';
+import { IProductProps, urlParamsProps, IWishListProps, ICartAPIResponse, IUserInfoProps } from '@/types';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
-import { cookiesService, productDetailsService } from '@hs/services';
+import { cookiesService, productDetailsService, timeService } from '@hs/services';
 import { useState, useEffect, useRef } from 'react';
 import sortBy from 'lodash/sortBy';
 import {
@@ -56,9 +56,15 @@ import {
 } from '@hs/framework';
 
 import * as segment from '@/components/segment-analytic';
+import { LoginModal } from '@/components/login-modal';
 // const ADD_TO_CART_BUTTON = 'Add to cart button';
+let CUSTOMER_INFO: IUserInfoProps;
 const SUCCESS = 'success';
 const tryLater = 'Try Later';
+const CUSTOMER_INFO_COOKIE_NAME = 'hs_customer_info';
+const GUEST_CUSTOMER_INFO = 'hs_guest_customer_info';
+const CART_ITEM_QTY_COOKIE_NAME = 'cart_item_quantity';
+// const CART_TRACKING_COOKIE_NAME = 'cart_tracking_data';
 // const getProductDetails = <P, R>(): Promise<R> => {
 //   const params = { currentTime: new Date().getTime() };
 //   // return httpService.get<R>({ url: `/api/product/${productId}`, params });
@@ -104,6 +110,11 @@ const Product: NextPage = (props) => {
   const [cartItemQty, setCartItemQty] = useState<number>(0);
   const [productInfo, setProductInfo] = useState<IProductDetails | any>({}); // productDetails with modification
 
+  const [LoginPopupModal, openLoginPopup, closeLoginPopup, isLoginPopupOpen] = useModal('root', {
+    preventScroll: false,
+    closeOnOverlayClick: true,
+  });
+
   const [SizeChartPopupModal, openSizeChartPopup, closeSizeChartPopup, isSizeChartPopupOpen] = useModal('root', {
     preventScroll: false,
     closeOnOverlayClick: true,
@@ -140,14 +151,6 @@ const Product: NextPage = (props) => {
   );
 
   const { productName, simpleSkus, ...product } = useProduct({ productData: productInfo });
-
-  // const [sku, setSku] = useState<ISimpleSkusEntityProps | any>(() => {
-  //   const sku = simpleSkus && simpleSkus[0];
-  //   if (sku && sku.availableQuantity === 1) {
-  //     return sku;
-  //   }
-  //   return;
-  // });
 
   const [sku, setSku] = useState<ISimpleSkusEntityProps | any>();
 
@@ -212,6 +215,13 @@ const Product: NextPage = (props) => {
   const [{ contextData, properties }] = useSegment();
   // const pdpTrackingData = useProductTracking({ selectedSku, productDetails });
 
+  const closeLoginModalPopup = (quantity?: number) => {
+    if (quantity) {
+      setCartItemQty(quantity);
+    }
+    closeLoginPopup();
+  };
+
   useEffect(() => {
     if (contextData && properties && productDetails) {
       segment.trackEvent({
@@ -226,9 +236,50 @@ const Product: NextPage = (props) => {
     }
   }, [contextData, productDetails, properties]);
 
+  useEffect(() => {
+    (async () => {
+      try {
+        const response: IUserInfoProps = await productDetailsService.getUserInfo();
+        CUSTOMER_INFO = response;
+        const expireProp = { expires: new Date(timeService.getCurrentTime() + 30 * 24 * 60 * 60 * 1000) };
+        if (response.action === SUCCESS) {
+          if (response.isLoggedIn) {
+            cookiesService.setCookies({ key: CUSTOMER_INFO_COOKIE_NAME, value: response, options: expireProp });
+          } else {
+            cookiesService.setCookies({ key: GUEST_CUSTOMER_INFO, value: response, options: expireProp });
+          }
+          if (response.cartItemQty !== undefined) {
+            setCartItemQty(response.cartItemQty);
+            cookiesService.setCookies({
+              key: CART_ITEM_QTY_COOKIE_NAME,
+              value: response.cartItemQty,
+              options: expireProp,
+            });
+          }
+        }
+      } catch (error) {
+        const errorResponse = error as unknown as IUserInfoProps;
+        CUSTOMER_INFO = errorResponse;
+      }
+    })();
+  }, [openLoginPopup]);
+
   const addToWishlist = () => {
-    if (1) {
-      // check for login
+    toast.info('Sign in to add this item to your Wishlist.', {
+      hideProgressBar: true,
+      closeButton: false,
+      icon: false,
+      autoClose: 2250,
+      style: {
+        backgroundColor: '#00aff0',
+        color: '#fff',
+        textAlign: 'center',
+        fontWeight: 600,
+        fontSize: '14px',
+        lineHeight: '16px',
+      },
+    });
+    if (CUSTOMER_INFO.isLoggedIn) {
       addToWishlistAfterModalClose();
     }
     // else {
@@ -360,10 +411,6 @@ const Product: NextPage = (props) => {
 
   const addToWishlistAfterModalClose = () => {
     if (1) {
-      // check for login
-      // let cookiesUserType = self._$cookies.get(WEBSITE_CUSTOMER_SEGMENT);
-      // let atc_user = self._SegmentService.getATCUser(self._CustomerService.isLoggedIn(), cookiesUserType);
-      // let oa_data = self.SessionStorageService.getData('oa_data') || {};
       let retailPrice = 0;
       if (selectedSku) {
         retailPrice = selectedSku.retailPrice;
@@ -485,7 +532,7 @@ const Product: NextPage = (props) => {
             <ProductDetailsWrapper>
               <ProductNamePrice
                 {...{
-                  productName: productName,
+                  productName,
                   isProductSoldOut: productInfo.isProductSoldOut,
                   wishlistId: productInfo.wishlistId,
                   retailPrice,
@@ -570,6 +617,10 @@ const Product: NextPage = (props) => {
             ></SizeSelectorPopupComponent>
           )}
         </SizeSelectorPopupModal>
+
+        <LoginPopupModal>
+          {isLoginPopupOpen && <LoginModal {...{ closeLoginPopup: closeLoginModalPopup }}></LoginModal>}
+        </LoginPopupModal>
       </main>
       {/* <pre style={{ width: '60%', overflowX: 'scroll' }}>{JSON.stringify(productDetails, null, 4)}</pre> */}
     </div>
