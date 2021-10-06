@@ -8,6 +8,10 @@ const NavBarWrapper = styled.div`
   width: 100%;
   display: flex;
   align-items: ${HsTextAlign.center};
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
 `;
 
 const HopscotchImage = styled.div`

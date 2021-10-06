@@ -12,13 +12,12 @@ const CarouselWrapper = styled.div`
 
 const ProductCarouselWrapper = styled.div`
   position: relative;
+  margin-top: 56px;
 `;
 
 const ProductImageContainer = styled.div`
   height: 100%;
   width: 100%;
-  margin: 0 auto;
-  top: 56px;
 `;
 
 const SvgIconsElement = styled(SvgIcon)``;

@@ -61,6 +61,7 @@ export const ProductCarousel: FC<IProductCarouselProps> = ({
           slidesToSlide={slidesToSlide}
           swipeable={swipeable}
           dotListClass="product-carousel-dot-list"
+          containerClass="product-carousel-container"
         >
           {imgUrls &&
             imgUrls.map((img: IImageUrlProps, index: number) => {
