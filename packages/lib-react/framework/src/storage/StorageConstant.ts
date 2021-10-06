@@ -1,4 +1,5 @@
 export const LOCAL_DATA = {
+  SEGMENT_SCREEN_MAP: 'SEGMENT_SCREEN_MAP',
   SESSION_START_TIME: 'sessionStartTime',
   LAST_VISIT_DATE: 'lastVisitdate',
   FUNNEL: 'funnel',
@@ -9,8 +10,6 @@ export const LOCAL_DATA = {
   SOURCE: 'source',
   PLP: 'plp',
   QUICKSHOP: 'quickshop',
-  OA_DATA: 'oa_data',
-  BACKUP: 'oa_data_backup',
 };
 
 export const COOKIE_DATA = {

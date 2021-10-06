@@ -54,6 +54,7 @@ export interface ISegmentProperties {
   sort_by?: string;
   track?: string[];
   from_screen?: string;
+  from_location?: string;
 }
 export interface IContextData {
   device?: Device;
