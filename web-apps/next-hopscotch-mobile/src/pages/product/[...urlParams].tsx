@@ -19,7 +19,7 @@ import {
 import { toast } from 'react-toastify';
 import { IProductProps, urlParamsProps, IWishListProps, ICartAPIResponse } from '@/types';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
-import { productDetailsService } from '@hs/services';
+import { cookiesService, productDetailsService } from '@hs/services';
 import { useState, useEffect, useRef } from 'react';
 import sortBy from 'lodash/sortBy';
 import {
@@ -52,6 +52,7 @@ import {
   IProductDetails,
   ISimpleSkusEntityProps,
   getProductTrackingData,
+  COOKIE_DATA,
 } from '@hs/framework';
 
 import * as segment from '@/components/segment-analytic';
@@ -212,7 +213,6 @@ const Product: NextPage = (props) => {
   // const pdpTrackingData = useProductTracking({ selectedSku, productDetails });
 
   useEffect(() => {
-    console.dir(productDetails);
     if (contextData && properties && productDetails) {
       segment.trackEvent({
         evtName: segment.PDP_TRACKING_EVENTS.PRODUCT_VIEWED,
@@ -274,6 +274,7 @@ const Product: NextPage = (props) => {
       (async () => {
         try {
           const addToCartResponse: ICartAPIResponse = await productDetailsService.addItemToCart(data);
+          const atc_user = cookiesService.getCookies(COOKIE_DATA.WEBSITE_CUSTOMER_SEGMENT);
           if (addToCartResponse.action === SUCCESS) {
             setCartItemQty(addToCartResponse.cartItemQty);
 
@@ -290,6 +291,7 @@ const Product: NextPage = (props) => {
               properties: {
                 ...properties,
                 ...getProductTrackingData({ productDetails, selectedSku: sku }),
+                atc_user,
                 addFrom: 'current=' + location.pathname,
               },
               contextData,

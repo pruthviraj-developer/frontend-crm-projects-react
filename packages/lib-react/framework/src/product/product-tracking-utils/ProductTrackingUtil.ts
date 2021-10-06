@@ -6,7 +6,7 @@ export const getProductTrackingData = ({
   selectedSku,
   productDetails,
 }: IProductTrackingProps) => {
-    console.dir(productDetails)
+  console.dir(productDetails);
   const selectedProductSku = selectedSku || productDetails?.simpleSkus?.[0];
   const attributes = selectedProductSku?.attrs?.reduce(
     (obj: Record<string, string>, item: IProductDetailsAttrsEntity) => (
@@ -45,7 +45,7 @@ export const getProductTrackingData = ({
       productDetails.showSizePickerDropdown &&
       productDetails.isEddDifferentForSKUs
         ? DIFFERENT_FOR_SIZES
-        : null,
+        : productDetails.edd,
     v_country: productDetails.country,
     merch_type: selectedProductSku.merchType,
     ...attributes,
