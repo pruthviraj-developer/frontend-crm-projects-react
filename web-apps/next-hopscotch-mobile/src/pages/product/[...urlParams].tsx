@@ -41,6 +41,10 @@ const SizeSelectorPopupComponent = dynamic(() => import('../../components/size-s
   ssr: false,
 });
 
+const SearchPopupComponent = dynamic(() => import('../../components/search/Search'), {
+  ssr: false,
+});
+
 import {
   useProduct,
   useRecommendation,
@@ -125,6 +129,11 @@ const Product: NextPage = (props) => {
     closeOnOverlayClick: true,
   });
 
+  const [SearchPopupModal, openSearchPopup, closeSearchPopup, isSearchPopupOpen] = useModal('root', {
+    preventScroll: false,
+    closeOnOverlayClick: true,
+  });
+
   const { data: productDetails, isSuccess: isProductDetailsSuccess } = useQuery<IProductDetails>(
     ['ProductDetail', productId],
     () => productDetailsService.getProductDetails(productId),
@@ -185,6 +194,11 @@ const Product: NextPage = (props) => {
     productData: productInfo,
     selectedSku: sku,
   }); // productForm
+
+  useEffect(() => {
+    openSearchPopup();
+  }, [openSearchPopup]);
+
   const { isOneSize } = useOneSize({
     productData: productInfo,
   });
@@ -514,7 +528,7 @@ const Product: NextPage = (props) => {
               />
               <link rel="icon" href="/favicon.ico" />
             </Head>
-            <NavBar count={cartItemQty}></NavBar>
+            <NavBar count={cartItemQty} showSearchPopup={openSearchPopup}></NavBar>
             <ProductCarousel
               {...{
                 showArrows: false,
@@ -618,6 +632,10 @@ const Product: NextPage = (props) => {
             ></SizeSelectorPopupComponent>
           )}
         </SizeSelectorPopupModal>
+
+        <SearchPopupModal>
+          {isSearchPopupOpen && <SearchPopupComponent {...{ close: closeSearchPopup }}></SearchPopupComponent>}
+        </SearchPopupModal>
 
         <LoginPopupModal>
           {isLoginPopupOpen && <LoginModal {...{ closeLoginPopup: closeLoginModalPopup }}></LoginModal>}

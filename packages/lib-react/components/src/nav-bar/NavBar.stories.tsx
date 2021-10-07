@@ -14,4 +14,5 @@ export const WebNavBarComponent = Template.bind({});
 
 WebNavBarComponent.args = {
   count: 1,
+  showSearchPopup: () => {},
 };

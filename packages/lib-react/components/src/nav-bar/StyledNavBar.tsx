@@ -12,7 +12,7 @@ const NavBarWrapper = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 1;
+  z-index: 1003;
 `;
 
 const HopscotchImage = styled.div`

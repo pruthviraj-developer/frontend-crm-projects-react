@@ -19,7 +19,10 @@ import {
   IconWishListDefault,
 } from '@hs/icons';
 
-export const NavBar: FC<INavBarProps> = ({ count }: INavBarProps) => {
+export const NavBar: FC<INavBarProps> = ({
+  count,
+  showSearchPopup,
+}: INavBarProps) => {
   return (
     <NavBarWrapper>
       <HopscotchImage>
@@ -41,7 +44,7 @@ export const NavBar: FC<INavBarProps> = ({ count }: INavBarProps) => {
           />
         </NavLinkWrapper>
         <NavigationIconsWrapper>
-          <NavIconWrapper marginRight={true}>
+          <NavIconWrapper onClick={showSearchPopup} marginRight={true}>
             <IconWrapper icon={IconSearch} />
           </NavIconWrapper>
           <NavIconWrapper>

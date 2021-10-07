@@ -49,7 +49,7 @@ export const SizeChartPopup: FC<ISizeChartPopup> = ({
               onClickClose();
             }}
           >
-            <SizeChartCloseIcon icon={IconClose} fill={'#bbb'} />
+            <SizeChartCloseIcon icon={IconClose} />
           </SizeChartHeaderCloseIcon>
         </SizeChartHeader>
         <SizeChartHeaderProductName>{productName}</SizeChartHeaderProductName>
