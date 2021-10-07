@@ -6,6 +6,7 @@ import {
   SimilarItemsLinkWrapper,
   SimilarTextElement,
   SvgIconsElement,
+  StyledImage,
 } from './StyledProductCarousel';
 import Carousel from 'react-multi-carousel';
 import {
@@ -67,16 +68,12 @@ export const ProductCarousel: FC<IProductCarouselProps> = ({
             imgUrls.map((img: IImageUrlProps, index: number) => {
               return (
                 <ProductImageContainer key={index}>
-                  <img
+                  <pre>{JSON.stringify(img)}</pre>
+                  <StyledImage
                     alt=""
+                    layout="fill"
                     draggable={false}
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      position: 'relative',
-                      maxWidth: '100%',
-                      maxHeight: '325px',
-                    }}
+                    unoptimized
                     src={`${img.imgUrlFull}&tr=w-${imageSize},c-at_max,dpr-2,n-medium`}
                   />
                 </ProductImageContainer>

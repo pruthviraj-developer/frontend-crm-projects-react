@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 
 import { typography } from '@hs/utils';
 import { SvgIcon } from '@hs/icons';
-
+import Image from 'next/image';
 const CarouselWrapper = styled.div`
   overflow-x: scroll;
   white-space: nowrap;
@@ -16,8 +16,8 @@ const ProductCarouselWrapper = styled.div`
 `;
 
 const ProductImageContainer = styled.div`
-  height: 100%;
-  width: 100%;
+  width: 360px;
+  height: 360px;
 `;
 
 const SvgIconsElement = styled(SvgIcon)``;
@@ -50,6 +50,14 @@ const SimilarItemsLinkWrapper = styled.div<{
   transition: width ease-out 300ms;
 `;
 
+const StyledImage = styled(Image)`
+  /* width: 100%;
+  height: 100%;
+  position: relative;
+  min-height: 100%;
+  min-height: 100%; */
+`;
+
 export {
   CarouselWrapper,
   ProductCarouselWrapper,
@@ -57,4 +65,5 @@ export {
   SimilarItemsLinkWrapper,
   SvgIconsElement,
   SimilarTextElement,
+  StyledImage,
 };

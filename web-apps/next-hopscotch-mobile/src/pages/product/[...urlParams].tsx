@@ -34,7 +34,7 @@ import {
   CartHeader,
   CartMessage,
   CartLinkText,
-} from './StyledUrlParams';
+} from '@/styles';
 import { useModal } from 'react-hooks-use-modal';
 
 const SizeChartPopupComponent = dynamic(() => import('../../components/size-chart/SizeChart'), {
