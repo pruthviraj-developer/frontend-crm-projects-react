@@ -123,6 +123,25 @@ const verifyOtp = <P, R>(user: P): Promise<R> => {
   });
 };
 
+const getEulerAutoSuggestions = <R>(keyWord: string): Promise<R> => {
+  let url = '/api/search/autoSuggest?query=' + encodeURIComponent(keyWord);
+  return httpService.get({ url });
+};
+
+const getResouce = <R>(): Promise<R> => {
+  const currentDate = new Date();
+  const prependZeroIfNecessary = (x: number) => {
+    return x > 10 ? x : '0' + x;
+  };
+  const updateElements = [
+    currentDate.getFullYear() - 1,
+    prependZeroIfNecessary(currentDate.getMonth() + 1),
+    prependZeroIfNecessary(currentDate.getDate()),
+  ];
+  const params = { updateDate: updateElements.join('') };
+  return httpService.get({ url: '/api/resources', params });
+};
+
 export const productDetailsService = {
   addItemToCart,
   addToWishlist,
@@ -136,4 +155,6 @@ export const productDetailsService = {
   getSizes,
   sendOtp,
   verifyOtp,
+  getEulerAutoSuggestions,
+  getResouce,
 };

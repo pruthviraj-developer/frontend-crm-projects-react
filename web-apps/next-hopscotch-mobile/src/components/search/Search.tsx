@@ -1,25 +1,35 @@
 import React, { FC, useState, useEffect } from 'react';
-import { ISearch } from './ISearch';
+import { ISearch, IRecentSearchesProps, IResoucreProps } from './ISearch';
 import { SearchWrapper, SearchField, SearchForm, CloseIcon, SearchList, List } from './StyledSearch';
 import { IconClose } from '@hs/icons';
-import { useDebounce } from '@hs/framework';
+import { useDebounce, useReadLocalStorage } from '@hs/framework';
+import { productDetailsService } from '@hs/services';
 
 const Search: FC<ISearch> = ({ close }: ISearch) => {
-  const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
-    e ? e.preventDefault() : '';
-    debugger;
-  };
-
   const [searchBy, setsSarchBy] = useState<string>('');
   const debouncedValue = useDebounce(searchBy, 500);
-
+  const searches: any = useReadLocalStorage(['recentSearches']);
+  const suggestions = [];
   useEffect(() => {
     console.log(debouncedValue);
   }, [debouncedValue]);
 
+  const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
+    e ? e.preventDefault() : '';
+  };
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setsSarchBy(e.target.value);
   };
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const resouces: IResoucreProps = await productDetailsService.getResouce();
+        console.log(JSON.stringify(resouces));
+      } catch (error) {}
+    })();
+  }, []);
+
   return (
     <SearchWrapper>
       <SearchField>
@@ -28,22 +38,22 @@ const Search: FC<ISearch> = ({ close }: ISearch) => {
             return submitForm(e);
           }}
           noValidate
+          autoComplete={'off'}
         >
-          <input
-            auto-complete="off"
-            type="text"
-            name="search"
-            onChange={handleOnChange}
-            placeholder="Search for products"
-          />
+          <input type="text" name="search" onChange={handleOnChange} placeholder="Search for products" />
           <CloseIcon onClick={close} icon={IconClose} />
         </SearchForm>
         <SearchList>
-          <List>Recent Searches</List>
-          <List>test</List>
-          <List>white k95</List>
-          <List>Barbi girl</List>
-          <List>Dream big</List>
+          {searches && searches.get('recentSearches') && suggestions.length === 0 ? (
+            <>
+              <List>Recent Searches</List>
+              {searches.get('recentSearches').map((data: IRecentSearchesProps) => {
+                return <List>{data.term || data.name}</List>;
+              })}
+            </>
+          ) : (
+            ''
+          )}
         </SearchList>
       </SearchField>
     </SearchWrapper>
