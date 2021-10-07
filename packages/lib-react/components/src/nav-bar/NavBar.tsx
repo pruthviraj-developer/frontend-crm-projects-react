@@ -1,5 +1,4 @@
-import React, { FC } from 'react';
-import { INavBarProps } from './INavBar';
+import React, { FC, useContext } from 'react';
 import { NextNavLink } from '../next-nav-link';
 import {
   NavBarWrapper,
@@ -9,8 +8,10 @@ import {
   CartIconQuantity,
 } from './StyledNavBar';
 import { CartIcon, HopScotchIcon } from '@hs/icons';
+import { CartItemQtyContext } from '@hs/framework';
 
-export const NavBar: FC<INavBarProps> = ({ count }: INavBarProps) => {
+export const NavBar: FC = () => {
+  const cartContext = useContext(CartItemQtyContext);
   return (
     <NavBarWrapper>
       <HopscotchImage>
@@ -25,7 +26,9 @@ export const NavBar: FC<INavBarProps> = ({ count }: INavBarProps) => {
         <NextNavLink href="/helpcenter" name="Help" display="inline-block" />
         <CartIconWrapper>
           <CartIcon />
-          {count > 0 && <CartIconQuantity>{count}</CartIconQuantity>}
+          {cartContext.cartItemQty > 0 && (
+            <CartIconQuantity>{cartContext.cartItemQty}</CartIconQuantity>
+          )}
         </CartIconWrapper>
       </RightContent>
     </NavBarWrapper>

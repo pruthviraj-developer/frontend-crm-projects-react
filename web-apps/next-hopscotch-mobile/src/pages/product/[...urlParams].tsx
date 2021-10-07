@@ -24,7 +24,7 @@ import {
 } from '@/types';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
 import { cookiesService, productDetailsService, timeService } from '@hs/services';
-import React, { useState, useEffect, useRef, ReactElement } from 'react';
+import React, { useState, useEffect, useRef, ReactElement, useContext } from 'react';
 import sortBy from 'lodash/sortBy';
 import {
   ProductDetailsWrapper,
@@ -57,6 +57,7 @@ import {
   ISimpleSkusEntityProps,
   getProductTrackingData,
   COOKIE_DATA,
+  CartItemQtyContext,
 } from '@hs/framework';
 
 import * as segment from '@/components/segment-analytic';
@@ -69,7 +70,7 @@ const SUCCESS = 'success';
 const tryLater = 'Try Later';
 const CUSTOMER_INFO_COOKIE_NAME = 'hs_customer_info';
 const GUEST_CUSTOMER_INFO = 'hs_guest_customer_info';
-const CART_ITEM_QTY_COOKIE_NAME = 'cart_item_quantity';
+// const CART_ITEM_QTY_COOKIE_NAME = 'cart_item_quantity';
 // const CART_TRACKING_COOKIE_NAME = 'cart_tracking_data';
 // const getProductDetails = <P, R>(): Promise<R> => {
 //   const params = { currentTime: new Date().getTime() };
@@ -113,9 +114,8 @@ const Product: NextPageWithLayout = (props) => {
   const recommendedProductsLink = useRef<HTMLDivElement>(null);
   const urlParams = router.query as unknown as IProductProps;
   const [productId]: urlParamsProps | any = [...(urlParams.urlParams || [])];
-  const [cartItemQty, setCartItemQty] = useState<number>(0);
   const [productInfo, setProductInfo] = useState<IProductDetails | any>({}); // productDetails with modification
-
+  const { updateCartItemQty } = useContext(CartItemQtyContext);
   const [LoginPopupModal, openLoginPopup, closeLoginPopup, isLoginPopupOpen] = useModal('root', {
     preventScroll: false,
     closeOnOverlayClick: true,
@@ -222,7 +222,7 @@ const Product: NextPageWithLayout = (props) => {
 
   const closeLoginModalPopup = (quantity?: number) => {
     if (quantity != undefined) {
-      setCartItemQty(quantity);
+      updateCartItemQty(quantity);
       addToWishlistAfterModalClose();
     }
     closeLoginPopup();
@@ -255,9 +255,9 @@ const Product: NextPageWithLayout = (props) => {
             cookiesService.setCookies({ key: GUEST_CUSTOMER_INFO, value: response, options: expireProp });
           }
           if (response.cartItemQty !== undefined) {
-            setCartItemQty(response.cartItemQty);
+            updateCartItemQty(response.cartItemQty);
             cookiesService.setCookies({
-              key: CART_ITEM_QTY_COOKIE_NAME,
+              key: COOKIE_DATA.CART_ITEM_QTY,
               value: response.cartItemQty,
               options: expireProp,
             });
@@ -326,7 +326,7 @@ const Product: NextPageWithLayout = (props) => {
           const addToCartResponse: ICartAPIResponse = await productDetailsService.addItemToCart(data);
           const atc_user = cookiesService.getCookies(COOKIE_DATA.WEBSITE_CUSTOMER_SEGMENT);
           if (addToCartResponse.action === SUCCESS) {
-            setCartItemQty(addToCartResponse.cartItemQty);
+            updateCartItemQty(addToCartResponse.cartItemQty);
 
             toast(getToasterContent(addToCartResponse), {
               position: toast.POSITION.TOP_RIGHT,
@@ -488,11 +488,11 @@ const Product: NextPageWithLayout = (props) => {
         };
         const soldOutSkus = productDetails.simpleSkus.find((sku) => !(sku.availableQuantity > 0));
         showRfypCue = !!soldOutSkus;
-        setCartItemQty(productDetails.quantity);
+        // updateCartItemQty(productDetails.quantity);
         setDetails();
       }
     }
-  }, [isProductDetailsSuccess, productDetails]);
+  }, [isProductDetailsSuccess, productDetails, updateCartItemQty]);
 
   // cookiesService.setCookies({ key: 'test', value: 'test value' });
   return (

@@ -22,8 +22,8 @@ export const COOKIE_DATA = {
   LAST_VISIT_DATE: 'lastVisitdate',
   DAYS_SINCE_LAST_VISIT: 'daysSinceLastVisit',
   HS_UTM_PARAMS: 'hs_utm_params',
+  CART_ITEM_QTY: 'cart_item_quantity',
 };
-
 export const SESSION_DATA = {
   OA_DATA: 'oa_data',
   SEGMENT_DATA: 'SEGMENT_DATA',
