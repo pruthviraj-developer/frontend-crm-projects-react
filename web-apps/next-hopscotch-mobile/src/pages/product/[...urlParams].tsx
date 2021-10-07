@@ -256,11 +256,11 @@ const Product: NextPageWithLayout = (props) => {
           }
           if (response.cartItemQty !== undefined) {
             updateCartItemQty(response.cartItemQty);
-            cookiesService.setCookies({
-              key: COOKIE_DATA.CART_ITEM_QTY,
-              value: response.cartItemQty,
-              options: expireProp,
-            });
+            // cookiesService.setCookies({
+            //   key: COOKIE_DATA.CART_ITEM_QTY,
+            //   value: response.cartItemQty,
+            //   options: expireProp,
+            // });
           }
         }
       } catch (error) {
