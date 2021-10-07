@@ -13,5 +13,5 @@ const Template: Story<INavBarProps> = (args) => <NavBar {...args} />;
 export const WebNavBarComponent = Template.bind({});
 
 WebNavBarComponent.args = {
-  count: 29,
+  count: 1,
 };

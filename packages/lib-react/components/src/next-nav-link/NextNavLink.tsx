@@ -11,6 +11,7 @@ export const NextNavLink: FC<INextNavLinkProps> = ({
   color = '#FFFFFF',
   padding = '8px 6px',
   margin = '16px 0 0 0',
+  fontWeight = 'inherit',
 }: INextNavLinkProps) => {
   return (
     <Link
@@ -25,6 +26,7 @@ export const NextNavLink: FC<INextNavLinkProps> = ({
         display={display}
         margin={margin}
         padding={padding}
+        fontweight={fontWeight}
       >
         {name}
       </LinkTag>

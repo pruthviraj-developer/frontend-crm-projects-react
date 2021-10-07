@@ -6,6 +6,7 @@ const LinkTag = styled.a<{
   display: string;
   padding: string;
   margin: string;
+  fontweight: string;
 }>`
   color: ${(props) => props.color};
   display: ${(props) => props.display};
@@ -16,6 +17,7 @@ const LinkTag = styled.a<{
   line-height: 1.33;
   letter-spacing: 0;
   text-decoration: none;
+  font-weight: ${(props) => props.fontweight};
 `;
 
 export { LinkTag };
