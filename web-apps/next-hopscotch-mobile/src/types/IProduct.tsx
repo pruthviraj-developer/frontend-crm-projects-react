@@ -32,3 +32,8 @@ export interface IUserInfoProps {
   hasGuestData: boolean;
   actionText: string;
 }
+
+export interface IHeadProps {
+  productName: string;
+  retailPrice?: number;
+}

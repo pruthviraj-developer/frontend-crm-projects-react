@@ -1,7 +1,6 @@
 import type { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
-import Head from 'next/head';
 import {
   AddToCart,
   Accordion,
@@ -63,6 +62,7 @@ import {
 import * as segment from '@/components/segment-analytic';
 import { LoginModal } from '@/components/login-modal';
 import { Layout } from '@/components/layout/Layout';
+import { ProductHead } from '@/components/header';
 // const ADD_TO_CART_BUTTON = 'Add to cart button';
 let CUSTOMER_INFO: IUserInfoProps;
 const SUCCESS = 'success';
@@ -409,7 +409,7 @@ const Product: NextPageWithLayout = (props) => {
     } else {
       retailPrice = productInfo.retailPrice;
     }
-    let wishlistItem = {
+    const wishlistItem = {
       sku: selectedSkuId,
       productId: productInfo.id,
       price: retailPrice,
@@ -496,138 +496,118 @@ const Product: NextPageWithLayout = (props) => {
 
   // cookiesService.setCookies({ key: 'test', value: 'test value' });
   return (
-    <div>
-      <main>
-        {productInfo && productInfo.action === SUCCESS && (
-          <div>
-            <Head>
-              <title>{`Shop Online ${productName} at ₹${retailPrice}`}</title>
-              <meta
-                name="description"
-                content={`Buy ${productName} online in India at ₹${retailPrice}. &#x2714;15 Days Easy Returns, &#x2714;Cash on Delivery, &#x2714;Latest Designs, &#x2714;Pan India shipping.`}
-              />
-              <meta property="og:title" content={`Shop Online ${productName} at ₹${retailPrice}`} />
-              <meta
-                property="og:description"
-                content={`Buy ${productName} online in India at ₹${retailPrice}. &#x2714;15 Days Easy Returns, &#x2714;Cash on Delivery, &#x2714;Latest Designs, &#x2714;Pan India shipping.`}
-              />
-              <meta
-                name="keywords"
-                content={`${productName?.replace(
-                  /-|:|_/gi,
-                  ' ',
-                )},online shopping for ${productInfo?.productName?.replace(/-|:|_/gi, ' ')}`}
-              />
-            </Head>
-            <ProductCarousel
+    <>
+      {productInfo && productInfo.action === SUCCESS && (
+        <>
+          <ProductHead {...{ productName, retailPrice }}></ProductHead>
+          <ProductCarousel
+            {...{
+              showArrows: false,
+              autoPlay: true,
+              draggable: false,
+              focusOnSelect: false,
+              renderButtonGroupOutside: false,
+              renderDotsOutside: false,
+              slidesToSlide: 1,
+              swipeable: false,
+              showDots: true,
+              imgUrls: productInfo.imgurls,
+              goToProductRecommendation,
+            }}
+          ></ProductCarousel>
+          <ProductDetailsWrapper>
+            <ProductNamePrice
               {...{
-                showArrows: false,
-                autoPlay: true,
-                draggable: false,
-                focusOnSelect: false,
-                renderButtonGroupOutside: false,
-                renderDotsOutside: false,
-                slidesToSlide: 1,
-                swipeable: false,
-                showDots: true,
-                imgUrls: productInfo.imgurls,
-                goToProductRecommendation,
+                productName,
+                isProductSoldOut: productInfo.isProductSoldOut,
+                wishlistId: productInfo.wishlistId,
+                retailPrice,
+                retailPriceMax,
+                selectedSku,
+                regularPrice,
+                discount,
+                addToWishlist,
+                deleteFromWishlist,
               }}
-            ></ProductCarousel>
-            <ProductDetailsWrapper>
-              <ProductNamePrice
-                {...{
-                  productName,
-                  isProductSoldOut: productInfo.isProductSoldOut,
-                  wishlistId: productInfo.wishlistId,
-                  retailPrice,
-                  retailPriceMax,
-                  selectedSku,
-                  regularPrice,
-                  discount,
-                  addToWishlist,
-                  deleteFromWishlist,
-                }}
-              ></ProductNamePrice>
-              <SizeAndChartLabels
-                {...{
-                  isOneSize,
-                  hasSizeChart: productInfo.hasSizeChart,
-                  qtyLeft,
-                  simpleSkus,
-                  onSizeChartClick: openSizeChartPopup,
-                }}
-              ></SizeAndChartLabels>
-              {!isOneSize && (
-                <CustomSizePicker
-                  {...{
-                    simpleSkus,
-                    selectedSku: sku,
-                    onSizeSelect,
-                  }}
-                ></CustomSizePicker>
-              )}
-              {productInfo.showRfypCue && showRFYP && (
-                <RecommendedProductsLinks
-                  {...{ isProductSoldOut: productInfo.isProductSoldOut, goToProductRecommendation }}
-                ></RecommendedProductsLinks>
-              )}
-              <DeliveryDetails {...deliveryDetailsData}></DeliveryDetails>
-              {productInfo.id && (
-                <Accordion {...{ productData: productInfo, simpleSkus, selectedSku, ...product }}></Accordion>
-              )}
-
-              {showRFYP && (
-                <div ref={recommendedProductsLink}>
-                  <RecommendedProducts {...recommendedForYou}></RecommendedProducts>
-                </div>
-              )}
-
-              {showSimilarProducts && (
-                <div ref={similarProductsLink}>
-                  <RecommendedProducts {...similarProducts}></RecommendedProducts>
-                </div>
-              )}
-            </ProductDetailsWrapper>
-            <AddToCart {...{ show: true, disabled: false, addProductToCart }}></AddToCart>
-          </div>
-        )}
-        <SizeChartPopupModal>
-          {isSizeChartPopupOpen && (
-            <SizeChartPopupComponent
+            ></ProductNamePrice>
+            <SizeAndChartLabels
               {...{
-                id: productInfo.id,
-                productName: productName,
-                onClickClose: closeSizeChartPopup,
-              }}
-            ></SizeChartPopupComponent>
-          )}
-        </SizeChartPopupModal>
-
-        <SizeSelectorPopupModal>
-          {isSizeSelectorPopupOpen && (
-            <SizeSelectorPopupComponent
-              {...{
-                closePopup: closeSizeSelector,
-                showRfypCue: true,
-                showAddToCart: true,
-                onSizeChartClick: openSizeChartPopup,
+                isOneSize,
+                hasSizeChart: productInfo.hasSizeChart,
+                qtyLeft,
                 simpleSkus,
-                selectedSku: sku,
-                onSizeSelect,
-                goToProductRecommendation,
-                addProductToCart,
+                onSizeChartClick: openSizeChartPopup,
               }}
-            ></SizeSelectorPopupComponent>
-          )}
-        </SizeSelectorPopupModal>
+            ></SizeAndChartLabels>
+            {!isOneSize && (
+              <CustomSizePicker
+                {...{
+                  simpleSkus,
+                  selectedSku: sku,
+                  onSizeSelect,
+                }}
+              ></CustomSizePicker>
+            )}
+            {productInfo.showRfypCue && showRFYP && (
+              <RecommendedProductsLinks
+                {...{ isProductSoldOut: productInfo.isProductSoldOut, goToProductRecommendation }}
+              ></RecommendedProductsLinks>
+            )}
+            <DeliveryDetails {...deliveryDetailsData}></DeliveryDetails>
+            {productInfo.id && (
+              <Accordion {...{ productData: productInfo, simpleSkus, selectedSku, ...product }}></Accordion>
+            )}
 
-        <LoginPopupModal>
-          {isLoginPopupOpen && <LoginModal {...{ closeLoginPopup: closeLoginModalPopup }}></LoginModal>}
-        </LoginPopupModal>
-      </main>
+            {showRFYP && (
+              <div ref={recommendedProductsLink}>
+                <RecommendedProducts {...recommendedForYou}></RecommendedProducts>
+              </div>
+            )}
+
+            {showSimilarProducts && (
+              <div ref={similarProductsLink}>
+                <RecommendedProducts {...similarProducts}></RecommendedProducts>
+              </div>
+            )}
+          </ProductDetailsWrapper>
+          <AddToCart {...{ show: true, disabled: false, addProductToCart }}></AddToCart>
+        </>
+      )}
+      <SizeChartPopupModal>
+        {isSizeChartPopupOpen && (
+          <SizeChartPopupComponent
+            {...{
+              id: productInfo.id,
+              productName: productName,
+              onClickClose: closeSizeChartPopup,
+            }}
+          ></SizeChartPopupComponent>
+        )}
+      </SizeChartPopupModal>
+
+      <SizeSelectorPopupModal>
+        {isSizeSelectorPopupOpen && (
+          <SizeSelectorPopupComponent
+            {...{
+              closePopup: closeSizeSelector,
+              showRfypCue: true,
+              showAddToCart: true,
+              onSizeChartClick: openSizeChartPopup,
+              simpleSkus,
+              selectedSku: sku,
+              onSizeSelect,
+              goToProductRecommendation,
+              addProductToCart,
+            }}
+          ></SizeSelectorPopupComponent>
+        )}
+      </SizeSelectorPopupModal>
+
+      <LoginPopupModal>
+        {isLoginPopupOpen && <LoginModal {...{ closeLoginPopup: closeLoginModalPopup }}></LoginModal>}
+      </LoginPopupModal>
       {/* <pre style={{ width: '60%', overflowX: 'scroll' }}>{JSON.stringify(productDetails, null, 4)}</pre> */}
-    </div>
+    </>
   );
 };
 
