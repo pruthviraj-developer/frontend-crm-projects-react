@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import type { AppProps } from 'next/app';
 import { globalStyles, productCarouselStyles } from '@/styles';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Hydrate } from 'react-query/hydration';
@@ -7,8 +6,9 @@ import GoogleTagManager from '@/components/google-tag-manager/GoogleTagManager';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import Head from 'next/head';
 import { ToastContainer } from 'react-toastify';
+import { AppPropsWithLayout } from '@/types';
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -21,7 +21,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         },
       }),
   );
-
+  const getLayout = Component.getLayout ?? ((page) => page);
   return (
     <>
       <Head>
@@ -32,9 +32,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       {productCarouselStyles}
       <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps.dehydratedState}>
-          <GoogleTagManager>
-            <Component {...pageProps} />
-          </GoogleTagManager>
+          <GoogleTagManager>{getLayout(<Component {...pageProps} />)}</GoogleTagManager>
         </Hydrate>
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>

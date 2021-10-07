@@ -1,26 +1,31 @@
-import type { GetServerSideProps, NextPage } from 'next';
+import type { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import {
   AddToCart,
   Accordion,
-  NavBar,
   ProductNamePrice,
   ProductCarousel,
   DeliveryDetails,
   CustomSizePicker,
   SizeAndChartLabels,
   RecommendedProducts,
-  Footer,
   RecommendedProductsLinks,
 } from '@hs/components';
 
 import { toast } from 'react-toastify';
-import { IProductProps, urlParamsProps, IWishListProps, ICartAPIResponse, IUserInfoProps } from '@/types';
+import {
+  IProductProps,
+  urlParamsProps,
+  IWishListProps,
+  ICartAPIResponse,
+  IUserInfoProps,
+  NextPageWithLayout,
+} from '@/types';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
 import { cookiesService, productDetailsService, timeService } from '@hs/services';
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, ReactElement } from 'react';
 import sortBy from 'lodash/sortBy';
 import {
   ProductDetailsWrapper,
@@ -57,6 +62,7 @@ import {
 
 import * as segment from '@/components/segment-analytic';
 import { LoginModal } from '@/components/login-modal';
+import { Layout } from '@/components/layout/Layout';
 // const ADD_TO_CART_BUTTON = 'Add to cart button';
 let CUSTOMER_INFO: IUserInfoProps;
 const SUCCESS = 'success';
@@ -101,7 +107,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     },
   };
 };
-const Product: NextPage = (props) => {
+const Product: NextPageWithLayout = (props) => {
   const router = useRouter();
   const similarProductsLink = useRef<HTMLDivElement>(null);
   const recommendedProductsLink = useRef<HTMLDivElement>(null);
@@ -512,9 +518,7 @@ const Product: NextPage = (props) => {
                   ' ',
                 )},online shopping for ${productInfo?.productName?.replace(/-|:|_/gi, ' ')}`}
               />
-              <link rel="icon" href="/favicon.ico" />
             </Head>
-            <NavBar count={cartItemQty}></NavBar>
             <ProductCarousel
               {...{
                 showArrows: false,
@@ -584,7 +588,6 @@ const Product: NextPage = (props) => {
                   <RecommendedProducts {...similarProducts}></RecommendedProducts>
                 </div>
               )}
-              <Footer />
             </ProductDetailsWrapper>
             <AddToCart {...{ show: true, disabled: false, addProductToCart }}></AddToCart>
           </div>
@@ -629,3 +632,7 @@ const Product: NextPage = (props) => {
 };
 
 export default Product;
+
+Product.getLayout = function getLayout(page: ReactElement) {
+  return <Layout>{page}</Layout>;
+};
