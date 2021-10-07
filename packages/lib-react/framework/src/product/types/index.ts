@@ -4,16 +4,6 @@ export interface IProductDetails {
   action: string;
   id: number;
   productDesc: string;
-  productName?: string;
-  isProductSoldOut?: boolean;
-  isOneSize?: boolean;
-  hasSamePrice?: boolean;
-  isDefault?: boolean;
-  isfirst?: boolean;
-  showRfypCue?: boolean;
-  selectedSkuId?: string;
-  simpleSkus: ISimpleSkusEntityProps[];
-  imgurls?: IImgurlsEntity[] | null;
   brandName: string;
   hasSizeChart: boolean;
   quantity: number;
@@ -65,6 +55,17 @@ export interface IProductDetails {
   brandId: number;
   wishlistId: number;
   subProductTypeName?: string;
+  productName?: string;
+  isProductSoldOut?: boolean;
+  isOneSize?: boolean;
+  hasSamePrice?: boolean;
+  isDefault?: boolean;
+  isfirst?: boolean;
+  showRfypCue?: boolean;
+  selectedSkuId?: string;
+  simpleSkus: ISimpleSkusEntityProps[];
+  imgurls?: IImageUrl[];
+  isWishlisted: boolean;
 }
 
 export interface ISimpleSkusEntityProps {
@@ -111,7 +112,7 @@ export interface IProductDetailsDeliveryMessageOrDeliveryMessagesEntity {
   type: number;
 }
 
-export interface IImgurlsEntity {
+export interface IImageUrl {
   imgUrl: string;
   imgUrlLarge: string;
   imgUrlFull: string;

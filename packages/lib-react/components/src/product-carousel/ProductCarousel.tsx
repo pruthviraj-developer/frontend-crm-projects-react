@@ -1,4 +1,5 @@
 import React, { FC, useState } from 'react';
+import Image from 'next/image';
 import {
   ProductCarouselWrapper,
   CarouselWrapper,
@@ -6,12 +7,10 @@ import {
   SimilarItemsLinkWrapper,
   SimilarTextElement,
   SvgIconsElement,
-  StyledImage,
 } from './StyledProductCarousel';
 import Carousel from 'react-multi-carousel';
 import {
   IProductCarouselProps,
-  IImageUrlProps,
   IProductCarouselBreakPoints,
 } from './IProductCarousel';
 import { IconSeeSimilar } from '@hs/icons';
@@ -63,13 +62,14 @@ export const ProductCarousel: FC<IProductCarouselProps> = ({
           swipeable={swipeable}
           dotListClass="product-carousel-dot-list"
           containerClass="product-carousel-container"
+          deviceType="mobile"
         >
           {imgUrls &&
-            imgUrls.map((img: IImageUrlProps, index: number) => {
+            imgUrls.map((img, index: number) => {
               return (
                 <ProductImageContainer key={index}>
                   <pre>{JSON.stringify(img)}</pre>
-                  <StyledImage
+                  <Image
                     alt=""
                     layout="fill"
                     draggable={false}

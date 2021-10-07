@@ -1,3 +1,4 @@
+import { IImageUrl } from '@hs/framework';
 export interface IProductCarouselProps {
   showArrows?: boolean;
   autoPlay?: boolean;
@@ -8,26 +9,9 @@ export interface IProductCarouselProps {
   slidesToSlide: number;
   swipeable?: boolean;
   showDots?: boolean;
-  imgUrls: IImageUrlProps[];
+  imgUrls?: IImageUrl[];
   goToProductRecommendation: (a: string) => void;
 }
-
-export interface IImageUrlProps {
-  imgUrl: string;
-  imgUrlLarge: string;
-  imgUrlFull: string;
-  imgUrlThumbnail: string;
-  isCover: boolean;
-  imgUrlHeight: number;
-  imgUrlWidth: number;
-  imgUrlLargeHeight: number;
-  imgUrlLargeWidth: number;
-  imgUrlFullHeight: number;
-  imgUrlFullWidth: number;
-  imgUrlThumbnailHeight: number;
-  imgUrlThumbnailWidth: number;
-}
-
 export interface IProductCarouselBreakPoints {
   desktop: DesktopOrMobileOrTablet;
   mobile: DesktopOrMobileOrTablet;

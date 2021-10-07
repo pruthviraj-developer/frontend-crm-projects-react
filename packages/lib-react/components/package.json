@@ -45,6 +45,7 @@
     "@emotion/babel-plugin": "11.3.0",
     "@hs/icons": "^1.0.0",
     "@hs/utils": "^1.0.0",
+    "@hs/framework": "^1.0.0",
     "@size-limit/preset-small-lib": "^5.0.3",
     "@types/react": "17.0.19",
     "@types/react-datepicker": "^3.1.1",

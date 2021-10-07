@@ -156,7 +156,7 @@ const Product: NextPageWithLayout = (props) => {
     },
   );
 
-  const { productName, simpleSkus, ...product } = useProduct({ productData: productInfo });
+  const { productName, simpleSkus, ...product } = useProduct({ productData: productDetails });
 
   const [sku, setSku] = useState<ISimpleSkusEntityProps | any>();
 
@@ -188,16 +188,16 @@ const Product: NextPageWithLayout = (props) => {
     selectedSku,
     selectedSkuId,
   } = useSelectedProduct({
-    productData: productInfo,
+    productData: productDetails,
     selectedSku: sku,
   }); // productForm
   const { isOneSize } = useOneSize({
-    productData: productInfo,
+    productData: productDetails,
   });
 
   const deliveryDetailsData = useDeliveryDetails({
     selectedSku,
-    productData: productInfo,
+    productData: productDetails,
   });
 
   const goToProductRecommendation = (fromLocation: string) => {
@@ -306,7 +306,10 @@ const Product: NextPageWithLayout = (props) => {
               goToCart();
             }}
           >
-            <img src={`${productInfo.imgurls[0] && productInfo.imgurls[0].imgUrlThumbnail}`} alt={`${productName}`} />
+            <img
+              src={`${productDetails?.imgurls[0] && productDetails.imgurls[0].imgUrlThumbnail}`}
+              alt={`${productName}`}
+            />
             <CartNotificationDetails>
               {!isOneSize && <CartHeader>{`${sku.attrs[0].name} : ${sku.attrs[0].value}`}</CartHeader>}
               <CartMessage>Added to your Cart!</CartMessage>
@@ -407,11 +410,11 @@ const Product: NextPageWithLayout = (props) => {
     if (selectedSku) {
       retailPrice = selectedSku.retailPrice;
     } else {
-      retailPrice = productInfo.retailPrice;
+      retailPrice = productDetails.retailPrice;
     }
     const wishlistItem = {
       sku: selectedSkuId,
-      productId: productInfo.id,
+      productId: productDetails.id,
       price: retailPrice,
       attribution: {
         // source: oa_data['source'],
@@ -497,7 +500,7 @@ const Product: NextPageWithLayout = (props) => {
   // cookiesService.setCookies({ key: 'test', value: 'test value' });
   return (
     <>
-      {productInfo && productInfo.action === SUCCESS && (
+      {productDetails && productDetails.action === SUCCESS && (
         <>
           <ProductHead {...{ productName, retailPrice }}></ProductHead>
           <ProductCarousel
@@ -511,7 +514,7 @@ const Product: NextPageWithLayout = (props) => {
               slidesToSlide: 1,
               swipeable: false,
               showDots: true,
-              imgUrls: productInfo.imgurls,
+              imgUrls: productDetails.imgurls,
               goToProductRecommendation,
             }}
           ></ProductCarousel>
@@ -519,8 +522,8 @@ const Product: NextPageWithLayout = (props) => {
             <ProductNamePrice
               {...{
                 productName,
-                isProductSoldOut: productInfo.isProductSoldOut,
-                wishlistId: productInfo.wishlistId,
+                isProductSoldOut: !!productDetails.isProductSoldOut,
+                wishlistId: productDetails.wishlistId,
                 retailPrice,
                 retailPriceMax,
                 selectedSku,
@@ -533,7 +536,7 @@ const Product: NextPageWithLayout = (props) => {
             <SizeAndChartLabels
               {...{
                 isOneSize,
-                hasSizeChart: productInfo.hasSizeChart,
+                hasSizeChart: productDetails.hasSizeChart,
                 qtyLeft,
                 simpleSkus,
                 onSizeChartClick: openSizeChartPopup,
@@ -548,14 +551,14 @@ const Product: NextPageWithLayout = (props) => {
                 }}
               ></CustomSizePicker>
             )}
-            {productInfo.showRfypCue && showRFYP && (
+            {productDetails.showRfypCue && showRFYP && (
               <RecommendedProductsLinks
-                {...{ isProductSoldOut: productInfo.isProductSoldOut, goToProductRecommendation }}
+                {...{ isProductSoldOut: !!productDetails.isProductSoldOut, goToProductRecommendation }}
               ></RecommendedProductsLinks>
             )}
             <DeliveryDetails {...deliveryDetailsData}></DeliveryDetails>
-            {productInfo.id && (
-              <Accordion {...{ productData: productInfo, simpleSkus, selectedSku, ...product }}></Accordion>
+            {productDetails.id && (
+              <Accordion {...{ productData: productDetails, simpleSkus, selectedSku, ...product }}></Accordion>
             )}
 
             {showRFYP && (
@@ -574,10 +577,10 @@ const Product: NextPageWithLayout = (props) => {
         </>
       )}
       <SizeChartPopupModal>
-        {isSizeChartPopupOpen && (
+        {isSizeChartPopupOpen && productDetails && (
           <SizeChartPopupComponent
             {...{
-              id: productInfo.id,
+              id: productDetails.id,
               productName: productName,
               onClickClose: closeSizeChartPopup,
             }}

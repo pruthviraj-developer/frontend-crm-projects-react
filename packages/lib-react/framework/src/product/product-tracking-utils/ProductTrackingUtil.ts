@@ -6,7 +6,6 @@ export const getProductTrackingData = ({
   selectedSku,
   productDetails,
 }: IProductTrackingProps) => {
-  console.dir(productDetails);
   const selectedProductSku = selectedSku || productDetails?.simpleSkus?.[0];
   const attributes = selectedProductSku?.attrs?.reduce(
     (obj: Record<string, string>, item: IProductDetailsAttrsEntity) => (
