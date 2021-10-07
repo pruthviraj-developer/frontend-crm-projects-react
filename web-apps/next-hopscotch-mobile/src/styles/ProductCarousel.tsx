@@ -22,7 +22,7 @@ export const productCarouselStyles = (
         border: 1px solid #707070;
       }
       .product-carousel-container {
-        max-height: 40vh;
+        max-height: calc(40vh - 8px);
       }
     `}
   />

@@ -75,7 +75,7 @@ export const ProductCarousel: FC<IProductCarouselProps> = ({
                       height: '100%',
                       position: 'relative',
                       maxWidth: '100%',
-                      maxHeight: '325px',
+                      maxHeight: '100%',
                     }}
                     src={`${img.imgUrlFull}&tr=w-${imageSize},c-at_max,dpr-2,n-medium`}
                   />
