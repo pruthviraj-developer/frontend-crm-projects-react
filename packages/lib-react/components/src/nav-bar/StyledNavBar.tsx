@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { Colors, typography, HsTextAlign } from '@hs/utils';
+import { SvgIcon } from '@hs/icons';
 
 const NavBarWrapper = styled.div`
   background-color: ${Colors.PINK[500]};
@@ -11,7 +12,7 @@ const NavBarWrapper = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 1;
+  z-index: 1003;
 `;
 
 const HopscotchImage = styled.div`
@@ -24,7 +25,7 @@ const Link = styled('a')`
   font-weight: ${typography.weight.medium};
   float: left;
   padding: 8px 6px;
-  margin-top: 16px;
+  margin-top: 17px;
   font-size: 12px;
   font-weight: 600;
   line-height: 1.33;
@@ -33,22 +34,21 @@ const Link = styled('a')`
 `;
 
 const RightContent = styled.div`
-  width: calc(100% - 112px);
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
 `;
 
 const CartIconWrapper = styled.div`
-  width: 48px;
-  height: 48px;
-  margin-top: 4px;
-  margin-right: 8px;
-  float: right;
+  height: 52px;
+  margin-right: 7px;
   position: relative;
 `;
 
 const CartIconQuantity = styled.span`
   font-size: 12px;
   line-height: 13px;
-  padding: 1px 4px 4px;
+  padding: 2px 2px 1px 1px;
   font-weight: ${typography.weight.medium};
   color: #ed54a4;
   background: ${Colors.WHITE};
@@ -62,11 +62,41 @@ const CartIconQuantity = styled.span`
   left: 26px;
 `;
 
+const IconWrapper = styled(SvgIcon)`
+  min-width: 24px;
+  min-height: 24px;
+`;
+
+const NavigationIconsWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: 4px;
+`;
+
+const NavLinkWrapper = styled.div`
+  padding-top: 1px;
+`;
+
+const NavIconWrapper = styled.div<{ marginRight?: boolean }>`
+  padding: 4px 6px;
+  margin-right: ${(props) => (props.marginRight ? '6px' : '0')};
+`;
+
+const HelpLink = styled.div`
+  margin-left: 5px;
+  font-weight: 500;
+`;
+
 export {
   NavBarWrapper,
+  NavLinkWrapper,
+  NavIconWrapper,
+  NavigationIconsWrapper,
   HopscotchImage,
   CartIconWrapper,
   CartIconQuantity,
   RightContent,
   Link,
+  IconWrapper,
+  HelpLink,
 };

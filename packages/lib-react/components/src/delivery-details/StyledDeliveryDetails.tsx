@@ -16,14 +16,16 @@ const DeliveryTitle = styled.div`
 `;
 
 const Title = styled.span`
-  fontweight: ${typography.weight.medium};
+  font-weight: ${typography.weight.medium};
+  color: #333;
+  font-size: 14px;
 `;
 
 const PinCode = styled.span`
   color: #ed54a4;
   cursor: pointer;
   text-transform: uppercase;
-  fontweight: ${typography.weight.medium};
+  font-weight: ${typography.weight.medium};
 `;
 
 const DeliveryDetailsContent = styled.div`

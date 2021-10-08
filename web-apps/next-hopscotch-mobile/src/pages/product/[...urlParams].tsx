@@ -1,6 +1,10 @@
 import type { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
+import React, { useState, useEffect, useRef, ReactElement, useContext } from 'react';
+import { useModal } from 'react-hooks-use-modal';
+import { toast } from 'react-toastify';
+import { dehydrate, QueryClient, useQuery } from 'react-query';
 import {
   AddToCart,
   Accordion,
@@ -13,7 +17,6 @@ import {
   RecommendedProductsLinks,
 } from '@hs/components';
 
-import { toast } from 'react-toastify';
 import {
   IProductProps,
   urlParamsProps,
@@ -22,10 +25,7 @@ import {
   IUserInfoProps,
   NextPageWithLayout,
 } from '@/types';
-import { dehydrate, QueryClient, useQuery } from 'react-query';
 import { cookiesService, productDetailsService, timeService } from '@hs/services';
-import React, { useState, useEffect, useRef, ReactElement, useContext } from 'react';
-import sortBy from 'lodash/sortBy';
 import {
   ProductDetailsWrapper,
   CartLink,
@@ -35,7 +35,6 @@ import {
   CartMessage,
   CartLinkText,
 } from '@/styles';
-import { useModal } from 'react-hooks-use-modal';
 
 const SizeChartPopupComponent = dynamic(() => import('../../components/size-chart/SizeChart'), {
   ssr: false,
@@ -191,6 +190,7 @@ const Product: NextPageWithLayout = (props) => {
     productData: productDetails,
     selectedSku: sku,
   }); // productForm
+
   const { isOneSize } = useOneSize({
     productData: productDetails,
   });
