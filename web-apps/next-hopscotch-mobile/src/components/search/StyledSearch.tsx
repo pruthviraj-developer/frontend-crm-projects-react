@@ -64,6 +64,12 @@ const List = styled.li`
   line-height: 16px;
   border-bottom: 1px solid #e6e6e6;
   padding: 16px;
+  p {
+    margin: 0;
+  }
+  img {
+    display: none;
+  }
 `;
 
 export { SearchWrapper, SearchForm, SearchField, SearchList, List, CloseIcon };

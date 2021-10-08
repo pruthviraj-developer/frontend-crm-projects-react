@@ -26,11 +26,12 @@ export interface IResoucreProps {
 export interface CategoriesEntity {
   id: number;
   name: string;
-  subCategory?: (SubCategoryEntity | null)[] | null;
+  subCategory: SubCategoryEntity[] | null;
 }
 export interface SubCategoryEntity {
   id: number;
   name: string;
+  parentName: string;
   productTypeList?: ProductTypeListEntity[] | null;
 }
 export interface ProductTypeListEntity {
@@ -90,4 +91,20 @@ export interface AwsInfo {
   regionPoolId: string;
   customerProfileBaseFolder: string;
   prefixProfilePic: string;
+}
+
+export interface IEulerAutoSuggestionsProps {
+  action: string;
+  suggestions: IEulerSuggestionsEntity[];
+}
+export interface IEulerSuggestionsEntity {
+  id: string;
+  type: string;
+  term: string;
+  search_params: string;
+  displayName: string;
+  trackingData: TrackingData;
+}
+export interface TrackingData {
+  section: string;
 }

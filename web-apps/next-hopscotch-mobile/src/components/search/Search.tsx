@@ -1,5 +1,11 @@
 import React, { FC, useState, useEffect } from 'react';
-import { ISearch, IRecentSearchesProps, IResoucreProps } from './ISearch';
+import {
+  ISearch,
+  IRecentSearchesProps,
+  IEulerAutoSuggestionsProps,
+  IEulerSuggestionsEntity,
+  IResoucreProps,
+} from './ISearch';
 import { SearchWrapper, SearchField, SearchForm, CloseIcon, SearchList, List } from './StyledSearch';
 import { IconClose } from '@hs/icons';
 import { useDebounce, useReadLocalStorage } from '@hs/framework';
@@ -7,12 +13,27 @@ import { productDetailsService } from '@hs/services';
 
 const Search: FC<ISearch> = ({ close }: ISearch) => {
   const [searchBy, setsSarchBy] = useState<string>('');
-  const debouncedValue = useDebounce(searchBy, 500);
+  const [suggestions, setSuggestions] = useState<IEulerSuggestionsEntity[]>([]);
+  const keyWord = useDebounce(searchBy, 500);
   const searches: any = useReadLocalStorage(['recentSearches']);
-  const suggestions = [];
   useEffect(() => {
-    console.log(debouncedValue);
-  }, [debouncedValue]);
+    if (keyWord.length) {
+      searches.delete('recentSearches');
+      (async () => {
+        try {
+          const response: IEulerAutoSuggestionsProps = await productDetailsService.getEulerAutoSuggestions(keyWord);
+          console.log(JSON.stringify(response));
+          if (response.action === 'success') {
+            setSuggestions(response.suggestions);
+            return;
+          }
+          setSuggestions([]);
+        } catch (error) {
+          setSuggestions([]);
+        }
+      })();
+    }
+  }, [keyWord]);
 
   const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e ? e.preventDefault() : '';
@@ -20,15 +41,6 @@ const Search: FC<ISearch> = ({ close }: ISearch) => {
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setsSarchBy(e.target.value);
   };
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const resouces: IResoucreProps = await productDetailsService.getResouce();
-        console.log(JSON.stringify(resouces));
-      } catch (error) {}
-    })();
-  }, []);
 
   return (
     <SearchWrapper>
@@ -44,13 +56,17 @@ const Search: FC<ISearch> = ({ close }: ISearch) => {
           <CloseIcon onClick={close} icon={IconClose} />
         </SearchForm>
         <SearchList>
-          {searches && searches.get('recentSearches') && suggestions.length === 0 ? (
+          {searches && searches.get('recentSearches') && suggestions && suggestions.length === 0 ? (
             <>
               <List>Recent Searches</List>
               {searches.get('recentSearches').map((data: IRecentSearchesProps) => {
-                return <List>{data.term || data.name}</List>;
+                return <List dangerouslySetInnerHTML={{ __html: data.term || data.name }}></List>;
               })}
             </>
+          ) : suggestions && suggestions.length > 0 ? (
+            suggestions.map((data: IEulerSuggestionsEntity) => {
+              return <List dangerouslySetInnerHTML={{ __html: data.displayName || data.term }}></List>;
+            })
           ) : (
             ''
           )}
