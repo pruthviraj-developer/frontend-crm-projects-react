@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import Image from 'next/image';
 import {
   ProductCarouselWrapper,
@@ -34,9 +34,16 @@ export const ProductCarousel: FC<IProductCarouselProps> = ({
   };
   const [similarItemsDisplayWith, setSimilarItemsDisplayWith] =
     useState<number>(140);
-  setTimeout(() => {
-    setSimilarItemsDisplayWith(38);
-  }, 2000);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setSimilarItemsDisplayWith(38);
+    }, 2000);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, []);
+
   return (
     <ProductCarouselWrapper>
       <CarouselWrapper>
@@ -68,7 +75,6 @@ export const ProductCarousel: FC<IProductCarouselProps> = ({
             imgUrls.map((img, index: number) => {
               return (
                 <ProductImageContainer key={index}>
-                  <pre>{JSON.stringify(img)}</pre>
                   <Image
                     alt=""
                     layout="fill"

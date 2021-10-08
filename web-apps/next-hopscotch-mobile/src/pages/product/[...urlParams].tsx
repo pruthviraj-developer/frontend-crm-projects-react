@@ -451,10 +451,6 @@ const Product: NextPageWithLayout = (props) => {
       if (productDetails && productDetails.action === SUCCESS) {
         let showRfypCue = false;
         const setDetails = () => {
-          const simpleSkus = sortBy(productDetails.simpleSkus, function (skus: ISimpleSkusEntityProps) {
-            return !(skus.availableQuantity > 0);
-          });
-
           let isfirst = false,
             isDefault = false,
             isProductSoldOut = false;
@@ -479,7 +475,7 @@ const Product: NextPageWithLayout = (props) => {
             isfirst = false;
             isProductSoldOut = true;
           };
-          selectSku(simpleSkus);
+          //selectSku(simpleSkus);
           setProductInfo({
             ...productDetails,
             showRfypCue,
@@ -495,7 +491,7 @@ const Product: NextPageWithLayout = (props) => {
         setDetails();
       }
     }
-  }, [isProductDetailsSuccess, productDetails, updateCartItemQty]);
+  }, [isProductDetailsSuccess, productDetails, simpleSkus, updateCartItemQty]);
 
   // cookiesService.setCookies({ key: 'test', value: 'test value' });
   return (
