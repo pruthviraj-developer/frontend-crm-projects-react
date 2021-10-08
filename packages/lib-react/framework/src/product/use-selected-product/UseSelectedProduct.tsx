@@ -12,10 +12,7 @@ export const useSelectedProduct = ({
     finalSale,
     skuId: selectedSkuId,
   } = selectedSku || {};
-  const rPrice = selectedSku && selectedSku.retailPrice;
-  const retailPrice = productData.isfirst
-    ? productData.retailPrice || rPrice
-    : rPrice;
+  const retailPrice = selectedSku?.retailPrice || productData.retailPrice;
 
   const deliveryMsg =
     productData.isDefault && productData.edd
