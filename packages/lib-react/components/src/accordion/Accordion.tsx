@@ -14,6 +14,7 @@ import {
   FeatureAttributesList,
   FeatureAttributesListItem,
   DetailsDescriptionTitle,
+  AccordionToggleIcon,
   AccordionIcon,
 } from './StyledAccordion';
 
@@ -77,10 +78,11 @@ export const Accordion: FC<IAccordionProps> = ({
         }}
       >
         <span>{title}</span>
-        <AccordionIcon
+        <AccordionToggleIcon
           active={toggleAccordions[toggleElement] ? true : false}
-          icon={IconAngleDown}
-        />
+        >
+          <AccordionIcon icon={IconAngleDown} />
+        </AccordionToggleIcon>
       </AccordionTitle>
     );
   };

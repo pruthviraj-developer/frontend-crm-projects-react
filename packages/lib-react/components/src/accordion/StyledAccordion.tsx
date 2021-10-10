@@ -18,9 +18,7 @@ const AccordionTitle = styled.div`
   justify-content: space-between;
 `;
 
-const AccordionIcon = styled(SvgIcon)<{ active: boolean }>`
-  transform: scaleY(${(props) => (props.active ? -1 : 1)});
-`;
+const AccordionIcon = styled(SvgIcon)``;
 
 const AccordionContent = styled.div`
   opacity: 0;
@@ -77,9 +75,14 @@ const DetailsDescriptionTitle = styled.div`
   font-weight: 400;
 `;
 
+const AccordionToggleIcon = styled.div<{ active: boolean }>`
+  transform: scaleY(${(props) => (props.active ? -1 : 1)});
+`;
+
 export {
   AccordionWrapper,
   AccordionTitle,
+  AccordionToggleIcon,
   AccordionIcon,
   AccordionContent,
   AccordionDescription,

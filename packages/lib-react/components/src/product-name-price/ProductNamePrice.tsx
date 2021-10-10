@@ -58,7 +58,7 @@ export const ProductNamePrice: FC<IProductNamePriceProps> = ({
             <ProductPrice>₹{getFormattedPrice(retailPrice)}</ProductPrice>
             {getRetailPrice() && (
               <ProductPrice>
-                - ₹{getFormattedPrice(retailPriceMax)}
+                &nbsp;-&nbsp;₹{getFormattedPrice(retailPriceMax)}
               </ProductPrice>
             )}
             {getDiscountDetails() && (
