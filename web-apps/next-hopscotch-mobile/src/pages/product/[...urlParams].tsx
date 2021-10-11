@@ -14,6 +14,7 @@ import {
   SizeAndChartLabels,
   RecommendedProducts,
   RecommendedProductsLinks,
+  ProductNamePrice,
 } from '@hs/components';
 
 import {
@@ -49,6 +50,7 @@ import {
   useDeliveryDetails,
   useSelectedProduct,
   useOneSize,
+  useProduct,
   useSegment,
   IProductDetails,
   ISimpleSkusEntityProps,
@@ -61,8 +63,8 @@ import * as segment from '@/components/segment-analytic';
 import { LoginModal } from '@/components/login-modal';
 import { Layout } from '@/components/layout/Layout';
 import { ProductHead } from '@/components/header';
-import { useProduct } from '@/components/use-product';
-import { ProductNamePrice } from '@/components/product-name-price';
+// import { useProduct } from '@/components/use-product';
+// import { ProductNamePrice } from '@/components/product-name-price';
 // const ADD_TO_CART_BUTTON = 'Add to cart button';
 let CUSTOMER_INFO: IUserInfoProps;
 const SUCCESS = 'success';
@@ -155,6 +157,7 @@ const Product: NextPageWithLayout = (props) => {
     },
   );
 
+  const [sku, setSku] = useState<ISimpleSkusEntityProps | any>();
   const {
     productName,
     selectedSku,
@@ -167,9 +170,7 @@ const Product: NextPageWithLayout = (props) => {
     simpleSkus,
     showRfypCue,
     ...product
-  } = useProduct({ productData: productDetails });
-
-  const [sku, setSku] = useState<ISimpleSkusEntityProps | any>();
+  } = useProduct({ productData: productDetails, sku });
 
   const { canShow: showSimilarProducts, ...similarProducts } = useRecommendation({
     section: 'RFYP',

@@ -4,7 +4,6 @@ import {
 } from 'product/types';
 import { useMemo } from 'react';
 import { ProductProps } from './IUseProduct';
-const SUCCESS = 'success';
 const getSimpleSkus = (simpleSkus: ISimpleSkusEntityProps[]) => {
   const retValue = [
     ...simpleSkus.filter((val) => val.availableQuantity > 0),
@@ -24,7 +23,8 @@ const getSimpleSkus = (simpleSkus: ISimpleSkusEntityProps[]) => {
   }
   return retValue;
 };
-export const useProduct = ({ productData }: ProductProps) => {
+
+export const useProduct = ({ productData, sku }: ProductProps) => {
   const simpleSkus = useMemo(
     () => getSimpleSkus(productData.simpleSkus),
     [productData]
@@ -41,6 +41,7 @@ export const useProduct = ({ productData }: ProductProps) => {
     brandDescription,
     brandName,
     moreInfo,
+    retailPriceMax,
   } = productData;
 
   let defaultParameters = {};
@@ -51,40 +52,43 @@ export const useProduct = ({ productData }: ProductProps) => {
     qtyLeft = undefined,
     size = undefined,
     isPresale = undefined,
-    finalSale = undefined;
+    finalSale = undefined,
+    showRfypCue = false,
+    isfirst = false,
+    isDefault = false,
+    isProductSoldOut = false;
+  const updateProductDetail = (
+    sku: any,
+    isfirst: Boolean,
+    isDefault?: Boolean
+  ) => {
+    isDefault = isDefault;
+    if (!sku) {
+      return;
+    }
 
-  if (productData && productData.action === SUCCESS) {
-    let isfirst = false,
-      isDefault = false,
-      isProductSoldOut = false;
-    const updateProductDetail = (
-      sku: any,
-      isfirst: Boolean,
-      isDefault?: Boolean
-    ) => {
-      isDefault = isDefault;
-      if (!sku) {
-        return;
-      }
+    if (!isfirst) {
+      // this.selectedSkuId = sku.skuId;
+      // this.showSizeSelectorOption = false;
+      selectedSku = sku;
+      retailPrice = sku.retailPrice;
+    } else {
+      // this.showSizeSelectorOption = true;
+      retailPrice = productData.retailPrice || sku.retailPrice;
+    }
 
-      if (!isfirst) {
-        // this.selectedSkuId = sku.skuId;
-        // this.showSizeSelectorOption = false;
-        selectedSku = sku;
-        retailPrice = sku.retailPrice;
-      } else {
-        // this.showSizeSelectorOption = true;
-        retailPrice = productData.retailPrice || sku.retailPrice;
-      }
+    regularPrice = sku.regularPrice;
+    discount = sku.discount;
+    qtyLeft = sku.availableQuantity;
+    size = sku.attributes.size;
+    isPresale = sku.isPresale;
+    finalSale = sku.finalSale;
+  };
 
-      regularPrice = sku.regularPrice;
-      discount = sku.discount;
-      qtyLeft = sku.availableQuantity;
-      size = sku.attributes.size;
-      isPresale = sku.isPresale;
-      finalSale = sku.finalSale;
-    };
-
+  if (sku) {
+    updateProductDetail(sku, false, false);
+    console.log(sku);
+  } else {
     const selectSku = (skuList: ISimpleSkusEntityProps[]) => {
       for (let i = 0; i < skuList.length; i++) {
         const sku = skuList[i];
@@ -107,16 +111,12 @@ export const useProduct = ({ productData }: ProductProps) => {
       updateProductDetail(skuList[0], isfirst);
     };
     selectSku(simpleSkus);
-    const showRfypCue = !!simpleSkus.find(
-      (sku) => !(sku.availableQuantity > 0)
-    );
+    showRfypCue = !!simpleSkus.find((sku) => !(sku.availableQuantity > 0));
     defaultParameters = {
       ...productData,
-      showRfypCue,
       isfirst,
       isDefault,
       isProductSoldOut,
-      simpleSkus,
     };
   }
 
@@ -131,10 +131,12 @@ export const useProduct = ({ productData }: ProductProps) => {
     productLevelAttrList,
     showBrandDetails,
     showBrandInfo: showBrandDetails && brandDescription ? true : false,
+    showRfypCue,
     brandDescription,
     brandName,
     moreInfo,
     ...defaultParameters,
+    simpleSkus,
     selectedSku,
     retailPrice,
     regularPrice,
@@ -143,5 +145,6 @@ export const useProduct = ({ productData }: ProductProps) => {
     size,
     isPresale,
     finalSale,
+    retailPriceMax,
   };
 };

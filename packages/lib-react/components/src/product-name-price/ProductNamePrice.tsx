@@ -26,22 +26,25 @@ export const ProductNamePrice: FC<IProductNamePriceProps> = ({
   deleteFromWishlist,
 }: IProductNamePriceProps) => {
   if (retailPrice) {
-    const getDiscountDetails = () => {
-      return selectedSku &&
-        !retailPriceMax &&
-        discount &&
-        discount > 2 &&
-        regularPrice &&
-        regularPrice > retailPrice
+    const showOffer = () => {
+      return retailPriceMax && !selectedSku ? true : false;
+    };
+
+    const getRetailPrice = () => {
+      return showOffer() === true &&
+        retailPriceMax &&
+        retailPriceMax > 0 &&
+        retailPrice != retailPriceMax
         ? true
         : false;
     };
 
-    const getRetailPrice = () => {
-      return retailPriceMax &&
-        retailPriceMax > 0 &&
-        !selectedSku &&
-        retailPrice != retailPriceMax
+    const getDiscountDetails = () => {
+      return showOffer() === false &&
+        discount &&
+        discount > 2 &&
+        regularPrice &&
+        regularPrice > retailPrice
         ? true
         : false;
     };
