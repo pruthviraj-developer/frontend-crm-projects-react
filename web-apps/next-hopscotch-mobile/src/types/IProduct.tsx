@@ -37,3 +37,26 @@ export interface IHeadProps {
   productName: string;
   retailPrice?: number;
 }
+
+export interface IAddressListProps {
+  action: string;
+  addressList?: IAllAddressItemsEntityProps[] | null;
+}
+export interface IAllAddressItemsEntityProps {
+  id: number;
+  name: string;
+  country: string;
+  state: string;
+  city: string;
+  zipCode: string;
+  streetAddress: string;
+  landmark: string;
+  cellPhone: string;
+  isPrimary: boolean;
+  canCod: boolean;
+  canPol: boolean;
+  isServicable: boolean;
+  simpleStreetAddress: string;
+  firstName: string;
+  lastName: string;
+}

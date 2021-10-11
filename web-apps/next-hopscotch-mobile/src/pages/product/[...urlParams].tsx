@@ -9,7 +9,6 @@ import {
   AddToCart,
   Accordion,
   ProductCarousel,
-  DeliveryDetails,
   CustomSizePicker,
   SizeAndChartLabels,
   RecommendedProducts,
@@ -44,6 +43,10 @@ const SizeSelectorPopupComponent = dynamic(() => import('../../components/size-s
   ssr: false,
 });
 
+const PinCodePopupComponent = dynamic(() => import('../../components/pin-code/PinCode'), {
+  ssr: false,
+});
+
 import {
   useRecommendation,
   IRecommendedProducts,
@@ -63,6 +66,7 @@ import * as segment from '@/components/segment-analytic';
 import { LoginModal } from '@/components/login-modal';
 import { Layout } from '@/components/layout/Layout';
 import { ProductHead } from '@/components/header';
+import { DeliveryDetails } from '@/components/delivery-details';
 // import { useProduct } from '@/components/use-product';
 // import { ProductNamePrice } from '@/components/product-name-price';
 // const ADD_TO_CART_BUTTON = 'Add to cart button';
@@ -131,6 +135,16 @@ const Product: NextPageWithLayout = (props) => {
     preventScroll: false,
     closeOnOverlayClick: true,
   });
+
+  const [PinCodePopupModel, openPinCodePopup, closePinCodePopup, isPinCodePopupOpen] = useModal('root', {
+    preventScroll: false,
+    closeOnOverlayClick: true,
+  });
+
+  useEffect(() => {
+    openPinCodePopup();
+    return () => {};
+  }, [openPinCodePopup]);
 
   const { data: productDetails, isSuccess: isProductDetailsSuccess } = useQuery<IProductDetails>(
     ['ProductDetail', productId],
@@ -507,7 +521,9 @@ const Product: NextPageWithLayout = (props) => {
                 {...{ isProductSoldOut: !!productDetails.isProductSoldOut, goToProductRecommendation }}
               ></RecommendedProductsLinks>
             )}
-            <DeliveryDetails {...deliveryDetailsData}></DeliveryDetails>
+            <DeliveryDetails
+              {...{ ...deliveryDetailsData, openPinCodePopup, pinCode: productDetails.pinCode }}
+            ></DeliveryDetails>
             {productDetails.id && <Accordion {...{ ...product, isPresale, simpleSkus, selectedSku }}></Accordion>}
 
             {showRFYP && (
@@ -523,6 +539,90 @@ const Product: NextPageWithLayout = (props) => {
             )}
           </ProductDetailsWrapper>
           <AddToCart {...{ show: true, disabled: false, addProductToCart }}></AddToCart>
+          <PinCodePopupModel>
+            {isPinCodePopupOpen && (
+              <PinCodePopupComponent
+                {...{
+                  productId: productDetails.id,
+                  closePinCodePopup,
+                  addressList: [
+                    {
+                      id: 4352079,
+                      name: 'Pruthviraj Patel',
+                      country: 'India',
+                      state: 'Delhi',
+                      city: 'Central Delhi',
+                      zipCode: '110001',
+                      streetAddress: 'Oasjd Asdjj Kdjs Kdj Dkas J',
+                      landmark: 'Kajdaksd',
+                      cellPhone: '7411498813',
+                      isPrimary: true,
+                      canCod: true,
+                      canPol: true,
+                      isServicable: true,
+                      simpleStreetAddress: 'Oasjd Asdjj Kdjs Kdj Dkas J',
+                      firstName: 'Pruthviraj',
+                      lastName: 'Patel',
+                    },
+                    {
+                      id: 4352022,
+                      name: 'Pruthviraj Patel',
+                      country: 'India',
+                      state: 'Karnataka',
+                      city: 'Mulbagal',
+                      zipCode: '563131',
+                      streetAddress: 'H Gollahalli',
+                      landmark: 'Anajanna Mani',
+                      cellPhone: '7411498813',
+                      isPrimary: false,
+                      canCod: true,
+                      canPol: true,
+                      isServicable: true,
+                      simpleStreetAddress: 'H Gollahalli',
+                      firstName: 'Pruthviraj',
+                      lastName: 'Patel',
+                    },
+                    {
+                      id: 4352079,
+                      name: 'Pruthviraj Patel',
+                      country: 'India',
+                      state: 'Delhi',
+                      city: 'Central Delhi',
+                      zipCode: '110001',
+                      streetAddress: 'Oasjd Asdjj Kdjs Kdj Dkas J',
+                      landmark: 'Kajdaksd',
+                      cellPhone: '7411498813',
+                      isPrimary: true,
+                      canCod: true,
+                      canPol: true,
+                      isServicable: true,
+                      simpleStreetAddress: 'Oasjd Asdjj Kdjs Kdj Dkas J',
+                      firstName: 'Pruthviraj',
+                      lastName: 'Patel',
+                    },
+                    {
+                      id: 4352022,
+                      name: 'Pruthviraj Patel',
+                      country: 'India',
+                      state: 'Karnataka',
+                      city: 'Mulbagal',
+                      zipCode: '563131',
+                      streetAddress: 'H Gollahalli',
+                      landmark: 'Anajanna Mani',
+                      cellPhone: '7411498813',
+                      isPrimary: false,
+                      canCod: true,
+                      canPol: true,
+                      isServicable: true,
+                      simpleStreetAddress: 'H Gollahalli',
+                      firstName: 'Pruthviraj',
+                      lastName: 'Patel',
+                    },
+                  ],
+                }}
+              />
+            )}
+          </PinCodePopupModel>
         </>
       )}
       <SizeChartPopupModal>
