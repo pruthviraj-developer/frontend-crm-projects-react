@@ -89,20 +89,20 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       staleTime: Infinity,
     },
   );
-  await queryClient.prefetchQuery(
-    ['RecommendedProducts', productId],
-    () => productDetailsService.getRecommendedProducts(productId, { boutiqueId: undefined }, process.env.WEB_HOST),
-    {
-      staleTime: Infinity,
-    },
-  );
-  await queryClient.prefetchQuery(
-    ['SimilarProducts', productId],
-    () => productDetailsService.getSimilarProducts(productId, { boutiqueId: undefined }, process.env.WEB_HOST),
-    {
-      staleTime: Infinity,
-    },
-  );
+  // await queryClient.prefetchQuery(
+  //   ['RecommendedProducts', productId],
+  //   () => productDetailsService.getRecommendedProducts(productId, { boutiqueId: undefined }, process.env.WEB_HOST),
+  //   {
+  //     staleTime: Infinity,
+  //   },
+  // );
+  // await queryClient.prefetchQuery(
+  //   ['SimilarProducts', productId],
+  //   () => productDetailsService.getSimilarProducts(productId, { boutiqueId: undefined }, process.env.WEB_HOST),
+  //   {
+  //     staleTime: Infinity,
+  //   },
+  // );
   return {
     props: {
       dehydratedState: dehydrate(queryClient),
