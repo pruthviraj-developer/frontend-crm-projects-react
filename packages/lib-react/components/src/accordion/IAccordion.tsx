@@ -9,7 +9,7 @@ export interface IAccordionProps {
   showShippingInfo: boolean;
   showBrandInfo: boolean;
   isReturnable: number;
-  isPresale: number;
+  isPresale?: number;
   preOrderDescription: string;
   showBrandDetails: boolean;
   brandDescription: string;

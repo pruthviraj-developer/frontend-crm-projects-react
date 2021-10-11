@@ -12,7 +12,7 @@ import { useDebounce, useReadLocalStorage } from '@hs/framework';
 import { productDetailsService } from '@hs/services';
 
 const Search: FC<ISearch> = ({ close }: ISearch) => {
-  const [searchBy, setsSarchBy] = useState<string>('');
+  const [searchBy, setSearchBy] = useState<string>('');
   const [suggestions, setSuggestions] = useState<IEulerSuggestionsEntity[]>([]);
   const keyWord = useDebounce(searchBy, 500);
   const searches: any = useReadLocalStorage(['recentSearches']);
@@ -39,7 +39,7 @@ const Search: FC<ISearch> = ({ close }: ISearch) => {
     e ? e.preventDefault() : '';
   };
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setsSarchBy(e.target.value);
+    setSearchBy(e.target.value);
   };
 
   return (
@@ -59,13 +59,13 @@ const Search: FC<ISearch> = ({ close }: ISearch) => {
           {searches && searches.get('recentSearches') && suggestions && suggestions.length === 0 ? (
             <>
               <List>Recent Searches</List>
-              {searches.get('recentSearches').map((data: IRecentSearchesProps) => {
-                return <List dangerouslySetInnerHTML={{ __html: data.term || data.name }}></List>;
+              {searches.get('recentSearches').map((data: IRecentSearchesProps, index: number) => {
+                return <List key={index} dangerouslySetInnerHTML={{ __html: data.term || data.name }}></List>;
               })}
             </>
           ) : suggestions && suggestions.length > 0 ? (
-            suggestions.map((data: IEulerSuggestionsEntity) => {
-              return <List dangerouslySetInnerHTML={{ __html: data.displayName || data.term }}></List>;
+            suggestions.map((data: IEulerSuggestionsEntity, index: number) => {
+              return <List key={index} dangerouslySetInnerHTML={{ __html: data.displayName || data.term }}></List>;
             })
           ) : (
             ''

@@ -8,7 +8,6 @@ import { dehydrate, QueryClient, useQuery } from 'react-query';
 import {
   AddToCart,
   Accordion,
-  ProductNamePrice,
   ProductCarousel,
   DeliveryDetails,
   CustomSizePicker,
@@ -45,7 +44,6 @@ const SizeSelectorPopupComponent = dynamic(() => import('../../components/size-s
 });
 
 import {
-  useProduct,
   useRecommendation,
   IRecommendedProducts,
   useDeliveryDetails,
@@ -63,6 +61,8 @@ import * as segment from '@/components/segment-analytic';
 import { LoginModal } from '@/components/login-modal';
 import { Layout } from '@/components/layout/Layout';
 import { ProductHead } from '@/components/header';
+import { useProduct } from '@/components/use-product';
+import { ProductNamePrice } from '@/components/product-name-price';
 // const ADD_TO_CART_BUTTON = 'Add to cart button';
 let CUSTOMER_INFO: IUserInfoProps;
 const SUCCESS = 'success';
@@ -155,7 +155,19 @@ const Product: NextPageWithLayout = (props) => {
     },
   );
 
-  const { productName, simpleSkus, ...product } = useProduct({ productData: productDetails });
+  const {
+    productName,
+    selectedSku,
+    retailPrice,
+    regularPrice,
+    discount,
+    isPresale,
+    finalSale,
+    qtyLeft,
+    simpleSkus,
+    showRfypCue,
+    ...product
+  } = useProduct({ productData: productDetails });
 
   const [sku, setSku] = useState<ISimpleSkusEntityProps | any>();
 
@@ -175,18 +187,7 @@ const Product: NextPageWithLayout = (props) => {
     pid: productId,
   });
 
-  const {
-    // deliveryMsg,
-    discount,
-    // finalSale,
-    // isPresale,
-    qtyLeft,
-    retailPrice,
-    retailPriceMax,
-    regularPrice,
-    selectedSku,
-    selectedSkuId,
-  } = useSelectedProduct({
+  const { retailPriceMax, selectedSkuId } = useSelectedProduct({
     productData: productDetails,
     selectedSku: sku,
   }); // productForm
@@ -446,53 +447,6 @@ const Product: NextPageWithLayout = (props) => {
     })();
   };
 
-  useEffect(() => {
-    if (isProductDetailsSuccess) {
-      if (productDetails && productDetails.action === SUCCESS) {
-        let showRfypCue = false;
-        const setDetails = () => {
-          let isfirst = false,
-            isDefault = false,
-            isProductSoldOut = false;
-
-          const selectSku = (skuList: ISimpleSkusEntityProps[]) => {
-            for (let i = 0; i < skuList.length; i++) {
-              const sku = skuList[i];
-              if (sku.availableQuantity > 0) {
-                isProductSoldOut = false;
-                if (skuList.length === 1) {
-                  isfirst = true;
-                  isDefault = true;
-                } else {
-                  isfirst = false;
-                  isDefault = true;
-                }
-                setSku(sku);
-                return;
-              }
-            }
-            setSku(skuList[0]);
-            isfirst = false;
-            isProductSoldOut = true;
-          };
-          //selectSku(simpleSkus);
-          setProductInfo({
-            ...productDetails,
-            showRfypCue,
-            isfirst,
-            isDefault,
-            isProductSoldOut,
-            simpleSkus,
-          });
-        };
-        const soldOutSkus = productDetails.simpleSkus.find((sku) => !(sku.availableQuantity > 0));
-        showRfypCue = !!soldOutSkus;
-        // updateCartItemQty(productDetails.quantity);
-        setDetails();
-      }
-    }
-  }, [isProductDetailsSuccess, productDetails, simpleSkus, updateCartItemQty]);
-
   // cookiesService.setCookies({ key: 'test', value: 'test value' });
   return (
     <>
@@ -547,15 +501,13 @@ const Product: NextPageWithLayout = (props) => {
                 }}
               ></CustomSizePicker>
             )}
-            {productDetails.showRfypCue && showRFYP && (
+            {showRfypCue && showRFYP && (
               <RecommendedProductsLinks
                 {...{ isProductSoldOut: !!productDetails.isProductSoldOut, goToProductRecommendation }}
               ></RecommendedProductsLinks>
             )}
             <DeliveryDetails {...deliveryDetailsData}></DeliveryDetails>
-            {productDetails.id && (
-              <Accordion {...{ productData: productDetails, simpleSkus, selectedSku, ...product }}></Accordion>
-            )}
+            {productDetails.id && <Accordion {...{ ...product, isPresale, simpleSkus, selectedSku }}></Accordion>}
 
             {showRFYP && (
               <div ref={recommendedProductsLink}>
@@ -589,7 +541,7 @@ const Product: NextPageWithLayout = (props) => {
           <SizeSelectorPopupComponent
             {...{
               closePopup: closeSizeSelector,
-              showRfypCue: true,
+              showRfypCue,
               showAddToCart: true,
               onSizeChartClick: openSizeChartPopup,
               simpleSkus,

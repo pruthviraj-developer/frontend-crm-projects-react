@@ -50,7 +50,7 @@ const SearchList = styled.ul`
   overflow-y: auto;
   margin: 0;
   padding: 0;
-  li:first-child {
+  li:first-of-type {
     color: #333;
     font-weight: 400;
     padding: 9px 0 9px 16px;

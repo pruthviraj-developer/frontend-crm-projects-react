@@ -26,7 +26,7 @@ export const Accordion: FC<IAccordionProps> = ({
   showBrandDetails,
   brandDescription,
   brandName,
-  isPresale,
+  isPresale = 0,
   preOrderDescription,
   productLevelAttrList = [],
   shippingReturnInfo,
