@@ -40,7 +40,7 @@ export interface IHeadProps {
 
 export interface IAddressListProps {
   action: string;
-  addressList: IAllAddressItemsEntityProps[];
+  allAddressItems: IAllAddressItemsEntityProps[];
 }
 export interface IAllAddressItemsEntityProps {
   id: number;

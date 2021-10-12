@@ -8,6 +8,7 @@ import {
   PinCodeNumber,
   PinCodeForm,
   PinCodeSubmit,
+  Loading,
   Header,
   DeliveryAddressesContainer,
   CloseIconWrapper,
@@ -24,6 +25,7 @@ const PinCode: FC<IPinCodeProps> = ({ productId, pinCode, closePinCodePopup }: I
   const [pincode, setPinCode] = useState<string>('');
   const [error, setError] = useState<IPinCodeAPIResponseProps | IPinCodeErrorProps>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoadingAddress, setIsLoadingAddress] = useState<boolean>(false);
   const [addressList, setAddressList] = useState<IAllAddressItemsEntityProps[]>([]);
 
   const checkPinCodeDetails = (pincode: string) => {
@@ -69,15 +71,17 @@ const PinCode: FC<IPinCodeProps> = ({ productId, pinCode, closePinCodePopup }: I
     }
   };
 
+  const hasAddress = addressList && addressList.length;
   useEffect(() => {
     (async () => {
       try {
+        setIsLoadingAddress(true);
         const response: IAddressListProps = await productDetailsService.getCustomerAddresses();
-
         if (response.action === SUCCESS) {
-          setAddressList(response.addressList);
+          setAddressList(response.allAddressItems);
         }
       } finally {
+        setIsLoadingAddress(false);
       }
     })();
   }, []);
@@ -85,13 +89,13 @@ const PinCode: FC<IPinCodeProps> = ({ productId, pinCode, closePinCodePopup }: I
   return (
     <PinCodeWrapper>
       <Header>
-        <Title> {addressList.length ? 'Edit' : 'Check'} Pincode</Title>
+        <Title> {hasAddress ? 'Edit' : 'Check'} Pincode</Title>
         <CloseIconWrapper onClick={closePinCodePopup}>
           <CloseIcon icon={IconClose} />
         </CloseIconWrapper>
       </Header>
       <PinCodeContainer>
-        {addressList.length && (
+        {hasAddress > 0 && (
           <>
             <Title>Select an address</Title>
             <DeliveryAddressesContainer>
@@ -118,7 +122,8 @@ const PinCode: FC<IPinCodeProps> = ({ productId, pinCode, closePinCodePopup }: I
             </DeliveryAddressesContainer>
           </>
         )}
-        <EnterPinCode>{addressList.length ? 'Or, enter your pincode' : 'Enter your pincode'}</EnterPinCode>
+        {isLoadingAddress && <Loading>Loading address...</Loading>}
+        <EnterPinCode>{hasAddress ? 'Or, enter your pincode' : 'Enter your pincode'}</EnterPinCode>
         <PinCodeForm
           onSubmit={(e) => {
             return submitForm(e);

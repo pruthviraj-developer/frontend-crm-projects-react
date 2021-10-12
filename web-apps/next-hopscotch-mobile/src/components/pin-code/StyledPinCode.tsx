@@ -114,6 +114,12 @@ const ErrorMessage = styled.div`
   line-height: 16px;
 `;
 
+const Loading = styled.div`
+  font-size: 18px;
+  line-height: 16px;
+  color: ${Colors.PINK[500]};
+`;
+
 export {
   PinCodeWrapper,
   PinCodeContainer,
@@ -123,6 +129,7 @@ export {
   PinCodeNumber,
   PinCodeForm,
   PinCodeSubmit,
+  Loading,
   Header,
   CloseIconWrapper,
   CloseIcon,
