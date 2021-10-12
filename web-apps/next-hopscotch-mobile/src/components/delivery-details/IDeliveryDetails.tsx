@@ -10,6 +10,7 @@ export interface IDeliveryDetailsProps {
   deliveryMsg: string;
   pinCode?: string;
   openPinCodePopup: () => void;
+  openSizeSelector: () => void;
   // selectedSku: ISimpleSkusEntityProps;
   selectedSku: any;
   showInternationaPreorder: boolean;

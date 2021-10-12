@@ -542,7 +542,7 @@ const Product: NextPageWithLayout = (props) => {
               ></RecommendedProductsLinks>
             )}
             <DeliveryDetails
-              {...{ ...deliveryDetailsData, selectedSku, ...deliveryDetails, openPinCodePopup }}
+              {...{ ...deliveryDetailsData, selectedSku, ...deliveryDetails, openPinCodePopup, openSizeSelector }}
             ></DeliveryDetails>
             {productDetails.id && <Accordion {...{ ...product, isPresale, simpleSkus, selectedSku }}></Accordion>}
 

@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { IconTick, IconCrossRed } from '@hs/icons';
+import { IconTick, IconCrossRed, IconDropDown } from '@hs/icons';
 import {
   DeliveryDetailsWrapper,
   DeliveryDetailsContent,
@@ -11,6 +11,9 @@ import {
   Title,
   PinCode,
   PreOrderInfo,
+  SelectedSkuSize,
+  SizeSelector,
+  SizeSelectorIcon,
 } from './StyledDeliveryDetails';
 import { IDeliveryDetailsProps, DeliveryMessageOrDeliveryMessagesEntity } from './IDeliveryDetails';
 
@@ -29,7 +32,22 @@ export const DeliveryDetails: FC<IDeliveryDetailsProps> = ({
   showInternationaPreorder,
   selectedSku,
   openPinCodePopup,
+  openSizeSelector,
 }: IDeliveryDetailsProps) => {
+  const getDeliveryDetails = () => {
+    return (
+      <>
+        <DeliverIcon icon={IconTick} />
+        <DeliveryInfo>
+          {eddPrefix}
+          <DeliveryBadge color={eddTextColor} bgColor={eddColor}>
+            {deliveryMsg}
+          </DeliveryBadge>
+        </DeliveryInfo>
+      </>
+    );
+  };
+
   const getPreOrderLink = () => {
     return showInternationaPreorder ? (
       <PreOrderInfo>
@@ -45,17 +63,12 @@ export const DeliveryDetails: FC<IDeliveryDetailsProps> = ({
         <Title>Delivery {pinCode ? `to ${pinCode}` : ''}</Title>
         <PinCode onClick={openPinCodePopup}> {pinCode ? 'Edit' : 'Check'} pincode</PinCode>
       </DeliveryTitle>
+      {selectedSku && <SelectedSkuSize>for size {selectedSku.attributes.size} </SelectedSkuSize>}
       <DeliveryDetailsContent>
         <Delivery>
           {isEddDifferentForSKUs === false && (
             <>
-              <DeliverIcon icon={IconTick} fill={'#bbb'} />
-              <DeliveryInfo>
-                {eddPrefix}
-                <DeliveryBadge color={eddTextColor} bgColor={eddColor}>
-                  {deliveryMsg}
-                </DeliveryBadge>
-              </DeliveryInfo>
+              {getDeliveryDetails()}
               {getPreOrderLink()}
             </>
           )}
@@ -64,17 +77,15 @@ export const DeliveryDetails: FC<IDeliveryDetailsProps> = ({
             <>
               {selectedSku && (
                 <>
-                  <DeliverIcon icon={IconTick} fill={'#bbb'} />
-                  <DeliveryInfo>
-                    {selectedSku.eddPrefix}
-                    <DeliveryBadge color={selectedSku.eddTextColor} bgColor={selectedSku.eddColor}>
-                      {selectedSku.deliveryMsg}
-                    </DeliveryBadge>
-                  </DeliveryInfo>
+                  {getDeliveryDetails()}
                   {getPreOrderLink()}
                 </>
               )}
-              {!selectedSku && <div>select size</div>}
+              {!selectedSku && (
+                <SizeSelector onClick={openSizeSelector}>
+                  <span>Select a size for delivery information</span> <SizeSelectorIcon icon={IconDropDown} />
+                </SizeSelector>
+              )}
             </>
           )}
         </Delivery>
@@ -82,7 +93,7 @@ export const DeliveryDetails: FC<IDeliveryDetailsProps> = ({
         {deliveryMessages &&
           deliveryMessages.map((data: DeliveryMessageOrDeliveryMessagesEntity, index: number) => (
             <Delivery key={index}>
-              <DeliverIcon icon={data.type ? IconTick : IconCrossRed} fill={'#bbb'} />
+              <DeliverIcon icon={data.type ? IconTick : IconCrossRed} />
               <DeliveryInfo>{data.msg}</DeliveryInfo>
             </Delivery>
           ))}
