@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
-import { useRouter } from 'next/router';
 import Image from 'next/image';
+import Link from 'next/link';
 import {
   CarouselListWrapper,
   CarouselList,
@@ -30,46 +30,41 @@ export const ProductCarouselList: FC<IProductCarouselListProps> = ({
   section,
   subsection,
 }: IProductCarouselListProps) => {
-  const router = useRouter();
   const [funnelData] = useSessionStorage<IFunnelData>(
     SESSION_DATA.OA_DATA,
     null
   );
   const imageSize = 360;
-
-  const gotoProductDetailsPage = (
-    product: IRecommendProductDetailListEntity
-  ) => {
-    router.push({
-      pathname: `/product/${product.id}/${getDashedParameter(product)}`,
-      query: {
-        ...funnelData,
-        ...{ section, subsection, from_screen: 'product' },
-      },
-    });
-  };
-
   return (
     <CarouselListWrapper>
       {products &&
         products.map(
           (product: IRecommendProductDetailListEntity, index: number) => (
             <CarouselList key={index}>
-              <ImageWrapper
-                onClick={() => gotoProductDetailsPage(product)}
-                key={index}
+              <Link
+                href={{
+                  pathname: `/product/${product.id}/${getDashedParameter(
+                    product
+                  )}`,
+                  query: {
+                    ...funnelData,
+                    ...{ section, subsection, from_screen: 'product' },
+                  },
+                }}
               >
-                <Image
-                  src={`${product.imageUrl}&tr=w-${imageSize},c-at_max,dpr-2,n-medium`}
-                  alt={product.productName}
-                  placeholder="blur"
-                  blurDataURL="https://static.hopscotch.in/web2/images/boutique-pattern.png"
-                  layout="fill"
-                  unoptimized
-                  // objectFit="cover"
-                />
-                <TransparentImgOverlay></TransparentImgOverlay>
-              </ImageWrapper>
+                <ImageWrapper key={index}>
+                  <Image
+                    src={`${product.imageUrl}&tr=w-${imageSize},c-at_max,dpr-2,n-medium`}
+                    alt={product.productName}
+                    placeholder="blur"
+                    blurDataURL="https://static.hopscotch.in/web2/images/boutique-pattern.png"
+                    layout="fill"
+                    unoptimized
+                    // objectFit="cover"
+                  />
+                  <TransparentImgOverlay></TransparentImgOverlay>
+                </ImageWrapper>
+              </Link>
               <SaleRetailPrice>
                 ₹{product.salePrice || product.retailPrice}
               </SaleRetailPrice>

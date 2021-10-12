@@ -88,7 +88,6 @@ export const useProduct = ({ productData, sku }: ProductProps) => {
 
   if (sku) {
     updateProductDetail(sku, false, false);
-    console.log(sku);
   } else {
     const selectSku = (skuList: ISimpleSkusEntityProps[]) => {
       for (let i = 0; i < skuList.length; i++) {

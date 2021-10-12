@@ -1,10 +1,13 @@
 import type { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
+import Image from 'next/image';
+import Link from 'next/link';
 import React, { useState, useEffect, useRef, ReactElement, useContext } from 'react';
 import { useModal } from 'react-hooks-use-modal';
 import { toast } from 'react-toastify';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
+
 import {
   AddToCart,
   Accordion,
@@ -70,20 +73,11 @@ import { LoginModal } from '@/components/login-modal';
 import { Layout } from '@/components/layout/Layout';
 import { ProductHead } from '@/components/header';
 
-// import { useProduct } from '@/components/use-product';
-
 let CUSTOMER_INFO: IUserInfoProps;
 const SUCCESS = 'success';
 const tryLater = 'Try Later';
 const CUSTOMER_INFO_COOKIE_NAME = 'hs_customer_info';
 const GUEST_CUSTOMER_INFO = 'hs_guest_customer_info';
-// const CART_ITEM_QTY_COOKIE_NAME = 'cart_item_quantity';
-// const CART_TRACKING_COOKIE_NAME = 'cart_tracking_data';
-// const getProductDetails = <P, R>(): Promise<R> => {
-//   const params = { currentTime: new Date().getTime() };
-//   // return httpService.get<R>({ url: `/api/product/${productId}`, params });
-//   return httpService.get<R>({ url: '/api/product/948332', params });
-// };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const queryClient = new QueryClient();
@@ -308,87 +302,84 @@ const Product: NextPageWithLayout = (props) => {
     }
   };
 
-  const goToCart = (path = '/v2/cart') => {
-    console.log(`${window.location.protocol}//${window.location.host}${path}`);
-    window.location.href = `${window.location.protocol}//${window.location.host}${path}`;
-  };
-
-  const getToasterContent = (response: ICartAPIResponse) => {
+  const getToasterContent = () => {
     return (
       <>
         <CartNotification>
-          <CartLink
-            onClick={() => {
-              goToCart();
+          <Link
+            href={{
+              pathname: '/v2/cart',
             }}
           >
-            <img
-              src={`${productDetails?.imgurls[0] && productDetails.imgurls[0].imgUrlThumbnail}`}
-              alt={`${productName}`}
-            />
-            <CartNotificationDetails>
-              {!isOneSize && <CartHeader>{`${sku.attrs[0].name} : ${sku.attrs[0].value}`}</CartHeader>}
-              <CartMessage>Added to your Cart!</CartMessage>
-              <CartLinkText>View cart</CartLinkText>
-            </CartNotificationDetails>
-          </CartLink>
+            <CartLink>
+              <Image
+                alt={`${productName}`}
+                width="70px"
+                height="70px"
+                max-width="100%"
+                draggable={false}
+                unoptimized
+                src={`${productDetails?.imgurls[0] && productDetails.imgurls[0].imgUrlThumbnail}`}
+              />
+              <CartNotificationDetails>
+                {!isOneSize && (
+                  <CartHeader>{`${selectedSku.attributes.name} : ${selectedSku.attributes.value}`}</CartHeader>
+                )}
+                <CartMessage>Added to your Cart!</CartMessage>
+                <CartLinkText>View cart</CartLinkText>
+              </CartNotificationDetails>
+            </CartLink>
+          </Link>
         </CartNotification>
       </>
     );
   };
 
+  const addToCart = (sku: ISimpleSkusEntityProps) => {
+    const data = { sku: sku.skuId, quantity: 1 };
+    (async () => {
+      try {
+        const addToCartResponse: ICartAPIResponse = await productDetailsService.addItemToCart(data);
+        const atc_user = cookiesService.getCookies(COOKIE_DATA.WEBSITE_CUSTOMER_SEGMENT);
+        if (addToCartResponse.action === SUCCESS) {
+          updateCartItemQty(addToCartResponse.cartItemQty);
+          toast(getToasterContent(), {
+            position: toast.POSITION.TOP_RIGHT,
+            closeButton: false,
+            hideProgressBar: true,
+            autoClose: 2250,
+            toastId: 'cartQuantiyChangeToaster',
+            bodyClassName: 'cartQuantiyChangeBodyToaster',
+          });
+          segment.trackEvent({
+            evtName: segment.PDP_TRACKING_EVENTS.ADDED_TO_CART,
+            properties: {
+              ...properties,
+              ...getProductTrackingData({ productDetails, selectedSku: sku }),
+              atc_user,
+              addFrom: 'current=' + location.pathname,
+            },
+            contextData,
+          });
+          return;
+        }
+      } catch (error: any) {
+        const errorMessage = error ? error.message : tryLater;
+        showErrorNotification(errorMessage);
+      }
+    })();
+  };
+
   const addProductToCart = () => {
     if (sku) {
-      const data = { sku: sku.skuId, quantity: 1 };
-      (async () => {
-        try {
-          const addToCartResponse: ICartAPIResponse = await productDetailsService.addItemToCart(data);
-          const atc_user = cookiesService.getCookies(COOKIE_DATA.WEBSITE_CUSTOMER_SEGMENT);
-          if (addToCartResponse.action === SUCCESS) {
-            updateCartItemQty(addToCartResponse.cartItemQty);
-
-            toast(getToasterContent(addToCartResponse), {
-              position: toast.POSITION.TOP_RIGHT,
-              closeButton: false,
-              hideProgressBar: true,
-              autoClose: 2250,
-              toastId: 'cartQuantiyChangeToaster',
-              bodyClassName: 'cartQuantiyChangeBodyToaster',
-            });
-            segment.trackEvent({
-              evtName: segment.PDP_TRACKING_EVENTS.ADDED_TO_CART,
-              properties: {
-                ...properties,
-                ...getProductTrackingData({ productDetails, selectedSku: sku }),
-                atc_user,
-                addFrom: 'current=' + location.pathname,
-              },
-              contextData,
-            });
-            return;
-          }
-        } catch (error: any) {
-          const errorMessage = error ? error.message : tryLater;
-          toast.error(errorMessage, {
-            hideProgressBar: true,
-            closeButton: false,
-            icon: false,
-            autoClose: 2250,
-            style: {
-              backgroundColor: '#f44',
-              color: '#fff',
-              textAlign: 'center',
-              fontWeight: 600,
-              fontSize: '14px',
-              lineHeight: '16px',
-            },
-          });
-        }
-      })();
-
-      return;
+      addToCart(sku);
+    } else if (simpleSkus.length === 1) {
+      const sku = simpleSkus[0];
+      setSku(sku);
+      addToCart(sku);
+    } else {
+      openSizeSelector();
     }
-    openSizeSelector();
   };
 
   const onSizeSelect = (sku: ISimpleSkusEntityProps, fromLocation: string) => {

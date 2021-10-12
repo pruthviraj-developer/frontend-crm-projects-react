@@ -1,5 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import Image from 'next/image';
+import Carousel from 'react-multi-carousel';
+import { IconSeeSimilar } from '@hs/icons';
 import {
   ProductCarouselWrapper,
   CarouselWrapper,
@@ -8,12 +10,10 @@ import {
   SimilarTextElement,
   SvgIconsElement,
 } from './StyledProductCarousel';
-import Carousel from 'react-multi-carousel';
 import {
   IProductCarouselProps,
   IProductCarouselBreakPoints,
 } from './IProductCarousel';
-import { IconSeeSimilar } from '@hs/icons';
 export const ProductCarousel: FC<IProductCarouselProps> = ({
   focusOnSelect,
   showArrows,
