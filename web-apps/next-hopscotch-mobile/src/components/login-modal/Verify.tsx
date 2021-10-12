@@ -138,8 +138,8 @@ export const Verify: FC<IVerifiedDataProps | any> = ({ back, type, ...props }: I
         </ChangeNumber>
         <OtpboxWrapper>
           <OtpContainer>
-            {[...Array(OTP_LENGTH)].map((x, i) => (
-              <OtpSeperator show={otp.length <= i}></OtpSeperator>
+            {[...Array(OTP_LENGTH)].map((x, index: number) => (
+              <OtpSeperator key={index} show={otp.length <= index}></OtpSeperator>
             ))}
             <input type="number" onChange={validateOtp} auto-complete="off" value={otp} />
           </OtpContainer>

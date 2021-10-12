@@ -11,7 +11,7 @@ const LoginModalWrapper = styled.div`
   width: 100%;
   left: 0;
   bottom: 0;
-  min-height: calc(100% - 24px);
+  min-height: calc(75% - 24px);
   overflow-y: auto;
   font-weight: ${typography.weight.regular};
   font-size: ${typography.size.s2}px;

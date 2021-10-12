@@ -105,8 +105,7 @@ const SizeChart: FC<ISizeChartDtoProps> = ({ productName, id, onClickClose }: IS
           prepareTableData();
           setChartData(sizeChartData);
         }
-      } catch (e) {
-        console.log(e);
+      } finally {
       }
     })();
   }, []);

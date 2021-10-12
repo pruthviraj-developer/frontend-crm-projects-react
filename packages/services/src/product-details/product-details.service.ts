@@ -23,12 +23,6 @@ const deleteFromWishlist = <P, R>(wishlistId: P): Promise<R> => {
   });
 };
 
-const checkForPincode = <P, R>(pid: P, pincode: P): Promise<R> => {
-  return httpService.get<R>({
-    url: `/api/products/pincode?productId=${pid}&pincode=${pincode}`,
-  });
-};
-
 const searchProducts = <P, R>(urlParams: P): Promise<R> => {
   // const suggestedSearchText:strong = urlParams['keyWord'] ? '' : urlParams['searchBy'];
   const params = {
@@ -128,18 +122,26 @@ const getEulerAutoSuggestions = <R>(keyWord: string): Promise<R> => {
   return httpService.get({ url });
 };
 
-const getResouce = <R>(): Promise<R> => {
-  const currentDate = new Date();
-  const prependZeroIfNecessary = (x: number) => {
-    return x > 10 ? x : '0' + x;
-  };
-  const updateElements = [
-    currentDate.getFullYear() - 1,
-    prependZeroIfNecessary(currentDate.getMonth() + 1),
-    prependZeroIfNecessary(currentDate.getDate()),
-  ];
-  const params = { updateDate: updateElements.join('') };
-  return httpService.get({ url: '/api/resources', params });
+// const getResouce = <R>(): Promise<R> => {
+//   const currentDate = new Date();
+//   const prependZeroIfNecessary = (x: number) => {
+//     return x > 10 ? x : '0' + x;
+//   };
+//   const updateElements = [
+//     currentDate.getFullYear() - 1,
+//     prependZeroIfNecessary(currentDate.getMonth() + 1),
+//     prependZeroIfNecessary(currentDate.getDate()),
+//   ];
+//   const params = { updateDate: updateElements.join('') };
+//   return httpService.get({ url: '/api/resources', params });
+// };
+
+const checkForPincode = <P, R>(params: P): Promise<R> => {
+  return httpService.get<R>({ url: '/api/products/pincode', params });
+};
+
+const getCustomerAddresses = <R>(): Promise<R> => {
+  return httpService.get<R>({ url: '/api/delivery/addresses' });
 };
 
 export const productDetailsService = {
@@ -156,5 +158,5 @@ export const productDetailsService = {
   sendOtp,
   verifyOtp,
   getEulerAutoSuggestions,
-  getResouce,
+  getCustomerAddresses,
 };

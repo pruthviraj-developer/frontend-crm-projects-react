@@ -22,7 +22,6 @@ const Search: FC<ISearch> = ({ close }: ISearch) => {
       (async () => {
         try {
           const response: IEulerAutoSuggestionsProps = await productDetailsService.getEulerAutoSuggestions(keyWord);
-          console.log(JSON.stringify(response));
           if (response.action === 'success') {
             setSuggestions(response.suggestions);
             return;

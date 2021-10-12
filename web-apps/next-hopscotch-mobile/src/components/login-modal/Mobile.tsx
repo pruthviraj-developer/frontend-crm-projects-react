@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import { FORM_ERROR_CODES, REGEX_PATTERNS } from './constants';
-import { IMobileProps, ILoginErrorResponse, ILoginErrorMessageBar, IVerifiedDataProps } from './ILoginModal';
+import { IMobileProps, ILoginErrorResponse, ILoginErrorMessageBar } from './ILoginModal';
 import {
   ActionText,
   MobileWrapper,

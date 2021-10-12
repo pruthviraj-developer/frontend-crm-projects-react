@@ -5,20 +5,19 @@ import { SvgIcon } from '@hs/icons';
 const DeliveryDetailsWrapper = styled.div`
   background-color: ${Colors.WHITE};
   box-shadow: 0 1px 0 0 ${Colors.MERCURY}, 0 -1px 0 0 ${Colors.MERCURY};
-  padding: ${typography.size.s24}px ${typography.size.s3}px
-    ${typography.size.s2}px;
+  padding: ${typography.size.s24}px ${typography.size.s3}px ${typography.size.s2}px;
   margin: 0px;
 `;
 
 const DeliveryTitle = styled.div`
   display: flex;
   justify-content: space-between;
+  font-size: 14px;
 `;
 
 const Title = styled.span`
   font-weight: ${typography.weight.medium};
   color: #333;
-  font-size: 14px;
 `;
 
 const PinCode = styled.span`
@@ -74,6 +73,36 @@ const PreOrderInfo = styled.span`
   }
 `;
 
+const SelectedSkuSize = styled.div`
+  opacity: 0.56;
+  line-height: 20px;
+  font-weight: 400;
+  font-size: 14px;
+  color: #333;
+`;
+
+const SizeSelector = styled.div`
+  background-color: #f5f5f5;
+  padding: 8px 8px 8px 16px;
+  border-radius: 4px;
+  box-shadow: 0 0 0 1px #dfe1e6;
+  height: 36px;
+  font-size: 14px;
+  color: #707070;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  line-height: 20px;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+`;
+
+const SizeSelectorIcon = styled(SvgIcon)`
+  opacity: 0.5;
+`;
+
 export {
   DeliveryDetailsWrapper,
   DeliveryDetailsContent,
@@ -85,4 +114,7 @@ export {
   PinCode,
   DeliverIcon,
   PreOrderInfo,
+  SelectedSkuSize,
+  SizeSelector,
+  SizeSelectorIcon,
 };

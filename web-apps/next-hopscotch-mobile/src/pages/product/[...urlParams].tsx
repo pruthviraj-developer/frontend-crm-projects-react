@@ -9,12 +9,12 @@ import {
   AddToCart,
   Accordion,
   ProductCarousel,
-  DeliveryDetails,
   CustomSizePicker,
   SizeAndChartLabels,
   RecommendedProducts,
   RecommendedProductsLinks,
   ProductNamePrice,
+  DeliveryDetails,
 } from '@hs/components';
 
 import {
@@ -24,6 +24,8 @@ import {
   ICartAPIResponse,
   IUserInfoProps,
   NextPageWithLayout,
+  IUpdatedDeliverDetailsProps,
+  IErrorStateProps,
 } from '@/types';
 import { cookiesService, productDetailsService, timeService } from '@hs/services';
 import {
@@ -44,12 +46,16 @@ const SizeSelectorPopupComponent = dynamic(() => import('../../components/size-s
   ssr: false,
 });
 
+const PinCodePopupComponent = dynamic(() => import('../../components/pin-code/PinCode'), {
+  ssr: false,
+});
+
 import {
   useRecommendation,
   IRecommendedProducts,
-  useDeliveryDetails,
   useSelectedProduct,
   useOneSize,
+  useDeliveryDetails,
   useProduct,
   useSegment,
   IProductDetails,
@@ -63,9 +69,9 @@ import * as segment from '@/components/segment-analytic';
 import { LoginModal } from '@/components/login-modal';
 import { Layout } from '@/components/layout/Layout';
 import { ProductHead } from '@/components/header';
+
 // import { useProduct } from '@/components/use-product';
-// import { ProductNamePrice } from '@/components/product-name-price';
-// const ADD_TO_CART_BUTTON = 'Add to cart button';
+
 let CUSTOMER_INFO: IUserInfoProps;
 const SUCCESS = 'success';
 const tryLater = 'Try Later';
@@ -115,7 +121,8 @@ const Product: NextPageWithLayout = (props) => {
   const recommendedProductsLink = useRef<HTMLDivElement>(null);
   const urlParams = router.query as unknown as IProductProps;
   const [productId]: urlParamsProps | any = [...(urlParams.urlParams || [])];
-  const [productInfo, setProductInfo] = useState<IProductDetails | any>({}); // productDetails with modification
+  const [deliveryDetails, updateDeliveryDetails] = useState<IUpdatedDeliverDetailsProps>();
+  const [updatedWishListId, updateWishListId] = useState<number>();
   const { updateCartItemQty } = useContext(CartItemQtyContext);
   const [LoginPopupModal, openLoginPopup, closeLoginPopup, isLoginPopupOpen] = useModal('root', {
     preventScroll: false,
@@ -128,6 +135,11 @@ const Product: NextPageWithLayout = (props) => {
   });
 
   const [SizeSelectorPopupModal, openSizeSelector, closeSizeSelector, isSizeSelectorPopupOpen] = useModal('root', {
+    preventScroll: false,
+    closeOnOverlayClick: true,
+  });
+
+  const [PinCodePopupModel, openPinCodePopup, closePinCodePopup, isPinCodePopupOpen] = useModal('root', {
     preventScroll: false,
     closeOnOverlayClick: true,
   });
@@ -169,6 +181,7 @@ const Product: NextPageWithLayout = (props) => {
     qtyLeft,
     simpleSkus,
     showRfypCue,
+    wishlistId,
     ...product
   } = useProduct({ productData: productDetails, sku });
 
@@ -226,6 +239,7 @@ const Product: NextPageWithLayout = (props) => {
     if (quantity != undefined) {
       updateCartItemQty(quantity);
       addToWishlistAfterModalClose();
+      CUSTOMER_INFO = cookiesService.getCookieData(CUSTOMER_INFO_COOKIE_NAME);
     }
     closeLoginPopup();
   };
@@ -391,18 +405,38 @@ const Product: NextPageWithLayout = (props) => {
     setSku(sku);
   };
 
+  const showErrorNotification = (message: string) => {
+    toast.error(message, {
+      hideProgressBar: true,
+      closeButton: false,
+      icon: false,
+      autoClose: 2250,
+      style: {
+        backgroundColor: '#f44',
+        color: '#fff',
+        textAlign: 'center',
+        fontWeight: 600,
+        fontSize: '14px',
+        lineHeight: '16px',
+      },
+    });
+  };
+
   const deleteFromWishlist = () => {
     (async () => {
       try {
-        const wishListStatus: IWishListProps = await productDetailsService.deleteFromWishlist(productInfo.wishlistId);
+        const wishListStatus: IWishListProps = await productDetailsService.deleteFromWishlist(
+          updatedWishListId === undefined ? wishlistId : updatedWishListId,
+        );
         if (wishListStatus.action === SUCCESS) {
-          setProductInfo({ ...productInfo, wishlistId: 0 });
+          updateWishListId(0);
           if (navigator && navigator.vibrate) {
             navigator.vibrate(200);
           }
         }
-      } catch (error) {
-        console.log(error);
+      } catch (error: any) {
+        const errorMessage = (error && error['data'] ? error.data : error) as unknown as IErrorStateProps;
+        showErrorNotification(errorMessage.message);
       }
     })();
   };
@@ -439,16 +473,38 @@ const Product: NextPageWithLayout = (props) => {
       try {
         const wishListStatus: IWishListProps = await productDetailsService.addToWishlist(wishlistItem);
         if (wishListStatus.action === SUCCESS) {
-          setProductInfo({ ...productInfo, wishlistId: wishListStatus.wishlistItemId });
+          updateWishListId(wishListStatus.wishlistItemId);
           if (navigator && navigator.vibrate) {
             navigator.vibrate(200);
           }
         }
-      } catch {}
+      } catch (error: any) {
+        const errorMessage = (error && error['data'] ? error.data : error) as unknown as IErrorStateProps;
+        showErrorNotification(errorMessage.message);
+      }
     })();
   };
 
-  // cookiesService.setCookies({ key: 'test', value: 'test value' });
+  const updateAndClosePinCodePopup = (newValues?: any) => {
+    closePinCodePopup();
+    if (newValues && newValues.simpleSkus) {
+      for (let i = 0; i < simpleSkus.length; i++) {
+        let sku = simpleSkus[i];
+        let newSku = newValues.simpleSkus[sku.skuId];
+        for (let key in newSku) {
+          if (sku[key]) {
+            sku[key] = newSku[key];
+          }
+        }
+      }
+      updateDeliveryDetails({
+        pinCode: newValues.newPincode,
+        eddPrefix: newValues.eddPrefix,
+        deliveryMessages: newValues.deliveryMessages,
+      });
+    }
+  };
+
   return (
     <>
       {productDetails && productDetails.action === SUCCESS && (
@@ -474,7 +530,7 @@ const Product: NextPageWithLayout = (props) => {
               {...{
                 productName,
                 isProductSoldOut: !!productDetails.isProductSoldOut,
-                wishlistId: productDetails.wishlistId,
+                wishlistId: updatedWishListId === undefined ? wishlistId : updatedWishListId,
                 retailPrice,
                 retailPriceMax,
                 selectedSku,
@@ -507,7 +563,9 @@ const Product: NextPageWithLayout = (props) => {
                 {...{ isProductSoldOut: !!productDetails.isProductSoldOut, goToProductRecommendation }}
               ></RecommendedProductsLinks>
             )}
-            <DeliveryDetails {...deliveryDetailsData}></DeliveryDetails>
+            <DeliveryDetails
+              {...{ ...deliveryDetailsData, selectedSku, ...deliveryDetails, openPinCodePopup, openSizeSelector }}
+            ></DeliveryDetails>
             {productDetails.id && <Accordion {...{ ...product, isPresale, simpleSkus, selectedSku }}></Accordion>}
 
             {showRFYP && (
@@ -523,6 +581,17 @@ const Product: NextPageWithLayout = (props) => {
             )}
           </ProductDetailsWrapper>
           <AddToCart {...{ show: true, disabled: false, addProductToCart }}></AddToCart>
+          <PinCodePopupModel>
+            {isPinCodePopupOpen && (
+              <PinCodePopupComponent
+                {...{
+                  productId: productDetails.id,
+                  pinCode: productDetails.pinCode,
+                  closePinCodePopup: updateAndClosePinCodePopup,
+                }}
+              />
+            )}
+          </PinCodePopupModel>
         </>
       )}
       <SizeChartPopupModal>

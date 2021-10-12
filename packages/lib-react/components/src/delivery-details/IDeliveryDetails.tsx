@@ -1,19 +1,19 @@
+import {
+  IProductDetailsDeliveryMessageOrDeliveryMessagesEntity,
+  ISimpleSkusEntityProps,
+} from 'types';
 export interface IDeliveryDetailsProps {
-  deliveryDetails: DeliveryMessageOrDeliveryMessagesEntity[];
-  isSkuInternational?: boolean;
-  skuInternationalPreOrderInfo: string;
-  skuInternationalPreOrderAction: string;
-  isProductInternational?: boolean;
-  productInternationalPreOrderInfo: string;
-  productInternationalPreOrderAction: string;
+  deliveryMessages?: IProductDetailsDeliveryMessageOrDeliveryMessagesEntity[];
+  isEddDifferentForSKUs: boolean;
+  preOrderInfo: string;
+  preOrderAction: string;
   eddColor: string;
   eddTextColor: string;
   eddPrefix: string;
   deliveryMsg: string;
-}
-
-export interface DeliveryMessageOrDeliveryMessagesEntity {
-  action: string;
-  msg: string;
-  type: number;
+  pinCode?: string;
+  openPinCodePopup: () => void;
+  openSizeSelector: () => void;
+  selectedSku: ISimpleSkusEntityProps;
+  showInternationaPreorder: boolean;
 }
