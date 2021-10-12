@@ -14,7 +14,7 @@ export interface IPopularSearchUrlProps {
 export interface IWishListProps {
   action: string;
   message: string;
-  wishlistItemId: string;
+  wishlistItemId: number;
 }
 
 export interface ICartAPIResponse {
@@ -40,7 +40,7 @@ export interface IHeadProps {
 
 export interface IAddressListProps {
   action: string;
-  addressList?: IAllAddressItemsEntityProps[] | null;
+  addressList: IAllAddressItemsEntityProps[];
 }
 export interface IAllAddressItemsEntityProps {
   id: number;
@@ -72,4 +72,15 @@ export interface IProductDetailsDeliveryMessageOrDeliveryMessagesEntity {
   action: string;
   msg: string;
   type: number;
+}
+
+export interface IErrorStateProps {
+  action: string;
+  message: string;
+  data: ErrorStateProps;
+}
+
+export interface ErrorStateProps {
+  action: string;
+  message: string;
 }

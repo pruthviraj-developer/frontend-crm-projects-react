@@ -1,8 +1,5 @@
-import { IAllAddressItemsEntityProps } from '@/types';
-
 export interface IPinCodeProps {
   pinCode?: string;
-  addressList: IAllAddressItemsEntityProps[];
   productId: number;
   closePinCodePopup: (args?: any) => void;
 }

@@ -1,7 +1,9 @@
 import styled from '@emotion/styled';
 import { typography } from '@hs/utils';
 
-const RecommendedProductsWrapper = styled.div``;
+const RecommendedProductsWrapper = styled.div`
+  background: #f5f5f5;
+`;
 
 const RecommendedProductsTitle = styled.div`
   padding: 24px 0 16px 16px;

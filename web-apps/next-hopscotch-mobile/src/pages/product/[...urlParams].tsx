@@ -14,6 +14,7 @@ import {
   RecommendedProducts,
   RecommendedProductsLinks,
   ProductNamePrice,
+  DeliveryDetails,
 } from '@hs/components';
 
 import {
@@ -24,6 +25,7 @@ import {
   IUserInfoProps,
   NextPageWithLayout,
   IUpdatedDeliverDetailsProps,
+  IErrorStateProps,
 } from '@/types';
 import { cookiesService, productDetailsService, timeService } from '@hs/services';
 import {
@@ -53,6 +55,7 @@ import {
   IRecommendedProducts,
   useSelectedProduct,
   useOneSize,
+  useDeliveryDetails,
   useProduct,
   useSegment,
   IProductDetails,
@@ -67,13 +70,8 @@ import { LoginModal } from '@/components/login-modal';
 import { Layout } from '@/components/layout/Layout';
 import { ProductHead } from '@/components/header';
 
-import { DeliveryDetails } from '@/components/delivery-details';
-import { useDeliveryDetails } from '../../components/use-delivery-details/UseDeliveryDetails';
-
 // import { useProduct } from '@/components/use-product';
-// import { ProductNamePrice } from '@/components/product-name-price';
 
-const ADD_TO_CART_BUTTON = 'Add to cart button';
 let CUSTOMER_INFO: IUserInfoProps;
 const SUCCESS = 'success';
 const tryLater = 'Try Later';
@@ -123,9 +121,8 @@ const Product: NextPageWithLayout = (props) => {
   const recommendedProductsLink = useRef<HTMLDivElement>(null);
   const urlParams = router.query as unknown as IProductProps;
   const [productId]: urlParamsProps | any = [...(urlParams.urlParams || [])];
-  const [productInfo, setProductInfo] = useState<IProductDetails | any>({});
   const [deliveryDetails, updateDeliveryDetails] = useState<IUpdatedDeliverDetailsProps>();
-
+  const [updatedWishListId, updateWishListId] = useState<number>();
   const { updateCartItemQty } = useContext(CartItemQtyContext);
   const [LoginPopupModal, openLoginPopup, closeLoginPopup, isLoginPopupOpen] = useModal('root', {
     preventScroll: false,
@@ -184,6 +181,7 @@ const Product: NextPageWithLayout = (props) => {
     qtyLeft,
     simpleSkus,
     showRfypCue,
+    wishlistId,
     ...product
   } = useProduct({ productData: productDetails, sku });
 
@@ -241,6 +239,7 @@ const Product: NextPageWithLayout = (props) => {
     if (quantity != undefined) {
       updateCartItemQty(quantity);
       addToWishlistAfterModalClose();
+      CUSTOMER_INFO = cookiesService.getCookieData(CUSTOMER_INFO_COOKIE_NAME);
     }
     closeLoginPopup();
   };
@@ -406,18 +405,38 @@ const Product: NextPageWithLayout = (props) => {
     setSku(sku);
   };
 
+  const showErrorNotification = (message: string) => {
+    toast.error(message, {
+      hideProgressBar: true,
+      closeButton: false,
+      icon: false,
+      autoClose: 2250,
+      style: {
+        backgroundColor: '#f44',
+        color: '#fff',
+        textAlign: 'center',
+        fontWeight: 600,
+        fontSize: '14px',
+        lineHeight: '16px',
+      },
+    });
+  };
+
   const deleteFromWishlist = () => {
     (async () => {
       try {
-        const wishListStatus: IWishListProps = await productDetailsService.deleteFromWishlist(productInfo.wishlistId);
+        const wishListStatus: IWishListProps = await productDetailsService.deleteFromWishlist(
+          updatedWishListId === undefined ? wishlistId : updatedWishListId,
+        );
         if (wishListStatus.action === SUCCESS) {
-          setProductInfo({ ...productInfo, wishlistId: 0 });
+          updateWishListId(0);
           if (navigator && navigator.vibrate) {
             navigator.vibrate(200);
           }
         }
-      } catch (error) {
-        console.log(error);
+      } catch (error: any) {
+        const errorMessage = (error && error['data'] ? error.data : error) as unknown as IErrorStateProps;
+        showErrorNotification(errorMessage.message);
       }
     })();
   };
@@ -454,12 +473,15 @@ const Product: NextPageWithLayout = (props) => {
       try {
         const wishListStatus: IWishListProps = await productDetailsService.addToWishlist(wishlistItem);
         if (wishListStatus.action === SUCCESS) {
-          setProductInfo({ ...productInfo, wishlistId: wishListStatus.wishlistItemId });
+          updateWishListId(wishListStatus.wishlistItemId);
           if (navigator && navigator.vibrate) {
             navigator.vibrate(200);
           }
         }
-      } catch {}
+      } catch (error: any) {
+        const errorMessage = (error && error['data'] ? error.data : error) as unknown as IErrorStateProps;
+        showErrorNotification(errorMessage.message);
+      }
     })();
   };
 
@@ -508,7 +530,7 @@ const Product: NextPageWithLayout = (props) => {
               {...{
                 productName,
                 isProductSoldOut: !!productDetails.isProductSoldOut,
-                wishlistId: productDetails.wishlistId,
+                wishlistId: updatedWishListId === undefined ? wishlistId : updatedWishListId,
                 retailPrice,
                 retailPriceMax,
                 selectedSku,
@@ -566,80 +588,6 @@ const Product: NextPageWithLayout = (props) => {
                   productId: productDetails.id,
                   pinCode: productDetails.pinCode,
                   closePinCodePopup: updateAndClosePinCodePopup,
-                  addressList: [
-                    {
-                      id: 4352079,
-                      name: 'Pruthviraj Patel',
-                      country: 'India',
-                      state: 'Delhi',
-                      city: 'Central Delhi',
-                      zipCode: '110001',
-                      streetAddress: 'Oasjd Asdjj Kdjs Kdj Dkas J',
-                      landmark: 'Kajdaksd',
-                      cellPhone: '7411498813',
-                      isPrimary: true,
-                      canCod: true,
-                      canPol: true,
-                      isServicable: true,
-                      simpleStreetAddress: 'Oasjd Asdjj Kdjs Kdj Dkas J',
-                      firstName: 'Pruthviraj',
-                      lastName: 'Patel',
-                    },
-                    {
-                      id: 4352022,
-                      name: 'Pruthviraj Patel',
-                      country: 'India',
-                      state: 'Karnataka',
-                      city: 'Mulbagal',
-                      zipCode: '563131',
-                      streetAddress: 'H Gollahalli',
-                      landmark: 'Anajanna Mani',
-                      cellPhone: '7411498813',
-                      isPrimary: false,
-                      canCod: true,
-                      canPol: true,
-                      isServicable: true,
-                      simpleStreetAddress: 'H Gollahalli',
-                      firstName: 'Pruthviraj',
-                      lastName: 'Patel',
-                    },
-                    {
-                      id: 4352079,
-                      name: 'Pruthviraj Patel',
-                      country: 'India',
-                      state: 'Delhi',
-                      city: 'Central Delhi',
-                      zipCode: '110001',
-                      streetAddress: 'Oasjd Asdjj Kdjs Kdj Dkas J',
-                      landmark: 'Kajdaksd',
-                      cellPhone: '7411498813',
-                      isPrimary: true,
-                      canCod: true,
-                      canPol: true,
-                      isServicable: true,
-                      simpleStreetAddress: 'Oasjd Asdjj Kdjs Kdj Dkas J',
-                      firstName: 'Pruthviraj',
-                      lastName: 'Patel',
-                    },
-                    {
-                      id: 4352022,
-                      name: 'Pruthviraj Patel',
-                      country: 'India',
-                      state: 'Karnataka',
-                      city: 'Mulbagal',
-                      zipCode: '563131',
-                      streetAddress: 'H Gollahalli',
-                      landmark: 'Anajanna Mani',
-                      cellPhone: '7411498813',
-                      isPrimary: false,
-                      canCod: true,
-                      canPol: true,
-                      isServicable: true,
-                      simpleStreetAddress: 'H Gollahalli',
-                      firstName: 'Pruthviraj',
-                      lastName: 'Patel',
-                    },
-                  ],
                 }}
               />
             )}

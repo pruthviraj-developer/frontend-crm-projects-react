@@ -140,6 +140,10 @@ const checkForPincode = <P, R>(params: P): Promise<R> => {
   return httpService.get<R>({ url: '/api/products/pincode', params });
 };
 
+const getCustomerAddresses = <R>(): Promise<R> => {
+  return httpService.get<R>({ url: '/api/delivery/addresses' });
+};
+
 export const productDetailsService = {
   addItemToCart,
   addToWishlist,
@@ -154,4 +158,5 @@ export const productDetailsService = {
   sendOtp,
   verifyOtp,
   getEulerAutoSuggestions,
+  getCustomerAddresses,
 };

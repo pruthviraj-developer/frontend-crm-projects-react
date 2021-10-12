@@ -53,6 +53,7 @@ export const RecommendedMatching: FC<IRecommendedMatchingProps> = ({
         color="#777"
         padding="0 12px"
         margin="0"
+        fontWeight="600"
       />
     </RecommendedMatchingWrapper>
   );

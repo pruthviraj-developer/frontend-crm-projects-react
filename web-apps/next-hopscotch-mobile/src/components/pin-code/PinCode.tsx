@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { IPinCodeAPIResponseProps, IPinCodeProps, IPinCodeErrorProps } from './IPinCode';
 import {
   PinCodeWrapper,
@@ -17,13 +17,14 @@ import {
   Name,
 } from './StyledPinCode';
 import { IconClose } from '@hs/icons';
-import { IAllAddressItemsEntityProps } from '@/types';
+import { IAddressListProps, IAllAddressItemsEntityProps } from '@/types';
 import { productDetailsService } from '@hs/services';
-const PinCode: FC<IPinCodeProps> = ({ addressList, productId, pinCode, closePinCodePopup }: IPinCodeProps) => {
+const SUCCESS = 'success';
+const PinCode: FC<IPinCodeProps> = ({ productId, pinCode, closePinCodePopup }: IPinCodeProps) => {
   const [pincode, setPinCode] = useState<string>('');
   const [error, setError] = useState<IPinCodeAPIResponseProps | IPinCodeErrorProps>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const hasAddressList = addressList && addressList.length;
+  const [addressList, setAddressList] = useState<IAllAddressItemsEntityProps[]>([]);
 
   const checkPinCodeDetails = (pincode: string) => {
     (async () => {
@@ -68,16 +69,29 @@ const PinCode: FC<IPinCodeProps> = ({ addressList, productId, pinCode, closePinC
     }
   };
 
+  useEffect(() => {
+    (async () => {
+      try {
+        const response: IAddressListProps = await productDetailsService.getCustomerAddresses();
+
+        if (response.action === SUCCESS) {
+          setAddressList(response.addressList);
+        }
+      } finally {
+      }
+    })();
+  }, []);
+
   return (
     <PinCodeWrapper>
       <Header>
-        <Title> {hasAddressList ? 'Edit' : 'Check'} Pincode</Title>
+        <Title> {addressList.length ? 'Edit' : 'Check'} Pincode</Title>
         <CloseIconWrapper onClick={closePinCodePopup}>
           <CloseIcon icon={IconClose} />
         </CloseIconWrapper>
       </Header>
       <PinCodeContainer>
-        {hasAddressList && (
+        {addressList.length && (
           <>
             <Title>Select an address</Title>
             <DeliveryAddressesContainer>
@@ -104,7 +118,7 @@ const PinCode: FC<IPinCodeProps> = ({ addressList, productId, pinCode, closePinC
             </DeliveryAddressesContainer>
           </>
         )}
-        <EnterPinCode>{hasAddressList ? 'Or, enter your pincode' : 'Enter your pincode'}</EnterPinCode>
+        <EnterPinCode>{addressList.length ? 'Or, enter your pincode' : 'Enter your pincode'}</EnterPinCode>
         <PinCodeForm
           onSubmit={(e) => {
             return submitForm(e);
@@ -112,15 +126,6 @@ const PinCode: FC<IPinCodeProps> = ({ addressList, productId, pinCode, closePinC
           noValidate
         >
           <PinCodeNumber value={pincode} onChange={handleOnChange} placeholder="Pincode" />
-          {/* {error && (
-            <MessageWrapper onClick={action}>
-              <ErrorIcon icon={IconErrorMessage} />
-              <ErrorMessage>
-                {error.message}
-                {error.actionLink && <ActionText>{error.actionText}</ActionText>}
-              </ErrorMessage>
-            </MessageWrapper>
-          )} */}
           <PinCodeSubmit disabled={pincode.length < 6 || isLoading} type="submit">
             Check
           </PinCodeSubmit>

@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { IconTick, IconCrossRed } from '@hs/icons';
+import { IconTick, IconCrossRed, IconDropDown } from '@hs/icons';
 import {
   DeliveryDetailsWrapper,
   DeliveryDetailsContent,
@@ -11,75 +11,110 @@ import {
   Title,
   PinCode,
   PreOrderInfo,
+  SelectedSkuSize,
+  SizeSelector,
+  SizeSelectorIcon,
 } from './StyledDeliveryDetails';
-import {
-  IDeliveryDetailsProps,
-  DeliveryMessageOrDeliveryMessagesEntity,
-} from './IDeliveryDetails';
-import { NextNavLink } from '../next-nav-link';
+import { IDeliveryDetailsProps } from './IDeliveryDetails';
+import { IProductDetailsDeliveryMessageOrDeliveryMessagesEntity } from 'types';
+import { NextNavLink } from '../next-nav-link/NextNavLink';
 
 export const DeliveryDetails: FC<IDeliveryDetailsProps> = ({
-  deliveryDetails,
-  isSkuInternational,
-  skuInternationalPreOrderInfo,
-  skuInternationalPreOrderAction,
-  isProductInternational,
-  productInternationalPreOrderInfo,
-  productInternationalPreOrderAction,
+  deliveryMessages,
+  isEddDifferentForSKUs,
+  preOrderInfo,
+  preOrderAction,
   eddColor,
   eddTextColor,
   eddPrefix,
   deliveryMsg,
+  pinCode,
+  showInternationaPreorder,
+  selectedSku,
+  openPinCodePopup,
+  openSizeSelector,
 }: IDeliveryDetailsProps) => {
+  const getDeliveryDetails = () => {
+    return (
+      <>
+        <DeliverIcon icon={IconTick} />
+        <DeliveryInfo>
+          {eddPrefix}
+          <DeliveryBadge color={eddTextColor} bgColor={eddColor}>
+            {deliveryMsg}
+          </DeliveryBadge>
+        </DeliveryInfo>
+      </>
+    );
+  };
+
+  const getPreOrderLink = () => {
+    return showInternationaPreorder ? (
+      <PreOrderInfo>
+        <NextNavLink
+          color={'#707070'}
+          margin="0"
+          name={preOrderInfo}
+          href={preOrderAction}
+        ></NextNavLink>
+      </PreOrderInfo>
+    ) : (
+      ''
+    );
+  };
   return (
     <DeliveryDetailsWrapper>
       <DeliveryTitle>
-        <Title>Delivery</Title>
-        <PinCode>Check pincode</PinCode>
+        <Title>Delivery {pinCode ? `to ${pinCode}` : ''}</Title>
+        <PinCode onClick={openPinCodePopup}>
+          {' '}
+          {pinCode ? 'Edit' : 'Check'} pincode
+        </PinCode>
       </DeliveryTitle>
+      {selectedSku && (
+        <SelectedSkuSize>
+          for size {selectedSku.attributes.size}{' '}
+        </SelectedSkuSize>
+      )}
       <DeliveryDetailsContent>
         <Delivery>
-          <DeliverIcon icon={IconTick} fill={'#bbb'} />
-          <DeliveryInfo>
-            {eddPrefix}
-            <DeliveryBadge color={eddTextColor} bgColor={eddColor}>
-              {deliveryMsg}
-            </DeliveryBadge>
-          </DeliveryInfo>
-
-          {isSkuInternational && (
-            <PreOrderInfo>
-              <NextNavLink
-                color={'#707070'}
-                name={skuInternationalPreOrderInfo}
-                href={skuInternationalPreOrderAction}
-              ></NextNavLink>
-            </PreOrderInfo>
+          {isEddDifferentForSKUs === false && (
+            <>
+              {getDeliveryDetails()}
+              {getPreOrderLink()}
+            </>
           )}
-          {isProductInternational && (
-            <PreOrderInfo>
-              <a
-                target="_blank"
-                href={productInternationalPreOrderAction}
-                rel="noreferrer"
-              >
-                {productInternationalPreOrderInfo}
-              </a>
-            </PreOrderInfo>
+
+          {isEddDifferentForSKUs === true && (
+            <>
+              {selectedSku && (
+                <>
+                  {getDeliveryDetails()}
+                  {getPreOrderLink()}
+                </>
+              )}
+              {!selectedSku && (
+                <SizeSelector onClick={openSizeSelector}>
+                  <span>Select a size for delivery information</span>{' '}
+                  <SizeSelectorIcon icon={IconDropDown} />
+                </SizeSelector>
+              )}
+            </>
           )}
         </Delivery>
 
-        {deliveryDetails.map(
-          (data: DeliveryMessageOrDeliveryMessagesEntity, index: number) => (
-            <Delivery key={index}>
-              <DeliverIcon
-                icon={data.type ? IconTick : IconCrossRed}
-                fill={'#bbb'}
-              />
-              <DeliveryInfo>{data.msg}</DeliveryInfo>
-            </Delivery>
-          )
-        )}
+        {deliveryMessages &&
+          deliveryMessages.map(
+            (
+              data: IProductDetailsDeliveryMessageOrDeliveryMessagesEntity,
+              index: number
+            ) => (
+              <Delivery key={index}>
+                <DeliverIcon icon={data.type ? IconTick : IconCrossRed} />
+                <DeliveryInfo>{data.msg}</DeliveryInfo>
+              </Delivery>
+            )
+          )}
       </DeliveryDetailsContent>
     </DeliveryDetailsWrapper>
   );

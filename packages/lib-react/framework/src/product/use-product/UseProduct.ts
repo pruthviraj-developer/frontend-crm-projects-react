@@ -42,6 +42,7 @@ export const useProduct = ({ productData, sku }: ProductProps) => {
     brandName,
     moreInfo,
     retailPriceMax,
+    wishlistId,
   } = productData;
 
   let defaultParameters = {};
@@ -146,5 +147,6 @@ export const useProduct = ({ productData, sku }: ProductProps) => {
     isPresale,
     finalSale,
     retailPriceMax,
+    wishlistId,
   };
 };
