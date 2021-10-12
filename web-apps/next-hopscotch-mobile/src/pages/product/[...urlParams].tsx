@@ -51,7 +51,6 @@ const PinCodePopupComponent = dynamic(() => import('../../components/pin-code/Pi
 import {
   useRecommendation,
   IRecommendedProducts,
-  useDeliveryDetails,
   useSelectedProduct,
   useOneSize,
   useProduct,
@@ -67,10 +66,14 @@ import * as segment from '@/components/segment-analytic';
 import { LoginModal } from '@/components/login-modal';
 import { Layout } from '@/components/layout/Layout';
 import { ProductHead } from '@/components/header';
+
 import { DeliveryDetails } from '@/components/delivery-details';
+import { useDeliveryDetails } from '../../components/use-delivery-details/UseDeliveryDetails';
+
 // import { useProduct } from '@/components/use-product';
 // import { ProductNamePrice } from '@/components/product-name-price';
-// const ADD_TO_CART_BUTTON = 'Add to cart button';
+
+const ADD_TO_CART_BUTTON = 'Add to cart button';
 let CUSTOMER_INFO: IUserInfoProps;
 const SUCCESS = 'success';
 const tryLater = 'Try Later';
@@ -143,11 +146,6 @@ const Product: NextPageWithLayout = (props) => {
     preventScroll: false,
     closeOnOverlayClick: true,
   });
-
-  useEffect(() => {
-    openPinCodePopup();
-    return () => {};
-  }, [openPinCodePopup]);
 
   const { data: productDetails, isSuccess: isProductDetailsSuccess } = useQuery<IProductDetails>(
     ['ProductDetail', productId],
@@ -543,7 +541,9 @@ const Product: NextPageWithLayout = (props) => {
                 {...{ isProductSoldOut: !!productDetails.isProductSoldOut, goToProductRecommendation }}
               ></RecommendedProductsLinks>
             )}
-            <DeliveryDetails {...{ ...deliveryDetailsData, ...deliveryDetails, openPinCodePopup }}></DeliveryDetails>
+            <DeliveryDetails
+              {...{ ...deliveryDetailsData, selectedSku, ...deliveryDetails, openPinCodePopup }}
+            ></DeliveryDetails>
             {productDetails.id && <Accordion {...{ ...product, isPresale, simpleSkus, selectedSku }}></Accordion>}
 
             {showRFYP && (

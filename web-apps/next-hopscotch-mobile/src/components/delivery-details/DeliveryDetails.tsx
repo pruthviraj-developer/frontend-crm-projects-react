@@ -18,19 +18,27 @@ import { NextNavLink } from '@hs/components';
 
 export const DeliveryDetails: FC<IDeliveryDetailsProps> = ({
   deliveryMessages,
-  isSkuInternational,
-  skuInternationalPreOrderInfo,
-  skuInternationalPreOrderAction,
-  isProductInternational,
-  productInternationalPreOrderInfo,
-  productInternationalPreOrderAction,
+  isEddDifferentForSKUs,
+  preOrderInfo,
+  preOrderAction,
   eddColor,
   eddTextColor,
   eddPrefix,
   deliveryMsg,
   pinCode,
+  showInternationaPreorder,
+  selectedSku,
   openPinCodePopup,
 }: IDeliveryDetailsProps) => {
+  const getPreOrderLink = () => {
+    return showInternationaPreorder ? (
+      <PreOrderInfo>
+        <NextNavLink color={'#707070'} margin="0" name={preOrderInfo} href={preOrderAction}></NextNavLink>
+      </PreOrderInfo>
+    ) : (
+      ''
+    );
+  };
   return (
     <DeliveryDetailsWrapper>
       <DeliveryTitle>
@@ -39,29 +47,35 @@ export const DeliveryDetails: FC<IDeliveryDetailsProps> = ({
       </DeliveryTitle>
       <DeliveryDetailsContent>
         <Delivery>
-          <DeliverIcon icon={IconTick} fill={'#bbb'} />
-          <DeliveryInfo>
-            {eddPrefix}
-            <DeliveryBadge color={eddTextColor} bgColor={eddColor}>
-              {deliveryMsg}
-            </DeliveryBadge>
-          </DeliveryInfo>
-
-          {isSkuInternational && (
-            <PreOrderInfo>
-              <NextNavLink
-                color={'#707070'}
-                name={skuInternationalPreOrderInfo}
-                href={skuInternationalPreOrderAction}
-              ></NextNavLink>
-            </PreOrderInfo>
+          {isEddDifferentForSKUs === false && (
+            <>
+              <DeliverIcon icon={IconTick} fill={'#bbb'} />
+              <DeliveryInfo>
+                {eddPrefix}
+                <DeliveryBadge color={eddTextColor} bgColor={eddColor}>
+                  {deliveryMsg}
+                </DeliveryBadge>
+              </DeliveryInfo>
+              {getPreOrderLink()}
+            </>
           )}
-          {isProductInternational && (
-            <PreOrderInfo>
-              <a target="_blank" href={productInternationalPreOrderAction} rel="noreferrer">
-                {productInternationalPreOrderInfo}
-              </a>
-            </PreOrderInfo>
+
+          {isEddDifferentForSKUs === true && (
+            <>
+              {selectedSku && (
+                <>
+                  <DeliverIcon icon={IconTick} fill={'#bbb'} />
+                  <DeliveryInfo>
+                    {selectedSku.eddPrefix}
+                    <DeliveryBadge color={selectedSku.eddTextColor} bgColor={selectedSku.eddColor}>
+                      {selectedSku.deliveryMsg}
+                    </DeliveryBadge>
+                  </DeliveryInfo>
+                  {getPreOrderLink()}
+                </>
+              )}
+              {!selectedSku && <div>select size</div>}
+            </>
           )}
         </Delivery>
 
