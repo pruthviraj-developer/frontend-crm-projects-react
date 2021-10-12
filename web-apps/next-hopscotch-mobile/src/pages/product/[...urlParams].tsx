@@ -23,6 +23,7 @@ import {
   ICartAPIResponse,
   IUserInfoProps,
   NextPageWithLayout,
+  IUpdatedDeliverDetailsProps,
 } from '@/types';
 import { cookiesService, productDetailsService, timeService } from '@hs/services';
 import {
@@ -119,7 +120,9 @@ const Product: NextPageWithLayout = (props) => {
   const recommendedProductsLink = useRef<HTMLDivElement>(null);
   const urlParams = router.query as unknown as IProductProps;
   const [productId]: urlParamsProps | any = [...(urlParams.urlParams || [])];
-  const [productInfo, setProductInfo] = useState<IProductDetails | any>({}); // productDetails with modification
+  const [productInfo, setProductInfo] = useState<IProductDetails | any>({});
+  const [deliveryDetails, updateDeliveryDetails] = useState<IUpdatedDeliverDetailsProps>();
+
   const { updateCartItemQty } = useContext(CartItemQtyContext);
   const [LoginPopupModal, openLoginPopup, closeLoginPopup, isLoginPopupOpen] = useModal('root', {
     preventScroll: false,
@@ -462,7 +465,26 @@ const Product: NextPageWithLayout = (props) => {
     })();
   };
 
-  // cookiesService.setCookies({ key: 'test', value: 'test value' });
+  const updateAndClosePinCodePopup = (newValues?: any) => {
+    closePinCodePopup();
+    if (newValues && newValues.simpleSkus) {
+      for (let i = 0; i < simpleSkus.length; i++) {
+        let sku = simpleSkus[i];
+        let newSku = newValues.simpleSkus[sku.skuId];
+        for (let key in newSku) {
+          if (sku[key]) {
+            sku[key] = newSku[key];
+          }
+        }
+      }
+      updateDeliveryDetails({
+        pinCode: newValues.newPincode,
+        eddPrefix: newValues.eddPrefix,
+        deliveryMessages: newValues.deliveryMessages,
+      });
+    }
+  };
+
   return (
     <>
       {productDetails && productDetails.action === SUCCESS && (
@@ -521,9 +543,7 @@ const Product: NextPageWithLayout = (props) => {
                 {...{ isProductSoldOut: !!productDetails.isProductSoldOut, goToProductRecommendation }}
               ></RecommendedProductsLinks>
             )}
-            <DeliveryDetails
-              {...{ ...deliveryDetailsData, openPinCodePopup, pinCode: productDetails.pinCode }}
-            ></DeliveryDetails>
+            <DeliveryDetails {...{ ...deliveryDetailsData, ...deliveryDetails, openPinCodePopup }}></DeliveryDetails>
             {productDetails.id && <Accordion {...{ ...product, isPresale, simpleSkus, selectedSku }}></Accordion>}
 
             {showRFYP && (
@@ -544,7 +564,8 @@ const Product: NextPageWithLayout = (props) => {
               <PinCodePopupComponent
                 {...{
                   productId: productDetails.id,
-                  closePinCodePopup,
+                  pinCode: productDetails.pinCode,
+                  closePinCodePopup: updateAndClosePinCodePopup,
                   addressList: [
                     {
                       id: 4352079,

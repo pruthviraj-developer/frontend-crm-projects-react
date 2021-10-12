@@ -1,5 +1,5 @@
 export interface IDeliveryDetailsProps {
-  deliveryDetails: DeliveryMessageOrDeliveryMessagesEntity[];
+  deliveryMessages?: DeliveryMessageOrDeliveryMessagesEntity[];
   isSkuInternational?: boolean;
   skuInternationalPreOrderInfo: string;
   skuInternationalPreOrderAction: string;

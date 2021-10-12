@@ -60,3 +60,16 @@ export interface IAllAddressItemsEntityProps {
   firstName: string;
   lastName: string;
 }
+
+export interface IUpdatedDeliverDetailsProps {
+  edd?: string;
+  pinCode: string;
+  eddPrefix: string;
+  deliveryMessages: IProductDetailsDeliveryMessageOrDeliveryMessagesEntity[];
+}
+
+export interface IProductDetailsDeliveryMessageOrDeliveryMessagesEntity {
+  action: string;
+  msg: string;
+  type: number;
+}

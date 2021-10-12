@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { IPinCodeAPIResponseProps, IPinCodeProps } from './IPinCode';
+import { IPinCodeAPIResponseProps, IPinCodeProps, IPinCodeErrorProps } from './IPinCode';
 import {
   PinCodeWrapper,
   PinCodeContainer,
@@ -19,32 +19,28 @@ import {
 import { IconClose } from '@hs/icons';
 import { IAllAddressItemsEntityProps } from '@/types';
 import { productDetailsService } from '@hs/services';
-const PinCode: FC<IPinCodeProps> = ({ addressList, productId, closePinCodePopup }: IPinCodeProps) => {
+const PinCode: FC<IPinCodeProps> = ({ addressList, productId, pinCode, closePinCodePopup }: IPinCodeProps) => {
   const [pincode, setPinCode] = useState<string>('');
-  const [error, setError] = useState<IPinCodeAPIResponseProps>();
+  const [error, setError] = useState<IPinCodeAPIResponseProps | IPinCodeErrorProps>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const hasAddressList = addressList && addressList.length;
-  const checkPincode = (zipCode: string, index: number) => {
-    console.log(zipCode, productId, index);
-  };
 
-  const checkPinCodeDetails = () => {
+  const checkPinCodeDetails = (pincode: string) => {
     (async () => {
+      if (pinCode === pincode) {
+        closePinCodePopup();
+        return;
+      }
       try {
         setIsLoading(true);
         const response: IPinCodeAPIResponseProps = await productDetailsService.checkForPincode({ productId, pincode });
-        console.log(response);
         setIsLoading(false);
         if (!response.serviceable) {
           setError({ ...response, message: response.noPinCodeMessage });
         } else {
-          closePinCodePopup();
-        }
-        if (response.action === 'success') {
-          console.log(response);
+          closePinCodePopup({ ...response, newPincode: pincode });
         }
       } catch (error) {
-        console.log(error);
         setError(error as unknown as IPinCodeAPIResponseProps);
         setIsLoading(false);
       }
@@ -53,7 +49,7 @@ const PinCode: FC<IPinCodeProps> = ({ addressList, productId, closePinCodePopup 
 
   const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e ? e.preventDefault() : '';
-    checkPinCodeDetails();
+    checkPinCodeDetails(pincode);
   };
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -76,7 +72,7 @@ const PinCode: FC<IPinCodeProps> = ({ addressList, productId, closePinCodePopup 
     <PinCodeWrapper>
       <Header>
         <Title> {hasAddressList ? 'Edit' : 'Check'} Pincode</Title>
-        <CloseIconWrapper>
+        <CloseIconWrapper onClick={closePinCodePopup}>
           <CloseIcon icon={IconClose} />
         </CloseIconWrapper>
       </Header>
@@ -91,7 +87,12 @@ const PinCode: FC<IPinCodeProps> = ({ addressList, productId, closePinCodePopup 
                     key={index}
                     onClick={() => {
                       if (address.isServicable) {
-                        checkPincode(address.zipCode, index + 1);
+                        const pin = address.zipCode || pincode;
+                        if (pin) {
+                          checkPinCodeDetails(pin);
+                        } else {
+                          setError({ message: 'Please enter pincode.' });
+                        }
                       }
                     }}
                   >
@@ -121,7 +122,7 @@ const PinCode: FC<IPinCodeProps> = ({ addressList, productId, closePinCodePopup 
             </MessageWrapper>
           )} */}
           <PinCodeSubmit disabled={pincode.length < 6 || isLoading} type="submit">
-            check
+            Check
           </PinCodeSubmit>
           {error && error.message && <ErrorMessage>{error.message}</ErrorMessage>}
         </PinCodeForm>

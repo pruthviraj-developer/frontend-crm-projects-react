@@ -4,7 +4,7 @@ export interface IPinCodeProps {
   pinCode?: string;
   addressList: IAllAddressItemsEntityProps[];
   productId: number;
-  closePinCodePopup: () => void;
+  closePinCodePopup: (args?: any) => void;
 }
 
 export interface IPinCodeAPIResponseProps {
@@ -23,6 +23,10 @@ export interface IPinCodeAPIResponseProps {
   sizePickerDropdownLabel: string;
   message: string;
   noPinCodeMessage: string;
+}
+
+export interface IPinCodeErrorProps {
+  message: string;
 }
 
 export interface IPinCodeSimpleSkus {

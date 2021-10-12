@@ -87,10 +87,10 @@ const PinCodeForm = styled.form`
   padding-top: 12px;
 `;
 
-const PinCodeSubmit = styled.button`
+const PinCodeSubmit = styled.button<{ disabled: boolean }>`
   background-color: #ed54a4;
   opacity: 1;
-  color: rgba(255, 255, 255, 0.6);
+  color: ${(props) => (props.disabled ? 'rgba(255, 255, 255, 0.6)' : '#fff')};
   margin-left: 8px;
   border: none;
   width: 91px;

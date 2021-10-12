@@ -30,7 +30,7 @@ export const useDeliveryDetails = ({
   }
 
   return {
-    deliveryDetails: productData.deliveryMessages || [],
+    deliveryMessages: productData.deliveryMessages || [],
     isSkuInternational,
     skuInternationalPreOrderInfo,
     skuInternationalPreOrderAction,
@@ -41,5 +41,6 @@ export const useDeliveryDetails = ({
     eddTextColor,
     eddPrefix,
     deliveryMsg,
+    pinCode: productData.pinCode,
   };
 };

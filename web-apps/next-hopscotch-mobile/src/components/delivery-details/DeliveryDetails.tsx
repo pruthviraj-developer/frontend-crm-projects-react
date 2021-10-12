@@ -17,7 +17,7 @@ import { IDeliveryDetailsProps, DeliveryMessageOrDeliveryMessagesEntity } from '
 import { NextNavLink } from '@hs/components';
 
 export const DeliveryDetails: FC<IDeliveryDetailsProps> = ({
-  deliveryDetails,
+  deliveryMessages,
   isSkuInternational,
   skuInternationalPreOrderInfo,
   skuInternationalPreOrderAction,
@@ -65,12 +65,13 @@ export const DeliveryDetails: FC<IDeliveryDetailsProps> = ({
           )}
         </Delivery>
 
-        {deliveryDetails.map((data: DeliveryMessageOrDeliveryMessagesEntity, index: number) => (
-          <Delivery key={index}>
-            <DeliverIcon icon={data.type ? IconTick : IconCrossRed} fill={'#bbb'} />
-            <DeliveryInfo>{data.msg}</DeliveryInfo>
-          </Delivery>
-        ))}
+        {deliveryMessages &&
+          deliveryMessages.map((data: DeliveryMessageOrDeliveryMessagesEntity, index: number) => (
+            <Delivery key={index}>
+              <DeliverIcon icon={data.type ? IconTick : IconCrossRed} fill={'#bbb'} />
+              <DeliveryInfo>{data.msg}</DeliveryInfo>
+            </Delivery>
+          ))}
       </DeliveryDetailsContent>
     </DeliveryDetailsWrapper>
   );

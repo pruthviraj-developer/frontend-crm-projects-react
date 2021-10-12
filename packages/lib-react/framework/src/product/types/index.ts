@@ -66,6 +66,7 @@ export interface IProductDetails {
   simpleSkus: ISimpleSkusEntityProps[];
   imgurls?: IImageUrl[];
   isWishlisted: boolean;
+  pinCode: string;
 }
 
 export interface ISimpleSkusEntityProps {
