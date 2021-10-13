@@ -1,5 +1,6 @@
 import React, { FC, useContext } from 'react';
 import { NextNavLink } from '../next-nav-link';
+import Link from 'next/link';
 import {
   NavBarWrapper,
   NavLinkWrapper,
@@ -49,12 +50,18 @@ export const NavBar: FC<INavBarProps> = ({ showSearchPopup }: INavBarProps) => {
           <NavIconWrapper>
             <IconWrapper icon={IconWishListDefault} />
           </NavIconWrapper>
-          <CartIconWrapper>
-            <CartIcon />
-            {cartContext.cartItemQty > 0 && (
-              <CartIconQuantity>{cartContext.cartItemQty}</CartIconQuantity>
-            )}
-          </CartIconWrapper>
+          <Link
+            href={{
+              pathname: '/v2/cart',
+            }}
+          >
+            <CartIconWrapper>
+              <CartIcon />
+              {cartContext.cartItemQty > 0 && (
+                <CartIconQuantity>{cartContext.cartItemQty}</CartIconQuantity>
+              )}
+            </CartIconWrapper>
+          </Link>
         </NavigationIconsWrapper>
       </RightContent>
     </NavBarWrapper>
