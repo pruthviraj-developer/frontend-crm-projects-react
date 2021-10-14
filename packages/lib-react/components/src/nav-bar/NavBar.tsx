@@ -23,11 +23,25 @@ import {
 
 export const NavBar: FC<INavBarProps> = ({ showSearchPopup }: INavBarProps) => {
   const cartContext = useContext(CartItemQtyContext);
+  const query = {
+    ref: 'logo',
+    funnel: 'Discover',
+    from_screen: 'product',
+    department: null,
+    customTileId: null,
+  };
   return (
     <NavBarWrapper>
-      <HopscotchImage>
-        <HopScotchIcon></HopScotchIcon>
-      </HopscotchImage>
+      <Link
+        href={{
+          pathname: '/',
+          query,
+        }}
+      >
+        <HopscotchImage>
+          <HopScotchIcon></HopScotchIcon>
+        </HopscotchImage>
+      </Link>
       <RightContent>
         <NavLinkWrapper>
           <NextNavLink
