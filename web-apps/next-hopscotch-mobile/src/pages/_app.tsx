@@ -34,7 +34,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         <Hydrate state={pageProps.dehydratedState}>
           <GoogleTagManager>{getLayout(<Component {...pageProps} />)}</GoogleTagManager>
         </Hydrate>
-        <ReactQueryDevtools initialIsOpen={false} />
+        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
       </QueryClientProvider>
       <ToastContainer
         style={{ fontFamily: 'inherit' }}

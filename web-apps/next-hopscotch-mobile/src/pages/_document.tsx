@@ -13,7 +13,6 @@ export default class MyDocument extends Document {
           <meta name="twitter:card" content="summary" />
           <meta name="twitter:site" content="@Hopscotchindia" />
           <meta name="twitter:card" content="app" />
-          <meta name="twitter:site" content="@Hopscotchindia" />
           <meta name="twitter:app:country" content="IN" />
           <meta name="twitter:app:name:iphone" content="Hopscotch" />
           <meta name="twitter:app:id:iphone" content="945949424" />
