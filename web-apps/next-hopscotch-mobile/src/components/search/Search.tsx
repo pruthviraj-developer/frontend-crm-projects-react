@@ -4,6 +4,7 @@ import { SearchWrapper, SearchField, SearchForm, CloseIcon, SearchList, List } f
 import { IconClose } from '@hs/icons';
 import { useDebounce, useReadLocalStorage } from '@hs/framework';
 import { productDetailsService } from '@hs/services';
+import { useRouter } from 'next/router';
 
 const RECENT_SEARCH = 'RecentSearch';
 const BRAND_SUGGESTION = 'BrandSuggestion';
@@ -11,43 +12,53 @@ const KEYWORD = 'Keyword';
 const CATEGORY_SUGGESTION = 'CategorySuggestion';
 
 const Search: FC<ISearch> = ({ close }: ISearch) => {
+  // let _recentSearch: boolean = true;
+  const router = useRouter();
   const [searchBy, setSearchBy] = useState<string>('');
   const [suggestions, setSuggestions] = useState<IEulerSuggestionsEntity[]>([]);
   const keyWord = useDebounce(searchBy, 500);
-  const recentSearches: any = useReadLocalStorage(['recentSearches']);
-  useEffect(() => {
+  const readRecentSearchesFromLocalStorage: any = useReadLocalStorage(['recentSearches']);
+  let recentSearches = [...readRecentSearchesFromLocalStorage.get('recentSearches')];
+
+  const getSuggestions = () => {
     if (keyWord.length) {
-      recentSearches.delete('recentSearches');
+      recentSearches = [];
+      setSuggestions([]);
       (async () => {
         try {
           const response: IEulerAutoSuggestionsProps = await productDetailsService.getEulerAutoSuggestions(keyWord);
           if (response.action === 'success') {
             setSuggestions(response.suggestions);
-            return;
           }
-          setSuggestions([]);
-        } catch (error) {
-          setSuggestions([]);
+        } finally {
         }
       })();
     }
+  };
+
+  useEffect(() => {
+    // _recentSearch = true;
+    getSuggestions();
   }, [keyWord]);
 
   const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e ? e.preventDefault() : '';
+    // _recentSearch = false;
+    getSuggestions();
   };
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchBy(e.target.value);
   };
 
   const selectAndSearch = (
-    data: IEulerSuggestionsEntity,
+    data: IEulerSuggestionsEntity | IRecentSearchesProps,
     recent: string | null,
     suggestionIndex: number,
     options: any,
   ) => {
+    debugger;
     let searchObj = Object.assign({}, data, { recent: recent }, options);
-    let q:any = {};
+    let q: any = {};
     let { id, name, type } = searchObj;
     let params: any = {
       resetFunnel: true,
@@ -68,17 +79,17 @@ const Search: FC<ISearch> = ({ close }: ISearch) => {
     params.extraSegdata = JSON.stringify(extraSegdata);
     if (
       recentSearches.length >= 5 &&
-      recentSearches.filter( (e:any) {
+      recentSearches.filter((e: any) => {
         return e.name == name;
-      }) < 1
+      }).length < 1
     ) {
       recentSearches.pop();
       recentSearches.unshift(searchObj);
       // LocalStorageService.setData('recentSearches', recentSearches);
     } else if (
-      recentSearches.filter((e:any) {
+      recentSearches.filter((e: any) => {
         return e.name == name;
-      }) < 1
+      }).length < 1
     ) {
       recentSearches.unshift(searchObj);
       // LocalStorageService.setData('recentSearches', _self.recentSearches);
@@ -102,10 +113,11 @@ const Search: FC<ISearch> = ({ close }: ISearch) => {
       }
       params.hsection = recent === 'recent' ? RECENT_SEARCH : extraSegdata.section;
       params.funnel_section = recent === 'recent' ? RECENT_SEARCH : extraSegdata.section;
-      _self._SegmentService.setUniversal('Server autocomplete');
+      // _self._SegmentService.setUniversal('Server autocomplete');
     } else {
       if (type !== 'keyword') {
-        _self._SegmentService.setUniversal('Client autocomplete');
+        console.log('Client autocomplete');
+        // _self._SegmentService.setUniversal('Client autocomplete');
       }
       if (type === 'brands') {
         q.filterQuery = 'brandId=' + id;
@@ -116,7 +128,9 @@ const Search: FC<ISearch> = ({ close }: ISearch) => {
       } else if (type === 'keyword') {
         q.filterQuery = 'keyWord=' + name;
         q.keyWord = name;
-        params.hsection = _self._recentSearch ? RECENT_SEARCH : KEYWORD;
+        // params.hsection = _recentSearch ? RECENT_SEARCH : KEYWORD;
+        params.hsection = RECENT_SEARCH;
+        // END As we are not using keyboard arrows
         params.hplp = name;
         params.orderRule = 3;
         params.funnel_section = recent === 'recent' ? RECENT_SEARCH : KEYWORD;
@@ -146,10 +160,15 @@ const Search: FC<ISearch> = ({ close }: ISearch) => {
     // _self._CtrService.clearSearchCTR();
 
     // _self._$timeout(function () {
-      q.searchBy = searchObj.search_params ? searchObj.term : name;
-      const qparams:any = {};
-      qparams.q = q.toJSON();
-        // _self.$state.go('search', qparams);
+    q.searchBy = searchObj.search_params ? searchObj.term : name;
+    const qparams = { ...params };
+    qparams.q = JSON.stringify(q);
+    router.push({
+      pathname: 'search',
+      query: qparams,
+    });
+
+    // _self.$state.go('search', qparams);
     // }, 10);
   };
 
@@ -167,16 +186,32 @@ const Search: FC<ISearch> = ({ close }: ISearch) => {
           <CloseIcon onClick={close} icon={IconClose} />
         </SearchForm>
         <SearchList>
-          {recentSearches && recentSearches.get('recentSearches') && suggestions && suggestions.length === 0 ? (
+          {recentSearches && recentSearches.length && suggestions && suggestions.length === 0 ? (
             <>
               <List>Recent Searches</List>
-              {recentSearches.get('recentSearches').map((data: IRecentSearchesProps, index: number) => {
-                return <List key={index} dangerouslySetInnerHTML={{ __html: data.term || data.name }}></List>;
+              {recentSearches.map((data: IRecentSearchesProps, index: number) => {
+                return (
+                  <List
+                    key={index}
+                    onClick={() => {
+                      selectAndSearch(data, 'recent', index, null);
+                    }}
+                    dangerouslySetInnerHTML={{ __html: data.term || data.name }}
+                  />
+                );
               })}
             </>
           ) : suggestions && suggestions.length > 0 ? (
             suggestions.map((data: IEulerSuggestionsEntity, index: number) => {
-              return <List key={index} dangerouslySetInnerHTML={{ __html: data.displayName || data.term }}></List>;
+              return (
+                <List
+                  key={index}
+                  onClick={() => {
+                    selectAndSearch(data, null, index, null);
+                  }}
+                  dangerouslySetInnerHTML={{ __html: data.displayName || data.term }}
+                />
+              );
             })
           ) : (
             ''
