@@ -4,7 +4,7 @@ import Head from 'next/head';
 import dynamic from 'next/dynamic';
 import { FC } from 'react';
 import { useModal } from 'react-hooks-use-modal';
-const SearchPopupComponent = dynamic(() => import('../../components/search/Search'), {
+const SearchPopupComponent = dynamic(() => import('../../components/search-popup/SearchPopup'), {
   ssr: false,
 });
 export const Layout: FC<unknown> = ({ children }) => {

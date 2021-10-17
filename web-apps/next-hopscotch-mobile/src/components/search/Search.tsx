@@ -5,13 +5,14 @@ import { IconClose } from '@hs/icons';
 import { useDebounce, useReadLocalStorage } from '@hs/framework';
 import { productDetailsService } from '@hs/services';
 import { useRouter } from 'next/router';
+import { chain } from 'lodash-es';
 
 const RECENT_SEARCH = 'RecentSearch';
 const BRAND_SUGGESTION = 'BrandSuggestion';
 const KEYWORD = 'Keyword';
 const CATEGORY_SUGGESTION = 'CategorySuggestion';
 
-const Search: FC<ISearch> = ({ close }: ISearch) => {
+const Search: FC<ISearch> = ({ close, resource }: ISearch) => {
   // let _recentSearch: boolean = true;
   const router = useRouter();
   const [searchBy, setSearchBy] = useState<string>('');
@@ -21,24 +22,115 @@ const Search: FC<ISearch> = ({ close }: ISearch) => {
   let recentSearches = [...readRecentSearchesFromLocalStorage.get('recentSearches')];
 
   const getSuggestions = () => {
-    if (keyWord.length) {
-      recentSearches = [];
-      setSuggestions([]);
-      (async () => {
-        try {
-          const response: IEulerAutoSuggestionsProps = await productDetailsService.getEulerAutoSuggestions(keyWord);
-          if (response.action === 'success') {
-            setSuggestions(response.suggestions);
-          }
-        } finally {
+    (async () => {
+      try {
+        const response: IEulerAutoSuggestionsProps = await productDetailsService.getEulerAutoSuggestions(keyWord);
+        if (response.action === 'success') {
+          setSuggestions(response.suggestions);
         }
-      })();
-    }
+      } finally {
+      }
+    })();
   };
 
   useEffect(() => {
     // _recentSearch = true;
-    getSuggestions();
+    if (keyWord.length) {
+      recentSearches = [];
+      setSuggestions([]);
+      if (resource) {
+        const brands = resource.brands || [];
+        const categories = resource.categories;
+        const subCategories = chain(categories)
+          .map(function (each: any) {
+            if (each.subCategory) {
+              for (var i = 0; i < each.subCategory.length; i++) {
+                each.subCategory[i].parentName = each.name;
+              }
+              return each.subCategory;
+            }
+            return null;
+          })
+          .flatten()
+          .compact()
+          .value();
+
+        const productTypeList = chain(subCategories)
+          .map(function (each: any) {
+            if (each.productTypeList) {
+              for (var i = 0; i < each.productTypeList.length; i++) {
+                each.productTypeList[i].parentName = each.parentName;
+              }
+              return each.productTypeList;
+            }
+            return null;
+          })
+          .flatten()
+          .compact()
+          .value();
+
+        const stringContains = (each: any) => {
+          return each.name.toLowerCase().indexOf(keyWord.toLowerCase()) > -1;
+        };
+
+        const suggestions = []
+          .concat(
+            chain(productTypeList)
+              .filter(stringContains)
+              .map(function (each: any) {
+                return {
+                  label: each.name + ' in ' + each.parentName,
+                  id: each.id,
+                  name: each.name,
+                  type: 'productTypeList',
+                };
+              })
+              .value(),
+          )
+          .concat(
+            chain(subCategories)
+              .filter(stringContains)
+              .map(function (each: any) {
+                return {
+                  label: each.name + ' in ' + each.parentName,
+                  id: each.id,
+                  name: each.name,
+                  type: 'subCategories',
+                };
+              })
+              .value(),
+          )
+          .concat(
+            chain(categories)
+              .filter(stringContains)
+              .map(function (each: any) {
+                return {
+                  label: each.name,
+                  id: each.id,
+                  name: each.name,
+                  type: 'categories',
+                };
+              })
+              .value(),
+          )
+          .concat(
+            chain(brands)
+              .filter(stringContains)
+              .map(function (each: any) {
+                return {
+                  label: each.name + ' in Brands',
+                  id: each.id,
+                  name: each.name,
+                  type: 'brands',
+                };
+              })
+              .value(),
+          );
+        setSuggestions(suggestions);
+        return;
+      }
+      getSuggestions();
+    }
   }, [keyWord]);
 
   const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
@@ -46,6 +138,7 @@ const Search: FC<ISearch> = ({ close }: ISearch) => {
     // _recentSearch = false;
     getSuggestions();
   };
+
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchBy(e.target.value);
   };
@@ -172,6 +265,24 @@ const Search: FC<ISearch> = ({ close }: ISearch) => {
     // }, 10);
   };
 
+  const getHighlightSearchText = (word: string, suggestion: string) => {
+    let highlightText = suggestion;
+    if (suggestion.includes('<b>') || suggestion.includes('<p>')) {
+      highlightText = suggestion;
+    } else {
+      try {
+        let str = new RegExp(word, 'gi');
+        highlightText = suggestion.replace(str, (w) => {
+          return '<em>' + w + '</em>';
+        });
+        highlightText = '<p>' + highlightText + '</p>';
+      } catch (error) {
+        //TBD
+      }
+    }
+    return highlightText;
+  };
+
   return (
     <SearchWrapper>
       <SearchField>
@@ -209,7 +320,7 @@ const Search: FC<ISearch> = ({ close }: ISearch) => {
                   onClick={() => {
                     selectAndSearch(data, null, index, null);
                   }}
-                  dangerouslySetInnerHTML={{ __html: data.displayName || data.term }}
+                  dangerouslySetInnerHTML={{ __html: data.displayName || getHighlightSearchText(keyWord, data.label) }}
                 />
               );
             })
