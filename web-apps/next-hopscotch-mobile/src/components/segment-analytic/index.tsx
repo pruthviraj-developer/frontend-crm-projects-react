@@ -1,5 +1,5 @@
 import { IContextData, ISegmentProperties } from '@hs/framework';
-
+const ERROR_OCCUERED = 'error_occured';
 export const PDP_TRACKING_EVENTS = {
   PRODUCT_VIEWED: 'product_viewed',
   ADDED_TO_CART: 'product_added_to_cart',
@@ -10,6 +10,7 @@ export const PDP_TRACKING_EVENTS = {
   PRODUCT_REMOVED_FROM_WISHLIST: 'product_removed_from_wishlist',
   PDP_SEE_SIMILAR_CLICKED: 'reco_clicked',
   SIZE_CLICKED: 'select_size_clicked',
+  ERROR_OCCUERED: 'error_occured',
 };
 
 export interface IPropsType {
@@ -19,5 +20,15 @@ export interface IPropsType {
 }
 
 export const trackEvent = ({ evtName, properties, contextData }: IPropsType) => {
-  (window as any).analytics.track(evtName, properties, contextData);
+  try {
+    (window as any).analytics.track(evtName, properties, contextData);
+  } catch (error: any) {
+    const errorData = {
+      event_name: evtName,
+      data: { ...properties, contextData },
+      error_message: error.toString(),
+      error_stack: error.stack,
+    };
+    (window as any).analytics.track(ERROR_OCCUERED, errorData);
+  }
 };
