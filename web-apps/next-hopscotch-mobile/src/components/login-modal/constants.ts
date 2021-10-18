@@ -9,7 +9,7 @@ const REGEX_PATTERNS = {
   REGEX_MOBILE_NO: /^\d{10}$/,
 };
 
-const FORM_ERROR_CODES: any = {
+const FORM_ERROR_CODES: Record<string, string> = {
   NAME: 'Enter a valid name',
   PINCODE: 'Enter a valid pincode',
   ADDRESS: 'Enter a valid address',

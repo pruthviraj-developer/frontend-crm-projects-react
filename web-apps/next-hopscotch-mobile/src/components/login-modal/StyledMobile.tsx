@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { typography, Colors } from '@hs/utils';
 import { SvgIcon } from '@hs/icons';
 
 const ActionText = styled.span`
@@ -14,7 +13,7 @@ const ErrorIcon = styled(SvgIcon)`
 `;
 
 const MobileWrapper = styled.div`
-  postion: relative;
+  position: relative;
 `;
 
 const MobileNumber = styled.input`

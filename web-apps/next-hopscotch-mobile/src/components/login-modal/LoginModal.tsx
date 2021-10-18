@@ -11,7 +11,7 @@ export const LoginModal: FC<ILoginModalProps> = ({ closeLoginPopup }: ILoginModa
   const subTitle = 'Sign In';
 
   const [currentState, setCurrentState] = useState(SIGNIN);
-  const [verified, verifiedData] = useState<IVerifiedDataProps | any>();
+  const [verified, verifiedData] = useState<IVerifiedDataProps>();
 
   const updateForm = (data: IVerifiedDataProps) => {
     verifiedData(data);

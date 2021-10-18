@@ -20,7 +20,7 @@ import { Loader } from './loader';
 const OTP_LENGTH = 6;
 const CUSTOMER_INFO_COOKIE_NAME = 'hs_customer_info';
 const CART_ITEM_QTY_COOKIE_NAME = 'cart_item_quantity';
-export const Verify: FC<IVerifiedDataProps | any> = ({ back, type, ...props }: IVerifiedDataProps) => {
+export const Verify: FC<IVerifiedDataProps> = ({ back, type, ...props }: IVerifiedDataProps) => {
   const [otp, setOtp] = useState<string>('');
   const [counter, setCounter] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
@@ -34,8 +34,7 @@ export const Verify: FC<IVerifiedDataProps | any> = ({ back, type, ...props }: I
       return str;
     }
   };
-  let interval: any = null;
-
+  let interval: ReturnType<typeof setInterval>;
   const resendOtp = () => {
     (async () => {
       try {
