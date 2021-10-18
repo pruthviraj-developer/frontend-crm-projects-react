@@ -4,6 +4,7 @@ import { productDetailsService } from '@hs/services';
 import { useState, useEffect, FC } from 'react';
 import { ISizeChartDTOListEntityProps } from '@/types';
 import { ISizeChartDtoProps } from './ISizeChart';
+import { useQuery } from 'react-query';
 
 const SUCCESS = 'success';
 const CM_TO_INCH = 2.54;
@@ -16,6 +17,13 @@ const SizeChart: FC<ISizeChartDtoProps> = ({ productName, id, onClickClose }: IS
   const [showWeightBlock, setWeightBlock] = useState<Array<boolean>>([]);
   const [showLengthBlock, setLengthBlock] = useState<Array<boolean>>([]);
 
+  const { data: sizesData } = useQuery<ISizeChartProps>(
+    ['sizeChartData', id],
+    () => productDetailsService.getSizes(id),
+    {
+      enabled: id !== undefined,
+    },
+  );
   const setWeight = (index: number, unit: string) => {
     if (isWeightActive[index] !== unit) {
       const _converterIndex = unit === 'kg' ? 1 / KG_TO_LB : KG_TO_LB;
@@ -57,58 +65,52 @@ const SizeChart: FC<ISizeChartDtoProps> = ({ productName, id, onClickClose }: IS
   };
 
   useEffect(() => {
-    (async () => {
-      try {
-        const sizesData: ISizeChartProps = await productDetailsService.getSizes(id);
-        if (sizesData.action === SUCCESS) {
-          const sizeChartData = sizesData.sizeChartDTOList;
-          const showWeightBlock = [true, true];
-          const showLengthBlock = [true, true];
-          const isLengthActive: Array<string> = [];
-          const isWeightActive: Array<string> = [];
-          const tableData: any = [];
-          const prepareTableData = () => {
-            if (sizeChartData && sizeChartData[0].sizeChartParameterValueDTOList) {
-              for (let index = 0; index < sizeChartData.length; index++) {
-                if (
-                  sizeChartData[index] &&
-                  sizeChartData[index].parameterMeasureTypeList &&
-                  (sizeChartData[index].parameterMeasureTypeList || '').indexOf('W') === -1
-                ) {
-                  showWeightBlock[index] = false;
-                }
-                if (
-                  sizeChartData[index] &&
-                  sizeChartData[index].parameterMeasureTypeList &&
-                  (sizeChartData[index].parameterMeasureTypeList || '').indexOf('L') === -1
-                ) {
-                  showLengthBlock[index] = false;
-                }
-                isLengthActive[index] = sizeChartData[index].lengthUnit;
-                isWeightActive[index] = sizeChartData[index].weightUnit;
-                tableData[index] = [
-                  {
-                    valueList: sizeChartData[index].parameterNamesList,
-                  },
-                ];
-                if (sizeChartData[index].sizeChartParameterValueDTOList) {
-                  tableData[index] = tableData[index].concat(sizeChartData[index].sizeChartParameterValueDTOList);
-                }
-              }
-              setLengthActive(isLengthActive);
-              setWeightActive(isWeightActive);
-              setWeightBlock(showWeightBlock);
-              setLengthBlock(showLengthBlock);
-              setChartTableData(tableData);
+    if (sizesData?.action === SUCCESS) {
+      const sizeChartData = sizesData.sizeChartDTOList;
+      const showWeightBlock = [true, true];
+      const showLengthBlock = [true, true];
+      const isLengthActive: Array<string> = [];
+      const isWeightActive: Array<string> = [];
+      const tableData: any = [];
+      const prepareTableData = () => {
+        if (sizeChartData && sizeChartData[0].sizeChartParameterValueDTOList) {
+          for (let index = 0; index < sizeChartData.length; index++) {
+            if (
+              sizeChartData[index] &&
+              sizeChartData[index].parameterMeasureTypeList &&
+              (sizeChartData[index].parameterMeasureTypeList || '').indexOf('W') === -1
+            ) {
+              showWeightBlock[index] = false;
             }
-          };
-          prepareTableData();
-          setChartData(sizeChartData);
+            if (
+              sizeChartData[index] &&
+              sizeChartData[index].parameterMeasureTypeList &&
+              (sizeChartData[index].parameterMeasureTypeList || '').indexOf('L') === -1
+            ) {
+              showLengthBlock[index] = false;
+            }
+            isLengthActive[index] = sizeChartData[index].lengthUnit;
+            isWeightActive[index] = sizeChartData[index].weightUnit;
+            tableData[index] = [
+              {
+                valueList: sizeChartData[index].parameterNamesList,
+              },
+            ];
+            if (sizeChartData[index].sizeChartParameterValueDTOList) {
+              tableData[index] = tableData[index].concat(sizeChartData[index].sizeChartParameterValueDTOList);
+            }
+          }
+          setLengthActive(isLengthActive);
+          setWeightActive(isWeightActive);
+          setWeightBlock(showWeightBlock);
+          setLengthBlock(showLengthBlock);
+          setChartTableData(tableData);
         }
-      } finally {
-      }
-    })();
-  }, []);
+      };
+      prepareTableData();
+      setChartData(sizeChartData);
+    }
+  }, [sizesData]);
 
   return (
     <SizeChartPopup
