@@ -133,6 +133,18 @@ const Search: FC<ISearch> = ({ close, resource }: ISearch) => {
     }
   }, [keyWord]);
 
+  const getSubCategorys = (categoryId: number) => {
+    const categories = (resource && resource.categories) || [];
+    if (categories && categories.length) {
+      let categoryList = categories.filter((category) => category.id === categoryId);
+      if (categoryList[0] && categoryList[0].hasOwnProperty('subCategory')) {
+        const reduceValue = (initial: any, subCategory: any) => initial + ',' + subCategory.id;
+        return categoryList[0] && categoryList[0].subCategory && categoryList[0].subCategory.reduce(reduceValue, '');
+      }
+      return '';
+    }
+  };
+
   const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e ? e.preventDefault() : '';
     // _recentSearch = false;
@@ -149,7 +161,6 @@ const Search: FC<ISearch> = ({ close, resource }: ISearch) => {
     suggestionIndex: number,
     options: any,
   ) => {
-    debugger;
     let searchObj = Object.assign({}, data, { recent: recent }, options);
     let q: any = {};
     let { id, name, type } = searchObj;
@@ -208,10 +219,10 @@ const Search: FC<ISearch> = ({ close, resource }: ISearch) => {
       params.funnel_section = recent === 'recent' ? RECENT_SEARCH : extraSegdata.section;
       // _self._SegmentService.setUniversal('Server autocomplete');
     } else {
-      if (type !== 'keyword') {
-        console.log('Client autocomplete');
-        // _self._SegmentService.setUniversal('Client autocomplete');
-      }
+      // if (type !== 'keyword') {
+      //   console.log('Client autocomplete');
+      //   // _self._SegmentService.setUniversal('Client autocomplete');
+      // }
       if (type === 'brands') {
         q.filterQuery = 'brandId=' + id;
         q.brandId = id;
@@ -234,9 +245,8 @@ const Search: FC<ISearch> = ({ close, resource }: ISearch) => {
         params.hplp = name;
         params.funnel_section = params.hsection;
       } else {
-        productDetailsService.getSubCategorys(id).then(function (categoryIds) {
-          q.filterQuery = 'subCategorys=' + id + categoryIds;
-        });
+        const categoryIds = getSubCategorys(id);
+        q.filterQuery = 'subCategorys=' + id + categoryIds;
         params.hsection = recent === 'recent' ? RECENT_SEARCH : CATEGORY_SUGGESTION;
         params.hplp = name;
       }
@@ -249,20 +259,14 @@ const Search: FC<ISearch> = ({ close, resource }: ISearch) => {
     params.subSection = params.hsubSection;
     params.plp = params.hplp;
 
-    //Clear Search CTR
-    // _self._CtrService.clearSearchCTR();
-
-    // _self._$timeout(function () {
     q.searchBy = searchObj.search_params ? searchObj.term : name;
     const qparams = { ...params };
     qparams.q = JSON.stringify(q);
     router.push({
-      pathname: 'search',
+      pathname: searchObj.actionURI || 'search',
       query: qparams,
     });
-
-    // _self.$state.go('search', qparams);
-    // }, 10);
+    // console.log(qparams);
   };
 
   const getHighlightSearchText = (word: string, suggestion: string) => {
