@@ -6,7 +6,7 @@ export const Loader: FC<ILoaderProps> = ({}: ILoaderProps) => {
     <CartLoaderWrapper>
       <CartSpinner>
         <Spinner>
-          {[...Array(4)].map((x, i) => (
+          {[...Array(4)].map((_x, _i) => (
             <Bullet></Bullet>
           ))}
         </Spinner>

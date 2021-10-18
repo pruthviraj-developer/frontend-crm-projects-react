@@ -18,7 +18,9 @@ export interface SizeChartDTOListEntity {
   weightUnit: string;
   notesList?: string[] | null;
   cueImageUrlList?: string[] | null;
-  sizeChartParameterValueDTOList?: SizeChartParameterValueDTOListEntity[] | null;
+  sizeChartParameterValueDTOList?:
+    | SizeChartParameterValueDTOListEntity[]
+    | null;
   parameterNamesList?: string[] | null;
   parameterMeasureTypeList?: string[] | null;
   importantInfo: string;

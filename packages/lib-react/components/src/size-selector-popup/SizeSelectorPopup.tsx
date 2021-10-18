@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { IconRadio, IconRadioActive } from '@hs/icons';
 import { ISizeSelectorPopupProps } from './ISizeSelectorPopup';
-import { AddToCart } from '@hs/components';
+import { AddToCart } from '../add-to-cart';
 import { ISimpleSkusEntityProps } from '@hs/framework';
 import {
   SizeSelectorPopupWrapper,
@@ -93,16 +93,22 @@ export const SizeSelectorPopup: FC<ISizeSelectorPopupProps> = ({
                     <SizeLabel>{sku.attributes.size}</SizeLabel>
                     <SoldOutWrapper>
                       {sku.availableQuantity < 1 && <SoldOut>Sold out</SoldOut>}
-                      <SvgIconsElement icon={isSelected ? IconRadioActive : IconRadio} />
+                      <SvgIconsElement
+                        icon={isSelected ? IconRadioActive : IconRadio}
+                      />
                     </SoldOutWrapper>
                   </SizeSelector>
                   {sku.availableQuantity > 0 && isSelected && (
                     <DeliveryMessageWrapper>
-                      <DeliveryMessage>{sku.eddPrefix + ' ' + sku.deliveryMsg}</DeliveryMessage>
+                      <DeliveryMessage>
+                        {sku.eddPrefix + ' ' + sku.deliveryMsg}
+                      </DeliveryMessage>
                       {sku.availableQuantity < 4 && sku.availableQuantity > 0 && (
                         <>
                           <DeliveryMessageOval></DeliveryMessageOval>
-                          <QuantityLeftOut>{sku.availableQuantity} left</QuantityLeftOut>
+                          <QuantityLeftOut>
+                            {sku.availableQuantity} left
+                          </QuantityLeftOut>
                         </>
                       )}
                     </DeliveryMessageWrapper>
@@ -118,7 +124,11 @@ export const SizeSelectorPopup: FC<ISizeSelectorPopupProps> = ({
           </Option> */}
         </OptionsContainer>
         <AddToCart
-          {...{ show: showAddToCart || false, addProductToCart: addProduct, disabled: !selectedSkuId }}
+          {...{
+            show: showAddToCart || false,
+            addProductToCart: addProduct,
+            disabled: !selectedSkuId,
+          }}
         ></AddToCart>
       </SizeWrapper>
     </SizeSelectorPopupWrapper>

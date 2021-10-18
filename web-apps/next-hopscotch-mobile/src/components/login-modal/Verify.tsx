@@ -27,7 +27,7 @@ export const Verify: FC<IVerifiedDataProps | any> = ({ back, type, ...props }: I
 
   const [error, setErrorState] = useState<ILoginErrorMessageBar | null>(null);
   const convertForUI = (str = '') => {
-    let pattern = new RegExp(REGEX_PATTERNS.REGEX_MOBILE_NO);
+    const pattern = new RegExp(REGEX_PATTERNS.REGEX_MOBILE_NO);
     if (pattern.test(str)) {
       return '+91 ' + str.slice(0, 5) + ' ' + str.slice(5);
     } else {

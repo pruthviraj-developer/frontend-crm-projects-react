@@ -106,6 +106,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       dehydratedState: dehydrate(queryClient),
+      productId,
     },
   };
 };
@@ -480,9 +481,9 @@ const Product: NextPageWithLayout = (props) => {
     closePinCodePopup();
     if (newValues && newValues.simpleSkus) {
       for (let i = 0; i < simpleSkus.length; i++) {
-        let sku = simpleSkus[i];
-        let newSku = newValues.simpleSkus[sku.skuId];
-        for (let key in newSku) {
+        const sku = simpleSkus[i];
+        const newSku = newValues.simpleSkus[sku.skuId];
+        for (const key in newSku) {
           if (sku[key]) {
             sku[key] = newSku[key];
           }

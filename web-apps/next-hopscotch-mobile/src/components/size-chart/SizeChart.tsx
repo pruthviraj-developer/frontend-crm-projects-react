@@ -1,4 +1,4 @@
-import { SizeChartPopup } from './../size-chart-popup';
+import { SizeChartPopup } from '@hs/components';
 import { ISizeChartProps } from '@/types';
 import { productDetailsService } from '@hs/services';
 import { useState, useEffect, FC } from 'react';

@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { SizeSelectorPopup } from '../size-selector-popup';
+import { SizeSelectorPopup } from '@hs/components';
 import { ISizeSelectorProps } from './ISizeSelector';
 import { SizeSelectorWrapper } from './StyledSizeSelector';
 
