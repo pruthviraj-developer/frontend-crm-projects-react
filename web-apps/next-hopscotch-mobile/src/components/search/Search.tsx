@@ -45,7 +45,7 @@ const Search: FC<ISearch> = ({ close, resource }: ISearch) => {
         const subCategories = chain(categories)
           .map(function (each: any) {
             if (each.subCategory) {
-              for (var i = 0; i < each.subCategory.length; i++) {
+              for (let i = 0; i < each.subCategory.length; i++) {
                 each.subCategory[i].parentName = each.name;
               }
               return each.subCategory;
@@ -59,7 +59,7 @@ const Search: FC<ISearch> = ({ close, resource }: ISearch) => {
         const productTypeList = chain(subCategories)
           .map(function (each: any) {
             if (each.productTypeList) {
-              for (var i = 0; i < each.productTypeList.length; i++) {
+              for (let i = 0; i < each.productTypeList.length; i++) {
                 each.productTypeList[i].parentName = each.parentName;
               }
               return each.productTypeList;
@@ -137,7 +137,7 @@ const Search: FC<ISearch> = ({ close, resource }: ISearch) => {
   const getSubCategorys = (categoryId: number) => {
     const categories = (resource && resource.categories) || [];
     if (categories && categories.length) {
-      let categoryList = categories.filter((category) => category.id === categoryId);
+      const categoryList = categories.filter((category) => category.id === categoryId);
       if (categoryList[0] && categoryList[0].hasOwnProperty('subCategory')) {
         const reduceValue = (initial: any, subCategory: any) => initial + ',' + subCategory.id;
         return categoryList[0] && categoryList[0].subCategory && categoryList[0].subCategory.reduce(reduceValue, '');
@@ -162,10 +162,10 @@ const Search: FC<ISearch> = ({ close, resource }: ISearch) => {
     suggestionIndex: number,
     options: any,
   ) => {
-    let searchObj = Object.assign({}, data, { recent: recent }, options);
+    const searchObj = Object.assign({}, data, { recent: recent }, options);
     let q: any = {};
-    let { id, name, type } = searchObj;
-    let params: any = {
+    const { id, name, type } = searchObj;
+    const params: any = {
       resetFunnel: true,
       funnel_tile: name,
       funnel_section: '',
@@ -273,7 +273,7 @@ const Search: FC<ISearch> = ({ close, resource }: ISearch) => {
       highlightText = suggestion;
     } else {
       try {
-        let str = new RegExp(word, 'gi');
+        const str = new RegExp(word, 'gi');
         highlightText = suggestion.replace(str, (w) => {
           return '<em>' + w + '</em>';
         });

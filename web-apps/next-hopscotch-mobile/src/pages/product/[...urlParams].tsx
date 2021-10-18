@@ -1,5 +1,4 @@
 import type { GetServerSideProps } from 'next';
-import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -22,7 +21,6 @@ import {
 
 import {
   IProductProps,
-  urlParamsProps,
   IWishListProps,
   ICartAPIResponse,
   IUserInfoProps,
@@ -110,12 +108,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     },
   };
 };
-const Product: NextPageWithLayout = (props) => {
-  const router = useRouter();
+const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
   const similarProductsLink = useRef<HTMLDivElement>(null);
   const recommendedProductsLink = useRef<HTMLDivElement>(null);
-  const urlParams = router.query as unknown as IProductProps;
-  const [productId]: urlParamsProps | any = [...(urlParams.urlParams || [])];
+  const productId = props.productId;
   const [deliveryDetails, updateDeliveryDetails] = useState<IUpdatedDeliverDetailsProps>();
   const [updatedWishListId, updateWishListId] = useState<number>();
   const { updateCartItemQty } = useContext(CartItemQtyContext);
@@ -139,7 +135,7 @@ const Product: NextPageWithLayout = (props) => {
     closeOnOverlayClick: true,
   });
 
-  const { data: productDetails, isSuccess: isProductDetailsSuccess } = useQuery<IProductDetails>(
+  const { data: productDetails } = useQuery<IProductDetails>(
     ['ProductDetail', productId],
     () => productDetailsService.getProductDetails(productId),
     {
@@ -219,7 +215,7 @@ const Product: NextPageWithLayout = (props) => {
         properties: {
           ...properties,
           reco_type: 'Similar products',
-          product_id: productId,
+          product_id: Number(productId),
           from_location: fromLocation,
         },
         contextData,
@@ -320,11 +316,11 @@ const Product: NextPageWithLayout = (props) => {
                 max-width="100%"
                 draggable={false}
                 unoptimized
-                src={`${productDetails?.imgurls[0] && productDetails.imgurls[0].imgUrlThumbnail}`}
+                src={`${productDetails?.imgurls?.[0] && productDetails.imgurls[0].imgUrlThumbnail}`}
               />
               <CartNotificationDetails>
                 {!isOneSize && (
-                  <CartHeader>{`${selectedSku.attributes.name} : ${selectedSku.attributes.value}`}</CartHeader>
+                  <CartHeader>{`${selectedSku.attributes?.name} : ${selectedSku.attributes.value}`}</CartHeader>
                 )}
                 <CartMessage>Added to your Cart!</CartMessage>
                 <CartLinkText>View cart</CartLinkText>

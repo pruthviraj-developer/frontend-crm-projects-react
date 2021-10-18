@@ -12,8 +12,8 @@ const SearchPopup: FC<ISearchPopupProps> = ({ close }: ISearchPopupProps) => {
       try {
         const response: IResourceProps = await productDetailsService.getResouce();
         if (response.action === 'success') {
-          var brands = response.brands || [];
-          var categories = response.categories;
+          const brands = response.brands || [];
+          const categories = response.categories;
           if (!brands || !categories || !brands.length || !categories.length) {
             return;
           }
