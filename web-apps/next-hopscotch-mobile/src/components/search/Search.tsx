@@ -2,7 +2,7 @@ import React, { FC, useState, useEffect } from 'react';
 import { ISearch, IRecentSearchesProps, IEulerAutoSuggestionsProps, IEulerSuggestionsEntity } from './ISearch';
 import { SearchWrapper, SearchField, SearchForm, CloseIcon, SearchList, List } from './StyledSearch';
 import { IconClose } from '@hs/icons';
-import { useDebounce, useReadLocalStorage } from '@hs/framework';
+import { useDebounce, useLocalStorage } from '@hs/framework';
 import { productDetailsService } from '@hs/services';
 import { useRouter } from 'next/router';
 import { chain } from 'lodash-es';
@@ -18,8 +18,9 @@ const Search: FC<ISearch> = ({ close, resource }: ISearch) => {
   const [searchBy, setSearchBy] = useState<string>('');
   const [suggestions, setSuggestions] = useState<IEulerSuggestionsEntity[]>([]);
   const keyWord = useDebounce(searchBy, 500);
-  const readRecentSearchesFromLocalStorage: any = useReadLocalStorage(['recentSearches']);
-  let recentSearches = [...readRecentSearchesFromLocalStorage.get('recentSearches')];
+  // const readRecentSearchesFromLocalStorage: any = useReadLocalStorage(['recentSearches']);
+  const [recentSearchData, setRecentSearchData] = useLocalStorage<any>('recentSearches', []);
+  const [recentSearches, setRecentSearches] = useState(recentSearchData);
 
   const getSuggestions = () => {
     (async () => {
@@ -36,7 +37,7 @@ const Search: FC<ISearch> = ({ close, resource }: ISearch) => {
   useEffect(() => {
     // _recentSearch = true;
     if (keyWord.length) {
-      recentSearches = [];
+      setRecentSearches([]);
       setSuggestions([]);
       if (resource) {
         const brands = resource.brands || [];
@@ -182,21 +183,18 @@ const Search: FC<ISearch> = ({ close, resource }: ISearch) => {
     extraSegdata = Object.assign({}, searchObj.trackingData, extraSegdata);
     params.extraSegdata = JSON.stringify(extraSegdata);
     if (
-      recentSearches.length >= 5 &&
-      recentSearches.filter((e: any) => {
+      recentSearchData.length >= 5 &&
+      recentSearchData.filter((e: any) => {
         return e.name == name;
       }).length < 1
     ) {
-      recentSearches.pop();
-      recentSearches.unshift(searchObj);
-      // LocalStorageService.setData('recentSearches', recentSearches);
+      setRecentSearchData([searchObj, ...recentSearchData.slice(0, 4)]);
     } else if (
-      recentSearches.filter((e: any) => {
+      recentSearchData.filter((e: any) => {
         return e.name == name;
       }).length < 1
     ) {
-      recentSearches.unshift(searchObj);
-      // LocalStorageService.setData('recentSearches', _self.recentSearches);
+      setRecentSearchData([searchObj, ...recentSearchData]);
     }
     if (searchObj.search_params || searchObj.actionURI) {
       if (searchObj.actionURI) {
