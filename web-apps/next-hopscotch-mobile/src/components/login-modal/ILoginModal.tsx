@@ -54,5 +54,3 @@ export interface VerifyOtpMessageBar {
   messageUIType: string;
   messageDisplayTime: string;
 }
-
-export interface ILoaderProps {}

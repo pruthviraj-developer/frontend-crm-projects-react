@@ -1,13 +1,12 @@
 import React, { FC } from 'react';
-import { ILoaderProps } from './ILoginModal';
 import { CartLoaderWrapper, CartSpinner, Spinner, Bullet } from './StyledLoader';
-export const Loader: FC<ILoaderProps> = ({}: ILoaderProps) => {
+export const Loader: FC = () => {
   return (
     <CartLoaderWrapper>
       <CartSpinner>
         <Spinner>
-          {[...Array(4)].map((_x, _i) => (
-            <Bullet></Bullet>
+          {[...Array(4)].map((_, i) => (
+            <Bullet key={'loader_' + i}></Bullet>
           ))}
         </Spinner>
       </CartSpinner>
