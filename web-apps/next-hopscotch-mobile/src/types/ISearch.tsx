@@ -1,20 +1,4 @@
-import { IResourceProps } from '@/types';
-
-export interface ISearch {
-  close: () => void;
-  resource?: IResourceProps;
-}
-
-export interface IRecentSearchesProps {
-  label: string;
-  name: string;
-  term: string;
-  id: number;
-  type: string;
-  recent?: null;
-}
-
-export interface IResoucreProps {
+export interface IResourceProps {
   action: string;
   categories?: CategoriesEntity[] | null;
   brands?: BrandsEntity[] | null;
@@ -29,12 +13,11 @@ export interface IResoucreProps {
 export interface CategoriesEntity {
   id: number;
   name: string;
-  subCategory: SubCategoryEntity[] | null;
+  subCategory?: (SubCategoryEntity | null)[] | null;
 }
 export interface SubCategoryEntity {
   id: number;
   name: string;
-  parentName: string;
   productTypeList?: ProductTypeListEntity[] | null;
 }
 export interface ProductTypeListEntity {
@@ -94,23 +77,4 @@ export interface AwsInfo {
   regionPoolId: string;
   customerProfileBaseFolder: string;
   prefixProfilePic: string;
-}
-
-export interface IEulerAutoSuggestionsProps {
-  action: string;
-  suggestions: IEulerSuggestionsEntity[];
-}
-export interface IEulerSuggestionsEntity {
-  id: string;
-  type: string;
-  term: string;
-  search_params: string;
-  displayName: string;
-  trackingData: TrackingData;
-  label: string;
-  name: string;
-  recent?: null;
-}
-export interface TrackingData {
-  section: string;
 }
