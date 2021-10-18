@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { IContextData, ISegmentProperties } from '@hs/framework';
 const ERROR_OCCUERED = 'error_occured';
 export const PDP_TRACKING_EVENTS = {
