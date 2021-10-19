@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect, useCallback } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { ISearch, IRecentSearchesProps, IEulerAutoSuggestionsProps, IEulerSuggestionsEntity } from './ISearch';
 import { SearchWrapper, SearchField, SearchForm, CloseIcon, SearchList, List } from './StyledSearch';
 import { IconClose } from '@hs/icons';
@@ -22,7 +22,7 @@ const Search: FC<ISearch> = ({ close, resource }: ISearch) => {
   const [recentSearchData, setRecentSearchData] = useLocalStorage<any>('recentSearches', []);
   const [recentSearches, setRecentSearches] = useState(recentSearchData);
 
-  const getSuggestions = useCallback(() => {
+  const getSuggestions = () => {
     (async () => {
       try {
         const response: IEulerAutoSuggestionsProps = await productDetailsService.getEulerAutoSuggestions(keyWord);
@@ -32,7 +32,7 @@ const Search: FC<ISearch> = ({ close, resource }: ISearch) => {
       } finally {
       }
     })();
-  }, [keyWord]);
+  };
 
   useEffect(() => {
     // _recentSearch = true;
@@ -132,7 +132,7 @@ const Search: FC<ISearch> = ({ close, resource }: ISearch) => {
       }
       getSuggestions();
     }
-  }, [keyWord, resource, getSuggestions]);
+  }, [keyWord]);
 
   const getSubCategorys = (categoryId: number) => {
     const categories = (resource && resource.categories) || [];

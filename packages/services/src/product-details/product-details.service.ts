@@ -118,7 +118,7 @@ const verifyOtp = <P, R>(user: P): Promise<R> => {
 };
 
 const getEulerAutoSuggestions = <R>(keyWord: string): Promise<R> => {
-  let url = '/api/search/autoSuggest?query=' + encodeURIComponent(keyWord);
+  const url = '/api/search/autoSuggest?query=' + encodeURIComponent(keyWord);
   return httpService.get({ url });
 };
 

@@ -32,9 +32,9 @@ export interface ILoginErrorMessageBar {
 }
 
 export interface IVerifiedDataProps {
-  loginId: string;
-  otpReason: string;
-  type: string;
+  loginId?: string;
+  otpReason?: string;
+  type?: string;
   back?: (args?: number) => void;
 }
 

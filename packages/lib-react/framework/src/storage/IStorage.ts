@@ -7,6 +7,7 @@ export interface IFunnelData {
   source?: string;
   plp?: string;
   quickshop?: string;
+  subsection?: string;
 }
 export interface ISegmentData {
   from_screen?: string;

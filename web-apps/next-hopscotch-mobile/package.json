@@ -19,7 +19,7 @@
     "react-toastify": "8.0.3"
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.172",
+    "@types/lodash-es": "^4.17.5",
     "@types/react": "17.0.19",
     "cross-env": "^7.0.2",
     "eslint": "7.32.0",

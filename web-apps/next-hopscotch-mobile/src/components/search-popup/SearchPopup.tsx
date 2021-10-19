@@ -8,7 +8,9 @@ import { IResourceProps } from '@/types';
 
 const SearchPopup: FC<ISearchPopupProps> = ({ close }: ISearchPopupProps) => {
   const [resource, setResource] = useState<IResourceProps>();
-  const { data: response } = useQuery<IResourceProps>(['resourceData'], () => productDetailsService.getResouce());
+  const { data: response } = useQuery<IResourceProps>(['resourceData'], () =>
+    productDetailsService.getResouce<IResourceProps>(),
+  );
   useEffect(() => {
     if (response?.action === 'success') {
       const brands = response.brands || [];
