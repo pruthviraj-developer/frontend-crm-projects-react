@@ -160,7 +160,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
     },
   );
 
-  const [sku, setSku] = useState<ISimpleSkusEntityProps | any>();
+  const [skuValue, setSku] = useState<ISimpleSkusEntityProps | any>();
   const {
     productName,
     selectedSku,
@@ -174,7 +174,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
     showRfypCue,
     wishlistId,
     ...product
-  } = useProduct({ productData: productDetails, sku });
+  } = useProduct({ productData: productDetails, sku: skuValue });
 
   const { canShow: showSimilarProducts, ...similarProducts } = useRecommendation({
     section: 'RFYP',
@@ -194,7 +194,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
 
   const { retailPriceMax, selectedSkuId } = useSelectedProduct({
     productData: productDetails,
-    selectedSku: sku,
+    selectedSku: skuValue,
   }); // productForm
 
   const { isOneSize } = useOneSize({
@@ -202,7 +202,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
   });
 
   const deliveryDetailsData = useDeliveryDetails({
-    selectedSku,
+    selectedSku: skuValue,
     productData: productDetails,
   });
 
@@ -319,9 +319,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
                 src={`${productDetails?.imgurls?.[0] && productDetails.imgurls[0].imgUrlThumbnail}`}
               />
               <CartNotificationDetails>
-                {!isOneSize && (
-                  <CartHeader>{`${selectedSku.attributes?.name} : ${selectedSku.attributes.value}`}</CartHeader>
-                )}
+                {!isOneSize && <CartHeader>{`${skuValue.attributes?.name} : ${skuValue.attributes.value}`}</CartHeader>}
                 <CartMessage>Added to your Cart!</CartMessage>
                 <CartLinkText>View cart</CartLinkText>
               </CartNotificationDetails>
@@ -368,8 +366,8 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
   };
 
   const addProductToCart = () => {
-    if (sku) {
-      addToCart(sku);
+    if (skuValue) {
+      addToCart(skuValue);
     } else if (simpleSkus.length === 1) {
       const sku = simpleSkus[0];
       setSku(sku);
@@ -430,15 +428,10 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
   };
 
   const addToWishlistAfterModalClose = () => {
-    let retailPrice = 0;
-    if (selectedSku) {
-      retailPrice = selectedSku.retailPrice;
-    } else {
-      retailPrice = productDetails.retailPrice;
-    }
+    let retailPrice = skuValue?.retailPrice || productDetails?.retailPrice || 0;
     const wishlistItem = {
       sku: selectedSkuId,
-      productId: productDetails.id,
+      productId: productDetails?.id,
       price: retailPrice,
       attribution: {
         // source: oa_data['source'],
@@ -521,7 +514,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
                 wishlistId: updatedWishListId === undefined ? wishlistId : updatedWishListId,
                 retailPrice,
                 retailPriceMax,
-                selectedSku,
+                selectedSku: skuValue,
                 regularPrice,
                 discount,
                 addToWishlist,
@@ -541,7 +534,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
               <CustomSizePicker
                 {...{
                   simpleSkus,
-                  selectedSku: sku,
+                  selectedSku: skuValue,
                   onSizeSelect,
                 }}
               ></CustomSizePicker>
@@ -552,9 +545,17 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
               ></RecommendedProductsLinks>
             )}
             <DeliveryDetails
-              {...{ ...deliveryDetailsData, selectedSku, ...deliveryDetails, openPinCodePopup, openSizeSelector }}
+              {...{
+                ...deliveryDetailsData,
+                selectedSku: skuValue,
+                ...deliveryDetails,
+                openPinCodePopup,
+                openSizeSelector,
+              }}
             ></DeliveryDetails>
-            {productDetails.id && <Accordion {...{ ...product, isPresale, simpleSkus, selectedSku }}></Accordion>}
+            {productDetails.id && (
+              <Accordion {...{ ...product, isPresale, simpleSkus, selectedSku: skuValue }}></Accordion>
+            )}
 
             {showRFYP && (
               <div ref={recommendedProductsLink}>
@@ -603,7 +604,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
               showAddToCart: true,
               onSizeChartClick: openSizeChartPopup,
               simpleSkus,
-              selectedSku: sku,
+              selectedSku: skuValue,
               onSizeSelect,
               goToProductRecommendation,
               addProductToCart,

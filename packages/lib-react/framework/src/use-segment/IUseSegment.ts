@@ -5,7 +5,7 @@ export interface IUseSegmentProps {
 
 export interface ISegmentProperties {
   product_id?: number;
-  sku?: string[];
+  sku?: string | string[];
   name?: string;
   brand?: string;
   price?: number;
@@ -16,10 +16,10 @@ export interface ISegmentProperties {
   product_type?: string;
   subproduct_type?: string;
   preorder?: string | null;
-  sale?: string;
+  sale?: string | null;
   gender?: string;
   colour?: string;
-  low_inventory?: string;
+  low_inventory?: string | null;
   delivery_days?: number;
   from_age?: number;
   to_age?: number;
@@ -55,6 +55,8 @@ export interface ISegmentProperties {
   track?: string[];
   from_screen?: string;
   from_location?: string;
+  reco_type?: string;
+  atc_user?: string;
 }
 export interface IContextData {
   device?: Device;

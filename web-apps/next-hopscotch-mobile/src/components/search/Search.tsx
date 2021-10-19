@@ -5,7 +5,7 @@ import { IconClose } from '@hs/icons';
 import { useDebounce, useLocalStorage } from '@hs/framework';
 import { productDetailsService } from '@hs/services';
 import { useRouter } from 'next/router';
-import { chain } from 'lodash-es';
+// import { chain } from 'lodash-es';
 
 const RECENT_SEARCH = 'RecentSearch';
 const BRAND_SUGGESTION = 'BrandSuggestion';
@@ -39,97 +39,97 @@ const Search: FC<ISearch> = ({ close, resource }: ISearch) => {
     if (keyWord.length) {
       setRecentSearches([]);
       setSuggestions([]);
-      if (resource) {
-        const brands = resource.brands || [];
-        const categories = resource.categories;
-        const subCategories = chain(categories)
-          .map(function (each: any) {
-            if (each.subCategory) {
-              for (let i = 0; i < each.subCategory.length; i++) {
-                each.subCategory[i].parentName = each.name;
-              }
-              return each.subCategory;
-            }
-            return null;
-          })
-          .flatten()
-          .compact()
-          .value();
+      // if (resource) {
+      //   const brands = resource.brands || [];
+      //   const categories = resource.categories;
+      //   const subCategories = chain(categories)
+      //     .map(function (each: any) {
+      //       if (each.subCategory) {
+      //         for (let i = 0; i < each.subCategory.length; i++) {
+      //           each.subCategory[i].parentName = each.name;
+      //         }
+      //         return each.subCategory;
+      //       }
+      //       return null;
+      //     })
+      //     .flatten()
+      //     .compact()
+      //     .value();
 
-        const productTypeList = chain(subCategories)
-          .map(function (each: any) {
-            if (each.productTypeList) {
-              for (let i = 0; i < each.productTypeList.length; i++) {
-                each.productTypeList[i].parentName = each.parentName;
-              }
-              return each.productTypeList;
-            }
-            return null;
-          })
-          .flatten()
-          .compact()
-          .value();
+      //   const productTypeList = chain(subCategories)
+      //     .map(function (each: any) {
+      //       if (each.productTypeList) {
+      //         for (let i = 0; i < each.productTypeList.length; i++) {
+      //           each.productTypeList[i].parentName = each.parentName;
+      //         }
+      //         return each.productTypeList;
+      //       }
+      //       return null;
+      //     })
+      //     .flatten()
+      //     .compact()
+      //     .value();
 
-        const stringContains = (each: any) => {
-          return each.name.toLowerCase().indexOf(keyWord.toLowerCase()) > -1;
-        };
+      //   const stringContains = (each: any) => {
+      //     return each.name.toLowerCase().indexOf(keyWord.toLowerCase()) > -1;
+      //   };
 
-        const suggestions = []
-          .concat(
-            chain(productTypeList)
-              .filter(stringContains)
-              .map(function (each: any) {
-                return {
-                  label: each.name + ' in ' + each.parentName,
-                  id: each.id,
-                  name: each.name,
-                  type: 'productTypeList',
-                };
-              })
-              .value(),
-          )
-          .concat(
-            chain(subCategories)
-              .filter(stringContains)
-              .map(function (each: any) {
-                return {
-                  label: each.name + ' in ' + each.parentName,
-                  id: each.id,
-                  name: each.name,
-                  type: 'subCategories',
-                };
-              })
-              .value(),
-          )
-          .concat(
-            chain(categories)
-              .filter(stringContains)
-              .map(function (each: any) {
-                return {
-                  label: each.name,
-                  id: each.id,
-                  name: each.name,
-                  type: 'categories',
-                };
-              })
-              .value(),
-          )
-          .concat(
-            chain(brands)
-              .filter(stringContains)
-              .map(function (each: any) {
-                return {
-                  label: each.name + ' in Brands',
-                  id: each.id,
-                  name: each.name,
-                  type: 'brands',
-                };
-              })
-              .value(),
-          );
-        setSuggestions(suggestions);
-        return;
-      }
+      //   const suggestions = []
+      //     .concat(
+      //       chain(productTypeList)
+      //         .filter(stringContains)
+      //         .map(function (each: any) {
+      //           return {
+      //             label: each.name + ' in ' + each.parentName,
+      //             id: each.id,
+      //             name: each.name,
+      //             type: 'productTypeList',
+      //           };
+      //         })
+      //         .value(),
+      //     )
+      //     .concat(
+      //       chain(subCategories)
+      //         .filter(stringContains)
+      //         .map(function (each: any) {
+      //           return {
+      //             label: each.name + ' in ' + each.parentName,
+      //             id: each.id,
+      //             name: each.name,
+      //             type: 'subCategories',
+      //           };
+      //         })
+      //         .value(),
+      //     )
+      //     .concat(
+      //       chain(categories)
+      //         .filter(stringContains)
+      //         .map(function (each: any) {
+      //           return {
+      //             label: each.name,
+      //             id: each.id,
+      //             name: each.name,
+      //             type: 'categories',
+      //           };
+      //         })
+      //         .value(),
+      //     )
+      //     .concat(
+      //       chain(brands)
+      //         .filter(stringContains)
+      //         .map(function (each: any) {
+      //           return {
+      //             label: each.name + ' in Brands',
+      //             id: each.id,
+      //             name: each.name,
+      //             type: 'brands',
+      //           };
+      //         })
+      //         .value(),
+      //     );
+      //   setSuggestions(suggestions);
+      //   return;
+      // }
       getSuggestions();
     }
   }, [keyWord]);
