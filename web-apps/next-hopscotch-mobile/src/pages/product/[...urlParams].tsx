@@ -275,7 +275,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
         CUSTOMER_INFO = errorResponse;
       }
     })();
-  }, []);
+  }, [updateCartItemQty]);
 
   const addToWishlist = () => {
     if (CUSTOMER_INFO.isLoggedIn) {
