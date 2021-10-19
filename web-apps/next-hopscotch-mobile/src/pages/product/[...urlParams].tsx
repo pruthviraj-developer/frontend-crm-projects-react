@@ -307,6 +307,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
             href={{
               pathname: '/v2/cart',
             }}
+            passHref
           >
             <CartLink>
               <Image
