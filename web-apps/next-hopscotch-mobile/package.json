@@ -12,14 +12,12 @@
     "@hs/components": "1.0.0",
     "@hs/framework": "^1.0.0",
     "@hs/services": "^1.0.0",
-    "lodash-es": "^4.17.21",
     "next": "11.1.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-toastify": "8.0.3"
   },
   "devDependencies": {
-    "@types/lodash-es": "^4.17.5",
     "@types/react": "17.0.19",
     "cross-env": "^7.0.2",
     "eslint": "7.32.0",

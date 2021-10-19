@@ -68,7 +68,15 @@ const List = styled.li`
     margin: 0;
   }
   img {
-    display: none;
+    width: 40px;
+    margin: 0 10px 0 0;
+    max-width: 100%;
+    height: auto;
+    vertical-align: middle;
+  }
+  .search-autocomplete-result-with-image {
+    display: flex;
+    align-items: center;
   }
 `;
 

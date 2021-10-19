@@ -1,11 +1,10 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState, useEffect, useCallback } from 'react';
 import { ISearch, IRecentSearchesProps, IEulerAutoSuggestionsProps, IEulerSuggestionsEntity } from './ISearch';
 import { SearchWrapper, SearchField, SearchForm, CloseIcon, SearchList, List } from './StyledSearch';
 import { IconClose } from '@hs/icons';
 import { useDebounce, useLocalStorage } from '@hs/framework';
 import { productDetailsService } from '@hs/services';
 import { useRouter } from 'next/router';
-// import { chain } from 'lodash-es';
 
 const RECENT_SEARCH = 'RecentSearch';
 const BRAND_SUGGESTION = 'BrandSuggestion';
@@ -22,7 +21,7 @@ const Search: FC<ISearch> = ({ close, resource }: ISearch) => {
   const [recentSearchData, setRecentSearchData] = useLocalStorage<any>('recentSearches', []);
   const [recentSearches, setRecentSearches] = useState(recentSearchData);
 
-  const getSuggestions = () => {
+  const getSuggestions = useCallback(() => {
     (async () => {
       try {
         const response: IEulerAutoSuggestionsProps = await productDetailsService.getEulerAutoSuggestions(keyWord);
@@ -32,107 +31,74 @@ const Search: FC<ISearch> = ({ close, resource }: ISearch) => {
       } finally {
       }
     })();
-  };
+  }, [keyWord]);
 
   useEffect(() => {
     // _recentSearch = true;
     if (keyWord.length) {
       setRecentSearches([]);
       setSuggestions([]);
-      // if (resource) {
-      //   const brands = resource.brands || [];
-      //   const categories = resource.categories;
-      //   const subCategories = chain(categories)
-      //     .map(function (each: any) {
-      //       if (each.subCategory) {
-      //         for (let i = 0; i < each.subCategory.length; i++) {
-      //           each.subCategory[i].parentName = each.name;
-      //         }
-      //         return each.subCategory;
-      //       }
-      //       return null;
-      //     })
-      //     .flatten()
-      //     .compact()
-      //     .value();
+      if (resource) {
+        const brands = resource.brands || [];
+        const categories = resource.categories;
+        const subCategories =
+          categories &&
+          categories
+            .map(function (each: any) {
+              if (each.subCategory) {
+                for (let i = 0; i < each.subCategory.length; i++) {
+                  each.subCategory[i].parentName = each.name;
+                }
+                return each.subCategory;
+              }
+              return null;
+            })
+            .flat()
+            .filter(Boolean);
+        const productTypeList =
+          subCategories &&
+          subCategories
+            .map(function (each: any) {
+              if (each.productTypeList) {
+                for (let i = 0; i < each.productTypeList.length; i++) {
+                  each.productTypeList[i].parentName = each.parentName;
+                }
+                return each.productTypeList;
+              }
+              return null;
+            })
+            .flat()
+            .filter(Boolean);
+        const stringContains = (each: any) => {
+          return each.name.toLowerCase().indexOf(keyWord.toLowerCase()) > -1;
+        };
 
-      //   const productTypeList = chain(subCategories)
-      //     .map(function (each: any) {
-      //       if (each.productTypeList) {
-      //         for (let i = 0; i < each.productTypeList.length; i++) {
-      //           each.productTypeList[i].parentName = each.parentName;
-      //         }
-      //         return each.productTypeList;
-      //       }
-      //       return null;
-      //     })
-      //     .flatten()
-      //     .compact()
-      //     .value();
+        const getFilteredArray = (list: any, type: string, parent?: string) => {
+          return list.filter(stringContains).map(function (each: any) {
+            const getLabel = () => {
+              const parentName = parent ? ' in ' + (each.parentName || parent) : '';
+              return each.name + parentName;
+            };
+            return {
+              label: getLabel(),
+              id: each.id,
+              name: each.name,
+              type,
+            };
+          });
+        };
 
-      //   const stringContains = (each: any) => {
-      //     return each.name.toLowerCase().indexOf(keyWord.toLowerCase()) > -1;
-      //   };
-
-      //   const suggestions = []
-      //     .concat(
-      //       chain(productTypeList)
-      //         .filter(stringContains)
-      //         .map(function (each: any) {
-      //           return {
-      //             label: each.name + ' in ' + each.parentName,
-      //             id: each.id,
-      //             name: each.name,
-      //             type: 'productTypeList',
-      //           };
-      //         })
-      //         .value(),
-      //     )
-      //     .concat(
-      //       chain(subCategories)
-      //         .filter(stringContains)
-      //         .map(function (each: any) {
-      //           return {
-      //             label: each.name + ' in ' + each.parentName,
-      //             id: each.id,
-      //             name: each.name,
-      //             type: 'subCategories',
-      //           };
-      //         })
-      //         .value(),
-      //     )
-      //     .concat(
-      //       chain(categories)
-      //         .filter(stringContains)
-      //         .map(function (each: any) {
-      //           return {
-      //             label: each.name,
-      //             id: each.id,
-      //             name: each.name,
-      //             type: 'categories',
-      //           };
-      //         })
-      //         .value(),
-      //     )
-      //     .concat(
-      //       chain(brands)
-      //         .filter(stringContains)
-      //         .map(function (each: any) {
-      //           return {
-      //             label: each.name + ' in Brands',
-      //             id: each.id,
-      //             name: each.name,
-      //             type: 'brands',
-      //           };
-      //         })
-      //         .value(),
-      //     );
-      //   setSuggestions(suggestions);
-      //   return;
-      // }
+        const suggestions = []
+          .concat(getFilteredArray(productTypeList, 'productTypeList', 'product'))
+          .concat(getFilteredArray(subCategories, 'subCategories', 'categories'))
+          .concat(getFilteredArray(categories, 'categories'))
+          .concat(getFilteredArray(brands, 'brands', 'Brands'));
+        setSuggestions(suggestions);
+        return;
+      }
       getSuggestions();
     }
-  }, [keyWord]);
+  }, [keyWord, resource, getSuggestions]);
 
   const getSubCategorys = (categoryId: number) => {
     const categories = (resource && resource.categories) || [];
@@ -261,7 +227,7 @@ const Search: FC<ISearch> = ({ close, resource }: ISearch) => {
     const qparams = { ...params };
     qparams.q = JSON.stringify(q);
     router.push({
-      pathname: searchObj.actionURI || 'search',
+      pathname: searchObj.actionURI || '/search',
       query: qparams,
     });
     // console.log(qparams);
