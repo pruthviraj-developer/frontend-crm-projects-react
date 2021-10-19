@@ -7,17 +7,22 @@ const SizeChartWrapper = styled.div`
   line-height: ${typography.size.s2}px;
   font-weight: ${typography.weight.regular};
   background-color: ${Colors.WHITE};
-  display: grid;
-  min-height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow-y: scroll;
 `;
 
 const SizeChartHeader = styled.div`
   border-bottom: 1px solid ${Colors.MERCURY};
-  padding: ${typography.size.s3}px 0;
   position: relative;
 `;
 
-const SizeChartHeaderTitle = styled.div``;
+const SizeChartHeaderTitle = styled.div`
+  padding: ${typography.size.s3}px 0;
+`;
 
 const SizeChartHeaderCloseIcon = styled.div`
   position: absolute;
@@ -34,6 +39,12 @@ const SizeChartHeaderWrapper = styled.div`
   font-weight: ${typography.weight.medium};
   font-size: ${typography.size.s2}px;
   line-height: ${typography.size.s3}px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: ${Colors.WHITE};
+  z-index: 1001;
 `;
 
 const SizeChartHeaderProductName = styled.div`
@@ -42,10 +53,7 @@ const SizeChartHeaderProductName = styled.div`
   padding: ${typography.size.s1}px;
 `;
 
-const SizeChartDetailsWrapper = styled.div`
-  max-height: 88.6vh;
-  overflow-y: scroll;
-`;
+const SizeChartDetailsWrapper = styled.div``;
 
 const SizeChartDetail = styled.div`
   margin: 8px 0 0;
@@ -146,6 +154,9 @@ const SizeTipsList = styled.ul`
 
 const SizeTipsListItem = styled.li``;
 
+const SizeChartBody = styled.div`
+  padding-top: 90px;
+`;
 export {
   SizeChartWrapper,
   SizeChartDetail,
@@ -155,6 +166,7 @@ export {
   SizeChartHeaderWrapper,
   SizeChartHeader,
   SizeChartHeaderTitle,
+  SizeChartBody,
   SizeChartHeaderCloseIcon,
   SizeChartHeaderProductName,
   SizeChartCloseIcon,
