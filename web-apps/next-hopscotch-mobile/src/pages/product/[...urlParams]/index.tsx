@@ -39,15 +39,15 @@ import {
   CartLinkText,
 } from '@/styles';
 
-const SizeChartPopupComponent = dynamic(() => import('../../components/size-chart/SizeChart'), {
+const SizeChartPopupComponent = dynamic(() => import('../../../components/size-chart/SizeChart'), {
   ssr: false,
 });
 
-const SizeSelectorPopupComponent = dynamic(() => import('../../components/size-selector/SizeSelector'), {
+const SizeSelectorPopupComponent = dynamic(() => import('../../../components/size-selector/SizeSelector'), {
   ssr: false,
 });
 
-const PinCodePopupComponent = dynamic(() => import('../../components/pin-code/PinCode'), {
+const PinCodePopupComponent = dynamic(() => import('../../../components/pin-code/PinCode'), {
   ssr: false,
 });
 
