@@ -8,6 +8,7 @@ const FooterWrapper = styled.footer`
   font-weight: ${typography.weight.medium};
   background-color: ${Colors.WHITE};
   margin-top: ${typography.size.m4}px;
+  margin-bottom: 90px;
   border-top: 1px solid ${Colors.MERCURY};
 `;
 
