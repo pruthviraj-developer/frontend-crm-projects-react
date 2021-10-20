@@ -18,16 +18,17 @@ import {
   Name,
 } from './StyledPinCode';
 import { IconClose } from '@hs/icons';
-import { IAddressListProps, IAllAddressItemsEntityProps } from '@/types';
-import { productDetailsService } from '@hs/services';
+import { IAddressListProps, IAllAddressItemsEntityProps, IUserInfoProps } from '@/types';
+import { productDetailsService, cookiesService } from '@hs/services';
 const SUCCESS = 'success';
+const CUSTOMER_INFO_COOKIE_NAME = 'hs_customer_info';
 const PinCode: FC<IPinCodeProps> = ({ productId, pinCode, closePinCodePopup }: IPinCodeProps) => {
   const [pincode, setPinCode] = useState<string>('');
   const [error, setError] = useState<IPinCodeAPIResponseProps | IPinCodeErrorProps>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isLoadingAddress, setIsLoadingAddress] = useState<boolean>(false);
   const [addressList, setAddressList] = useState<IAllAddressItemsEntityProps[]>([]);
-
+  const CUSTOMER_INFO: IUserInfoProps = cookiesService.getCookieData(CUSTOMER_INFO_COOKIE_NAME);
   const checkPinCodeDetails = (pincode: string) => {
     (async () => {
       if (pinCode === pincode) {
@@ -73,6 +74,10 @@ const PinCode: FC<IPinCodeProps> = ({ productId, pinCode, closePinCodePopup }: I
 
   const hasAddress = addressList && addressList.length;
   useEffect(() => {
+    debugger;
+    if (!(CUSTOMER_INFO && CUSTOMER_INFO.isLoggedIn)) {
+      return;
+    }
     (async () => {
       try {
         setIsLoadingAddress(true);
@@ -84,7 +89,7 @@ const PinCode: FC<IPinCodeProps> = ({ productId, pinCode, closePinCodePopup }: I
         setIsLoadingAddress(false);
       }
     })();
-  }, []);
+  }, [CUSTOMER_INFO]);
 
   return (
     <PinCodeWrapper>
