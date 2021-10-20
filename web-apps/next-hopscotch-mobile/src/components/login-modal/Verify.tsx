@@ -18,6 +18,7 @@ import {
 } from './StyledVerify';
 import { Loader } from './loader';
 const OTP_LENGTH = 6;
+const PERSISTENT_TICKET_COOKIE_NAME = 'hs_persistent_ticket';
 const CUSTOMER_INFO_COOKIE_NAME = 'hs_customer_info';
 const CART_ITEM_QTY_COOKIE_NAME = 'cart_item_quantity';
 export const Verify: FC<IVerifiedDataProps> = ({ back, type, ...props }: IVerifiedDataProps) => {
@@ -89,13 +90,16 @@ export const Verify: FC<IVerifiedDataProps> = ({ back, type, ...props }: IVerifi
             setLoading(false);
             if (response.action === 'success' && response.isLoggedIn) {
               const expireProp = { expires: new Date(timeService.getCurrentTime() + 30 * 24 * 60 * 60 * 1000) };
-
               cookiesService.setCookies({
                 key: CUSTOMER_INFO_COOKIE_NAME,
                 value: response,
                 options: expireProp,
               });
-
+              cookiesService.setCookies({
+                key: PERSISTENT_TICKET_COOKIE_NAME,
+                value: response.persistentTicket,
+                options: expireProp,
+              });
               if (response.cartItemQty) {
                 cookiesService.setCookies({
                   key: CART_ITEM_QTY_COOKIE_NAME,
