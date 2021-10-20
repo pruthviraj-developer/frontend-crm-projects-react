@@ -30,12 +30,20 @@ const FooterBlock = styled.div`
 const FooterLinks = styled.ul`
   margin: 0;
   list-style: none;
-  display: flex;
-  justify-content: space-around;
   padding: ${typography.size.s3}px 0 4px 0;
+  text-align: center;
 `;
 
-const FooterLink = styled.li``;
+const FooterLink = styled.li`
+  display: inline-block;
+  &:before {
+    content: '\\00b7';
+    padding: 0 8px;
+  }
+  &:first-of-type:before {
+    display: none;
+  }
+`;
 
 const Link = styled('a')`
   color: ${Colors.DARKGRAY};
