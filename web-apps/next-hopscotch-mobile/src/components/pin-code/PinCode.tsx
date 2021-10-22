@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState, useEffect, useContext } from 'react';
 import { IPinCodeAPIResponseProps, IPinCodeProps, IPinCodeErrorProps } from './IPinCode';
 import {
   PinCodeWrapper,
@@ -20,6 +20,7 @@ import {
 import { IconClose } from '@hs/icons';
 import { IAddressListProps, IAllAddressItemsEntityProps, IUserInfoProps } from '@/types';
 import { productDetailsService, cookiesService } from '@hs/services';
+import { LoginContext } from '@hs/framework';
 const SUCCESS = 'success';
 const CUSTOMER_INFO_COOKIE_NAME = 'hs_customer_info';
 const PinCode: FC<IPinCodeProps> = ({ productId, pinCode, closePinCodePopup }: IPinCodeProps) => {
@@ -29,6 +30,8 @@ const PinCode: FC<IPinCodeProps> = ({ productId, pinCode, closePinCodePopup }: I
   const [isLoadingAddress, setIsLoadingAddress] = useState<boolean>(false);
   const [addressList, setAddressList] = useState<IAllAddressItemsEntityProps[]>([]);
   const CUSTOMER_INFO: IUserInfoProps = cookiesService.getCookieData(CUSTOMER_INFO_COOKIE_NAME);
+
+  const { updateLoginPopup } = useContext(LoginContext);
   const checkPinCodeDetails = (pincode: string) => {
     (async () => {
       if (pinCode === pincode) {
@@ -74,7 +77,6 @@ const PinCode: FC<IPinCodeProps> = ({ productId, pinCode, closePinCodePopup }: I
 
   const hasAddress = addressList && addressList.length;
   useEffect(() => {
-    debugger;
     if (!(CUSTOMER_INFO && CUSTOMER_INFO.isLoggedIn)) {
       return;
     }
@@ -85,7 +87,10 @@ const PinCode: FC<IPinCodeProps> = ({ productId, pinCode, closePinCodePopup }: I
         if (response.action === SUCCESS) {
           setAddressList(response.allAddressItems);
         }
-      } finally {
+      } catch (err) {
+        if (error && error.message === 'login required') {
+          updateLoginPopup(true);
+        }
         setIsLoadingAddress(false);
       }
     })();

@@ -64,6 +64,7 @@ import {
   getProductTrackingData,
   COOKIE_DATA,
   CartItemQtyContext,
+  LoginContext,
 } from '@hs/framework';
 
 import * as segment from '@/components/segment-analytic';
@@ -115,6 +116,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
   const [deliveryDetails, updateDeliveryDetails] = useState<IUpdatedDeliverDetailsProps>();
   const [updatedWishListId, updateWishListId] = useState<number>();
   const { updateCartItemQty } = useContext(CartItemQtyContext);
+  const { showLoginPopup } = useContext(LoginContext);
   const [LoginPopupModal, openLoginPopup, closeLoginPopup, isLoginPopupOpen] = useModal('root', {
     preventScroll: false,
     closeOnOverlayClick: true,
@@ -276,6 +278,12 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
       }
     })();
   }, [updateCartItemQty]);
+
+  useEffect(() => {
+    if (showLoginPopup) {
+      openLoginPopup();
+    }
+  }, [showLoginPopup, openLoginPopup]);
 
   const addToWishlist = () => {
     if (CUSTOMER_INFO.isLoggedIn) {
