@@ -29,7 +29,6 @@ const PinCode: FC<IPinCodeProps> = ({ productId, pinCode, closePinCodePopup }: I
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isLoadingAddress, setIsLoadingAddress] = useState<boolean>(false);
   const [addressList, setAddressList] = useState<IAllAddressItemsEntityProps[]>([]);
-  const CUSTOMER_INFO: IUserInfoProps = cookiesService.getCookieData(CUSTOMER_INFO_COOKIE_NAME);
 
   const { updateLoginPopup } = useContext(LoginContext);
   const checkPinCodeDetails = (pincode: string) => {
@@ -77,6 +76,7 @@ const PinCode: FC<IPinCodeProps> = ({ productId, pinCode, closePinCodePopup }: I
 
   const hasAddress = addressList && addressList.length;
   useEffect(() => {
+    const CUSTOMER_INFO: IUserInfoProps = cookiesService.getCookieData(CUSTOMER_INFO_COOKIE_NAME);
     if (!(CUSTOMER_INFO && CUSTOMER_INFO.isLoggedIn)) {
       return;
     }
@@ -87,14 +87,16 @@ const PinCode: FC<IPinCodeProps> = ({ productId, pinCode, closePinCodePopup }: I
         if (response.action === SUCCESS) {
           setAddressList(response.allAddressItems);
         }
-      } catch (err) {
-        if (error && error.message === 'login required') {
+      } catch (error: any) {
+        if (error && error['message'] === 'login required') {
+          closePinCodePopup();
           updateLoginPopup(true);
         }
+      } finally {
         setIsLoadingAddress(false);
       }
     })();
-  }, [CUSTOMER_INFO]);
+  }, []);
 
   return (
     <PinCodeWrapper>

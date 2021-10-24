@@ -1,6 +1,7 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useContext } from 'react';
 import { productDetailsService, cookiesService, timeService } from '@hs/services';
 import { IconErrorMessage } from '@hs/icons';
+import { LoginContext } from '@hs/framework';
 import { REGEX_PATTERNS } from './constants';
 import { IVerifiedDataProps, ILoginErrorResponse, ILoginErrorMessageBar, IVerifyOtpResponeProps } from './ILoginModal';
 import {
@@ -25,7 +26,7 @@ export const Verify: FC<IVerifiedDataProps> = ({ back, type, ...props }: IVerifi
   const [otp, setOtp] = useState<string>('');
   const [counter, setCounter] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
-
+  const { updateLoginPopup } = useContext(LoginContext);
   const [error, setErrorState] = useState<ILoginErrorMessageBar | null>(null);
   const convertForUI = (str = '') => {
     const pattern = new RegExp(REGEX_PATTERNS.REGEX_MOBILE_NO);
@@ -89,24 +90,22 @@ export const Verify: FC<IVerifiedDataProps> = ({ back, type, ...props }: IVerifi
             });
             setLoading(false);
             if (response.action === 'success' && response.isLoggedIn) {
-              const expireProp = { expires: new Date(timeService.getCurrentTime() + 30 * 24 * 60 * 60 * 1000) };
-              cookiesService.setCookies({
-                key: CUSTOMER_INFO_COOKIE_NAME,
-                value: response,
-                options: expireProp,
-              });
-              cookiesService.setCookies({
-                key: PERSISTENT_TICKET_COOKIE_NAME,
-                value: response.persistentTicket,
-                options: expireProp,
-              });
-              if (response.cartItemQty) {
+              const setCookie = (key: string, value: any) => {
+                const expireProp = {
+                  expires: new Date(timeService.getCurrentTime() + 30 * 24 * 60 * 60 * 1000),
+                };
                 cookiesService.setCookies({
-                  key: CART_ITEM_QTY_COOKIE_NAME,
-                  value: response.cartItemQty,
+                  key,
+                  value,
                   options: expireProp,
                 });
+              };
+              setCookie(CUSTOMER_INFO_COOKIE_NAME, response);
+              setCookie(PERSISTENT_TICKET_COOKIE_NAME, response.persistentTicket);
+              if (response.cartItemQty) {
+                setCookie(CART_ITEM_QTY_COOKIE_NAME, response.cartItemQty);
               }
+              updateLoginPopup(false);
               back && back(response.cartItemQty);
             } else {
               setErrorState(response.messageBar);
