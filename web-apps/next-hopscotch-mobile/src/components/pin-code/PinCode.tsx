@@ -95,7 +95,7 @@ const PinCode: FC<IPinCodeProps> = ({ productId, pinCode, closePinCodePopup }: I
         setIsLoadingAddress(false);
       }
     })();
-  }, []);
+  }, [userInfo, closePinCodePopup, updateLoginPopup]);
 
   return (
     <PinCodeWrapper>
