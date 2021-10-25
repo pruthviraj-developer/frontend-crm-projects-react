@@ -307,7 +307,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
     }
   };
 
-  const getToasterContent = () => {
+  const getToasterContent = (skuValue: ISimpleSkusEntityProps) => {
     return (
       <>
         <CartNotification>
@@ -328,7 +328,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
                 src={`${productDetails?.imgurls?.[0] && productDetails.imgurls[0].imgUrlThumbnail}`}
               />
               <CartNotificationDetails>
-                {!isOneSize && <CartHeader>{`${skuValue.attributes?.name} : ${skuValue.attributes.value}`}</CartHeader>}
+                {!isOneSize && <CartHeader>{`${skuValue?.attrs[0]?.name} : ${skuValue?.attrs[0]?.value}`}</CartHeader>}
                 <CartMessage>Added to your Cart!</CartMessage>
                 <CartLinkText>View cart</CartLinkText>
               </CartNotificationDetails>
@@ -347,7 +347,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
         const atc_user = cookiesService.getCookies(COOKIE_DATA.WEBSITE_CUSTOMER_SEGMENT);
         if (addToCartResponse.action === SUCCESS) {
           updateCartItemQty(addToCartResponse.cartItemQty);
-          toast(getToasterContent(), {
+          toast(getToasterContent(sku), {
             position: toast.POSITION.TOP_RIGHT,
             closeButton: false,
             hideProgressBar: true,

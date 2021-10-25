@@ -73,7 +73,7 @@ export interface ISimpleSkusEntityProps {
   attributes: ISkuAttributes;
   productName: string;
   skuId: string;
-  attrs?: IProductDetailsAttrsEntity[] | null;
+  attrs: IProductDetailsAttrsEntity[];
   retailPrice: number;
   regularPrice: number;
   availableQuantity: number;
@@ -170,4 +170,6 @@ export interface ISkuAttributes {
   'value pack'?: string;
   weave?: string;
   year?: string;
+  name?: string;
+  value?: string;
 }
