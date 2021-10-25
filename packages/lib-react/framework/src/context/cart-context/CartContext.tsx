@@ -8,9 +8,9 @@ export const CartItemQtyContext = createContext<ICartContext>(
 );
 
 export const CartItemQtyProvider: FC<unknown> = ({ children }) => {
-  const [cartItemQty, setCartItemQuantity] = useState(
-    cookiesService.getCookies(COOKIE_DATA.CART_ITEM_QTY) || 0
-  );
+  const [cartItemQty, setCartItemQuantity] = useState(() => {
+    return cookiesService.getCookies(COOKIE_DATA.CART_ITEM_QTY) || 0;
+  });
   const updateCartItemQty = (qty: number) => {
     setCartItemQuantity(qty);
     const expireProp = {

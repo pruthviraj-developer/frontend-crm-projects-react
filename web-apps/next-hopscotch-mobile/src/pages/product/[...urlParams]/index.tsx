@@ -65,6 +65,7 @@ import {
   CartItemQtyContext,
   LoginContext,
   UserInfoContext,
+  LOCAL_DATA,
 } from '@hs/framework';
 
 import * as segment from '@/components/segment-analytic';
@@ -72,7 +73,6 @@ import { LoginModal } from '@/components/login-modal';
 import { Layout } from '@/components/layout/Layout';
 import { ProductHead } from '@/components/header';
 
-const SUCCESS = 'success';
 const tryLater = 'Try Later';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -314,7 +314,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
       try {
         const addToCartResponse: ICartAPIResponse = await productDetailsService.addItemToCart(data);
         const atc_user = cookiesService.getCookies(COOKIE_DATA.WEBSITE_CUSTOMER_SEGMENT);
-        if (addToCartResponse.action === SUCCESS) {
+        if (addToCartResponse.action === LOCAL_DATA.SUCCESS) {
           updateCartItemQty(addToCartResponse.cartItemQty);
           toast(getToasterContent(sku), {
             position: toast.POSITION.TOP_RIGHT,
@@ -392,7 +392,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
         const wishListStatus: IWishListProps = await productDetailsService.deleteFromWishlist(
           updatedWishListId === undefined ? wishlistId : updatedWishListId,
         );
-        if (wishListStatus.action === SUCCESS) {
+        if (wishListStatus.action === LOCAL_DATA.SUCCESS) {
           updateWishListId(0);
           if (navigator && navigator.vibrate) {
             navigator.vibrate(200);
@@ -431,7 +431,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
     (async () => {
       try {
         const wishListStatus: IWishListProps = await productDetailsService.addToWishlist(wishlistItem);
-        if (wishListStatus.action === SUCCESS) {
+        if (wishListStatus.action === LOCAL_DATA.SUCCESS) {
           updateWishListId(wishListStatus.wishlistItemId);
           if (navigator && navigator.vibrate) {
             navigator.vibrate(200);
@@ -466,7 +466,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
 
   return (
     <>
-      {productDetails && productDetails.action === SUCCESS && (
+      {productDetails && productDetails.action === LOCAL_DATA.SUCCESS && (
         <>
           <ProductHead {...{ productName, retailPrice }}></ProductHead>
           <ProductCarousel

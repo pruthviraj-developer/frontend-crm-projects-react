@@ -11,6 +11,7 @@ export const LOCAL_DATA = {
   PLP: 'plp',
   QUICKSHOP: 'quickshop',
   SORT_DATA: 'sortData',
+  SUCCESS: 'success',
 };
 
 export const COOKIE_DATA = {
