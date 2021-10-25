@@ -2,10 +2,12 @@ export interface INavBarProps {
   showSearchPopup: () => void;
 }
 
-// export interface INavBarHomeLinkProps {
-//   ref: string;
-//   funnel: string;
-//   from_screen: string;
-//   department?: null;
-//   customTileId?: null;
-// }
+export interface IUserInfoProps {
+  action: string;
+  actionURI: string;
+  cartItemQty: number;
+  isRegister: boolean;
+  isLoggedIn: boolean;
+  hasGuestData: boolean;
+  actionText: string;
+}

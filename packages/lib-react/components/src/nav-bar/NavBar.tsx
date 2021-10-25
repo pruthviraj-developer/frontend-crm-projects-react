@@ -1,6 +1,8 @@
 import React, { FC, useContext } from 'react';
+import { useRouter } from 'next/router';
 import { NextNavLink } from '../next-nav-link';
 import Link from 'next/link';
+import { cookiesService } from '@hs/services';
 import {
   NavBarWrapper,
   NavLinkWrapper,
@@ -12,17 +14,32 @@ import {
   CartIconQuantity,
   IconWrapper,
 } from './StyledNavBar';
-import { CartItemQtyContext } from '@hs/framework';
-import { INavBarProps } from './INavBar';
+import { CartItemQtyContext, LoginContext } from '@hs/framework';
+import { INavBarProps, IUserInfoProps } from './INavBar';
 import {
   CartIcon,
   HopScotchIcon,
   IconSearch,
   IconWishListDefault,
 } from '@hs/icons';
-
+const CUSTOMER_INFO_COOKIE_NAME = 'hs_customer_info';
 export const NavBar: FC<INavBarProps> = ({ showSearchPopup }: INavBarProps) => {
   const cartContext = useContext(CartItemQtyContext);
+  const { updateLoginPopup } = useContext(LoginContext);
+  const router = useRouter();
+  const gotoWishList = () => {
+    const CUSTOMER_INFO: IUserInfoProps = cookiesService.getCookieData(
+      CUSTOMER_INFO_COOKIE_NAME
+    );
+    if (!(CUSTOMER_INFO && CUSTOMER_INFO.isLoggedIn)) {
+      updateLoginPopup(true);
+    } else {
+      router.push({
+        pathname: '/v2/wishlist',
+        query: { fromScreen: 'Discover' },
+      });
+    }
+  };
   const query = {
     ref: 'logo',
     funnel: 'Discover',
@@ -61,7 +78,7 @@ export const NavBar: FC<INavBarProps> = ({ showSearchPopup }: INavBarProps) => {
           <NavIconWrapper onClick={showSearchPopup} marginRight={true}>
             <IconWrapper icon={IconSearch} />
           </NavIconWrapper>
-          <NavIconWrapper>
+          <NavIconWrapper onClick={gotoWishList}>
             <IconWrapper icon={IconWishListDefault} />
           </NavIconWrapper>
           <Link
