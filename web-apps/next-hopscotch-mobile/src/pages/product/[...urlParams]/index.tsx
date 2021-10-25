@@ -23,12 +23,11 @@ import {
   IProductProps,
   IWishListProps,
   ICartAPIResponse,
-  IUserInfoProps,
   NextPageWithLayout,
   IUpdatedDeliverDetailsProps,
   IErrorStateProps,
 } from '@/types';
-import { cookiesService, productDetailsService, timeService } from '@hs/services';
+import { cookiesService, productDetailsService } from '@hs/services';
 import {
   ProductDetailsWrapper,
   CartLink,
@@ -65,6 +64,7 @@ import {
   COOKIE_DATA,
   CartItemQtyContext,
   LoginContext,
+  UserInfoContext,
 } from '@hs/framework';
 
 import * as segment from '@/components/segment-analytic';
@@ -72,11 +72,8 @@ import { LoginModal } from '@/components/login-modal';
 import { Layout } from '@/components/layout/Layout';
 import { ProductHead } from '@/components/header';
 
-let CUSTOMER_INFO: IUserInfoProps;
 const SUCCESS = 'success';
 const tryLater = 'Try Later';
-const CUSTOMER_INFO_COOKIE_NAME = 'hs_customer_info';
-const GUEST_CUSTOMER_INFO = 'hs_guest_customer_info';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const queryClient = new QueryClient();
@@ -117,6 +114,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
   const [updatedWishListId, updateWishListId] = useState<number>();
   const { updateCartItemQty } = useContext(CartItemQtyContext);
   const { showLoginPopup } = useContext(LoginContext);
+  const { userInfo } = useContext(UserInfoContext);
   const [LoginPopupModal, openLoginPopup, closeLoginPopup, isLoginPopupOpen] = useModal('root', {
     preventScroll: false,
     closeOnOverlayClick: true,
@@ -232,7 +230,6 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
     if (quantity != undefined) {
       updateCartItemQty(quantity);
       addToWishlistAfterModalClose();
-      CUSTOMER_INFO = cookiesService.getCookieData(CUSTOMER_INFO_COOKIE_NAME);
     }
     closeLoginPopup();
   };
@@ -252,41 +249,13 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
   }, [contextData, productDetails, properties]);
 
   useEffect(() => {
-    (async () => {
-      try {
-        const response: IUserInfoProps = await productDetailsService.getUserInfo();
-        CUSTOMER_INFO = response;
-        const expireProp = { expires: new Date(timeService.getCurrentTime() + 30 * 24 * 60 * 60 * 1000) };
-        if (response.action === SUCCESS) {
-          if (response.isLoggedIn) {
-            cookiesService.setCookies({ key: CUSTOMER_INFO_COOKIE_NAME, value: response, options: expireProp });
-          } else {
-            cookiesService.setCookies({ key: GUEST_CUSTOMER_INFO, value: response, options: expireProp });
-          }
-          if (response.cartItemQty !== undefined) {
-            updateCartItemQty(response.cartItemQty);
-            // cookiesService.setCookies({
-            //   key: COOKIE_DATA.CART_ITEM_QTY,
-            //   value: response.cartItemQty,
-            //   options: expireProp,
-            // });
-          }
-        }
-      } catch (error) {
-        const errorResponse = error as unknown as IUserInfoProps;
-        CUSTOMER_INFO = errorResponse;
-      }
-    })();
-  }, [updateCartItemQty]);
-
-  useEffect(() => {
     if (showLoginPopup) {
       openLoginPopup();
     }
   }, [showLoginPopup, openLoginPopup]);
 
   const addToWishlist = () => {
-    if (CUSTOMER_INFO.isLoggedIn) {
+    if (userInfo.isLoggedIn) {
       addToWishlistAfterModalClose();
     } else {
       toast.info('Sign in to add this item to your Wishlist.', {

@@ -2,7 +2,6 @@ import React, { FC, useContext } from 'react';
 import { useRouter } from 'next/router';
 import { NextNavLink } from '../next-nav-link';
 import Link from 'next/link';
-import { cookiesService } from '@hs/services';
 import {
   NavBarWrapper,
   NavLinkWrapper,
@@ -14,24 +13,25 @@ import {
   CartIconQuantity,
   IconWrapper,
 } from './StyledNavBar';
-import { CartItemQtyContext, LoginContext } from '@hs/framework';
-import { INavBarProps, IUserInfoProps } from './INavBar';
+import {
+  CartItemQtyContext,
+  LoginContext,
+  UserInfoContext,
+} from '@hs/framework';
+import { INavBarProps } from './INavBar';
 import {
   CartIcon,
   HopScotchIcon,
   IconSearch,
   IconWishListDefault,
 } from '@hs/icons';
-const CUSTOMER_INFO_COOKIE_NAME = 'hs_customer_info';
 export const NavBar: FC<INavBarProps> = ({ showSearchPopup }: INavBarProps) => {
   const cartContext = useContext(CartItemQtyContext);
   const { updateLoginPopup } = useContext(LoginContext);
+  const { userInfo } = useContext(UserInfoContext);
   const router = useRouter();
   const gotoWishList = () => {
-    const CUSTOMER_INFO: IUserInfoProps = cookiesService.getCookieData(
-      CUSTOMER_INFO_COOKIE_NAME
-    );
-    if (!(CUSTOMER_INFO && CUSTOMER_INFO.isLoggedIn)) {
+    if (!(userInfo && userInfo.isLoggedIn)) {
       updateLoginPopup(true);
     } else {
       router.push({

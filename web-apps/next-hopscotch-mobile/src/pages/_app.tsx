@@ -8,7 +8,7 @@ import Head from 'next/head';
 import { ToastContainer } from 'react-toastify';
 import { AppPropsWithLayout } from '@/types';
 
-import { LoginProvider } from '@hs/framework';
+import { LoginProvider, UserInfoProvider } from '@hs/framework';
 
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const [queryClient] = useState(
@@ -35,7 +35,9 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
       <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps.dehydratedState}>
           <GoogleTagManager>
-            <LoginProvider>{getLayout(<Component {...pageProps} />)}</LoginProvider>
+            <UserInfoProvider>
+              <LoginProvider>{getLayout(<Component {...pageProps} />)}</LoginProvider>
+            </UserInfoProvider>
           </GoogleTagManager>
         </Hydrate>
         {/* <ReactQueryDevtools initialIsOpen={false} /> */}

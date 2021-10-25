@@ -1,4 +1,4 @@
 export type ICartContext = {
-  cartItemQty: number;
+  cartItemQty: string | number;
   updateCartItemQty: (qty: number) => void;
 };

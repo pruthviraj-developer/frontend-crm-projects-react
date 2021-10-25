@@ -1,7 +1,7 @@
 import React, { FC, useState, useContext } from 'react';
 import { productDetailsService, cookiesService, timeService } from '@hs/services';
 import { IconErrorMessage } from '@hs/icons';
-import { LoginContext } from '@hs/framework';
+import { LoginContext, COOKIE_DATA } from '@hs/framework';
 import { REGEX_PATTERNS } from './constants';
 import { IVerifiedDataProps, ILoginErrorResponse, ILoginErrorMessageBar, IVerifyOtpResponeProps } from './ILoginModal';
 import {
@@ -19,9 +19,6 @@ import {
 } from './StyledVerify';
 import { Loader } from './loader';
 const OTP_LENGTH = 6;
-const PERSISTENT_TICKET_COOKIE_NAME = 'hs_persistent_ticket';
-const CUSTOMER_INFO_COOKIE_NAME = 'hs_customer_info';
-const CART_ITEM_QTY_COOKIE_NAME = 'cart_item_quantity';
 export const Verify: FC<IVerifiedDataProps> = ({ back, type, ...props }: IVerifiedDataProps) => {
   const [otp, setOtp] = useState<string>('');
   const [counter, setCounter] = useState<number>(0);
@@ -100,10 +97,10 @@ export const Verify: FC<IVerifiedDataProps> = ({ back, type, ...props }: IVerifi
                   options: expireProp,
                 });
               };
-              setCookie(CUSTOMER_INFO_COOKIE_NAME, response);
-              setCookie(PERSISTENT_TICKET_COOKIE_NAME, response.persistentTicket);
+              setCookie(COOKIE_DATA.CUSTOMER_INFO, response);
+              setCookie(COOKIE_DATA.PERSISTENT_TICKET, response.persistentTicket);
               if (response.cartItemQty) {
-                setCookie(CART_ITEM_QTY_COOKIE_NAME, response.cartItemQty);
+                setCookie(COOKIE_DATA.CART_ITEM_QTY, response.cartItemQty);
               }
               updateLoginPopup(false);
               back && back(response.cartItemQty);
