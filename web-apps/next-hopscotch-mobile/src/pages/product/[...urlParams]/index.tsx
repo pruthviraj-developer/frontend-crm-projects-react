@@ -64,6 +64,7 @@ import {
   getProductTrackingData,
   COOKIE_DATA,
   CartItemQtyContext,
+  LoginContext,
 } from '@hs/framework';
 
 import * as segment from '@/components/segment-analytic';
@@ -115,6 +116,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
   const [deliveryDetails, updateDeliveryDetails] = useState<IUpdatedDeliverDetailsProps>();
   const [updatedWishListId, updateWishListId] = useState<number>();
   const { updateCartItemQty } = useContext(CartItemQtyContext);
+  const { showLoginPopup } = useContext(LoginContext);
   const [LoginPopupModal, openLoginPopup, closeLoginPopup, isLoginPopupOpen] = useModal('root', {
     preventScroll: false,
     closeOnOverlayClick: true,
@@ -277,6 +279,12 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
     })();
   }, [updateCartItemQty]);
 
+  useEffect(() => {
+    if (showLoginPopup) {
+      openLoginPopup();
+    }
+  }, [showLoginPopup, openLoginPopup]);
+
   const addToWishlist = () => {
     if (CUSTOMER_INFO.isLoggedIn) {
       addToWishlistAfterModalClose();
@@ -299,7 +307,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
     }
   };
 
-  const getToasterContent = () => {
+  const getToasterContent = (skuValue: ISimpleSkusEntityProps) => {
     return (
       <>
         <CartNotification>
@@ -320,7 +328,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
                 src={`${productDetails?.imgurls?.[0] && productDetails.imgurls[0].imgUrlThumbnail}`}
               />
               <CartNotificationDetails>
-                {!isOneSize && <CartHeader>{`${skuValue.attributes?.name} : ${skuValue.attributes.value}`}</CartHeader>}
+                {!isOneSize && <CartHeader>{`${skuValue?.attrs[0]?.name} : ${skuValue?.attrs[0]?.value}`}</CartHeader>}
                 <CartMessage>Added to your Cart!</CartMessage>
                 <CartLinkText>View cart</CartLinkText>
               </CartNotificationDetails>
@@ -339,7 +347,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
         const atc_user = cookiesService.getCookies(COOKIE_DATA.WEBSITE_CUSTOMER_SEGMENT);
         if (addToCartResponse.action === SUCCESS) {
           updateCartItemQty(addToCartResponse.cartItemQty);
-          toast(getToasterContent(), {
+          toast(getToasterContent(sku), {
             position: toast.POSITION.TOP_RIGHT,
             closeButton: false,
             hideProgressBar: true,

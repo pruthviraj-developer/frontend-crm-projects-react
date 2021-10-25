@@ -1,6 +1,6 @@
 import { cookiesService, timeService } from '@hs/services';
 import React, { createContext, FC, useState } from 'react';
-import { COOKIE_DATA } from '../storage';
+import { COOKIE_DATA } from '../../storage';
 import { ICartContext } from './ICartContext';
 
 export const CartItemQtyContext = createContext<ICartContext>(

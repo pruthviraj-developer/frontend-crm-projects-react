@@ -8,6 +8,8 @@ import Head from 'next/head';
 import { ToastContainer } from 'react-toastify';
 import { AppPropsWithLayout } from '@/types';
 
+import { LoginProvider } from '@hs/framework';
+
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const [queryClient] = useState(
     () =>
@@ -32,7 +34,9 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
       {productCarouselStyles}
       <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps.dehydratedState}>
-          <GoogleTagManager>{getLayout(<Component {...pageProps} />)}</GoogleTagManager>
+          <GoogleTagManager>
+            <LoginProvider>{getLayout(<Component {...pageProps} />)}</LoginProvider>
+          </GoogleTagManager>
         </Hydrate>
         {/* <ReactQueryDevtools initialIsOpen={false} /> */}
       </QueryClientProvider>

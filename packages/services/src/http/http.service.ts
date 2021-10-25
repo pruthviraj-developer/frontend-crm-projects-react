@@ -11,9 +11,11 @@ export const httpHeaders = {
 };
 type IHttpService = Pick<AxiosRequestConfig, 'url' | 'data' | 'params'>;
 
-const handleUnauthorised = () => {
-  window.location.href = '/intranet/login';
+const err = {
+  action: 'failure',
+  message: 'login required',
 };
+
 const processRequest = <P = any>(
   requestConfig: AxiosRequestConfig
 ): Promise<P> => {
@@ -31,12 +33,10 @@ const processRequest = <P = any>(
     })
     .catch(function (error: AxiosError) {
       if (error.response && 401 === error.response.status) {
-        handleUnauthorised();
-        return Promise.reject(error);
+        return Promise.reject(err);
       } else if (error.response && error.response.status >= 500) {
         return Promise.reject(error.response || {});
       } else if (error.message === 'Network Error') {
-        handleUnauthorised();
         return Promise.reject(error);
       } else {
         const errorMessage = error.response?.data;
