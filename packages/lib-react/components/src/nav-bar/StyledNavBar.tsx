@@ -48,18 +48,18 @@ const CartIconWrapper = styled.div`
 const CartIconQuantity = styled.span`
   font-size: 12px;
   line-height: 13px;
-  padding: 2px 2px 1px 1px;
   font-weight: ${typography.weight.medium};
   color: #ed54a4;
   background: ${Colors.WHITE};
   border-radius: 7px;
-  text-align: ${HsTextAlign.center};
-  min-width: 15px;
-  height: 15px;
-  text-indent: 0;
   position: absolute;
   top: 10px;
   left: 26px;
+  height: 18px;
+  min-width: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
 `;
 
 const IconWrapper = styled(SvgIcon)`
