@@ -11,6 +11,7 @@ export const LOCAL_DATA = {
   PLP: 'plp',
   QUICKSHOP: 'quickshop',
   SORT_DATA: 'sortData',
+  SUCCESS: 'success',
 };
 
 export const COOKIE_DATA = {
@@ -23,7 +24,9 @@ export const COOKIE_DATA = {
   DAYS_SINCE_LAST_VISIT: 'daysSinceLastVisit',
   HS_UTM_PARAMS: 'hs_utm_params',
   CART_ITEM_QTY: 'cart_item_quantity',
-  CUSTOMER_INFO_COOKIE_NAME: 'hs_customer_info',
+  PERSISTENT_TICKET: 'hs_persistent_ticket',
+  CUSTOMER_INFO: 'hs_customer_info',
+  GUEST_CUSTOMER_INFO: 'hs_guest_customer_info',
 };
 export const SESSION_DATA = {
   OA_DATA: 'oa_data',

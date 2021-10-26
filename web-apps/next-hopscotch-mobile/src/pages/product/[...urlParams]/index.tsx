@@ -23,12 +23,11 @@ import {
   IProductProps,
   IWishListProps,
   ICartAPIResponse,
-  IUserInfoProps,
   NextPageWithLayout,
   IUpdatedDeliverDetailsProps,
   IErrorStateProps,
 } from '@/types';
-import { cookiesService, productDetailsService, timeService } from '@hs/services';
+import { cookiesService, productDetailsService } from '@hs/services';
 import {
   ProductDetailsWrapper,
   CartLink,
@@ -65,6 +64,8 @@ import {
   COOKIE_DATA,
   CartItemQtyContext,
   LoginContext,
+  UserInfoContext,
+  LOCAL_DATA,
 } from '@hs/framework';
 
 import * as segment from '@/components/segment-analytic';
@@ -72,11 +73,7 @@ import { LoginModal } from '@/components/login-modal';
 import { Layout } from '@/components/layout/Layout';
 import { ProductHead } from '@/components/header';
 
-let CUSTOMER_INFO: IUserInfoProps;
-const SUCCESS = 'success';
 const tryLater = 'Try Later';
-const CUSTOMER_INFO_COOKIE_NAME = 'hs_customer_info';
-const GUEST_CUSTOMER_INFO = 'hs_guest_customer_info';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const queryClient = new QueryClient();
@@ -117,6 +114,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
   const [updatedWishListId, updateWishListId] = useState<number>();
   const { updateCartItemQty } = useContext(CartItemQtyContext);
   const { showLoginPopup } = useContext(LoginContext);
+  const { userInfo } = useContext(UserInfoContext);
   const [LoginPopupModal, openLoginPopup, closeLoginPopup, isLoginPopupOpen] = useModal('root', {
     preventScroll: false,
     closeOnOverlayClick: true,
@@ -232,7 +230,6 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
     if (quantity != undefined) {
       updateCartItemQty(quantity);
       addToWishlistAfterModalClose();
-      CUSTOMER_INFO = cookiesService.getCookieData(CUSTOMER_INFO_COOKIE_NAME);
     }
     closeLoginPopup();
   };
@@ -252,41 +249,13 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
   }, [contextData, productDetails, properties]);
 
   useEffect(() => {
-    (async () => {
-      try {
-        const response: IUserInfoProps = await productDetailsService.getUserInfo();
-        CUSTOMER_INFO = response;
-        const expireProp = { expires: new Date(timeService.getCurrentTime() + 30 * 24 * 60 * 60 * 1000) };
-        if (response.action === SUCCESS) {
-          if (response.isLoggedIn) {
-            cookiesService.setCookies({ key: CUSTOMER_INFO_COOKIE_NAME, value: response, options: expireProp });
-          } else {
-            cookiesService.setCookies({ key: GUEST_CUSTOMER_INFO, value: response, options: expireProp });
-          }
-          if (response.cartItemQty !== undefined) {
-            updateCartItemQty(response.cartItemQty);
-            // cookiesService.setCookies({
-            //   key: COOKIE_DATA.CART_ITEM_QTY,
-            //   value: response.cartItemQty,
-            //   options: expireProp,
-            // });
-          }
-        }
-      } catch (error) {
-        const errorResponse = error as unknown as IUserInfoProps;
-        CUSTOMER_INFO = errorResponse;
-      }
-    })();
-  }, [updateCartItemQty]);
-
-  useEffect(() => {
     if (showLoginPopup) {
       openLoginPopup();
     }
   }, [showLoginPopup, openLoginPopup]);
 
   const addToWishlist = () => {
-    if (CUSTOMER_INFO.isLoggedIn) {
+    if (userInfo.isLoggedIn) {
       addToWishlistAfterModalClose();
     } else {
       toast.info('Sign in to add this item to your Wishlist.', {
@@ -345,7 +314,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
       try {
         const addToCartResponse: ICartAPIResponse = await productDetailsService.addItemToCart(data);
         const atc_user = cookiesService.getCookies(COOKIE_DATA.WEBSITE_CUSTOMER_SEGMENT);
-        if (addToCartResponse.action === SUCCESS) {
+        if (addToCartResponse.action === LOCAL_DATA.SUCCESS) {
           updateCartItemQty(addToCartResponse.cartItemQty);
           toast(getToasterContent(sku), {
             position: toast.POSITION.TOP_RIGHT,
@@ -423,7 +392,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
         const wishListStatus: IWishListProps = await productDetailsService.deleteFromWishlist(
           updatedWishListId === undefined ? wishlistId : updatedWishListId,
         );
-        if (wishListStatus.action === SUCCESS) {
+        if (wishListStatus.action === LOCAL_DATA.SUCCESS) {
           updateWishListId(0);
           if (navigator && navigator.vibrate) {
             navigator.vibrate(200);
@@ -462,7 +431,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
     (async () => {
       try {
         const wishListStatus: IWishListProps = await productDetailsService.addToWishlist(wishlistItem);
-        if (wishListStatus.action === SUCCESS) {
+        if (wishListStatus.action === LOCAL_DATA.SUCCESS) {
           updateWishListId(wishListStatus.wishlistItemId);
           if (navigator && navigator.vibrate) {
             navigator.vibrate(200);
@@ -497,7 +466,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
 
   return (
     <>
-      {productDetails && productDetails.action === SUCCESS && (
+      {productDetails && productDetails.action === LOCAL_DATA.SUCCESS && (
         <>
           <ProductHead {...{ productName, retailPrice }}></ProductHead>
           <ProductCarousel

@@ -173,3 +173,23 @@ export interface ISkuAttributes {
   name?: string;
   value?: string;
 }
+
+export interface IUserInfoProps {
+  action: string;
+  actionURI: string;
+  cartItemQty: number;
+  isRegister: boolean;
+  isLoggedIn: boolean;
+  hasGuestData: boolean;
+  actionText: string;
+  userId: number;
+  firstName: string;
+  lastName: string;
+  userName: string;
+  email: string;
+  phoneNumber: string;
+  uuid: string;
+  mobileStatus: string;
+  resendOTPAuto: boolean;
+  persistentTicket: string;
+}

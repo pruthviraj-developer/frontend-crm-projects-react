@@ -23,16 +23,6 @@ export interface ICartAPIResponse {
   message: string;
 }
 
-export interface IUserInfoProps {
-  action: string;
-  actionURI: string;
-  cartItemQty: number;
-  isRegister: boolean;
-  isLoggedIn: boolean;
-  hasGuestData: boolean;
-  actionText: string;
-}
-
 export interface IHeadProps {
   productName: string;
   retailPrice?: number;

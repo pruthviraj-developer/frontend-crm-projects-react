@@ -4,55 +4,45 @@ import {
   timeService,
   cookiesService,
 } from '@hs/services';
-import { UserInfoProps } from './IUserInfo';
-
-// const PERSISTENT_TICKET_COOKIE_NAME = 'hs_persistent_ticket';
-const CUSTOMER_INFO_COOKIE_NAME = 'hs_customer_info';
-// const CUSTOMER_SEGMENT_INFO = 'WEBSITE_customersegment';
-const GUEST_CUSTOMER_INFO = 'hs_guest_customer_info';
-const CART_ITEM_QTY_COOKIE_NAME = 'cart_item_quantity';
+import { IUserInfoProps } from 'product/types';
+import { COOKIE_DATA } from '../storage';
 
 export const userInfo = () => {
   const {
     data: userData,
     isSuccess: isSuccess,
     isLoading: isLoading,
-  } = useQuery<UserInfoProps>('userInfo', productDetailsService.getUserInfo, {
+  } = useQuery<IUserInfoProps>('userInfo', productDetailsService.getUserInfo, {
     staleTime: Infinity,
     retry: false,
   });
 
   if (isSuccess && userData) {
     // Store data in cookie and update service/cartQty
-    const expireProp = {
-      // Expire 30 days in the future
-      expires: new Date(
-        timeService.getCurrentTime() + 30 * 24 * 60 * 60 * 1000
-      ),
-      path: '/',
+    const setCookie = (key: string, value: any) => {
+      const expireProp = {
+        expires: new Date(
+          timeService.getCurrentTime() + 30 * 24 * 60 * 60 * 1000
+        ),
+      };
+      cookiesService.setCookies({
+        key,
+        value,
+        options: expireProp,
+      });
     };
     if (userData.isLoggedIn) {
-      cookiesService.setCookies({
-        key: CUSTOMER_INFO_COOKIE_NAME,
-        value: { ...userData },
-        options: expireProp,
-      });
+      setCookie(COOKIE_DATA.CUSTOMER_INFO, userData);
     } else {
-      cookiesService.setCookies({
-        key: GUEST_CUSTOMER_INFO,
-        value: { ...userData },
-        options: expireProp,
-      });
+      setCookie(COOKIE_DATA.GUEST_CUSTOMER_INFO, userData);
     }
     if (userData.cartItemQty !== undefined) {
-      cookiesService.setCookies({
-        key: CART_ITEM_QTY_COOKIE_NAME,
-        value: userData.cartItemQty,
-      });
+      setCookie(COOKIE_DATA.CART_ITEM_QTY, userData.cartItemQty);
     }
+    setCookie(COOKIE_DATA.PERSISTENT_TICKET, userData.persistentTicket);
   }
   return {
-    userInfo,
+    userInfo: userData,
     isLoading,
   };
 };
