@@ -29,7 +29,7 @@ export const useProduct = ({ productData, sku }: ProductProps) => {
     () => getSimpleSkus(productData.simpleSkus),
     [productData]
   );
-  let {
+  const {
     productDesc,
     showShippingInfo,
     shippingReturnInfo,
@@ -60,8 +60,8 @@ export const useProduct = ({ productData, sku }: ProductProps) => {
     isProductSoldOut = false;
   const updateProductDetail = (
     sku: any,
-    isfirst: Boolean,
-    isDefault?: Boolean
+    isfirst: boolean,
+    isDefault?: boolean
   ) => {
     isDefault = isDefault;
     if (!sku) {
