@@ -1,9 +1,9 @@
 import React, { FC, useState, useContext } from 'react';
-import { productDetailsService, cookiesService, timeService } from '@hs/services';
+import { productDetailsService } from '@hs/services';
 import { IconErrorMessage } from '@hs/icons';
-import { LoginContext, COOKIE_DATA } from '@hs/framework';
+import { LoginContext } from '@hs/framework';
 import { REGEX_PATTERNS } from './constants';
-import { IVerifiedDataProps, ILoginErrorResponse, ILoginErrorMessageBar, IVerifyOtpResponeProps } from './ILoginModal';
+import { IVerifiedDataProps, ILoginErrorResponse, ILoginErrorMessageBar } from './ILoginModal';
 import {
   ChangeNumber,
   VerifyWrapper,
@@ -23,7 +23,7 @@ export const Verify: FC<IVerifiedDataProps> = ({ back, type, ...props }: IVerifi
   const [otp, setOtp] = useState<string>('');
   const [counter, setCounter] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
-  const { updateLoginPopup } = useContext(LoginContext);
+  const { verifyOtp } = useContext(LoginContext);
   const [error, setErrorState] = useState<ILoginErrorMessageBar | null>(null);
   const convertForUI = (str = '') => {
     const pattern = new RegExp(REGEX_PATTERNS.REGEX_MOBILE_NO);
@@ -79,38 +79,14 @@ export const Verify: FC<IVerifiedDataProps> = ({ back, type, ...props }: IVerifi
       setOtp(e.target.value);
       if (otplength === OTP_LENGTH) {
         (async () => {
-          try {
-            setLoading(true);
-            const response: IVerifyOtpResponeProps = await productDetailsService.verifyOtp({
-              ...props,
-              otp: value,
-            });
-            setLoading(false);
-            if (response.action === 'success' && response.isLoggedIn) {
-              const setCookie = (key: string, value: any) => {
-                const expireProp = {
-                  expires: new Date(timeService.getCurrentTime() + 30 * 24 * 60 * 60 * 1000),
-                };
-                cookiesService.setCookies({
-                  key,
-                  value,
-                  options: expireProp,
-                });
-              };
-              setCookie(COOKIE_DATA.CUSTOMER_INFO, response);
-              setCookie(COOKIE_DATA.PERSISTENT_TICKET, response.persistentTicket);
-              if (response.cartItemQty) {
-                setCookie(COOKIE_DATA.CART_ITEM_QTY, response.cartItemQty);
-              }
-              updateLoginPopup(false);
-              back && back(response.cartItemQty);
-            } else {
-              setErrorState(response.messageBar);
-            }
-          } catch (error) {
-            const errorRespone = error as unknown as IVerifyOtpResponeProps;
-            setLoading(false);
-            setErrorState(errorRespone.messageBar);
+          const response = await verifyOtp({
+            ...props,
+            otp: value,
+          });
+          if (response.action === 'success' && response.isLoggedIn) {
+            back && back();
+          } else {
+            setErrorState(response.messageBar);
           }
         })();
       }

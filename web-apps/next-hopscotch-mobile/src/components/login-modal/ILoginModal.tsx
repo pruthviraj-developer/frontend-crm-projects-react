@@ -37,32 +37,3 @@ export interface IVerifiedDataProps {
   type?: string;
   back?: (args?: number) => void;
 }
-
-export interface IVerifyOtpResponeProps {
-  action: string;
-  userId: number;
-  firstName: string;
-  lastName: string;
-  userName: string;
-  cartItemQty: number;
-  persistentTicket: string;
-  email: string;
-  phoneNumber: string;
-  registrationDate: string;
-  isRegister: boolean;
-  uuid: string;
-  loginId: string;
-  mobileStatus: string;
-  isLoggedIn: boolean;
-  isCustomerCreatedOnPlaceOrder: boolean;
-  messageBar: ILoginErrorMessageBar;
-  resendOTPAuto: boolean;
-}
-
-export interface VerifyOtpMessageBar {
-  messageType: string;
-  code: string;
-  message: string;
-  messageUIType: string;
-  messageDisplayTime: string;
-}
