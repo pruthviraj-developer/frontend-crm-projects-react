@@ -112,6 +112,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
   const productId = props.productId;
   const [deliveryDetails, updateDeliveryDetails] = useState<IUpdatedDeliverDetailsProps>();
   const [updatedWishListId, updateWishListId] = useState<number>();
+  const [addToWishlistStatus, setAddToWishlistStatus] = useState<boolean>(false);
   const { updateCartItemQty } = useContext(CartItemQtyContext);
   const { showLoginPopup } = useContext(LoginContext);
   const { userInfo } = useContext(UserInfoContext);
@@ -226,11 +227,11 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
   const [{ contextData, properties }] = useSegment();
   // const pdpTrackingData = useProductTracking({ selectedSku, productDetails });
 
-  const closeLoginModalPopup = (quantity?: number) => {
-    if (quantity != undefined) {
-      updateCartItemQty(quantity);
+  const closeLoginModalPopup = (status?: boolean) => {
+    if (status && addToWishlistStatus) {
       addToWishlistAfterModalClose();
     }
+    setAddToWishlistStatus(false);
     closeLoginPopup();
   };
 
@@ -272,6 +273,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
           lineHeight: '16px',
         },
       });
+      setAddToWishlistStatus(true);
       openLoginPopup();
     }
   };

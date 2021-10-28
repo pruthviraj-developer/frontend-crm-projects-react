@@ -84,7 +84,7 @@ export const Verify: FC<IVerifiedDataProps> = ({ back, type, ...props }: IVerifi
             otp: value,
           });
           if (response.action === 'success' && response.isLoggedIn) {
-            back && back();
+            back && back(true);
           } else {
             setErrorState(response.messageBar);
           }

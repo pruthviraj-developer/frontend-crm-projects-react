@@ -1,9 +1,9 @@
 export interface ILoginModalProps {
-  closeLoginPopup: (args?: number) => void;
+  closeLoginPopup: (status?: boolean) => void;
 }
 
 export interface IHeaderProps {
-  closeLoginPopup: (args?: number) => void;
+  closeLoginPopup: () => void;
   active: boolean;
   back: () => void;
 }
@@ -35,5 +35,5 @@ export interface IVerifiedDataProps {
   loginId?: string;
   otpReason?: string;
   type?: string;
-  back?: (args?: number) => void;
+  back?: (status?: boolean) => void;
 }
