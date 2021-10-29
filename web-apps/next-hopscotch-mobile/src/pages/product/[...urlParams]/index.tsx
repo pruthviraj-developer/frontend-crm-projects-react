@@ -53,7 +53,6 @@ const PinCodePopupComponent = dynamic(() => import('../../../components/pin-code
 import {
   useRecommendation,
   IRecommendedProducts,
-  useSelectedProduct,
   useOneSize,
   useDeliveryDetails,
   useProduct,
@@ -167,6 +166,8 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
     selectedSku,
     retailPrice,
     regularPrice,
+    retailPriceMax,
+    selectedSkuId,
     discount,
     isPresale,
     finalSale,
@@ -192,11 +193,6 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
     id: 'productrecommendations',
     pid: productId,
   });
-
-  const { retailPriceMax, selectedSkuId } = useSelectedProduct({
-    productData: productDetails,
-    selectedSku: skuValue,
-  }); // productForm
 
   const { isOneSize } = useOneSize({
     productData: productDetails,
@@ -410,7 +406,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
   const addToWishlistAfterModalClose = () => {
     let retailPrice = skuValue?.retailPrice || productDetails?.retailPrice || 0;
     const wishlistItem = {
-      sku: selectedSkuId,
+      sku: selectedSkuId || '',
       productId: productDetails?.id,
       price: retailPrice,
       attribution: {
