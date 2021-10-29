@@ -1,4 +1,3 @@
-import { CartItemQtyProvider } from '@hs/framework';
 import { Footer, NavBar } from '@hs/components';
 import Head from 'next/head';
 import dynamic from 'next/dynamic';
@@ -13,7 +12,7 @@ export const Layout: FC<unknown> = ({ children }) => {
     closeOnOverlayClick: true,
   });
   return (
-    <CartItemQtyProvider>
+    <>
       <Head>
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -23,6 +22,6 @@ export const Layout: FC<unknown> = ({ children }) => {
       <SearchPopupModal>
         {isSearchPopupOpen && <SearchPopupComponent {...{ close: closeSearchPopup }}></SearchPopupComponent>}
       </SearchPopupModal>
-    </CartItemQtyProvider>
+    </>
   );
 };

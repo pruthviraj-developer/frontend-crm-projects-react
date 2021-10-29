@@ -1,6 +1,10 @@
 import Cookies from 'js-cookie';
 import { SetCookieProps } from './Icookies.service';
 
+const deleteCookie = (key: string) => {
+  return Cookies.get(key);
+};
+
 const getCookies = (key: string) => {
   return Cookies.get(key);
 };
@@ -20,6 +24,7 @@ const getCookieData = <T>(key: string) => {
 };
 
 export const cookiesService = {
+  deleteCookie,
   getCookies,
   setCookies,
   getCookieData,

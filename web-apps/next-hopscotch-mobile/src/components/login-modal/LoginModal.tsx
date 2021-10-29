@@ -18,9 +18,9 @@ export const LoginModal: FC<ILoginModalProps> = ({ closeLoginPopup }: ILoginModa
     setCurrentState(VERIFY);
   };
 
-  const back = (cartItemQty?: number) => {
+  const back = (status?: boolean) => {
     if (currentState === VERIFY) {
-      closeLoginPopup(cartItemQty);
+      closeLoginPopup(status);
       return;
     }
     closeLoginPopup();

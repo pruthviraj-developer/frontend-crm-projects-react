@@ -1,9 +1,9 @@
 export interface ILoginModalProps {
-  closeLoginPopup: (args?: number) => void;
+  closeLoginPopup: (status?: boolean) => void;
 }
 
 export interface IHeaderProps {
-  closeLoginPopup: (args?: number) => void;
+  closeLoginPopup: () => void;
   active: boolean;
   back: () => void;
 }
@@ -35,34 +35,5 @@ export interface IVerifiedDataProps {
   loginId?: string;
   otpReason?: string;
   type?: string;
-  back?: (args?: number) => void;
-}
-
-export interface IVerifyOtpResponeProps {
-  action: string;
-  userId: number;
-  firstName: string;
-  lastName: string;
-  userName: string;
-  cartItemQty: number;
-  persistentTicket: string;
-  email: string;
-  phoneNumber: string;
-  registrationDate: string;
-  isRegister: boolean;
-  uuid: string;
-  loginId: string;
-  mobileStatus: string;
-  isLoggedIn: boolean;
-  isCustomerCreatedOnPlaceOrder: boolean;
-  messageBar: ILoginErrorMessageBar;
-  resendOTPAuto: boolean;
-}
-
-export interface VerifyOtpMessageBar {
-  messageType: string;
-  code: string;
-  message: string;
-  messageUIType: string;
-  messageDisplayTime: string;
+  back?: (status?: boolean) => void;
 }
