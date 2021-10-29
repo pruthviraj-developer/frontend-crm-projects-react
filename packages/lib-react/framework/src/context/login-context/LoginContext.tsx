@@ -47,10 +47,9 @@ export const LoginProvider: FC<unknown> = ({ children }) => {
           }
           updateLoginPopup(false);
         }
-        return Promise.resolve(response);
+        return response;
       } catch (error) {
-        const errorRespone = error as unknown as ILoginErrorResponse;
-        return Promise.resolve(errorRespone);
+        return error as unknown as ILoginErrorResponse;
       }
     })();
   };

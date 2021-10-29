@@ -43,7 +43,6 @@ export const UserInfoProvider: FC<unknown> = ({ children }) => {
     if (userInfo.cartItemQty !== undefined) {
       setCookie(COOKIE_DATA.CART_ITEM_QTY, userInfo.cartItemQty);
     }
-    setCookie(COOKIE_DATA.PERSISTENT_TICKET, userInfo.persistentTicket);
   }
   return (
     <UserInfoContext.Provider value={{ userInfo }}>
