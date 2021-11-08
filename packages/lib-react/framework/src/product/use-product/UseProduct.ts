@@ -56,14 +56,14 @@ export const useProduct = ({ productData, sku }: ProductProps) => {
     finalSale = undefined,
     showRfypCue = false,
     isfirst = false,
-    isDefault = false,
     isProductSoldOut = false;
+  let isDefault: boolean | undefined = false;
   const updateProductDetail = (
-    sku: any,
+    sku: ISimpleSkusEntityProps,
     isfirst: boolean,
-    isDefault?: boolean
+    defaultOne?: boolean
   ) => {
-    isDefault = isDefault;
+    isDefault = defaultOne;
     if (!sku) {
       return;
     }
@@ -147,5 +147,6 @@ export const useProduct = ({ productData, sku }: ProductProps) => {
     finalSale,
     retailPriceMax,
     wishlistId,
+    selectedSkuId: sku && sku.skuId,
   };
 };
