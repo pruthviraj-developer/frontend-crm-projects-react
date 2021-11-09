@@ -247,7 +247,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
   }, [contextData, productDetails, properties]);
 
   useEffect(() => {
-    if (productDetails && productId && productName && retailPrice && simpleSkus) {
+    if (productDetails && productId && productName) {
       gtm.trackEvent({
         event: gtm.PRODUCT_IMPRESSION,
         data: {
@@ -258,21 +258,21 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
                   id: Number(productId),
                   name: productName,
                   brand: productDetails.brandName,
-                  price: retailPrice,
+                  price: productDetails.retailPrice,
                   category: productDetails.categoryId,
                 },
               ],
             },
           },
-          productSkus: simpleSkus.map((sku: ISimpleSkusEntityProps) => sku.skuId),
+          productSkus: productDetails?.simpleSkus.map((sku: ISimpleSkusEntityProps) => sku.skuId),
           productId: Number(productId),
           productName: productName,
           productCategory: productDetails.categoryId,
-          productPrice: retailPrice,
+          productPrice: productDetails.retailPrice,
         },
       });
     }
-  }, [productDetails, productId, productName, retailPrice, simpleSkus]);
+  }, [productDetails, productId, productName]);
 
   useEffect(() => {
     if (showLoginPopup) {
