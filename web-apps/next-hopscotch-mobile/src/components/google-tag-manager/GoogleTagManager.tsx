@@ -2,6 +2,7 @@ import { useEffect, FC } from 'react';
 import { useRouter } from 'next/router';
 import * as gtm from './GTMLib';
 import { useSessionStorage, SESSION_DATA, IFunnelData, ISegmentData } from '@hs/framework';
+import { getURL } from 'next/dist/shared/lib/utils';
 const GoogleTagManager: FC<unknown> = ({ children }) => {
   const router = useRouter();
   const [, setOaData] = useSessionStorage<IFunnelData>(SESSION_DATA.OA_DATA, null);
@@ -12,6 +13,10 @@ const GoogleTagManager: FC<unknown> = ({ children }) => {
       router.events.off('routeChangeComplete', gtm.pageview);
     };
   }, [router.events]);
+
+  useEffect(() => {
+    gtm.pageview(router.asPath, { shallow: false });
+  }, []);
 
   useEffect(() => {
     if (router.asPath.indexOf('?') > -1) {

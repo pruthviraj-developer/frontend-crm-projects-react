@@ -68,6 +68,7 @@ import {
 } from '@hs/framework';
 
 import * as segment from '@/components/segment-analytic';
+import * as gtm from '@/components/google-tag-manager/GTMLib';
 import { LoginModal } from '@/components/login-modal';
 import { Layout } from '@/components/layout/Layout';
 import { ProductHead } from '@/components/header';
@@ -246,6 +247,34 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
   }, [contextData, productDetails, properties]);
 
   useEffect(() => {
+    if (productDetails && productId && productName && retailPrice && simpleSkus) {
+      gtm.trackEvent({
+        event: gtm.PRODUCT_IMPRESSION,
+        data: {
+          ecommerce: {
+            detail: {
+              products: [
+                {
+                  id: Number(productId),
+                  name: productName,
+                  brand: productDetails.brandName,
+                  price: retailPrice,
+                  category: productDetails.categoryId,
+                },
+              ],
+            },
+          },
+          productSkus: simpleSkus.map((sku: ISimpleSkusEntityProps) => sku.skuId),
+          productId: Number(productId),
+          productName: productName,
+          productCategory: productDetails.categoryId,
+          productPrice: retailPrice,
+        },
+      });
+    }
+  }, [productDetails, productId, productName, retailPrice, simpleSkus]);
+
+  useEffect(() => {
     if (showLoginPopup) {
       openLoginPopup();
     }
@@ -331,6 +360,35 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
               addFrom: 'current=' + location.pathname,
             },
             contextData,
+          });
+
+          gtm.trackEvent({
+            event: gtm.ADD_TO_CART,
+            data: {
+              ecommerce: {
+                currentCode: 'INR',
+                add: {
+                  products: [
+                    {
+                      id: Number(productId),
+                      name: productName,
+                      brand: productDetails.brandName,
+                      price: retailPrice,
+                      category: productDetails.categoryId,
+                      quantity: 1,
+                    },
+                  ],
+                },
+              },
+              category: 'Cart',
+              action: 'cart-change',
+              label: 'add-item',
+              productId: Number(productId),
+              productName: productName,
+              productCategory: productDetails.categoryId,
+              productPrice: retailPrice,
+              productSkuId: sku.skuId,
+            },
           });
           return;
         }
