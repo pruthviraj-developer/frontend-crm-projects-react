@@ -61,7 +61,8 @@ const tryLater = 'Try Later';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const queryClient = new QueryClient();
-  const productId = context.params?.urlParams?.[0] || '';
+  const productId = context.params?.urlParams?.[1] || '';
+  console.log('process.env.WEB_HOST', process.env.WEB_HOST);
   await queryClient.prefetchQuery(
     ['ProductDetail', productId],
     () => productDetailsService.getProductDetails(productId, process.env.WEB_HOST),
@@ -198,6 +199,11 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
       // });
     }
   };
+
+  // Remove
+
+  const closeLoginPopup = () => {};
+  const openLoginPopup = () => {};
 
   const [{ contextData, properties }] = useSegment();
   // const pdpTrackingData = useProductTracking({ selectedSku, productDetails });
