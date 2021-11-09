@@ -14,6 +14,8 @@ const MskuTargetDownload = React.lazy(
   () => import(/* webpackChunkName: "msku-target" */ './components/mskuTargetDownload/MskuTargetDownload'),
 );
 
+const ShipmentIdCreation = React.lazy(() => import('./components/shipmentIdCreation/ShipmentIdCreation'));
+
 const App: FC = () => {
   return (
     <div className="App">
@@ -39,6 +41,11 @@ const App: FC = () => {
                     getUrlAction={'getUrlBySheetKey'}
                     downloadOption={'Download latest file'}
                   />
+                </Suspense>
+              </Route>
+              <Route path="/shipmentIdCreation">
+                <Suspense fallback={<div>Loading...</div>}>
+                  <ShipmentIdCreation header={'ShipmentId Creation Upload'} />
                 </Suspense>
               </Route>
             </Switch>

@@ -20,6 +20,10 @@ interface IFileType {
   params: IFileParams;
 }
 
+interface IShipmentIdFileUploadType {
+  createShipmentIdTemplate?: string | Blob;
+}
+
 const getFilterData = <R>(): Promise<R> => {
   const url = '/crm-api/intranet/customduty/filterdata';
   return httpService.get<R>({ url });
@@ -61,10 +65,21 @@ const getTemplateDownloadLink = (
   return httpService.get<downloadTemplateUrlObject>({ url, params });
 };
 
+const postShipmentIdData = ({
+  createShipmentIdTemplate,
+}: IShipmentIdFileUploadType): Promise<any> => {
+  const url = '/crm-api/intranet/create/shipmentid';
+  const data = new FormData();
+  if (createShipmentIdTemplate) {
+    data.append('createShipmentIdTemplate', createShipmentIdTemplate);
+  }
+  return httpService.fileUpload<any>({ url, data });
+};
 export const financeAccountingService = {
   getFilterData,
   getDashboardData,
   getValidStatus,
   postFileData,
   getTemplateDownloadLink,
+  postShipmentIdData,
 };
