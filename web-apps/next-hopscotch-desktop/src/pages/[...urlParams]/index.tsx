@@ -5,7 +5,8 @@ import Link from 'next/link';
 import React, { useState, useEffect, useRef, ReactElement, useContext } from 'react';
 import { useModal } from 'react-hooks-use-modal';
 import { toast } from 'react-toastify';
-import { dehydrate, QueryClient, useQuery } from 'react-query';
+import { dehydrate, useQuery } from 'react-query';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
 import {
   AddToCart,
@@ -39,18 +40,6 @@ import {
   CartLinkText,
 } from '@/styles';
 
-const SizeChartPopupComponent = dynamic(() => import('../../../components/size-chart/SizeChart'), {
-  ssr: false,
-});
-
-const SizeSelectorPopupComponent = dynamic(() => import('../../../components/size-selector/SizeSelector'), {
-  ssr: false,
-});
-
-const PinCodePopupComponent = dynamic(() => import('../../../components/pin-code/PinCode'), {
-  ssr: false,
-});
-
 import {
   useRecommendation,
   IRecommendedProducts,
@@ -67,11 +56,6 @@ import {
   UserInfoContext,
   LOCAL_DATA,
 } from '@hs/framework';
-
-import * as segment from '@/components/segment-analytic';
-import * as gtm from '@/components/google-tag-manager/GTMLib';
-import { LoginModal } from '@/components/login-modal';
-import { Layout } from '@/components/layout/Layout';
 
 const tryLater = 'Try Later';
 
@@ -116,27 +100,21 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
   const { updateCartItemQty } = useContext(CartItemQtyContext);
   const { showLoginPopup } = useContext(LoginContext);
   const { userInfo } = useContext(UserInfoContext);
-  const [LoginPopupModal, openLoginPopup, closeLoginPopup, isLoginPopupOpen] = useModal('root', {
-    preventScroll: false,
-    closeOnOverlayClick: true,
-  });
 
-  const [SizeChartPopupModal, openSizeChartPopup, closeSizeChartPopup, isSizeChartPopupOpen] = useModal('root', {
-    preventScroll: false,
-    closeOnOverlayClick: true,
-  });
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            retry: false,
+            refetchOnWindowFocus: false,
+            staleTime: Infinity,
+          },
+        },
+      }),
+  );
 
-  const [SizeSelectorPopupModal, openSizeSelector, closeSizeSelector, isSizeSelectorPopupOpen] = useModal('root', {
-    preventScroll: false,
-    closeOnOverlayClick: true,
-  });
-
-  const [PinCodePopupModel, openPinCodePopup, closePinCodePopup, isPinCodePopupOpen] = useModal('root', {
-    preventScroll: false,
-    closeOnOverlayClick: true,
-  });
-
-  const { data: productData } = useQuery<IProductDetails>(
+  const { data: productDetails } = useQuery<IProductDetails>(
     ['ProductDetail', productId],
     () => productDetailsService.getProductDetails(productId),
     {
@@ -161,9 +139,10 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
     },
   );
 
-  const [selectedSku, setSelectedSku] = useState<ISimpleSkusEntityProps | any>();
+  const [skuValue, setSku] = useState<ISimpleSkusEntityProps | any>();
   const {
     productName,
+    selectedSku,
     retailPrice,
     regularPrice,
     retailPriceMax,
@@ -175,9 +154,8 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
     simpleSkus,
     showRfypCue,
     wishlistId,
-    isProductSoldOut,
     ...product
-  } = useProduct({ productData: productData, selectedSku: selectedSku });
+  } = useProduct({ productData: productDetails, sku: skuValue });
 
   const { canShow: showSimilarProducts, ...similarProducts } = useRecommendation({
     section: 'RFYP',
@@ -196,28 +174,28 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
   });
 
   const { isOneSize } = useOneSize({
-    productData: productData,
+    productData: productDetails,
   });
 
   const deliveryDetailsData = useDeliveryDetails({
-    selectedSku: selectedSku,
-    productData: productData,
+    selectedSku: skuValue,
+    productData: productDetails,
   });
 
   const goToProductRecommendation = (fromLocation: string) => {
     if (fromLocation) {
       const currentRefElement = showRFYP ? recommendedProductsLink : similarProductsLink;
       currentRefElement?.current?.scrollIntoView({ behavior: 'smooth' });
-      segment.trackEvent({
-        evtName: segment.PDP_TRACKING_EVENTS.PDP_SEE_SIMILAR_CLICKED,
-        properties: {
-          ...properties,
-          reco_type: 'Similar products',
-          product_id: Number(productId),
-          from_location: fromLocation,
-        },
-        contextData,
-      });
+      // segment.trackEvent({
+      //   evtName: segment.PDP_TRACKING_EVENTS.PDP_SEE_SIMILAR_CLICKED,
+      //   properties: {
+      //     ...properties,
+      //     reco_type: 'Similar products',
+      //     product_id: Number(productId),
+      //     from_location: fromLocation,
+      //   },
+      //   contextData,
+      // });
     }
   };
 
@@ -233,50 +211,18 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
   };
 
   useEffect(() => {
-    setSelectedSku(null);
-  }, [productId]);
-
-  useEffect(() => {
-    if (contextData && properties && productData) {
-      segment.trackEvent({
-        evtName: segment.PDP_TRACKING_EVENTS.PRODUCT_VIEWED,
-        properties: {
-          ...properties,
-          ...getProductTrackingData({ productData: productData }),
-          addFrom: 'current=' + location.pathname,
-        },
-        contextData,
-      });
+    if (contextData && properties && productDetails) {
+      // segment.trackEvent({
+      //   evtName: segment.PDP_TRACKING_EVENTS.PRODUCT_VIEWED,
+      //   properties: {
+      //     ...properties,
+      //     ...getProductTrackingData({ productDetails }),
+      //     addFrom: 'current=' + location.pathname,
+      //   },
+      //   contextData,
+      // });
     }
-  }, [contextData, productData, properties]);
-
-  useEffect(() => {
-    if (productData && productId && productName) {
-      gtm.trackEvent({
-        event: gtm.PRODUCT_IMPRESSION,
-        data: {
-          ecommerce: {
-            detail: {
-              products: [
-                {
-                  id: Number(productId),
-                  name: productName,
-                  brand: productData.brandName,
-                  price: productData.retailPrice,
-                  category: productData.categoryId,
-                },
-              ],
-            },
-          },
-          productSkus: productData?.simpleSkus.map((sku: ISimpleSkusEntityProps) => sku.skuId),
-          productId: Number(productId),
-          productName: productName,
-          productCategory: productData.categoryId,
-          productPrice: productData.retailPrice,
-        },
-      });
-    }
-  }, [productData, productId, productName]);
+  }, [contextData, productDetails, properties]);
 
   useEffect(() => {
     if (showLoginPopup) {
@@ -325,7 +271,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
                 max-width="100%"
                 draggable={false}
                 unoptimized
-                src={`${productData?.imgurls?.[0] && productData.imgurls[0].imgUrlThumbnail}`}
+                src={`${productDetails?.imgurls?.[0] && productDetails.imgurls[0].imgUrlThumbnail}`}
               />
               <CartNotificationDetails>
                 {!isOneSize && <CartHeader>{`${skuValue?.attrs[0]?.name} : ${skuValue?.attrs[0]?.value}`}</CartHeader>}
@@ -355,45 +301,16 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
             toastId: 'cartQuantiyChangeToaster',
             bodyClassName: 'cartQuantiyChangeBodyToaster',
           });
-          segment.trackEvent({
-            evtName: segment.PDP_TRACKING_EVENTS.ADDED_TO_CART,
-            properties: {
-              ...properties,
-              ...getProductTrackingData({ productData: productData, selectedSku: sku }),
-              atc_user,
-              addFrom: 'current=' + location.pathname,
-            },
-            contextData,
-          });
-
-          gtm.trackEvent({
-            event: gtm.ADD_TO_CART,
-            data: {
-              ecommerce: {
-                currentCode: 'INR',
-                add: {
-                  products: [
-                    {
-                      id: Number(productId),
-                      name: productName,
-                      brand: productData?.brandName,
-                      price: retailPrice,
-                      category: productData?.categoryId,
-                      quantity: 1,
-                    },
-                  ],
-                },
-              },
-              category: 'Cart',
-              action: 'cart-change',
-              label: 'add-item',
-              productId: Number(productId),
-              productName: productName,
-              productCategory: productData?.categoryId,
-              productPrice: retailPrice,
-              productSkuId: sku.skuId,
-            },
-          });
+          // segment.trackEvent({
+          //   evtName: segment.PDP_TRACKING_EVENTS.ADDED_TO_CART,
+          //   properties: {
+          //     ...properties,
+          //     ...getProductTrackingData({ productDetails, selectedSku: sku }),
+          //     atc_user,
+          //     addFrom: 'current=' + location.pathname,
+          //   },
+          //   contextData,
+          // });
           return;
         }
       } catch (error: any) {
@@ -403,12 +320,20 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
     })();
   };
 
+  // remove
+  const closePinCodePopup = () => {};
+  const openPinCodePopup = () => {};
+  const openSizeSelector = () => {};
+  const openSizeChartPopup = () => {};
+
+  // end
+
   const addProductToCart = () => {
-    if (selectedSku) {
-      addToCart(selectedSku);
+    if (skuValue) {
+      addToCart(skuValue);
     } else if (simpleSkus.length === 1) {
       const sku = simpleSkus[0];
-      setSelectedSku(sku);
+      setSku(sku);
       addToCart(sku);
     } else {
       openSizeSelector();
@@ -416,17 +341,17 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
   };
 
   const onSizeSelect = (sku: ISimpleSkusEntityProps, fromLocation: string) => {
-    segment.trackEvent({
-      evtName: segment.PDP_TRACKING_EVENTS.SIZE_CLICKED,
-      properties: {
-        ...properties,
-        ...getProductTrackingData({ productData: productData, selectedSku: sku }),
-        addFrom: 'current=' + location.pathname,
-        from_location: fromLocation,
-      },
-      contextData,
-    });
-    setSelectedSku(sku);
+    // segment.trackEvent({
+    //   evtName: segment.PDP_TRACKING_EVENTS.SIZE_CLICKED,
+    //   properties: {
+    //     ...properties,
+    //     ...getProductTrackingData({ productDetails, selectedSku: sku }),
+    //     addFrom: 'current=' + location.pathname,
+    //     from_location: fromLocation,
+    //   },
+    //   contextData,
+    // });
+    setSku(sku);
   };
 
   const showErrorNotification = (message: string) => {
@@ -466,10 +391,10 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
   };
 
   const addToWishlistAfterModalClose = () => {
-    let retailPrice = selectedSku?.retailPrice || productData?.retailPrice || 0;
+    let retailPrice = skuValue?.retailPrice || productDetails?.retailPrice || 0;
     const wishlistItem = {
       sku: selectedSkuId || '',
-      productId: productData?.id,
+      productId: productDetails?.id,
       price: retailPrice,
       attribution: {
         // source: oa_data['source'],
@@ -526,139 +451,95 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
 
   return (
     <>
-      {productData && productData.action === LOCAL_DATA.SUCCESS && (
-        <>
-          <ProductHead {...{ productName, retailPrice }}></ProductHead>
-          <ProductCarousel
-            {...{
-              showArrows: false,
-              autoPlay: true,
-              draggable: false,
-              focusOnSelect: false,
-              renderButtonGroupOutside: false,
-              renderDotsOutside: false,
-              slidesToSlide: 1,
-              swipeable: false,
-              showDots: true,
-              imgUrls: productData.imgurls,
-              goToProductRecommendation,
-            }}
-          ></ProductCarousel>
-          <ProductDetailsWrapper>
-            <ProductNamePrice
+      <QueryClientProvider client={queryClient}>
+        {productDetails && productDetails.action === LOCAL_DATA.SUCCESS && (
+          <>
+            <ProductHead {...{ productName, retailPrice }}></ProductHead>
+            <ProductCarousel
               {...{
-                productName,
-                isProductSoldOut,
-                wishlistId: updatedWishListId === undefined ? wishlistId : updatedWishListId,
-                retailPrice,
-                retailPriceMax,
-                selectedSku: selectedSku,
-                regularPrice,
-                discount,
-                addToWishlist,
-                deleteFromWishlist,
+                showArrows: false,
+                autoPlay: true,
+                draggable: false,
+                focusOnSelect: false,
+                renderButtonGroupOutside: false,
+                renderDotsOutside: false,
+                slidesToSlide: 1,
+                swipeable: false,
+                showDots: true,
+                imgUrls: productDetails.imgurls,
+                goToProductRecommendation,
               }}
-            ></ProductNamePrice>
-            <SizeAndChartLabels
-              {...{
-                isOneSize,
-                hasSizeChart: productData.hasSizeChart,
-                qtyLeft,
-                simpleSkus,
-                onSizeChartClick: openSizeChartPopup,
-              }}
-            ></SizeAndChartLabels>
-            {!isOneSize && (
-              <CustomSizePicker
+            ></ProductCarousel>
+            <ProductDetailsWrapper>
+              <ProductNamePrice
                 {...{
+                  productName,
+                  isProductSoldOut: !!productDetails.isProductSoldOut,
+                  wishlistId: updatedWishListId === undefined ? wishlistId : updatedWishListId,
+                  retailPrice,
+                  retailPriceMax,
+                  selectedSku: skuValue,
+                  regularPrice,
+                  discount,
+                  addToWishlist,
+                  deleteFromWishlist,
+                }}
+              ></ProductNamePrice>
+              <SizeAndChartLabels
+                {...{
+                  isOneSize,
+                  hasSizeChart: productDetails.hasSizeChart,
+                  qtyLeft,
                   simpleSkus,
-                  selectedSku: selectedSku,
-                  onSizeSelect,
+                  onSizeChartClick: openSizeChartPopup,
                 }}
-              ></CustomSizePicker>
-            )}
-            {showRfypCue && showRFYP && (
-              <RecommendedProductsLinks {...{ isProductSoldOut, goToProductRecommendation }}></RecommendedProductsLinks>
-            )}
-            <DeliveryDetails
-              {...{
-                ...deliveryDetailsData,
-                selectedSku: selectedSku,
-                ...deliveryDetails,
-                openPinCodePopup,
-                openSizeSelector,
-              }}
-            ></DeliveryDetails>
-            {productData.id && (
-              <Accordion {...{ ...product, isPresale, simpleSkus, selectedSku: selectedSku }}></Accordion>
-            )}
-
-            {showRFYP && (
-              <div ref={recommendedProductsLink}>
-                <RecommendedProducts {...recommendedForYou}></RecommendedProducts>
-              </div>
-            )}
-
-            {showSimilarProducts && (
-              <div ref={similarProductsLink}>
-                <RecommendedProducts {...similarProducts}></RecommendedProducts>
-              </div>
-            )}
-          </ProductDetailsWrapper>
-          <AddToCart {...{ show: true, disabled: false, addProductToCart }}></AddToCart>
-          <PinCodePopupModel>
-            {isPinCodePopupOpen && (
-              <PinCodePopupComponent
+              ></SizeAndChartLabels>
+              {!isOneSize && (
+                <CustomSizePicker
+                  {...{
+                    simpleSkus,
+                    selectedSku: skuValue,
+                    onSizeSelect,
+                  }}
+                ></CustomSizePicker>
+              )}
+              {showRfypCue && showRFYP && (
+                <RecommendedProductsLinks
+                  {...{ isProductSoldOut: !!productDetails.isProductSoldOut, goToProductRecommendation }}
+                ></RecommendedProductsLinks>
+              )}
+              <DeliveryDetails
                 {...{
-                  productId: productData.id,
-                  pinCode: productData.pinCode,
-                  closePinCodePopup: updateAndClosePinCodePopup,
+                  ...deliveryDetailsData,
+                  selectedSku: skuValue,
+                  ...deliveryDetails,
+                  openPinCodePopup,
+                  openSizeSelector,
                 }}
-              />
-            )}
-          </PinCodePopupModel>
-        </>
-      )}
-      <SizeChartPopupModal>
-        {isSizeChartPopupOpen && productData && (
-          <SizeChartPopupComponent
-            {...{
-              id: productData.id,
-              productName: productName,
-              onClickClose: closeSizeChartPopup,
-            }}
-          ></SizeChartPopupComponent>
-        )}
-      </SizeChartPopupModal>
+              ></DeliveryDetails>
+              {productDetails.id && (
+                <Accordion {...{ ...product, isPresale, simpleSkus, selectedSku: skuValue }}></Accordion>
+              )}
 
-      <SizeSelectorPopupModal>
-        {isSizeSelectorPopupOpen && (
-          <SizeSelectorPopupComponent
-            {...{
-              closePopup: closeSizeSelector,
-              showRfypCue,
-              showAddToCart: true,
-              onSizeChartClick: openSizeChartPopup,
-              simpleSkus,
-              selectedSku: selectedSku,
-              onSizeSelect,
-              goToProductRecommendation,
-              addProductToCart,
-            }}
-          ></SizeSelectorPopupComponent>
-        )}
-      </SizeSelectorPopupModal>
+              {showRFYP && (
+                <div ref={recommendedProductsLink}>
+                  <RecommendedProducts {...recommendedForYou}></RecommendedProducts>
+                </div>
+              )}
 
-      <LoginPopupModal>
-        {isLoginPopupOpen && <LoginModal {...{ closeLoginPopup: closeLoginModalPopup }}></LoginModal>}
-      </LoginPopupModal>
+              {showSimilarProducts && (
+                <div ref={similarProductsLink}>
+                  <RecommendedProducts {...similarProducts}></RecommendedProducts>
+                </div>
+              )}
+            </ProductDetailsWrapper>
+            <AddToCart {...{ show: true, disabled: false, addProductToCart }}></AddToCart>
+          </>
+        )}
+      </QueryClientProvider>
       {/* <pre style={{ width: '60%', overflowX: 'scroll' }}>{JSON.stringify(productDetails, null, 4)}</pre> */}
     </>
   );
 };
 
 export default Product;
-
-Product.getLayout = function getLayout(page: ReactElement) {
-  return <Layout>{page}</Layout>;
-};
