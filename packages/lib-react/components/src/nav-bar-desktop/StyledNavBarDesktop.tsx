@@ -11,6 +11,7 @@ const NavBarWrapper = styled.div`
 const HopscotchImage = styled.div`
   width: 112px;
   height: 100%;
+  margin: 0 28px 0 12px;
 `;
 
 const Link = styled('a')`
@@ -29,7 +30,8 @@ const Link = styled('a')`
 const RightContent = styled.div`
   display: flex;
   justify-content: space-between;
-  width: 100%;
+  padding: 0 ${typography.size.s5}px;
+  height: 56px;
 `;
 
 const CartIconWrapper = styled.div`
@@ -63,11 +65,10 @@ const IconWrapper = styled(SvgIcon)`
 const NavigationIconsWrapper = styled.div`
   display: flex;
   align-items: center;
-  margin-top: 4px;
 `;
 
 const NavLinkWrapper = styled.div`
-  padding-top: 1px;
+  display: flex;
 `;
 
 const NotificationBarLinkWrapper = styled.div`
@@ -88,7 +89,7 @@ const NotificationBar = styled.div`
   background: ${primaryColor[100]};
   color: ${Colors.WHITE};
   font-size: ${typography.size.s1}px;
-  line-height: ${typography.size.s3};
+  line-height: ${typography.size.s3}px;
   font-weight: ${typography.weight.regular};
   display: flex;
   justify-content: end;

@@ -7,4 +7,6 @@ export interface INextNavLinkProps {
   margin?: string;
   queryParams?: any;
   fontWeight?: string;
+  fontSize?: string;
+  lineHeight?: string;
 }

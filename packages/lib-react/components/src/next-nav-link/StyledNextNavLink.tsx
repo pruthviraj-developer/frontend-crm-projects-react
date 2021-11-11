@@ -7,14 +7,16 @@ const LinkTag = styled.a<{
   padding: string;
   margin: string;
   fontweight: string;
+  fontSize: string;
+  lineHeight: string;
 }>`
   color: ${(props) => props.color};
   display: ${(props) => props.display};
   font-weight: ${typography.weight.medium};
   padding: ${(props) => props.padding};
   margin: ${(props) => props.margin || `${typography.size.s3}px 0 0 0`};
-  font-size: ${typography.size.s1}px;
-  line-height: 1.33;
+  font-size: ${(props) => props.fontSize};
+  line-height: ${(props) => props.lineHeight};
   letter-spacing: 0;
   text-decoration: none;
   font-weight: ${(props) => props.fontweight};
