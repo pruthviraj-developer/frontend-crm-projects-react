@@ -3,7 +3,6 @@ import { globalStyles, productCarouselStyles } from '@/styles';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Hydrate } from 'react-query/hydration';
 import GoogleTagManager from '@/components/google-tag-manager/GoogleTagManager';
-// import { ReactQueryDevtools } from 'react-query/devtools';
 import Head from 'next/head';
 import { ToastContainer } from 'react-toastify';
 import { AppPropsWithLayout } from '@/types';
@@ -42,7 +41,6 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
             </UserInfoProvider>
           </GoogleTagManager>
         </Hydrate>
-        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
       </QueryClientProvider>
       <ToastContainer
         style={{ fontFamily: 'inherit' }}
