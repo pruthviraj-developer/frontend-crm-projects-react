@@ -75,9 +75,16 @@ export const NavBarDesktop: FC<INavBarDesktopProps> = ({
               line-height="16px"
               padding="20px 0 18px 0"
               color="#fff"
-              text-align="center"
             />
-            <FilteredBy>Boys 1-5 years</FilteredBy>
+            <FilteredBy>
+              <NextNavLink
+                href="/?funnel=Discover&amp;from_screen=product&amp;ref=navigation&amp;department=null&amp;customTileId=null"
+                name="Boys 1-5 years"
+                display="inline-block"
+                margin="0"
+                padding="0"
+              />
+            </FilteredBy>
           </FilterWrapper>
           <NextNavLink
             href="/moments?funnel=Moments&amp;from_screen=product"
@@ -88,7 +95,6 @@ export const NavBarDesktop: FC<INavBarDesktopProps> = ({
             line-height="16px"
             padding="20px 0 18px 0"
             color="#fff"
-            text-align="center"
           />
           <NextNavLink
             href="/blog/"
@@ -99,7 +105,6 @@ export const NavBarDesktop: FC<INavBarDesktopProps> = ({
             line-height="16px"
             padding="20px 0 18px 0"
             color="#fff"
-            text-align="center"
           />
         </NavLinkWrapper>
         <NavigationIconsWrapper>

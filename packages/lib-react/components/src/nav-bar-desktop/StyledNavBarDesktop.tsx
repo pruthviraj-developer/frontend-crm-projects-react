@@ -31,13 +31,13 @@ const RightContent = styled.div`
   display: flex;
   justify-content: space-between;
   padding: 0 ${typography.size.s5}px;
-  height: 56px;
+  height: 54px;
   margin-right: 10px;
 `;
 
 const CartIconWrapper = styled.div`
   height: 52px;
-  margin-right: 7px;
+  margin-right: 6px;
   position: relative;
 `;
 
@@ -100,20 +100,19 @@ const NotificationBar = styled.div`
 `;
 
 const FilteredBy = styled.span`
+  color: #fff;
+  opacity: 0.8;
+  width: 100px;
   cursor: pointer;
   font-size: 12px;
-  font-weight: 600;
-  text-align: center;
-  display: inline-block;
-  position: relative;
-  color: #fff;
-  border-radius: 14px;
-  background-color: rgba(0, 0, 0, 0.12);
-  opacity: 0.8;
-  margin-left: 4px;
+  font-weight: 400;
   line-height: 28px;
-  width: 100px;
+  border-radius: 14px;
   margin-left: 4px;
+  text-align: center;
+  position: relative;
+  display: inline-block;
+  background-color: rgba(0, 0, 0, 0.12);
 `;
 
 const FilterWrapper = styled.div`
