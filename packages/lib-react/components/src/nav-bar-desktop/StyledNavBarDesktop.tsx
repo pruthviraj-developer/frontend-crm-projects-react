@@ -32,6 +32,7 @@ const RightContent = styled.div`
   justify-content: space-between;
   padding: 0 ${typography.size.s5}px;
   height: 56px;
+  margin-right: 10px;
 `;
 
 const CartIconWrapper = styled.div`
@@ -69,6 +70,7 @@ const NavigationIconsWrapper = styled.div`
 
 const NavLinkWrapper = styled.div`
   display: flex;
+  align-items: center;
 `;
 
 const NotificationBarLinkWrapper = styled.div`
@@ -97,7 +99,30 @@ const NotificationBar = styled.div`
   padding: 0 ${typography.size.s24}px;
 `;
 
+const FilteredBy = styled.span`
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  display: inline-block;
+  position: relative;
+  color: #fff;
+  border-radius: 14px;
+  background-color: rgba(0, 0, 0, 0.12);
+  opacity: 0.8;
+  margin-left: 4px;
+  line-height: 28px;
+  width: 100px;
+  margin-left: 4px;
+`;
+
+const FilterWrapper = styled.div`
+  margin: 0 32px 0 0;
+`;
+
 export {
+  FilteredBy,
+  FilterWrapper,
   NavBarWrapper,
   NavLinkWrapper,
   NavIconWrapper,

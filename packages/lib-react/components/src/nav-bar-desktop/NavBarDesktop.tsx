@@ -11,6 +11,8 @@ import {
   CartIconWrapper,
   CartIconQuantity,
   IconWrapper,
+  FilteredBy,
+  FilterWrapper,
 } from './StyledNavBarDesktop';
 import { INavBarDesktopProps } from './INavBarDesktop';
 
@@ -63,17 +65,20 @@ export const NavBarDesktop: FC<INavBarDesktopProps> = ({
               <HopScotchIcon></HopScotchIcon>
             </HopscotchImage>
           </Link>
-          <NextNavLink
-            href="/?funnel=Discover&amp;from_screen=product"
-            name="Discover"
-            display="inline-block"
-            margin="0 32px 0 0"
-            fontSize="14px"
-            line-height="16px"
-            padding="20px 0 18px 0"
-            color="#fff"
-            text-align="center"
-          />
+          <FilterWrapper>
+            <NextNavLink
+              href="/?funnel=Discover&amp;from_screen=product"
+              name="Discover"
+              display="inline-block"
+              margin="0"
+              fontSize="14px"
+              line-height="16px"
+              padding="20px 0 18px 0"
+              color="#fff"
+              text-align="center"
+            />
+            <FilteredBy>Boys 1-5 years</FilteredBy>
+          </FilterWrapper>
           <NextNavLink
             href="/moments?funnel=Moments&amp;from_screen=product"
             name="Moments"
