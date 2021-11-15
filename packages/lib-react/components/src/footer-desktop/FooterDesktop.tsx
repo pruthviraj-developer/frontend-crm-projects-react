@@ -36,46 +36,8 @@ import {
 } from './StyledFooterDesktop';
 import { NextNavLink } from '../next-nav-link';
 
-const POPULAR_URL = [
-  { displayName: 'Boys Sherwani', link: '/products/15172/boys-sherwani' },
-  {
-    displayName: ' Girls Party Wear Dresses',
-    link: '/products/15864/girls-party-wear-dresses',
-  },
-  { displayName: 'Girls Jackets', link: '/products/15935/girls-jackets' },
-  { displayName: ' Girls Frocks', link: '/products/15936/girls-frocks' },
-  { displayName: 'Boys Jackets', link: '/products/15966/boys-jackets' },
-  { displayName: 'Girls Leggings', link: '/products/15971/girls-leggings' },
-  {
-    displayName: 'Girls Casual Dresses',
-    link: '/products/16270/girls-casual-dresses',
-  },
-  { displayName: 'Girls Gowns', link: '/products/16320/girls-gowns' },
-  {
-    displayName: 'Baby Girl Onesies ',
-    link: '/products/16415/baby-girl-onesies',
-  },
-  {
-    displayName: 'Baby Boy Onesies ',
-    link: '/products/16416/baby-boy-onesies',
-  },
-  {
-    displayName: 'Baby Girls Rompers',
-    link: '/products/16417/baby-girl-rompers',
-  },
-  { displayName: 'Baby Boy Rompers', link: '/products/16418/baby-boy-rompers' },
-  { displayName: 'Baby Clothes ', link: '/baby' },
-  { displayName: 'Girls Clothes ', link: '/girls' },
-  { displayName: 'Boys Clothes ', link: '/boys' },
-  { displayName: 'Boys Tshirts ', link: '/clothing/boys/tshirts' },
-  { displayName: 'Girls Tops ', link: '/clothing/girls/tops' },
-  { displayName: 'Boys Jeans', link: '/clothing/boys/jeans' },
-  { displayName: 'Girls Jeans ', link: '/clothing/girls/jeans' },
-  { displayName: 'Boys Shirts ', link: '/clothing/boys/shirts' },
-  { displayName: 'Girls Tshirts ', link: '/clothing/girls/tshirts' },
-  { displayName: 'Girls Dresses', link: '/clothing/girls/dresses' },
-];
-// eslint-disable-next-line no-empty-pattern
+import { POPULAR_SEARCH_URLS } from '@hs/utils';
+
 export const FooterDesktop: FC = () => {
   const currentYear = new Date().getFullYear();
   return (
@@ -83,11 +45,13 @@ export const FooterDesktop: FC = () => {
       <PopularSearches>
         <PopularSearchesTitle>Popular Searches</PopularSearchesTitle>
         <PopularSearchesLinks>
-          {POPULAR_URL.map((data: IPopularSearchUrlProps, index: number) => (
-            <PopularSearchesLink key={index} href={data.link}>
-              {data.displayName}
-            </PopularSearchesLink>
-          ))}
+          {POPULAR_SEARCH_URLS.map(
+            (data: IPopularSearchUrlProps, index: number) => (
+              <PopularSearchesLink key={index} href={data.link}>
+                {data.displayName}
+              </PopularSearchesLink>
+            )
+          )}
         </PopularSearchesLinks>
       </PopularSearches>
       <FooterSection>

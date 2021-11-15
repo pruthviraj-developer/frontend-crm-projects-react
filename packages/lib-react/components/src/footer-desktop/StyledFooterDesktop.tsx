@@ -69,6 +69,7 @@ const FooterLogoIcon = styled(SvgIcon)`
 const FooterLogoIconWrapper = styled.div`
   margin-right: 16px;
   display: inline-block;
+  vertical-align: sub;
 `;
 
 const FooterBlockTitle = styled.h5`
@@ -79,7 +80,7 @@ const FooterBlockTitle = styled.h5`
 const ConnectToApps = styled.div`
   line-height: 16px;
   margin: 8px 0 0 0;
-  color: ${secondaryColor[300]}px;
+  color: ${secondaryColor[300]};
 `;
 
 const LinkIcons = styled('a')`
