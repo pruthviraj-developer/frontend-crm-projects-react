@@ -9,6 +9,7 @@ const LinkTag = styled.a<{
   fontweight: string;
   fontSize: string;
   lineHeight: string;
+  hoverColor?: string;
 }>`
   color: ${(props) => props.color};
   display: ${(props) => props.display};
@@ -20,6 +21,9 @@ const LinkTag = styled.a<{
   letter-spacing: 0;
   text-decoration: none;
   font-weight: ${(props) => props.fontweight};
+  &:hover {
+    color: ${(props) => props.hoverColor || props.color};
+  }
 `;
 
 export { LinkTag };
