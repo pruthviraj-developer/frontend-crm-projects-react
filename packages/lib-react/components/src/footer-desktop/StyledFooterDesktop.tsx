@@ -23,10 +23,29 @@ const FooterBlock = styled.div`
   height: 168px;
   &:hover {
     background: #f9f9f9;
+    a {
+      color: #ed54a4;
+    }
   }
-  &:hover a {
-    color: #ed54a4;
-  }
+`;
+
+const StyledIcon = styled(SvgIcon)`
+  max-width: ${typography.size.s24}px;
+`;
+
+const ConnectToApps = styled.div`
+  line-height: 16px;
+  margin: 8px 0 0 0;
+  color: ${secondaryColor[300]};
+`;
+
+const DownloadIcon = styled(SvgIcon)`
+  margin: 0 5px;
+  max-width: ${typography.size.s24}px;
+`;
+
+const FooterLogoIcon = styled(SvgIcon)`
+  max-width: 100%;
 `;
 
 const FooterLinks = styled.ul`
@@ -58,14 +77,6 @@ const Copyright = styled.div`
   line-height: 11px;
 `;
 
-const StyledIcon = styled(SvgIcon)`
-  max-width: ${typography.size.s24}px;
-`;
-
-const FooterLogoIcon = styled(SvgIcon)`
-  max-width: 100%;
-`;
-
 const FooterLogoIconWrapper = styled.div`
   margin-right: 16px;
   display: inline-block;
@@ -77,21 +88,10 @@ const FooterBlockTitle = styled.h5`
   font-weight: ${typography.weight.medium};
 `;
 
-const ConnectToApps = styled.div`
-  line-height: 16px;
-  margin: 8px 0 0 0;
-  color: ${secondaryColor[300]};
-`;
-
 const LinkIcons = styled('a')`
   padding: 0;
   margin: 0 4px;
   display: inline-block;
-`;
-
-const DownloadIcon = styled(SvgIcon)`
-  margin: 0 5px;
-  max-width: ${typography.size.s24}px;
 `;
 
 const PopularSearches = styled.section`

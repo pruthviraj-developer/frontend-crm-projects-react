@@ -56,9 +56,7 @@ export const FooterDesktop: FC = () => {
       </PopularSearches>
       <FooterSection>
         <FooterBlock>
-          <div>
-            <StyledIcon icon={InfoIcon}></StyledIcon>
-          </div>
+          <StyledIcon icon={InfoIcon}></StyledIcon>
           <FooterBlockTitle>Need help?</FooterBlockTitle>
           <NextNavLink
             href="/help"
@@ -73,9 +71,7 @@ export const FooterDesktop: FC = () => {
           />
         </FooterBlock>
         <FooterBlock>
-          <div>
-            <StyledIcon icon={MailIcon}></StyledIcon>
-          </div>
+          <StyledIcon icon={MailIcon}></StyledIcon>
           <FooterBlockTitle>24x7 support</FooterBlockTitle>
           <NextNavLink
             href="mailto:wecare@hopscotch.in"
@@ -90,9 +86,7 @@ export const FooterDesktop: FC = () => {
           />
         </FooterBlock>
         <FooterBlock>
-          <div>
-            <StyledIcon icon={HsDarkIcon}></StyledIcon>
-          </div>
+          <StyledIcon icon={HsDarkIcon}></StyledIcon>
           <FooterBlockTitle>Download our apps</FooterBlockTitle>
           <ConnectToApps>
             <LinkIcons
@@ -110,9 +104,7 @@ export const FooterDesktop: FC = () => {
           </ConnectToApps>
         </FooterBlock>
         <FooterBlock>
-          <div>
-            <StyledIcon icon={ThumbsupIcon}></StyledIcon>
-          </div>
+          <StyledIcon icon={ThumbsupIcon}></StyledIcon>
           <FooterBlockTitle>Connect with us</FooterBlockTitle>
           <ConnectToApps>
             <LinkIcons
