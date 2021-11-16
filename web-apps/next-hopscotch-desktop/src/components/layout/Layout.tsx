@@ -1,4 +1,4 @@
-import { Footer } from '@hs/components';
+import { FooterDesktop, NavBarDesktop } from '@hs/components';
 import Head from 'next/head';
 // import dynamic from 'next/dynamic';
 import { FC } from 'react';
@@ -11,14 +11,15 @@ export const Layout: FC<unknown> = ({ children }) => {
   //   preventScroll: false,
   //   closeOnOverlayClick: true,
   // });
+  const openSearchPopup = () => {};
   return (
     <>
       <Head>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {/* <NavBar showSearchPopup={openSearchPopup}></NavBar> */}
+      <NavBarDesktop showSearchPopup={openSearchPopup}></NavBarDesktop>
       <main>{children}</main>
-      <Footer />
+      <FooterDesktop />
       {/* <SearchPopupModal>
         {isSearchPopupOpen && <SearchPopupComponent {...{ close: closeSearchPopup }}></SearchPopupComponent>}
       </SearchPopupModal> */}

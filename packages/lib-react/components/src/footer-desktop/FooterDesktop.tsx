@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { IPopularSearchUrlProps } from './IFooterDesktop';
+import { IPopularSearchUrlDeskTopProps } from './IFooterDesktop';
 import {
   AppleIcon,
   PlayIcon,
@@ -46,7 +46,7 @@ export const FooterDesktop: FC = () => {
         <PopularSearchesTitle>Popular Searches</PopularSearchesTitle>
         <PopularSearchesLinks>
           {POPULAR_SEARCH_URLS.map(
-            (data: IPopularSearchUrlProps, index: number) => (
+            (data: IPopularSearchUrlDeskTopProps, index: number) => (
               <PopularSearchesLink key={index} href={data.link}>
                 {data.displayName}
               </PopularSearchesLink>

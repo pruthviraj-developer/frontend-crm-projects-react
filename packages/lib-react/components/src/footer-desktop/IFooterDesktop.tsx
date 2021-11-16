@@ -1,8 +1,8 @@
 // export interface IFooterProps {
-//   urls: IPopularSearchUrlProps[];
+//   urls: IPopularSearchUrlDeskTopProps[];
 // }
 
-export interface IPopularSearchUrlProps {
+export interface IPopularSearchUrlDeskTopProps {
   displayName: string;
   link: string;
 }

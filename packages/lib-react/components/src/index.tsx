@@ -15,3 +15,7 @@ export * from './add-to-cart';
 export * from './size-selector-popup';
 export * from './size-chart-popup';
 export * from './header';
+
+//  desktop components
+export * from './nav-bar-desktop';
+export * from './footer-desktop';

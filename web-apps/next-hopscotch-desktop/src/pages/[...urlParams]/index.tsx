@@ -7,6 +7,7 @@ import { useModal } from 'react-hooks-use-modal';
 import { toast } from 'react-toastify';
 import { dehydrate, useQuery } from 'react-query';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { Layout } from '@/components/layout/Layout';
 
 import {
   AddToCart,
@@ -549,3 +550,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
 };
 
 export default Product;
+
+Product.getLayout = function getLayout(page: ReactElement) {
+  return <Layout>{page}</Layout>;
+};
