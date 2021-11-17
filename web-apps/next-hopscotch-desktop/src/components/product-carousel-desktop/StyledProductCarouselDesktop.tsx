@@ -61,7 +61,6 @@ const TransparentImgOverlay = styled.div`
   position: absolute;
   top: 0;
   left: 0;
-  border: 1px solid #e6e6e6;
 `;
 
 export {
