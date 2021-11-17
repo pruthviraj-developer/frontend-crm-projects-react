@@ -10,9 +10,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { Layout } from '@/components/layout/Layout';
 
 import {
-  AddToCart,
   Accordion,
-  ProductCarousel,
   CustomSizePicker,
   SizeAndChartLabels,
   RecommendedProducts,
@@ -21,6 +19,8 @@ import {
   ProductNamePrice,
   DeliveryDetails,
 } from '@hs/components';
+
+import { ProductCarouselDesktop } from '../../components/product-carousel-desktop/ProductCarouselDesktop';
 
 import {
   IProductProps,
@@ -32,6 +32,7 @@ import {
 } from '@/types';
 import { cookiesService, productDetailsService } from '@hs/services';
 import {
+  ProductWrapper,
   ProductDetailsWrapper,
   CartLink,
   CartNotification,
@@ -462,85 +463,87 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
         {productDetails && productDetails.action === LOCAL_DATA.SUCCESS && (
           <>
             <ProductHead {...{ productName, retailPrice }}></ProductHead>
-            <ProductCarousel
-              {...{
-                showArrows: false,
-                autoPlay: true,
-                draggable: false,
-                focusOnSelect: false,
-                renderButtonGroupOutside: false,
-                renderDotsOutside: false,
-                slidesToSlide: 1,
-                swipeable: false,
-                showDots: true,
-                imgUrls: productDetails.imgurls,
-                goToProductRecommendation,
-              }}
-            ></ProductCarousel>
-            <ProductDetailsWrapper>
-              <ProductNamePrice
+            <ProductWrapper>
+              <ProductCarouselDesktop
                 {...{
-                  productName,
-                  isProductSoldOut: !!productDetails.isProductSoldOut,
-                  wishlistId: updatedWishListId === undefined ? wishlistId : updatedWishListId,
-                  retailPrice,
-                  retailPriceMax,
-                  selectedSku: skuValue,
-                  regularPrice,
-                  discount,
-                  addToWishlist,
-                  deleteFromWishlist,
+                  showArrows: true,
+                  autoPlay: false,
+                  draggable: false,
+                  focusOnSelect: false,
+                  renderButtonGroupOutside: false,
+                  renderDotsOutside: false,
+                  slidesToSlide: 1,
+                  swipeable: false,
+                  showDots: false,
+                  imgUrls: productDetails.imgurls,
+                  goToProductRecommendation,
                 }}
-              ></ProductNamePrice>
-              <SizeAndChartLabels
-                {...{
-                  isOneSize,
-                  hasSizeChart: productDetails.hasSizeChart,
-                  qtyLeft,
-                  simpleSkus,
-                  onSizeChartClick: openSizeChartPopup,
-                }}
-              ></SizeAndChartLabels>
-              {!isOneSize && (
-                <CustomSizePicker
+              ></ProductCarouselDesktop>
+              <ProductDetailsWrapper>
+                <ProductNamePrice
                   {...{
-                    simpleSkus,
+                    productName,
+                    isProductSoldOut: !!productDetails.isProductSoldOut,
+                    wishlistId: updatedWishListId === undefined ? wishlistId : updatedWishListId,
+                    retailPrice,
+                    retailPriceMax,
                     selectedSku: skuValue,
-                    onSizeSelect,
+                    regularPrice,
+                    discount,
+                    addToWishlist,
+                    deleteFromWishlist,
                   }}
-                ></CustomSizePicker>
-              )}
-              {showRfypCue && showRFYP && (
-                <RecommendedProductsLinks
-                  {...{ isProductSoldOut: !!productDetails.isProductSoldOut, goToProductRecommendation }}
-                ></RecommendedProductsLinks>
-              )}
-              <DeliveryDetails
-                {...{
-                  ...deliveryDetailsData,
-                  selectedSku: skuValue,
-                  ...deliveryDetails,
-                  openPinCodePopup,
-                  openSizeSelector,
-                }}
-              ></DeliveryDetails>
-              {productDetails.id && (
-                <Accordion {...{ ...product, isPresale, simpleSkus, selectedSku: skuValue }}></Accordion>
-              )}
+                ></ProductNamePrice>
+                <SizeAndChartLabels
+                  {...{
+                    isOneSize,
+                    hasSizeChart: productDetails.hasSizeChart,
+                    qtyLeft,
+                    simpleSkus,
+                    onSizeChartClick: openSizeChartPopup,
+                  }}
+                ></SizeAndChartLabels>
+                {!isOneSize && (
+                  <CustomSizePicker
+                    {...{
+                      simpleSkus,
+                      selectedSku: skuValue,
+                      onSizeSelect,
+                    }}
+                  ></CustomSizePicker>
+                )}
+                {showRfypCue && showRFYP && (
+                  <RecommendedProductsLinks
+                    {...{ isProductSoldOut: !!productDetails.isProductSoldOut, goToProductRecommendation }}
+                  ></RecommendedProductsLinks>
+                )}
+                <DeliveryDetails
+                  {...{
+                    ...deliveryDetailsData,
+                    selectedSku: skuValue,
+                    ...deliveryDetails,
+                    openPinCodePopup,
+                    openSizeSelector,
+                  }}
+                ></DeliveryDetails>
+                {productDetails.id && (
+                  <Accordion {...{ ...product, isPresale, simpleSkus, selectedSku: skuValue }}></Accordion>
+                )}
+              </ProductDetailsWrapper>
+            </ProductWrapper>
 
-              {showRFYP && (
-                <div ref={recommendedProductsLink}>
-                  <RecommendedProducts {...recommendedForYou}></RecommendedProducts>
-                </div>
-              )}
+            {showRFYP && (
+              <div ref={recommendedProductsLink}>
+                <RecommendedProducts {...recommendedForYou}></RecommendedProducts>
+              </div>
+            )}
 
-              {showSimilarProducts && (
-                <div ref={similarProductsLink}>
-                  <RecommendedProducts {...similarProducts}></RecommendedProducts>
-                </div>
-              )}
-            </ProductDetailsWrapper>
-            <AddToCart {...{ show: true, disabled: false, addProductToCart }}></AddToCart>
+            {showSimilarProducts && (
+              <div ref={similarProductsLink}>
+                <RecommendedProducts {...similarProducts}></RecommendedProducts>
+              </div>
+            )}
+            {/* <AddToCart {...{ show: true, disabled: false, addProductToCart }}></AddToCart> */}
           </>
         )}
       </QueryClientProvider>

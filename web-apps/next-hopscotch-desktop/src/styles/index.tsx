@@ -1,3 +1,3 @@
 export * from './golbal';
-export * from './ProductCarousel';
+export * from './ProductCarouselDesktop';
 export * from './StyledProductPage';

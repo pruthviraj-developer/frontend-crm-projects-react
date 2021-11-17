@@ -1,9 +1,16 @@
 import styled from '@emotion/styled';
 import { Colors } from '@hs/utils';
+const ProductWrapper = styled.div`
+  display: flex;
+  margin: auto 20px;
+`;
 const ProductDetailsWrapper = styled.div`
-  display: block;
-  min-height: 0;
   background: ${Colors.WHITE};
+  width: 100%;
+  min-height: 586.5px;
+  border-left: 1px solid #e6e6e6;
+  padding: 8px 24px 24px;
+  display: block;
 `;
 
 const CartNotification = styled.div`
@@ -49,6 +56,7 @@ const CartNotificationDetails = styled.div`
 `;
 
 export {
+  ProductWrapper,
   ProductDetailsWrapper,
   CartNotification,
   CartNotificationDetails,
