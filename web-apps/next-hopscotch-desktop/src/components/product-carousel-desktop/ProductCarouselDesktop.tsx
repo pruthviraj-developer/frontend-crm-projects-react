@@ -9,6 +9,7 @@ import {
   SimilarItemsLinkWrapper,
   SimilarTextElement,
   SvgIconsElement,
+  TransparentImgOverlay,
 } from './StyledProductCarouselDesktop';
 import { IProductCarouselDesktopProps, IProductCarouselDesktopBreakPoints } from './IProductCarouselDesktop';
 export const ProductCarouselDesktop: FC<IProductCarouselDesktopProps> = ({
@@ -79,6 +80,7 @@ export const ProductCarouselDesktop: FC<IProductCarouselDesktopProps> = ({
                     unoptimized
                     src={`${img.imgUrlFull}&tr=w-${imageSize},c-at_max,dpr-2,n-medium`}
                   />
+                  <TransparentImgOverlay></TransparentImgOverlay>
                 </ProductImageContainer>
               );
             })}

@@ -1,9 +1,9 @@
 import styled from '@emotion/styled';
 import { typography } from '@hs/utils';
 import { SvgIcon } from '@hs/icons';
-import Image from 'next/image';
+
 const CarouselWrapper = styled.div`
-  overflow-x: scroll;
+  overflow-x: initial;
   white-space: nowrap;
   position: relative;
   padding: 16px 0px 32px 8px;
@@ -54,12 +54,14 @@ const SimilarItemsLinkWrapper = styled.div<{
   transition: width ease-out 300ms;
 `;
 
-const StyledImage = styled(Image)`
-  /* width: 100%;
+const TransparentImgOverlay = styled.div`
+  width: 100%;
   height: 100%;
-  position: relative;
-  min-height: 100%;
-  min-height: 100%; */
+  background: #00000000;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 1px solid #e6e6e6;
 `;
 
 export {
@@ -69,5 +71,5 @@ export {
   SimilarItemsLinkWrapper,
   SvgIconsElement,
   SimilarTextElement,
-  StyledImage,
+  TransparentImgOverlay,
 };
