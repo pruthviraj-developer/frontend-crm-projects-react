@@ -25,7 +25,7 @@ export const ProductCarouselDesktop: FC<IProductCarouselDesktopProps> = ({
 }: IProductCarouselDesktopProps) => {
   const imageSize = 360;
   const responsive: IProductCarouselDesktopBreakPoints | any = {
-    desktop: { breakpoint: { max: 3000, min: 1024 }, items: 1, partialVisibilityGutter: 358 },
+    desktop: { breakpoint: { max: 3000, min: 1024 }, items: 1, partialVisibilityGutter: 359 },
     mobile: { breakpoint: { max: 464, min: 0 }, items: 1 },
     tablet: { breakpoint: { max: 1024, min: 464 }, items: 1, partialVisibilityGutter: 40 },
   };
@@ -33,7 +33,7 @@ export const ProductCarouselDesktop: FC<IProductCarouselDesktopProps> = ({
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setSimilarItemsDisplayWith(38);
+      setSimilarItemsDisplayWith(46);
     }, 2000);
     return () => {
       clearTimeout(timer);

@@ -14,6 +14,7 @@ const ProductCarouselWrapper = styled.div`
   width: 66.66667%;
   padding-left: 8px;
   background: #fff;
+  position: relative;
 `;
 
 const ProductImageContainer = styled.div`
@@ -38,8 +39,9 @@ const SimilarTextElement = styled.span<{
 const SimilarItemsLinkWrapper = styled.div<{
   width: number;
 }>`
-  right: 12px;
-  bottom: 12px;
+  top: 28px;
+  height: 46px;
+  right: 28px;
   padding: ${typography.size.s06}px;
   background: #fff;
   border-radius: ${typography.size.s24}px;
