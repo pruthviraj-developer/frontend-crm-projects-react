@@ -13,6 +13,10 @@ import {
 } from './StyledProductNamePrice';
 import { IProductNamePriceProps } from './IProductNamePrice';
 import { IconWishList, IconWishListFilled } from '@hs/icons';
+
+const getFormattedPrice = (price?: number) => {
+  return price && price.toLocaleString('en-IN');
+};
 export const ProductNamePrice: FC<IProductNamePriceProps> = ({
   productName,
   retailPrice,
@@ -47,10 +51,6 @@ export const ProductNamePrice: FC<IProductNamePriceProps> = ({
         regularPrice > retailPrice
         ? true
         : false;
-    };
-
-    const getFormattedPrice = (price?: number) => {
-      return price && price.toLocaleString('en-IN');
     };
 
     return (
