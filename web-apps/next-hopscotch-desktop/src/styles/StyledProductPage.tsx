@@ -1,8 +1,12 @@
 import styled from '@emotion/styled';
-import { Colors } from '@hs/utils';
+import { Colors, mediaQueries } from '@hs/utils';
+
 const ProductWrapper = styled.div`
   display: flex;
-  margin: auto 20px;
+  margin: auto;
+  ${mediaQueries('xl')`
+    margin: auto 20px;
+  `};
 `;
 const ProductDetailsWrapper = styled.div`
   background: ${Colors.WHITE};

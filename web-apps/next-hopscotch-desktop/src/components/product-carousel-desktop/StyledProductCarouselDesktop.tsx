@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { typography } from '@hs/utils';
+import { typography, mediaQueries } from '@hs/utils';
 import { SvgIcon } from '@hs/icons';
 
 const CarouselWrapper = styled.div`
@@ -11,16 +11,22 @@ const CarouselWrapper = styled.div`
 `;
 
 const ProductCarouselWrapper = styled.div`
-  width: 66.66667%;
   padding-left: 8px;
   background: #fff;
   position: relative;
+  width: 58.33333%;
+  ${mediaQueries('xl')`
+    width: 66.66667%;
+  `};
 `;
 
 const ProductImageContainer = styled.div`
   width: 100%;
-  height: 558px;
+  height: 468px;
   max-width: 558px;
+  ${mediaQueries('xl')`
+    height: 558px;
+  `};
 `;
 
 const SvgIconsElement = styled(SvgIcon)``;
