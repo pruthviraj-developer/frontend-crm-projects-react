@@ -26,6 +26,7 @@ export const ProductCarousel: FC<IProductCarouselProps> = ({
   imgUrls,
   goToProductRecommendation,
 }: IProductCarouselProps) => {
+  let CarouselRef;
   const responsive: IProductCarouselBreakPoints | any = {
     desktop: { breakpoint: { max: 3000, min: 1024 }, items: 1 },
     mobile: { breakpoint: { max: 464, min: 0 }, items: 1 },
@@ -43,10 +44,15 @@ export const ProductCarousel: FC<IProductCarouselProps> = ({
     };
   }, []);
 
+  useEffect(() => {
+    CarouselRef && CarouselRef.goToSlide && CarouselRef.goToSlide(0, true);
+  }, [imgUrls]);
+
   return (
     <ProductCarouselWrapper>
       <CarouselWrapper>
         <Carousel
+          ref={(el) => (CarouselRef = el)}
           ssr
           responsive={responsive}
           additionalTransfrom={0}

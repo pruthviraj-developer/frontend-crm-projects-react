@@ -14,8 +14,6 @@ const ProductNamePriceWrapper = styled.div`
 const ProductPrice = styled.span`
   font-size: 16px;
   line-height: 19px;
-  font-size: 16px;
-  line-height: 19px;
   font-weight: ${typography.weight.medium};
   color: #333;
 `;
