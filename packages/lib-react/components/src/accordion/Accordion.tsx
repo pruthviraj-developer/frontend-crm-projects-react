@@ -23,22 +23,17 @@ export const Accordion: FC<IAccordionProps> = ({
   selectedSku,
   productDesc,
   moreInfo,
-  showBrandDetails,
-  brandDescription,
-  brandName,
   isPresale = 0,
   preOrderDescription,
   productLevelAttrList = [],
   shippingReturnInfo,
   showShippingInfo,
-  showBrandInfo,
   simpleSkus = [],
   isReturnable,
 }: IAccordionProps) => {
   const [toggleAccordions, setToggleAccordions] = useState({
     item: false,
     shipping: false,
-    about: false,
     more: false,
   });
 
@@ -177,19 +172,6 @@ export const Accordion: FC<IAccordionProps> = ({
               </AccordionDescription>
             )}
           </AccordionContent>
-        </AccordionWrapper>
-      )}
-      {showBrandInfo && (
-        <AccordionWrapper>
-          {getAccordionTitle('about', `About ${brandName}`)}
-          <AccordionContent className={toggleAccordions.about ? ACTIVE : ''}>
-            {getAccordionDetails(brandDescription)}
-          </AccordionContent>
-        </AccordionWrapper>
-      )}
-      {!(showBrandDetails || brandDescription) && (
-        <AccordionWrapper>
-          <AccordionTitle>By brand {brandName}</AccordionTitle>
         </AccordionWrapper>
       )}
       {moreInfo && (

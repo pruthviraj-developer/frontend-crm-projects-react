@@ -7,13 +7,9 @@ import {
 export interface IAccordionProps {
   productDesc: string;
   showShippingInfo: boolean;
-  showBrandInfo: boolean;
   isReturnable: number;
   isPresale?: number;
   preOrderDescription: string;
-  showBrandDetails: boolean;
-  brandDescription: string;
-  brandName: string;
   moreInfo: string;
   shippingReturnInfo: string;
   shippingReturnInfoForSku: string;
