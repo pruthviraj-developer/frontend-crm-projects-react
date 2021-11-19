@@ -10,7 +10,7 @@ const ProductNamePriceWrapper = styled.div`
   justify-content: space-between;
 `;
 const RetailPrice = styled.span`
-  font-size: ${typography.size.s3}px;
+  font-size: 1.6rem;
   line-height: ${typography.size.s19}px;
 `;
 

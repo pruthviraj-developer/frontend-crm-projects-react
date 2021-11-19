@@ -26,7 +26,7 @@ const Link = styled('a')`
   float: left;
   padding: 8px 6px;
   margin-top: 17px;
-  font-size: 12px;
+  font-size: 1.2rem;
   font-weight: 600;
   line-height: 1.33;
   letter-spacing: 0;
@@ -46,7 +46,7 @@ const CartIconWrapper = styled.div`
 `;
 
 const CartIconQuantity = styled.span`
-  font-size: 12px;
+  font-size: 1.2rem;
   line-height: 13px;
   font-weight: ${typography.weight.medium};
   color: #ed54a4;

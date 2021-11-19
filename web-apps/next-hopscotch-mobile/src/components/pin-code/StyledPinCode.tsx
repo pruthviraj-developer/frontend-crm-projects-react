@@ -110,12 +110,12 @@ const ErrorMessage = styled.div`
   margin-bottom: 12px;
   margin-left: 12px;
   color: #f44;
-  font-size: 12px;
+  font-size: 1.2rem;
   line-height: 16px;
 `;
 
 const Loading = styled.div`
-  font-size: 18px;
+  font-size: 1.8rem;
   line-height: 16px;
   color: ${Colors.PINK[500]};
 `;

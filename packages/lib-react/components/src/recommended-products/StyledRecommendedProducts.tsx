@@ -7,7 +7,7 @@ const RecommendedProductsWrapper = styled.div`
 
 const RecommendedProductsTitle = styled.div`
   padding: 24px 0 16px 16px;
-  font-size: 18px;
+  font-size: 1.8rem;
   font-weight: ${typography.weight.medium};
   line-height: 22px;
   border-top: 1px solid #e6e6e6;

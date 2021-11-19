@@ -41,7 +41,7 @@ const OtpContainer = styled.div`
     border: 1px solid transparent;
     outline: transparent;
     letter-spacing: 15px;
-    font-size: 24px;
+    font-size: 2.4rem;
     padding-left: 16px;
     position: absolute;
   }
@@ -83,7 +83,7 @@ const MessageWrapper = styled.div`
 const ErrorMessage = styled.span`
   margin-left: 16px;
   color: #000;
-  font-size: 12px;
+  font-size: 1.2rem;
   text-align: left;
   line-height: 16px;
 `;

@@ -31,7 +31,7 @@ const CartHeader = styled.div`
 `;
 
 const CartMessage = styled.div`
-  font-size: 12px;
+  font-size: 1.2rem;
   line-height: 16px;
   margin: 4px 0 6px;
   color: #707070;
@@ -40,7 +40,7 @@ const CartMessage = styled.div`
 const CartLinkText = styled.div`
   font-weight: 600;
   color: #ed54a4;
-  font-size: 12px;
+  font-size: 1.2rem;
   line-height: 16px;
 `;
 

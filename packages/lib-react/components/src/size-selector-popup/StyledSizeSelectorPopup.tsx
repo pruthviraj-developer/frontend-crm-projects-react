@@ -48,7 +48,7 @@ const SeeSimilarProducts = styled.div`
   padding: ${typography.size.s1}px ${typography.size.s3}px;
   border-radius: ${typography.size.s08}px;
   background-color: #ffeff8;
-  font-size: ${typography.size.s1}px;
+  font-size: 1.2rem;
   line-height: ${typography.size.s3}px;
   color: rgba(0, 0, 0, 0.8);
   display: block;
@@ -113,7 +113,7 @@ const Option = styled.div<{ selected: boolean }>`
 `;
 
 const SizeSelector = styled.div<{ selected?: boolean }>`
-  font-size: 16px;
+  font-size: 1.6rem;
   font-weight: 400;
   display: flex;
   justify-content: space-between;
@@ -134,7 +134,7 @@ const SoldOut = styled.span`
 `;
 
 const DeliveryMessageWrapper = styled.div`
-  font-size: 12px;
+  font-size: 1.2rem;
   line-height: 16px;
   font-weight: 600;
   display: flex;

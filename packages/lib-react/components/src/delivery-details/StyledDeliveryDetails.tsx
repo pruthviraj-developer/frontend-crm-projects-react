@@ -36,7 +36,7 @@ const DeliveryBadge = styled.span<{
   color: string;
   bgColor: string;
 }>`
-  font-size: ${typography.size.s1}px;
+  font-size: 1.2rem;
   background-color: ${(props) => props.bgColor};
   color: ${(props) => props.color || 'rgb(51, 51, 51)'};
   line-height: ${typography.size.s3}px;
