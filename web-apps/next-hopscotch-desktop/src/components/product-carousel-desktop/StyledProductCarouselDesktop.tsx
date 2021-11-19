@@ -25,7 +25,7 @@ const ProductImageContainer = styled.div`
   height: 468px;
   max-width: 558px;
   ${mediaQueries('xl')`
-    height: 558px;
+    height: 554px;
   `};
 `;
 

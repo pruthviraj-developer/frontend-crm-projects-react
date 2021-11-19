@@ -15,6 +15,10 @@ const ProductDetailsWrapper = styled.div`
   border-left: 1px solid #e6e6e6;
   padding: 8px 24px 24px;
   display: block;
+  width: 41.66667%;
+  ${mediaQueries('xl')`
+   width: 33.33333%;
+  `};
 `;
 
 const CartNotification = styled.div`

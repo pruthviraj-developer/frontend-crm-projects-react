@@ -12,11 +12,11 @@ import { Layout } from '@/components/layout/Layout';
 import {
   Accordion,
   CustomSizePicker,
-  SizeAndChartLabels,
+  SizeAndChartLabelsDesktop,
   RecommendedProducts,
   RecommendedProductsLinks,
   ProductHead,
-  ProductNamePrice,
+  ProductNamePriceDesktop,
   DeliveryDetails,
 } from '@hs/components';
 
@@ -480,7 +480,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
                 }}
               ></ProductCarouselDesktop>
               <ProductDetailsWrapper>
-                <ProductNamePrice
+                <ProductNamePriceDesktop
                   {...{
                     productName,
                     isProductSoldOut: !!productDetails.isProductSoldOut,
@@ -493,8 +493,8 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
                     addToWishlist,
                     deleteFromWishlist,
                   }}
-                ></ProductNamePrice>
-                <SizeAndChartLabels
+                ></ProductNamePriceDesktop>
+                <SizeAndChartLabelsDesktop
                   {...{
                     isOneSize,
                     hasSizeChart: productDetails.hasSizeChart,
@@ -502,7 +502,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
                     simpleSkus,
                     onSizeChartClick: openSizeChartPopup,
                   }}
-                ></SizeAndChartLabels>
+                ></SizeAndChartLabelsDesktop>
                 {!isOneSize && (
                   <CustomSizePicker
                     {...{

@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import 'react-multi-carousel/lib/styles.css';
 import { typography } from '@hs/utils';
 import { SvgIcon } from '@hs/icons';
 import Image from 'next/image';
