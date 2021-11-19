@@ -4,6 +4,10 @@ import { HsTextAlign, typography, Colors } from '@hs/utils';
 const CustomSizeWrapper = styled.div`
   margin: ${typography.size.s3}px auto;
   overflow-x: scroll;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const Sizes = styled.div`
