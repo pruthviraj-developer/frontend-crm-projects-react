@@ -11,6 +11,7 @@
     "@emotion/react": "^11.5.0",
     "@emotion/styled": "^11.3.0",
     "@hs/components": "1.0.0",
+    "@hs/components-web-desktop": "1.0.0",
     "@hs/framework": "^1.0.0",
     "@hs/services": "^1.0.0",
     "next": "12.0.3",

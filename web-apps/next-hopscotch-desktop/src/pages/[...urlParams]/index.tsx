@@ -12,13 +12,13 @@ import { Layout } from '@/components/layout/Layout';
 import {
   Accordion,
   CustomSizePicker,
-  SizeAndChartLabelsDesktop,
   RecommendedProducts,
   RecommendedProductsLinks,
   ProductHead,
-  ProductNamePriceDesktop,
   DeliveryDetails,
 } from '@hs/components';
+
+import { SizeAndChartLabelsDesktop, ProductNamePriceDesktop } from '@hs/components-web-desktop';
 
 import { ProductCarouselDesktop } from '../../components/product-carousel-desktop/ProductCarouselDesktop';
 
@@ -464,21 +464,23 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
           <>
             <ProductHead {...{ productName, retailPrice }}></ProductHead>
             <ProductWrapper>
-              <ProductCarouselDesktop
-                {...{
-                  showArrows: true,
-                  autoPlay: false,
-                  draggable: false,
-                  focusOnSelect: false,
-                  renderButtonGroupOutside: false,
-                  renderDotsOutside: false,
-                  slidesToSlide: 1,
-                  swipeable: false,
-                  showDots: false,
-                  imgUrls: productDetails.imgurls,
-                  goToProductRecommendation,
-                }}
-              ></ProductCarouselDesktop>
+              {productDetails.imgurls && productDetails.imgurls.length > 0 && (
+                <ProductCarouselDesktop
+                  {...{
+                    showArrows: true,
+                    autoPlay: false,
+                    draggable: false,
+                    focusOnSelect: false,
+                    renderButtonGroupOutside: false,
+                    renderDotsOutside: false,
+                    slidesToSlide: 1,
+                    swipeable: false,
+                    showDots: false,
+                    imgUrls: productDetails.imgurls,
+                    goToProductRecommendation,
+                  }}
+                ></ProductCarouselDesktop>
+              )}
               <ProductDetailsWrapper>
                 <ProductNamePriceDesktop
                   {...{
