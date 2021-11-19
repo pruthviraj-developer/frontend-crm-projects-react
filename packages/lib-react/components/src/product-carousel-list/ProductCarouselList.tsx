@@ -25,6 +25,9 @@ const getDashedParameter = (product: IRecommendProductDetailListEntity) => {
     .replace(/-+/g, '-');
   return dashSeparatedUrlProductName;
 };
+const getFormattedPrice = (price?: number) => {
+  return price && price.toLocaleString('en-IN');
+};
 export const ProductCarouselList: FC<IProductCarouselListProps> = ({
   products,
   section,
@@ -68,7 +71,7 @@ export const ProductCarouselList: FC<IProductCarouselListProps> = ({
                 </ImageWrapper>
               </Link>
               <SaleRetailPrice>
-                ₹{product.salePrice || product.retailPrice}
+                ₹{getFormattedPrice(product.salePrice || product.retailPrice)}
               </SaleRetailPrice>
             </CarouselList>
           )
