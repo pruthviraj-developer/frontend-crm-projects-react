@@ -359,7 +359,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
             evtName: segment.PDP_TRACKING_EVENTS.ADDED_TO_CART,
             properties: {
               ...properties,
-              ...getProductTrackingData({ productDetails: productData, selectedSku: sku }),
+              ...getProductTrackingData({ productData: productData, selectedSku: sku }),
               atc_user,
               addFrom: 'current=' + location.pathname,
             },
@@ -420,7 +420,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
       evtName: segment.PDP_TRACKING_EVENTS.SIZE_CLICKED,
       properties: {
         ...properties,
-        ...getProductTrackingData({ productDetails: productData, selectedSku: sku }),
+        ...getProductTrackingData({ productData: productData, selectedSku: sku }),
         addFrom: 'current=' + location.pathname,
         from_location: fromLocation,
       },
