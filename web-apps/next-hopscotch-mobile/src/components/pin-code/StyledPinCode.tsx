@@ -61,7 +61,7 @@ const Address = styled.div`
   margin-right: 8px;
   padding: 16px;
   cursor: pointer;
-  font-size: 14px;
+  /* font-size: 14px; */
 `;
 
 const Name = styled.div`
@@ -96,7 +96,7 @@ const PinCodeSubmit = styled.button<{ disabled: boolean }>`
   width: 91px;
   display: inline-block;
   vertical-align: middle;
-  font-size: 14px;
+  /* font-size: 14px; */
   line-height: 16px;
   font-weight: 600;
   margin-bottom: 8px;

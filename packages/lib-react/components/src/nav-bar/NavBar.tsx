@@ -65,11 +65,14 @@ export const NavBar: FC<INavBarProps> = ({ showSearchPopup }: INavBarProps) => {
             href="/my/account/orders/"
             name="Account"
             display="inline-block"
+            fontSize="1.2rem"
+            fontWeight="600"
           />
           <NextNavLink
             href="/helpcenter"
             name="Help"
-            fontWeight="500"
+            fontWeight="600"
+            fontSize="1.2rem"
             display="inline-block"
             margin="16px 0 0 5px"
           />

@@ -15,7 +15,7 @@ const RecommendedProductsTitle = styled.div`
 
 const RecommendedMatchingWrapper = styled.div`
   margin: 12px 0 56px;
-  font-size: 14px;
+  /* font-size: 14px; */
   line-height: 20px;
 `;
 

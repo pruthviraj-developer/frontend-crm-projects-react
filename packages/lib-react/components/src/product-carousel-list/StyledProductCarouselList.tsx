@@ -20,7 +20,7 @@ const ImageWrapper = styled.div`
 const SaleRetailPrice = styled.h3`
   margin: 8px 0 0 0;
   font-weight: ${typography.weight.regular};
-  font-size: ${typography.size.s2}px;
+  font-size: 1.4rem;
   line-height: ${typography.size.s3}px;
   text-align: center;
 `;

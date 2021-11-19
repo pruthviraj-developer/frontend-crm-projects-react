@@ -21,7 +21,7 @@ const CartLink = styled.div`
 
 const CartHeader = styled.div`
   font-weight: 600;
-  font-size: 14px;
+  /* font-size: 14px; */
   line-height: 16px;
   color: #333;
   width: 120px;

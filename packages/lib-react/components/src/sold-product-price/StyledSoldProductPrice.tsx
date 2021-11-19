@@ -17,7 +17,7 @@ const RetailPrice = styled.span`
 const ProductOfferPrice = styled.div``;
 const ProductSold = styled.div`
   padding: ${typography.size.s04}px ${typography.size.s06}px;
-  font-size: ${typography.size.s2}px;
+  /* font-size: ${typography.size.s2}px; */
   line-height: ${typography.size.s3}px;
   font-weight: ${typography.weight.medium};
   background-color: #f44;
@@ -29,7 +29,7 @@ const ProductSold = styled.div`
 
 const ProductName = styled.h1`
   margin: ${typography.size.s07}px 0 0 0;
-  font-size: ${typography.size.s2}px;
+  /* font-size: ${typography.size.s2}px; */
   line-height: ${typography.size.s5}px;
   padding-bottom: ${typography.size.s08}px;
   font-weight: ${typography.weight.regular};

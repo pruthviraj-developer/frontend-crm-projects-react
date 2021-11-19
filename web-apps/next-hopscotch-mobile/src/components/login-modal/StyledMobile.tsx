@@ -40,7 +40,7 @@ const Button = styled.button`
   font: inherit;
   text-transform: uppercase;
   line-height: 1.14;
-  font-size: 14px;
+  /* font-size: 14px; */
   font-weight: 700;
   margin-top: 12px;
 `;
