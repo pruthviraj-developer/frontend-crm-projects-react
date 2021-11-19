@@ -21,9 +21,9 @@ export const productCarouselStyles = (
         background-color: #707070;
         border: 1px solid #707070;
       }
-      .product-carousel-container {
-        max-height: calc(40vh - 8px);
-      }
+      /* .product-carousel-container {
+        max-height: calc(100vw - 8px);
+      } */
     `}
   />
 );

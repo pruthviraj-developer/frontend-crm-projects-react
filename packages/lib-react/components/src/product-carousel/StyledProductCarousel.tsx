@@ -12,12 +12,18 @@ const CarouselWrapper = styled.div`
 
 const ProductCarouselWrapper = styled.div`
   position: relative;
-  margin-top: 56px;
+  /* margin-top: 56px; */
+  .react-multi-carousel-item {
+    height: 100vw !important;
+  }
 `;
 
 const ProductImageContainer = styled.div`
-  width: 360px;
-  height: 360px;
+  /* width: 360px;
+  height: 360px; */
+  .pdpImages {
+    top: 112px !important;
+  }
 `;
 
 const SvgIconsElement = styled(SvgIcon)``;

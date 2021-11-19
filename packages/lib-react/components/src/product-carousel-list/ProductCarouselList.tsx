@@ -34,7 +34,7 @@ export const ProductCarouselList: FC<IProductCarouselListProps> = ({
     SESSION_DATA.OA_DATA,
     null
   );
-  const imageSize = 360;
+  // const imageSize = 360;
   return (
     <CarouselListWrapper>
       {products &&
@@ -54,13 +54,15 @@ export const ProductCarouselList: FC<IProductCarouselListProps> = ({
               >
                 <ImageWrapper key={index}>
                   <Image
-                    src={`${product.imageUrl}&tr=w-${imageSize},c-at_max,dpr-2,n-medium`}
+                    src={product.imageUrl}
                     alt={product.productName}
                     placeholder="blur"
                     blurDataURL="https://static.hopscotch.in/web2/images/boutique-pattern.png"
                     layout="fill"
-                    unoptimized
-                    // objectFit="cover"
+                    loader={({ src, width }) =>
+                      `${src}&tr=w-${width},c-at_max,n-medium`
+                    }
+                    sizes="40vw"
                   />
                   <TransparentImgOverlay></TransparentImgOverlay>
                 </ImageWrapper>
