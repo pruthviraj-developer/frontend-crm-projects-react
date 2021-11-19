@@ -19,7 +19,7 @@ export const productCarouselStyles = (
       }
       .product-carousel-dot-list li.react-multi-carousel-dot--active button {
         background-color: #707070;
-        border: 1px solid #707070;
+        /* border: 1px solid #707070; */
       }
       /* .product-carousel-container {
         max-height: calc(100vw - 8px);
