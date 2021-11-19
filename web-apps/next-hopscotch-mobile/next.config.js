@@ -3,7 +3,9 @@ module.exports = {
   reactStrictMode: true,
   images: {
     domains: ['hopscotch.in'],
+    loader: 'custom',
     imageSizes: [360, 480, 720, 1080],
+    deviceSizes: [360, 480, 720, 1080],
   },
   env: {
     WEB_HOST: process.env.MY_ENV_VAR,

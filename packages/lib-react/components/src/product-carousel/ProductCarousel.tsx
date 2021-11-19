@@ -26,7 +26,6 @@ export const ProductCarousel: FC<IProductCarouselProps> = ({
   imgUrls,
   goToProductRecommendation,
 }: IProductCarouselProps) => {
-  const imageSize = 360;
   const responsive: IProductCarouselBreakPoints | any = {
     desktop: { breakpoint: { max: 3000, min: 1024 }, items: 1 },
     mobile: { breakpoint: { max: 464, min: 0 }, items: 1 },
@@ -79,8 +78,11 @@ export const ProductCarousel: FC<IProductCarouselProps> = ({
                     alt=""
                     layout="fill"
                     draggable={false}
-                    unoptimized
-                    src={`${img.imgUrlFull}&tr=w-${imageSize},c-at_max,dpr-2,n-medium`}
+                    loader={({ src, width }) =>
+                      `${src}&tr=w-${width},c-at_max,n-medium`
+                    }
+                    priority={index === 0}
+                    src={img.imgUrlFull}
                   />
                 </ProductImageContainer>
               );
