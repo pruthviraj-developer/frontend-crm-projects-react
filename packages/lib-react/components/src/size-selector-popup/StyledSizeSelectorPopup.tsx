@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { typography, Colors } from '@hs/utils';
+import { typography } from '@hs/utils';
 import { SvgIcon } from '@hs/icons';
 
 const DeliveryPincodeContainer = styled.div`
@@ -42,36 +42,6 @@ const SizeSelectorPopupWrapper = styled.div`
   /* font-size: ${typography.size.s2}px; */
   line-height: ${typography.size.s3}px;
   font-weight: ${typography.weight.medium};
-`;
-
-const SeeSimilarProducts = styled.div`
-  padding: ${typography.size.s1}px ${typography.size.s3}px;
-  border-radius: ${typography.size.s08}px;
-  background-color: #ffeff8;
-  font-size: 1.2rem;
-  line-height: ${typography.size.s3}px;
-  color: rgba(0, 0, 0, 0.8);
-  display: block;
-  margin: 0 ${typography.size.s5}px;
-  width: calc(100% - 40px);
-  bottom: calc(100% + ${typography.size.s5}px);
-  text-align: center;
-  letter-spacing: 0.2px;
-  position: absolute;
-`;
-
-const SizeSoldOut = styled.span`
-  opacity: 0.8;
-  /* font-size: ${typography.size.s2}px; */
-  line-height: 1.43;
-  color: ${Colors.BLACK};
-  font-weight: ${typography.weight.regular};
-`;
-
-const SeeSimilar = styled.span`
-  text-decoration: underline;
-  font-weight: ${typography.weight.medium};
-  padding-left: ${typography.size.s02}px;
 `;
 
 const SizeWrapper = styled.div`
@@ -178,9 +148,6 @@ export {
   QuantityLeftOut,
   SizeSelectorPopupWrapper,
   SizeWrapper,
-  SeeSimilarProducts,
-  SeeSimilar,
-  SizeSoldOut,
   Header,
   Size,
   ViewSizeChart,

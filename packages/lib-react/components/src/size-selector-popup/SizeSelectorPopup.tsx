@@ -5,9 +5,6 @@ import { AddToCart } from '../add-to-cart';
 import { ISimpleSkusEntityProps } from '@hs/framework';
 import {
   SizeSelectorPopupWrapper,
-  SeeSimilarProducts,
-  SizeSoldOut,
-  SeeSimilar,
   SizeWrapper,
   Header,
   Size,
@@ -28,13 +25,11 @@ import {
 } from './StyledSizeSelectorPopup';
 const ADD_TO_CART_BUTTON = 'Add to cart button';
 export const SizeSelectorPopup: FC<ISizeSelectorPopupProps> = ({
-  showRfypCue,
   pinCode,
   simpleSkus,
   selectedSku,
   showAddToCart,
   addProductToCart,
-  goToProductRecommendation,
   onSizeChartClick,
   onSizeSelect,
   closePopup,
@@ -47,19 +42,6 @@ export const SizeSelectorPopup: FC<ISizeSelectorPopupProps> = ({
   return (
     <SizeSelectorPopupWrapper>
       <SizeWrapper>
-        {showRfypCue && (
-          <SeeSimilarProducts>
-            <SizeSoldOut>Size sold out?</SizeSoldOut>
-            <SeeSimilar
-              onClick={() => {
-                closePopup();
-                goToProductRecommendation('Add to cart');
-              }}
-            >
-              See similar products
-            </SeeSimilar>
-          </SeeSimilarProducts>
-        )}
         {pinCode && (
           <DeliveryPincodeContainer>
             <DeliveryPincode>Delivery to {pinCode}</DeliveryPincode>

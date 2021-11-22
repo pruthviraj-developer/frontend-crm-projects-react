@@ -17,6 +17,7 @@ import {
   RecommendedProductsLinks,
   ProductNamePrice,
   DeliveryDetails,
+  SeeSimilarProducts,
 } from '@hs/components';
 
 import {
@@ -580,6 +581,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
             {showRfypCue && showRFYP && (
               <RecommendedProductsLinks {...{ isProductSoldOut, goToProductRecommendation }}></RecommendedProductsLinks>
             )}
+            {showRfypCue && <SeeSimilarProducts {...{ goToProductRecommendation }}></SeeSimilarProducts>}
             <DeliveryDetails
               {...{
                 ...deliveryDetailsData,
@@ -636,13 +638,11 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
           <SizeSelectorPopupComponent
             {...{
               closePopup: closeSizeSelector,
-              showRfypCue,
               showAddToCart: true,
               onSizeChartClick: openSizeChartPopup,
               simpleSkus,
               selectedSku: selectedSku,
               onSizeSelect,
-              goToProductRecommendation,
               addProductToCart,
             }}
           ></SizeSelectorPopupComponent>
