@@ -6,13 +6,13 @@ const SizeAndChartLabelsWrapper = styled.div`
   justify-content: space-between;
   padding: ${typography.size.s24}px ${typography.size.s3}px 0
     ${typography.size.s3}px;
-  font-size: ${typography.size.s2}px;
+  /* font-size: ${typography.size.s2}px; */
   line-height: ${typography.size.s3}px;
   font-weight: ${typography.weight.medium};
 `;
 
 const Size = styled.span`
-  font-size: ${typography.size.s2}px;
+  /* font-size: ${typography.size.s2}px; */
   line-height: ${typography.size.s3}px;
   font-weight: ${typography.weight.medium};
 `;

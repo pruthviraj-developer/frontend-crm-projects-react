@@ -4,6 +4,10 @@ import { HsTextAlign, typography, Colors } from '@hs/utils';
 const CustomSizeWrapper = styled.div`
   margin: ${typography.size.s3}px auto;
   overflow-x: scroll;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const Sizes = styled.div`
@@ -24,7 +28,7 @@ const Size = styled.div<{
   disabled: boolean;
 }>`
   display: inline-block;
-  font-size: ${typography.size.s2}px;
+  /* font-size: ${typography.size.s2}px; */
   line-height: ${typography.size.s3}px;
   font-weight: ${typography.weight.regular};
   padding: ${typography.size.s1}px ${typography.size.s2}px;
@@ -41,6 +45,6 @@ const Size = styled.div<{
 const LeftQuantity = styled.div`
   color: #f44;
   text-align: center;
-  font-size: ${typography.size.s2}px;
+  /* font-size: ${typography.size.s2}px; */
 `;
 export { CustomSizeWrapper, SizePill, Sizes, Size, LeftQuantity };

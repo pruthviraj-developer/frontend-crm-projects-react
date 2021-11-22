@@ -8,6 +8,4 @@ export interface INextNavLinkProps {
   queryParams?: any;
   fontWeight?: string;
   fontSize?: string;
-  lineHeight?: string;
-  hoverColor?: string;
 }

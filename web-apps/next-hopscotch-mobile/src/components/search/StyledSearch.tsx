@@ -13,7 +13,7 @@ const SearchField = styled.div`
   input {
     width: 100%;
     padding: 16px 0 16px 16px;
-    font-size: 14px;
+    /* font-size: 14px; */
     line-height: 20px;
     border: 0;
     position: relative;
@@ -60,7 +60,7 @@ const SearchList = styled.ul`
 
 const List = styled.li`
   list-style: none;
-  font-size: 14px;
+  /* font-size: 14px; */
   line-height: 16px;
   border-bottom: 1px solid #e6e6e6;
   padding: 16px;

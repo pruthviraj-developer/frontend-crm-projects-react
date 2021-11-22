@@ -538,7 +538,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
               renderButtonGroupOutside: false,
               renderDotsOutside: false,
               slidesToSlide: 1,
-              swipeable: false,
+              swipeable: true,
               showDots: true,
               imgUrls: productData.imgurls,
               goToProductRecommendation,

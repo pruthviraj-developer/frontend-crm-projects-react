@@ -12,7 +12,7 @@ const DeliveryPincodeContainer = styled.div`
 `;
 
 const DeliveryPincode = styled.div`
-  font-size: 14px;
+  /* font-size: 14px; */
   line-height: 20px;
   font-weight: 400;
   color: #000;
@@ -26,9 +26,10 @@ const DeliveryPincode = styled.div`
 const Header = styled.div`
   text-transform: uppercase;
   font-weight: ${typography.weight.medium};
-  font-size: ${typography.size.s2}px;
+  /* font-size: ${typography.size.s2}px; */
   line-height: ${typography.size.s3}px;
-  padding: ${typography.size.s4}px ${typography.size.s3}px ${typography.size.s15}px;
+  padding: ${typography.size.s4}px ${typography.size.s3}px
+    ${typography.size.s15}px;
   display: flex;
   justify-content: space-between;
 `;
@@ -36,8 +37,9 @@ const Header = styled.div`
 const SizeSelectorPopupWrapper = styled.div`
   display: flex;
   justify-content: space-between;
-  padding: ${typography.size.s24}px ${typography.size.s3}px 0 ${typography.size.s3}px;
-  font-size: ${typography.size.s2}px;
+  padding: ${typography.size.s24}px ${typography.size.s3}px 0
+    ${typography.size.s3}px;
+  /* font-size: ${typography.size.s2}px; */
   line-height: ${typography.size.s3}px;
   font-weight: ${typography.weight.medium};
 `;
@@ -46,7 +48,7 @@ const SeeSimilarProducts = styled.div`
   padding: ${typography.size.s1}px ${typography.size.s3}px;
   border-radius: ${typography.size.s08}px;
   background-color: #ffeff8;
-  font-size: ${typography.size.s1}px;
+  font-size: 1.2rem;
   line-height: ${typography.size.s3}px;
   color: rgba(0, 0, 0, 0.8);
   display: block;
@@ -60,7 +62,7 @@ const SeeSimilarProducts = styled.div`
 
 const SizeSoldOut = styled.span`
   opacity: 0.8;
-  font-size: ${typography.size.s2}px;
+  /* font-size: ${typography.size.s2}px; */
   line-height: 1.43;
   color: ${Colors.BLACK};
   font-weight: ${typography.weight.regular};
@@ -93,7 +95,7 @@ const SizeLabel = styled.span``;
 const ViewSizeChart = styled.span`
   color: #ed54a4;
   letter-spacing: 0.4px;
-  font-size: ${typography.size.s2}px;
+  /* font-size: ${typography.size.s2}px; */
 `;
 
 const OptionsContainer = styled.div`
@@ -106,11 +108,12 @@ const OptionsContainer = styled.div`
 const Option = styled.div<{ selected: boolean }>`
   padding: 16px;
   padding-bottom: ${(props) => (props.selected ? 12 : 16)}px;
-  background-color: ${(props) => (props.selected ? 'rgba(237, 84, 164, 0.04)' : 'inherit')};
+  background-color: ${(props) =>
+    props.selected ? 'rgba(237, 84, 164, 0.04)' : 'inherit'};
 `;
 
 const SizeSelector = styled.div<{ selected?: boolean }>`
-  font-size: 16px;
+  font-size: 1.6rem;
   font-weight: 400;
   display: flex;
   justify-content: space-between;
@@ -131,7 +134,7 @@ const SoldOut = styled.span`
 `;
 
 const DeliveryMessageWrapper = styled.div`
-  font-size: 12px;
+  font-size: 1.2rem;
   line-height: 16px;
   font-weight: 600;
   display: flex;
@@ -139,7 +142,7 @@ const DeliveryMessageWrapper = styled.div`
 `;
 
 const DeliveryMessage = styled.span`
-  font-size: 14px;
+  /* font-size: 14px; */
   line-height: 1.43;
   letter-spacing: 0.2px;
   color: #0c884a;
@@ -158,7 +161,7 @@ const DeliveryMessageOval = styled.span`
 `;
 
 const QuantityLeftOut = styled.span`
-  font-size: 14px;
+  /* font-size: 14px; */
   line-height: 1.43;
   letter-spacing: 0.2px;
   color: #ed7100;

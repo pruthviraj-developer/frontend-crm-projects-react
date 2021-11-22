@@ -14,7 +14,7 @@ const LoginModalWrapper = styled.div`
   min-height: calc(75% - 24px);
   overflow-y: auto;
   font-weight: ${typography.weight.regular};
-  font-size: ${typography.size.s2}px;
+  /* font-size: ${typography.size.s2}px; */
   line-height: 1.43;
   letter-spacing: 0.2px;
   color: rgba(0, 0, 0, 0.8);
@@ -44,7 +44,7 @@ const HeaderWrapper = styled.div<{ active: boolean }>`
 `;
 
 const HeaderTitle = styled.div`
-  font-size: 20px;
+  font-size: 2rem;
   font-weight: 600;
   line-height: 1.2;
   letter-spacing: -0.2px;

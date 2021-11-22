@@ -14,7 +14,7 @@ const LoggedInBy = styled.span`
 
 const ChangeNumber = styled.span`
   color: #000;
-  font-size: 14px;
+  /* font-size: 14px; */
   text-decoration: underline;
   opacity: 0.56;
   letter-spacing: 0.2px;
@@ -41,7 +41,7 @@ const OtpContainer = styled.div`
     border: 1px solid transparent;
     outline: transparent;
     letter-spacing: 15px;
-    font-size: 24px;
+    font-size: 2.4rem;
     padding-left: 16px;
     position: absolute;
   }
@@ -57,7 +57,7 @@ const OtpSeperator = styled.div<{ show: boolean }>`
 `;
 
 const Resend = styled.button<{ convertText?: boolean }>`
-  font-size: 14px;
+  /* font-size: 14px; */
   font-weight: ${(props) => (props.convertText ? 700 : 400)};
   line-height: 1.14;
   letter-spacing: 0.4px;
@@ -83,7 +83,7 @@ const MessageWrapper = styled.div`
 const ErrorMessage = styled.span`
   margin-left: 16px;
   color: #000;
-  font-size: 12px;
+  font-size: 1.2rem;
   text-align: left;
   line-height: 16px;
 `;

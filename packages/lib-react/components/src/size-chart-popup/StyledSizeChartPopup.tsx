@@ -3,7 +3,7 @@ import { typography, Colors, HsTextAlign } from '@hs/utils';
 import { SvgIcon } from '@hs/icons';
 
 const SizeChartWrapper = styled.div`
-  font-size: ${typography.size.s1}px;
+  font-size: 1.2rem;
   line-height: ${typography.size.s2}px;
   font-weight: ${typography.weight.regular};
   background-color: ${Colors.WHITE};
@@ -37,7 +37,7 @@ const SizeChartCloseIcon = styled(SvgIcon)`
 const SizeChartHeaderWrapper = styled.div`
   text-align: ${HsTextAlign.center};
   font-weight: ${typography.weight.medium};
-  font-size: ${typography.size.s2}px;
+  /* font-size: ${typography.size.s2}px; */
   line-height: ${typography.size.s3}px;
   position: fixed;
   top: 0;
@@ -106,7 +106,7 @@ const SizeOptionType = styled.div`
 `;
 
 const SizeTable = styled.div`
-  font-size: ${typography.size.s2}px;
+  /* font-size: ${typography.size.s2}px; */
   line-height: ${typography.size.m4}px;
   overflow-x: scroll;
 `;

@@ -7,23 +7,17 @@ const LinkTag = styled.a<{
   padding: string;
   margin: string;
   fontweight: string;
-  fontSize: string;
-  lineHeight: string;
-  hoverColor?: string;
+  fontsize: string;
 }>`
   color: ${(props) => props.color};
   display: ${(props) => props.display};
-  font-weight: ${typography.weight.medium};
   padding: ${(props) => props.padding};
   margin: ${(props) => props.margin || `${typography.size.s3}px 0 0 0`};
-  font-size: ${(props) => props.fontSize};
-  line-height: ${(props) => props.lineHeight};
+  font-size: ${(props) => props.fontsize};
+  line-height: 16px;
   letter-spacing: 0;
   text-decoration: none;
   font-weight: ${(props) => props.fontweight};
-  &:hover {
-    color: ${(props) => props.hoverColor || props.color};
-  }
 `;
 
 export { LinkTag };

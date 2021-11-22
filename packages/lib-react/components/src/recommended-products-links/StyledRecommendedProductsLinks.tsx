@@ -5,7 +5,7 @@ const RecommendedProductsLinksWrapper = styled.div<{
   isProductSoldOut?: boolean;
 }>`
   margin: 8px 0 ${(props) => (props.isProductSoldOut ? 16 : 8)}px 0;
-  font-size: ${typography.size.s2}px;
+  /* font-size: ${typography.size.s2}px; */
   line-height: ${typography.size.s5}px;
   color: rgba(0, 0, 0, 0.8);
   padding: 0 ${typography.size.s3}px;

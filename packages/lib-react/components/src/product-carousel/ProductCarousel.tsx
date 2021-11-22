@@ -89,6 +89,7 @@ export const ProductCarousel: FC<IProductCarouselProps> = ({
                     }
                     priority={index === 0}
                     src={img.imgUrlFull}
+                    className="pdpImages"
                   />
                 </ProductImageContainer>
               );

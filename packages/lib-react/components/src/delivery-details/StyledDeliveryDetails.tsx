@@ -5,14 +5,15 @@ import { SvgIcon } from '@hs/icons';
 const DeliveryDetailsWrapper = styled.div`
   background-color: ${Colors.WHITE};
   box-shadow: 0 1px 0 0 ${Colors.MERCURY}, 0 -1px 0 0 ${Colors.MERCURY};
-  padding: ${typography.size.s24}px ${typography.size.s3}px ${typography.size.s2}px;
+  padding: ${typography.size.s24}px ${typography.size.s3}px
+    ${typography.size.s2}px;
   margin: 0px;
 `;
 
 const DeliveryTitle = styled.div`
   display: flex;
   justify-content: space-between;
-  font-size: 14px;
+  /* font-size: 14px; */
 `;
 
 const Title = styled.span`
@@ -35,7 +36,7 @@ const DeliveryBadge = styled.span<{
   color: string;
   bgColor: string;
 }>`
-  font-size: ${typography.size.s1}px;
+  font-size: 1.2rem;
   background-color: ${(props) => props.bgColor};
   color: ${(props) => props.color || 'rgb(51, 51, 51)'};
   line-height: ${typography.size.s3}px;
@@ -49,7 +50,7 @@ const DeliveryBadge = styled.span<{
 const Delivery = styled.div`
   padding-left: ${typography.size.s08}px;
   margin-bottom: ${typography.size.s0}px;
-  font-size: ${typography.size.s2}px;
+  /* font-size: ${typography.size.s2}px; */
   line-height: ${typography.size.s3}px;
   color: ${secondaryColor[300]};
   display: flex;
@@ -77,7 +78,7 @@ const SelectedSkuSize = styled.div`
   opacity: 0.56;
   line-height: 20px;
   font-weight: 400;
-  font-size: 14px;
+  /* font-size: 14px; */
   color: #333;
 `;
 
@@ -87,7 +88,7 @@ const SizeSelector = styled.div`
   border-radius: 4px;
   box-shadow: 0 0 0 1px #dfe1e6;
   height: 36px;
-  font-size: 14px;
+  /* font-size: 14px; */
   color: #707070;
   text-overflow: ellipsis;
   white-space: nowrap;

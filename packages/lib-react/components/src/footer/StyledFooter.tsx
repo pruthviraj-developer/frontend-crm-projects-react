@@ -3,7 +3,7 @@ import { typography, HsTextAlign, Colors, secondaryColor } from '@hs/utils';
 import { SvgIcon } from '@hs/icons';
 
 const FooterWrapper = styled.footer`
-  font-size: ${typography.size.s1}px;
+  font-size: 1.2rem;
   line-height: 13px;
   font-weight: ${typography.weight.medium};
   background-color: ${Colors.WHITE};
@@ -62,7 +62,7 @@ const LinkWithIcons = styled('a')`
 const Copyright = styled.div`
   color: ${Colors.DARKGRAY};
   font-weight: ${typography.weight.regular};
-  font-size: 9px;
+  font-size: 0.9rem;
   line-height: 11px;
   padding-bottom: ${typography.size.s3}px;
   text-align: ${HsTextAlign.center};
@@ -114,13 +114,13 @@ const PopularSearchesLinks = styled.div`
 `;
 
 const PopularSearchesTitle = styled.div`
-  font-size: ${typography.size.s1}px;
+  font-size: 1.2rem;
   line-height: ${typography.size.s3}px;
 `;
 
 const PopularSearchesLink = styled('a')`
   color: ${secondaryColor[100]};
-  font-size: ${typography.size.s0}px;
+  font-size: 1rem;
   font-weight: ${typography.weight.regular};
   text-decoration: none;
   line-height: ${typography.size.s3}px;

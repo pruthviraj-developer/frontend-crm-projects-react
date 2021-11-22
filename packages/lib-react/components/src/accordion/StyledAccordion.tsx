@@ -7,7 +7,7 @@ const AccordionWrapper = styled.div`
 `;
 
 const AccordionTitle = styled.div`
-  font-size: ${typography.size.s2}px;
+  /* font-size: ${typography.size.s2}px; */
   line-height: ${typography.size.s3}px;
   padding: 12px 12px 12px 14px;
   border: 1px solid ${Colors.MERCURY};
@@ -39,7 +39,7 @@ const AccordionDescription = styled.div``;
 const DetailsDescription = styled.div<{ margin?: boolean }>`
   margin-top: ${(props) => (props.margin ? typography.size.s3 : 0)}px;
   &b {
-    font-size: ${typography.size.s2}px;
+    /* font-size: ${typography.size.s2}px; */
     line-height: ${typography.size.s4}px;
     font-weight: ${typography.weight.medium};
   }
@@ -51,14 +51,14 @@ const DetailsDescription = styled.div<{ margin?: boolean }>`
 const OtherDetails = styled.div`
   margin-top: ${typography.size.s3}px;
   &.content {
-    font-size: 14px;
+    /* font-size: 14px; */
     line-height: 20px;
     font-weight: 400;
   }
 `;
 
 const FeatureAttributesList = styled.ul`
-  font-size: 14px;
+  /* font-size: 14px; */
   line-height: 20px;
   font-weight: 400;
   padding-left: 24px;
@@ -70,7 +70,7 @@ const FeatureAttributesListItem = styled.li`
 `;
 
 const DetailsDescriptionTitle = styled.div`
-  font-size: 14px;
+  /* font-size: 14px; */
   line-height: 20px;
   font-weight: 400;
 `;
