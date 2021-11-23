@@ -24,7 +24,7 @@ const AccordionContent = styled.div`
   opacity: 0;
   display: none;
   color: ${secondaryColor[300]};
-  padding: 1.4rem;
+  padding: 1.4rem 1.4rem 1.4rem 1.5rem;
   border: none;
   background-color: ${Colors.WHITE};
   &.active {
@@ -38,13 +38,21 @@ const AccordionDescription = styled.div``;
 
 const DetailsDescription = styled.div<{ margin?: boolean }>`
   margin-top: ${(props) => (props.margin ? typography.size.s3 : 0)}px;
-  &b {
-    /* font-size: ${typography.size.s2}px; */
+  > b {
     line-height: ${typography.size.s4}px;
     font-weight: ${typography.weight.medium};
   }
-  & > a {
+  > a {
     color: ${primaryColor[100]};
+  }
+  > ul {
+    margin: 0;
+    padding-left: 24px;
+    line-height: ${typography.size.s22}px;
+  }
+  b {
+    line-height: ${typography.size.s4}px;
+    font-weight: ${typography.weight.medium};
   }
 `;
 

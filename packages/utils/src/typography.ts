@@ -30,6 +30,7 @@ export const typography = {
     s0: 10,
     s1: 12,
     s2: 14,
+    s22: 22,
     s24: 24,
     s15: 15,
     s3: 16,
