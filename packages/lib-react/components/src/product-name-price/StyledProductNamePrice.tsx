@@ -20,12 +20,12 @@ const ProductPrice = styled.span`
 
 const ProductOfferPrice = styled.div`
   display: inline-block;
+  margin-left: 4px;
 `;
 
 const ProductVendorPrice = styled.span`
   color: ${Colors.DARKGRAY};
-  /* font-size: ${typography.size.s2}px; */
-  line-height: ${typography.size.s3}px;
+  line-height: ${typography.size.s2}px;
   font-weight: ${typography.weight.medium};
   text-decoration: line-through;
   vertical-align: top;
@@ -35,8 +35,8 @@ const ProductVendorPrice = styled.span`
 const ProductDiscountPrice = styled.span`
   color: #f44;
   vertical-align: top;
-  padding-left: ${typography.size.s08}px;
-  line-height: ${typography.size.s3}px;
+  padding-left: ${typography.size.s1}px;
+  line-height: ${typography.size.s2}px;
 `;
 
 const ProductName = styled.h1`

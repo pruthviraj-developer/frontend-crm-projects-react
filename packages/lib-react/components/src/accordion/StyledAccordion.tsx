@@ -24,7 +24,7 @@ const AccordionContent = styled.div`
   opacity: 0;
   display: none;
   color: ${secondaryColor[300]};
-  padding: 1rem;
+  padding: 1.4rem;
   border: none;
   background-color: ${Colors.WHITE};
   &.active {

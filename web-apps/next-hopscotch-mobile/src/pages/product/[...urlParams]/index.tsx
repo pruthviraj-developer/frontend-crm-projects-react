@@ -562,15 +562,17 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
                 deleteFromWishlist,
               }}
             ></ProductNamePrice>
-            <SizeAndChartLabels
-              {...{
-                isOneSize,
-                hasSizeChart: productData.hasSizeChart,
-                qtyLeft,
-                simpleSkus,
-                onSizeChartClick: openSizeChartPopup,
-              }}
-            ></SizeAndChartLabels>
+            {isProductSoldOut === false && (
+              <SizeAndChartLabels
+                {...{
+                  isOneSize,
+                  hasSizeChart: productData.hasSizeChart,
+                  qtyLeft,
+                  simpleSkus,
+                  onSizeChartClick: openSizeChartPopup,
+                }}
+              ></SizeAndChartLabels>
+            )}
             {!isOneSize && (
               <CustomSizePicker
                 {...{
@@ -583,7 +585,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
             {showRfypCue && showRFYP && (
               <RecommendedProductsLinks {...{ isProductSoldOut, goToProductRecommendation }}></RecommendedProductsLinks>
             )}
-            {showRfypCue && <SeeSimilarProducts {...{ goToProductRecommendation }}></SeeSimilarProducts>}
+            {showRfypCue === true && <SeeSimilarProducts {...{ goToProductRecommendation }}></SeeSimilarProducts>}
             {isProductSoldOut === false && (
               <DeliveryDetails
                 {...{
