@@ -16,8 +16,8 @@ const SizeSoldOut = styled.span`
 const SeeSimilar = styled.span`
   color: rgba(0, 0, 0, 0.56);
   text-decoration: underline;
-  font-weight: ${typography.weight.medium};
-  padding-left: ${typography.size.s02}px;
+  font-weight: ${typography.weight.regular};
+  padding-left: ${typography.size.s03}px;
 `;
 
 export { SeeSimilarProductsWrapper, SeeSimilar, SizeSoldOut };

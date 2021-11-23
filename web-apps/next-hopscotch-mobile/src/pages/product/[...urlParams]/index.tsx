@@ -582,32 +582,32 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
               <RecommendedProductsLinks {...{ isProductSoldOut, goToProductRecommendation }}></RecommendedProductsLinks>
             )}
             {showRfypCue && <SeeSimilarProducts {...{ goToProductRecommendation }}></SeeSimilarProducts>}
-            <DeliveryDetails
-              {...{
-                ...deliveryDetailsData,
-                selectedSku: selectedSku,
-                ...deliveryDetails,
-                openPinCodePopup,
-                openSizeSelector,
-              }}
-            ></DeliveryDetails>
+            {isProductSoldOut === false && (
+              <DeliveryDetails
+                {...{
+                  ...deliveryDetailsData,
+                  selectedSku: selectedSku,
+                  ...deliveryDetails,
+                  openPinCodePopup,
+                  openSizeSelector,
+                }}
+              ></DeliveryDetails>
+            )}
             {productData.id && (
               <Accordion {...{ ...product, isPresale, simpleSkus, selectedSku: selectedSku }}></Accordion>
             )}
-
             {showRFYP && (
               <div ref={recommendedProductsLink}>
                 <RecommendedProducts {...recommendedForYou}></RecommendedProducts>
               </div>
             )}
-
             {showSimilarProducts && (
               <div ref={similarProductsLink}>
                 <RecommendedProducts {...similarProducts}></RecommendedProducts>
               </div>
             )}
           </ProductDetailsWrapper>
-          <AddToCart {...{ show: true, disabled: false, addProductToCart }}></AddToCart>
+          <AddToCart {...{ show: true, disabled: isProductSoldOut ? true : false, addProductToCart }}></AddToCart>
           <PinCodePopupModel>
             {isPinCodePopupOpen && (
               <PinCodePopupComponent
