@@ -543,6 +543,8 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
               showDots: true,
               imgUrls: productData.imgurls,
               goToProductRecommendation,
+              showRFYP,
+              isProductSoldOut,
             }}
           ></ProductCarousel>
           <ProductDetailsWrapper>

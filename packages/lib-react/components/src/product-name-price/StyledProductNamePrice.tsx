@@ -4,7 +4,7 @@ import { SvgIcon } from '@hs/icons';
 const ProductPricingWrapper = styled.div`
   display: flex;
   justify-content: space-between;
-  padding: 16px 16px 0;
+  padding: 16px 16px 0 17px;
 `;
 
 const ProductNamePriceWrapper = styled.div`
@@ -36,14 +36,13 @@ const ProductDiscountPrice = styled.span`
   color: #f44;
   vertical-align: top;
   padding-left: ${typography.size.s08}px;
-  /* font-size: ${typography.size.s2}px; */
   line-height: ${typography.size.s3}px;
 `;
 
 const ProductName = styled.h1`
   margin: 7px 0 0 0;
   font-size: 1.4rem;
-  line-height: ${typography.size.s5}px;
+  line-height: ${typography.size.s4}px;
   padding-bottom: ${typography.size.s08}px;
   font-weight: ${typography.weight.regular};
 `;

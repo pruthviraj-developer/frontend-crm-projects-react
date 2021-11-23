@@ -19,6 +19,7 @@ export const typography = {
     black: '900',
   },
   size: {
+    s01: 1,
     s02: 2,
     s03: 3,
     s04: 4,
@@ -33,6 +34,7 @@ export const typography = {
     s15: 15,
     s3: 16,
     s4: 18,
+    s17: 17,
     s19: 19,
     s40: 40,
     s5: 20,

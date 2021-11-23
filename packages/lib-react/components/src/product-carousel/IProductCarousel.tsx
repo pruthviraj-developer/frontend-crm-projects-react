@@ -9,6 +9,7 @@ export interface IProductCarouselProps {
   slidesToSlide: number;
   swipeable?: boolean;
   showDots?: boolean;
+  isProductSoldOut: boolean;
   imgUrls?: IImageUrl[];
   goToProductRecommendation: (a: string) => void;
 }
