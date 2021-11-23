@@ -38,7 +38,7 @@ const AccordionDescription = styled.div``;
 
 const DetailsDescription = styled.div<{ margin?: boolean }>`
   margin-top: ${(props) => (props.margin ? typography.size.s3 : 0)}px;
-  > b {
+  b {
     line-height: ${typography.size.s4}px;
     font-weight: ${typography.weight.medium};
   }
@@ -50,14 +50,11 @@ const DetailsDescription = styled.div<{ margin?: boolean }>`
     padding-left: 24px;
     line-height: ${typography.size.s22}px;
   }
-  b {
-    line-height: ${typography.size.s4}px;
-    font-weight: ${typography.weight.medium};
-  }
 `;
 
 const OtherDetails = styled.div`
-  margin-top: ${typography.size.s3}px;
+  margin-top: ${typography.size.s1}px;
+  line-height: 20px;
   &.content {
     /* font-size: 14px; */
     line-height: 20px;
