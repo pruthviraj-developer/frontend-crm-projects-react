@@ -151,8 +151,8 @@ const CreateProduct: FC<{ header: string }> = ({ header }: ICreateProductSubtype
   useEffect(() => {
     if (isAttributeSuccess) {
       attributeListData?.attributes.sort((a: IAttributesData, b: IAttributesData) => {
-        if (a.attributeName < b.attributeName) return -1;
-        return a.attributeName > b.attributeName ? 1 : 0;
+        if (a.attributeKey < b.attributeKey) return -1;
+        return a.attributeKey > b.attributeKey ? 1 : 0;
       });
       if (attributeListData) {
         setAttributeList(attributeListData.attributes);
@@ -537,7 +537,7 @@ const CreateProduct: FC<{ header: string }> = ({ header }: ICreateProductSubtype
                     </Grid>
                   </Paper>
                 </Grid>
-                {/* <pre>{JSON.stringify(values)}</pre> */}
+                {/* <pre>{JSON.stringify(values.attributeList, null, 4)}</pre> */}
               </Form>
             )}
           </Formik>
