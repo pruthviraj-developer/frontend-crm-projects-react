@@ -73,6 +73,7 @@ import * as gtm from '@/components/google-tag-manager/GTMLib';
 import { LoginModal } from '@/components/login-modal';
 import { Layout } from '@/components/layout/Layout';
 import { ProductHead } from '@/components/header';
+import GoToTop from '@/components/go-to-top/GoToTop';
 
 const tryLater = 'Try Later';
 
@@ -656,6 +657,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
       <LoginPopupModal>
         {isLoginPopupOpen && <LoginModal {...{ closeLoginPopup: closeLoginModalPopup }}></LoginModal>}
       </LoginPopupModal>
+      <GoToTop></GoToTop>
       {/* <pre style={{ width: '60%', overflowX: 'scroll' }}>{JSON.stringify(productDetails, null, 4)}</pre> */}
     </>
   );
