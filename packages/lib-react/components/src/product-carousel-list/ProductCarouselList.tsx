@@ -16,9 +16,6 @@ import { IFunnelData, SESSION_DATA, useSessionStorage } from '@hs/framework';
 
 const getDashedParameter = (product: IProductCarouselDetailsEntityList) => {
   let dashSeparatedUrlProductName = '';
-  if (product.brandName || product.brand) {
-    dashSeparatedUrlProductName = (product.brandName || product.brand) + '-';
-  }
   dashSeparatedUrlProductName += product.name || product.productName;
   dashSeparatedUrlProductName = dashSeparatedUrlProductName
     .replace(/\s+/g, '-')
