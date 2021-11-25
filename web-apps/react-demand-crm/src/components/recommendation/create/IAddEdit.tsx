@@ -9,3 +9,8 @@ export interface IFormResponse {
   action: string;
   message?: string;
 }
+
+export interface IRecommendationCarouselList {
+  key: string;
+  displayName: string;
+}

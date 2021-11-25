@@ -20,6 +20,11 @@ const getModelData = <P, R>(params?: P): Promise<R> => {
   return httpService.get<R>({ url, params });
 };
 
+const getRecommendCarouselTypes = <R>(): Promise<R> => {
+  const url = '/crm-api/intranet/model/listType';
+  return httpService.get<R>({ url });
+};
+
 const postModelData = <P, R>(data: P): Promise<R> => {
   const url = '/crm-api/intranet/model';
   return httpService.post<R>({ url, data });
@@ -30,4 +35,5 @@ export const recommendationService = {
   runData,
   getModelData,
   postModelData,
+  getRecommendCarouselTypes,
 };
