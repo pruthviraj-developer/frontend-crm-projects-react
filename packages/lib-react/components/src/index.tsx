@@ -16,3 +16,10 @@ export * from './size-selector-popup';
 export * from './size-chart-popup';
 export * from './header';
 export * from './see-similar-products';
+
+// desktop components
+export * from './nav-bar-desktop';
+export * from './footer-desktop';
+export * from './product-name-price-desktop';
+export * from './size-and-chart-labels-desktop';
+export * from './product-carousel-desktop';

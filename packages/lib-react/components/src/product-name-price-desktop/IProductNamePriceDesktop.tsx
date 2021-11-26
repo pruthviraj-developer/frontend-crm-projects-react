@@ -1,4 +1,4 @@
-import { ISimpleSkusEntityProps } from 'types';
+import { ISimpleSkusEntityProps } from '../types';
 
 export interface IProductNamePricePropsDesktop {
   productName?: string;

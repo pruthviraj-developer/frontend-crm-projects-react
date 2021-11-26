@@ -16,9 +16,9 @@ import {
   RecommendedProductsLinks,
   ProductHead,
   DeliveryDetails,
+  SizeAndChartLabelsDesktop,
+  ProductNamePriceDesktop,
 } from '@hs/components';
-
-import { SizeAndChartLabelsDesktop, ProductNamePriceDesktop } from '@hs/components-web-desktop';
 
 import { ProductCarouselDesktop } from '../../components/product-carousel-desktop/ProductCarouselDesktop';
 

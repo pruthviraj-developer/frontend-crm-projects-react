@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { typography, Colors, HsTextAlign } from '@hs/utils';
 import { SvgIcon } from '@hs/icons';
 
-const SizeChartWrapper = styled.div`
+const SizeChartWrapperDesktop = styled.div`
   font-size: ${typography.size.s1}px;
   line-height: ${typography.size.s2}px;
   font-weight: ${typography.weight.regular};
@@ -15,26 +15,26 @@ const SizeChartWrapper = styled.div`
   overflow-y: scroll;
 `;
 
-const SizeChartHeader = styled.div`
+const SizeChartHeaderDesktop = styled.div`
   border-bottom: 1px solid ${Colors.MERCURY};
   position: relative;
 `;
 
-const SizeChartHeaderTitle = styled.div`
+const SizeChartHeaderTitleDesktop = styled.div`
   padding: ${typography.size.s3}px 0;
 `;
 
-const SizeChartHeaderCloseIcon = styled.div`
+const SizeChartHeaderCloseIconDesktop = styled.div`
   position: absolute;
   right: ${typography.size.s3}px;
   top: ${typography.size.s1}px;
 `;
 
-const SizeChartCloseIcon = styled(SvgIcon)`
+const SizeChartCloseIconDesktop = styled(SvgIcon)`
   fill: #bbb;
 `;
 
-const SizeChartHeaderWrapper = styled.div`
+const SizeChartHeaderWrapperDesktop = styled.div`
   text-align: ${HsTextAlign.center};
   font-weight: ${typography.weight.medium};
   font-size: ${typography.size.s2}px;
@@ -47,38 +47,38 @@ const SizeChartHeaderWrapper = styled.div`
   z-index: 1001;
 `;
 
-const SizeChartHeaderProductName = styled.div`
+const SizeChartHeaderProductNameDesktop = styled.div`
   color: ${Colors.GRAY20};
   border-bottom: 1px solid ${Colors.MERCURY};
   padding: ${typography.size.s1}px;
 `;
 
-const SizeChartDetailsWrapper = styled.div``;
+const SizeChartDetailsWrapperDesktop = styled.div``;
 
 const SizeChartDetail = styled.div`
   margin: 8px 0 0;
   border-bottom: 1px solid #e6e6e6;
 `;
 
-const SizeChartDetailImages = styled.div``;
+const SizeChartDetailImagesDesktop = styled.div``;
 
-const SizeChartDetailImage = styled.div`
+const SizeChartDetailImageDesktop = styled.div`
   position: relative;
 `;
 
-const ChartDetailImageIllustration = styled.img`
+const ChartDetailImageIllustrationDesktop = styled.img`
   position: relative;
   width: 100%;
 `;
 
-const ImageLink = styled.img`
+const ImageLinkDesktop = styled.img`
   position: absolute;
   width: 100%;
   top: 0;
   left: 0;
 `;
 
-const SizeTableWrapper = styled.div`
+const SizeTableWrapperDesktop = styled.div`
   position: relative;
   margin-bottom: 16px;
 `;
@@ -87,13 +87,13 @@ const SizeTableHeader = styled.div`
   padding: ${typography.size.s08}px 0;
 `;
 
-const SizeOptionTypeLengthOrWidthHeader = styled.div`
+const SizeOptionTypeLengthOrWidthHeaderDesktop = styled.div`
   display: flex;
   align-items: center;
   padding: 8px 0 8px 12px;
 `;
 
-const SizeOptionType = styled.div`
+const SizeOptionTypeDesktop = styled.div`
   padding: ${typography.size.s08}px 6px 4px;
   margin: ${typography.size.s08}px;
   color: ${Colors.PINK[500]};
@@ -105,7 +105,7 @@ const SizeOptionType = styled.div`
   }
 `;
 
-const SizeTable = styled.div`
+const SizeTableDesktop = styled.div`
   font-size: ${typography.size.s2}px;
   line-height: ${typography.size.m4}px;
   overflow-x: scroll;
@@ -154,29 +154,29 @@ const SizeTipsList = styled.ul`
 
 const SizeTipsListItem = styled.li``;
 
-const SizeChartBody = styled.div`
+const SizeChartBodyDesktop = styled.div`
   padding-top: 90px;
 `;
 export {
-  SizeChartWrapper,
+  SizeChartWrapperDesktop,
   SizeChartDetail,
-  SizeChartDetailImage,
-  SizeChartDetailImages,
-  SizeChartDetailsWrapper,
-  SizeChartHeaderWrapper,
-  SizeChartHeader,
-  SizeChartHeaderTitle,
-  SizeChartBody,
-  SizeChartHeaderCloseIcon,
-  SizeChartHeaderProductName,
-  SizeChartCloseIcon,
-  SizeTableWrapper,
+  SizeChartDetailImageDesktop,
+  SizeChartDetailImagesDesktop,
+  SizeChartDetailsWrapperDesktop,
+  SizeChartHeaderWrapperDesktop,
+  SizeChartHeaderDesktop,
+  SizeChartHeaderTitleDesktop,
+  SizeChartBodyDesktop,
+  SizeChartHeaderCloseIconDesktop,
+  SizeChartHeaderProductNameDesktop,
+  SizeChartCloseIconDesktop,
+  SizeTableWrapperDesktop,
   SizeTableHeader,
-  SizeOptionType,
-  SizeOptionTypeLengthOrWidthHeader,
-  ChartDetailImageIllustration,
-  ImageLink,
-  SizeTable,
+  SizeOptionTypeDesktop,
+  SizeOptionTypeLengthOrWidthHeaderDesktop,
+  ChartDetailImageIllustrationDesktop,
+  ImageLinkDesktop,
+  SizeTableDesktop,
   SizeTableDetail,
   SizeTableBody,
   SizeTableRow,
