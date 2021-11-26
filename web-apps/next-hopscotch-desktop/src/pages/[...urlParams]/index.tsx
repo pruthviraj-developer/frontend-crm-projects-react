@@ -15,9 +15,9 @@ import {
   RecommendedProducts,
   RecommendedProductsLinks,
   ProductHead,
-  DeliveryDetails,
   SizeAndChartLabelsDesktop,
   ProductNamePriceDesktop,
+  DeliveryDetailsDesktop,
 } from '@hs/components';
 
 import { ProductCarouselDesktop } from '../../components/product-carousel-desktop/ProductCarouselDesktop';
