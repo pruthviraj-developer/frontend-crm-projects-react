@@ -1,2 +1,2 @@
 export * from './RecommendedProductsLinks';
-export * from './StyledRecommendedProductsLinks';
+export * from './IRecommendedProductsLinks';

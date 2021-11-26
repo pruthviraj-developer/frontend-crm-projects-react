@@ -1,0 +1,45 @@
+import React, { FC, useEffect, useState } from 'react';
+
+import { GoToTopWrapper, BackToTopIconWrapper, BackToTopIcon, BackToTopText } from './StyledGoToTop';
+import { BackIcon } from '@hs/icons';
+
+const GoToTop: FC = () => {
+  const [showBackToTop, setShowBackToTop] = useState<boolean>(false);
+  useEffect(() => {
+    let timeOut: any;
+    let lastScrollTop = 0;
+    const handleScroll = () => {
+      timeOut = clearTimeout(timeOut);
+      setTimeout(() => {
+        let currentScrollTop = window.scrollY;
+        let difference = currentScrollTop - lastScrollTop;
+        if (currentScrollTop > 500) {
+          setShowBackToTop(true);
+        } else if (currentScrollTop < 500) {
+          setShowBackToTop(false);
+        }
+        if (difference < 0 && currentScrollTop > 500) {
+          // Scrolling up, and below a certain height
+          setShowBackToTop(true);
+        } else if (difference > 20 || currentScrollTop <= 500) {
+          setShowBackToTop(false);
+        }
+        lastScrollTop = currentScrollTop;
+      }, 200);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+  return showBackToTop === true ? (
+    <GoToTopWrapper>
+      <BackToTopIconWrapper>
+        <BackToTopIcon icon={BackIcon}></BackToTopIcon>
+      </BackToTopIconWrapper>
+      <BackToTopText>Back to top</BackToTopText>
+    </GoToTopWrapper>
+  ) : null;
+};
+export default GoToTop;

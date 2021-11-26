@@ -1,2 +1,2 @@
 export * from './SizeSelectorPopup';
-export * from './SizeSelectorPopup';
+export * from './ISizeSelectorPopup';

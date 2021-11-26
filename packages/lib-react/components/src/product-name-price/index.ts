@@ -1,2 +1,2 @@
 export * from './ProductNamePrice';
-export * from './StyledProductNamePrice';
+export * from './IProductNamePrice';

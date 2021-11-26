@@ -1,2 +1,2 @@
 export * from './SizeAndChartLabels';
-export * from './StyledSizeAndChartLabels';
+export * from './ISizeAndChartLabels';

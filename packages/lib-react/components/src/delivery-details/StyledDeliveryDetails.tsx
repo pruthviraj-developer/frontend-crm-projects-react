@@ -6,8 +6,9 @@ const DeliveryDetailsWrapper = styled.div`
   background-color: ${Colors.WHITE};
   box-shadow: 0 1px 0 0 ${Colors.MERCURY}, 0 -1px 0 0 ${Colors.MERCURY};
   padding: ${typography.size.s24}px ${typography.size.s3}px
-    ${typography.size.s2}px;
+    ${typography.size.s2}px ${typography.size.s17}px;
   margin: 0px;
+  line-height: ${typography.size.s3}px;
 `;
 
 const DeliveryTitle = styled.div`
@@ -51,13 +52,15 @@ const Delivery = styled.div`
   padding-left: ${typography.size.s08}px;
   margin-bottom: ${typography.size.s0}px;
   /* font-size: ${typography.size.s2}px; */
-  line-height: ${typography.size.s3}px;
+  line-height: ${typography.size.s4}px;
   color: ${secondaryColor[300]};
   display: flex;
   align-items: center;
 `;
 
-const DeliveryInfo = styled.span``;
+const DeliveryInfo = styled.span`
+  margin-left: ${typography.size.s02}px;
+`;
 
 const DeliverIcon = styled(SvgIcon)`
   height: ${typography.size.s3}px;

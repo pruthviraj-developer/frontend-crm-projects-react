@@ -2,7 +2,8 @@ import styled from '@emotion/styled';
 import { HsTextAlign, typography, Colors } from '@hs/utils';
 
 const CustomSizeWrapper = styled.div`
-  margin: ${typography.size.s3}px auto;
+  margin: ${typography.size.s15}px auto ${typography.size.s3}px
+    ${typography.size.s01}px;
   overflow-x: scroll;
   scrollbar-width: none;
   &::-webkit-scrollbar {

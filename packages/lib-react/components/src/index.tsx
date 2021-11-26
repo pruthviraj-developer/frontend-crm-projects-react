@@ -15,3 +15,4 @@ export * from './add-to-cart';
 export * from './size-selector-popup';
 export * from './size-chart-popup';
 export * from './header';
+export * from './see-similar-products';

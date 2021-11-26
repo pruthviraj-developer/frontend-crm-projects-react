@@ -12,7 +12,7 @@ export const productCarouselStyles = (
         border-radius: 6px;
       }
       .product-carousel-dot-list {
-        bottom: 9px;
+        bottom: 10px;
         text-align: left;
         margin-left: 16px;
         justify-content: start;

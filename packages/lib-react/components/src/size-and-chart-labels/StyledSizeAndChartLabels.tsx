@@ -5,9 +5,9 @@ const SizeAndChartLabelsWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   padding: ${typography.size.s24}px ${typography.size.s3}px 0
-    ${typography.size.s3}px;
+    ${typography.size.s17}px;
   /* font-size: ${typography.size.s2}px; */
-  line-height: ${typography.size.s3}px;
+  line-height: ${typography.size.s4}px;
   font-weight: ${typography.weight.medium};
 `;
 

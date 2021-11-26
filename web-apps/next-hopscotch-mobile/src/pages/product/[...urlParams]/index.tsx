@@ -18,6 +18,7 @@ import {
   ProductHead,
   ProductNamePrice,
   DeliveryDetails,
+  SeeSimilarProducts,
 } from '@hs/components';
 
 import {
@@ -72,6 +73,7 @@ import * as segment from '@/components/segment-analytic';
 import * as gtm from '@/components/google-tag-manager/GTMLib';
 import { LoginModal } from '@/components/login-modal';
 import { Layout } from '@/components/layout/Layout';
+import GoToTop from '@/components/go-to-top/GoToTop';
 
 const tryLater = 'Try Later';
 
@@ -542,6 +544,8 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
               showDots: true,
               imgUrls: productData.imgurls,
               goToProductRecommendation,
+              showRFYP,
+              isProductSoldOut,
             }}
           ></ProductCarousel>
           <ProductDetailsWrapper>
@@ -559,15 +563,17 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
                 deleteFromWishlist,
               }}
             ></ProductNamePrice>
-            <SizeAndChartLabels
-              {...{
-                isOneSize,
-                hasSizeChart: productData.hasSizeChart,
-                qtyLeft,
-                simpleSkus,
-                onSizeChartClick: openSizeChartPopup,
-              }}
-            ></SizeAndChartLabels>
+            {isProductSoldOut === false && (
+              <SizeAndChartLabels
+                {...{
+                  isOneSize,
+                  hasSizeChart: productData.hasSizeChart,
+                  qtyLeft,
+                  simpleSkus,
+                  onSizeChartClick: openSizeChartPopup,
+                }}
+              ></SizeAndChartLabels>
+            )}
             {!isOneSize && (
               <CustomSizePicker
                 {...{
@@ -580,32 +586,33 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
             {showRfypCue && showRFYP && (
               <RecommendedProductsLinks {...{ isProductSoldOut, goToProductRecommendation }}></RecommendedProductsLinks>
             )}
-            <DeliveryDetails
-              {...{
-                ...deliveryDetailsData,
-                selectedSku: selectedSku,
-                ...deliveryDetails,
-                openPinCodePopup,
-                openSizeSelector,
-              }}
-            ></DeliveryDetails>
+            {showRfypCue === true && <SeeSimilarProducts {...{ goToProductRecommendation }}></SeeSimilarProducts>}
+            {isProductSoldOut === false && (
+              <DeliveryDetails
+                {...{
+                  ...deliveryDetailsData,
+                  selectedSku: selectedSku,
+                  ...deliveryDetails,
+                  openPinCodePopup,
+                  openSizeSelector,
+                }}
+              ></DeliveryDetails>
+            )}
             {productData.id && (
               <Accordion {...{ ...product, isPresale, simpleSkus, selectedSku: selectedSku }}></Accordion>
             )}
-
             {showRFYP && (
               <div ref={recommendedProductsLink}>
                 <RecommendedProducts {...recommendedForYou}></RecommendedProducts>
               </div>
             )}
-
             {showSimilarProducts && (
               <div ref={similarProductsLink}>
                 <RecommendedProducts {...similarProducts}></RecommendedProducts>
               </div>
             )}
           </ProductDetailsWrapper>
-          <AddToCart {...{ show: true, disabled: false, addProductToCart }}></AddToCart>
+          <AddToCart {...{ show: true, disabled: isProductSoldOut ? true : false, addProductToCart }}></AddToCart>
           <PinCodePopupModel>
             {isPinCodePopupOpen && (
               <PinCodePopupComponent
@@ -636,13 +643,11 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
           <SizeSelectorPopupComponent
             {...{
               closePopup: closeSizeSelector,
-              showRfypCue,
               showAddToCart: true,
               onSizeChartClick: openSizeChartPopup,
               simpleSkus,
               selectedSku: selectedSku,
               onSizeSelect,
-              goToProductRecommendation,
               addProductToCart,
             }}
           ></SizeSelectorPopupComponent>
@@ -652,6 +657,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
       <LoginPopupModal>
         {isLoginPopupOpen && <LoginModal {...{ closeLoginPopup: closeLoginModalPopup }}></LoginModal>}
       </LoginPopupModal>
+      <GoToTop></GoToTop>
       {/* <pre style={{ width: '60%', overflowX: 'scroll' }}>{JSON.stringify(productDetails, null, 4)}</pre> */}
     </>
   );
