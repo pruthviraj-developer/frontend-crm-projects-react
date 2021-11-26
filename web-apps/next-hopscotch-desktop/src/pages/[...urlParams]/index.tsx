@@ -9,6 +9,10 @@ import { dehydrate, useQuery } from 'react-query';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Layout } from '@/components/layout/Layout';
 
+const SizeChartPopupComponent = dynamic(() => import('../../components/size-chart/SizeChart'), {
+  ssr: false,
+});
+
 import {
   Accordion,
   CustomSizePicker,
@@ -117,7 +121,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
       }),
   );
 
-  const { data: productDetails } = useQuery<IProductDetails>(
+  const { data: productData } = useQuery<IProductDetails>(
     ['ProductDetail', productId],
     () => productDetailsService.getProductDetails(productId),
     {
@@ -142,6 +146,11 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
     },
   );
 
+  const [SizeChartPopupModal, openSizeChartPopup, closeSizeChartPopup, isSizeChartPopupOpen] = useModal('root', {
+    preventScroll: false,
+    closeOnOverlayClick: true,
+  });
+
   const [skuValue, setSku] = useState<ISimpleSkusEntityProps | any>();
   const {
     productName,
@@ -158,7 +167,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
     showRfypCue,
     wishlistId,
     ...product
-  } = useProduct({ productData: productDetails, sku: skuValue });
+  } = useProduct({ productData: productData, sku: skuValue });
 
   const { canShow: showSimilarProducts, ...similarProducts } = useRecommendation({
     section: 'RFYP',
@@ -177,12 +186,12 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
   });
 
   const { isOneSize } = useOneSize({
-    productData: productDetails,
+    productData: productData,
   });
 
   const deliveryDetailsData = useDeliveryDetails({
     selectedSku: skuValue,
-    productData: productDetails,
+    productData: productData,
   });
 
   const goToProductRecommendation = (fromLocation: string) => {
@@ -208,7 +217,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
   const openLoginPopup = () => {};
 
   const [{ contextData, properties }] = useSegment();
-  // const pdpTrackingData = useProductTracking({ selectedSku, productDetails });
+  // const pdpTrackingData = useProductTracking({ selectedSku, productData });
 
   const closeLoginModalPopup = (status?: boolean) => {
     if (status && addToWishlistStatus) {
@@ -219,18 +228,18 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
   };
 
   useEffect(() => {
-    if (contextData && properties && productDetails) {
+    if (contextData && properties && productData) {
       // segment.trackEvent({
       //   evtName: segment.PDP_TRACKING_EVENTS.PRODUCT_VIEWED,
       //   properties: {
       //     ...properties,
-      //     ...getProductTrackingData({ productDetails }),
+      //     ...getProductTrackingData({ productData }),
       //     addFrom: 'current=' + location.pathname,
       //   },
       //   contextData,
       // });
     }
-  }, [contextData, productDetails, properties]);
+  }, [contextData, productData, properties]);
 
   useEffect(() => {
     if (showLoginPopup) {
@@ -279,7 +288,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
                 max-width="100%"
                 draggable={false}
                 unoptimized
-                src={`${productDetails?.imgurls?.[0] && productDetails.imgurls[0].imgUrlThumbnail}`}
+                src={`${productData?.imgurls?.[0] && productData.imgurls[0].imgUrlThumbnail}`}
               />
               <CartNotificationDetails>
                 {!isOneSize && <CartHeader>{`${skuValue?.attrs[0]?.name} : ${skuValue?.attrs[0]?.value}`}</CartHeader>}
@@ -313,7 +322,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
           //   evtName: segment.PDP_TRACKING_EVENTS.ADDED_TO_CART,
           //   properties: {
           //     ...properties,
-          //     ...getProductTrackingData({ productDetails, selectedSku: sku }),
+          //     ...getProductTrackingData({ productData, selectedSku: sku }),
           //     atc_user,
           //     addFrom: 'current=' + location.pathname,
           //   },
@@ -332,7 +341,6 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
   const closePinCodePopup = () => {};
   const openPinCodePopup = () => {};
   const openSizeSelector = () => {};
-  const openSizeChartPopup = () => {};
 
   // end
 
@@ -353,7 +361,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
     //   evtName: segment.PDP_TRACKING_EVENTS.SIZE_CLICKED,
     //   properties: {
     //     ...properties,
-    //     ...getProductTrackingData({ productDetails, selectedSku: sku }),
+    //     ...getProductTrackingData({ productData, selectedSku: sku }),
     //     addFrom: 'current=' + location.pathname,
     //     from_location: fromLocation,
     //   },
@@ -399,10 +407,10 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
   };
 
   const addToWishlistAfterModalClose = () => {
-    let retailPrice = skuValue?.retailPrice || productDetails?.retailPrice || 0;
+    let retailPrice = skuValue?.retailPrice || productData?.retailPrice || 0;
     const wishlistItem = {
       sku: selectedSkuId || '',
-      productId: productDetails?.id,
+      productId: productData?.id,
       price: retailPrice,
       attribution: {
         // source: oa_data['source'],
@@ -460,11 +468,11 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
   return (
     <>
       <QueryClientProvider client={queryClient}>
-        {productDetails && productDetails.action === LOCAL_DATA.SUCCESS && (
+        {productData && productData.action === LOCAL_DATA.SUCCESS && (
           <>
             <ProductHead {...{ productName, retailPrice }}></ProductHead>
             <ProductWrapper>
-              {productDetails.imgurls && productDetails.imgurls.length > 0 && (
+              {productData.imgurls && productData.imgurls.length > 0 && (
                 <ProductCarouselDesktop
                   {...{
                     showArrows: true,
@@ -476,7 +484,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
                     slidesToSlide: 1,
                     swipeable: false,
                     showDots: false,
-                    imgUrls: productDetails.imgurls,
+                    imgUrls: productData.imgurls,
                     goToProductRecommendation,
                   }}
                 ></ProductCarouselDesktop>
@@ -485,7 +493,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
                 <ProductNamePriceDesktop
                   {...{
                     productName,
-                    isProductSoldOut: !!productDetails.isProductSoldOut,
+                    isProductSoldOut: !!productData.isProductSoldOut,
                     wishlistId: updatedWishListId === undefined ? wishlistId : updatedWishListId,
                     retailPrice,
                     retailPriceMax,
@@ -499,7 +507,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
                 <SizeAndChartLabelsDesktop
                   {...{
                     isOneSize,
-                    hasSizeChart: productDetails.hasSizeChart,
+                    hasSizeChart: productData.hasSizeChart,
                     qtyLeft,
                     simpleSkus,
                     onSizeChartClick: openSizeChartPopup,
@@ -516,10 +524,10 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
                 )}
                 {showRfypCue && showRFYP && (
                   <RecommendedProductsLinks
-                    {...{ isProductSoldOut: !!productDetails.isProductSoldOut, goToProductRecommendation }}
+                    {...{ isProductSoldOut: !!productData.isProductSoldOut, goToProductRecommendation }}
                   ></RecommendedProductsLinks>
                 )}
-                <DeliveryDetails
+                <DeliveryDetailsDesktop
                   {...{
                     ...deliveryDetailsData,
                     selectedSku: skuValue,
@@ -527,8 +535,8 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
                     openPinCodePopup,
                     openSizeSelector,
                   }}
-                ></DeliveryDetails>
-                {productDetails.id && (
+                ></DeliveryDetailsDesktop>
+                {productData.id && (
                   <Accordion {...{ ...product, isPresale, simpleSkus, selectedSku: skuValue }}></Accordion>
                 )}
               </ProductDetailsWrapper>
@@ -546,10 +554,22 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
               </div>
             )}
             {/* <AddToCart {...{ show: true, disabled: false, addProductToCart }}></AddToCart> */}
+
+            <SizeChartPopupModal>
+              {isSizeChartPopupOpen && productData && (
+                <SizeChartPopupComponent
+                  {...{
+                    id: productData.id,
+                    productName: productName,
+                    onClickClose: closeSizeChartPopup,
+                  }}
+                ></SizeChartPopupComponent>
+              )}
+            </SizeChartPopupModal>
           </>
         )}
       </QueryClientProvider>
-      {/* <pre style={{ width: '60%', overflowX: 'scroll' }}>{JSON.stringify(productDetails, null, 4)}</pre> */}
+      {/* <pre style={{ width: '60%', overflowX: 'scroll' }}>{JSON.stringify(productData, null, 4)}</pre> */}
     </>
   );
 };
