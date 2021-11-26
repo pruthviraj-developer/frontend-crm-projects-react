@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { makeStyles } from '@material-ui/core/styles';
 import { HSTableV1 } from '@hs/components';
@@ -9,6 +9,7 @@ import { ArchivedDashBoardWrapper, ArchivedFilterWrapper, TableWrapper } from '.
 import { getArchivedFiltersData, dashboardColumns } from './Constant';
 import { recommendationService } from '@hs/services';
 import { useQuery } from 'react-query';
+import { IRecommendationCarouselList } from '../create/IAddEdit';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -41,6 +42,7 @@ const ArchivedDashboard: FC<{ header: string }> = ({ header }: IHeaderType) => {
   const classes = useStyles();
   const [postFilterData, setPostFilterData] = useState({});
   const [filterPage, setFilterPage] = useState<IPageType>(defaultPageFilters);
+  const [getFiltersData, setFilterData] = useState(getArchivedFiltersData);
 
   const { data: dashboardData, isSuccess: isDashboardSuccess } = useQuery<
     IDashboardDataResponse,
@@ -78,10 +80,31 @@ const ArchivedDashboard: FC<{ header: string }> = ({ header }: IHeaderType) => {
     setPostFilterData(data);
   };
 
-  const filterData: FilterPanProps = {
-    data: getArchivedFiltersData,
+  let filterData: FilterPanProps = {
+    data: getFiltersData,
     onChange: onChangeHandler,
   };
+
+  useEffect(() => {
+    (async () => {
+      try {
+        let listType: IRecommendationCarouselList[] = await recommendationService.getRecommendCarouselTypes();
+        if (listType.length > 0) {
+          let setupfilterData: any = JSON.parse(JSON.stringify(getArchivedFiltersData));
+          setupfilterData.map((row: any) => {
+            if (row.key === 'rcType') {
+              listType.map((list: any) => {
+                row.options.push({ display: list.displayName, key: list.key });
+                return list;
+              });
+            }
+            return row;
+          });
+          setFilterData(setupfilterData);
+        }
+      } catch (e) {}
+    })();
+  }, []);
 
   return (
     <>

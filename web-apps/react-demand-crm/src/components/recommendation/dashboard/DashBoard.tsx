@@ -20,6 +20,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import { toast } from 'react-toastify';
 import { recommendationService } from '@hs/services';
+import { IRecommendationCarouselList } from '../create/IAddEdit';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -67,6 +68,7 @@ const DashBoard: FC<{ header: string }> = ({ header }) => {
     models: [],
     totalRecords: 0,
   });
+  const [filtersData, setFilterData] = useState(getFiltersData);
 
   useEffect(() => {
     (async () => {
@@ -92,6 +94,27 @@ const DashBoard: FC<{ header: string }> = ({ header }) => {
       }
     })();
   }, [filterParams]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        let listType: IRecommendationCarouselList[] = await recommendationService.getRecommendCarouselTypes();
+        if (listType.length > 0) {
+          let setupfilterData: any = JSON.parse(JSON.stringify(getFiltersData));
+          setupfilterData.map((row: any) => {
+            if (row.key === 'rcType') {
+              listType.map((list: any) => {
+                row.options.push({ display: list.displayName, key: list.key });
+                return list;
+              });
+            }
+            return row;
+          });
+          setFilterData(setupfilterData);
+        }
+      } catch (e) {}
+    })();
+  }, []);
 
   const fetchTableData = (e: any) => {
     setFilterParams({ ...filterParams, pageNo: e.pageNo + 1, pageSize: e.pageSize });
@@ -213,7 +236,7 @@ const DashBoard: FC<{ header: string }> = ({ header }) => {
   };
 
   const filterPanData: FilterPanProps = {
-    data: getFiltersData,
+    data: filtersData,
     onChange: onChangeHandler,
   };
 

@@ -17,11 +17,7 @@ export const getFiltersData: FilterPanDataType[] = [
     key: 'rcType',
     multiSelect: false,
     isString: true,
-    options: [
-      { display: 'rc1 - Recommendation Carousel 1 i.e P to P mapping', key: 'rc1' },
-      { display: 'rc2 - Recommendation Carousel 2 i.e C to P mapping', key: 'rc2' },
-      { display: 'all', key: 'all' },
-    ],
+    options: [{ display: 'all', key: 'all' }],
   },
   {
     display: 'Status',
@@ -56,11 +52,7 @@ export const getArchivedFiltersData: FilterPanDataType[] = [
     key: 'rcType',
     multiSelect: false,
     isString: true,
-    options: [
-      { display: 'rc1 - Recommendation Carousel 1 i.e P to P mapping', key: 'rc1' },
-      { display: 'rc2 - Recommendation Carousel 2 i.e C to P mapping', key: 'rc2' },
-      { display: 'all', key: 'all' },
-    ],
+    options: [{ display: 'all', key: 'all' }],
   },
 ];
 
