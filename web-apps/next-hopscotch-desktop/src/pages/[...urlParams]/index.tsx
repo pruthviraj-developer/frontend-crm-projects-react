@@ -46,6 +46,8 @@ import {
   CartLinkText,
 } from '@/styles';
 
+import SizeSelector from '../../components/size-selector/SizeSelector';
+
 import {
   useRecommendation,
   IRecommendedProducts,
@@ -513,7 +515,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
                     onSizeChartClick: openSizeChartPopup,
                   }}
                 ></SizeAndChartLabelsDesktop>
-                {!isOneSize && (
+                {/* {!isOneSize && (
                   <CustomSizePicker
                     {...{
                       simpleSkus,
@@ -526,7 +528,9 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
                   <RecommendedProductsLinks
                     {...{ isProductSoldOut: !!productData.isProductSoldOut, goToProductRecommendation }}
                   ></RecommendedProductsLinks>
-                )}
+                )} */}
+
+                <SizeSelector></SizeSelector>
                 <DeliveryDetailsDesktop
                   {...{
                     ...deliveryDetailsData,
