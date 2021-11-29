@@ -381,7 +381,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
         color: '#fff',
         textAlign: 'center',
         fontWeight: 600,
-        fontSize: '14px',
+        fontSize: '1.4rem',
         lineHeight: '16px',
       },
     });

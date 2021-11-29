@@ -18,6 +18,9 @@ const ProductCarouselWrapper = styled.div`
   ${mediaQueries('xl')`
     width: 66.66667%;
   `};
+  ${mediaQueries('lg')`
+  width: 58.33333%;
+ `};
 `;
 
 const ProductImageContainer = styled.div`

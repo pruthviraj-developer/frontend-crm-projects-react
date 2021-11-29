@@ -7,6 +7,9 @@ const ProductWrapper = styled.div`
   ${mediaQueries('xl')`
     margin: auto 20px;
   `};
+  ${mediaQueries('lg')`
+    margin: auto;
+  `};
 `;
 const ProductDetailsWrapper = styled.div`
   background: ${Colors.WHITE};
@@ -18,6 +21,9 @@ const ProductDetailsWrapper = styled.div`
   width: 41.66667%;
   ${mediaQueries('xl')`
    width: 33.33333%;
+  `};
+  ${mediaQueries('lg')`
+   width: 41.66667%;
   `};
 `;
 
