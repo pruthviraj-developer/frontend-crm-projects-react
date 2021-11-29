@@ -159,6 +159,7 @@ const SizeTableRowTableData = styled.td`
     position: absolute;
     min-width: 130px;
     left: 13px;
+    margin-top: -1px;
   }
 `;
 
