@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { typography, Colors, HsTextAlign } from '@hs/utils';
+import { typography, Colors, HsTextAlign, fontWeight } from '@hs/utils';
 import { SvgIcon } from '@hs/icons';
 
 const SizeChartWrapperDesktop = styled.div`
@@ -14,7 +14,7 @@ const SizeChartWrapperDesktop = styled.div`
   bottom: 0;
   overflow-y: scroll;
   max-width: 83%;
-  margin: auto;
+  margin: auto auto 103px auto;
 `;
 
 const SizeChartHeaderDesktop = styled.div`
@@ -75,7 +75,7 @@ const SizeChartDetail = styled.div`
 `;
 
 const SizeChartDetailImagesDesktop = styled.div`
-  min-width: 41.33%;
+  min-width: 41.66667%;
 `;
 
 const SizeChartDetailImageDesktop = styled.div`
@@ -131,11 +131,12 @@ const SizeTableDesktop = styled.div`
 `;
 
 const SizeTableDetail = styled.table`
-  margin: ${typography.size.s08}px 0 0 108px;
+  margin: 0 0 0 108px;
   text-align: center;
   width: calc(100% - 128px);
   border-collapse: collapse;
   border-spacing: 0;
+  font-size: 12px;
 `;
 
 const SizeTableBody = styled.tbody``;
@@ -144,6 +145,7 @@ const SizeTableRow = styled.tr`
   font-weight: ${typography.weight.regular};
   &:first-of-type td {
     background: #f5f5f5;
+    font-weight: 600;
   }
 `;
 
@@ -152,23 +154,29 @@ const SizeTableRowTableData = styled.td`
   background: #fff;
   border: 1px solid #e6e6e6;
   min-width: 120px;
+  line-height: 34px;
   &:first-of-type {
     position: absolute;
     min-width: 130px;
-    left: 0;
+    left: 13px;
   }
 `;
 
 const SizeTips = styled.div`
-  padding: 16px 0 16px 16px;
+  padding: 16px 0;
 `;
 
 const SizeTipsTitle = styled.div`
   font-weight: ${typography.weight.medium};
+  font-size: 14px;
+  line-height: 20px;
 `;
 
 const SizeTipsList = styled.ul`
   padding-left: 16px;
+  font-size: 14px;
+  line-height: 20px;
+  margin: 0;
 `;
 
 const SizeTipsListItem = styled.li``;
