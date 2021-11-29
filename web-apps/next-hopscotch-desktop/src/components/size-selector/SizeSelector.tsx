@@ -25,16 +25,19 @@ const SizeSelector: FC = () => {
         </SelectPreview>
         {isDropDownOpen && (
           <OptionsPreview>
-            <Options>
+            <Options soldOut={false}>
               <span>6-12 months</span>
               <DeliveryDetails>
                 <DeliveryIcon icon={IconDeliveryTruck} />
                 4-5 weeks
               </DeliveryDetails>
             </Options>
-            <Options>6-12 months</Options>
-            <Options>1-2 years</Options>
-            <Options>2-3 years</Options>
+            <Options soldOut={true}>6-12 months</Options>
+            <Options soldOut={false}>1-2 years</Options>
+            <Options soldOut={false}>2-3 years</Options>
+            <Options soldOut={true}>
+              <span>3-4 years</span> <span>Sold out</span>
+            </Options>
           </OptionsPreview>
         )}
       </CustomSizePicker>

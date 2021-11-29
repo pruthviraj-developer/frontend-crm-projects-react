@@ -43,7 +43,9 @@ const OptionsPreview = styled.div`
   box-shadow: 0 8px 20px 0 rgb(0 0 0 / 16%);
 `;
 
-const Options = styled.div`
+const Options = styled.div<{
+  soldOut: Boolean;
+}>`
   padding: 16px;
   font-size: 14px;
   font-weight: 400;
@@ -52,6 +54,10 @@ const Options = styled.div`
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid #e6e6e6;
+  opacity: ${(props) => (props.soldOut ? 0.4 : 1)};
+  &:last-child {
+    border: none;
+  }
 `;
 
 const SelectPreview = styled.div<{
