@@ -38,6 +38,7 @@ import ICIconErrorMessage from './images/icon-error-msg.svg';
 import ICIconSearch from './images/ic-seach-white.svg';
 import ICIconWishListDefault from './images/ic-wish-default.svg';
 import ICIconDropDown from './images/icon-dropdown.svg';
+import ICIconDeliveryTruck from './images/ic-delivery-truck.svg';
 
 export const CreateIcon = ICCreate;
 export const BackIcon = ICBack;
@@ -78,3 +79,4 @@ export const IconRadioActive = ICIconRadioActive;
 export const IconErrorMessage = ICIconErrorMessage;
 export const IconSearch = ICIconSearch;
 export const IconDropDown = ICIconDropDown;
+export const IconDeliveryTruck = ICIconDeliveryTruck;
