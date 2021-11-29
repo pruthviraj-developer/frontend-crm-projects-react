@@ -20,10 +20,11 @@ const SizeChartWrapperDesktop = styled.div`
 const SizeChartHeaderDesktop = styled.div`
   border-bottom: 1px solid ${Colors.MERCURY};
   position: relative;
+  padding: ${typography.size.s3}px 0 ${typography.size.s15}px 0;
 `;
 
 const SizeChartHeaderTitleDesktop = styled.div`
-  padding: ${typography.size.s3}px 0;
+  line-height: ${typography.size.s4}px;
 `;
 
 const SizeChartHeaderCloseIconDesktop = styled.div`
@@ -34,6 +35,7 @@ const SizeChartHeaderCloseIconDesktop = styled.div`
 
 const SizeChartCloseIconDesktop = styled(SvgIcon)`
   fill: #bbb;
+  opacity: 0.5;
 `;
 
 const SizeChartHeaderWrapperDesktop = styled.div`
@@ -52,18 +54,29 @@ const SizeChartHeaderWrapperDesktop = styled.div`
 
 const SizeChartHeaderProductNameDesktop = styled.div`
   color: ${Colors.GRAY20};
-  border-bottom: 1px solid ${Colors.MERCURY};
   padding: ${typography.size.s1}px;
+  font-size: 14px;
+  line-height: 16px;
+  font-weight: 600;
 `;
 
-const SizeChartDetailsWrapperDesktop = styled.div``;
+const SizeChartDetailsWrapperDesktop = styled.div`
+  display: flex;
+  margin-top: 8px;
+  margin-right: 0px;
+  margin-bottom: 0px;
+  margin-left: 0px;
+  border-bottom: 1px solid #e6e6e6;
+`;
 
 const SizeChartDetail = styled.div`
   margin: 8px 0 0;
   border-bottom: 1px solid #e6e6e6;
 `;
 
-const SizeChartDetailImagesDesktop = styled.div``;
+const SizeChartDetailImagesDesktop = styled.div`
+  min-width: 41.33%;
+`;
 
 const SizeChartDetailImageDesktop = styled.div`
   position: relative;
@@ -83,7 +96,8 @@ const ImageLinkDesktop = styled.img`
 
 const SizeTableWrapperDesktop = styled.div`
   position: relative;
-  margin-bottom: 16px;
+  padding: 0 16px;
+  max-width: 58.33333%;
 `;
 
 const SizeTableHeader = styled.div`
@@ -93,12 +107,14 @@ const SizeTableHeader = styled.div`
 const SizeOptionTypeLengthOrWidthHeaderDesktop = styled.div`
   display: flex;
   align-items: center;
-  padding: 8px 0 8px 12px;
+  padding: 0 0 8px 12px;
+  font-size: 14px;
+  line-height: 16px;
 `;
 
 const SizeOptionTypeDesktop = styled.div`
-  padding: ${typography.size.s08}px 6px 4px;
-  margin: ${typography.size.s08}px;
+  padding: ${typography.size.s08}px 6px 5px;
+  margin: ${typography.size.s08}px ${typography.size.s08}px ${typography.size.s08}px 12px;
   color: ${Colors.PINK[500]};
   font-weight: ${typography.weight.regular};
   cursor: pointer;
@@ -158,7 +174,7 @@ const SizeTipsList = styled.ul`
 const SizeTipsListItem = styled.li``;
 
 const SizeChartBodyDesktop = styled.div`
-  padding-top: 90px;
+  padding-top: 50px;
 `;
 export {
   SizeChartWrapperDesktop,

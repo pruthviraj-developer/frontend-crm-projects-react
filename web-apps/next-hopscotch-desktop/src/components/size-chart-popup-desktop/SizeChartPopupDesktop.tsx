@@ -57,136 +57,104 @@ export const SizeChartPopupDesktop: FC<ISizeChartPopupDesktop> = ({
             <SizeChartCloseIconDesktop icon={IconClose} />
           </SizeChartHeaderCloseIconDesktop>
         </SizeChartHeaderDesktop>
-        <SizeChartHeaderProductNameDesktop>
-          {productName}
-        </SizeChartHeaderProductNameDesktop>
       </SizeChartHeaderWrapperDesktop>
       <SizeChartBodyDesktop>
         {sizeChartData &&
-          sizeChartData.map(
-            (sizeChart: ISizeChartDTOListEntityDesktop, index: number) => {
-              return (
-                <SizeChartDetailsWrapperDesktop key={index}>
-                  {sizeChart.illustrationImageUrl && (
-                    <SizeChartDetailImagesDesktop>
-                      <SizeChartDetailImageDesktop>
-                        <ChartDetailImageIllustrationDesktop
-                          src={sizeChart.illustrationImageUrl}
-                        />
-                        {sizeChart.cueImageUrlList?.map(
-                          (cueImg: string, ind: number) => (
-                            <ImageLinkDesktop key={ind} src={cueImg} />
-                          )
-                        )}
-                      </SizeChartDetailImageDesktop>
-                    </SizeChartDetailImagesDesktop>
+          sizeChartData.map((sizeChart: ISizeChartDTOListEntityDesktop, index: number) => {
+            return (
+              <SizeChartDetailsWrapperDesktop key={index}>
+                {sizeChart.illustrationImageUrl && (
+                  <SizeChartDetailImagesDesktop>
+                    <SizeChartDetailImageDesktop>
+                      <ChartDetailImageIllustrationDesktop src={sizeChart.illustrationImageUrl} />
+                      {sizeChart.cueImageUrlList?.map((cueImg: string, ind: number) => (
+                        <ImageLinkDesktop key={ind} src={cueImg} />
+                      ))}
+                    </SizeChartDetailImageDesktop>
+                  </SizeChartDetailImagesDesktop>
+                )}
+                <SizeTableWrapperDesktop>
+                  {index === 0 && <SizeChartHeaderProductNameDesktop>{productName}</SizeChartHeaderProductNameDesktop>}
+                  {sizeChart.sizeChartParameterValueDTOList && (
+                    <>
+                      {showLengthBlock[index] && (
+                        <SizeOptionTypeLengthOrWidthHeaderDesktop>
+                          Length:
+                          <SizeOptionTypeDesktop
+                            onClick={() => {
+                              setLength(index, 'cm');
+                            }}
+                            className={isLengthActive[index] === 'cm' ? 'active' : ''}
+                          >
+                            cm
+                          </SizeOptionTypeDesktop>
+                          <SizeOptionTypeDesktop
+                            onClick={() => {
+                              setLength(index, 'in');
+                            }}
+                            className={isLengthActive[index] === 'in' ? 'active' : ''}
+                          >
+                            in
+                          </SizeOptionTypeDesktop>
+                        </SizeOptionTypeLengthOrWidthHeaderDesktop>
+                      )}
+                      {showWeightBlock[index] && (
+                        <SizeOptionTypeLengthOrWidthHeaderDesktop>
+                          Weight:
+                          <SizeOptionTypeDesktop
+                            onClick={() => {
+                              setWeight(index, 'kg');
+                            }}
+                            className={isWeightActive[index] === 'kg' ? 'active' : ''}
+                          >
+                            kg
+                          </SizeOptionTypeDesktop>
+                          <SizeOptionTypeDesktop
+                            onClick={() => {
+                              setWeight(index, 'lb');
+                            }}
+                            className={isWeightActive[index] === 'lb' ? 'active' : ''}
+                          >
+                            lb
+                          </SizeOptionTypeDesktop>
+                        </SizeOptionTypeLengthOrWidthHeaderDesktop>
+                      )}
+                    </>
                   )}
-                  <SizeTableWrapperDesktop>
-                    {sizeChart.sizeChartParameterValueDTOList && (
-                      <>
-                        {showLengthBlock[index] && (
-                          <SizeOptionTypeLengthOrWidthHeaderDesktop>
-                            Length:
-                            <SizeOptionTypeDesktop
-                              onClick={() => {
-                                setLength(index, 'cm');
-                              }}
-                              className={
-                                isLengthActive[index] === 'cm' ? 'active' : ''
-                              }
-                            >
-                              cm
-                            </SizeOptionTypeDesktop>
-                            <SizeOptionTypeDesktop
-                              onClick={() => {
-                                setLength(index, 'in');
-                              }}
-                              className={
-                                isLengthActive[index] === 'in' ? 'active' : ''
-                              }
-                            >
-                              in
-                            </SizeOptionTypeDesktop>
-                          </SizeOptionTypeLengthOrWidthHeaderDesktop>
-                        )}
-                        {showWeightBlock[index] && (
-                          <SizeOptionTypeLengthOrWidthHeaderDesktop>
-                            Weight:
-                            <SizeOptionTypeDesktop
-                              onClick={() => {
-                                setWeight(index, 'kg');
-                              }}
-                              className={
-                                isWeightActive[index] === 'kg' ? 'active' : ''
-                              }
-                            >
-                              kg
-                            </SizeOptionTypeDesktop>
-                            <SizeOptionTypeDesktop
-                              onClick={() => {
-                                setWeight(index, 'lb');
-                              }}
-                              className={
-                                isWeightActive[index] === 'lb' ? 'active' : ''
-                              }
-                            >
-                              lb
-                            </SizeOptionTypeDesktop>
-                          </SizeOptionTypeLengthOrWidthHeaderDesktop>
-                        )}
-                      </>
-                    )}
-                    <SizeTableDesktop>
-                      <SizeTableDetail>
-                        <SizeTableBody>
-                          {chartTableData[index] &&
-                            chartTableData[index].map(
-                              (
-                                tableData: ISizeChartParameterValueDTOListEntityDesktop,
-                                inde: number
-                              ) => {
-                                return (
-                                  <SizeTableRow key={inde}>
-                                    {tableData.valueList &&
-                                      tableData.valueList.map(
-                                        (param: string, ind: number) => {
-                                          return (
-                                            <SizeTableRowTableData key={ind}>
-                                              {param}
-                                            </SizeTableRowTableData>
-                                          );
-                                        }
-                                      )}
-                                  </SizeTableRow>
-                                );
-                              }
-                            )}
-                        </SizeTableBody>
-                      </SizeTableDetail>
-                    </SizeTableDesktop>
-                  </SizeTableWrapperDesktop>
+
+                  <SizeTableDesktop>
+                    <SizeTableDetail>
+                      <SizeTableBody>
+                        {chartTableData[index] &&
+                          chartTableData[index].map(
+                            (tableData: ISizeChartParameterValueDTOListEntityDesktop, inde: number) => {
+                              return (
+                                <SizeTableRow key={inde}>
+                                  {tableData.valueList &&
+                                    tableData.valueList.map((param: string, ind: number) => {
+                                      return <SizeTableRowTableData key={ind}>{param}</SizeTableRowTableData>;
+                                    })}
+                                </SizeTableRow>
+                              );
+                            },
+                          )}
+                      </SizeTableBody>
+                    </SizeTableDetail>
+                  </SizeTableDesktop>
                   {sizeChart.notesList && (
                     <SizeTips>
-                      <SizeTipsTitle>
-                        Size notes and fitting tips:
-                      </SizeTipsTitle>
+                      <SizeTipsTitle>Size notes and fitting tips:</SizeTipsTitle>
                       <SizeTipsList>
-                        {sizeChart.notesList.map(
-                          (notes: string, notesIndex: number) => {
-                            return (
-                              <SizeTipsListItem key={notesIndex}>
-                                {notes}
-                              </SizeTipsListItem>
-                            );
-                          }
-                        )}
+                        {sizeChart.notesList.map((notes: string, notesIndex: number) => {
+                          return <SizeTipsListItem key={notesIndex}>{notes}</SizeTipsListItem>;
+                        })}
                       </SizeTipsList>
                     </SizeTips>
                   )}
-                </SizeChartDetailsWrapperDesktop>
-              );
-            }
-          )}
+                </SizeTableWrapperDesktop>
+              </SizeChartDetailsWrapperDesktop>
+            );
+          })}
       </SizeChartBodyDesktop>
     </SizeChartWrapperDesktop>
   );
