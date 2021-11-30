@@ -90,6 +90,30 @@ const DeliveryIcon = styled(SvgIcon)`
   margin-top: 1px;
 `;
 
+const RecommendedForyou = styled.div`
+  position: relative;
+  padding: 10px 16px;
+  background-color: #3e4855;
+  color: #fff;
+  font-size: 12px;
+  line-height: 15px;
+  display: flex;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+`;
+
+const SeeSimilarIcon = styled(SvgIcon)``;
+const SizeSoldOut = styled.div`
+  padding-left: 7px;
+  vertical-align: top;
+`;
+const SeeSimilarProducts = styled.div`
+  text-decoration: underline;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  padding-left: 3px;
+`;
+
 export {
   SizeSelectorWrapper,
   CustomSizePicker,
@@ -100,4 +124,8 @@ export {
   Options,
   SelectPreview,
   DeliveryDetails,
+  RecommendedForyou,
+  SeeSimilarIcon,
+  SizeSoldOut,
+  SeeSimilarProducts,
 };
