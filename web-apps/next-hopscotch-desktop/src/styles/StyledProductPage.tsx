@@ -4,11 +4,11 @@ import { Colors, mediaQueries } from '@hs/utils';
 const ProductWrapper = styled.div`
   display: flex;
   margin: auto;
-  ${mediaQueries('xl')`
-    margin: auto 20px;
-  `};
   ${mediaQueries('lg')`
     margin: auto;
+  `};
+  ${mediaQueries('xl')`
+    margin: auto 20px;
   `};
 `;
 const ProductDetailsWrapper = styled.div`
@@ -19,11 +19,11 @@ const ProductDetailsWrapper = styled.div`
   padding: 8px 24px 24px;
   display: block;
   width: 41.66667%;
-  ${mediaQueries('xl')`
-   width: 33.33333%;
-  `};
   ${mediaQueries('lg')`
    width: 41.66667%;
+  `};
+  ${mediaQueries('xl')`
+   width: 33.33333%;
   `};
 `;
 

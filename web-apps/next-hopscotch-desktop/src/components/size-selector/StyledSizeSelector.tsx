@@ -58,6 +58,13 @@ const Options = styled.div<{
   &:last-child {
     border: none;
   }
+  &:hover {
+    cursor: ${(props) => (props.soldOut ? 'not-allowed' : 'pointer')};
+    background-color: ${(props) => (props.soldOut ? 'inherit' : '#f9f9f9')};
+    div {
+      display: flex;
+    }
+  }
 `;
 
 const SelectPreview = styled.div<{
@@ -71,17 +78,32 @@ const SelectPreview = styled.div<{
   border-bottom-right-radius: 0;
   border-bottom: ${(props) => (props.borderBottom ? '1px solid #a4a4a4' : 'none')};
 `;
-const DeliveryDetails = styled.span`
-  display: flex;
+
+const Details = styled.div`
+  display: none;
   align-items: center;
   justify-content: space-between;
-  color: #333333;
-  font-size: 12px;
   font-weight: 600;
+  font-size: 12px;
+`;
+
+const ItemsLeft = styled.span`
+  color: #fff;
+  padding: 3px 6px;
+  line-height: 13px;
+  margin-right: 5px;
+  border-radius: 4px;
+  background-color: #707070;
+`;
+
+const DeliveryDetails = styled.span`
+  color: #333333;
   line-height: 13px;
   border-radius: 4px;
   background-color: #ffcc33;
   padding: 1px 6px 1px 10px;
+  display: flex;
+  align-items: center;
 `;
 
 const DeliveryIcon = styled(SvgIcon)`
@@ -123,6 +145,8 @@ export {
   OptionsPreview,
   Options,
   SelectPreview,
+  Details,
+  ItemsLeft,
   DeliveryDetails,
   RecommendedForyou,
   SeeSimilarIcon,

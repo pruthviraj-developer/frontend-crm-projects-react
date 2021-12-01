@@ -15,12 +15,12 @@ const ProductCarouselWrapper = styled.div`
   background: #fff;
   position: relative;
   width: 58.33333%;
+  ${mediaQueries('lg')`
+    width: 58.33333%;
+ `};
   ${mediaQueries('xl')`
     width: 66.66667%;
   `};
-  ${mediaQueries('lg')`
-  width: 58.33333%;
- `};
 `;
 
 const ProductImageContainer = styled.div`
