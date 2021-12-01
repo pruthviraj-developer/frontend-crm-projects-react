@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import { FilterPanDataType } from '@hs/components';
 
-export const getFiltersData: FilterPanDataType[] = [
+export const FiltersData: FilterPanDataType[] = [
   {
     display: 'Start date',
     key: 'startDate',
@@ -11,13 +11,6 @@ export const getFiltersData: FilterPanDataType[] = [
     display: 'End date',
     key: 'endDate',
     fieldType: 'DatePicker',
-  },
-  {
-    display: 'Recommendation Carousel',
-    key: 'rcType',
-    multiSelect: false,
-    isString: true,
-    options: [{ display: 'all', key: 'all' }],
   },
   {
     display: 'Status',
@@ -36,7 +29,7 @@ export const getFiltersData: FilterPanDataType[] = [
   },
 ];
 
-export const getArchivedFiltersData: FilterPanDataType[] = [
+export const ArchivedFiltersData: FilterPanDataType[] = [
   {
     display: 'Start date',
     key: 'startDate',
@@ -47,16 +40,17 @@ export const getArchivedFiltersData: FilterPanDataType[] = [
     key: 'endDate',
     fieldType: 'DatePicker',
   },
-  {
-    display: 'Recommendation Carousel',
-    key: 'rcType',
-    multiSelect: false,
-    isString: true,
-    options: [{ display: 'all', key: 'all' }],
-  },
 ];
 
-export const dashboardColumns = [
+export const RecommendationOption = {
+  display: 'Recommendation Carousel',
+  key: 'rcType',
+  multiSelect: false,
+  isString: true,
+  options: [{ display: 'all', key: 'all' }],
+};
+
+export const DashboardColumns = [
   {
     id: 'id',
     key: 'id',

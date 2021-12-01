@@ -12,5 +12,5 @@ export interface IFormResponse {
 
 export interface IRecommendationCarouselList {
   key: string;
-  displayName: string;
+  display: string;
 }

@@ -6,7 +6,7 @@ import { FilterPan, FilterPanProps } from '@hs/components';
 import { IPostDataType, IDashboardDataResponse, IHeaderType, IPageType, ITableDataType } from './IDashBoard';
 import { Helmet } from 'react-helmet';
 import { ArchivedDashBoardWrapper, ArchivedFilterWrapper, TableWrapper } from './Style';
-import { getArchivedFiltersData, dashboardColumns } from './Constant';
+import { ArchivedFiltersData, DashboardColumns, RecommendationOption } from './Constant';
 import { recommendationService } from '@hs/services';
 import { useQuery } from 'react-query';
 import { IRecommendationCarouselList } from '../create/IAddEdit';
@@ -42,7 +42,7 @@ const ArchivedDashboard: FC<{ header: string }> = ({ header }: IHeaderType) => {
   const classes = useStyles();
   const [postFilterData, setPostFilterData] = useState({});
   const [filterPage, setFilterPage] = useState<IPageType>(defaultPageFilters);
-  const [getFiltersData, setFilterData] = useState(getArchivedFiltersData);
+  const [filtersData, setFilterData] = useState(ArchivedFiltersData);
 
   const { data: dashboardData, isSuccess: isDashboardSuccess } = useQuery<
     IDashboardDataResponse,
@@ -68,7 +68,7 @@ const ArchivedDashboard: FC<{ header: string }> = ({ header }: IHeaderType) => {
     title: '',
     count: (dashboardData && dashboardData.totalRecords) || 0,
     activePage: filterPage.pageNo,
-    columns: dashboardColumns,
+    columns: DashboardColumns,
     rows: dashboardData ? dashboardData['models'] : [],
     rowsPerPage: filterPage.pageSize || 10,
     filterRowsPerPage: [10, 20, 50, 100],
@@ -81,7 +81,7 @@ const ArchivedDashboard: FC<{ header: string }> = ({ header }: IHeaderType) => {
   };
 
   let filterData: FilterPanProps = {
-    data: getFiltersData,
+    data: filtersData,
     onChange: onChangeHandler,
   };
 
@@ -89,19 +89,10 @@ const ArchivedDashboard: FC<{ header: string }> = ({ header }: IHeaderType) => {
     (async () => {
       try {
         let listType: IRecommendationCarouselList[] = await recommendationService.getRecommendCarouselTypes();
-        if (listType.length > 0) {
-          let setupfilterData: any = JSON.parse(JSON.stringify(getArchivedFiltersData));
-          setupfilterData.map((row: any) => {
-            if (row.key === 'rcType') {
-              listType.map((list: any) => {
-                row.options.push({ display: list.displayName, key: list.key });
-                return list;
-              });
-            }
-            return row;
-          });
-          setFilterData(setupfilterData);
-        }
+        setFilterData([
+          ...ArchivedFiltersData,
+          { ...RecommendationOption, options: [...listType, ...RecommendationOption.options] },
+        ]);
       } catch (e) {}
     })();
   }, []);

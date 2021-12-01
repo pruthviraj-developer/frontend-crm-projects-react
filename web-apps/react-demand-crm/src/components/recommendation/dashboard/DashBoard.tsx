@@ -9,7 +9,7 @@ import { FilterPan, FilterPanProps } from '@hs/components';
 import { IPostDataType, IDashboardDataResponse, IdialogFromSubmit } from './IDashBoard';
 import { Helmet } from 'react-helmet';
 import { DashBoardWrapper, FilterWrapper } from './Style';
-import { getFiltersData, dashboardColumns } from './Constant';
+import { FiltersData, DashboardColumns, RecommendationOption } from './Constant';
 import { RecommendationTableToolbar } from './RecommendationTableToolbar';
 import { makeStyles } from '@material-ui/core/styles';
 import { Colors } from '@hs/utils';
@@ -68,7 +68,7 @@ const DashBoard: FC<{ header: string }> = ({ header }) => {
     models: [],
     totalRecords: 0,
   });
-  const [filtersData, setFilterData] = useState(getFiltersData);
+  const [filterList, setFilterList] = useState(FiltersData);
 
   useEffect(() => {
     (async () => {
@@ -99,19 +99,10 @@ const DashBoard: FC<{ header: string }> = ({ header }) => {
     (async () => {
       try {
         let listType: IRecommendationCarouselList[] = await recommendationService.getRecommendCarouselTypes();
-        if (listType.length > 0) {
-          let setupfilterData: any = JSON.parse(JSON.stringify(getFiltersData));
-          setupfilterData.map((row: any) => {
-            if (row.key === 'rcType') {
-              listType.map((list: any) => {
-                row.options.push({ display: list.displayName, key: list.key });
-                return list;
-              });
-            }
-            return row;
-          });
-          setFilterData(setupfilterData);
-        }
+        setFilterList([
+          ...FiltersData,
+          { ...RecommendationOption, options: [...listType, ...RecommendationOption.options] },
+        ]);
       } catch (e) {}
     })();
   }, []);
@@ -207,7 +198,7 @@ const DashBoard: FC<{ header: string }> = ({ header }) => {
 
   const selectTableData: SelectableTableProps = {
     rows: dashboardData && dashboardData['models'] ? dashboardData['models'] : [],
-    columns: dashboardColumns,
+    columns: DashboardColumns,
 
     rowsPerPageOptions: [5, 10, 15, 20],
     displayRowsPerPage: filterParams.pageSize || 10,
@@ -236,7 +227,7 @@ const DashBoard: FC<{ header: string }> = ({ header }) => {
   };
 
   const filterPanData: FilterPanProps = {
-    data: filtersData,
+    data: filterList,
     onChange: onChangeHandler,
   };
 

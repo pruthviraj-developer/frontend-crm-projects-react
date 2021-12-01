@@ -56,7 +56,7 @@ const AddEdit: FC<{ header: string }> = ({ header }) => {
   const [initialData, setInitialData] = useState(initialValues);
   const [recommendationCarouselList, setRecommendationCarouselList] = useState([
     {
-      displayName: '---',
+      display: '---',
       key: '',
     },
   ]);
@@ -142,7 +142,7 @@ const AddEdit: FC<{ header: string }> = ({ header }) => {
                       >
                         {recommendationCarouselList.map((item: IRecommendationCarouselList) => (
                           <MenuItem key={item.key} value={item.key}>
-                            {item.displayName}
+                            {item.display}
                           </MenuItem>
                         ))}
                       </Field>
