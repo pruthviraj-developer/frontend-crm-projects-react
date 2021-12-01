@@ -17,8 +17,9 @@ import {
   SeeSimilarProducts,
 } from './StyledSizeSelector';
 import { IconAngleDown, IconDeliveryTruck, IconSeeSimilarWhite } from '@hs/icons';
+import { ISizeSelectorProps } from './ISizeSelector';
 
-const SizeSelector: FC = () => {
+const SizeSelector: FC<ISizeSelectorProps> = ({ showRFYP, goToProductRecommendation }: ISizeSelectorProps) => {
   const [isDropDownOpen, setIsDropDownOpen] = useState<Boolean>(false);
   const elementRef = useRef<any>();
   useEffect(() => {
@@ -28,6 +29,7 @@ const SizeSelector: FC = () => {
     const ref = elementRef && elementRef.current;
     function handleClickOutside(event: any) {
       if (ref && !ref.contains(event.target)) {
+        debugger;
         setIsDropDownOpen(false);
       }
     }
@@ -92,11 +94,21 @@ const SizeSelector: FC = () => {
                 <span>3-4 years</span> <span>Sold out</span>
               </Options>
             </OptionsPreview>
-            <RecommendedForyou>
-              <SeeSimilarIcon icon={IconSeeSimilarWhite} />
-              <SizeSoldOut>Size sold out?</SizeSoldOut>
-              <SeeSimilarProducts>See similar products</SeeSimilarProducts>
-            </RecommendedForyou>
+            {showRFYP && (
+              <RecommendedForyou>
+                <SeeSimilarIcon icon={IconSeeSimilarWhite} />
+                <SizeSoldOut>Size sold out?</SizeSoldOut>
+                <SeeSimilarProducts
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsDropDownOpen(false);
+                    goToProductRecommendation('Size picker');
+                  }}
+                >
+                  See similar products
+                </SeeSimilarProducts>
+              </RecommendedForyou>
+            )}
           </>
         )}
       </CustomSizePicker>

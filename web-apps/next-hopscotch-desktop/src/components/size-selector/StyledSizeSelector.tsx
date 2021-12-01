@@ -130,10 +130,11 @@ const SizeSoldOut = styled.div`
   vertical-align: top;
 `;
 const SeeSimilarProducts = styled.div`
-  text-decoration: underline;
+  cursor: pointer;
   font-weight: 600;
-  letter-spacing: 0.2px;
   padding-left: 3px;
+  letter-spacing: 0.2px;
+  text-decoration: underline;
 `;
 
 export {
