@@ -1,4 +1,4 @@
-import { ReactElement, ReactNode } from '@/../../../packages/icons/node_modules/@types/react';
+import { ReactElement, ReactNode } from 'react';
 import { NextPage } from 'next';
 import { AppProps } from 'next/app';
 
