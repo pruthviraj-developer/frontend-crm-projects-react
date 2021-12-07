@@ -70,6 +70,11 @@ const DeliverIcon = styled(SvgIcon)`
   margin-right: ${typography.size.s02}px;
 `;
 
+const DeliveryInfoIcon = styled(SvgIcon)`
+  height: ${typography.size.s3}px;
+  opacity: 0.36;
+`;
+
 const PreOrderInfo = styled.span`
   display: inline-block;
   vertical-align: middle;
@@ -89,25 +94,12 @@ const SelectedSkuSize = styled.div`
 `;
 
 const SizeSelector = styled.div`
-  background-color: #f5f5f5;
-  padding: 8px 8px 8px 16px;
-  border-radius: 4px;
-  box-shadow: 0 0 0 1px #dfe1e6;
-  height: 36px;
-  /* font-size: 14px; */
-  color: #707070;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-  line-height: 20px;
+  cursor: pointer;
   display: flex;
-  justify-content: space-between;
-  width: 100%;
-  align-items: center;
-`;
-
-const SizeSelectorIcon = styled(SvgIcon)`
-  opacity: 0.5;
+  & > span {
+    margin-left: 2px;
+    text-decoration: underline;
+  }
 `;
 
 export {
@@ -116,6 +108,7 @@ export {
   DeliveryTitle,
   DeliveryBadge,
   DeliveryInfo,
+  DeliveryInfoIcon,
   Delivery,
   Title,
   PinCode,
@@ -123,5 +116,4 @@ export {
   PreOrderInfo,
   SelectedSkuSize,
   SizeSelector,
-  SizeSelectorIcon,
 };

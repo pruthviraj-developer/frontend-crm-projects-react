@@ -95,7 +95,7 @@ export const DeliveryDetails: FC<IDeliveryDetailsProps> = ({
               )}
               {!selectedSku && (
                 <SizeSelector onClick={openSizeSelector}>
-                  <span>Select a size for delivery information</span>{' '}
+                  <span>Select a size for delivery information</span>
                   <SizeSelectorIcon icon={IconDropDown} />
                 </SizeSelector>
               )}

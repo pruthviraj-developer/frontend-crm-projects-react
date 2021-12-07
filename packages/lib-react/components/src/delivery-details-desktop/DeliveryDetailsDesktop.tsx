@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { IconTick, IconCrossRed, IconDropDown } from '@hs/icons';
+import { IconTick, IconCrossRed, IconInfoBlack } from '@hs/icons';
 import {
   DeliveryDetailsWrapper,
   DeliveryDetailsContent,
@@ -8,12 +8,12 @@ import {
   DeliverIcon,
   DeliveryBadge,
   DeliveryInfo,
+  DeliveryInfoIcon,
   Title,
   PinCode,
   PreOrderInfo,
   SelectedSkuSize,
   SizeSelector,
-  SizeSelectorIcon,
 } from './StyledDeliveryDetails';
 import { IDeliveryDetailsDesktopProps } from './IDeliveryDetailsDesktop';
 import { IProductDetailsDeliveryMessageOrDeliveryMessagesEntity } from 'types';
@@ -95,8 +95,8 @@ export const DeliveryDetailsDesktop: FC<IDeliveryDetailsDesktopProps> = ({
               )}
               {!selectedSku && (
                 <SizeSelector onClick={openSizeSelector}>
-                  <span>Select a size for delivery information</span>{' '}
-                  <SizeSelectorIcon icon={IconDropDown} />
+                  <DeliveryInfoIcon icon={IconInfoBlack} />
+                  <span>Select a size for delivery information</span>
                 </SizeSelector>
               )}
             </>

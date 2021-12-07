@@ -40,6 +40,7 @@ import ICIconSearch from './images/ic-seach-white.svg';
 import ICIconWishListDefault from './images/ic-wish-default.svg';
 import ICIconDropDown from './images/icon-dropdown.svg';
 import ICIconDeliveryTruck from './images/ic-delivery-truck.svg';
+import ICInfoBlackIcon from './images/icon-info-black.svg';
 
 export const CreateIcon = ICCreate;
 export const BackIcon = ICBack;
@@ -82,3 +83,4 @@ export const IconErrorMessage = ICIconErrorMessage;
 export const IconSearch = ICIconSearch;
 export const IconDropDown = ICIconDropDown;
 export const IconDeliveryTruck = ICIconDeliveryTruck;
+export const IconInfoBlack = ICInfoBlackIcon;
