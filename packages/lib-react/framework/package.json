@@ -19,9 +19,6 @@
     "size": "size-limit",
     "analyze": "size-limit --why"
   },
-  "peerDependencies": {
-    "react": "17.0.2"
-  },
   "husky": {
     "hooks": {
       "pre-commit": "tsdx lint"
@@ -39,24 +36,25 @@
   "size-limit": [
     {
       "path": "dist/framework.esm.js",
-      "limit": "10 KB"
+      "limit": "20 KB"
     }
   ],
+  "peerDependencies": {
+    "react": "17.0.2",
+    "@hs/services": "^1.0.0",
+    "ua-parser-js": "^1.0.2"
+  },
   "devDependencies": {
+    "@hs/services": "^1.0.0",
     "@size-limit/preset-small-lib": "^5.0.3",
     "@types/react": "17.0.19",
-    "@types/react-dom": "17.0.5",
     "@types/ua-parser-js": "^0.7.36",
     "husky": "6.0.0",
     "react": "17.0.2",
-    "react-dom": "17.0.2",
     "size-limit": "^5.0.3",
     "tsdx": "0.14.1",
     "tslib": "2.3.1",
-    "typescript": "4.3.5"
-  },
-  "dependencies": {
-    "@hs/services": "^1.0.0",
+    "typescript": "4.3.5",
     "ua-parser-js": "^1.0.2"
   }
 }
