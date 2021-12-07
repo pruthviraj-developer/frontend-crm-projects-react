@@ -40,7 +40,8 @@
     }
   ],
   "peerDependencies": {
-    "react": "17.0.2"
+    "react": "17.0.2",
+    "@types/react": "17.0.19"
   },
   "peerDependenciesMeta": {
     "react": {
@@ -51,9 +52,7 @@
     "@rollup/plugin-url": "6.1.0",
     "@size-limit/preset-small-lib": "^5.0.3",
     "@svgr/rollup": "5.5.0",
-    "@types/react": "17.0.19",
     "husky": "6.0.0",
-    "react": "17.0.2",
     "size-limit": "^5.0.3",
     "tsdx": "0.14.1",
     "tslib": "2.3.1",
