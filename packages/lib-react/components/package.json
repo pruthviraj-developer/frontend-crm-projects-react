@@ -36,7 +36,7 @@
   "size-limit": [
     {
       "path": "dist/components.esm.js",
-      "limit": "50 KB"
+      "limit": "40 KB"
     }
   ],
   "peerDependencies": {
@@ -45,7 +45,8 @@
     "@hs/icons": "^1.0.0",
     "@emotion/react": "11.4.1",
     "@emotion/styled": "11.3.0",
-    "react": "17.0.2"
+    "react": "17.0.2",
+    "next": "^12.0.7"
   },
   "peerDependenciesMeta": {
     "@hs/icon": {
@@ -64,6 +65,9 @@
       "optional": true
     },
     "react": {
+      "optional": true
+    },
+    "next": {
       "optional": true
     }
   },
