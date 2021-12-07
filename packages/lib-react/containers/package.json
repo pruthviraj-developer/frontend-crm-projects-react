@@ -1,5 +1,5 @@
 {
-    "version": "0.1.0",
+    "version": "1.0.0",
     "license": "MIT",
     "main": "dist/containers.esm.js",
     "typings": "dist/index.d.ts",
@@ -43,6 +43,8 @@
         "react": "17.0.2"
     },
     "devDependencies": {
+        "@hs/components": "1.0.0",
+        "@hs/framework": "^1.0.0",
         "@babel/core": "^7.10.3",
         "@emotion/babel-plugin": "11.3.0",
         "@size-limit/preset-small-lib": "^5.0.3",

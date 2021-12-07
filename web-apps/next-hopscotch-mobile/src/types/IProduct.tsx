@@ -1,5 +1,6 @@
 export interface IProductProps {
   productId: string;
+  isMobile: Boolean;
 }
 
 export interface urlParamsProps {
