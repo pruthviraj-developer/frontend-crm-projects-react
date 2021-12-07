@@ -36,11 +36,24 @@
     "size-limit": [
         {
             "path": "dist/containers.esm.js",
-            "limit": "10 KB"
+            "limit": "80 KB"
         }
     ],
     "peerDependencies": {
-        "react": "17.0.2"
+        "react": "17.0.2",
+        "@hs/components": "1.0.0",
+        "@hs/framework": "^1.0.0"
+    },
+    "peerDependenciesMeta": {
+        "react": {
+            "optional": true
+        },
+        "@hs/components": {
+            "optional": true
+        },
+        "@hs/framework": {
+            "optional": true
+        }
     },
     "devDependencies": {
         "@hs/components": "1.0.0",
