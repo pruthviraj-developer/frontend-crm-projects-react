@@ -29,7 +29,6 @@ const SizeSelector: FC<ISizeSelectorProps> = ({ showRFYP, goToProductRecommendat
     const ref = elementRef && elementRef.current;
     function handleClickOutside(event: any) {
       if (ref && !ref.contains(event.target)) {
-        debugger;
         setIsDropDownOpen(false);
       }
     }

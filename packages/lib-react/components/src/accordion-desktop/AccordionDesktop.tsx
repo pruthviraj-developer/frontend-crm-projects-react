@@ -1,8 +1,8 @@
 import React, { FC, useState } from 'react';
 import {
-  IAccordionProps,
-  AccordionProductSubAttrListEntityProps,
-} from './IAccordion';
+  IAccordionDesktopProps,
+  AccordionProductSubAttrListEntityDesktopProps,
+} from './IAccordionDesktop';
 import { IconAngleDown } from '@hs/icons';
 import {
   AccordionWrapper,
@@ -16,10 +16,10 @@ import {
   DetailsDescriptionTitle,
   AccordionToggleIcon,
   AccordionIcon,
-} from './StyledAccordion';
+} from './StyledAccordionDesktop';
 
 const ACTIVE = 'active';
-export const Accordion: FC<IAccordionProps> = ({
+export const AccordionDesktop: FC<IAccordionDesktopProps> = ({
   selectedSku,
   productDesc,
   moreInfo,
@@ -30,7 +30,7 @@ export const Accordion: FC<IAccordionProps> = ({
   showShippingInfo,
   simpleSkus = [],
   isReturnable,
-}: IAccordionProps) => {
+}: IAccordionDesktopProps) => {
   const [toggleAccordions, setToggleAccordions] = useState({
     item: true,
     shipping: false,
@@ -83,7 +83,7 @@ export const Accordion: FC<IAccordionProps> = ({
   };
 
   const getFeatureAttributesList = (
-    productSubAttrList: AccordionProductSubAttrListEntityProps[] = []
+    productSubAttrList: AccordionProductSubAttrListEntityDesktopProps[] = []
   ) => {
     return productSubAttrList.length ? (
       <FeatureAttributesList>
