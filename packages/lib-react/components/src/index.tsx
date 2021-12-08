@@ -25,3 +25,4 @@ export * from './size-and-chart-labels-desktop';
 export * from './product-carousel-desktop';
 export * from './delivery-details-desktop';
 export * from './accordion-desktop';
+export * from './product-carousel-list-desktop';
