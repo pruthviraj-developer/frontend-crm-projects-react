@@ -1,5 +1,5 @@
 {
-  "name": "react-merch-intelligence",
+  "name": "@hs-crm-app/react-merch-intelligence",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

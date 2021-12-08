@@ -1,5 +1,5 @@
 {
-  "name": "react-carousel-crm",
+  "name": "@hs-crm-app/react-carousel-crm",
   "version": "1.0.0",
   "private": true,
   "dependencies": {

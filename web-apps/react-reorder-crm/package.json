@@ -1,5 +1,5 @@
 {
-  "name": "react-reorder-crm",
+  "name": "@hs-crm-app/react-reorder-crm",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
