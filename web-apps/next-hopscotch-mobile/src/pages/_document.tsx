@@ -1,4 +1,5 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document';
+import { GTM_ID } from '@/components/google-tag-manager';
 export default class MyDocument extends Document {
   render() {
     return (
