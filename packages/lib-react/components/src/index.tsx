@@ -26,3 +26,5 @@ export * from './product-carousel-desktop';
 export * from './delivery-details-desktop';
 export * from './accordion-desktop';
 export * from './product-carousel-list-desktop';
+export * from './recommended-products-desktop';
+export * from './recommended-matching-desktop';

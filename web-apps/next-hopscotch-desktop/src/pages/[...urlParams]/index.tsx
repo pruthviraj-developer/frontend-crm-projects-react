@@ -16,8 +16,7 @@ const SizeChartPopupComponent = dynamic(() => import('../../components/size-char
 import {
   AccordionDesktop,
   CustomSizePicker,
-  RecommendedProducts,
-  RecommendedProductsLinks,
+  RecommendedProductsDesktop,
   ProductHead,
   SizeAndChartLabelsDesktop,
   ProductNamePriceDesktop,
@@ -552,13 +551,13 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
 
             {showRFYP && (
               <div ref={recommendedProductsLink}>
-                <RecommendedProducts {...recommendedForYou}></RecommendedProducts>
+                <RecommendedProductsDesktop {...recommendedForYou}></RecommendedProductsDesktop>
               </div>
             )}
 
             {showSimilarProducts && (
               <div ref={similarProductsLink}>
-                <RecommendedProducts {...similarProducts}></RecommendedProducts>
+                <RecommendedProductsDesktop {...similarProducts}></RecommendedProductsDesktop>
               </div>
             )}
             {/* <AddToCart {...{ show: true, disabled: false, addProductToCart }}></AddToCart> */}

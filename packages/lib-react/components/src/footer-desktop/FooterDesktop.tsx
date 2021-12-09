@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { IPopularSearchUrlDeskTopProps } from './IFooterDesktop';
+// import { IPopularSearchUrlDeskTopProps } from './IFooterDesktop';
 import {
   AppleIcon,
   PlayIcon,
@@ -28,21 +28,21 @@ import {
   FooterEnd,
   FooterLogoIcon,
   FooterLogoIconWrapper,
-  PopularSearches,
-  PopularSearchesTitle,
-  PopularSearchesLinks,
-  PopularSearchesLink,
+  // PopularSearches,
+  // PopularSearchesTitle,
+  // PopularSearchesLinks,
+  // PopularSearchesLink,
   StyledIcon,
 } from './StyledFooterDesktop';
 import { NextNavLink } from '../next-nav-link';
 
-import { POPULAR_SEARCH_URLS } from '@hs/utils';
+// import { POPULAR_SEARCH_URLS } from '@hs/utils';
 
 export const FooterDesktop: FC = () => {
   const currentYear = new Date().getFullYear();
   return (
     <FooterWrapper>
-      <PopularSearches>
+      {/* <PopularSearches>
         <PopularSearchesTitle>Popular Searches</PopularSearchesTitle>
         <PopularSearchesLinks>
           {POPULAR_SEARCH_URLS.map(
@@ -53,7 +53,7 @@ export const FooterDesktop: FC = () => {
             )
           )}
         </PopularSearchesLinks>
-      </PopularSearches>
+      </PopularSearches> */}
       <FooterSection>
         <FooterBlock>
           <StyledIcon icon={InfoIcon}></StyledIcon>
@@ -147,9 +147,9 @@ export const FooterDesktop: FC = () => {
               name="About Us"
               margin="0px 0 0 0"
               padding="0"
-              fontWeight="400"
+              fontWeight="600"
               fontSize="12px"
-              lineHeight="16px"
+              lineHeight="13px"
               color="#a4a4a4"
               hoverColor="#ed54a4"
             />
@@ -160,9 +160,9 @@ export const FooterDesktop: FC = () => {
               name="Terms of Service"
               margin="0px 0 0 0"
               padding="0"
-              fontWeight="400"
+              fontWeight="600"
               fontSize="12px"
-              lineHeight="16px"
+              lineHeight="13px"
               color="#a4a4a4"
               hoverColor="#ed54a4"
             />
@@ -173,9 +173,9 @@ export const FooterDesktop: FC = () => {
               name="Privacy Policy"
               margin="0px 0 0 0"
               padding="0"
-              fontWeight="400"
+              fontWeight="600"
               fontSize="12px"
-              lineHeight="16px"
+              lineHeight="13px"
               color="#a4a4a4"
               hoverColor="#ed54a4"
             />
