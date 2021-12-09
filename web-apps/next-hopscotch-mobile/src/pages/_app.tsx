@@ -32,6 +32,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
       </Head>
       <Script
+        id="ga-script"
         strategy="afterInteractive"
         dangerouslySetInnerHTML={{
           __html: `
@@ -44,6 +45,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         }}
       />
       <Script
+        id="segment-script"
         strategy="afterInteractive"
         type="text/javascript"
         dangerouslySetInnerHTML={{
