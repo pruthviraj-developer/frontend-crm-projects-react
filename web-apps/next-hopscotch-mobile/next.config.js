@@ -13,19 +13,19 @@ module.exports = {
     ANALYTIC_HOST: process.env.ANALYTIC_HOST,
   },
   async rewrites() {
-    return [
-      {
-        source: '/api/:path*',
-        destination: process.env.WEB_HOST + '/api/:path*',
-      },
-      {
-        source: '/product/:path*',
-        destination: '/product/:path*',
-      },
-      {
-        source: '/:path*',
-        destination: process.env.WEB_HOST + '/:path*',
-      },
-    ];
+    return {
+      beforeFiles: [
+        {
+          source: '/api/:path*',
+          destination: process.env.WEB_HOST + '/api/:path*',
+        },
+      ],
+      fallback: [
+        {
+          source: '/:path*',
+          destination: process.env.WEB_HOST + '/:path*',
+        },
+      ],
+    };
   },
 };

@@ -7,9 +7,13 @@ import { useModal } from 'react-hooks-use-modal';
 import { toast } from 'react-toastify';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
 import Parser from 'ua-parser-js';
-const ProductMobile = dynamic(() => import('../../../components/pdp/index'), {
+const ProductMobile = dynamic(() => import('@/components/pdp/index'), {
   ssr: true,
 });
+const Layout = dynamic(() => import('@/components/layout/Layout'), {
+  ssr: true,
+});
+
 import {
   IProductProps,
   IWishListProps,
@@ -21,15 +25,15 @@ import {
 import { cookiesService, productDetailsService } from '@hs/services';
 import { CartLink, CartNotification, CartNotificationDetails, CartHeader, CartMessage, CartLinkText } from '@/styles';
 
-const SizeChartPopupComponent = dynamic(() => import('../../../components/size-chart/SizeChart'), {
+const SizeChartPopupComponent = dynamic(() => import('@/components/size-chart/SizeChart'), {
   ssr: false,
 });
 
-const SizeSelectorPopupComponent = dynamic(() => import('../../../components/size-selector/SizeSelector'), {
+const SizeSelectorPopupComponent = dynamic(() => import('@/components/size-selector/SizeSelector'), {
   ssr: false,
 });
 
-const PinCodePopupComponent = dynamic(() => import('../../../components/pin-code/PinCode'), {
+const PinCodePopupComponent = dynamic(() => import('@/components/pin-code/PinCode'), {
   ssr: false,
 });
 
@@ -51,8 +55,8 @@ import {
 import * as segment from '@/components/segment-analytic';
 import * as gtm from '@/components/google-tag-manager/GTMLib';
 import { LoginModal } from '@/components/login-modal';
-import { Layout } from '@/components/layout/Layout';
-import { ProductHead } from '@hs/components';
+// import { Layout } from '@/components/layout/Layout';
+import { ProductHead } from '@/components/header';
 import GoToTop from '@/components/go-to-top/GoToTop';
 
 const tryLater = 'Try Later';
@@ -519,5 +523,6 @@ const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile }: IPr
 export default Product;
 
 Product.getLayout = function getLayout(page: ReactElement) {
-  return <Layout>{page}</Layout>;
+  if (page.props.isMobile) return <Layout>{page}</Layout>;
+  else return <>{page}</>;
 };
