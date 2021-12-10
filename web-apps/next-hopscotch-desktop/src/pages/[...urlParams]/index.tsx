@@ -13,6 +13,10 @@ const SizeChartPopupComponent = dynamic(() => import('../../components/size-char
   ssr: false,
 });
 
+const PinCodePopupComponent = dynamic(() => import('../../components/pin-code/PinCode'), {
+  ssr: false,
+});
+
 import {
   AccordionDesktop,
   CustomSizePicker,
@@ -148,6 +152,11 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
   );
 
   const [SizeChartPopupModal, openSizeChartPopup, closeSizeChartPopup, isSizeChartPopupOpen] = useModal('root', {
+    preventScroll: false,
+    closeOnOverlayClick: true,
+  });
+
+  const [PinCodePopupModal, openPinCodePopup, closePinCodePopup, isPinCodePopupOpen] = useModal('root', {
     preventScroll: false,
     closeOnOverlayClick: true,
   });
@@ -341,10 +350,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
   };
 
   // remove
-  const closePinCodePopup = () => {};
-  const openPinCodePopup = () => {};
   const openSizeSelector = () => {};
-
   // end
 
   const addProductToCart = () => {
@@ -573,6 +579,12 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
                 ></SizeChartPopupComponent>
               )}
             </SizeChartPopupModal>
+
+            <PinCodePopupModal>
+              {isPinCodePopupOpen && productData && (
+                <PinCodePopupComponent {...{ pincode: '123123', closePinCodePopup }}> </PinCodePopupComponent>
+              )}
+            </PinCodePopupModal>
           </>
         )}
       </QueryClientProvider>
