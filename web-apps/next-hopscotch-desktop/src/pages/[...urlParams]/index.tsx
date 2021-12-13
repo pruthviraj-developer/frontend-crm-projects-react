@@ -582,7 +582,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
 
             <PinCodePopupModal>
               {isPinCodePopupOpen && productData && (
-                <PinCodePopupComponent {...{ pincode: '123123', closePinCodePopup }}> </PinCodePopupComponent>
+                <PinCodePopupComponent {...{ pincode: '', closePinCodePopup }}> </PinCodePopupComponent>
               )}
             </PinCodePopupModal>
           </>

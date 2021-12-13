@@ -17,9 +17,13 @@ import { IPinCodeProps } from './IPinCode';
 import { IconDismiss } from '@hs/icons';
 
 const SizeSelector: FC<IPinCodeProps> = ({ pincode, closePinCodePopup }: IPinCodeProps) => {
+  const getDefaultString = (val: string) => {
+    return val.replace(/\D/g, '');
+  };
+
   const setFormatedValue = (val?: string, pin?: string) => {
     if (val) {
-      const value = val.toString().replace(/\D/g, '');
+      const value = getDefaultString(val).replace(/^0+/, '');
       if (value.length === 3 && pin && pin.length === 4) {
         return value.substr(0, 2);
       } else if (value.length > 6 && value[0] !== '0') {
@@ -36,8 +40,9 @@ const SizeSelector: FC<IPinCodeProps> = ({ pincode, closePinCodePopup }: IPinCod
 
   const onSubmit = (event: React.SyntheticEvent) => {
     event && event.preventDefault();
-    console.log(pin);
+    console.log(getDefaultString(pin));
   };
+
   return (
     <PinCodeWrapper>
       <Header>Check pincode</Header>
