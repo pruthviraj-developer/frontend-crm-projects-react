@@ -100,38 +100,38 @@ const DownloadIcon = styled(SvgIcon)`
   max-width: ${typography.size.s3}px;
 `;
 
-const PopularSearches = styled.section`
-  margin: 5px ${typography.size.s3}px;
-  padding: 5px;
-  border-bottom: 1px solid ${Colors.MERCURY};
-`;
+// const PopularSearches = styled.section`
+//   margin: 5px ${typography.size.s3}px;
+//   padding: 5px;
+//   border-bottom: 1px solid ${Colors.MERCURY};
+// `;
 
-const PopularSearchesLinks = styled.div`
-  margin-top: 7px;
-  margin-bottom: 7px;
-  display: inline-flex;
-  flex-wrap: wrap;
-`;
+// const PopularSearchesLinks = styled.div`
+//   margin-top: 7px;
+//   margin-bottom: 7px;
+//   display: inline-flex;
+//   flex-wrap: wrap;
+// `;
 
-const PopularSearchesTitle = styled.div`
-  font-size: 1.2rem;
-  line-height: ${typography.size.s3}px;
-`;
+// const PopularSearchesTitle = styled.div`
+//   font-size: 1.2rem;
+//   line-height: ${typography.size.s3}px;
+// `;
 
-const PopularSearchesLink = styled('a')`
-  color: ${secondaryColor[100]};
-  font-size: 1rem;
-  font-weight: ${typography.weight.regular};
-  text-decoration: none;
-  line-height: ${typography.size.s3}px;
-  &:after {
-    content: '|';
-    margin-left: 1px;
-  }
-  &:last-child:after {
-    content: '';
-  }
-`;
+// const PopularSearchesLink = styled('a')`
+//   color: ${secondaryColor[100]};
+//   font-size: 1rem;
+//   font-weight: ${typography.weight.regular};
+//   text-decoration: none;
+//   line-height: ${typography.size.s3}px;
+//   &:after {
+//     content: '|';
+//     margin-left: 1px;
+//   }
+//   &:last-child:after {
+//     content: '';
+//   }
+// `;
 
 export {
   Copyright,
@@ -146,9 +146,9 @@ export {
   FooterLink,
   Link,
   LinkWithIcons,
-  PopularSearches,
-  PopularSearchesLinks,
-  PopularSearchesTitle,
-  PopularSearchesLink,
+  // PopularSearches,
+  // PopularSearchesLinks,
+  // PopularSearchesTitle,
+  // PopularSearchesLink,
   StyledIcon,
 };

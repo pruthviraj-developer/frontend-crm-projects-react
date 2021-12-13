@@ -2,7 +2,6 @@ import { useEffect, FC } from 'react';
 import { useRouter } from 'next/router';
 import * as gtm from './GTMLib';
 import { useSessionStorage, SESSION_DATA, IFunnelData, ISegmentData } from '@hs/framework';
-import { getURL } from 'next/dist/shared/lib/utils';
 const GoogleTagManager: FC<unknown> = ({ children }) => {
   const router = useRouter();
   const [, setOaData] = useSessionStorage<IFunnelData>(SESSION_DATA.OA_DATA, null);

@@ -32,8 +32,8 @@ const SimilarTextElement = styled.span<{
   width: number;
 }>`
   color: #ed54a4;
-  padding: ${typography.size.s05}px ${typography.size.s06}px;
-  /* font-size: ${typography.size.s2}px; */
+  padding: ${typography.size.s05}px ${typography.size.s06}px
+    ${typography.size.s05}px ${typography.size.s04}px;
   line-height: ${typography.size.s2}px;
   font-weight: ${typography.weight.medium};
   display: ${(props) => (props.width === 140 ? 'block' : 'none')};

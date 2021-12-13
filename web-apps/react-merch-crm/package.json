@@ -1,5 +1,5 @@
 {
-  "name": "react-merch-crm",
+  "name": "@hs-crm-app/react-merch-crm",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

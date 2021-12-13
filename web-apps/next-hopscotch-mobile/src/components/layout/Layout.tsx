@@ -3,10 +3,10 @@ import Head from 'next/head';
 import dynamic from 'next/dynamic';
 import { FC } from 'react';
 import { useModal } from 'react-hooks-use-modal';
-const SearchPopupComponent = dynamic(() => import('../../components/search-popup/SearchPopup'), {
+const SearchPopupComponent = dynamic(() => import('@/components/search-popup/SearchPopup'), {
   ssr: false,
 });
-export const Layout: FC<unknown> = ({ children }) => {
+const Layout: FC<unknown> = ({ children }) => {
   const [SearchPopupModal, openSearchPopup, closeSearchPopup, isSearchPopupOpen] = useModal('root', {
     preventScroll: false,
     closeOnOverlayClick: true,
@@ -25,3 +25,5 @@ export const Layout: FC<unknown> = ({ children }) => {
     </>
   );
 };
+
+export default Layout;

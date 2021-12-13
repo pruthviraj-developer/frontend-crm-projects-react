@@ -1,2 +1,2 @@
 export * from './ProductCarousel';
-export * from './StyledProductCarousel';
+export * from './IProductCarousel';

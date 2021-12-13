@@ -10,15 +10,12 @@ import {
 } from './StyledProductCarouselList';
 import {
   IProductCarouselListProps,
-  IRecommendProductDetailListEntity,
+  IProductCarouselDetailsEntityList,
 } from './IProductCarouselList';
 import { IFunnelData, SESSION_DATA, useSessionStorage } from '@hs/framework';
 
-const getDashedParameter = (product: IRecommendProductDetailListEntity) => {
+const getDashedParameter = (product: IProductCarouselDetailsEntityList) => {
   let dashSeparatedUrlProductName = '';
-  if (product.brandName || product.brand) {
-    dashSeparatedUrlProductName = (product.brandName || product.brand) + '-';
-  }
   dashSeparatedUrlProductName += product.name || product.productName;
   dashSeparatedUrlProductName = dashSeparatedUrlProductName
     .replace(/\s+/g, '-')
@@ -42,7 +39,7 @@ export const ProductCarouselList: FC<IProductCarouselListProps> = ({
     <CarouselListWrapper>
       {products &&
         products.map(
-          (product: IRecommendProductDetailListEntity, index: number) => (
+          (product: IProductCarouselDetailsEntityList, index: number) => (
             <CarouselList key={index}>
               <Link
                 href={{

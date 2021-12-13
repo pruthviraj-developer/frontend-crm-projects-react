@@ -24,6 +24,7 @@ export const ProductCarousel: FC<IProductCarouselProps> = ({
   swipeable,
   showDots,
   imgUrls,
+  isProductSoldOut,
   goToProductRecommendation,
 }: IProductCarouselProps) => {
   let CarouselRef;
@@ -36,13 +37,16 @@ export const ProductCarousel: FC<IProductCarouselProps> = ({
     useState<number>(140);
 
   useEffect(() => {
+    if (isProductSoldOut) {
+      return;
+    }
     const timer = setTimeout(() => {
       setSimilarItemsDisplayWith(38);
     }, 2000);
     return () => {
       clearTimeout(timer);
     };
-  }, []);
+  }, [isProductSoldOut]);
 
   useEffect(() => {
     CarouselRef && CarouselRef.goToSlide && CarouselRef.goToSlide(0, true);

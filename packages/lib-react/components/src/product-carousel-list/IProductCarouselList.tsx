@@ -1,10 +1,10 @@
 export interface IProductCarouselListProps {
-  products?: IRecommendProductDetailListEntity[] | null;
+  products?: IProductCarouselDetailsEntityList[] | null;
   section: string;
   subsection: string;
 }
 
-export interface IRecommendProductDetailListEntity {
+export interface IProductCarouselDetailsEntityList {
   id: number;
   imageUrl: string;
   productName: string;

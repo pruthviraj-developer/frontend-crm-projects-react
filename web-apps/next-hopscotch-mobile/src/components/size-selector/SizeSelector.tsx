@@ -4,7 +4,6 @@ import { ISizeSelectorProps } from './ISizeSelector';
 import { SizeSelectorWrapper } from './StyledSizeSelector';
 
 const SizeSelector: FC<ISizeSelectorProps> = ({
-  showRfypCue,
   pinCode,
   showAddToCart,
   simpleSkus,
@@ -13,13 +12,11 @@ const SizeSelector: FC<ISizeSelectorProps> = ({
   closePopup,
   onSizeSelect,
   onSizeChartClick,
-  goToProductRecommendation,
 }: ISizeSelectorProps) => {
   return (
     <SizeSelectorWrapper>
       <SizeSelectorPopup
         {...{
-          showRfypCue,
           pinCode,
           showAddToCart,
           onSizeChartClick,
@@ -27,7 +24,6 @@ const SizeSelector: FC<ISizeSelectorProps> = ({
           simpleSkus,
           selectedSku,
           onSizeSelect,
-          goToProductRecommendation,
           closePopup,
         }}
       ></SizeSelectorPopup>

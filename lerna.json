@@ -5,7 +5,7 @@
     "packages/lib-react/*",
     "web-apps/*"
   ],
-  "version": "0.0.0",
+  "version": "independent",
   "npmClient": "yarn",
   "useWorkspaces": true
 }
