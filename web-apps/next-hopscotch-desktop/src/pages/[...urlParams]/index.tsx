@@ -5,8 +5,7 @@ import Link from 'next/link';
 import React, { useState, useEffect, useRef, ReactElement, useContext } from 'react';
 import { useModal } from 'react-hooks-use-modal';
 import { toast } from 'react-toastify';
-import { dehydrate, useQuery } from 'react-query';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { dehydrate, QueryClient, useQuery } from 'react-query';
 import { Layout } from '@/components/layout/Layout';
 
 const SizeChartPopupComponent = dynamic(() => import('../../components/size-chart/SizeChart'), {
@@ -476,53 +475,52 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
 
   return (
     <>
-      <QueryClientProvider client={queryClient}>
-        {productData && productData.action === LOCAL_DATA.SUCCESS && (
-          <>
-            <ProductHead {...{ productName, retailPrice }}></ProductHead>
-            <ProductWrapper>
-              {productData.imgurls && productData.imgurls.length > 0 && (
-                <ProductCarouselDesktop
-                  {...{
-                    showArrows: true,
-                    autoPlay: false,
-                    draggable: false,
-                    focusOnSelect: false,
-                    renderButtonGroupOutside: false,
-                    renderDotsOutside: false,
-                    slidesToSlide: 1,
-                    swipeable: false,
-                    showDots: false,
-                    imgUrls: productData.imgurls,
-                    goToProductRecommendation,
-                  }}
-                ></ProductCarouselDesktop>
-              )}
-              <ProductDetailsWrapper>
-                <ProductNamePriceDesktop
-                  {...{
-                    productName,
-                    isProductSoldOut: !!productData.isProductSoldOut,
-                    wishlistId: updatedWishListId === undefined ? wishlistId : updatedWishListId,
-                    retailPrice,
-                    retailPriceMax,
-                    selectedSku: selectedSku,
-                    regularPrice,
-                    discount,
-                    addToWishlist,
-                    deleteFromWishlist,
-                  }}
-                ></ProductNamePriceDesktop>
-                <SizeAndChartLabelsDesktop
-                  {...{
-                    isOneSize,
-                    hasSizeChart: productData.hasSizeChart,
-                    qtyLeft,
-                    simpleSkus,
-                    onSizeChartClick: openSizeChartPopup,
-                  }}
-                ></SizeAndChartLabelsDesktop>
-                {/* {!isOneSize && (
+      {productData && productData.action === LOCAL_DATA.SUCCESS && (
+        <>
+          <ProductHead {...{ productName, retailPrice }}></ProductHead>
+          <ProductWrapper>
+            {productData.imgurls && productData.imgurls.length > 0 && (
+              <ProductCarouselDesktop
+                {...{
+                  showArrows: true,
+                  autoPlay: false,
+                  draggable: false,
+                  focusOnSelect: false,
+                  renderButtonGroupOutside: false,
+                  renderDotsOutside: false,
+                  slidesToSlide: 1,
+                  swipeable: false,
+                  showDots: false,
+                  imgUrls: productData.imgurls,
+                  goToProductRecommendation,
+                }}
+              ></ProductCarouselDesktop>
+            )}
+            <ProductDetailsWrapper>
+              <ProductNamePriceDesktop
+                {...{
+                  productName,
+                  isProductSoldOut: !!productData.isProductSoldOut,
+                  wishlistId: updatedWishListId === undefined ? wishlistId : updatedWishListId,
+                  retailPrice,
+                  retailPriceMax,
+                  selectedSku: selectedSku,
+                  regularPrice,
+                  discount,
+                  addToWishlist,
+                  deleteFromWishlist,
+                }}
+              ></ProductNamePriceDesktop>
+              <SizeAndChartLabelsDesktop
+                {...{
+                  isOneSize,
+                  hasSizeChart: productData.hasSizeChart,
+                  qtyLeft,
+                  simpleSkus,
+                  onSizeChartClick: openSizeChartPopup,
+                }}
+              ></SizeAndChartLabelsDesktop>
+              {/* {!isOneSize && (
                   <CustomSizePicker
                     {...{
                       simpleSkus,
@@ -537,57 +535,56 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
                   ></RecommendedProductsLinks>
                 )} */}
 
-                <SizeSelector {...{ showRFYP, goToProductRecommendation }}></SizeSelector>
-                <DeliveryDetailsDesktop
-                  {...{
-                    ...deliveryDetailsData,
-                    selectedSku: selectedSku,
-                    ...deliveryDetails,
-                    openPinCodePopup,
-                    openSizeSelector,
-                  }}
-                ></DeliveryDetailsDesktop>
-                {productData.id && (
-                  <AccordionDesktop
-                    {...{ ...product, isPresale, simpleSkus, selectedSku: selectedSku }}
-                  ></AccordionDesktop>
-                )}
-              </ProductDetailsWrapper>
-            </ProductWrapper>
-
-            {showRFYP && (
-              <div ref={recommendedProductsLink}>
-                <RecommendedProductsDesktop {...recommendedForYou}></RecommendedProductsDesktop>
-              </div>
-            )}
-
-            {showSimilarProducts && (
-              <div ref={similarProductsLink}>
-                <RecommendedProductsDesktop {...similarProducts}></RecommendedProductsDesktop>
-              </div>
-            )}
-            {/* <AddToCart {...{ show: true, disabled: false, addProductToCart }}></AddToCart> */}
-
-            <SizeChartPopupModal>
-              {isSizeChartPopupOpen && productData && (
-                <SizeChartPopupComponent
-                  {...{
-                    id: productData.id,
-                    productName: productName,
-                    onClickClose: closeSizeChartPopup,
-                  }}
-                ></SizeChartPopupComponent>
+              <SizeSelector {...{ showRFYP, goToProductRecommendation }}></SizeSelector>
+              <DeliveryDetailsDesktop
+                {...{
+                  ...deliveryDetailsData,
+                  selectedSku: selectedSku,
+                  ...deliveryDetails,
+                  openPinCodePopup,
+                  openSizeSelector,
+                }}
+              ></DeliveryDetailsDesktop>
+              {productData.id && (
+                <AccordionDesktop
+                  {...{ ...product, isPresale, simpleSkus, selectedSku: selectedSku }}
+                ></AccordionDesktop>
               )}
-            </SizeChartPopupModal>
+            </ProductDetailsWrapper>
+          </ProductWrapper>
 
-            <PinCodePopupModal>
-              {isPinCodePopupOpen && productData && (
-                <PinCodePopupComponent {...{ pincode: '', closePinCodePopup }}> </PinCodePopupComponent>
-              )}
-            </PinCodePopupModal>
-          </>
-        )}
-      </QueryClientProvider>
+          {showRFYP && (
+            <div ref={recommendedProductsLink}>
+              <RecommendedProductsDesktop {...recommendedForYou}></RecommendedProductsDesktop>
+            </div>
+          )}
+
+          {showSimilarProducts && (
+            <div ref={similarProductsLink}>
+              <RecommendedProductsDesktop {...similarProducts}></RecommendedProductsDesktop>
+            </div>
+          )}
+          {/* <AddToCart {...{ show: true, disabled: false, addProductToCart }}></AddToCart> */}
+
+          <SizeChartPopupModal>
+            {isSizeChartPopupOpen && productData && (
+              <SizeChartPopupComponent
+                {...{
+                  id: productData.id,
+                  productName: productName,
+                  onClickClose: closeSizeChartPopup,
+                }}
+              ></SizeChartPopupComponent>
+            )}
+          </SizeChartPopupModal>
+
+          <PinCodePopupModal>
+            {isPinCodePopupOpen && productData && (
+              <PinCodePopupComponent {...{ pincode: '', closePinCodePopup }}> </PinCodePopupComponent>
+            )}
+          </PinCodePopupModal>
+        </>
+      )}
       {/* <pre style={{ width: '60%', overflowX: 'scroll' }}>{JSON.stringify(productData, null, 4)}</pre> */}
     </>
   );

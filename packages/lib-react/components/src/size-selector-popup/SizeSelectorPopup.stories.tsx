@@ -9,7 +9,9 @@ export default {
   component: SizeSelectorPopup,
 };
 
-const Template: Story<ISizeSelectorPopupProps> = (args) => <SizeSelectorPopup {...args} />;
+const Template: Story<ISizeSelectorPopupProps> = (args) => (
+  <SizeSelectorPopup {...args} />
+);
 export const SizeSelectorPopupComponent = Template.bind({});
 
 SizeSelectorPopupComponent.args = {
