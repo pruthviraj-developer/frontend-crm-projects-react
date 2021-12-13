@@ -81,14 +81,17 @@ const Label = styled.label`
 const InputField = styled.input`
   height: 48px;
   width: 173px;
-  padding: 12px 16px;
+  padding: 16px 16px 0 12px;
   border-radius: 4px;
   display: inline-block;
   vertical-align: middle;
   border: 1px solid #f44;
+  &:focus + .label {
+    top: 10px;
+  }
 
-  &:focus + ${Label} {
-    display: none;
+  &:not([value='']) + .label {
+    top: 10px;
   }
 `;
 
