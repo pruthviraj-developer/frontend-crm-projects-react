@@ -1,2 +1,3 @@
-export * from './RecommendedProducts';
+export * from './desktop';
+export * from './mobile';
 export * from './IRecommendedProducts';

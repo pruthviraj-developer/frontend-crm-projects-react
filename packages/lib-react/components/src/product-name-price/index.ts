@@ -1,2 +1,3 @@
-export * from './ProductNamePrice';
+export * from './desktop';
+export * from './mobile';
 export * from './IProductNamePrice';

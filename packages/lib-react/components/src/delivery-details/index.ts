@@ -1,2 +1,3 @@
-export * from './DeliveryDetails';
+export * from './desktop';
+export * from './mobile';
 export * from './IDeliveryDetails';

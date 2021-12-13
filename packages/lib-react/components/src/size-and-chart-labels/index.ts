@@ -1,2 +1,2 @@
-export * from './SizeAndChartLabels';
-export * from './ISizeAndChartLabels';
+export * from './desktop';
+export * from './mobile';

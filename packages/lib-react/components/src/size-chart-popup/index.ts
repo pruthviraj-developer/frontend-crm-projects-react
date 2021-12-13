@@ -1,2 +1,3 @@
-export * from './SizeChartPopup';
+export * from './desktop';
+export * from './mobile';
 export * from './ISizeChartPopup';

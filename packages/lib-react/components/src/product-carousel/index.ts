@@ -1,2 +1,3 @@
-export * from './ProductCarousel';
+export * from './desktop';
+export * from './mobile';
 export * from './IProductCarousel';
