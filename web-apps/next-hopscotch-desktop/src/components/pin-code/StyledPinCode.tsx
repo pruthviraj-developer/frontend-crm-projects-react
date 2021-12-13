@@ -67,6 +67,17 @@ const PinCodeForm = styled.form`
   display: flex;
 `;
 
+const Label = styled.label`
+  pointer-events: none;
+  position: absolute;
+  font-size: 14px;
+  line-height: 14px;
+  left: 12px;
+  top: 18px;
+  transition: 0.2s ease all;
+  color: #a4a4a4;
+`;
+
 const InputField = styled.input`
   height: 48px;
   width: 173px;
@@ -75,6 +86,14 @@ const InputField = styled.input`
   display: inline-block;
   vertical-align: middle;
   border: 1px solid #f44;
+
+  &:focus + ${Label} {
+    display: none;
+  }
+`;
+
+const InputWrapper = styled.div`
+  position: relative;
 `;
 
 export {
@@ -88,4 +107,6 @@ export {
   Check,
   PinCodeForm,
   InputField,
+  InputWrapper,
+  Label,
 };

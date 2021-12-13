@@ -10,6 +10,8 @@ import {
   Check,
   PinCodeForm,
   InputField,
+  InputWrapper,
+  Label,
 } from './StyledPinCode';
 import { IPinCodeProps } from './IPinCode';
 import { IconDismiss } from '@hs/icons';
@@ -29,13 +31,15 @@ const SizeSelector: FC<IPinCodeProps> = ({ pincode, closePinCodePopup }: IPinCod
       <PinCodeBody>
         <Title>Enter your pincode</Title>
         <PinCodeForm onSubmit={onSubmit}>
-          <InputField
-            placeholder="PinCode"
-            value={pin}
-            onChange={(event) => {
-              setPincode(event.target.value);
-            }}
-          />
+          <InputWrapper>
+            <InputField
+              value={pin}
+              onChange={(event) => {
+                setPincode(event.target.value);
+              }}
+            />
+            <Label>PinCode</Label>
+          </InputWrapper>
           <Check>Check</Check>
         </PinCodeForm>
         <ErrorMessage>We’re unable to ​ship to 565656</ErrorMessage>
