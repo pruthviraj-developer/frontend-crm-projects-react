@@ -89,7 +89,6 @@ const InputField = styled.input`
   &:focus + .label {
     top: 10px;
   }
-
   &:not([value='']) + .label {
     top: 10px;
   }

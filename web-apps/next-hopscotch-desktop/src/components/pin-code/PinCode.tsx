@@ -17,8 +17,24 @@ import { IPinCodeProps } from './IPinCode';
 import { IconDismiss } from '@hs/icons';
 
 const SizeSelector: FC<IPinCodeProps> = ({ pincode, closePinCodePopup }: IPinCodeProps) => {
-  const [pin, setPincode] = useState<string>(pincode || '');
-  const onSubmit = (event) => {
+  const setFormatedValue = (val?: string, pin?: string) => {
+    if (val) {
+      const value = val.toString().replace(/\D/g, '');
+      if (value.length === 3 && pin && pin.length === 4) {
+        return value.substr(0, 2);
+      } else if (value.length > 6 && value[0] !== '0') {
+        return value.substr(0, 3) + '-' + value.substr(3, 3);
+      } else if (value.length > 2) {
+        return value.substr(0, 3) + '-' + value.substr(3);
+      } else {
+        return value;
+      }
+    }
+    return '';
+  };
+  const [pin, setPincode] = useState<string>(setFormatedValue(pincode, pincode) || '');
+
+  const onSubmit = (event: React.SyntheticEvent) => {
     event && event.preventDefault();
     console.log(pin);
   };
@@ -35,7 +51,7 @@ const SizeSelector: FC<IPinCodeProps> = ({ pincode, closePinCodePopup }: IPinCod
             <InputField
               value={pin}
               onChange={(event) => {
-                setPincode(event.target.value);
+                setPincode(setFormatedValue(event.target.value, pin));
               }}
             />
             <Label className="label">PinCode</Label>
