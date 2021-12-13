@@ -42,6 +42,7 @@ import ICIconDropDown from './images/icon-dropdown.svg';
 import ICIconDeliveryTruck from './images/ic-delivery-truck.svg';
 import ICInfoBlackIcon from './images/icon-info-black.svg';
 import ICChevronRightIcon from './images/chevron-right.svg';
+import ICIconDismiss from './images/icon-dismiss.svg';
 
 export const CreateIcon = ICCreate;
 export const BackIcon = ICBack;
@@ -86,3 +87,4 @@ export const IconDropDown = ICIconDropDown;
 export const IconDeliveryTruck = ICIconDeliveryTruck;
 export const IconInfoBlack = ICInfoBlackIcon;
 export const IconChevronRight = ICChevronRightIcon;
+export const IconDismiss = ICIconDismiss;
