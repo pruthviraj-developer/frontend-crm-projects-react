@@ -5,6 +5,9 @@ import { BackIcon } from '@hs/icons';
 
 const GoToTop: FC = () => {
   const [showBackToTop, setShowBackToTop] = useState<boolean>(false);
+  const scrollToTop = () => {
+    window.scrollTo({ behavior: 'smooth', top: 0 });
+  };
   useEffect(() => {
     let timeOut: any;
     let lastScrollTop = 0;
@@ -34,7 +37,7 @@ const GoToTop: FC = () => {
     };
   }, []);
   return showBackToTop === true ? (
-    <GoToTopWrapper>
+    <GoToTopWrapper onClick={scrollToTop}>
       <BackToTopIconWrapper>
         <BackToTopIcon icon={BackIcon}></BackToTopIcon>
       </BackToTopIconWrapper>
