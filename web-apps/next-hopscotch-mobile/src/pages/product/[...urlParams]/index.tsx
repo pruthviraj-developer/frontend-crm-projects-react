@@ -523,6 +523,7 @@ const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile }: IPr
 export default Product;
 
 Product.getLayout = function getLayout(page: ReactElement) {
-  if (page.props.isMobile) return <Layout>{page}</Layout>;
-  else return <>{page}</>;
+  // if (page.props.isMobile) return <Layout>{page}</Layout>;
+  // else return <>{page}</>;
+  return <Layout>{page}</Layout>;
 };
