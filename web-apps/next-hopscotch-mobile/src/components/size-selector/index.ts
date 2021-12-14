@@ -1,2 +1,2 @@
-export * from './SizeSelector';
-export * from './ISizeSelector';
+import { SizeSelectorPopup } from '@hs/components';
+export default SizeSelectorPopup;

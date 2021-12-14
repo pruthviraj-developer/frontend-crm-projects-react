@@ -138,7 +138,12 @@ const QuantityLeftOut = styled.span`
   padding: 4px 8px;
   font-weight: normal;
 `;
-
+const SizeSelectorWrapper = styled.div`
+  position: fixed;
+  min-width: 100%;
+  left: 0;
+  bottom: 0;
+`;
 export {
   DeliveryPincodeContainer,
   DeliveryPincode,
@@ -158,4 +163,5 @@ export {
   SizeSelector,
   SoldOut,
   SoldOutWrapper,
+  SizeSelectorWrapper,
 };

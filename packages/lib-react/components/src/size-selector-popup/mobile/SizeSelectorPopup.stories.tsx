@@ -2,14 +2,16 @@ import React from 'react';
 import { Story } from '@storybook/react/types-6-0';
 import { action } from '@storybook/addon-actions';
 import { SizeSelectorPopup } from './SizeSelectorPopup';
-import { ISizeSelectorPopupProps } from './ISizeSelectorPopup';
+import { ISizeSelectorPopupProps } from '../ISizeSelectorPopup';
 
 export default {
   title: 'Size Selector Popup',
   component: SizeSelectorPopup,
 };
 
-const Template: Story<ISizeSelectorPopupProps> = (args) => <SizeSelectorPopup {...args} />;
+const Template: Story<ISizeSelectorPopupProps> = (args) => (
+  <SizeSelectorPopup {...args} />
+);
 export const SizeSelectorPopupComponent = Template.bind({});
 
 SizeSelectorPopupComponent.args = {

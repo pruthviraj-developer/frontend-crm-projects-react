@@ -7,7 +7,7 @@ import { useModal } from 'react-hooks-use-modal';
 import { toast } from 'react-toastify';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
 import Parser from 'ua-parser-js';
-const ProductMobile = dynamic(() => import('@/components/pdp/index'), {
+const ProductMobile = dynamic(() => import('@/components/pdp'), {
   ssr: true,
 });
 const Layout = dynamic(() => import('@/components/layout/Layout'), {
@@ -29,11 +29,11 @@ const SizeChartPopupComponent = dynamic(() => import('@/components/size-chart/Si
   ssr: false,
 });
 
-const SizeSelectorPopupComponent = dynamic(() => import('@/components/size-selector/SizeSelector'), {
+const SizeSelectorPopupComponent = dynamic(() => import('@/components/size-selector/index'), {
   ssr: false,
 });
 
-const PinCodePopupComponent = dynamic(() => import('@/components/pin-code/PinCode'), {
+const PinCodeMobile = dynamic(() => import('@/components/pin-code'), {
   ssr: false,
 });
 
@@ -472,7 +472,7 @@ const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile }: IPr
           }
           <PinCodePopupModel>
             {isPinCodePopupOpen && (
-              <PinCodePopupComponent
+              <PinCodeMobile
                 {...{
                   productId: productData.id,
                   pinCode: productData.pinCode,
