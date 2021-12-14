@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { Colors } from '@hs/utils';
 import { SvgIcon } from '@hs/icons';
 
 const GoToTopWrapper = styled.span`

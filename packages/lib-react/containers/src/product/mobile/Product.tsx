@@ -9,7 +9,6 @@ import {
   RecommendedProductsLinks,
   ProductNamePrice,
   DeliveryDetails,
-  SeeSimilarProducts,
 } from '@hs/components';
 import {
   useProduct,
@@ -137,15 +136,10 @@ const ProductMobile = ({
             }}
           ></CustomSizePicker>
         )}
-        {showRfypCue && showRFYP && (
+        {showRfypCue && (showRFYP || showSimilarProducts) && (
           <RecommendedProductsLinks
             {...{ isProductSoldOut, goToProductRecommendation }}
           ></RecommendedProductsLinks>
-        )}
-        {showRfypCue === true && (
-          <SeeSimilarProducts
-            {...{ goToProductRecommendation }}
-          ></SeeSimilarProducts>
         )}
         {isProductSoldOut === false && (
           <DeliveryDetails
