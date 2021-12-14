@@ -9,11 +9,11 @@ const GoToTop: FC = () => {
     window.scrollTo({ behavior: 'smooth', top: 0 });
   };
   useEffect(() => {
-    let timeOut: any;
+    let timeOut: NodeJS.Timeout;
     let lastScrollTop = 0;
     const handleScroll = () => {
-      timeOut = clearTimeout(timeOut);
-      setTimeout(() => {
+      clearTimeout(timeOut);
+      timeOut = setTimeout(() => {
         let currentScrollTop = window.scrollY;
         let difference = currentScrollTop - lastScrollTop;
         if (currentScrollTop > 500) {
@@ -33,6 +33,7 @@ const GoToTop: FC = () => {
 
     window.addEventListener('scroll', handleScroll);
     return () => {
+      clearTimeout(timeOut);
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
