@@ -1,14 +1,6 @@
 import styled from '@emotion/styled';
 import { typography } from '@hs/utils';
 
-const CarouselListWrapper = styled.div`
-  overflow-x: scroll;
-  padding-bottom: 15px;
-  white-space: nowrap;
-  transition: margin-left 1.5s ease;
-  display: inline-block;
-`;
-
 const ImageWrapper = styled.div`
   width: 150px;
   height: 150px;
@@ -39,10 +31,4 @@ const CarouselList = styled.div`
   display: inline-block;
 `;
 
-export {
-  CarouselListWrapper,
-  CarouselList,
-  ImageWrapper,
-  TransparentImgOverlay,
-  SaleRetailPrice,
-};
+export { CarouselList, ImageWrapper, TransparentImgOverlay, SaleRetailPrice };

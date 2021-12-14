@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { typography } from '@hs/utils';
+import { SvgIcon } from '@hs/icons';
 
 const RecommendedProductsWrapper = styled.div`
   background: #f5f5f5;
@@ -26,10 +27,14 @@ const RecommendedMatchingWrapper = styled.div`
 `;
 
 const RecommendedProductWrapper = styled.div`
-  left: -12px;
-  width: calc(100% + 12px);
+  width: 100%;
   max-width: 100%;
   overflow-x: scroll;
+  position: relative;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const HrDashedLine = styled.hr`
@@ -47,6 +52,42 @@ const Divider = styled.div`
   height: 30px;
 `;
 
+const Scroller = styled.div`
+  top: 32%;
+  z-index: 1;
+  width: 48px;
+  height: 48px;
+  cursor: pointer;
+  background: #fff;
+  position: absolute;
+  border-radius: 24px;
+  transition: box-shadow 0.25s ease;
+  box-shadow: 0 2px 8px 0 rgb(0 0 0 / 8%);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  right: 26px;
+  &.left {
+    left: 26px;
+    right: auto;
+    transform: rotate(180deg);
+  }
+`;
+
+const CarouselIcon = styled(SvgIcon)`
+  &:hover {
+    fill: red;
+  }
+`;
+
+const CarouselListWrapper = styled.div`
+  overflow-x: visible;
+  padding-bottom: 15px;
+  white-space: nowrap;
+  transition: margin-left 1.5s ease;
+  display: inline-block;
+`;
+
 export {
   RecommendedMatchingWrapper,
   RecommendedProductsWrapper,
@@ -55,4 +96,7 @@ export {
   RecommendedTitle,
   HrDashedLine,
   Divider,
+  Scroller,
+  CarouselIcon,
+  CarouselListWrapper,
 };

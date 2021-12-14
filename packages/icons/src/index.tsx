@@ -44,6 +44,9 @@ import ICInfoBlackIcon from './images/icon-info-black.svg';
 import ICChevronRightIcon from './images/chevron-right.svg';
 import ICIconDismiss from './images/icon-dismiss.svg';
 
+import ICIconCarouselCaret from './images/icon-carouselcaret.svg';
+import ICIconCarouselCaretPink from './images/icon-carouselcaret-pink.svg';
+
 export const CreateIcon = ICCreate;
 export const BackIcon = ICBack;
 export const DashBoardIcon = ICDashBoard;
@@ -88,3 +91,5 @@ export const IconDeliveryTruck = ICIconDeliveryTruck;
 export const IconInfoBlack = ICInfoBlackIcon;
 export const IconChevronRight = ICChevronRightIcon;
 export const IconDismiss = ICIconDismiss;
+export const IconCarouselCaret = ICIconCarouselCaret;
+export const IconCarouselCaretPink = ICIconCarouselCaretPink;

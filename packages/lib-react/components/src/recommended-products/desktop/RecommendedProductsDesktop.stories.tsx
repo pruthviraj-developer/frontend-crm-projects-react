@@ -1,14 +1,14 @@
 import React from 'react';
 import { Story } from '@storybook/react/types-6-0';
-import { IRecommendedProductsDesktopProps } from './IRecommendedProductsDesktop';
+import { IRecommendedProductsProps } from './../IRecommendedProducts';
 import { RecommendedProductsDesktop } from './RecommendedProductsDesktop';
 
 export default {
-  title: 'Recommended Products',
+  title: 'Desktop Recommended Products',
   component: RecommendedProductsDesktop,
 };
 
-const Template: Story<IRecommendedProductsDesktopProps> = (args) => (
+const Template: Story<IRecommendedProductsProps> = (args) => (
   <RecommendedProductsDesktop {...args} />
 );
 export const DetailsComponent = Template.bind({});
@@ -17,49 +17,24 @@ DetailsComponent.args = {
   section: 'RFYP',
   subsection: 'Carousel',
   id: 'similarproducts',
-  pid: '406496',
+  pid: '942343',
   showmatching: true,
   products: [
     {
-      id: 949535,
+      id: 924931,
       imageUrl:
-        'https://qastatic.hopscotch.in/fstatic/product/202007/ffc320c5-9cbf-435c-aba3-96876dd308ef_medium.jpg?version=1594190522858',
-      productName:
-        'Vanilla Grey & Mustard Color Reusable 100% Cotton Face Mask for Kids (SET OF 2 pcs )',
-      brandName: 'Pluchi',
-      salePrice: 250,
+        'https://qastatic.hopscotch.in/fstatic/product/202002/005225da-b2ae-4215-8c26-abaf7d2f6000_medium.jpg?version=1582114822686',
+      productName: 'Blue Boys Bat Printed Jogger',
+      brandName: 'GBN',
+      salePrice: 268,
     },
     {
-      id: 695400,
+      id: 930907,
       imageUrl:
-        'https://qastatic.hopscotch.in/fstatic/product/201808/07419467-2ad3-4fc1-bbc1-8f0f5e777c95_medium.jpg?version=1533105958717',
-      productName: 'Blue Cartoon Face Print Dungaree and Top Set',
-      brandName: 'FASHION',
-      salePrice: 771,
-    },
-    {
-      id: 931236,
-      imageUrl:
-        'https://qastatic.hopscotch.in/fstatic/product/202003/e87a2130-6160-428c-9135-c85b92c4c921_medium.jpg?version=1583385988889',
-      productName: 'Black Baby Sleeveless Frock Set',
-      brandName: 'Fcare',
-      salePrice: 449,
-    },
-    {
-      id: 859463,
-      imageUrl:
-        'https://qastatic.hopscotch.in/fstatic/product/201908/0cc43eb1-0d61-4609-b02e-6b92c08be9ae_medium.jpg?version=1566815332827',
-      productName: 'Black Graphic Print Full Sleeves T-Shirt ',
-      brandName: 'BKZ',
-      salePrice: 220,
-    },
-    {
-      id: 883662,
-      imageUrl:
-        'https://qastatic.hopscotch.in/fstatic/product/201911/790f56a2-9fee-458c-ba88-22a6e8db921e_medium.jpg?version=1573726073141',
-      productName: 'Brown Stripe Jacket& Pajama Set',
-      brandName: 'KDY',
-      salePrice: 750,
+        'https://qastatic.hopscotch.in/fstatic/product/202003/d9e479aa-7450-4ba1-8ee2-93d6cfc1d527_medium.jpg?version=1583485948147',
+      productName: 'Beige Bow Applique Ballerinas',
+      brandName: 'AMZ',
+      salePrice: 649,
     },
     {
       id: 924245,
@@ -70,182 +45,28 @@ DetailsComponent.args = {
       salePrice: 998,
     },
     {
-      id: 925370,
+      id: 945056,
       imageUrl:
-        'https://qastatic.hopscotch.in/fstatic/product/202002/715f75fa-e58a-4aeb-82ba-eb83d2896081_medium.jpg?version=1580973969046',
-      productName: 'Black And Yellow Booties',
-      brandName: 'SKI',
-      salePrice: 499,
-    },
-    {
-      id: 865748,
-      imageUrl:
-        'https://qastatic.hopscotch.in/fstatic/product/201908/3b70cd52-343d-4c96-ab18-fdbdc1b6f6ea_medium.jpg?version=1566995576162',
-      productName: 'Blue Cat Applique Slip Ons',
-      brandName: 'KS',
-      salePrice: 799,
-    },
-    {
-      id: 848529,
-      imageUrl:
-        'https://qastatic.hopscotch.in/fstatic/product/201907/451ea5c5-4732-4d44-a4fc-6c6e9ef853e7_medium.jpg?version=1563194581539',
-      productName: 'Slub Cotton Full Sleeve Kanhaiya Suit- Green',
-      brandName: 'Bown',
-      salePrice: 699,
-    },
-    {
-      id: 948629,
-      imageUrl:
-        'https://qastatic.hopscotch.in/fstatic/product/202007/9a79c8d5-7bd9-4a5e-a492-71e4c8eb9aee_medium.jpg?version=1593786656326',
+        'https://qastatic.hopscotch.in/fstatic/product/202006/238d3f3e-1748-4ed9-a04b-eae6221d8655_medium.jpg?version=1592994804063',
       productName:
-        'Traditional Handcrafted Zardozi Resham Thread Work Rakhi For Brother - Gold and Red - TMW-JR-1265',
-      brandName: 'CASC',
-      salePrice: 179,
+        'Multi All over Printed Mercerised Footie  With Rib Around Neck 4',
+      brandName: 'PRN',
+      salePrice: 345,
     },
     {
-      id: 936847,
+      id: 886827,
       imageUrl:
-        'https://qastatic.hopscotch.in/fstatic/product/202006/a4063fda-acd0-438c-adad-65a1f25aaa10_medium.jpg?version=1592202524811',
-      productName: 'White Robot Print Half Sleeves T-Shirt',
-      brandName: "M'ANDY",
-      salePrice: 399,
-    },
-    {
-      id: 923374,
-      imageUrl:
-        'https://qastatic.hopscotch.in/fstatic/product/202001/9e98aefd-fbc3-4326-bea6-291ea559b0f9_medium.jpg?version=1580383384094',
-      productName: 'L.Green Dinosaur Print Half Sleeve T-Shirt',
-      brandName: 'OJO',
-      salePrice: 260,
-    },
-    {
-      id: 797220,
-      imageUrl:
-        'https://qastatic.hopscotch.in/fstatic/product/201903/3dc63a6e-ec50-4786-b371-5152937080df_medium.jpg?version=1553077357640',
-      productName: 'Half Sleeves Shirt With Leaf Print',
-      brandName: 'PTR',
-      salePrice: 799,
-    },
-    {
-      id: 945394,
-      imageUrl:
-        'https://qastatic.hopscotch.in/fstatic/product/202006/361e0a03-585a-4c98-bafd-36a5e8968eb5_medium.jpg?version=1592479578376',
-      productName: 'Happy Birthday Doll',
-      brandName: 'BAR',
-      salePrice: 999,
-    },
-    {
-      id: 941494,
-      imageUrl:
-        'https://qastatic.hopscotch.in/fstatic/product/202005/eee00abd-6e3a-46e1-b018-0728f4c9b596_medium.jpg?version=1589359102949',
-      productName: 'Sprouted Health Mix - Sathu Mavu - 500 g',
-      brandName: 'HFC',
-      salePrice: 914,
-    },
-    {
-      id: 665087,
-      imageUrl:
-        'https://qastatic.hopscotch.in/fstatic/product/201806/74f108ab-5f49-4914-b130-f62d28503391_medium.png?version=1528096587674',
-      productName: 'Storage Bin - Duck',
-      brandName: 'SUM',
-      salePrice: 875,
-    },
-    {
-      id: 118262,
-      imageUrl:
-        'https://qastatic.hopscotch.in/fstatic/product/201706/b7e4fdc7-1749-47b1-8c8b-55b5c79eae05_medium.jpg?version=1496314553209',
-      productName: 'Light Orange And Camel Cushy Thong Slippers',
-      brandName: 'Beanz',
-      salePrice: 1499,
-    },
-    {
-      id: 924931,
-      imageUrl:
-        'https://qastatic.hopscotch.in/fstatic/product/202002/005225da-b2ae-4215-8c26-abaf7d2f6000_medium.jpg?version=1582114822686',
-      productName: 'Blue Boys Bat Printed Jogger',
-      brandName: 'GBN',
-      salePrice: 268,
-    },
-    {
-      id: 946579,
-      imageUrl:
-        'https://qastatic.hopscotch.in/fstatic/product/202006/2698f13a-9103-45b3-9b94-89734af30f8a_medium.jpg?version=1592894028000',
-      productName: 'Blue Embroidery Printed  Kurta Set',
-      brandName: 'BBBH',
-      salePrice: 987,
-    },
-    {
-      id: 928523,
-      imageUrl:
-        'https://qastatic.hopscotch.in/fstatic/product/202002/dbe49c84-6d23-4cbb-bfca-0a1eedde45cc_medium.jpg?version=1582804039218',
-      productName: 'Graphic Print Half Sleeves T-Shirt ',
-      brandName: 'TW2',
-      salePrice: 399,
-    },
-    {
-      id: 943668,
-      imageUrl:
-        'https://qastatic.hopscotch.in/fstatic/product/202006/2752982c-8295-4fdf-885d-6dba61977992_medium.jpg?version=1591857642155',
-      productName: 'White All Over Print Sleeveless Half Romper',
-      brandName: 'NIB',
+        'https://qastatic.hopscotch.in/fstatic/product/201910/efc604af-db48-47e8-a41a-d3fb97e17565_medium.jpg?version=1572517486391',
+      productName: 'Full Sleeves Sweatshirt-Navy',
+      brandName: 'BUBB',
       salePrice: 599,
     },
     {
-      id: 242449,
+      id: 928096,
       imageUrl:
-        'https://qastatic.hopscotch.in/fstatic/product/201601/46079dd7-c2c6-45e4-865e-7980ee3d7eff_medium.jpg?version=1452677325650',
-      productName: 'Paddlepak Clown Fish',
-      brandName: 'TRU',
-      salePrice: 1799,
-    },
-    {
-      id: 948027,
-      imageUrl:
-        'https://qastatic.hopscotch.in/fstatic/product/202007/09f22535-d6bc-47f1-a039-db3f62d4da00_medium.jpg?version=1594979525250',
-      productName:
-        '100% Natural Multigrain Snack - Protein Puffs - Pizza Party - Pack of 6 (60gm x 6)',
-      brandName: 'MCO',
-      salePrice: 360,
-    },
-    {
-      id: 954589,
-      imageUrl:
-        'https://qastatic.hopscotch.in/fstatic/product/202007/5f730b16-69cb-431e-8e0b-511cda446d57_medium.jpg?version=1595330504758',
-      productName: 'Off White Floral Print Sleeveless Dress',
-      brandName: 'Budding Bees',
-      salePrice: 850,
-    },
-    {
-      id: 844773,
-      imageUrl:
-        'https://qastatic.hopscotch.in/fstatic/product/201906/db11b6d7-6944-4fac-9d8b-5eaf46e21ab0_medium.jpg?version=1561462715293',
-      productName:
-        'Floral Print 3/4th Sleeves White Kurta With Pink Sharara Set',
-      brandName: 'PS',
-      salePrice: 2249,
-    },
-    {
-      id: 801378,
-      imageUrl:
-        'https://qastatic.hopscotch.in/fstatic/product/201904/30a0946a-d933-4b5c-8885-3b332973701e_medium.jpg?version=1554202631284',
-      productName: 'Orange Dhoti Kurta Set',
-      brandName: 'JJC',
-      salePrice: 1150,
-    },
-    {
-      id: 242860,
-      imageUrl:
-        'https://qastatic.hopscotch.in/fstatic/product/201601/e7684125-22af-45e9-9746-c8683459b65b_medium.jpg?version=1452601416910',
-      productName: 'Multi Stripes Slip-On Shoes ',
-      brandName: 'Carter-s',
-      salePrice: 769,
-    },
-    {
-      id: 767082,
-      imageUrl:
-        'https://qastatic.hopscotch.in/fstatic/product/201902/e2c2ecf6-209d-4564-9018-aae8556fe4ed_medium.jpg?version=1549967515932',
-      productName: 'Ventilated Symmetric Silicone Soother Blue : 0-6 months',
-      brandName: 'P U R',
+        'https://qastatic.hopscotch.in/fstatic/product/202003/8dedc7bb-3583-4991-bb2e-48f7fa8a244c_medium.jpg?version=1583302594322',
+      productName: 'Light Pink Cat Ears Set',
+      brandName: 'BOTA',
       salePrice: 199,
     },
     {
@@ -257,30 +78,208 @@ DetailsComponent.args = {
       salePrice: 699,
     },
     {
-      id: 938256,
+      id: 901519,
       imageUrl:
-        'https://qastatic.hopscotch.in/fstatic/product/202003/53c76121-e47f-4b42-ba90-f1a2fa417ff8_medium.jpg?version=1585057437050',
-      productName: 'Provence Cascade Dress',
-      brandName: 'ALF',
-      salePrice: 2872,
+        'https://qastatic.hopscotch.in/fstatic/product/201911/b580b777-1667-4d32-b5cf-767eb98addba_medium.jpg?version=1574912397977',
+      productName: 'Red Knitted Heart Pom Pom Beanie Cap and Scarf',
+      brandName: 'YWB',
+      salePrice: 799,
+    },
+    {
+      id: 797220,
+      imageUrl:
+        'https://qastatic.hopscotch.in/fstatic/product/201903/3dc63a6e-ec50-4786-b371-5152937080df_medium.jpg?version=1553077357640',
+      productName: 'Half Sleeves Shirt With Leaf Print',
+      brandName: 'PTR',
+      salePrice: 799,
+    },
+    {
+      id: 922273,
+      imageUrl:
+        'https://qastatic.hopscotch.in/fstatic/product/202001/624eefa8-349e-4a18-a1a5-42fce2fafe1d_medium.jpg?version=1580196639121',
+      productName: 'Red Doll Applique Cap',
+      brandName: 'BUBB',
+      salePrice: 249,
+    },
+    {
+      id: 933182,
+      imageUrl:
+        'https://qastatic.hopscotch.in/fstatic/product/202006/b128219a-3894-4106-a0e8-ae0a251e6d41_medium.jpg?version=1592213178284',
+      productName: 'White Cinderella Girl Print T-Shirt',
+      brandName: 'NSMD',
+      salePrice: 420,
+    },
+    {
+      id: 929339,
+      imageUrl:
+        'https://qastatic.hopscotch.in/fstatic/product/202002/efbf0d08-babd-454f-a852-cf341e421350_medium.jpg?version=1582702774236',
+      productName: 'VPK - Black Summer Print Girls Top',
+      brandName: 'WHAO',
+      salePrice: 299,
+    },
+    {
+      id: 865748,
+      imageUrl:
+        'https://qastatic.hopscotch.in/fstatic/product/201908/3b70cd52-343d-4c96-ab18-fdbdc1b6f6ea_medium.jpg?version=1566995576162',
+      productName: 'Blue Cat Applique Slip Ons',
+      brandName: 'KS',
+      salePrice: 799,
+    },
+    {
+      id: 919132,
+      imageUrl:
+        'https://qastatic.hopscotch.in/fstatic/product/202001/ffe6f408-fc9f-408c-931c-7572591e595b_medium.jpg?version=1579522792006',
+      productName: 'Navy Blue Floral Print Sleeveless Dress with Head Band Set',
+      brandName: 'TCA',
+      salePrice: 449,
+    },
+    {
+      id: 901025,
+      imageUrl:
+        'https://qastatic.hopscotch.in/fstatic/product/201911/118ef179-d717-41fb-bb80-f991fed46650_medium.jpg?version=1574837690119',
+      productName: 'Pink Slip On Shoes',
+      brandName: 'KS',
+      salePrice: 499,
+    },
+    {
+      id: 949535,
+      imageUrl:
+        'https://qastatic.hopscotch.in/fstatic/product/202007/ffc320c5-9cbf-435c-aba3-96876dd308ef_medium.jpg?version=1594190522858',
+      productName:
+        'Vanilla Grey & Mustard Color Reusable 100% Cotton Face Mask for Kids (SET OF 2 pcs )',
+      brandName: 'Pluchi',
+      salePrice: 250,
+    },
+    {
+      id: 948732,
+      imageUrl:
+        'https://qastatic.hopscotch.in/fstatic/product/202007/05459591-06cf-4602-909f-35ea6205456b_medium.jpg?version=1595244333681',
+      productName: 'Red Blooming Flower Pretty Dress',
+      brandName: 'TMW',
+      salePrice: 525,
+    },
+    {
+      id: 956977,
+      imageUrl:
+        'https://qastatic.hopscotch.in/fstatic/product/202007/4666fc06-3c8e-4ab5-b949-0747ee392fb2_medium.jpg?version=1595855638554',
+      productName: 'Green Floral Print Sleeveless Dress',
+      brandName: 'Lil Pic',
+      salePrice: 399,
+    },
+    {
+      id: 916081,
+      imageUrl:
+        'https://qastatic.hopscotch.in/fstatic/product/202002/151fb3f2-3e55-44fa-82ba-c7175f005ba7_medium.jpg?version=1580795556481',
+      productName: 'Pink LED Sneaker',
+      brandName: 'KS',
+      salePrice: 1899,
+    },
+    {
+      id: 769596,
+      imageUrl:
+        'https://qastatic.hopscotch.in/fstatic/product/201904/55fad1e3-e700-42dd-a931-5c7df32c4eb6_medium.jpg?version=1554294039199',
+      productName: 'Candy Tik Tac Clip- Skinny',
+      brandName: 'YWMA',
+      salePrice: 222,
+    },
+    {
+      id: 905806,
+      imageUrl:
+        'https://qastatic.hopscotch.in/fstatic/product/201912/485e45e2-d40b-4f06-a9b9-989c14c19252_medium.jpg?version=1576133423922',
+      productName: 'Yellow Peeping Rabbit Thick Fleece Sweatshirt',
+      brandName: "M'ANDY",
+      salePrice: 749,
+    },
+    {
+      id: 943009,
+      imageUrl:
+        'https://qastatic.hopscotch.in/fstatic/product/202006/0611868e-51a4-4177-858d-80b1b6b2b58d_medium.jpg?version=1591230092585',
+      productName: "Creative Sketchbook - Marinia's",
+      brandName: 'NBLS',
+      salePrice: 1499,
+    },
+    {
+      id: 848529,
+      imageUrl:
+        'https://qastatic.hopscotch.in/fstatic/product/201907/451ea5c5-4732-4d44-a4fc-6c6e9ef853e7_medium.jpg?version=1563194581539',
+      productName: 'Slub Cotton Full Sleeve Kanhaiya Suit- Green',
+      brandName: 'Bown',
+      salePrice: 699,
+    },
+    {
+      id: 911777,
+      imageUrl:
+        'https://qastatic.hopscotch.in/fstatic/product/201912/09692ae8-dfa7-4db2-82d8-d5a84ff29e65_medium.jpg?version=1576841446438',
+      productName: 'Floral Charm Yellow Bow Hairclip',
+      brandName: 'Asthetika',
+      salePrice: 129,
+    },
+    {
+      id: 936847,
+      imageUrl:
+        'https://qastatic.hopscotch.in/fstatic/product/202006/a4063fda-acd0-438c-adad-65a1f25aaa10_medium.jpg?version=1592202524811',
+      productName: 'White Robot Print Half Sleeves T-Shirt',
+      brandName: "M'ANDY",
+      salePrice: 399,
+    },
+    {
+      id: 951741,
+      imageUrl:
+        'https://qastatic.hopscotch.in/fstatic/product/202007/a75f3c6e-e2e6-4510-962f-03b5058a6d82_medium.jpg?version=1594355310190',
+      productName: 'White Flower Pattern Velcro Mary Jane',
+      brandName: 'AMZ',
+      salePrice: 699,
+    },
+    {
+      id: 920150,
+      imageUrl:
+        'https://qastatic.hopscotch.in/fstatic/product/202001/bf02f727-3cc2-4f46-a909-9b13f5384518_medium.jpg?version=1579684373877',
+      productName: 'White Bicycle Print Half Sleeves T-Shirt',
+      brandName: 'RKD',
+      salePrice: 399,
+    },
+    {
+      id: 925370,
+      imageUrl:
+        'https://qastatic.hopscotch.in/fstatic/product/202002/715f75fa-e58a-4aeb-82ba-eb83d2896081_medium.jpg?version=1580973969046',
+      productName: 'Black And Yellow Booties',
+      brandName: 'SKI',
+      salePrice: 499,
+    },
+    {
+      id: 942525,
+      imageUrl:
+        'https://qastatic.hopscotch.in/fstatic/product/202006/61af4da4-a2f6-4a49-8fd8-7af9dac59a49_medium.jpg?version=1591233866517',
+      productName:
+        'Kids Spy Goggles Night Vision - See In The Dark With Powerful Green Led',
+      brandName: 'DISC',
+      salePrice: 1260,
+    },
+    {
+      id: 926391,
+      imageUrl:
+        'https://qastatic.hopscotch.in/fstatic/product/202002/90b6a752-e0b1-4715-9eec-489f58808bfd_medium.jpg?version=1582009410676',
+      productName: 'Black Bow Applique Half Party Dress',
+      brandName: 'My Pink Closet',
+      salePrice: 989,
     },
   ],
   matching: [
     {
-      name: 'More Multi Kitchen Organizers',
+      name: 'More Pink Value Packs',
       searchParams: {
-        subCategorys: 757,
-        colour: 'Multi',
-        filterQuery: 'subCategorys=757&colour=Multi',
+        subCategorys: 872,
+        colour: 'Pink',
+        filterQuery: 'subCategorys=872&colour=Pink',
       },
       recoType: 'More Recommendations',
-      screenName: 'More Multi Kitchen Organizers',
+      screenName: 'More Pink Value Packs',
     },
     {
-      name: 'More Kitchen Organizers',
-      searchParams: { subCategorys: 757, filterQuery: 'subCategorys=757' },
+      name: 'More Value Packs',
+      searchParams: { subCategorys: 872, filterQuery: 'subCategorys=872' },
       recoType: 'More Recommendations',
-      screenName: 'More Kitchen Organizers',
+      screenName: 'More Value Packs',
     },
   ],
   title: 'RC1 PPVar2 Random',
