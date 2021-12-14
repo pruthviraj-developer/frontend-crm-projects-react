@@ -1,9 +1,6 @@
-import {
-  IProductDetailsDeliveryMessageOrDeliveryMessagesEntity,
-  ISimpleSkusEntityProps,
-} from 'types';
+import { IDeliveryMessagesEntity, ISimpleSkusEntityProps } from 'types';
 export interface IDeliveryDetailsProps {
-  deliveryMessages?: IProductDetailsDeliveryMessageOrDeliveryMessagesEntity[];
+  deliveryMessages?: IDeliveryMessagesEntity[];
   isEddDifferentForSKUs: boolean;
   preOrderInfo: string;
   preOrderAction: string;
