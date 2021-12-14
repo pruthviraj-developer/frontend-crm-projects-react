@@ -29,7 +29,7 @@ const SizeChartPopupComponent = dynamic(() => import('@/components/size-chart/Si
   ssr: false,
 });
 
-const SizeSelectorPopupComponent = dynamic(() => import('@/components/size-selector/index'), {
+const SizeSelectorMobile = dynamic(() => import('@/components/size-selector'), {
   ssr: false,
 });
 
@@ -497,7 +497,7 @@ const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile }: IPr
 
       <SizeSelectorPopupModal>
         {isSizeSelectorPopupOpen && (
-          <SizeSelectorPopupComponent
+          <SizeSelectorMobile
             {...{
               closePopup: closeSizeSelector,
               showAddToCart: true,
@@ -507,7 +507,7 @@ const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile }: IPr
               onSizeSelect,
               addProductToCart,
             }}
-          ></SizeSelectorPopupComponent>
+          ></SizeSelectorMobile>
         )}
       </SizeSelectorPopupModal>
 

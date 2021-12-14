@@ -1,2 +1,2 @@
-import { SizeSelectorPopup } from '@hs/components';
-export default SizeSelectorPopup;
+import { SizeSelectorMobile } from '@hs/components';
+export default SizeSelectorMobile;

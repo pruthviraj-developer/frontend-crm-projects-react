@@ -1,1 +1,1 @@
-export * from './SizeSelectorPopup';
+export { default as SizeSelectorMobile } from './SizeSelectorPopup';

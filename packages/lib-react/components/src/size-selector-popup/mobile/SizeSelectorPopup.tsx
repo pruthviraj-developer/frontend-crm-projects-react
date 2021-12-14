@@ -25,7 +25,7 @@ import {
   SizeSelectorWrapper,
 } from './StyledSizeSelectorPopup';
 const ADD_TO_CART_BUTTON = 'Add to cart button';
-export const SizeSelectorPopup: FC<ISizeSelectorPopupProps> = ({
+const SizeSelectorMobile: FC<ISizeSelectorPopupProps> = ({
   pinCode,
   simpleSkus,
   selectedSku,
@@ -122,3 +122,4 @@ export const SizeSelectorPopup: FC<ISizeSelectorPopupProps> = ({
     </SizeSelectorWrapper>
   );
 };
+export default SizeSelectorMobile;
