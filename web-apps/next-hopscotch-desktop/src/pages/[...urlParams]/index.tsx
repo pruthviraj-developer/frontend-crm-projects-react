@@ -194,6 +194,8 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
     pid: productId,
   });
 
+  console.log(JSON.stringify(similarProducts));
+
   const { isOneSize } = useOneSize({
     productData: productData,
   });

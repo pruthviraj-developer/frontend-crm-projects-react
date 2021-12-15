@@ -2,7 +2,6 @@ import React, { FC } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
-  CarouselListWrapper,
   CarouselList,
   SaleRetailPrice,
   ImageWrapper,
@@ -36,7 +35,7 @@ export const ProductCarouselListDesktop: FC<IProductCarouselListProps> = ({
   );
   // const imageSize = 360;
   return (
-    <CarouselListWrapper>
+    <>
       {products &&
         products.map(
           (product: IProductCarouselDetailsEntityList, index: number) => (
@@ -73,6 +72,6 @@ export const ProductCarouselListDesktop: FC<IProductCarouselListProps> = ({
             </CarouselList>
           )
         )}
-    </CarouselListWrapper>
+    </>
   );
 };

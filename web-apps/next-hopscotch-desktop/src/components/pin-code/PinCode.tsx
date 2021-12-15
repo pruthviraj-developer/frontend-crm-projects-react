@@ -59,7 +59,7 @@ const SizeSelector: FC<IPinCodeProps> = ({ pincode, closePinCodePopup }: IPinCod
                 setPincode(setFormatedValue(event.target.value, pin));
               }}
             />
-            <Label className="label">PinCode</Label>
+            <Label className="label">Pincode</Label>
           </InputWrapper>
           <Check>Check</Check>
         </PinCodeForm>
