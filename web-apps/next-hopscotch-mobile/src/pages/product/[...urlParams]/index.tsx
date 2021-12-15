@@ -58,7 +58,6 @@ import {
 
 import * as segment from '@/components/segment-analytic';
 import * as gtm from '@/components/google-tag-manager/GTMLib';
-import { LoginModal } from '@/components/login-modal';
 // import { Layout } from '@/components/layout/Layout';
 import { ProductHead } from '@/components/header';
 import GoToTop from '@/components/go-to-top/GoToTop';
