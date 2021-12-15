@@ -16,3 +16,4 @@ export * from './size-selector-popup';
 export * from './size-chart-popup';
 export * from './see-similar-products';
 export * from './pin-code';
+export * from './login-modal';

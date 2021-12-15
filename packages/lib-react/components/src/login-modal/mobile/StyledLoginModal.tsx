@@ -39,7 +39,8 @@ const Description = styled.div`
 
 const HeaderWrapper = styled.div<{ active: boolean }>`
   align-items: center;
-  box-shadow: ${(props) => (props.active ? ' 0 1px 0 0 rgb(0 0 0 / 12%)' : 'none')};
+  box-shadow: ${(props) =>
+    props.active ? ' 0 1px 0 0 rgb(0 0 0 / 12%)' : 'none'};
   display: flex;
 `;
 

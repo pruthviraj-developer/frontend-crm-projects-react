@@ -1,2 +1,2 @@
-export * from './LoginModal';
+export * from './mobile';
 export * from './ILoginModal';

@@ -37,6 +37,10 @@ const PinCodeMobile = dynamic(() => import('@/components/pin-code'), {
   ssr: false,
 });
 
+const LoginPopup = dynamic(() => import('@/components/login-modal'), {
+  ssr: false,
+});
+
 import {
   IRecommendedProducts,
   useOneSize,
@@ -512,7 +516,8 @@ const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile }: IPr
       </SizeSelectorPopupModal>
 
       <LoginPopupModal>
-        {isLoginPopupOpen && <LoginModal {...{ closeLoginPopup: closeLoginModalPopup }}></LoginModal>}
+        {/* {isLoginPopupOpen && <LoginModal {...{ closeLoginPopup: closeLoginModalPopup }}></LoginModal>} */}
+        {isLoginPopupOpen && <LoginPopup {...{ closeLoginPopup: closeLoginModalPopup }}></LoginPopup>}
       </LoginPopupModal>
       <GoToTop></GoToTop>
       {/* <pre style={{ width: '60%', overflowX: 'scroll' }}>{JSON.stringify(productDetails, null, 4)}</pre> */}

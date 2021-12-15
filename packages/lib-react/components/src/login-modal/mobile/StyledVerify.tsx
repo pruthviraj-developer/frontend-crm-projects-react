@@ -2,7 +2,6 @@ import styled from '@emotion/styled';
 import { SvgIcon } from '@hs/icons';
 
 const VerifyWrapper = styled.div`
-  postion: relative;
   margin-top: 20px;
   text-align: center;
   margin-bottom: 16px;
