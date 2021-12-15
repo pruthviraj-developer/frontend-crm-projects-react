@@ -40,9 +40,6 @@ const Bullet = styled.div`
   border: transparent;
   border-radius: 12px;
   margin: 4px;
-  -webkit-animation-name: jump;
-  -webkit-animation-duration: 2s;
-  -webkit-animation-iteration-count: infinite;
   animation-name: jump;
   animation-duration: 2s;
   animation-iteration-count: infinite;

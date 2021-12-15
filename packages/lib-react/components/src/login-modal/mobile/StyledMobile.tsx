@@ -58,4 +58,12 @@ const ErrorMessage = styled.span`
   font-size: 1.2rem;
 `;
 
-export { ActionText, MobileWrapper, MobileNumber, MessageWrapper, Button, ErrorIcon, ErrorMessage };
+export {
+  ActionText,
+  MobileWrapper,
+  MobileNumber,
+  MessageWrapper,
+  Button,
+  ErrorIcon,
+  ErrorMessage,
+};

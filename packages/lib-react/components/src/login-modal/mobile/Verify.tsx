@@ -2,8 +2,12 @@ import React, { FC, useState, useContext } from 'react';
 import { productDetailsService } from '@hs/services';
 import { IconErrorMessage } from '@hs/icons';
 import { LoginContext } from '@hs/framework';
-import { REGEX_PATTERNS } from './constants';
-import { IVerifiedDataProps, ILoginErrorResponse, ILoginErrorMessageBar } from './ILoginModal';
+import { REGEX_PATTERNS } from '../constants';
+import {
+  IVerifiedDataProps,
+  ILoginErrorResponse,
+  ILoginErrorMessageBar,
+} from '../ILoginModal';
 import {
   ChangeNumber,
   VerifyWrapper,
@@ -17,9 +21,13 @@ import {
   ErrorIcon,
   VerifyDetails,
 } from './StyledVerify';
-import { Loader } from './loader';
+import { Loader } from '../loader';
 const OTP_LENGTH = 6;
-export const Verify: FC<IVerifiedDataProps> = ({ back, type, ...props }: IVerifiedDataProps) => {
+export const Verify: FC<IVerifiedDataProps> = ({
+  back,
+  type,
+  ...props
+}: IVerifiedDataProps) => {
   const [otp, setOtp] = useState<string>('');
   const [counter, setCounter] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
@@ -39,9 +47,10 @@ export const Verify: FC<IVerifiedDataProps> = ({ back, type, ...props }: IVerifi
       try {
         setLoading(true);
         clearInterval(interval);
-        const response: ILoginErrorResponse = await productDetailsService.sendOtp({
-          ...props,
-        });
+        const response: ILoginErrorResponse =
+          await productDetailsService.sendOtp({
+            ...props,
+          });
         setLoading(false);
         if (response.action === 'success') {
           setOtp('');
@@ -102,7 +111,9 @@ export const Verify: FC<IVerifiedDataProps> = ({ back, type, ...props }: IVerifi
         </MessageWrapper>
       )}
       <VerifyDetails>
-        <div>Enter the OTP sent to your {type == 'SMS' ? 'number' : 'email'}</div>
+        <div>
+          Enter the OTP sent to your {type == 'SMS' ? 'number' : 'email'}
+        </div>
         <LoggedInBy> {convertForUI(props.loginId)} &nbsp;</LoggedInBy>
         <ChangeNumber
           onClick={() => {
@@ -114,12 +125,22 @@ export const Verify: FC<IVerifiedDataProps> = ({ back, type, ...props }: IVerifi
         <OtpboxWrapper>
           <OtpContainer>
             {[...Array(OTP_LENGTH)].map((x, index: number) => (
-              <OtpSeperator key={index} show={otp.length <= index}></OtpSeperator>
+              <OtpSeperator
+                key={index || x}
+                show={otp.length <= index}
+              ></OtpSeperator>
             ))}
-            <input type="number" onChange={validateOtp} auto-complete="off" value={otp} />
+            <input
+              type="number"
+              onChange={validateOtp}
+              auto-complete="off"
+              value={otp}
+            />
           </OtpContainer>
         </OtpboxWrapper>
-        {counter > 0 && <Resend convertText={false}>Resend OTP in &nbsp;{counter}s</Resend>}
+        {counter > 0 && (
+          <Resend convertText={false}>Resend OTP in &nbsp;{counter}s</Resend>
+        )}
         {counter === 0 && (
           <Resend convertText={true} onClick={resendOtp}>
             Resend otp
