@@ -31,7 +31,7 @@ export const Mobile: FC<IMobileProps> = ({ updateForm }: IMobileProps) => {
   };
 
   const validateUserMobile = () => {
-    let error;
+    let error: ILoginErrorMessageBar | null = null;
     const setErrorMessage = (type: string, msg?: string) => {
       error = {
         messageType: 'error',

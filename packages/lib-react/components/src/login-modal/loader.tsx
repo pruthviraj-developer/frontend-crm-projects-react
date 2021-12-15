@@ -10,9 +10,11 @@ export const Loader: FC = () => {
     <CartLoaderWrapper>
       <CartSpinner>
         <Spinner>
-          {[...Array(4)].map((_, i) => (
-            <Bullet key={'loader_' + i}></Bullet>
-          ))}
+          {Array(4)
+            .fill(0)
+            .map((_, i) => (
+              <Bullet key={'loader_' + i}></Bullet>
+            ))}
         </Spinner>
       </CartSpinner>
     </CartLoaderWrapper>

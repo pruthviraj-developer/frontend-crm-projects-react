@@ -22,12 +22,12 @@ export interface ILoginErrorResponse {
 }
 
 export interface ILoginErrorMessageBar {
-  messageType: string;
-  message: string;
-  actionText: string;
-  actionLink: string;
-  messageUIType: string;
-  messageDisplayTime: string;
+  messageType?: string;
+  message?: string;
+  actionText?: string;
+  actionLink?: string;
+  messageUIType?: string;
+  messageDisplayTime?: string;
   code?: string;
 }
 

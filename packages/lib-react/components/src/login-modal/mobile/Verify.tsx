@@ -124,12 +124,14 @@ export const Verify: FC<IVerifiedDataProps> = ({
         </ChangeNumber>
         <OtpboxWrapper>
           <OtpContainer>
-            {[...Array(OTP_LENGTH)].map((x, index: number) => (
-              <OtpSeperator
-                key={index || x}
-                show={otp.length <= index}
-              ></OtpSeperator>
-            ))}
+            {Array(OTP_LENGTH)
+              .fill(0)
+              .map((_, index: number) => (
+                <OtpSeperator
+                  key={index}
+                  show={otp.length <= index}
+                ></OtpSeperator>
+              ))}
             <input
               type="number"
               onChange={validateOtp}

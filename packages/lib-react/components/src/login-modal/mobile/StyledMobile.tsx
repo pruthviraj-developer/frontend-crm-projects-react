@@ -12,9 +12,7 @@ const ErrorIcon = styled(SvgIcon)`
   min-width: 24px;
 `;
 
-const MobileWrapper = styled.div`
-  position: relative;
-`;
+const MobileWrapper = styled.div``;
 
 const MobileNumber = styled.input`
   width: 100%;
