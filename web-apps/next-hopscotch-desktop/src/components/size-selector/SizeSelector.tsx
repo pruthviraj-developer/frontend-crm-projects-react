@@ -6,6 +6,7 @@ import {
   SelectSize,
   SelectPreview,
   OptionsPreview,
+  OptionsPreviewList,
   Options,
   Details,
   ItemsLeft,
@@ -46,13 +47,13 @@ const SizeSelector: FC<ISizeSelectorProps> = ({ showRFYP, goToProductRecommendat
 
   return (
     <SizeSelectorWrapper ref={elementRef} onClick={handleClickInside}>
-      <CustomSizePicker border={isDropDownOpen}>
+      <CustomSizePicker isOpen={isDropDownOpen}>
         <SelectPreview borderBottom={isDropDownOpen}>
           <SelectSize>Select a size</SelectSize>
           <AngleDownArrow icon={IconAngleDown} />
         </SelectPreview>
         {isDropDownOpen && (
-          <>
+          <OptionsPreviewList>
             <OptionsPreview>
               <Options soldOut={false}>
                 <span>6-12 months</span>
@@ -93,7 +94,7 @@ const SizeSelector: FC<ISizeSelectorProps> = ({ showRFYP, goToProductRecommendat
                 <span>3-4 years</span> <span>Sold out</span>
               </Options>
             </OptionsPreview>
-            {showRFYP && (
+            {
               <RecommendedForyou>
                 <SeeSimilarIcon icon={IconSeeSimilarWhite} />
                 <SizeSoldOut>Size sold out?</SizeSoldOut>
@@ -107,8 +108,8 @@ const SizeSelector: FC<ISizeSelectorProps> = ({ showRFYP, goToProductRecommendat
                   See similar products
                 </SeeSimilarProducts>
               </RecommendedForyou>
-            )}
-          </>
+            }
+          </OptionsPreviewList>
         )}
       </CustomSizePicker>
     </SizeSelectorWrapper>

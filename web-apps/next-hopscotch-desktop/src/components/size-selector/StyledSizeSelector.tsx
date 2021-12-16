@@ -5,7 +5,7 @@ const SizeSelectorWrapper = styled.div`
 `;
 
 const CustomSizePicker = styled.div<{
-  border: Boolean;
+  isOpen: Boolean;
 }>`
   border-radius: 4px;
   background-color: #fff;
@@ -13,7 +13,9 @@ const CustomSizePicker = styled.div<{
   &:hover {
     border-color: #a4a4a4;
   }
-  border-color: ${(props) => (props.border ? '#a4a4a4' : '#e6e6e6')};
+  border-color: ${(props) => (props.isOpen ? '#a4a4a4' : '#e6e6e6')};
+  border-bottom-left-radius: ${(props) => (props.isOpen ? 0 : '4px')};
+  border-bottom-right-radius: ${(props) => (props.isOpen ? 0 : '4px')};
 `;
 
 const AngleDownArrow = styled(SvgIcon)`
@@ -108,27 +110,29 @@ const DeliveryDetails = styled.span`
 
 const DeliveryIcon = styled(SvgIcon)`
   width: 16px;
-  margin-right: 4px;
   margin-top: 1px;
+  margin-right: 4px;
 `;
 
 const RecommendedForyou = styled.div`
-  position: relative;
-  padding: 10px 16px;
-  background-color: #3e4855;
   color: #fff;
+  display: flex;
   font-size: 12px;
   line-height: 15px;
-  display: flex;
-  border-bottom-left-radius: 3px;
-  border-bottom-right-radius: 3px;
+  padding: 10px 16px;
+  position: relative;
+  background-color: #3e4855;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
 `;
 
 const SeeSimilarIcon = styled(SvgIcon)``;
+
 const SizeSoldOut = styled.div`
   padding-left: 7px;
   vertical-align: top;
 `;
+
 const SeeSimilarProducts = styled.div`
   cursor: pointer;
   font-weight: 600;
@@ -137,12 +141,25 @@ const SeeSimilarProducts = styled.div`
   text-decoration: underline;
 `;
 
+const OptionsPreviewList = styled.div`
+  left: 0;
+  right: 0;
+  z-index: 1;
+  border: 1px solid #a4a4a4;
+  border-top: 0;
+  background: #fff;
+  position: absolute;
+  border-bottom-right-radius: 4px;
+  border-bottom-left-radius: 4px;
+`;
+
 export {
   SizeSelectorWrapper,
   CustomSizePicker,
   AngleDownArrow,
   DeliveryIcon,
   SelectSize,
+  OptionsPreviewList,
   OptionsPreview,
   Options,
   SelectPreview,
