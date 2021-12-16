@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import { SvgIcon } from '@hs/icons';
 const SizeSelectorWrapper = styled.div`
   position: relative;
+  padding-bottom: 12px;
 `;
 
 const CustomSizePicker = styled.div<{
@@ -14,8 +15,8 @@ const CustomSizePicker = styled.div<{
     border-color: #a4a4a4;
   }
   border-color: ${(props) => (props.isOpen ? '#a4a4a4' : '#e6e6e6')};
-  border-bottom-left-radius: ${(props) => (props.isOpen ? 0 : '4px')};
-  border-bottom-right-radius: ${(props) => (props.isOpen ? 0 : '4px')};
+  border-bottom-left-radius: ${(props) => (props.isOpen ? 0 : '5px')};
+  border-bottom-right-radius: ${(props) => (props.isOpen ? 0 : '5px')};
 `;
 
 const AngleDownArrow = styled(SvgIcon)`
@@ -76,9 +77,9 @@ const SelectPreview = styled.div<{
   display: flex;
   align-items: center;
   padding: 16px 19px 16px 16px;
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-  border-bottom: ${(props) => (props.borderBottom ? '1px solid #a4a4a4' : 'none')};
+  border-bottom: ${(props) => (props.borderBottom ? '1px solid #a4a4a4' : 0)};
+  border-top-right-radius: 4px;
+  border-top-left-radius: 4px;
 `;
 
 const Details = styled.div`
@@ -122,8 +123,8 @@ const RecommendedForyou = styled.div`
   padding: 10px 16px;
   position: relative;
   background-color: #3e4855;
-  border-bottom-left-radius: 4px;
-  border-bottom-right-radius: 4px;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
 `;
 
 const SeeSimilarIcon = styled(SvgIcon)``;

@@ -1,15 +1,17 @@
 import React from 'react';
 import { Story } from '@storybook/react/types-6-0';
 
-import { AddToCart } from './AddToCart';
-import { IAddToCartProps } from './IAddToCart';
+import { AddToCartDesktop } from './AddToCartDesktop';
+import { IAddToCartProps } from '../IAddToCart';
 
 export default {
   title: 'Add To Cart Button',
-  component: AddToCart,
+  component: AddToCartDesktop,
 };
 
-const Template: Story<IAddToCartProps> = (args) => <AddToCart {...args} />;
+const Template: Story<IAddToCartProps> = (args) => (
+  <AddToCartDesktop {...args} />
+);
 export const AddToCartComponentDisabled = Template.bind({});
 
 AddToCartComponentDisabled.args = { disabled: true, show: true };

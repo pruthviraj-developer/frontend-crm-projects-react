@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
-import { IAddToCartProps } from './IAddToCart';
+import { IAddToCartProps } from '../IAddToCart';
 import { AddToCartWrapper, AddToCartButton } from './StyledAddToCart';
-export const AddToCart: FC<IAddToCartProps> = ({
+export const AddToCartDesktop: FC<IAddToCartProps> = ({
   addProductToCart,
   disabled,
   show,

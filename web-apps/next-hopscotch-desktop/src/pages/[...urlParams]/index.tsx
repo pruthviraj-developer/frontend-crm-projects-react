@@ -17,6 +17,7 @@ const PinCodePopupComponent = dynamic(() => import('../../components/pin-code/Pi
 });
 
 import {
+  AddToCartDesktop,
   AccordionDesktop,
   CustomSizePicker,
   RecommendedProductsDesktop,
@@ -538,6 +539,13 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
                 )} */}
 
               <SizeSelector {...{ showRFYP, goToProductRecommendation }}></SizeSelector>
+              <AddToCartDesktop
+                {...{
+                  show: true,
+                  disabled: isProductSoldOut ? true : false,
+                  addProductToCart,
+                }}
+              ></AddToCartDesktop>
               <DeliveryDetailsDesktop
                 {...{
                   ...deliveryDetailsData,

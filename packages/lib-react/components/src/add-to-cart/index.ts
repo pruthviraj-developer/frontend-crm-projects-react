@@ -1,2 +1,2 @@
-export * from './AddToCart';
-export * from './IAddToCart';
+export * from './mobile';
+export * from './desktop';
