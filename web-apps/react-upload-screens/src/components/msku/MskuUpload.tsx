@@ -11,6 +11,7 @@ const navItems: LeftNavBarProps = {
     { linkUrl: 'upload-targets', linkText: 'Upload MSKU targets', icon: UploadIcon },
     { linkUrl: 'update-targets', linkText: 'Update MSKU targets', icon: DashBoardIcon },
     { linkUrl: 'salesplan-upload', linkText: 'Sales Plan Upload', icon: UploadIcon },
+    { linkUrl: 'thirdparty-salesplan-upload', linkText: '3P Sales Plan Upload', icon: UploadIcon },
   ],
 };
 
@@ -27,6 +28,7 @@ const MskuUpload: FC = () => {
     { label: 'Download Template', action: 'downloadUpdateMskuTarget' },
   ];
   const salesPlanDownloadOption = [{ label: 'Download Template', action: 'downloadMskuTargetSalePlan' }];
+  const salesPlanDownload3POption = [{ label: 'Download Template', action: 'downloadMskuTarget3PSalePlan' }];
 
   return (
     <>
@@ -61,6 +63,13 @@ const MskuUpload: FC = () => {
             header="Sales Plan Upload"
             uploadAction="createMskuTargetSalePlan"
             downloadOption={salesPlanDownloadOption}
+          />
+        </Route>
+        <Route path={`${path}/thirdparty-salesplan-upload`}>
+          <BulkUploadScreen
+            header="3P Sales Plan Upload"
+            uploadAction="createMskuTarget3PSalePlan"
+            downloadOption={salesPlanDownload3POption}
           />
         </Route>
       </Switch>
