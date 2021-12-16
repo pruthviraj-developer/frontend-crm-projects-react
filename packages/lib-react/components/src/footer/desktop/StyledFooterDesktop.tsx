@@ -5,14 +5,14 @@ import { SvgIcon } from '@hs/icons';
 const FooterWrapper = styled.footer`
   background-color: ${Colors.WHITE};
   border-top: 1px solid ${Colors.MERCURY};
-  max-width: 1400px;
+  //max-width: inherit;
   margin: 68px auto auto;
 `;
 
 const FooterSection = styled.section`
   display: flex;
   max-width: 1400px;
-  margin: auto;
+  margin: 0 auto;
   > div {
     flex: 25%;
     display: flex;
@@ -142,6 +142,8 @@ const FooterEnd = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  max-width: 1400px;
+  margin: 0 auto;
 `;
 
 export {
