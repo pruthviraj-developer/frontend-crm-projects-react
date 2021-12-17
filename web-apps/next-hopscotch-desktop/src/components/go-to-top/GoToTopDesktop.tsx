@@ -1,9 +1,9 @@
 import React, { FC, useEffect, useState } from 'react';
 
 import { GoToTopWrapper, BackToTopIconWrapper, BackToTopIcon, BackToTopText } from './StyledGoToTop';
-import { BackIcon } from '@hs/icons';
+import { IconArrowTop } from '@hs/icons';
 
-const GoToTop: FC = () => {
+const GoToTopDesktop: FC = () => {
   const [showBackToTop, setShowBackToTop] = useState<boolean>(false);
   useEffect(() => {
     let timeOut: any;
@@ -36,10 +36,10 @@ const GoToTop: FC = () => {
   return showBackToTop === true ? (
     <GoToTopWrapper>
       <BackToTopIconWrapper>
-        <BackToTopIcon icon={BackIcon}></BackToTopIcon>
+        <BackToTopIcon icon={IconArrowTop}></BackToTopIcon>
       </BackToTopIconWrapper>
       <BackToTopText>Back to top</BackToTopText>
     </GoToTopWrapper>
   ) : null;
 };
-export default GoToTop;
+export default GoToTopDesktop;

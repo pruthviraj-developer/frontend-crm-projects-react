@@ -67,6 +67,7 @@ import {
   UserInfoContext,
   LOCAL_DATA,
 } from '@hs/framework';
+import GoToTopDesktop from '@/components/go-to-top/GoToTopDesktop';
 
 const tryLater = 'Try Later';
 
@@ -595,6 +596,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
           </PinCodePopupModal>
         </>
       )}
+      <GoToTopDesktop></GoToTopDesktop>
       {/* <pre style={{ width: '60%', overflowX: 'scroll' }}>{JSON.stringify(productData, null, 4)}</pre> */}
     </>
   );
