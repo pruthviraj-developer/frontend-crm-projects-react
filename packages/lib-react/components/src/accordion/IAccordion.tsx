@@ -1,6 +1,6 @@
 import {
   IProductDetailsAttrsEntity,
-  IProductDetailsDeliveryMessageOrDeliveryMessagesEntity,
+  IDeliveryMessagesEntity,
   ISimpleSkusEntityProps,
 } from 'types';
 
@@ -48,7 +48,7 @@ export interface ISelectedSimpleSkusEntityProps {
   preorderInfo: string;
   merchType: string;
   shippingReturnInfoForSku: string;
-  deliveryMessage: IProductDetailsDeliveryMessageOrDeliveryMessagesEntity;
+  deliveryMessage: IDeliveryMessagesEntity;
 }
 
 export interface AccordionProductLevelAttrListEntityProps {

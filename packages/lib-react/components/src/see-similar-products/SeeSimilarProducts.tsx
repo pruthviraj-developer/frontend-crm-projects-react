@@ -13,7 +13,7 @@ export const SeeSimilarProducts: FC<ISeeSimilarProductsProps> = ({
       <SizeSoldOut>Size sold out?</SizeSoldOut>
       <SeeSimilar
         onClick={() => {
-          goToProductRecommendation('Add to cart');
+          goToProductRecommendation('Size list');
         }}
       >
         See similar products

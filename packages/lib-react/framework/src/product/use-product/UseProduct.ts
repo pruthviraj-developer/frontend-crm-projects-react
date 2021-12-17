@@ -41,6 +41,7 @@ export const useProduct = ({ productData, selectedSku }: ProductProps) => {
     () => getSimpleSkus(productData.simpleSkus),
     [productData]
   );
+  const defaultSku = useMemo(() => getDefaultSku(simpleSkus), [productData]);
   const {
     productDesc,
     showShippingInfo,
@@ -54,8 +55,7 @@ export const useProduct = ({ productData, selectedSku }: ProductProps) => {
     wishlistId,
   } = productData;
   const retailPrice = selectedSku?.retailPrice || productData.retailPrice;
-  const skuData: ISimpleSkusEntityProps =
-    selectedSku || getDefaultSku(simpleSkus);
+  const skuData: ISimpleSkusEntityProps = selectedSku || defaultSku;
   const { regularPrice, discount, isPresale, finalSale } = skuData;
   const qtyLeft = skuData.availableQuantity,
     size = skuData.attributes.size;
@@ -84,5 +84,6 @@ export const useProduct = ({ productData, selectedSku }: ProductProps) => {
     retailPriceMax,
     wishlistId,
     selectedSkuId: selectedSku && selectedSku.skuId,
+    defaultSku,
   };
 };

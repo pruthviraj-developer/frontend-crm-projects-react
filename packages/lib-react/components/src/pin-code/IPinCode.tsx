@@ -1,3 +1,5 @@
+import { IDeliveryMessagesEntity } from 'types';
+
 export interface IPinCodeProps {
   pinCode?: string;
   productId: number;
@@ -11,7 +13,7 @@ export interface IPinCodeAPIResponseProps {
   codAvailable: boolean;
   edd: string;
   eddPrefix: string;
-  deliveryMessages?: DeliveryMessageOrDeliveryMessagesEntity[] | null;
+  deliveryMessages?: IDeliveryMessagesEntity[] | null;
   eddColor: string;
   eddTextColor: string;
   isEddDifferentForSKUs: boolean;
@@ -36,10 +38,35 @@ export interface IPinCodeSimpleSkus {
   eddColor: string;
   eddTextColor: string;
   isFastEdd: boolean;
-  deliveryMessage: DeliveryMessageOrDeliveryMessagesEntity;
+  deliveryMessage: IDeliveryMessagesEntity;
 }
-export interface DeliveryMessageOrDeliveryMessagesEntity {
+
+export interface IAddressListProps {
   action: string;
-  msg: string;
-  type: number;
+  allAddressItems: IAllAddressItemsEntityProps[];
+}
+export interface IAllAddressItemsEntityProps {
+  id: number;
+  name: string;
+  country: string;
+  state: string;
+  city: string;
+  zipCode: string;
+  streetAddress: string;
+  landmark: string;
+  cellPhone: string;
+  isPrimary: boolean;
+  canCod: boolean;
+  canPol: boolean;
+  isServicable: boolean;
+  simpleStreetAddress: string;
+  firstName: string;
+  lastName: string;
+}
+
+export interface IUpdatedDeliverDetailsProps {
+  edd?: string;
+  pinCode: string;
+  eddPrefix: string;
+  deliveryMessages: IDeliveryMessagesEntity[];
 }

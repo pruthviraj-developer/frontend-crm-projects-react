@@ -57,7 +57,7 @@ export interface ISimpleSkusEntityProps {
   preorderAction: string;
   preorderInfo: string;
   merchType: string;
-  deliveryMessage: IProductDetailsDeliveryMessageOrDeliveryMessagesEntity;
+  deliveryMessage: IDeliveryMessagesEntity;
 }
 
 export interface IProductDetailsAttrsEntity {
@@ -65,7 +65,7 @@ export interface IProductDetailsAttrsEntity {
   value: string;
 }
 
-export interface IProductDetailsDeliveryMessageOrDeliveryMessagesEntity {
+export interface IDeliveryMessagesEntity {
   action: string;
   msg: string;
   type: number;
@@ -74,4 +74,5 @@ export interface IProductDetailsDeliveryMessageOrDeliveryMessagesEntity {
 export interface IHeadProps {
   productName: string;
   retailPrice?: number;
+  schema: string;
 }

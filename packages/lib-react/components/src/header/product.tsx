@@ -2,7 +2,11 @@ import { IHeadProps } from 'types';
 import Head from 'next/head';
 import React from 'react';
 
-export const ProductHead = ({ productName, retailPrice }: IHeadProps) => {
+export const ProductHead = ({
+  productName,
+  retailPrice,
+  schema,
+}: IHeadProps) => {
   const keyword = productName?.replace(/-|:|_/gi, ' ');
   return (
     <Head>
@@ -22,6 +26,12 @@ export const ProductHead = ({ productName, retailPrice }: IHeadProps) => {
       <meta
         name="keywords"
         content={`${keyword},online shopping for ${keyword}`}
+      />
+      <script
+        id="schemaScript"
+        key="productSchema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: schema }}
       />
     </Head>
   );

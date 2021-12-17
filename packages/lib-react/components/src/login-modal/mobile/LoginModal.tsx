@@ -1,13 +1,20 @@
 import React, { FC, useState } from 'react';
-import { ILoginModalProps, IVerifiedDataProps } from './ILoginModal';
-import { LoginModalWrapper, SignInContainer, SignInWrapper, Description } from './StyledLoginModal';
+import { ILoginModalProps, IVerifiedDataProps } from '../ILoginModal';
+import {
+  LoginModalWrapper,
+  SignInContainer,
+  SignInWrapper,
+  Description,
+} from './StyledLoginModal';
 import { Header } from './Header';
 import { SubHeader } from './SubHeader';
-import { Mobile } from './Mobile';
 import { Verify } from './Verify';
+import { Mobile } from './Mobile';
 const SIGNIN = 'SIGN_IN';
 const VERIFY = 'verify';
-export const LoginModal: FC<ILoginModalProps> = ({ closeLoginPopup }: ILoginModalProps) => {
+const LoginModal: FC<ILoginModalProps> = ({
+  closeLoginPopup,
+}: ILoginModalProps) => {
   const subTitle = 'Sign In';
 
   const [currentState, setCurrentState] = useState(SIGNIN);
@@ -28,12 +35,20 @@ export const LoginModal: FC<ILoginModalProps> = ({ closeLoginPopup }: ILoginModa
 
   return (
     <LoginModalWrapper>
-      <Header {...{ closeLoginPopup, back, active: currentState === SIGNIN ? false : true }} />
+      <Header
+        {...{
+          closeLoginPopup,
+          back,
+          active: currentState === SIGNIN ? false : true,
+        }}
+      />
       <SignInContainer>
         {currentState === SIGNIN && (
           <>
             <SubHeader title={subTitle} />
-            <Description>Your number will be your account identity.</Description>
+            <Description>
+              Your number will be your account identity.
+            </Description>
           </>
         )}
         <SignInWrapper>
@@ -44,3 +59,4 @@ export const LoginModal: FC<ILoginModalProps> = ({ closeLoginPopup }: ILoginModa
     </LoginModalWrapper>
   );
 };
+export default LoginModal;

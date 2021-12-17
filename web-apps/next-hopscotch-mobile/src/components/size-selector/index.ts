@@ -1,2 +1,2 @@
-export * from './SizeSelector';
-export * from './ISizeSelector';
+import { SizeSelectorMobile } from '@hs/components';
+export default SizeSelectorMobile;

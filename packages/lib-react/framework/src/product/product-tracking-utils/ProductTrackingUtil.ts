@@ -1,5 +1,5 @@
 import { IProductDetailsAttrsEntity } from 'product/types';
-import { IProductTrackingProps } from './IProductTrackingUtil';
+import { IProductSchema, IProductTrackingProps } from './IProductTrackingUtil';
 
 const DIFFERENT_FOR_SIZES = 'Different for sizes';
 export const getProductTrackingData = ({
@@ -48,4 +48,37 @@ export const getProductTrackingData = ({
     ...attributes,
   };
   return productTrackData;
+};
+
+export const getSchemaData = ({
+  defaultSku,
+  productData,
+  url,
+}: IProductSchema) => {
+  const SchemaData = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: productData.productName,
+    image:
+      productData &&
+      Array.isArray(productData.imgurls) &&
+      productData.imgurls[0].imgUrlFull,
+    sku: productData.id,
+    mpn: productData.id,
+    description: productData.productDesc,
+    offers: {
+      '@type': 'Offer',
+      priceCurrency: 'INR',
+      price: defaultSku.retailPrice,
+      availability: !(defaultSku.availableQuantity > 0)
+        ? 'http://schema.org/OutOfStock'
+        : 'http://schema.org/InStock',
+      url: url,
+    },
+    brand: {
+      '@type': 'Thing',
+      name: productData.brandName,
+    },
+  };
+  return JSON.stringify(SchemaData);
 };

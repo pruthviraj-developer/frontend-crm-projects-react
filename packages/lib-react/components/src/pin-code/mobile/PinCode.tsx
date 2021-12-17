@@ -1,5 +1,9 @@
 import React, { FC, useState, useEffect, useContext } from 'react';
-import { IPinCodeAPIResponseProps, IPinCodeProps, IPinCodeErrorProps } from './IPinCode';
+import {
+  IPinCodeAPIResponseProps,
+  IPinCodeProps,
+  IPinCodeErrorProps,
+} from '../IPinCode';
 import {
   PinCodeWrapper,
   PinCodeContainer,
@@ -18,16 +22,24 @@ import {
   Name,
 } from './StyledPinCode';
 import { IconClose } from '@hs/icons';
-import { IAddressListProps, IAllAddressItemsEntityProps } from '@/types';
+import { IAddressListProps, IAllAddressItemsEntityProps } from '../IPinCode';
 import { productDetailsService } from '@hs/services';
 import { LoginContext, UserInfoContext } from '@hs/framework';
 const SUCCESS = 'success';
-const PinCode: FC<IPinCodeProps> = ({ productId, pinCode, closePinCodePopup }: IPinCodeProps) => {
+const PinCodeMobile: FC<IPinCodeProps> = ({
+  productId,
+  pinCode,
+  closePinCodePopup,
+}: IPinCodeProps) => {
   const [pincode, setPinCode] = useState<string>('');
-  const [error, setError] = useState<IPinCodeAPIResponseProps | IPinCodeErrorProps>();
+  const [error, setError] = useState<
+    IPinCodeAPIResponseProps | IPinCodeErrorProps
+  >();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isLoadingAddress, setIsLoadingAddress] = useState<boolean>(false);
-  const [addressList, setAddressList] = useState<IAllAddressItemsEntityProps[]>([]);
+  const [addressList, setAddressList] = useState<IAllAddressItemsEntityProps[]>(
+    []
+  );
 
   const { updateLoginPopup } = useContext(LoginContext);
   const { userInfo } = useContext(UserInfoContext);
@@ -39,7 +51,8 @@ const PinCode: FC<IPinCodeProps> = ({ productId, pinCode, closePinCodePopup }: I
       }
       try {
         setIsLoading(true);
-        const response: IPinCodeAPIResponseProps = await productDetailsService.checkForPincode({ productId, pincode });
+        const response: IPinCodeAPIResponseProps =
+          await productDetailsService.checkForPincode({ productId, pincode });
         setIsLoading(false);
         if (!response.serviceable) {
           setError({ ...response, message: response.noPinCodeMessage });
@@ -82,11 +95,12 @@ const PinCode: FC<IPinCodeProps> = ({ productId, pinCode, closePinCodePopup }: I
     (async () => {
       try {
         setIsLoadingAddress(true);
-        const response: IAddressListProps = await productDetailsService.getCustomerAddresses();
+        const response: IAddressListProps =
+          await productDetailsService.getCustomerAddresses();
         if (response.action === SUCCESS) {
           setAddressList(response.allAddressItems);
         }
-      } catch (error: any) {
+      } catch (error) {
         if (error && error['message'] === 'login required') {
           closePinCodePopup();
           updateLoginPopup(true);
@@ -110,45 +124,59 @@ const PinCode: FC<IPinCodeProps> = ({ productId, pinCode, closePinCodePopup }: I
           <>
             <Title>Select an address</Title>
             <DeliveryAddressesContainer>
-              {addressList.map((address: IAllAddressItemsEntityProps, index: number) => {
-                return (
-                  <Address
-                    key={index}
-                    onClick={() => {
-                      if (address.isServicable) {
-                        const pin = address.zipCode || pincode;
-                        if (pin) {
-                          checkPinCodeDetails(pin);
-                        } else {
-                          setError({ message: 'Please enter pincode.' });
+              {addressList.map(
+                (address: IAllAddressItemsEntityProps, index: number) => {
+                  return (
+                    <Address
+                      key={index}
+                      onClick={() => {
+                        if (address.isServicable) {
+                          const pin = address.zipCode || pincode;
+                          if (pin) {
+                            checkPinCodeDetails(pin);
+                          } else {
+                            setError({ message: 'Please enter pincode.' });
+                          }
                         }
-                      }
-                    }}
-                  >
-                    <Name>{address.name}</Name>
-                    {address.city + ' - ' + address.zipCode}
-                  </Address>
-                );
-              })}
+                      }}
+                    >
+                      <Name>{address.name}</Name>
+                      {address.city + ' - ' + address.zipCode}
+                    </Address>
+                  );
+                }
+              )}
             </DeliveryAddressesContainer>
           </>
         )}
         {isLoadingAddress && <Loading>Loading address...</Loading>}
-        <EnterPinCode>{hasAddress ? 'Or, enter your pincode' : 'Enter your pincode'}</EnterPinCode>
+        <EnterPinCode>
+          {hasAddress ? 'Or, enter your pincode' : 'Enter your pincode'}
+        </EnterPinCode>
         <PinCodeForm
           onSubmit={(e) => {
             return submitForm(e);
           }}
           noValidate
         >
-          <PinCodeNumber value={pincode} onChange={handleOnChange} placeholder="Pincode" />
-          <PinCodeSubmit disabled={pincode.length < 6 || isLoading} type="submit">
+          <PinCodeNumber
+            value={pincode}
+            onChange={handleOnChange}
+            placeholder="Pincode"
+          />
+          <PinCodeSubmit
+            disabled={pincode.length < 6 || isLoading}
+            type="submit"
+          >
             Check
           </PinCodeSubmit>
-          {error && error.message && <ErrorMessage>{error.message}</ErrorMessage>}
+          {error && error.message && (
+            <ErrorMessage>{error.message}</ErrorMessage>
+          )}
         </PinCodeForm>
       </PinCodeContainer>
     </PinCodeWrapper>
   );
 };
-export default PinCode;
+
+export default PinCodeMobile;

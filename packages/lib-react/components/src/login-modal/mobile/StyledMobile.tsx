@@ -12,9 +12,7 @@ const ErrorIcon = styled(SvgIcon)`
   min-width: 24px;
 `;
 
-const MobileWrapper = styled.div`
-  position: relative;
-`;
+const MobileWrapper = styled.div``;
 
 const MobileNumber = styled.input`
   width: 100%;
@@ -58,4 +56,12 @@ const ErrorMessage = styled.span`
   font-size: 1.2rem;
 `;
 
-export { ActionText, MobileWrapper, MobileNumber, MessageWrapper, Button, ErrorIcon, ErrorMessage };
+export {
+  ActionText,
+  MobileWrapper,
+  MobileNumber,
+  MessageWrapper,
+  Button,
+  ErrorIcon,
+  ErrorMessage,
+};

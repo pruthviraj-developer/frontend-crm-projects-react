@@ -16,7 +16,7 @@ import {
   SizeSelector,
 } from './StyledDeliveryDetails';
 import { IDeliveryDetailsProps } from '../IDeliveryDetails';
-import { IProductDetailsDeliveryMessageOrDeliveryMessagesEntity } from 'types';
+import { IDeliveryMessagesEntity } from 'types';
 import { NextNavLink } from '../../next-nav-link';
 export const DeliveryDetailsDesktop: FC<IDeliveryDetailsProps> = ({
   deliveryMessages,
@@ -104,10 +104,7 @@ export const DeliveryDetailsDesktop: FC<IDeliveryDetailsProps> = ({
 
         {deliveryMessages &&
           deliveryMessages.map(
-            (
-              data: IProductDetailsDeliveryMessageOrDeliveryMessagesEntity,
-              index: number
-            ) => (
+            (data: IDeliveryMessagesEntity, index: number) => (
               <Delivery key={index}>
                 <DeliverIcon icon={data.type ? IconTick : IconCrossRed} />
                 <DeliveryInfo>{data.msg}</DeliveryInfo>

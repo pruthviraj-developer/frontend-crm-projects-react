@@ -1,6 +1,10 @@
 import React, { FC, useState } from 'react';
-import { FORM_ERROR_CODES, REGEX_PATTERNS } from './constants';
-import { IMobileProps, ILoginErrorResponse, ILoginErrorMessageBar } from './ILoginModal';
+import { FORM_ERROR_CODES, REGEX_PATTERNS } from '../constants';
+import {
+  IMobileProps,
+  ILoginErrorResponse,
+  ILoginErrorMessageBar,
+} from '../ILoginModal';
 import {
   ActionText,
   MobileWrapper,
@@ -13,7 +17,7 @@ import {
 
 import { IconErrorMessage } from '@hs/icons';
 import { productDetailsService } from '@hs/services';
-import { Loader } from './loader';
+import { Loader } from '../loader';
 
 const reason = { otpReason: 'SIGN_IN', type: 'SMS' };
 
@@ -27,7 +31,7 @@ export const Mobile: FC<IMobileProps> = ({ updateForm }: IMobileProps) => {
   };
 
   const validateUserMobile = () => {
-    let error = null;
+    let error: ILoginErrorMessageBar | null = null;
     const setErrorMessage = (type: string, msg?: string) => {
       error = {
         messageType: 'error',
@@ -37,7 +41,10 @@ export const Mobile: FC<IMobileProps> = ({ updateForm }: IMobileProps) => {
     if (!loginId) {
       setErrorMessage('mobile', 'Required');
     } else if (loginId.length < 10) {
-      setErrorMessage('mobile', "Check if you've entered a 10 digit Indian mobile number");
+      setErrorMessage(
+        'mobile',
+        "Check if you've entered a 10 digit Indian mobile number"
+      );
     } else if (!REGEX_PATTERNS.MOBILE.test(loginId)) {
       setErrorMessage('mobile');
     }
@@ -51,10 +58,11 @@ export const Mobile: FC<IMobileProps> = ({ updateForm }: IMobileProps) => {
     (async () => {
       try {
         setLoading(true);
-        const response: ILoginErrorResponse = await productDetailsService.sendOtp({
-          loginId,
-          ...reason,
-        });
+        const response: ILoginErrorResponse =
+          await productDetailsService.sendOtp({
+            loginId,
+            ...reason,
+          });
         setLoading(false);
         if (response.action === 'success') {
           updateForm({
@@ -97,7 +105,11 @@ export const Mobile: FC<IMobileProps> = ({ updateForm }: IMobileProps) => {
         }}
         noValidate
       >
-        <MobileNumber value={loginId} onChange={handleOnChange} placeholder="Mobile Number" />
+        <MobileNumber
+          value={loginId}
+          onChange={handleOnChange}
+          placeholder="Mobile Number"
+        />
         {error && (
           <MessageWrapper onClick={action}>
             <ErrorIcon icon={IconErrorMessage} />

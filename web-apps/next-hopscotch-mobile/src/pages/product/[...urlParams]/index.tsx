@@ -2,12 +2,13 @@ import type { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React, { useState, useEffect, ReactElement, useContext } from 'react';
 import { useModal } from 'react-hooks-use-modal';
 import { toast } from 'react-toastify';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
 import Parser from 'ua-parser-js';
-const ProductMobile = dynamic(() => import('@/components/pdp/index'), {
+const ProductMobile = dynamic(() => import('@/components/pdp'), {
   ssr: true,
 });
 const Layout = dynamic(() => import('@/components/layout/Layout'), {
@@ -29,11 +30,15 @@ const SizeChartPopupComponent = dynamic(() => import('@/components/size-chart/Si
   ssr: false,
 });
 
-const SizeSelectorPopupComponent = dynamic(() => import('@/components/size-selector/SizeSelector'), {
+const SizeSelectorMobile = dynamic(() => import('@/components/size-selector'), {
   ssr: false,
 });
 
-const PinCodePopupComponent = dynamic(() => import('@/components/pin-code/PinCode'), {
+const PinCodeMobile = dynamic(() => import('@/components/pin-code'), {
+  ssr: false,
+});
+
+const LoginPopup = dynamic(() => import('@/components/login-modal'), {
   ssr: false,
 });
 
@@ -45,6 +50,7 @@ import {
   IProductDetails,
   ISimpleSkusEntityProps,
   getProductTrackingData,
+  getSchemaData,
   COOKIE_DATA,
   CartItemQtyContext,
   LoginContext,
@@ -54,7 +60,6 @@ import {
 
 import * as segment from '@/components/segment-analytic';
 import * as gtm from '@/components/google-tag-manager/GTMLib';
-import { LoginModal } from '@/components/login-modal';
 // import { Layout } from '@/components/layout/Layout';
 import { ProductHead } from '@/components/header';
 import GoToTop from '@/components/go-to-top/GoToTop';
@@ -66,6 +71,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const productId = context.params?.urlParams?.[0] || '';
   const ua = Parser(context.req.headers['user-agent']);
   const isMobile = ua.device.type === Parser.DEVICE.MOBILE;
+  const url = `https://${context.req.headers?.host}${context.resolvedUrl?.split('?')?.[0]}`;
   await queryClient.prefetchQuery(
     ['ProductDetail', productId],
     () => productDetailsService.getProductDetails(productId, process.env.WEB_HOST),
@@ -77,11 +83,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     props: {
       dehydratedState: dehydrate(queryClient),
       productId,
+      url,
       isMobile,
     },
   };
 };
-const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile }: IProductProps) => {
+const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile, url }: IProductProps) => {
   const [deliveryDetails, updateDeliveryDetails] = useState<IUpdatedDeliverDetailsProps>();
   const [updatedWishListId, updateWishListId] = useState<number>();
   const [addToWishlistStatus, setAddToWishlistStatus] = useState<boolean>(false);
@@ -134,7 +141,7 @@ const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile }: IPr
   );
 
   const [selectedSku, setSelectedSku] = useState<ISimpleSkusEntityProps | any>();
-  const { productName, retailPrice, selectedSkuId, simpleSkus, wishlistId } = useProduct({
+  const { productName, retailPrice, selectedSkuId, simpleSkus, wishlistId, defaultSku } = useProduct({
     productData: productData,
     selectedSku: selectedSku,
   });
@@ -449,7 +456,9 @@ const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile }: IPr
     <>
       {productData && productData.action === LOCAL_DATA.SUCCESS && (
         <>
-          <ProductHead {...{ productName, retailPrice }}></ProductHead>
+          <ProductHead
+            {...{ productName, retailPrice, schema: getSchemaData({ productData, defaultSku, url: url }) }}
+          ></ProductHead>
           {
             <ProductMobile
               {...{
@@ -472,7 +481,7 @@ const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile }: IPr
           }
           <PinCodePopupModel>
             {isPinCodePopupOpen && (
-              <PinCodePopupComponent
+              <PinCodeMobile
                 {...{
                   productId: productData.id,
                   pinCode: productData.pinCode,
@@ -497,7 +506,7 @@ const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile }: IPr
 
       <SizeSelectorPopupModal>
         {isSizeSelectorPopupOpen && (
-          <SizeSelectorPopupComponent
+          <SizeSelectorMobile
             {...{
               closePopup: closeSizeSelector,
               showAddToCart: true,
@@ -507,15 +516,16 @@ const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile }: IPr
               onSizeSelect,
               addProductToCart,
             }}
-          ></SizeSelectorPopupComponent>
+          ></SizeSelectorMobile>
         )}
       </SizeSelectorPopupModal>
 
       <LoginPopupModal>
-        {isLoginPopupOpen && <LoginModal {...{ closeLoginPopup: closeLoginModalPopup }}></LoginModal>}
+        {/* {isLoginPopupOpen && <LoginModal {...{ closeLoginPopup: closeLoginModalPopup }}></LoginModal>} */}
+        {isLoginPopupOpen && <LoginPopup {...{ closeLoginPopup: closeLoginModalPopup }}></LoginPopup>}
       </LoginPopupModal>
       <GoToTop></GoToTop>
-      {/* <pre style={{ width: '60%', overflowX: 'scroll' }}>{JSON.stringify(productDetails, null, 4)}</pre> */}
+      {/* <pre style={{ width: '60%', overflowX: 'scroll' }}>{JSON.stringify(productData, null, 4)}</pre> */}
     </>
   );
 };
@@ -524,5 +534,5 @@ export default Product;
 
 Product.getLayout = function getLayout(page: ReactElement) {
   if (page.props.isMobile) return <Layout>{page}</Layout>;
-  else return <>{page}</>;
+  else return <Layout>{page}</Layout>;
 };
