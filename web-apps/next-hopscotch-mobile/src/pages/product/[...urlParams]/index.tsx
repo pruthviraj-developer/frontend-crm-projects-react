@@ -484,7 +484,7 @@ const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile, url }
               <PinCodeMobile
                 {...{
                   productId: productData.id,
-                  pinCode: productData.pinCode,
+                  pinCode: deliveryDetails?.pinCode || productData.pinCode,
                   closePinCodePopup: updateAndClosePinCodePopup,
                 }}
               />
