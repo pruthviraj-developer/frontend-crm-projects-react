@@ -1,6 +1,7 @@
 export interface IProductProps {
   productId: string;
   isMobile: Boolean;
+  url: string;
 }
 
 export interface urlParamsProps {
@@ -27,6 +28,7 @@ export interface ICartAPIResponse {
 export interface IHeadProps {
   productName: string;
   retailPrice?: number;
+  schema: string;
 }
 
 export interface IAddressListProps {
