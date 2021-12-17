@@ -17,6 +17,7 @@ const RecommendedMatchingWrapper = styled.div`
   margin: 12px 0 56px;
   /* font-size: 14px; */
   line-height: 20px;
+  border-bottom: 1px solid #e6e6e6;
 `;
 
 const RecommendedProductWrapper = styled.div`
