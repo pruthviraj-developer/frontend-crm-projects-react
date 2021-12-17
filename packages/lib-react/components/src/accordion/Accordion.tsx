@@ -32,7 +32,7 @@ export const Accordion: FC<IAccordionProps> = ({
   isReturnable,
 }: IAccordionProps) => {
   const [toggleAccordions, setToggleAccordions] = useState({
-    item: false,
+    item: true,
     shipping: false,
     more: false,
   });
