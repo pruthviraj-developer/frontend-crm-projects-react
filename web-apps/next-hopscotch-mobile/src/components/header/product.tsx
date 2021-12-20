@@ -1,7 +1,7 @@
 import { IHeadProps } from '@/types';
 import Head from 'next/head';
 
-export const ProductHead = ({ productName, retailPrice }: IHeadProps) => {
+export const ProductHead = ({ productName, retailPrice, schema }: IHeadProps) => {
   const keyword = productName?.replace(/-|:|_/gi, ' ');
   return (
     <Head>
@@ -16,6 +16,7 @@ export const ProductHead = ({ productName, retailPrice }: IHeadProps) => {
         content={`Buy ${productName} online in India at ₹${retailPrice}. &#x2714;15 Days Easy Returns, &#x2714;Cash on Delivery, &#x2714;Latest Designs, &#x2714;Pan India shipping.`}
       />
       <meta name="keywords" content={`${keyword},online shopping for ${keyword}`} />
+      <script id="schemaScript" key="productSchema" type="application/ld+json" dangerouslySetInnerHTML={{ __html: schema }} />
     </Head>
   );
 };

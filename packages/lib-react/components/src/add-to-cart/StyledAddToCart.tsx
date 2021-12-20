@@ -22,6 +22,9 @@ const AddToCartButton = styled.button<{ disabled: boolean }>`
   color: ${(props) => (props.disabled ? 'hsla(0,0%,100%,.6)' : Colors.WHITE)};
   padding: ${typography.size.s3}px ${typography.size.s4}px;
   border: none;
+  font-size: 1.4rem;
+  line-height: 16px;
+  font-weight: 600;
 `;
 
 export { AddToCartWrapper, AddToCartButton };

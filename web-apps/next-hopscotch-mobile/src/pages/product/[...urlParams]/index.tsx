@@ -49,6 +49,7 @@ import {
   IProductDetails,
   ISimpleSkusEntityProps,
   getProductTrackingData,
+  getSchemaData,
   COOKIE_DATA,
   CartItemQtyContext,
   LoginContext,
@@ -69,6 +70,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const productId = context.params?.urlParams?.[0] || '';
   const ua = Parser(context.req.headers['user-agent']);
   const isMobile = ua.device.type === Parser.DEVICE.MOBILE;
+  const url = `https://${context.req.headers?.host}${context.resolvedUrl?.split('?')?.[0]}`;
   await queryClient.prefetchQuery(
     ['ProductDetail', productId],
     () => productDetailsService.getProductDetails(productId, process.env.WEB_HOST),
@@ -80,11 +82,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     props: {
       dehydratedState: dehydrate(queryClient),
       productId,
+      url,
       isMobile,
     },
   };
 };
-const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile }: IProductProps) => {
+const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile, url }: IProductProps) => {
   const [deliveryDetails, updateDeliveryDetails] = useState<IUpdatedDeliverDetailsProps>();
   const [updatedWishListId, updateWishListId] = useState<number>();
   const [addToWishlistStatus, setAddToWishlistStatus] = useState<boolean>(false);
@@ -137,7 +140,7 @@ const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile }: IPr
   );
 
   const [selectedSku, setSelectedSku] = useState<ISimpleSkusEntityProps | any>();
-  const { productName, retailPrice, selectedSkuId, simpleSkus, wishlistId } = useProduct({
+  const { productName, retailPrice, selectedSkuId, simpleSkus, wishlistId, defaultSku } = useProduct({
     productData: productData,
     selectedSku: selectedSku,
   });
@@ -452,7 +455,9 @@ const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile }: IPr
     <>
       {productData && productData.action === LOCAL_DATA.SUCCESS && (
         <>
-          <ProductHead {...{ productName, retailPrice }}></ProductHead>
+          <ProductHead
+            {...{ productName, retailPrice, schema: getSchemaData({ productData, defaultSku, url: url }) }}
+          ></ProductHead>
           {
             <ProductMobile
               {...{
@@ -478,7 +483,7 @@ const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile }: IPr
               <PinCodeMobile
                 {...{
                   productId: productData.id,
-                  pinCode: productData.pinCode,
+                  pinCode: deliveryDetails?.pinCode || productData.pinCode,
                   closePinCodePopup: updateAndClosePinCodePopup,
                 }}
               />
@@ -519,7 +524,7 @@ const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile }: IPr
         {isLoginPopupOpen && <LoginPopup {...{ closeLoginPopup: closeLoginModalPopup }}></LoginPopup>}
       </LoginPopupModal>
       <GoToTop></GoToTop>
-      {/* <pre style={{ width: '60%', overflowX: 'scroll' }}>{JSON.stringify(productDetails, null, 4)}</pre> */}
+      {/* <pre style={{ width: '60%', overflowX: 'scroll' }}>{JSON.stringify(productData, null, 4)}</pre> */}
     </>
   );
 };
@@ -527,7 +532,6 @@ const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile }: IPr
 export default Product;
 
 Product.getLayout = function getLayout(page: ReactElement) {
-  // if (page.props.isMobile) return <Layout>{page}</Layout>;
-  // else return <>{page}</>;
-  return <Layout>{page}</Layout>;
+  if (page.props.isMobile) return <Layout>{page}</Layout>;
+  else return <Layout>{page}</Layout>;
 };

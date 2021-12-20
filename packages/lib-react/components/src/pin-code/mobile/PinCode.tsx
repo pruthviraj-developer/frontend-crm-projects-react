@@ -31,7 +31,6 @@ const PinCodeMobile: FC<IPinCodeProps> = ({
   pinCode,
   closePinCodePopup,
 }: IPinCodeProps) => {
-  const [pincode, setPinCode] = useState<string>('');
   const [error, setError] = useState<
     IPinCodeAPIResponseProps | IPinCodeErrorProps
   >();
@@ -39,6 +38,29 @@ const PinCodeMobile: FC<IPinCodeProps> = ({
   const [isLoadingAddress, setIsLoadingAddress] = useState<boolean>(false);
   const [addressList, setAddressList] = useState<IAllAddressItemsEntityProps[]>(
     []
+  );
+
+  const getDefaultString = (val: string) => {
+    return val.toString().replace(/\D/g, '');
+  };
+
+  const setFormatedValue = (val?: string, pin?: string) => {
+    if (val) {
+      const value = getDefaultString(val).replace(/^0+/, '');
+      if (value.length === 3 && pin && pin.length === 4) {
+        return value.substr(0, 2);
+      } else if (value.length > 6 && value[0] !== '0') {
+        return value.substr(0, 3) + '-' + value.substr(3, 3);
+      } else if (value.length > 2) {
+        return value.substr(0, 3) + '-' + value.substr(3);
+      } else {
+        return value;
+      }
+    }
+    return '';
+  };
+  const [pincode, setPinCode] = useState<string>(
+    setFormatedValue(pinCode, pinCode) || ''
   );
 
   const { updateLoginPopup } = useContext(LoginContext);
@@ -68,23 +90,7 @@ const PinCodeMobile: FC<IPinCodeProps> = ({
 
   const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e ? e.preventDefault() : '';
-    checkPinCodeDetails(pincode);
-  };
-
-  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const getOnlyNumbers = (value: string) => {
-      return value.toString().replace(/\D/g, '');
-    };
-
-    const value = getOnlyNumbers(e.target.value || '');
-
-    if (value.length === 6 && value.toString()[0] !== '0') {
-      setPinCode(value);
-    } else if (value.length > 6) {
-      setPinCode(pincode);
-    } else {
-      setPinCode(value);
-    }
+    checkPinCodeDetails(getDefaultString(pincode));
   };
 
   const hasAddress = addressList && addressList.length;
@@ -161,11 +167,13 @@ const PinCodeMobile: FC<IPinCodeProps> = ({
         >
           <PinCodeNumber
             value={pincode}
-            onChange={handleOnChange}
+            onChange={(event) => {
+              setPinCode(setFormatedValue(event.target.value, pincode));
+            }}
             placeholder="Pincode"
           />
           <PinCodeSubmit
-            disabled={pincode.length < 6 || isLoading}
+            disabled={pincode.length < 7 || isLoading}
             type="submit"
           >
             Check
