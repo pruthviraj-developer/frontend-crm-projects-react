@@ -1,7 +1,12 @@
-import { NextNavLink } from '../../next-nav-link';
 import React, { FC } from 'react';
 import { IRecommendedMatchingProps } from '../IRecommendedMatching';
-import { RecommendedMatchingWrapper } from './StyledRecommendedMatching';
+import {
+  RecommendedMatchingWrapper,
+  AnchorLinkTag,
+} from './StyledRecommendedMatching';
+import Link from 'next/link';
+import { ChevronRight, SvgIcon } from '@hs/icons';
+
 export const RecommendedMatching: FC<IRecommendedMatchingProps> = ({
   section,
   product,
@@ -46,15 +51,18 @@ export const RecommendedMatching: FC<IRecommendedMatchingProps> = ({
   };
   return (
     <RecommendedMatchingWrapper>
-      <NextNavLink
-        href="/search"
-        name={product.name}
-        queryParams={paramsList}
-        color="#777"
-        padding="0 12px"
-        margin="0"
-        fontWeight="600"
-      />
+      <Link
+        href={{
+          pathname: '/search',
+          query: { ...paramsList },
+        }}
+        passHref
+      >
+        <AnchorLinkTag>
+          {product.name}
+          <SvgIcon icon={ChevronRight}></SvgIcon>
+        </AnchorLinkTag>
+      </Link>
     </RecommendedMatchingWrapper>
   );
 };
