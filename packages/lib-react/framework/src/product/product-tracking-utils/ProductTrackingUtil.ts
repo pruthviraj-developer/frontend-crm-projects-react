@@ -58,14 +58,14 @@ export const getSchemaData = ({
   const SchemaData = {
     '@context': 'https://schema.org',
     '@type': 'Product',
-    name: productData.productName,
+    name: defaultSku.productName,
     image:
       productData &&
       Array.isArray(productData.imgurls) &&
       productData.imgurls[0].imgUrlFull,
     sku: productData.id,
     mpn: productData.id,
-    description: productData.productDesc,
+    description: `Buy ${defaultSku.productName} online in India at ₹${defaultSku.retailPrice}. &#x2714;15 Days Easy Returns, &#x2714;Cash on Delivery, &#x2714;Latest Designs, &#x2714;Pan India shipping.`,
     offers: {
       '@type': 'Offer',
       priceCurrency: 'INR',
