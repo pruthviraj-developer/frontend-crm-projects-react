@@ -92,7 +92,11 @@ export const Footer: FC = () => {
           </LinkWithIcons>
         </FooterBlock>
         <FooterBlock>
-          <LinkWithIcons href="/helpcenter">
+          <LinkWithIcons
+            href="mailto:wecare@hopscotch.in"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <StyledIcon icon={MailIcon}></StyledIcon>
             24x7 support
           </LinkWithIcons>
