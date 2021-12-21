@@ -252,6 +252,9 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
       //   contextData,
       // });
     }
+    if (productData?.simpleSkus?.length === 1) {
+      setSelectedSku(productData.simpleSkus[0]);
+    }
   }, [contextData, productData, properties]);
 
   useEffect(() => {
@@ -359,10 +362,6 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
   const addProductToCart = () => {
     if (selectedSku) {
       addToCart(selectedSku);
-    } else if (simpleSkus.length === 1) {
-      const sku = simpleSkus[0];
-      setSelectedSku(sku);
-      addToCart(sku);
     } else {
       openSizeSelector();
     }
