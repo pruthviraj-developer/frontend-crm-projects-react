@@ -1,5 +1,9 @@
 import { IProductDetailsAttrsEntity } from 'product/types';
-import { IProductSchema, IProductTrackingProps } from './IProductTrackingUtil';
+import {
+  IProductSchema,
+  IProductTrackingProps,
+  ICanonicalUrl,
+} from './IProductTrackingUtil';
 
 const DIFFERENT_FOR_SIZES = 'Different for sizes';
 export const getProductTrackingData = ({
@@ -83,7 +87,7 @@ export const getSchemaData = ({
   return JSON.stringify(SchemaData);
 };
 
-export const getCanonicalUrl = ({ productData, url }: IProductSchema) => {
+export const getCanonicalUrl = ({ productData, url }: ICanonicalUrl) => {
   let canonicalURL = '';
   const baseUrl = url.toLowerCase();
   const productURL = baseUrl.substring(baseUrl.lastIndexOf('/'), 0);

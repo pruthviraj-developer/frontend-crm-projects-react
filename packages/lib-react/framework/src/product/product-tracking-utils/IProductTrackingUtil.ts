@@ -6,7 +6,12 @@ export interface IProductTrackingProps {
 }
 
 export interface IProductSchema {
-  defaultSku?: ISimpleSkusEntityProps;
+  defaultSku: ISimpleSkusEntityProps;
+  productData: IProductDetails;
+  url: string;
+}
+
+export interface ICanonicalUrl {
   productData: IProductDetails;
   url: string;
 }
