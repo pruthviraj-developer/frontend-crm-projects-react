@@ -10,3 +10,8 @@ export interface IProductSchema {
   productData: IProductDetails;
   url: string;
 }
+
+export interface ICanonicalUrl {
+  productData: IProductDetails;
+  url: string;
+}
