@@ -7,8 +7,8 @@ export interface IProductNamePriceProps {
   discount?: number;
   isProductSoldOut: boolean;
   wishlistId?: number;
-  addToWishlist: () => void;
-  deleteFromWishlist: () => void;
+  addToWishlist?: () => void;
+  deleteFromWishlist?: () => void;
 }
 
 export interface ISimpleSkusEntityProps {

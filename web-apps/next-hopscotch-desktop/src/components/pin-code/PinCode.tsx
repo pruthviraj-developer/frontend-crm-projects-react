@@ -72,7 +72,7 @@ const SizeSelector: FC<IPinCodeProps> = ({ productId, pincode, closePinCodePopup
         if (!response.serviceable) {
           setError({ ...response, message: response.noPinCodeMessage });
         } else {
-          closePinCodePopup({ ...response, newPincode: pincode });
+          closePinCodePopup({ ...response, newPincode: pin });
         }
       } catch (error) {
         setError(error as unknown as IPinCodeAPIResponseProps);

@@ -79,10 +79,10 @@ export const ProductNamePrice: FC<IProductNamePriceProps> = ({
               selected={wishlistId}
               onClick={() => {
                 if (wishlistId) {
-                  deleteFromWishlist();
+                  deleteFromWishlist && deleteFromWishlist();
                   return;
                 }
-                addToWishlist();
+                addToWishlist && addToWishlist();
               }}
               icon={wishlistId ? IconWishListFilled : IconWishList}
               fill={wishlistId ? '#ED54A4' : '#bbb'}

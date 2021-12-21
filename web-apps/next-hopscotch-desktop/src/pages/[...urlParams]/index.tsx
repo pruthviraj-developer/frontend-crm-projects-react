@@ -19,7 +19,6 @@ const PinCodePopupComponent = dynamic(() => import('../../components/pin-code/Pi
 import {
   AddToCartDesktop,
   AccordionDesktop,
-  CustomSizePicker,
   RecommendedProductsDesktop,
   ProductHead,
   SizeAndChartLabelsDesktop,
@@ -29,14 +28,7 @@ import {
 
 import { ProductCarouselDesktop } from '../../components/product-carousel-desktop/ProductCarouselDesktop';
 
-import {
-  IProductProps,
-  IWishListProps,
-  ICartAPIResponse,
-  NextPageWithLayout,
-  IUpdatedDeliverDetailsProps,
-  IErrorStateProps,
-} from '@/types';
+import { IProductProps, ICartAPIResponse, NextPageWithLayout, IUpdatedDeliverDetailsProps } from '@/types';
 import { cookiesService, productDetailsService } from '@hs/services';
 import {
   ProductWrapper,
@@ -63,8 +55,6 @@ import {
   getProductTrackingData,
   COOKIE_DATA,
   CartItemQtyContext,
-  LoginContext,
-  UserInfoContext,
   LOCAL_DATA,
 } from '@hs/framework';
 import GoToTopDesktop from '@/components/go-to-top/GoToTopDesktop';
@@ -74,7 +64,6 @@ const tryLater = 'Try Later';
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const queryClient = new QueryClient();
   const productId = context.params?.urlParams?.[1] || '';
-  console.log('process.env.WEB_HOST', process.env.WEB_HOST);
   await queryClient.prefetchQuery(
     ['ProductDetail', productId],
     () => productDetailsService.getProductDetails(productId, process.env.WEB_HOST),
@@ -108,11 +97,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
   const recommendedProductsLink = useRef<HTMLDivElement>(null);
   const productId = props.productId;
   const [deliveryDetails, updateDeliveryDetails] = useState<IUpdatedDeliverDetailsProps>();
-  const [updatedWishListId, updateWishListId] = useState<number>();
-  const [addToWishlistStatus, setAddToWishlistStatus] = useState<boolean>(false);
   const { updateCartItemQty } = useContext(CartItemQtyContext);
-  const { showLoginPopup } = useContext(LoginContext);
-  const { userInfo } = useContext(UserInfoContext);
 
   const [queryClient] = useState(
     () =>
@@ -175,10 +160,9 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
     qtyLeft,
     simpleSkus,
     showRfypCue,
-    wishlistId,
     isProductSoldOut,
     ...product
-  } = useProduct({ productData: productData, selectedSku: selectedSku });
+  } = useProduct({ productData, selectedSku });
 
   const { canShow: showSimilarProducts, ...similarProducts } = useRecommendation({
     section: 'RFYP',
@@ -196,15 +180,13 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
     pid: productId,
   });
 
-  console.log(JSON.stringify(similarProducts));
-
   const { isOneSize } = useOneSize({
-    productData: productData,
+    productData,
   });
 
   const deliveryDetailsData = useDeliveryDetails({
     selectedSku: selectedSku,
-    productData: productData,
+    productData,
   });
 
   const goToProductRecommendation = (fromLocation: string) => {
@@ -224,21 +206,8 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
     }
   };
 
-  // Remove
-
-  const closeLoginPopup = () => {};
-  const openLoginPopup = () => {};
-
   const [{ contextData, properties }] = useSegment();
   // const pdpTrackingData = useProductTracking({ selectedSku, productData });
-
-  const closeLoginModalPopup = (status?: boolean) => {
-    if (status && addToWishlistStatus) {
-      addToWishlistAfterModalClose();
-    }
-    setAddToWishlistStatus(false);
-    closeLoginPopup();
-  };
 
   useEffect(() => {
     if (contextData && properties && productData) {
@@ -256,35 +225,6 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
       setSelectedSku(productData.simpleSkus[0]);
     }
   }, [contextData, productData, properties]);
-
-  useEffect(() => {
-    if (showLoginPopup) {
-      openLoginPopup();
-    }
-  }, [showLoginPopup, openLoginPopup]);
-
-  const addToWishlist = () => {
-    if (userInfo.isLoggedIn) {
-      addToWishlistAfterModalClose();
-    } else {
-      toast.info('Sign in to add this item to your Wishlist.', {
-        hideProgressBar: true,
-        closeButton: false,
-        icon: false,
-        autoClose: 2250,
-        style: {
-          backgroundColor: '#00aff0',
-          color: '#fff',
-          textAlign: 'center',
-          fontWeight: 600,
-          fontSize: '14px',
-          lineHeight: '16px',
-        },
-      });
-      setAddToWishlistStatus(true);
-      openLoginPopup();
-    }
-  };
 
   const getToasterContent = (selectedSku: ISimpleSkusEntityProps) => {
     return (
@@ -398,64 +338,6 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
     });
   };
 
-  const deleteFromWishlist = () => {
-    (async () => {
-      try {
-        const wishListStatus: IWishListProps = await productDetailsService.deleteFromWishlist(
-          updatedWishListId === undefined ? wishlistId : updatedWishListId,
-        );
-        if (wishListStatus.action === LOCAL_DATA.SUCCESS) {
-          updateWishListId(0);
-          if (navigator && navigator.vibrate) {
-            navigator.vibrate(200);
-          }
-        }
-      } catch (error: any) {
-        const errorMessage = (error && error['data'] ? error.data : error) as unknown as IErrorStateProps;
-        showErrorNotification(errorMessage.message);
-      }
-    })();
-  };
-
-  const addToWishlistAfterModalClose = () => {
-    let retailPrice = selectedSku?.retailPrice || productData?.retailPrice || 0;
-    const wishlistItem = {
-      sku: selectedSkuId || '',
-      productId: productData?.id,
-      price: retailPrice,
-      attribution: {
-        // source: oa_data['source'],
-        // funnel: oa_data['funnel'],
-        // funnel_tile: oa_data['funnel_tile'],
-        // funnel_section: oa_data['funnel_section'],
-        funnel_row: '',
-        // section: oa_data['section'],
-        subSection: 'CT3006',
-        // plp: oa_data['plp'],
-        sortBar: 'All',
-        sortBarGroup: 'All',
-        sortBy: 'System',
-        // quick_shop: oa_data['quickshop'],
-        // atc_user: atc_user,
-      },
-    };
-
-    (async () => {
-      try {
-        const wishListStatus: IWishListProps = await productDetailsService.addToWishlist(wishlistItem);
-        if (wishListStatus.action === LOCAL_DATA.SUCCESS) {
-          updateWishListId(wishListStatus.wishlistItemId);
-          if (navigator && navigator.vibrate) {
-            navigator.vibrate(200);
-          }
-        }
-      } catch (error: any) {
-        const errorMessage = (error && error['data'] ? error.data : error) as unknown as IErrorStateProps;
-        showErrorNotification(errorMessage.message);
-      }
-    })();
-  };
-
   const updateAndClosePinCodePopup = (newValues?: any) => {
     closePinCodePopup();
     if (newValues && newValues.simpleSkus) {
@@ -504,14 +386,11 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
                 {...{
                   productName,
                   isProductSoldOut: !!productData.isProductSoldOut,
-                  wishlistId: updatedWishListId === undefined ? wishlistId : updatedWishListId,
                   retailPrice,
                   retailPriceMax,
                   selectedSku: selectedSku,
                   regularPrice,
                   discount,
-                  addToWishlist,
-                  deleteFromWishlist,
                 }}
               ></ProductNamePriceDesktop>
               <SizeAndChartLabelsDesktop
@@ -592,7 +471,13 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
 
           <PinCodePopupModal>
             {isPinCodePopupOpen && productData && (
-              <PinCodePopupComponent {...{ pincode: '', productId, closePinCodePopup }}> </PinCodePopupComponent>
+              <PinCodePopupComponent
+                {...{
+                  pincode: deliveryDetails?.pinCode || productData.pinCode,
+                  productId,
+                  closePinCodePopup: updateAndClosePinCodePopup,
+                }}
+              ></PinCodePopupComponent>
             )}
           </PinCodePopupModal>
         </>
