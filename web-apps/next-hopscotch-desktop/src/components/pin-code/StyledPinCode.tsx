@@ -10,6 +10,7 @@ const PinCodeWrapper = styled.div`
   background-color: ${Colors.WHITE};
   transform: translate(0px, -28px);
 `;
+
 const Header = styled.div`
   color: #333;
   padding: 16px;
@@ -46,14 +47,15 @@ const Title = styled.div`
 
 const ErrorMessage = styled.div`
   color: #f44;
+  font-size: 12px;
   margin: 0 12px 12px;
 `;
 
-const Check = styled.button`
+const Check = styled.button<{ disabled: boolean }>`
   border: 0;
-  color: #fff;
+  color: ${(props) => (props.disabled ? 'rgba(255, 255, 255, 0.6)' : '#fff')};
   padding: 16px;
-  cursor: pointer;
+  cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
   font-weight: 600;
   margin-left: 8px;
   font-size: 1.4rem;
@@ -81,16 +83,20 @@ const Label = styled.label`
 const InputField = styled.input`
   height: 48px;
   width: 173px;
+  outline: none;
   padding: 16px 16px 0 12px;
   border-radius: 4px;
   display: inline-block;
   vertical-align: middle;
-  border: 1px solid #f44;
+  border: 1px solid #e6e6e6;
   &:focus + .label {
     top: 10px;
   }
   &:not([value='']) + .label {
     top: 10px;
+  }
+  &:hover {
+    border: 1px solid #a4a4a4;
   }
 `;
 

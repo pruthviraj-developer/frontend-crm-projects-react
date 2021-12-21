@@ -64,7 +64,10 @@ const SizeSelector: FC<IPinCodeProps> = ({ productId, pincode, closePinCodePopup
       }
       try {
         setIsLoading(true);
-        const response: IPinCodeAPIResponseProps = await productDetailsService.checkForPincode({ productId, pin });
+        const response: IPinCodeAPIResponseProps = await productDetailsService.checkForPincode({
+          productId,
+          pincode: pin,
+        });
         setIsLoading(false);
         if (!response.serviceable) {
           setError({ ...response, message: response.noPinCodeMessage });
@@ -79,6 +82,7 @@ const SizeSelector: FC<IPinCodeProps> = ({ productId, pincode, closePinCodePopup
   };
 
   const hasAddress = addressList && addressList.length;
+
   useEffect(() => {
     if (!(userInfo && userInfo.isLoggedIn)) {
       return;
@@ -153,9 +157,11 @@ const SizeSelector: FC<IPinCodeProps> = ({ productId, pincode, closePinCodePopup
             />
             <Label className="label">Pincode</Label>
           </InputWrapper>
-          <Check>Check</Check>
+          <Check disabled={pin.length < 7 || isLoading} type="submit">
+            Check
+          </Check>
         </PinCodeForm>
-        <ErrorMessage>We’re unable to ​ship to 565656</ErrorMessage>
+        {error && error.message && <ErrorMessage>{error.message}</ErrorMessage>}
       </PinCodeBody>
     </PinCodeWrapper>
   );
