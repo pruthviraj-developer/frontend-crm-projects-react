@@ -80,7 +80,7 @@ export const getSchemaData = ({
       url: url,
     },
     brand: {
-      '@type': 'Thing',
+      '@type': 'Brand',
       name: productData.brandName,
     },
   };
