@@ -19,8 +19,14 @@ import {
 } from './StyledSizeSelector';
 import { IconAngleDown, IconDeliveryTruck, IconSeeSimilarWhite } from '@hs/icons';
 import { ISizeSelectorProps } from './ISizeSelector';
-
-const SizeSelector: FC<ISizeSelectorProps> = ({ showRFYP, goToProductRecommendation }: ISizeSelectorProps) => {
+import { ISimpleSkusEntityProps } from '@hs/framework';
+const ADD_TO_CART_BUTTON = 'Add to cart button';
+const SizeSelector: FC<ISizeSelectorProps> = ({
+  showRFYP,
+  simpleSkus,
+  onSizeSelect,
+  goToProductRecommendation,
+}: ISizeSelectorProps) => {
   const [isDropDownOpen, setIsDropDownOpen] = useState<Boolean>(false);
   const elementRef = useRef<any>();
   useEffect(() => {
@@ -55,44 +61,37 @@ const SizeSelector: FC<ISizeSelectorProps> = ({ showRFYP, goToProductRecommendat
         {isDropDownOpen && (
           <OptionsPreviewList>
             <OptionsPreview>
-              <Options soldOut={false}>
-                <span>6-12 months</span>
-                <Details>
-                  <ItemsLeft>2 left</ItemsLeft>
-                  <DeliveryDetails>
-                    {/*                     ng-if="sku.availableQuantity > 0 && sku.availableQuantity < 4"
-                    ng-bind="sku.availableQuantity + ' left'" */}
-                    <DeliveryIcon icon={IconDeliveryTruck} />
-                    4-5 weeks
-                  </DeliveryDetails>
-                </Details>
-              </Options>
-              <Options soldOut={true}>
-                <span>6-12 months</span>
-                <Details>
-                  <DeliveryDetails>
-                    {/*                     ng-if="sku.availableQuantity > 0 && sku.availableQuantity < 4"
-                    ng-bind="sku.availableQuantity + ' left'" */}
-                    <DeliveryIcon icon={IconDeliveryTruck} />
-                    4-5 weeks
-                  </DeliveryDetails>
-                </Details>
-              </Options>
-              <Options soldOut={false}>
-                <span>1-2 years</span>
-                <Details>
-                  <DeliveryDetails>
-                    {/*                     ng-if="sku.availableQuantity > 0 && sku.availableQuantity < 4"
-                    ng-bind="sku.availableQuantity + ' left'" */}
-                    <DeliveryIcon icon={IconDeliveryTruck} />
-                    4-5 weeks
-                  </DeliveryDetails>
-                </Details>
-              </Options>
-              <Options soldOut={false}>2-3 years</Options>
-              <Options soldOut={true}>
-                <span>3-4 years</span> <span>Sold out</span>
-              </Options>
+              {simpleSkus &&
+                simpleSkus.map((sku: ISimpleSkusEntityProps, index: number) => {
+                  return (
+                    <Options
+                      soldOut={sku.availableQuantity < 1 ? true : false}
+                      key={index}
+                      onClick={() => {
+                        if (sku.availableQuantity > 0) {
+                          onSizeSelect(sku, ADD_TO_CART_BUTTON);
+                        }
+                      }}
+                    >
+                      <span>{sku.attributes.size}</span>
+                      {sku.availableQuantity < 1 ? (
+                        <span>Sold out</span>
+                      ) : (
+                        <Details>
+                          {sku.availableQuantity < 4 && sku.availableQuantity > 0 && (
+                            <ItemsLeft>{sku.availableQuantity} left</ItemsLeft>
+                          )}
+                          <DeliveryDetails>
+                            <DeliveryIcon icon={IconDeliveryTruck} />
+                            {/* {sku.eddPrefix + ' ' + sku.deliveryMsg} */}
+                            {sku.deliveryMsg}
+                          </DeliveryDetails>
+                        </Details>
+                      )}
+                    </Options>
+                  );
+                })
+              }
             </OptionsPreview>
             {
               <RecommendedForyou>
