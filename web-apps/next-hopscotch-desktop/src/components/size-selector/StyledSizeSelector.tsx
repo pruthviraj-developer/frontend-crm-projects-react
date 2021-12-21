@@ -154,6 +154,12 @@ const OptionsPreviewList = styled.div`
   border-bottom-left-radius: 4px;
 `;
 
+const SelectedSize = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding-right: 16px;
+  color: #333;
+`;
 export {
   SizeSelectorWrapper,
   CustomSizePicker,
@@ -164,6 +170,7 @@ export {
   OptionsPreview,
   Options,
   SelectPreview,
+  SelectedSize,
   Details,
   ItemsLeft,
   DeliveryDetails,

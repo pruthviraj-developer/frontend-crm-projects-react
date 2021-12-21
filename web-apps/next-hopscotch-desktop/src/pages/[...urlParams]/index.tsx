@@ -540,7 +540,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
                 )} */}
 
               <SizeSelector
-                {...{ showRFYP, goToProductRecommendation, simpleSkus, showAddToCart: true, onSizeSelect }}
+                {...{ showRFYP, goToProductRecommendation, simpleSkus, showAddToCart: true, onSizeSelect, selectedSku }}
               ></SizeSelector>
               <AddToCartDesktop
                 {...{

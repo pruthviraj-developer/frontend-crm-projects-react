@@ -14,6 +14,7 @@ import {
   DeliveryDetails,
   RecommendedForyou,
   SeeSimilarIcon,
+  SelectedSize,
   SizeSoldOut,
   SeeSimilarProducts,
 } from './StyledSizeSelector';
@@ -24,6 +25,7 @@ const ADD_TO_CART_BUTTON = 'Add to cart button';
 const SizeSelector: FC<ISizeSelectorProps> = ({
   showRFYP,
   simpleSkus,
+  selectedSku,
   onSizeSelect,
   goToProductRecommendation,
 }: ISizeSelectorProps) => {
@@ -51,11 +53,20 @@ const SizeSelector: FC<ISizeSelectorProps> = ({
     setIsDropDownOpen(true);
   };
 
+  const getSize = () => {
+    return (
+      <SelectedSize>
+        <span>{selectedSku.attributes.size}</span>
+        {selectedSku.availableQuantity < 4 && <span>Only {selectedSku.availableQuantity} left</span>}
+      </SelectedSize>
+    );
+  };
+
   return (
     <SizeSelectorWrapper ref={elementRef} onClick={handleClickInside}>
       <CustomSizePicker isOpen={isDropDownOpen}>
         <SelectPreview borderBottom={isDropDownOpen}>
-          <SelectSize>Select a size</SelectSize>
+          <SelectSize>{selectedSku ? getSize() : 'Select a size'}</SelectSize>
           <AngleDownArrow icon={IconAngleDown} />
         </SelectPreview>
         {isDropDownOpen && (
@@ -67,9 +78,11 @@ const SizeSelector: FC<ISizeSelectorProps> = ({
                     <Options
                       soldOut={sku.availableQuantity < 1 ? true : false}
                       key={index}
-                      onClick={() => {
+                      onClick={(e) => {
                         if (sku.availableQuantity > 0) {
+                          e.stopPropagation();
                           onSizeSelect(sku, ADD_TO_CART_BUTTON);
+                          setIsDropDownOpen(false);
                         }
                       }}
                     >
@@ -78,9 +91,7 @@ const SizeSelector: FC<ISizeSelectorProps> = ({
                         <span>Sold out</span>
                       ) : (
                         <Details>
-                          {sku.availableQuantity < 4 && sku.availableQuantity > 0 && (
-                            <ItemsLeft>{sku.availableQuantity} left</ItemsLeft>
-                          )}
+                          {sku.availableQuantity < 4 && <ItemsLeft>{sku.availableQuantity} left</ItemsLeft>}
                           <DeliveryDetails>
                             <DeliveryIcon icon={IconDeliveryTruck} />
                             {/* {sku.eddPrefix + ' ' + sku.deliveryMsg} */}
@@ -90,10 +101,9 @@ const SizeSelector: FC<ISizeSelectorProps> = ({
                       )}
                     </Options>
                   );
-                })
-              }
+                })}
             </OptionsPreview>
-            {
+            {showRFYP && (
               <RecommendedForyou>
                 <SeeSimilarIcon icon={IconSeeSimilarWhite} />
                 <SizeSoldOut>Size sold out?</SizeSoldOut>
@@ -107,7 +117,7 @@ const SizeSelector: FC<ISizeSelectorProps> = ({
                   See similar products
                 </SeeSimilarProducts>
               </RecommendedForyou>
-            }
+            )}
           </OptionsPreviewList>
         )}
       </CustomSizePicker>
