@@ -82,3 +82,15 @@ export const getSchemaData = ({
   };
   return JSON.stringify(SchemaData);
 };
+
+export const getCanonicalUrl = ({ productData, url }: IProductSchema) => {
+  let canonicalURL = '';
+  const baseUrl = url.toLowerCase();
+  const productURL = baseUrl.substring(baseUrl.lastIndexOf('/'), 0);
+  const canonicalProductName = productData.simpleSkus[0].productName
+    .toLowerCase()
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-');
+  canonicalURL = `${productURL}/${canonicalProductName}`;
+  return canonicalURL;
+};
