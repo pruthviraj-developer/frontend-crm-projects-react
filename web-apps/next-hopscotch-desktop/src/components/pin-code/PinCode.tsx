@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect, useContext } from 'react';
 import {
   PinCodeWrapper,
   Header,
@@ -12,11 +12,30 @@ import {
   InputField,
   InputWrapper,
   Label,
+  Loading,
+  DeliveryAddressesContainer,
+  Address,
+  Name,
 } from './StyledPinCode';
-import { IPinCodeProps } from './IPinCode';
+import {
+  IPinCodeProps,
+  IPinCodeAPIResponseProps,
+  IPinCodeErrorProps,
+  IAllAddressItemsEntityProps,
+  IAddressListProps,
+} from './IPinCode';
 import { IconDismiss } from '@hs/icons';
+import { productDetailsService } from '@hs/services';
+import { LoginContext, UserInfoContext } from '@hs/framework';
+const SUCCESS = 'success';
+const SizeSelector: FC<IPinCodeProps> = ({ productId, pincode, closePinCodePopup }: IPinCodeProps) => {
+  const [error, setError] = useState<IPinCodeAPIResponseProps | IPinCodeErrorProps>();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoadingAddress, setIsLoadingAddress] = useState<boolean>(false);
+  const [addressList, setAddressList] = useState<IAllAddressItemsEntityProps[]>([]);
 
-const SizeSelector: FC<IPinCodeProps> = ({ pincode, closePinCodePopup }: IPinCodeProps) => {
+  const { updateLoginPopup } = useContext(LoginContext);
+  const { userInfo } = useContext(UserInfoContext);
   const getDefaultString = (val: string) => {
     return val.replace(/\D/g, '');
   };
@@ -37,20 +56,93 @@ const SizeSelector: FC<IPinCodeProps> = ({ pincode, closePinCodePopup }: IPinCod
     return '';
   };
   const [pin, setPincode] = useState<string>(setFormatedValue(pincode, pincode) || '');
+  const checkPinCodeDetails = (pin: string) => {
+    (async () => {
+      if (pin === pincode) {
+        closePinCodePopup();
+        return;
+      }
+      try {
+        setIsLoading(true);
+        const response: IPinCodeAPIResponseProps = await productDetailsService.checkForPincode({ productId, pin });
+        setIsLoading(false);
+        if (!response.serviceable) {
+          setError({ ...response, message: response.noPinCodeMessage });
+        } else {
+          closePinCodePopup({ ...response, newPincode: pincode });
+        }
+      } catch (error) {
+        setError(error as unknown as IPinCodeAPIResponseProps);
+        setIsLoading(false);
+      }
+    })();
+  };
+
+  const hasAddress = addressList && addressList.length;
+  useEffect(() => {
+    if (!(userInfo && userInfo.isLoggedIn)) {
+      return;
+    }
+    (async () => {
+      try {
+        setIsLoadingAddress(true);
+        const response: IAddressListProps = await productDetailsService.getCustomerAddresses();
+        if (response.action === SUCCESS) {
+          setAddressList(response.allAddressItems);
+        }
+      } catch (error) {
+        if (error && error['message'] === 'login required') {
+          closePinCodePopup();
+          updateLoginPopup(true);
+        }
+      } finally {
+        setIsLoadingAddress(false);
+      }
+    })();
+  }, [userInfo, closePinCodePopup, updateLoginPopup]);
 
   const onSubmit = (event: React.SyntheticEvent) => {
     event && event.preventDefault();
-    console.log(getDefaultString(pin));
+    checkPinCodeDetails(getDefaultString(pin));
   };
 
   return (
     <PinCodeWrapper>
-      <Header>Check pincode</Header>
+      <Header>{hasAddress > 0 ? 'Edit' : 'Check'} pincode</Header>
       <ModalClose>
         <IconClose icon={IconDismiss} onClick={closePinCodePopup} />
       </ModalClose>
       <PinCodeBody>
-        <Title>Enter your pincode</Title>
+        {hasAddress > 0 && (
+          <>
+            <Title>Select an address</Title>
+            <DeliveryAddressesContainer>
+              {addressList.map((address: IAllAddressItemsEntityProps, index: number) => {
+                return (
+                  <Address
+                    key={index}
+                    onClick={() => {
+                      if (address.isServicable) {
+                        const pin = address.zipCode || pincode;
+                        if (pin) {
+                          checkPinCodeDetails(pin);
+                        } else {
+                          setError({ message: 'Please enter pincode.' });
+                        }
+                      }
+                    }}
+                  >
+                    <Name>{address.name}</Name>
+                    {address.city + ' - ' + address.zipCode}
+                  </Address>
+                );
+              })}
+            </DeliveryAddressesContainer>
+          </>
+        )}
+        {isLoadingAddress && <Loading>Loading address...</Loading>}
+        <Title>{hasAddress ? 'Or, enter your pincode' : 'Enter your pincode'}</Title>
+
         <PinCodeForm onSubmit={onSubmit}>
           <InputWrapper>
             <InputField

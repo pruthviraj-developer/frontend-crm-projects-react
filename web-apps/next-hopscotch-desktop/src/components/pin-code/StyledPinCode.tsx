@@ -8,7 +8,7 @@ const PinCodeWrapper = styled.div`
   width: 480px;
   border-radius: 4px;
   background-color: ${Colors.WHITE};
-  transform: translate(0px, -50%);
+  transform: translate(0px, -28px);
 `;
 const Header = styled.div`
   color: #333;
@@ -98,6 +98,40 @@ const InputWrapper = styled.div`
   position: relative;
 `;
 
+const DeliveryAddressesContainer = styled.div`
+  padding: 12px 0 24px;
+  white-space: nowrap;
+  overflow: scroll;
+`;
+
+const Address = styled.div`
+  display: inline-block;
+  border: 1px solid #a4a4a4;
+  border-radius: 4px;
+  font-weight: 400;
+  color: #707070;
+  margin-right: 8px;
+  padding: 16px;
+  cursor: pointer;
+  font-size: 1.4rem;
+  line-height: 16px;
+  &:hover {
+    color: #ed54a4;
+    border-color: #e6e6e6;
+    box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.12);
+  }
+`;
+
+const Name = styled.div`
+  margin-bottom: 4px;
+`;
+
+const Loading = styled.div`
+  font-size: 1.8rem;
+  line-height: 16px;
+  color: ${Colors.PINK[500]};
+`;
+
 export {
   PinCodeWrapper,
   Header,
@@ -111,4 +145,8 @@ export {
   InputField,
   InputWrapper,
   Label,
+  Loading,
+  DeliveryAddressesContainer,
+  Address,
+  Name,
 };
