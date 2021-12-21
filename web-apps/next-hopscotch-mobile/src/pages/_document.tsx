@@ -19,6 +19,8 @@ export default class MyDocument extends Document {
           <meta name="msapplication-TileImage" content="images/icon-144.png" />
           <meta name="msapplication-TileColor" content="#ed54a4" />
           <meta name="apple-mobile-web-app-title" content="Hopscotch"></meta>
+          <meta property="og:image" content="https://static.hopscotch.in/web2/images/assets/hopscotch_typeface.png" />
+          <meta property="og:type" content="website" />
           <script src="/n7/n7HD.js" async></script>
         </Head>
         <body>
