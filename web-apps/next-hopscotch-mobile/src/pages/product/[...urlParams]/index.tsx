@@ -71,11 +71,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const productId = context.params?.urlParams?.[0] || '';
   const ua = Parser(context.req.headers['user-agent']);
   const isMobile = ua.device.type === Parser.DEVICE.MOBILE;
-  const baseUrl = `https://${context.req.headers?.host}`;
+  const baseUrl = process.env.WEB_HOST;
   const url = `${baseUrl}${context.resolvedUrl?.split('?')?.[0]}`;
   await queryClient.prefetchQuery(
     ['ProductDetail', productId],
-    () => productDetailsService.getProductDetails(productId, process.env.WEB_HOST),
+    () => productDetailsService.getProductDetails(productId, baseUrl),
     {
       staleTime: Infinity,
     },
