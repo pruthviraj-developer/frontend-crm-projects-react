@@ -15,7 +15,10 @@ export const ProductHead = ({ productName, retailPrice, schema, canonicalUrl }: 
       {!isNoIndexPage && <meta name="twitter:url" content={canonicalUrl} />}
       <meta property="og:url" content={canonicalUrl} />
       <meta property="og:title" content={`Shop Online ${productName} at ₹${retailPrice}`} />
+      <meta name="twitter:title" content={`Shop Online ${productName} at ₹${retailPrice}`} />
       <meta property="og:description" content={description} />
+      <meta name="twitter:description" content={description} />
+      <meta itemProp="description" content={description} />
       <meta name="keywords" content={`${keyword},online shopping for ${keyword}`} />
       <script
         id="schemaScript"
