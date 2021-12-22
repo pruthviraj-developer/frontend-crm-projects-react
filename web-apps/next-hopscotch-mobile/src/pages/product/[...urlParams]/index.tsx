@@ -70,7 +70,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const queryClient = new QueryClient();
   const productId = context.params?.urlParams?.[0] || '';
   const ua = Parser(context.req.headers['user-agent']);
-  const isMobile = JSON.stringify(ua, null, 4); //ua.device.type === Parser.DEVICE.MOBILE;
+  const isMobile = JSON.stringify(context.req.headers, null, 4); //ua.device.type === Parser.DEVICE.MOBILE;
   const baseUrl = process.env.WEB_HOST;
   const url = `${baseUrl}${context.resolvedUrl?.split('?')?.[0]}`;
   await queryClient.prefetchQuery(
