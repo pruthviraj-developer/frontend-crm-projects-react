@@ -25,6 +25,7 @@ const AddToCartButton = styled.button<{ disabled: boolean }>`
   font-size: 1.4rem;
   line-height: 16px;
   font-weight: 600;
+  font-family: Averta, Helvetica, Arial, sans-serif;
 `;
 
 export { AddToCartWrapper, AddToCartButton };

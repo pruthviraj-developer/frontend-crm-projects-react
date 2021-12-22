@@ -2,7 +2,6 @@ import type { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import React, { useState, useEffect, ReactElement, useContext } from 'react';
 import { useModal } from 'react-hooks-use-modal';
 import { toast } from 'react-toastify';
@@ -51,6 +50,7 @@ import {
   ISimpleSkusEntityProps,
   getProductTrackingData,
   getSchemaData,
+  getCanonicalUrl,
   COOKIE_DATA,
   CartItemQtyContext,
   LoginContext,
@@ -61,7 +61,7 @@ import {
 import * as segment from '@/components/segment-analytic';
 import * as gtm from '@/components/google-tag-manager/GTMLib';
 // import { Layout } from '@/components/layout/Layout';
-import { ProductHead } from '@/components/header';
+import { ProductHead } from '@hs/components';
 import GoToTop from '@/components/go-to-top/GoToTop';
 
 const tryLater = 'Try Later';
@@ -71,10 +71,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const productId = context.params?.urlParams?.[0] || '';
   const ua = Parser(context.req.headers['user-agent']);
   const isMobile = ua.device.type === Parser.DEVICE.MOBILE;
-  const url = `https://${context.req.headers?.host}${context.resolvedUrl?.split('?')?.[0]}`;
+  const baseUrl = process.env.WEB_HOST;
+  const url = `${baseUrl}${context.resolvedUrl?.split('?')?.[0]}`;
   await queryClient.prefetchQuery(
     ['ProductDetail', productId],
-    () => productDetailsService.getProductDetails(productId, process.env.WEB_HOST),
+    () => productDetailsService.getProductDetails(productId, baseUrl),
     {
       staleTime: Infinity,
     },
@@ -457,7 +458,12 @@ const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile, url }
       {productData && productData.action === LOCAL_DATA.SUCCESS && (
         <>
           <ProductHead
-            {...{ productName, retailPrice, schema: getSchemaData({ productData, defaultSku, url: url }) }}
+            {...{
+              productName,
+              retailPrice,
+              schema: getSchemaData({ productData, defaultSku, url: url }),
+              canonicalUrl: getCanonicalUrl({ productData, url }),
+            }}
           ></ProductHead>
           {
             <ProductMobile

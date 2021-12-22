@@ -8,6 +8,8 @@ export const httpHeaders = {
   'device-id': '',
   'install-id': '',
   'Content-Type': 'application/json',
+  'x-nv-security-magic':
+    '1890568C010499FE34D23BA98C3D750828ADE507D5CB418832AF31F706845569',
 };
 type IHttpService = Pick<AxiosRequestConfig, 'url' | 'data' | 'params'>;
 

@@ -76,7 +76,9 @@ const StyledIcon = styled(SvgIcon)`
 
 const FooterBlockTitle = styled.h5`
   margin: 19px 0 0 0;
+  font-size: 1.2rem;
   font-weight: ${typography.weight.medium};
+  line-height: 13px;
 `;
 
 const ConnectToApps = styled.div`

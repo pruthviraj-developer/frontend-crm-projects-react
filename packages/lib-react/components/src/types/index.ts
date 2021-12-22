@@ -70,9 +70,3 @@ export interface IDeliveryMessagesEntity {
   msg: string;
   type: number;
 }
-
-export interface IHeadProps {
-  productName: string;
-  retailPrice?: number;
-  schema: string;
-}

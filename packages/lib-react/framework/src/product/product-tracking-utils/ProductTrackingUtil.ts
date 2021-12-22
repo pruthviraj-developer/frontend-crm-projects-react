@@ -1,5 +1,9 @@
 import { IProductDetailsAttrsEntity } from 'product/types';
-import { IProductSchema, IProductTrackingProps } from './IProductTrackingUtil';
+import {
+  IProductSchema,
+  IProductTrackingProps,
+  ICanonicalUrl,
+} from './IProductTrackingUtil';
 
 const DIFFERENT_FOR_SIZES = 'Different for sizes';
 export const getProductTrackingData = ({
@@ -58,14 +62,14 @@ export const getSchemaData = ({
   const SchemaData = {
     '@context': 'https://schema.org',
     '@type': 'Product',
-    name: productData.productName,
+    name: defaultSku.productName,
     image:
       productData &&
       Array.isArray(productData.imgurls) &&
       productData.imgurls[0].imgUrlFull,
     sku: productData.id,
     mpn: productData.id,
-    description: productData.productDesc,
+    description: `Buy ${defaultSku.productName} online in India at ₹${defaultSku.retailPrice}. &#x2714;15 Days Easy Returns, &#x2714;Cash on Delivery, &#x2714;Latest Designs, &#x2714;Pan India shipping.`,
     offers: {
       '@type': 'Offer',
       priceCurrency: 'INR',
@@ -76,9 +80,21 @@ export const getSchemaData = ({
       url: url,
     },
     brand: {
-      '@type': 'Thing',
+      '@type': 'Brand',
       name: productData.brandName,
     },
   };
   return JSON.stringify(SchemaData);
+};
+
+export const getCanonicalUrl = ({ productData, url }: ICanonicalUrl) => {
+  let canonicalURL = '';
+  const baseUrl = url.toLowerCase();
+  const productURL = baseUrl.substring(baseUrl.lastIndexOf('/'), 0);
+  const canonicalProductName = productData.simpleSkus[0].productName
+    .toLowerCase()
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-');
+  canonicalURL = `${productURL}/${canonicalProductName}`;
+  return canonicalURL;
 };
