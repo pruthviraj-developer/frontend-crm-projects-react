@@ -11,7 +11,7 @@ export const Footer: FC<IFooterProps> = ({ title, link, from, updateUserStatus }
         <Title>{title}</Title>
         <ActionLink
           onClick={() => {
-            updateUserStatus(SIGNIN === from ? true : false);
+            updateUserStatus(from);
           }}
         >
           {link}

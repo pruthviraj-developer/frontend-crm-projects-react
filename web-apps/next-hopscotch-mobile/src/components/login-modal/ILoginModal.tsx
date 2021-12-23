@@ -1,3 +1,5 @@
+import { IErrorProps } from './common';
+
 export interface ILoginModalProps {
   closeLoginPopup: (status?: boolean) => void;
 }
@@ -14,6 +16,7 @@ export interface ISubHeaderProps {
 
 export interface IMobileProps {
   updateForm: (args: IVerifiedDataProps) => void;
+  switchScreen: (error: IErrorProps) => void;
 }
 
 export interface ILoginErrorResponse {

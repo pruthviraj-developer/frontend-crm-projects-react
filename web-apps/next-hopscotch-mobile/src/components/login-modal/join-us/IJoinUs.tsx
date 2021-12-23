@@ -1,3 +1,3 @@
 export interface IJoinUsProps {
-  updateUserStatus: (status?: boolean) => void;
+  updateUserStatus: (status?: string) => void;
 }

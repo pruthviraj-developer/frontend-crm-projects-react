@@ -2,12 +2,9 @@ import React, { FC } from 'react';
 import { BackIcon } from '@hs/icons';
 import { IHeaderProps } from './IHeader';
 import { HeaderWrapper, HeaderTitle, LoginModalHeaderIcon } from './StyledHeader';
-export const Header: FC<IHeaderProps> = ({ active, back, closeLoginPopup }: IHeaderProps) => {
+export const Header: FC<IHeaderProps> = ({ active, back, backStatus }: IHeaderProps) => {
   const updateForm = () => {
-    if (active) {
-      back();
-    } else {
-    }
+    back(backStatus);
   };
   return (
     <HeaderWrapper active={active}>

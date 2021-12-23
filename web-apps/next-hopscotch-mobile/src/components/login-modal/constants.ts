@@ -23,7 +23,31 @@ const FORM_ERROR_CODES: Record<string, string> = {
   CARD_NUMBER: 'Enter a valid card number',
 };
 
-const SIGNIN = 'SIGN_IN';
 const VERIFY = 'verify';
-const JOIN_US = 'Joinus';
-export { REGEX_PATTERNS, FORM_ERROR_CODES, SIGNIN, VERIFY, JOIN_US };
+
+const SIGN_UP_NOW_LINK = 'hopscotch://signup';
+const SIGN_IN_MOBILE_LINK = 'hopscotch://signin-mobile';
+const SIGN_IN_EMAIL_LINK = 'hopscotch://signin';
+const REGEX_MOBILE_NO = /^\d{10}$/;
+const SIGNIN = 'Sign in';
+const SIGNUP = 'Join us';
+const EMAILSIGNIN = 'emailSignIn';
+const MOBILESIGNIN = 'mobileSignIn';
+const VERIFICATION = 'Verification';
+const ADD_MOBILE = 'AddMobile';
+
+export {
+  SIGNIN,
+  SIGNUP,
+  VERIFY,
+  ADD_MOBILE,
+  EMAILSIGNIN,
+  VERIFICATION,
+  MOBILESIGNIN,
+  REGEX_PATTERNS,
+  REGEX_MOBILE_NO,
+  FORM_ERROR_CODES,
+  SIGN_UP_NOW_LINK,
+  SIGN_IN_EMAIL_LINK,
+  SIGN_IN_MOBILE_LINK,
+};

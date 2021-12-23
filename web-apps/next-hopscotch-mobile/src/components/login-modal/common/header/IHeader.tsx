@@ -1,5 +1,5 @@
 export interface IHeaderProps {
-  closeLoginPopup: () => void;
   active: boolean;
-  back: () => void;
+  backStatus: string;
+  back: (status: string) => void;
 }

@@ -5,15 +5,17 @@ import { Header } from './Header';
 import { SubHeader } from './SubHeader';
 import { Verify } from './Verify';
 import { Mobile } from './Mobile';
-import { Footer } from '../common';
+import { Footer, IErrorProps } from '../common';
 import { JoinUs } from '../join-us/JoinUs';
-import { SIGNIN, VERIFY } from '../constants';
+
+import { SIGNIN, SIGNUP, VERIFY, SIGN_UP_NOW_LINK, SIGN_IN_MOBILE_LINK, SIGN_IN_EMAIL_LINK } from '../constants';
+
 const subTitle = 'Sign in';
 
 const LoginModal: FC<ILoginModalProps> = ({ closeLoginPopup }: ILoginModalProps) => {
   const [currentState, setCurrentState] = useState(SIGNIN);
   const [verified, verifiedData] = useState<IVerifiedDataProps>();
-  const [newUser, setNewUser] = useState<Boolean>(false);
+  const [user, setUser] = useState<string>(SIGNIN);
 
   const updateForm = (data: IVerifiedDataProps) => {
     verifiedData(data);
@@ -28,13 +30,62 @@ const LoginModal: FC<ILoginModalProps> = ({ closeLoginPopup }: ILoginModalProps)
     closeLoginPopup();
   };
 
-  const updateUserStatus = (status?: boolean) => {
-    setNewUser(status || false);
+  const updateUserStatus = (status?: string) => {
+    if (status === SIGNIN) {
+      setCurrentState(SIGNIN);
+    }
+    setUser(status || SIGNIN);
+  };
+
+  const footerConstants = {
+    title: 'New to Hopscotch?',
+    link: 'Join us',
+    updateUserStatus,
+    from: SIGNUP,
+  };
+
+  const getParamsObject = (deepLink: string) => {
+    if (deepLink.indexOf('?') == -1) {
+      return { link: deepLink };
+    }
+    let hashes = deepLink.slice(deepLink.indexOf('?') + 1).split('&');
+    let link = deepLink.slice(0, deepLink.indexOf('?'));
+    let object = hashes.reduce((params, hash) => {
+      let [key, val] = hash.split('=');
+      return Object.assign(params, { [key]: decodeURIComponent(val) });
+    }, {});
+    return { ...object, link };
+  };
+
+  const switchScreen = (error: IErrorProps) => {
+    let obj = getParamsObject(error.actionLink || error.redirectLink);
+    switch (obj.link) {
+      case SIGN_IN_EMAIL_LINK:
+        // userDetail.loginId = userDetail.email;
+        this.switchFunc(SIGNIN);
+        return;
+      case SIGN_IN_MOBILE_LINK:
+        // userDetail.loginId = userDetail.phoneNo || userDetail.loginId;
+        this.switchFunc(SIGNIN);
+        return;
+      case SIGN_UP_NOW_LINK:
+        // if (obj.id) {
+        //   if (new RegExp(REGEX_MOBILE_NO).test(obj.id)) {
+        //     userDetail = { ...userDetail, phoneNo: obj.id };
+        //   } else {
+        //     userDetail = { ...userDetail, email: obj.id };
+        //   }
+        // }
+        this.switchFunc(SIGNUP);
+        return;
+      default:
+        return;
+    }
   };
 
   return (
     <>
-      {newUser === false && (
+      {user === SIGNIN && (
         <LoginModalWrapper>
           <Header
             {...{
@@ -51,21 +102,14 @@ const LoginModal: FC<ILoginModalProps> = ({ closeLoginPopup }: ILoginModalProps)
               </>
             )}
             <SignInWrapper>
-              {currentState === SIGNIN && <Mobile {...{ updateForm }} />}
+              {currentState === SIGNIN && <Mobile {...{ updateForm, switchScreen }} />}
               {currentState === VERIFY && <Verify {...{ ...verified, back }} />}
             </SignInWrapper>
-            <Footer
-              {...{
-                title: 'New to Hopscotch?',
-                link: 'Join us',
-                updateUserStatus,
-                from: SIGNIN,
-              }}
-            />
+            <Footer {...footerConstants} />
           </SignInContainer>
         </LoginModalWrapper>
       )}
-      {newUser && <JoinUs {...{ updateUserStatus }} />}
+      {user === SIGNUP && <JoinUs {...{ updateUserStatus }} />}
     </>
   );
 };

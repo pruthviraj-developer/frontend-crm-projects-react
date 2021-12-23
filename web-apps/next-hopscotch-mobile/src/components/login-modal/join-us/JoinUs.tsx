@@ -3,23 +3,27 @@ import { Header } from '../common/header/Header';
 import { IJoinUsProps } from './IJoinUs';
 import { JoinUsWrapper, JoinUsContainer, InputWrapper, InputField, Label, Description } from './StyledJoinUs';
 import { Button, SubHeader, Footer } from '../common';
-import { SIGNIN, JOIN_US, VERIFY } from '../constants';
+import { SIGNIN, SIGNUP, VERIFY } from '../constants';
+import { Verify } from '../mobile/Verify';
 
 export const JoinUs: FC<IJoinUsProps> = ({ updateUserStatus }: IJoinUsProps) => {
-  const [currentState, setCurrentState] = useState(SIGNIN);
+  const [currentState, setCurrentState] = useState(SIGNUP);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phoneNo, setPhoneNo] = useState('');
 
-  const updateForm = () => {
-    console.log('close');
-    setCurrentState(VERIFY);
+  const footerConstants = {
+    title: 'Have an account?',
+    link: 'Sign in',
+    from: SIGNIN,
+    updateUserStatus,
   };
 
-  const back = (status?: boolean) => {
-    console.log('close', status);
-    if (currentState === VERIFY) {
-      return;
+  const back = (status?: string) => {
+    if (status === VERIFY) {
+      setCurrentState(VERIFY);
+    } else {
+      updateUserStatus(SIGNIN);
     }
   };
 
@@ -45,58 +49,56 @@ export const JoinUs: FC<IJoinUsProps> = ({ updateUserStatus }: IJoinUsProps) => 
   };
 
   return (
-    <JoinUsWrapper>
-      <Header
-        {...{
-          closeLoginPopup: updateForm,
-          back,
-          active: false,
-        }}
-      />
-      <JoinUsContainer>
-        <SubHeader title="Join us" />
-        <InputWrapper isFirst={true}>
-          <InputField
-            type="text"
-            value={name}
-            onChange={(event) => {
-              onNameChange(event.target.value);
+    <>
+      {currentState === SIGNUP && (
+        <JoinUsWrapper>
+          <Header
+            {...{
+              back,
+              active: false,
+              backStatus: SIGNUP,
             }}
           />
-          <Label className="label">Full Name</Label>
-        </InputWrapper>
-        <InputWrapper>
-          <InputField
-            type="email"
-            value={email}
-            onChange={(event) => {
-              onEmailChange(event.target.value);
-            }}
-          />
-          <Label className="label">Email Address</Label>
-        </InputWrapper>
-        <InputWrapper>
-          <InputField
-            type="tel"
-            value={phoneNo}
-            onChange={(event) => {
-              onMobileNumberChange(event.target.value);
-            }}
-          />
-          <Label className="label">Mobile Number</Label>
-          <Description>Verify your number to create your Account</Description>
-          <Button name="Send otp" />
-        </InputWrapper>
-        <Footer
-          {...{
-            title: 'Have an account?',
-            link: 'Sign in',
-            from: JOIN_US,
-            updateUserStatus,
-          }}
-        />
-      </JoinUsContainer>
-    </JoinUsWrapper>
+          <JoinUsContainer>
+            <SubHeader title="Join us" />
+            <InputWrapper isFirst={true}>
+              <InputField
+                type="text"
+                value={name}
+                onChange={(event) => {
+                  onNameChange(event.target.value);
+                }}
+              />
+              <Label className="label">Full Name</Label>
+            </InputWrapper>
+            <InputWrapper>
+              <InputField
+                type="email"
+                value={email}
+                onChange={(event) => {
+                  onEmailChange(event.target.value);
+                }}
+              />
+              <Label className="label">Email Address</Label>
+            </InputWrapper>
+            <InputWrapper>
+              <InputField
+                type="tel"
+                value={phoneNo}
+                onChange={(event) => {
+                  onMobileNumberChange(event.target.value);
+                }}
+              />
+              <Label className="label">Mobile Number</Label>
+              <Description>Verify your number to create your Account</Description>
+              <Button name="Send otp" />
+            </InputWrapper>
+            <Footer {...footerConstants} />
+          </JoinUsContainer>
+        </JoinUsWrapper>
+      )}
+      {currentState === VERIFY && <Verify {...{ ...verified, back }} />}
+    </>
   );
 };
 // SEND OTP

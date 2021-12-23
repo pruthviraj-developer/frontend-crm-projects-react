@@ -1,25 +1,17 @@
 import React, { FC, useState } from 'react';
 import { FORM_ERROR_CODES, REGEX_PATTERNS } from '../constants';
-import { IMobileProps, ILoginErrorResponse, ILoginErrorMessageBar } from '../ILoginModal';
-import {
-  ActionText,
-  MobileWrapper,
-  MobileNumber,
-  Button,
-  MessageWrapper,
-  ErrorMessage,
-  ErrorIcon,
-} from './StyledMobile';
+import { IMobileProps, ILoginErrorMessageBar, ILoginErrorResponse } from '../ILoginModal';
+import { MobileWrapper, MobileNumber } from './StyledMobile';
 
-import { IconErrorMessage } from '@hs/icons';
 import { productDetailsService } from '@hs/services';
 import { Loader } from '../loader';
+import { Button, Error, IErrorProps } from '../common';
 
 const reason = { otpReason: 'SIGN_IN', type: 'SMS' };
 
-export const Mobile: FC<IMobileProps> = ({ updateForm }: IMobileProps) => {
+export const Mobile: FC<IMobileProps> = ({ updateForm, switchScreen }: IMobileProps) => {
   const [loginId, setLoginId] = useState('');
-  const [error, setErrorState] = useState<ILoginErrorMessageBar | null>(null);
+  const [error, setErrorState] = useState<IErrorProps | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e ? e.preventDefault() : '';
@@ -66,7 +58,7 @@ export const Mobile: FC<IMobileProps> = ({ updateForm }: IMobileProps) => {
         }
       } catch (error) {
         setLoading(false);
-        const errorResponse = error as unknown as ILoginErrorResponse;
+        const errorResponse = error as unknown as IErrorProps;
         setErrorState(errorResponse.messageBar);
       }
     })();
@@ -82,12 +74,6 @@ export const Mobile: FC<IMobileProps> = ({ updateForm }: IMobileProps) => {
     setErrorState(null);
   };
 
-  const action = () => {
-    if (error && error.actionLink) {
-      window.location.href = `${window.location.protocol}//${window.location.host}/${error.actionLink}`;
-    }
-  };
-
   return (
     <MobileWrapper>
       {loading && <Loader />}
@@ -98,16 +84,8 @@ export const Mobile: FC<IMobileProps> = ({ updateForm }: IMobileProps) => {
         noValidate
       >
         <MobileNumber value={loginId} onChange={handleOnChange} placeholder="Mobile Number" />
-        {error && (
-          <MessageWrapper onClick={action}>
-            <ErrorIcon icon={IconErrorMessage} />
-            <ErrorMessage>
-              {error.message}
-              {error.actionLink && <ActionText>{error.actionText}</ActionText>}
-            </ErrorMessage>
-          </MessageWrapper>
-        )}
-        <Button type="submit">SEND OTP</Button>
+        {error && <Error {...{ switchScreen, error }} />}
+        <Button name="SEND OTP" />
       </form>
     </MobileWrapper>
   );
