@@ -213,6 +213,12 @@ const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile, url }
     }
   }, [showLoginPopup, openLoginPopup]);
 
+  // Remove
+  useEffect(() => {
+    openLoginPopup();
+  }, []);
+  // end
+
   const addToWishlist = () => {
     if (userInfo.isLoggedIn) {
       addToWishlistAfterModalClose();

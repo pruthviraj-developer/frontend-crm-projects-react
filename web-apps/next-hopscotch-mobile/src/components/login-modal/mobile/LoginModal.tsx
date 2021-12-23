@@ -5,14 +5,15 @@ import { Header } from './Header';
 import { SubHeader } from './SubHeader';
 import { Verify } from './Verify';
 import { Mobile } from './Mobile';
-import { Footer } from '../Footer';
-const SIGNIN = 'SIGN_IN';
-const VERIFY = 'verify';
-const LoginModal: FC<ILoginModalProps> = ({ closeLoginPopup }: ILoginModalProps) => {
-  const subTitle = 'Sign in';
+import { Footer } from '../common';
+import { JoinUs } from '../join-us/JoinUs';
+import { SIGNIN, VERIFY } from '../constants';
+const subTitle = 'Sign in';
 
+const LoginModal: FC<ILoginModalProps> = ({ closeLoginPopup }: ILoginModalProps) => {
   const [currentState, setCurrentState] = useState(SIGNIN);
   const [verified, verifiedData] = useState<IVerifiedDataProps>();
+  const [newUser, setNewUser] = useState<Boolean>(false);
 
   const updateForm = (data: IVerifiedDataProps) => {
     verifiedData(data);
@@ -27,34 +28,45 @@ const LoginModal: FC<ILoginModalProps> = ({ closeLoginPopup }: ILoginModalProps)
     closeLoginPopup();
   };
 
+  const updateUserStatus = (status?: boolean) => {
+    setNewUser(status || false);
+  };
+
   return (
-    <LoginModalWrapper>
-      <Header
-        {...{
-          closeLoginPopup,
-          back,
-          active: currentState === SIGNIN ? false : true,
-        }}
-      />
-      <SignInContainer>
-        {currentState === SIGNIN && (
-          <>
-            <SubHeader title={subTitle} />
-            <Description>Your number will be your account identity.</Description>
-          </>
-        )}
-        <SignInWrapper>
-          {currentState === SIGNIN && <Mobile {...{ updateForm }} />}
-          {currentState === VERIFY && <Verify {...{ ...verified, back }} />}
-        </SignInWrapper>
-      </SignInContainer>
-      <Footer
-        {...{
-          title: 'New to Hopscotch?',
-          link: 'Join us',
-        }}
-      />
-    </LoginModalWrapper>
+    <>
+      {newUser === false && (
+        <LoginModalWrapper>
+          <Header
+            {...{
+              closeLoginPopup,
+              back,
+              active: currentState === SIGNIN ? false : true,
+            }}
+          />
+          <SignInContainer>
+            {currentState === SIGNIN && (
+              <>
+                <SubHeader title={subTitle} />
+                <Description>Your number will be your account identity.</Description>
+              </>
+            )}
+            <SignInWrapper>
+              {currentState === SIGNIN && <Mobile {...{ updateForm }} />}
+              {currentState === VERIFY && <Verify {...{ ...verified, back }} />}
+            </SignInWrapper>
+            <Footer
+              {...{
+                title: 'New to Hopscotch?',
+                link: 'Join us',
+                updateUserStatus,
+                from: SIGNIN,
+              }}
+            />
+          </SignInContainer>
+        </LoginModalWrapper>
+      )}
+      {newUser && <JoinUs {...{ updateUserStatus }} />}
+    </>
   );
 };
 export default LoginModal;

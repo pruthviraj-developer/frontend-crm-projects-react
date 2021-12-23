@@ -23,4 +23,7 @@ const FORM_ERROR_CODES: Record<string, string> = {
   CARD_NUMBER: 'Enter a valid card number',
 };
 
-export { REGEX_PATTERNS, FORM_ERROR_CODES };
+const SIGNIN = 'SIGN_IN';
+const VERIFY = 'verify';
+const JOIN_US = 'Joinus';
+export { REGEX_PATTERNS, FORM_ERROR_CODES, SIGNIN, VERIFY, JOIN_US };

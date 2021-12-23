@@ -1,7 +1,8 @@
 import styled from '@emotion/styled';
 
 const FooterWrapper = styled.div`
-  padding: 0.2rem 2rem 0 2rem;
+  padding: 0.2rem 0 0;
+  margin-top: 12px;
 `;
 
 const HrLine = styled.div`
