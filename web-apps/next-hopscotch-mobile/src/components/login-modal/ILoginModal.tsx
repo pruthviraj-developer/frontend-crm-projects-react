@@ -1,7 +1,7 @@
 import { IErrorProps } from './common';
 
 export interface ILoginModalProps {
-  closeLoginPopup: (status?: boolean) => void;
+  closeLoginPopup: (status?: string | boolean) => void;
 }
 
 export interface IHeaderProps {
@@ -38,5 +38,5 @@ export interface IVerifiedDataProps {
   loginId?: string;
   otpReason?: string;
   type?: string;
-  back?: (status?: boolean) => void;
+  back?: (status?: boolean | string) => void;
 }

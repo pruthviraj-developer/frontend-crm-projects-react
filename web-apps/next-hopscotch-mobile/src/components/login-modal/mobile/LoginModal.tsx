@@ -22,7 +22,7 @@ const LoginModal: FC<ILoginModalProps> = ({ closeLoginPopup }: ILoginModalProps)
     setCurrentState(VERIFY);
   };
 
-  const back = (status?: boolean) => {
+  const back = (status?: string | boolean) => {
     if (currentState === VERIFY) {
       closeLoginPopup(status);
       return;
