@@ -9,6 +9,7 @@ import { Footer, IErrorProps } from '../common';
 import { JoinUs } from '../join-us/JoinUs';
 
 import { SIGNIN, SIGNUP, VERIFY, SIGN_UP_NOW_LINK, SIGN_IN_MOBILE_LINK, SIGN_IN_EMAIL_LINK } from '../constants';
+import { HyperLink } from '../common/hyper-link/HyperLink';
 
 const subTitle = 'Sign in';
 
@@ -98,13 +99,13 @@ const LoginModal: FC<ILoginModalProps> = ({ closeLoginPopup }: ILoginModalProps)
             {currentState === SIGNIN && (
               <>
                 <SubHeader title={subTitle} />
-                <Description>Your number will be your account identity.</Description>
               </>
             )}
             <SignInWrapper>
               {currentState === SIGNIN && <Mobile {...{ updateForm, switchScreen }} />}
               {currentState === VERIFY && <Verify {...{ ...verified, back }} />}
             </SignInWrapper>
+            <HyperLink />
             <Footer {...footerConstants} />
           </SignInContainer>
         </LoginModalWrapper>

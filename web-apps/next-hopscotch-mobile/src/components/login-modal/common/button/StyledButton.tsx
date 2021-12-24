@@ -4,7 +4,7 @@ const ButtonWrapper = styled.div`
   padding: 12px 0 8px 0;
 `;
 
-const StyledButton = styled.button`
+const StyledButton = styled.button<{ disabled?: Boolean }>`
   color: #fff;
   border: 0;
   width: 100%;
@@ -16,6 +16,7 @@ const StyledButton = styled.button`
   text-transform: uppercase;
   line-height: 1.14;
   font-weight: 700;
+  opacity: ${(props) => (props.disabled ? 0.36 : 1)};
 `;
 
 export { ButtonWrapper, StyledButton };

@@ -1,17 +1,17 @@
 import React, { FC, useState } from 'react';
 import { FORM_ERROR_CODES, REGEX_PATTERNS } from '../constants';
 import { IMobileProps, ILoginErrorMessageBar, ILoginErrorResponse } from '../ILoginModal';
-import { MobileWrapper, MobileNumber } from './StyledMobile';
+import { MobileWrapper, InputWrapper, InputField, Label } from './StyledMobile';
 
 import { productDetailsService } from '@hs/services';
 import { Loader } from '../loader';
-import { Button, Error, IErrorProps } from '../common';
+import { Button, Error } from '../common';
 
 const reason = { otpReason: 'SIGN_IN', type: 'SMS' };
 
 export const Mobile: FC<IMobileProps> = ({ updateForm, switchScreen }: IMobileProps) => {
   const [loginId, setLoginId] = useState('');
-  const [error, setErrorState] = useState<IErrorProps | null>(null);
+  const [error, setErrorState] = useState<ILoginErrorMessageBar | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e ? e.preventDefault() : '';
@@ -58,7 +58,7 @@ export const Mobile: FC<IMobileProps> = ({ updateForm, switchScreen }: IMobilePr
         }
       } catch (error) {
         setLoading(false);
-        const errorResponse = error as unknown as IErrorProps;
+        const errorResponse = error as unknown as ILoginErrorResponse;
         setErrorState(errorResponse.messageBar);
       }
     })();
@@ -83,9 +83,12 @@ export const Mobile: FC<IMobileProps> = ({ updateForm, switchScreen }: IMobilePr
         }}
         noValidate
       >
-        <MobileNumber value={loginId} onChange={handleOnChange} placeholder="Mobile Number" />
+        <InputWrapper>
+          <InputField type="text" value={loginId} onChange={handleOnChange} />
+          <Label className="label">Mobile Number</Label>
+        </InputWrapper>
         {error && <Error {...{ switchScreen, error }} />}
-        <Button name="SEND OTP" />
+        <Button disabled={loginId.length != 10} name="SEND OTP" />
       </form>
     </MobileWrapper>
   );
