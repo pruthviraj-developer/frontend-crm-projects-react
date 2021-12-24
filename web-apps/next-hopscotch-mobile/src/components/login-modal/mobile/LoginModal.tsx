@@ -5,11 +5,20 @@ import { Header } from './Header';
 import { SubHeader } from './SubHeader';
 import { Verify } from './Verify';
 import { Mobile } from './Mobile';
-import { Footer, IErrorProps } from '../common';
+import { Email } from '../email';
+import { Footer, HyperLink, IErrorProps } from '../common';
 import { JoinUs } from '../join-us/JoinUs';
 
-import { SIGNIN, SIGNUP, VERIFY, SIGN_UP_NOW_LINK, SIGN_IN_MOBILE_LINK, SIGN_IN_EMAIL_LINK } from '../constants';
-import { HyperLink } from '../common/hyper-link/HyperLink';
+import {
+  SIGNIN,
+  SIGNUP,
+  VERIFY,
+  EMAILSIGNIN,
+  MOBILESIGNIN,
+  SIGN_UP_NOW_LINK,
+  SIGN_IN_MOBILE_LINK,
+  SIGN_IN_EMAIL_LINK,
+} from '../constants';
 
 const subTitle = 'Sign in';
 
@@ -17,6 +26,7 @@ const LoginModal: FC<ILoginModalProps> = ({ closeLoginPopup }: ILoginModalProps)
   const [currentState, setCurrentState] = useState(SIGNIN);
   const [verified, verifiedData] = useState<IVerifiedDataProps>();
   const [user, setUser] = useState<string>(SIGNIN);
+  const [loginType, setLoginType] = useState<string>(MOBILESIGNIN);
 
   const updateForm = (data: IVerifiedDataProps) => {
     verifiedData(data);
@@ -84,6 +94,10 @@ const LoginModal: FC<ILoginModalProps> = ({ closeLoginPopup }: ILoginModalProps)
     }
   };
 
+  const switchToEmailOrMobile = (loginType: string) => {
+    setLoginType(loginType);
+  };
+
   return (
     <>
       {user === SIGNIN && (
@@ -92,7 +106,8 @@ const LoginModal: FC<ILoginModalProps> = ({ closeLoginPopup }: ILoginModalProps)
             {...{
               closeLoginPopup,
               back,
-              active: currentState === SIGNIN ? false : true,
+              active: currentState === SIGNIN ? (loginType === EMAILSIGNIN ? true : false) : true,
+              loginType,
             }}
           />
           <SignInContainer>
@@ -102,10 +117,15 @@ const LoginModal: FC<ILoginModalProps> = ({ closeLoginPopup }: ILoginModalProps)
               </>
             )}
             <SignInWrapper>
-              {currentState === SIGNIN && <Mobile {...{ updateForm, switchScreen }} />}
+              {currentState === SIGNIN &&
+                (loginType === MOBILESIGNIN ? (
+                  <Mobile {...{ updateForm, switchScreen }} />
+                ) : (
+                  <Email {...{ updateForm, switchScreen }} />
+                ))}
               {currentState === VERIFY && <Verify {...{ ...verified, back }} />}
             </SignInWrapper>
-            <HyperLink />
+            <HyperLink {...{ switchToEmailOrMobile, loginType }} />
             <Footer {...footerConstants} />
           </SignInContainer>
         </LoginModalWrapper>

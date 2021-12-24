@@ -7,6 +7,9 @@ const REGEX_PATTERNS = {
   ONLY_TEXT: /^[A-Za-z\s]+$/,
   CARD_EXPIRY: /^[0-9]{2}\/[0-9]{2}$/,
   REGEX_MOBILE_NO: /^\d{10}$/,
+  REGEX_NAME: /^([a-zA-Z\s\.\'\-]*)$/,
+  REGEX_EMAIL:
+    "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])+",
 };
 
 const FORM_ERROR_CODES: Record<string, string> = {
@@ -28,13 +31,17 @@ const VERIFY = 'verify';
 const SIGN_UP_NOW_LINK = 'hopscotch://signup';
 const SIGN_IN_MOBILE_LINK = 'hopscotch://signin-mobile';
 const SIGN_IN_EMAIL_LINK = 'hopscotch://signin';
-const REGEX_MOBILE_NO = /^\d{10}$/;
 const SIGNIN = 'Sign in';
 const SIGNUP = 'Join us';
 const EMAILSIGNIN = 'emailSignIn';
 const MOBILESIGNIN = 'mobileSignIn';
 const VERIFICATION = 'Verification';
 const ADD_MOBILE = 'AddMobile';
+
+const INVALID_EMAIL = 'Enter a valid Email Address';
+const INVALID_EMAIL_MOBILE = 'Please enter valid Mobile/Email';
+const INVALID_ACCOUNT = 'Your email and password does not match';
+const INVALID_NAME = 'Please enter valid Name';
 
 export {
   SIGNIN,
@@ -45,9 +52,12 @@ export {
   VERIFICATION,
   MOBILESIGNIN,
   REGEX_PATTERNS,
-  REGEX_MOBILE_NO,
   FORM_ERROR_CODES,
   SIGN_UP_NOW_LINK,
   SIGN_IN_EMAIL_LINK,
   SIGN_IN_MOBILE_LINK,
+  INVALID_NAME,
+  INVALID_EMAIL,
+  INVALID_ACCOUNT,
+  INVALID_EMAIL_MOBILE,
 };

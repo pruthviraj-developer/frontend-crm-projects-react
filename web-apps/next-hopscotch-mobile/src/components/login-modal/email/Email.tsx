@@ -1,24 +1,23 @@
 import React, { FC, useState } from 'react';
-import { FORM_ERROR_CODES, REGEX_PATTERNS } from '../constants';
-import { IUserProps, ILoginErrorMessageBar, ILoginErrorResponse } from '../ILoginModal';
-import { MobileWrapper, InputWrapper, InputField, Label } from './StyledMobile';
-
-import { productDetailsService } from '@hs/services';
+import { EmailWrapper, InputWrapper, InputField, Label } from './StyledEmail';
 import { Button, Error, Loader } from '../common';
+import { productDetailsService } from '@hs/services';
+import { FORM_ERROR_CODES, REGEX_PATTERNS, INVALID_EMAIL } from '../constants';
+import { IUserProps, ILoginErrorMessageBar, ILoginErrorResponse } from '../ILoginModal';
+const reason = { otpReason: 'SIGN_IN' };
 
-const reason = { otpReason: 'SIGN_IN', type: 'SMS' };
-
-export const Mobile: FC<IUserProps> = ({ updateForm, switchScreen }: IUserProps) => {
+export const Email: FC<IUserProps> = ({ updateForm, switchScreen }: IUserProps) => {
   const [loginId, setLoginId] = useState('');
   const [error, setErrorState] = useState<ILoginErrorMessageBar | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e ? e.preventDefault() : '';
-    validateUserMobile();
+    validateEmail();
   };
 
-  const validateUserMobile = () => {
+  const validateEmail = () => {
     let error: ILoginErrorMessageBar | null = null;
+    const REGEXEMAIL = new RegExp(REGEX_PATTERNS.REGEX_EMAIL);
     const setErrorMessage = (type: string, msg?: string) => {
       error = {
         messageType: 'error',
@@ -26,11 +25,9 @@ export const Mobile: FC<IUserProps> = ({ updateForm, switchScreen }: IUserProps)
       };
     };
     if (!loginId) {
-      setErrorMessage('mobile', 'Required');
-    } else if (loginId.length < 10) {
-      setErrorMessage('mobile', "Check if you've entered a 10 digit Indian mobile number");
-    } else if (!REGEX_PATTERNS.MOBILE.test(loginId)) {
-      setErrorMessage('mobile');
+      setErrorMessage('email', 'Required');
+    } else if (!REGEXEMAIL.test(loginId)) {
+      setErrorMessage('email', INVALID_EMAIL);
     }
     setErrorState(error);
     if (!error) {
@@ -74,7 +71,7 @@ export const Mobile: FC<IUserProps> = ({ updateForm, switchScreen }: IUserProps)
   };
 
   return (
-    <MobileWrapper>
+    <EmailWrapper>
       {loading && <Loader />}
       <form
         onSubmit={(e) => {
@@ -84,11 +81,11 @@ export const Mobile: FC<IUserProps> = ({ updateForm, switchScreen }: IUserProps)
       >
         <InputWrapper>
           <InputField type="text" value={loginId} onChange={handleOnChange} />
-          <Label className="label">Mobile Number</Label>
+          <Label className="label">Email</Label>
         </InputWrapper>
         {error && <Error {...{ switchScreen, error }} />}
         <Button disabled={loginId.length != 10} name="SEND OTP" />
       </form>
-    </MobileWrapper>
+    </EmailWrapper>
   );
 };

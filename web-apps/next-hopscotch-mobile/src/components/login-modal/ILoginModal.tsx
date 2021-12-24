@@ -8,13 +8,14 @@ export interface IHeaderProps {
   closeLoginPopup: () => void;
   active: boolean;
   back: () => void;
+  loginType: string;
 }
 
 export interface ISubHeaderProps {
   title: string;
 }
 
-export interface IMobileProps {
+export interface IUserProps {
   updateForm: (args: IVerifiedDataProps) => void;
   switchScreen: (error: IErrorProps) => void;
 }
@@ -32,6 +33,7 @@ export interface ILoginErrorMessageBar {
   messageUIType?: string;
   messageDisplayTime?: string;
   code?: string;
+  redirectLink?: string;
 }
 
 export interface IVerifiedDataProps {

@@ -17,7 +17,7 @@ import {
   ErrorIcon,
   VerifyDetails,
 } from './StyledVerify';
-import { Loader } from '../loader';
+import { Loader } from '../common';
 const OTP_LENGTH = 6;
 export const Verify: FC<IVerifiedDataProps> = ({ back, type, ...props }: IVerifiedDataProps) => {
   const [otp, setOtp] = useState<string>('');

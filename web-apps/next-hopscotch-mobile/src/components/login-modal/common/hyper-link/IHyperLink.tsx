@@ -1,1 +1,4 @@
-export interface IHyperLinkProps {}
+export interface IHyperLinkProps {
+  switchToEmailOrMobile: (loginType: string) => void;
+  loginType: string;
+}
