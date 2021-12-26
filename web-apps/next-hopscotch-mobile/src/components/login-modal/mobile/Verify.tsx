@@ -2,7 +2,7 @@ import React, { FC, useState, useContext } from 'react';
 import { productDetailsService } from '@hs/services';
 import { IconErrorMessage } from '@hs/icons';
 import { LoginContext } from '@hs/framework';
-import { REGEX_PATTERNS } from '../constants';
+import { REGEX_PATTERNS, SIGNIN } from '../constants';
 import { IVerifiedDataProps, ILoginErrorResponse, ILoginErrorMessageBar } from '../ILoginModal';
 import {
   ChangeNumber,
@@ -106,7 +106,7 @@ export const Verify: FC<IVerifiedDataProps> = ({ back, type, ...props }: IVerifi
         <LoggedInBy> {convertForUI(props.loginId)} &nbsp;</LoggedInBy>
         <ChangeNumber
           onClick={() => {
-            back && back();
+            back && back(SIGNIN);
           }}
         >
           Change
