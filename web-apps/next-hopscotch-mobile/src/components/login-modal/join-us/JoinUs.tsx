@@ -131,7 +131,6 @@ export const JoinUs: FC<IJoinUsProps> = ({ updateUserStatus }: IJoinUsProps) => 
             {...{
               ...verified,
               back: () => {
-                debugger;
                 setCurrentState(SIGNUP);
               },
             }}

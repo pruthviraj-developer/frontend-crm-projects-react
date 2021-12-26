@@ -62,11 +62,7 @@ export const Email: FC<IUserProps> = ({ updateForm, switchScreen }: IUserProps) 
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    if (value.trim().length > 10) {
-      setLoginId(loginId);
-      return;
-    }
-    setLoginId(e.target.value);
+    setLoginId(value);
     setErrorState(null);
   };
 
@@ -84,7 +80,7 @@ export const Email: FC<IUserProps> = ({ updateForm, switchScreen }: IUserProps) 
           <Label className="label">Email</Label>
         </InputWrapper>
         {error && <Error {...{ switchScreen, error }} />}
-        <Button disabled={loginId.length != 10} name="SEND OTP" />
+        <Button disabled={error ? true : false} name="SEND OTP" />
       </form>
     </EmailWrapper>
   );
