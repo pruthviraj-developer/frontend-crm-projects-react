@@ -8,8 +8,8 @@ import { Button, Error, Loader } from '../common';
 
 const reason = { otpReason: 'SIGN_IN', type: 'SMS' };
 
-export const Mobile: FC<IUserProps> = ({ updateForm, switchScreen }: IUserProps) => {
-  const [loginId, setLoginId] = useState('');
+export const Mobile: FC<IUserProps> = ({ updateForm, switchScreen, loginBy }: IUserProps) => {
+  const [loginId, setLoginId] = useState(loginBy || '');
   const [error, setErrorState] = useState<ILoginErrorMessageBar | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const submitForm = (e: React.FormEvent<HTMLFormElement>) => {

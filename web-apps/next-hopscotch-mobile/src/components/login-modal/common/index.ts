@@ -5,3 +5,4 @@ export * from './footer';
 export * from './error';
 export * from './hyper-link';
 export * from './loader';
+export * from './login-service';

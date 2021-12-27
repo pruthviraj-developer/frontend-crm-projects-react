@@ -32,15 +32,15 @@ const SignInWrapper = styled.div`
   position: relative;
 `;
 
-const Description = styled.div`
-  opacity: 0.56;
-  margin-bottom: 16px;
-  margin-top: 12px;
-`;
+// const Description = styled.div`
+//   opacity: 0.56;
+//   margin-bottom: 16px;
+//   margin-top: 12px;
+// `;
 
-const HeaderWrapper = styled.div<{ active: boolean }>`
+const HeaderWrapper = styled.div<{ active: boolean; hideShadow?: boolean }>`
   align-items: center;
-  box-shadow: ${(props) => (props.active ? ' 0 1px 0 0 rgb(0 0 0 / 12%)' : 'none')};
+  box-shadow: ${(props) => (props.active ? (props.hideShadow ? 'none' : ' 0 1px 0 0 rgb(0 0 0 / 12%)') : 'none')};
   display: flex;
 `;
 
@@ -67,5 +67,5 @@ export {
   SignInContainer,
   SignInWrapper,
   SubHeaderWrapper,
-  Description,
+  // Description,
 };

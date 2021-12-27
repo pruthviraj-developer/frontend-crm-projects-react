@@ -1,5 +1,7 @@
+import { ILoginErrorMessageBar } from './../ILoginModal';
+
 export interface IJoinUsProps {
-  updateUserStatus: (status?: string) => void;
+  updateUserStatus: (status: string, type?: string, error?: ILoginErrorMessageBar) => void;
 }
 export interface IUserProps {
   name: string;

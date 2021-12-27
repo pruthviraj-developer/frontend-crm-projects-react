@@ -2,10 +2,21 @@ import React, { FC, useState } from 'react';
 import { Header } from '../common/header/Header';
 import { IJoinUsProps, IUserProps } from './IJoinUs';
 import { JoinUsWrapper, JoinUsContainer, InputWrapper, InputField, Label, Description } from './StyledJoinUs';
-import { Error, Button, SubHeader, Footer } from '../common';
-import { SIGNIN, SIGNUP, VERIFY, REQUIRED, REGEX_PATTERNS, FORM_ERROR_CODES } from '../constants';
+import { Error, Button, SubHeader, Footer, Loader, LoginService } from '../common';
+import {
+  SIGNIN,
+  SIGNUP,
+  VERIFY,
+  REQUIRED,
+  REGEX_PATTERNS,
+  FORM_ERROR_CODES,
+  SIGN_IN_EMAIL_LINK,
+  SIGN_IN_MOBILE_LINK,
+  EMAILSIGNIN,
+} from '../constants';
 import { Verify } from '../mobile/Verify';
-import { ILoginErrorMessageBar } from '..';
+import { productDetailsService } from '@hs/services';
+import { ILoginErrorResponse, ILoginErrorMessageBar } from '../ILoginModal';
 
 const NAME = 'NAME';
 const EMAIL = 'EMAIL';
@@ -16,10 +27,11 @@ export const JoinUs: FC<IJoinUsProps> = ({ updateUserStatus }: IJoinUsProps) => 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phoneNo, setPhoneNo] = useState('');
-
+  const [loading, setLoading] = useState<boolean>(false);
   const [errorName, setErrorName] = useState<string | null>(null);
   const [errorEmail, setErrorEmail] = useState<string | null>(null);
   const [errorPhoneNo, setErrorPhoneNo] = useState<string | null>(null);
+  const [error, setErrorState] = useState<ILoginErrorMessageBar | null>(null);
 
   const footerConstants = {
     title: 'Have an account?',
@@ -56,25 +68,6 @@ export const JoinUs: FC<IJoinUsProps> = ({ updateUserStatus }: IJoinUsProps) => 
     }
     setPhoneNo(value);
   };
-
-  // const validateEmail = () => {
-  //   let error: ILoginErrorMessageBar | null = null;
-  //   const REGEXEMAIL = new RegExp(REGEX_PATTERNS.REGEX_EMAIL);
-  //   const setErrorMessage = (type: string, msg?: string) => {
-  //     error = {
-  //       message: msg || FORM_ERROR_CODES.EMAIL,
-  //     };
-  //   };
-  //   if (!email) {
-  //     setErrorEmail(REQUIRED);
-  //   } else if (!REGEXEMAIL.test(email)) {
-  //     setErrorEmail(FORM_ERROR_CODES.EMAIL);
-  //   }
-  //   if (error) {
-  //     return true;
-  //   }
-  //   return false;
-  // };
 
   const clearErrorFields = () => {
     setErrorName(null);
@@ -126,11 +119,43 @@ export const JoinUs: FC<IJoinUsProps> = ({ updateUserStatus }: IJoinUsProps) => 
       return;
     }
     setVerifiedState({ otpReason: 'SIGN_UP', name, email, phoneNo });
-    setCurrentState(VERIFY);
+    const checkErrorResponse = (errorData: ILoginErrorMessageBar) => {
+      const obj = LoginService.getParamsObject(errorData.actionLink || errorData.redirectLink);
+      debugger;
+      switch (obj.link) {
+        case SIGN_IN_EMAIL_LINK:
+          console.log('EMAIL');
+          updateUserStatus(SIGNIN, EMAILSIGNIN, { ...errorData, ...obj });
+          return;
+        case SIGN_IN_MOBILE_LINK:
+          console.log('MOBILE');
+          return;
+        default:
+          setErrorState(errorData);
+          return;
+      }
+    };
+    (async () => {
+      try {
+        setLoading(true);
+        const response: ILoginErrorResponse = await productDetailsService.signUp(verified);
+        setLoading(false);
+        if (response.action === 'success') {
+          setCurrentState(VERIFY);
+        } else {
+          checkErrorResponse(response.messageBar);
+        }
+      } catch (error) {
+        setLoading(false);
+        const errorResponse = error as unknown as ILoginErrorResponse;
+        checkErrorResponse(errorResponse.messageBar);
+      }
+    })();
   };
 
   return (
     <JoinUsWrapper>
+      {loading && <Loader />}
       {currentState === SIGNUP ? (
         <>
           <Header
@@ -181,6 +206,7 @@ export const JoinUs: FC<IJoinUsProps> = ({ updateUserStatus }: IJoinUsProps) => 
                 <Label className="label">Mobile Number</Label>
                 {errorPhoneNo && <Error {...{ error: { message: errorPhoneNo } }} />}
                 <Description>Verify your number to create your Account</Description>
+                {error && <Error {...{ error }} />}
                 <Button name="Send otp" />
               </InputWrapper>
             </form>

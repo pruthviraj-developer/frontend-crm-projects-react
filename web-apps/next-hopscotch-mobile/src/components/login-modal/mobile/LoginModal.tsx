@@ -1,13 +1,13 @@
 import React, { FC, useState } from 'react';
 import { ILoginModalProps, IVerifiedDataProps } from '../ILoginModal';
-import { LoginModalWrapper, SignInContainer, SignInWrapper, Description } from './StyledLoginModal';
+import { LoginModalWrapper, SignInContainer, SignInWrapper } from './StyledLoginModal';
 import { Header } from './Header';
 import { SubHeader } from './SubHeader';
 import { Verify } from './Verify';
 import { Mobile } from './Mobile';
 import { Email } from '../email';
-import { Footer, HyperLink, IErrorProps } from '../common';
-import { JoinUs } from '../join-us/JoinUs';
+import { Error, Footer, HyperLink, IErrorProps, LoginService } from '../common';
+import { JoinUs } from '../join-us';
 
 import {
   SIGNIN,
@@ -19,33 +19,50 @@ import {
   SIGN_IN_MOBILE_LINK,
   SIGN_IN_EMAIL_LINK,
 } from '../constants';
+import { ILoginErrorMessageBar } from './../ILoginModal';
 
 const subTitle = 'Sign in';
 
 const LoginModal: FC<ILoginModalProps> = ({ closeLoginPopup }: ILoginModalProps) => {
   const [currentState, setCurrentState] = useState(SIGNIN);
-  const [verified, verifiedData] = useState<IVerifiedDataProps>();
+  const [verified, setVerifiedData] = useState<IVerifiedDataProps>();
   const [user, setUser] = useState<string>(SIGNIN);
   const [loginType, setLoginType] = useState<string>(MOBILESIGNIN);
-
+  const [loginBy, setLoginBy] = useState<string>('');
+  const [error, setErrorState] = useState<ILoginErrorMessageBar | null>(null);
   const updateForm = (data: IVerifiedDataProps) => {
-    verifiedData(data);
+    setVerifiedData(data);
     setCurrentState(VERIFY);
   };
 
   const back = (status?: string | boolean) => {
     if (status === SIGNIN) {
       setCurrentState(SIGNIN);
+    } else if (status === MOBILESIGNIN) {
+      setLoginType(MOBILESIGNIN);
     } else if (currentState === VERIFY) {
       closeLoginPopup(status);
     } else {
       closeLoginPopup();
     }
+    setErrorState(null);
   };
 
-  const updateUserStatus = (status?: string) => {
+  const updateUserStatus = (status: string, type?: string, error?: ILoginErrorMessageBar) => {
     if (status === SIGNIN) {
       setCurrentState(SIGNIN);
+    }
+    if (type) {
+      setLoginType(type);
+    }
+    if (error) {
+      setErrorState(error);
+      const id = error.id;
+      if (id) {
+        setLoginBy(id);
+      }
+    } else {
+      setErrorState(null);
     }
     setUser(status || SIGNIN);
   };
@@ -57,39 +74,18 @@ const LoginModal: FC<ILoginModalProps> = ({ closeLoginPopup }: ILoginModalProps)
     from: SIGNUP,
   };
 
-  const getParamsObject = (deepLink: string) => {
-    if (deepLink.indexOf('?') == -1) {
-      return { link: deepLink };
-    }
-    let hashes = deepLink.slice(deepLink.indexOf('?') + 1).split('&');
-    let link = deepLink.slice(0, deepLink.indexOf('?'));
-    let object = hashes.reduce((params, hash) => {
-      let [key, val] = hash.split('=');
-      return Object.assign(params, { [key]: decodeURIComponent(val) });
-    }, {});
-    return { ...object, link };
-  };
-
   const switchScreen = (error: IErrorProps) => {
-    let obj = getParamsObject(error.actionLink || error.redirectLink);
+    const obj = LoginService.getParamsObject(error.actionLink || error.redirectLink);
+    setLoginBy('');
     switch (obj.link) {
       case SIGN_IN_EMAIL_LINK:
-        // userDetail.loginId = userDetail.email;
-        this.switchFunc(SIGNIN);
+        updateUserStatus(SIGNIN, EMAILSIGNIN);
         return;
       case SIGN_IN_MOBILE_LINK:
-        // userDetail.loginId = userDetail.phoneNo || userDetail.loginId;
-        this.switchFunc(SIGNIN);
+        updateUserStatus(SIGNIN, MOBILESIGNIN);
         return;
       case SIGN_UP_NOW_LINK:
-        // if (obj.id) {
-        //   if (new RegExp(REGEX_MOBILE_NO).test(obj.id)) {
-        //     userDetail = { ...userDetail, phoneNo: obj.id };
-        //   } else {
-        //     userDetail = { ...userDetail, email: obj.id };
-        //   }
-        // }
-        this.switchFunc(SIGNUP);
+        updateUserStatus(SIGNUP);
         return;
       default:
         return;
@@ -97,6 +93,7 @@ const LoginModal: FC<ILoginModalProps> = ({ closeLoginPopup }: ILoginModalProps)
   };
 
   const switchToEmailOrMobile = (loginType: string) => {
+    setLoginBy('');
     setLoginType(loginType);
   };
 
@@ -118,12 +115,13 @@ const LoginModal: FC<ILoginModalProps> = ({ closeLoginPopup }: ILoginModalProps)
                 <SubHeader title={subTitle} />
               </>
             )}
+            {error && <Error {...{ switchScreen, error }} />}
             <SignInWrapper>
               {currentState === SIGNIN &&
                 (loginType === MOBILESIGNIN ? (
-                  <Mobile {...{ updateForm, switchScreen }} />
+                  <Mobile {...{ updateForm, loginBy, switchScreen }} />
                 ) : (
-                  <Email {...{ updateForm, switchScreen }} />
+                  <Email {...{ updateForm, loginBy, switchScreen }} />
                 ))}
               {currentState === VERIFY && <Verify {...{ ...verified, back }} />}
             </SignInWrapper>
