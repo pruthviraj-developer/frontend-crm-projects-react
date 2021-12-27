@@ -223,20 +223,22 @@ export const JoinUs: FC<IJoinUsProps> = ({ updateUserStatus }: IJoinUsProps) => 
               backStatus: SIGNUP,
             }}
           />
-          <Verify
-            {...{
-              email,
-              name,
-              phoneNo,
-              from: SIGNUP,
-              loginId: successResponse?.loginId,
-              otpReason: successResponse?.otpReason,
-              message: successResponse?.textMessage,
-              back: () => {
-                setCurrentState(SIGNUP);
-              },
-            }}
-          />
+          <JoinUsContainer>
+            <Verify
+              {...{
+                email,
+                name,
+                phoneNo,
+                from: SIGNUP,
+                loginId: successResponse?.loginId,
+                otpReason: successResponse?.otpReason,
+                message: successResponse?.textMessage,
+                back: () => {
+                  setCurrentState(SIGNUP);
+                },
+              }}
+            />
+          </JoinUsContainer>
         </>
       )}
     </JoinUsWrapper>

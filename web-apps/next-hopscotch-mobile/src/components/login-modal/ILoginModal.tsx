@@ -5,10 +5,10 @@ export interface ILoginModalProps {
 }
 
 export interface IHeaderProps {
-  closeLoginPopup: () => void;
   active: boolean;
+  loginType?: string;
+  closeLoginPopup: () => void;
   back: (status?: string) => void;
-  loginType: string;
 }
 
 export interface ISubHeaderProps {

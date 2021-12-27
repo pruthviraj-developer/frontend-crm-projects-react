@@ -22,7 +22,9 @@ export const Header: FC<IHeaderProps> = ({ active, loginType, back, closeLoginPo
   return (
     <HeaderWrapper active={active} hideShadow={hideShadow}>
       <LoginModalHeaderIcon icon={active ? BackIcon : IconClose} onClick={updateForm} />
-      {active && loginType != EMAILSIGNIN && <HeaderTitle>Verify mobile</HeaderTitle>}
+      {active && loginType != EMAILSIGNIN && (
+        <HeaderTitle>Verify {loginType === MOBILESIGNIN ? 'mobile' : 'email'} </HeaderTitle>
+      )}
     </HeaderWrapper>
   );
 };

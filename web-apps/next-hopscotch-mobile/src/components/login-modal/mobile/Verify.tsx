@@ -3,7 +3,8 @@ import { productDetailsService } from '@hs/services';
 import { IconErrorMessage, IconInfoMessage } from '@hs/icons';
 import { LoginContext } from '@hs/framework';
 import { REGEX_PATTERNS, SIGNUP, SIGNIN } from '../constants';
-import { IVerifiedDataProps, ILoginErrorResponse, ILoginErrorMessageBar } from '../ILoginModal';
+import { ILoginErrorResponse, ILoginErrorMessageBar } from './IVerify';
+import { IVerifiedDataProps } from '../ILoginModal';
 import {
   ChangeNumber,
   VerifyWrapper,
@@ -18,7 +19,6 @@ import {
   VerifyDetails,
 } from './StyledVerify';
 import { Loader } from '../common';
-import { IResendOtpSuccessMessageBar } from './IVerify';
 const OTP_LENGTH = 6;
 export const Verify: FC<IVerifiedDataProps> = ({
   back,
@@ -35,7 +35,7 @@ export const Verify: FC<IVerifiedDataProps> = ({
   const [counter, setCounter] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
   const { verifyOtp } = useContext(LoginContext);
-  const [success, setSuccess] = useState<IResendOtpSuccessMessageBar | undefined>();
+  const [success, setSuccess] = useState<string | undefined>();
   const [error, setErrorState] = useState<ILoginErrorMessageBar | undefined>();
   const convertForUI = (str = '') => {
     const pattern = new RegExp(REGEX_PATTERNS.REGEX_MOBILE_NO);
@@ -63,7 +63,7 @@ export const Verify: FC<IVerifiedDataProps> = ({
           setLoading(false);
           if (response.action === 'success') {
             resetVariables();
-            setSuccess(response.messageBar as IResendOtpSuccessMessageBar);
+            setSuccess(response.messageBar.message || response?.textMessage);
           } else {
             setErrorState(response.messageBar);
           }
@@ -86,7 +86,7 @@ export const Verify: FC<IVerifiedDataProps> = ({
           setLoading(false);
           if (response.action === 'success') {
             resetVariables();
-            setSuccess(response.messageBar as IResendOtpSuccessMessageBar);
+            setSuccess(response.messageBar.message);
           } else {
             setErrorState(response.messageBar);
           }
@@ -118,6 +118,8 @@ export const Verify: FC<IVerifiedDataProps> = ({
     if (otplength <= OTP_LENGTH) {
       setOtp(e.target.value);
       if (otplength === OTP_LENGTH) {
+        setSuccess(undefined);
+        setErrorState(undefined);
         (async () => {
           try {
             setLoading(true);
@@ -153,7 +155,7 @@ export const Verify: FC<IVerifiedDataProps> = ({
       {success && (
         <MessageWrapper active={true}>
           <ErrorIcon icon={IconInfoMessage} />
-          <ErrorMessage>{success.message}</ErrorMessage>
+          <ErrorMessage>{success}</ErrorMessage>
         </MessageWrapper>
       )}
       <VerifyDetails>
