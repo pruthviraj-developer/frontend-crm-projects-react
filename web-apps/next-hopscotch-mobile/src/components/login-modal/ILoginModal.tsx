@@ -7,6 +7,7 @@ export interface ILoginModalProps {
 export interface IHeaderProps {
   active: boolean;
   loginType?: string;
+  currentState?: string;
   closeLoginPopup: () => void;
   back: (status?: string) => void;
 }

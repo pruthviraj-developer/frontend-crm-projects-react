@@ -1,8 +1,7 @@
 import React, { FC, useState } from 'react';
-import { Header } from '../common/header/Header';
 import { IJoinUsProps, IUserProps, ISignUpSuccessResponseProps } from './IJoinUs';
 import { JoinUsWrapper, JoinUsContainer, InputWrapper, InputField, Label, Description } from './StyledJoinUs';
-import { Error, Button, SubHeader, Footer, Loader, LoginService } from '../common';
+import { Error, Button, Header, SubHeader, Footer, Loader, LoginService } from '../common';
 import {
   SIGNIN,
   SIGNUP,
@@ -122,7 +121,6 @@ export const JoinUs: FC<IJoinUsProps> = ({ updateUserStatus }: IJoinUsProps) => 
     setVerifiedState({ otpReason: 'SIGN_UP', name, email, phoneNo });
     const checkErrorResponse = (errorData: ILoginErrorMessageBar) => {
       const obj = LoginService.getParamsObject(errorData.actionLink || errorData.redirectLink);
-      debugger;
       switch (obj.link) {
         case SIGN_IN_EMAIL_LINK:
           updateUserStatus(SIGNIN, EMAILSIGNIN, { ...errorData, ...obj });

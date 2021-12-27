@@ -106,12 +106,8 @@ const LoginModal: FC<ILoginModalProps> = ({ closeLoginPopup }: ILoginModalProps)
               closeLoginPopup,
               back,
               active: currentState === SIGNIN ? (loginType === EMAILSIGNIN ? true : false) : true,
-              loginType:
-                currentState === SIGNIN && loginType === EMAILSIGNIN
-                  ? EMAILSIGNIN
-                  : currentState === VERIFY
-                  ? loginType
-                  : undefined,
+              loginType,
+              currentState,
             }}
           />
           <SignInContainer>

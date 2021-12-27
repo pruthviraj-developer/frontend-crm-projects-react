@@ -3,13 +3,13 @@ import { LoginContext } from '@hs/framework';
 import { BackIcon, IconClose } from '@hs/icons';
 import { IHeaderProps } from '../ILoginModal';
 import { HeaderWrapper, HeaderTitle, LoginModalHeaderIcon } from './StyledLoginModal';
-import { EMAILSIGNIN, MOBILESIGNIN, SIGNIN } from '../constants';
-export const Header: FC<IHeaderProps> = ({ active, loginType, back, closeLoginPopup }: IHeaderProps) => {
-  const hideShadow = loginType === EMAILSIGNIN ? true : false;
+import { EMAILSIGNIN, MOBILESIGNIN, SIGNIN, VERIFY } from '../constants';
+export const Header: FC<IHeaderProps> = ({ active, loginType, currentState, back, closeLoginPopup }: IHeaderProps) => {
+  const backStatus = loginType === EMAILSIGNIN ? true : false;
   const { updateLoginPopup } = useContext(LoginContext);
   const updateForm = () => {
     if (active) {
-      if (hideShadow) {
+      if (backStatus && currentState != VERIFY) {
         back(MOBILESIGNIN);
       } else {
         back(SIGNIN);
@@ -20,9 +20,9 @@ export const Header: FC<IHeaderProps> = ({ active, loginType, back, closeLoginPo
     }
   };
   return (
-    <HeaderWrapper active={active} hideShadow={hideShadow}>
+    <HeaderWrapper active={active} hideShadow={currentState === SIGNIN}>
       <LoginModalHeaderIcon icon={active ? BackIcon : IconClose} onClick={updateForm} />
-      {active && loginType != EMAILSIGNIN && (
+      {active && currentState != SIGNIN && (
         <HeaderTitle>Verify {loginType === MOBILESIGNIN ? 'mobile' : 'email'} </HeaderTitle>
       )}
     </HeaderWrapper>
