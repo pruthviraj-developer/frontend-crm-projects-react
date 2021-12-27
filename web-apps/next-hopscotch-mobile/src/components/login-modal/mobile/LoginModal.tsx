@@ -125,8 +125,12 @@ const LoginModal: FC<ILoginModalProps> = ({ closeLoginPopup }: ILoginModalProps)
                 ))}
               {currentState === VERIFY && <Verify {...{ ...verified, back }} />}
             </SignInWrapper>
-            <HyperLink {...{ switchToEmailOrMobile, loginType }} />
-            <Footer {...footerConstants} />
+            {currentState != VERIFY && (
+              <>
+                <HyperLink {...{ switchToEmailOrMobile, loginType }} />
+                <Footer {...footerConstants} />
+              </>
+            )}
           </SignInContainer>
         </LoginModalWrapper>
       )}

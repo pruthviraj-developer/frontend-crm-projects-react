@@ -9,3 +9,15 @@ export interface IUserProps {
   phoneNo: string;
   otpReason: string;
 }
+
+export interface ISignUpSuccessResponseProps {
+  action: string;
+  messageBar: ILoginErrorMessageBar;
+  loginId: string;
+  timer: number;
+  textMessage: string;
+  phoneNumber: string;
+  email: string;
+  otpReason: string;
+  otpLength: number;
+}

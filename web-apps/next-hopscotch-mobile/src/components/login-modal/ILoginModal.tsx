@@ -39,8 +39,13 @@ export interface ILoginErrorMessageBar {
 }
 
 export interface IVerifiedDataProps {
-  loginId?: string;
-  otpReason?: string;
   type?: string;
+  from?: string;
+  name?: string;
+  email?: string;
+  loginId?: string;
+  phoneNo?: string;
+  message?: string;
+  otpReason?: string;
   back?: (status?: boolean | string) => void;
 }

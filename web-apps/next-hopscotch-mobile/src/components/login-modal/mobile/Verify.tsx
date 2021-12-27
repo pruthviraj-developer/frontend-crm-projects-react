@@ -1,8 +1,8 @@
 import React, { FC, useState, useContext } from 'react';
 import { productDetailsService } from '@hs/services';
-import { IconErrorMessage } from '@hs/icons';
+import { IconErrorMessage, IconInfoMessage } from '@hs/icons';
 import { LoginContext } from '@hs/framework';
-import { REGEX_PATTERNS, SIGNIN } from '../constants';
+import { REGEX_PATTERNS, SIGNUP, SIGNIN } from '../constants';
 import { IVerifiedDataProps, ILoginErrorResponse, ILoginErrorMessageBar } from '../ILoginModal';
 import {
   ChangeNumber,
@@ -18,13 +18,25 @@ import {
   VerifyDetails,
 } from './StyledVerify';
 import { Loader } from '../common';
+import { IResendOtpSuccessMessageBar } from './IVerify';
 const OTP_LENGTH = 6;
-export const Verify: FC<IVerifiedDataProps> = ({ back, type, ...props }: IVerifiedDataProps) => {
+export const Verify: FC<IVerifiedDataProps> = ({
+  back,
+  name,
+  type,
+  from,
+  email,
+  message,
+  phoneNo,
+  loginId,
+  otpReason,
+}: IVerifiedDataProps) => {
   const [otp, setOtp] = useState<string>('');
   const [counter, setCounter] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
   const { verifyOtp } = useContext(LoginContext);
-  const [error, setErrorState] = useState<ILoginErrorMessageBar | null>(null);
+  const [success, setSuccess] = useState<IResendOtpSuccessMessageBar | undefined>();
+  const [error, setErrorState] = useState<ILoginErrorMessageBar | undefined>();
   const convertForUI = (str = '') => {
     const pattern = new RegExp(REGEX_PATTERNS.REGEX_MOBILE_NO);
     if (pattern.test(str)) {
@@ -34,30 +46,58 @@ export const Verify: FC<IVerifiedDataProps> = ({ back, type, ...props }: IVerifi
     }
   };
   let interval: ReturnType<typeof setInterval>;
+
+  const resetVariables = () => {
+    setOtp('');
+    setCounter(30);
+    runTimer();
+  };
   const resendOtp = () => {
-    (async () => {
-      try {
-        setLoading(true);
-        clearInterval(interval);
-        const response: ILoginErrorResponse = await productDetailsService.sendOtp({
-          ...props,
-        });
-        setLoading(false);
-        if (response.action === 'success') {
-          setOtp('');
-          setCounter(30);
-          runTimer();
-          setErrorState(null);
-        } else {
-          setErrorState(response.messageBar);
+    setSuccess(undefined);
+    setErrorState(undefined);
+    if (from === SIGNUP) {
+      (async () => {
+        try {
+          setLoading(true);
+          const response: ILoginErrorResponse = await productDetailsService.signUp({ email, name, otpReason, phoneNo });
+          setLoading(false);
+          if (response.action === 'success') {
+            resetVariables();
+            setSuccess(response.messageBar as IResendOtpSuccessMessageBar);
+          } else {
+            setErrorState(response.messageBar);
+          }
+        } catch (error) {
+          setLoading(false);
+          const errorResponse = error as unknown as ILoginErrorResponse;
+          setErrorState(errorResponse.messageBar);
         }
-      } catch (error) {
-        const errorRespone = error as unknown as ILoginErrorResponse;
-        setLoading(false);
-        setCounter(0);
-        setErrorState(errorRespone.messageBar);
-      }
-    })();
+      })();
+    } else {
+      (async () => {
+        try {
+          setLoading(true);
+          clearInterval(interval);
+          const response: ILoginErrorResponse = await productDetailsService.sendOtp({
+            type,
+            loginId,
+            otpReason: 'SIGN_IN',
+          });
+          setLoading(false);
+          if (response.action === 'success') {
+            resetVariables();
+            setSuccess(response.messageBar as IResendOtpSuccessMessageBar);
+          } else {
+            setErrorState(response.messageBar);
+          }
+        } catch (error) {
+          const errorRespone = error as unknown as ILoginErrorResponse;
+          setLoading(false);
+          setCounter(0);
+          setErrorState(errorRespone.messageBar);
+        }
+      })();
+    }
   };
 
   const runTimer = () => {
@@ -79,14 +119,23 @@ export const Verify: FC<IVerifiedDataProps> = ({ back, type, ...props }: IVerifi
       setOtp(e.target.value);
       if (otplength === OTP_LENGTH) {
         (async () => {
-          const response = await verifyOtp({
-            ...props,
-            otp: value,
-          });
-          if (response.action === 'success' && response.isLoggedIn) {
-            back && back(true);
-          } else {
-            setErrorState(response.messageBar);
+          try {
+            setLoading(true);
+            const response = await verifyOtp({
+              loginId,
+              otpReason,
+              otp: value,
+            });
+            setLoading(false);
+            if (response.action === 'success' && response.isLoggedIn) {
+              back && back(true);
+            } else {
+              setErrorState(response.messageBar);
+            }
+          } catch (error) {
+            setLoading(false);
+            const errorResponse = error as unknown as ILoginErrorMessageBar;
+            setErrorState(errorResponse);
           }
         })();
       }
@@ -101,9 +150,15 @@ export const Verify: FC<IVerifiedDataProps> = ({ back, type, ...props }: IVerifi
           <ErrorMessage>{error.message}</ErrorMessage>
         </MessageWrapper>
       )}
+      {success && (
+        <MessageWrapper active={true}>
+          <ErrorIcon icon={IconInfoMessage} />
+          <ErrorMessage>{success.message}</ErrorMessage>
+        </MessageWrapper>
+      )}
       <VerifyDetails>
-        <div>Enter the OTP sent to your {type == 'SMS' ? 'number' : 'email'}</div>
-        <LoggedInBy> {convertForUI(props.loginId)} &nbsp;</LoggedInBy>
+        <div>{message || `Enter the OTP sent to your ${type == 'SMS' ? 'number' : 'email'}`}</div>
+        <LoggedInBy> {convertForUI(loginId)} &nbsp;</LoggedInBy>
         <ChangeNumber
           onClick={() => {
             back && back(SIGNIN);

@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import { Header } from '../common/header/Header';
-import { IJoinUsProps, IUserProps } from './IJoinUs';
+import { IJoinUsProps, IUserProps, ISignUpSuccessResponseProps } from './IJoinUs';
 import { JoinUsWrapper, JoinUsContainer, InputWrapper, InputField, Label, Description } from './StyledJoinUs';
 import { Error, Button, SubHeader, Footer, Loader, LoginService } from '../common';
 import {
@@ -13,6 +13,7 @@ import {
   SIGN_IN_EMAIL_LINK,
   SIGN_IN_MOBILE_LINK,
   EMAILSIGNIN,
+  MOBILESIGNIN,
 } from '../constants';
 import { Verify } from '../mobile/Verify';
 import { productDetailsService } from '@hs/services';
@@ -32,7 +33,7 @@ export const JoinUs: FC<IJoinUsProps> = ({ updateUserStatus }: IJoinUsProps) => 
   const [errorEmail, setErrorEmail] = useState<string | null>(null);
   const [errorPhoneNo, setErrorPhoneNo] = useState<string | null>(null);
   const [error, setErrorState] = useState<ILoginErrorMessageBar | null>(null);
-
+  const [successResponse, setSuccessResponse] = useState<ISignUpSuccessResponseProps | undefined>();
   const footerConstants = {
     title: 'Have an account?',
     link: SIGNIN,
@@ -124,11 +125,10 @@ export const JoinUs: FC<IJoinUsProps> = ({ updateUserStatus }: IJoinUsProps) => 
       debugger;
       switch (obj.link) {
         case SIGN_IN_EMAIL_LINK:
-          console.log('EMAIL');
           updateUserStatus(SIGNIN, EMAILSIGNIN, { ...errorData, ...obj });
           return;
         case SIGN_IN_MOBILE_LINK:
-          console.log('MOBILE');
+          updateUserStatus(SIGNIN, MOBILESIGNIN, { ...errorData, ...obj });
           return;
         default:
           setErrorState(errorData);
@@ -142,6 +142,7 @@ export const JoinUs: FC<IJoinUsProps> = ({ updateUserStatus }: IJoinUsProps) => 
         setLoading(false);
         if (response.action === 'success') {
           setCurrentState(VERIFY);
+          setSuccessResponse(response as unknown as ISignUpSuccessResponseProps);
         } else {
           checkErrorResponse(response.messageBar);
         }
@@ -224,7 +225,13 @@ export const JoinUs: FC<IJoinUsProps> = ({ updateUserStatus }: IJoinUsProps) => 
           />
           <Verify
             {...{
-              ...verified,
+              email,
+              name,
+              phoneNo,
+              from: SIGNUP,
+              loginId: successResponse?.loginId,
+              otpReason: successResponse?.otpReason,
+              message: successResponse?.textMessage,
               back: () => {
                 setCurrentState(SIGNUP);
               },
