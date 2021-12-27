@@ -2,10 +2,14 @@ import React, { FC, useState } from 'react';
 import { Header } from '../common/header/Header';
 import { IJoinUsProps, IUserProps } from './IJoinUs';
 import { JoinUsWrapper, JoinUsContainer, InputWrapper, InputField, Label, Description } from './StyledJoinUs';
-import { Button, SubHeader, Footer } from '../common';
-import { SIGNIN, SIGNUP, VERIFY } from '../constants';
+import { Error, Button, SubHeader, Footer } from '../common';
+import { SIGNIN, SIGNUP, VERIFY, REQUIRED, REGEX_PATTERNS, FORM_ERROR_CODES } from '../constants';
 import { Verify } from '../mobile/Verify';
+import { ILoginErrorMessageBar } from '..';
 
+const NAME = 'NAME';
+const EMAIL = 'EMAIL';
+const MOBILE = 'MOBILE';
 export const JoinUs: FC<IJoinUsProps> = ({ updateUserStatus }: IJoinUsProps) => {
   const [currentState, setCurrentState] = useState<string | undefined>(SIGNUP);
   const [verified, setVerifiedState] = useState<IUserProps>();
@@ -13,9 +17,13 @@ export const JoinUs: FC<IJoinUsProps> = ({ updateUserStatus }: IJoinUsProps) => 
   const [email, setEmail] = useState('');
   const [phoneNo, setPhoneNo] = useState('');
 
+  const [errorName, setErrorName] = useState<string | null>(null);
+  const [errorEmail, setErrorEmail] = useState<string | null>(null);
+  const [errorPhoneNo, setErrorPhoneNo] = useState<string | null>(null);
+
   const footerConstants = {
     title: 'Have an account?',
-    link: 'Sign in',
+    link: SIGNIN,
     from: SIGNIN,
     updateUserStatus,
   };
@@ -49,23 +57,82 @@ export const JoinUs: FC<IJoinUsProps> = ({ updateUserStatus }: IJoinUsProps) => 
     setPhoneNo(value);
   };
 
+  // const validateEmail = () => {
+  //   let error: ILoginErrorMessageBar | null = null;
+  //   const REGEXEMAIL = new RegExp(REGEX_PATTERNS.REGEX_EMAIL);
+  //   const setErrorMessage = (type: string, msg?: string) => {
+  //     error = {
+  //       message: msg || FORM_ERROR_CODES.EMAIL,
+  //     };
+  //   };
+  //   if (!email) {
+  //     setErrorEmail(REQUIRED);
+  //   } else if (!REGEXEMAIL.test(email)) {
+  //     setErrorEmail(FORM_ERROR_CODES.EMAIL);
+  //   }
+  //   if (error) {
+  //     return true;
+  //   }
+  //   return false;
+  // };
+
+  const clearErrorFields = () => {
+    setErrorName(null);
+    setErrorEmail(null);
+    setErrorPhoneNo(null);
+  };
+
+  const validateInput = (value: string, fieldName: string) => {
+    const setError = (error: string) => {
+      switch (fieldName) {
+        case NAME:
+          {
+            setErrorName(error);
+          }
+          break;
+        case EMAIL:
+          {
+            setErrorEmail(error);
+          }
+          break;
+        case MOBILE:
+          {
+            setErrorPhoneNo(error);
+          }
+          break;
+      }
+    };
+    if (value) {
+      let pattern = new RegExp(REGEX_PATTERNS[fieldName]);
+      const result = pattern.test(value);
+      if (!result) {
+        setError(FORM_ERROR_CODES[fieldName]);
+        return true;
+      }
+    } else {
+      setError(REQUIRED);
+      return true;
+    }
+  };
+
   const sendOtp = (e: React.FormEvent<HTMLFormElement>) => {
     e ? e.preventDefault() : '';
-    setVerifiedState({
-      name: 'Aksjaksj',
-      email: 'dskjkadj@gmail.com',
-      loginId: '6676767676',
-      phoneNo: '6676767676',
-      type: 'SMS',
-      otpReason: 'SIGN_UP',
-    });
+    clearErrorFields();
+    if (validateInput(name, NAME)) {
+      return;
+    } else if (validateInput(email, EMAIL)) {
+      return;
+    } else if (validateInput(phoneNo, MOBILE)) {
+      return;
+    }
+    setVerifiedState({ otpReason: 'SIGN_UP', name, email, phoneNo });
     setCurrentState(VERIFY);
   };
 
   return (
-    <>
-      {currentState === SIGNUP && (
-        <JoinUsWrapper>
+    <JoinUsWrapper>
+      {currentState === SIGNUP ? (
+        <>
           <Header
             {...{
               back,
@@ -91,6 +158,7 @@ export const JoinUs: FC<IJoinUsProps> = ({ updateUserStatus }: IJoinUsProps) => 
                 />
                 <Label className="label">Full Name</Label>
               </InputWrapper>
+              {errorName && <Error {...{ error: { message: errorName } }} />}
               <InputWrapper>
                 <InputField
                   type="email"
@@ -101,6 +169,7 @@ export const JoinUs: FC<IJoinUsProps> = ({ updateUserStatus }: IJoinUsProps) => 
                 />
                 <Label className="label">Email Address</Label>
               </InputWrapper>
+              {errorEmail && <Error {...{ error: { message: errorEmail } }} />}
               <InputWrapper>
                 <InputField
                   type="tel"
@@ -110,16 +179,16 @@ export const JoinUs: FC<IJoinUsProps> = ({ updateUserStatus }: IJoinUsProps) => 
                   }}
                 />
                 <Label className="label">Mobile Number</Label>
+                {errorPhoneNo && <Error {...{ error: { message: errorPhoneNo } }} />}
                 <Description>Verify your number to create your Account</Description>
                 <Button name="Send otp" />
               </InputWrapper>
             </form>
             <Footer {...footerConstants} />
           </JoinUsContainer>
-        </JoinUsWrapper>
-      )}
-      {currentState === VERIFY && (
-        <JoinUsWrapper>
+        </>
+      ) : (
+        <>
           <Header
             {...{
               back,
@@ -135,9 +204,8 @@ export const JoinUs: FC<IJoinUsProps> = ({ updateUserStatus }: IJoinUsProps) => 
               },
             }}
           />
-        </JoinUsWrapper>
+        </>
       )}
-    </>
+    </JoinUsWrapper>
   );
 };
-// SEND OTP

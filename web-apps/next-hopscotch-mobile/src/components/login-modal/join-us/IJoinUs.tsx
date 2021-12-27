@@ -3,9 +3,7 @@ export interface IJoinUsProps {
 }
 export interface IUserProps {
   name: string;
-  type: string;
   email: string;
   phoneNo: string;
-  loginId: string;
   otpReason: string;
 }

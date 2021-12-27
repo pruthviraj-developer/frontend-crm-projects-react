@@ -1,5 +1,5 @@
 export interface ILoginErrorProps {
-  switchScreen: (error: IErrorProps) => void;
+  switchScreen?: (error: IErrorProps) => void;
   error: IErrorProps;
 }
 

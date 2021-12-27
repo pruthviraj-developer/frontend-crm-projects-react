@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react';
 import { EmailWrapper, InputWrapper, InputField, Label } from './StyledEmail';
 import { Button, Error, Loader } from '../common';
 import { productDetailsService } from '@hs/services';
-import { FORM_ERROR_CODES, REGEX_PATTERNS, INVALID_EMAIL } from '../constants';
+import { FORM_ERROR_CODES, REGEX_PATTERNS } from '../constants';
 import { IUserProps, ILoginErrorMessageBar, ILoginErrorResponse } from '../ILoginModal';
 const reason = { otpReason: 'SIGN_IN' };
 
@@ -27,7 +27,7 @@ export const Email: FC<IUserProps> = ({ updateForm, switchScreen }: IUserProps) 
     if (!loginId) {
       setErrorMessage('email', 'Required');
     } else if (!REGEXEMAIL.test(loginId)) {
-      setErrorMessage('email', INVALID_EMAIL);
+      setErrorMessage('email', FORM_ERROR_CODES.EMAIL);
     }
     setErrorState(error);
     if (!error) {

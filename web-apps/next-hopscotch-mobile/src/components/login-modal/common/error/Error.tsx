@@ -6,10 +6,9 @@ import { ActionText, ErrorWrapper, ErrorIcon, ErrorMessage } from './StyedError'
 export const Error: FC<ILoginErrorProps> = ({ switchScreen, error }: ILoginErrorProps) => {
   const action = () => {
     if (error.actionLink && error.redirectLink) {
-      switchScreen(error);
+      switchScreen && switchScreen(error);
     }
   };
-
   return (
     <ErrorWrapper onClick={action}>
       <ErrorIcon icon={IconErrorMessage} />

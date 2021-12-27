@@ -25,11 +25,12 @@ export const Mobile: FC<IUserProps> = ({ updateForm, switchScreen }: IUserProps)
         message: msg || FORM_ERROR_CODES[type.toUpperCase()],
       };
     };
+    let pattern = new RegExp(REGEX_PATTERNS['MOBILE']);
     if (!loginId) {
       setErrorMessage('mobile', 'Required');
     } else if (loginId.length < 10) {
       setErrorMessage('mobile', "Check if you've entered a 10 digit Indian mobile number");
-    } else if (!REGEX_PATTERNS.MOBILE.test(loginId)) {
+    } else if (!pattern.test(loginId)) {
       setErrorMessage('mobile');
     }
     setErrorState(error);
