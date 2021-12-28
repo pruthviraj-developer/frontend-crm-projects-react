@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { FORM_ERROR_CODES, REGEX_PATTERNS } from '../constants';
+import { FORM_ERROR_CODES } from '../constants';
 import { IUserProps, ILoginErrorMessageBar, ILoginErrorResponse } from '../ILoginModal';
 import { MobileWrapper, InputWrapper, InputField, Label } from './StyledMobile';
 
@@ -17,6 +17,13 @@ export const Mobile: FC<IUserProps> = ({ updateForm, switchScreen, loginBy }: IU
     validateUserMobile();
   };
 
+  const onNumberKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    let isNumber = [
+      48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 8, 9, 13,
+    ].includes(event.keyCode);
+    isNumber ? '' : event.preventDefault();
+  };
+
   const validateUserMobile = () => {
     let error: ILoginErrorMessageBar | null = null;
     const setErrorMessage = (type: string, msg?: string) => {
@@ -25,13 +32,10 @@ export const Mobile: FC<IUserProps> = ({ updateForm, switchScreen, loginBy }: IU
         message: msg || FORM_ERROR_CODES[type.toUpperCase()],
       };
     };
-    let pattern = new RegExp(REGEX_PATTERNS['MOBILE']);
     if (!loginId) {
       setErrorMessage('mobile', 'Required');
     } else if (loginId.length < 10) {
       setErrorMessage('mobile', "Check if you've entered a 10 digit Indian mobile number");
-    } else if (!pattern.test(loginId)) {
-      setErrorMessage('mobile');
     }
     setErrorState(error);
     if (!error) {
@@ -84,7 +88,7 @@ export const Mobile: FC<IUserProps> = ({ updateForm, switchScreen, loginBy }: IU
         noValidate
       >
         <InputWrapper>
-          <InputField type="text" value={loginId} onChange={handleOnChange} />
+          <InputField type="number" value={loginId} onKeyDown={onNumberKeyDown} onChange={handleOnChange} />
           <Label className="label">Mobile Number</Label>
         </InputWrapper>
         {error && <Error {...{ switchScreen, error }} />}
