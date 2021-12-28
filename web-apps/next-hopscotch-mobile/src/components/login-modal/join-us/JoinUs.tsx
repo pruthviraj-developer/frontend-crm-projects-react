@@ -69,6 +69,11 @@ export const JoinUs: FC<IJoinUsProps> = ({ updateUserStatus }: IJoinUsProps) => 
     setPhoneNo(value);
   };
 
+  const onNumberKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    const isNumber = LoginService.checkIsNumber(event.keyCode);
+    isNumber ? '' : event.preventDefault();
+  };
+
   const clearErrorFields = () => {
     setErrorName(null);
     setErrorEmail(null);
@@ -196,7 +201,8 @@ export const JoinUs: FC<IJoinUsProps> = ({ updateUserStatus }: IJoinUsProps) => 
               {errorEmail && <Error {...{ error: { message: errorEmail } }} />}
               <InputWrapper>
                 <InputField
-                  type="tel"
+                  type="number"
+                  onKeyDown={onNumberKeyDown}
                   value={phoneNo}
                   onChange={(event) => {
                     onMobileNumberChange(event.target.value);

@@ -4,7 +4,7 @@ import { IUserProps, ILoginErrorMessageBar, ILoginErrorResponse } from '../ILogi
 import { MobileWrapper, InputWrapper, InputField, Label } from './StyledMobile';
 
 import { productDetailsService } from '@hs/services';
-import { Button, Error, Loader } from '../common';
+import { Button, Error, Loader, LoginService } from '../common';
 
 const reason = { otpReason: 'SIGN_IN', type: 'SMS' };
 
@@ -18,9 +18,7 @@ export const Mobile: FC<IUserProps> = ({ updateForm, switchScreen, loginBy }: IU
   };
 
   const onNumberKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    let isNumber = [
-      48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 8, 9, 13,
-    ].includes(event.keyCode);
+    const isNumber = LoginService.checkIsNumber(event.keyCode);
     isNumber ? '' : event.preventDefault();
   };
 
