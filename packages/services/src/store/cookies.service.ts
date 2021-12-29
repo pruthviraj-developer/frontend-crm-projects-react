@@ -2,7 +2,7 @@ import Cookies from 'js-cookie';
 import { SetCookieProps } from './Icookies.service';
 
 const deleteCookie = (key: string) => {
-  return Cookies.get(key);
+  return Cookies.remove(key);
 };
 
 const getCookies = (key: string) => {

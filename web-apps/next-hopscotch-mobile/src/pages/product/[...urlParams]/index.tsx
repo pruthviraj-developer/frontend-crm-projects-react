@@ -214,7 +214,7 @@ const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile, url }
   }, [showLoginPopup, openLoginPopup]);
 
   const addToWishlist = () => {
-    if (userInfo.isLoggedIn) {
+    if (userInfo && userInfo.isLoggedIn) {
       addToWishlistAfterModalClose();
     } else {
       toast.info('Sign in to add this item to your Wishlist.', {
