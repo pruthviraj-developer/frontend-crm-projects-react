@@ -7,11 +7,11 @@ const HyperLinkWrapper = styled.div`
   justify-content: center;
 `;
 
-const FaceBookIcon = styled(SvgIcon)`
-  margin: 1px 8px 0;
-  width: 18px;
-  height: 18px;
-`;
+// const FaceBookIcon = styled(SvgIcon)`
+//   margin: 1px 8px 0;
+//   width: 18px;
+//   height: 18px;
+// `;
 
 const HyperLinkTag = styled.a`
   color: #000;
@@ -21,14 +21,14 @@ const HyperLinkTag = styled.a`
   text-decoration: underline;
 `;
 
-const Divider = styled.span`
-  margin-left: 4%;
-  margin-right: 2%;
-  width: 4px;
-  height: 4px;
-  border-radius: 4px;
-  background-color: #dcdcdc;
-  display: inline-block;
-`;
+// const Divider = styled.span`
+//   margin-left: 4%;
+//   margin-right: 2%;
+//   width: 4px;
+//   height: 4px;
+//   border-radius: 4px;
+//   background-color: #dcdcdc;
+//   display: inline-block;
+// `;
 
-export { HyperLinkWrapper, HyperLinkTag, Divider, FaceBookIcon };
+export { HyperLinkWrapper, HyperLinkTag };

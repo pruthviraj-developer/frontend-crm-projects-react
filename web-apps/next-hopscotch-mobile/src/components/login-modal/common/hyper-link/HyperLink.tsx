@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
-import { FaceBookLinkIcon } from '@hs/icons';
 import { IHyperLinkProps } from './IHyperLink';
-import { HyperLinkWrapper, HyperLinkTag, Divider, FaceBookIcon } from './StyledHyperLink';
+import { HyperLinkWrapper, HyperLinkTag } from './StyledHyperLink';
 import { EMAILSIGNIN, MOBILESIGNIN } from '../../constants';
 
 export const HyperLink: FC<IHyperLinkProps> = ({ switchToEmailOrMobile, loginType }: IHyperLinkProps) => {
@@ -14,9 +13,9 @@ export const HyperLink: FC<IHyperLinkProps> = ({ switchToEmailOrMobile, loginTyp
       >
         {loginType === MOBILESIGNIN ? 'Use Email' : 'Use Mobile'}
       </HyperLinkTag>
-      <Divider />
+      {/* <Divider />
       <FaceBookIcon icon={FaceBookLinkIcon} />
-      <HyperLinkTag>Continue with Facebook</HyperLinkTag>
+      <HyperLinkTag>Continue with Facebook</HyperLinkTag> */}
     </HyperLinkWrapper>
   );
 };
