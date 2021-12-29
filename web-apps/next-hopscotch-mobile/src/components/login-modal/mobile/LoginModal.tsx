@@ -6,7 +6,7 @@ import { SubHeader } from './SubHeader';
 import { Verify } from './Verify';
 import { Mobile } from './Mobile';
 import { Email } from '../email';
-import { Error, Footer, HyperLink, IErrorProps, LoginService } from '../common';
+import { Error, Footer, HyperLink, IErrorProps, loginService } from '../common';
 import { JoinUs } from '../join-us';
 
 import {
@@ -75,7 +75,7 @@ const LoginModal: FC<ILoginModalProps> = ({ closeLoginPopup }: ILoginModalProps)
   };
 
   const switchScreen = (error: IErrorProps) => {
-    const obj = LoginService.getParamsObject(error.actionLink || error.redirectLink);
+    const obj = loginService.getParamsObject(error.actionLink || error.redirectLink);
     setLoginBy('');
     switch (obj.link) {
       case SIGN_IN_EMAIL_LINK:

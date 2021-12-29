@@ -17,7 +17,7 @@ const checkIsNumber = (value: number) => {
   );
 };
 
-export const LoginService = {
+export const loginService = {
   checkIsNumber,
   getParamsObject,
 };

@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import { IJoinUsProps, IUserProps, ISignUpSuccessResponseProps } from './IJoinUs';
 import { JoinUsWrapper, JoinUsContainer, InputWrapper, InputField, Label, Description } from './StyledJoinUs';
-import { Error, Button, Header, SubHeader, Footer, Loader, LoginService } from '../common';
+import { Error, Button, Header, SubHeader, Footer, Loader, loginService } from '../common';
 import {
   SIGNIN,
   SIGNUP,
@@ -70,7 +70,7 @@ export const JoinUs: FC<IJoinUsProps> = ({ updateUserStatus }: IJoinUsProps) => 
   };
 
   const onNumberKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    const isNumber = LoginService.checkIsNumber(event.keyCode);
+    const isNumber = loginService.checkIsNumber(event.keyCode);
     isNumber ? '' : event.preventDefault();
   };
 
@@ -125,7 +125,7 @@ export const JoinUs: FC<IJoinUsProps> = ({ updateUserStatus }: IJoinUsProps) => 
     }
     setVerifiedState({ otpReason: 'SIGN_UP', name, email, phoneNo });
     const checkErrorResponse = (errorData: ILoginErrorMessageBar) => {
-      const obj = LoginService.getParamsObject(errorData.actionLink || errorData.redirectLink);
+      const obj = loginService.getParamsObject(errorData.actionLink || errorData.redirectLink);
       switch (obj.link) {
         case SIGN_IN_EMAIL_LINK:
           updateUserStatus(SIGNIN, EMAILSIGNIN, { ...errorData, ...obj });
