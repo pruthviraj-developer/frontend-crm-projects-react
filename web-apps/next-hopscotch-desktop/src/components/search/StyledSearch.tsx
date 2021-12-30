@@ -77,12 +77,12 @@ const List = styled.li`
   }
   .search-autocomplete-result-with-image {
     display: flex;
+    p {
+      margin: 6% 0 0;
+    }
   }
   &:hover {
     background-color: #f9f9f9;
-  }
-  div > p {
-    margin: 6% 0 0;
   }
 `;
 

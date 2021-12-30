@@ -6,7 +6,6 @@ import React, { useState, useEffect, ReactElement, useContext } from 'react';
 import { useModal } from 'react-hooks-use-modal';
 import { toast } from 'react-toastify';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
-import Parser from 'ua-parser-js';
 const ProductMobile = dynamic(() => import('@/components/pdp'), {
   ssr: true,
 });
@@ -69,8 +68,7 @@ const tryLater = 'Try Later';
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const queryClient = new QueryClient();
   const productId = context.params?.urlParams?.[0] || '';
-  const ua = Parser(context.req.headers['user-agent']);
-  const isMobile = JSON.stringify(context, null, 4); //ua.device.type === Parser.DEVICE.MOBILE;
+  const isMobile = context.req.headers['x-nv-device'] === 'sp';
   const baseUrl = process.env.WEB_HOST;
   const url = `${baseUrl}${context.resolvedUrl?.split('?')?.[0]}`;
   await queryClient.prefetchQuery(
