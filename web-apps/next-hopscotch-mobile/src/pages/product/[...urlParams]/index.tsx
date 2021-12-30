@@ -69,8 +69,8 @@ const tryLater = 'Try Later';
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const queryClient = new QueryClient();
   const productId = context.params?.urlParams?.[0] || '';
-  const ua = Parser(context.req.headers['user-agent']);
-  const isMobile = ua.device.type === Parser.DEVICE.MOBILE;
+  // const ua = Parser(context.req.headers['user-agent']);
+  const isMobile = JSON.stringify(context.req.headers, null, 4);
   const baseUrl = process.env.WEB_HOST;
   const url = `${baseUrl}${context.resolvedUrl?.split('?')?.[0]}`;
   await queryClient.prefetchQuery(
@@ -531,7 +531,7 @@ const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile, url }
         {isLoginPopupOpen && <LoginPopup {...{ closeLoginPopup: closeLoginModalPopup }}></LoginPopup>}
       </LoginPopupModal>
       <GoToTop></GoToTop>
-      {/* <pre style={{ width: '60%', overflowX: 'scroll' }}>{JSON.stringify(productData, null, 4)}</pre> */}
+      <pre style={{ width: '90%', overflowX: 'scroll' }}>{isMobile}</pre>
     </>
   );
 };
