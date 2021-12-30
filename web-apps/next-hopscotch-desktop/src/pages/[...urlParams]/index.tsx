@@ -52,10 +52,11 @@ import {
   useSegment,
   IProductDetails,
   ISimpleSkusEntityProps,
-  getProductTrackingData,
   COOKIE_DATA,
   CartItemQtyContext,
   LOCAL_DATA,
+  getSchemaData,
+  getCanonicalUrl,
 } from '@hs/framework';
 import GoToTopDesktop from '@/components/go-to-top/GoToTopDesktop';
 
@@ -64,6 +65,8 @@ const tryLater = 'Try Later';
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const queryClient = new QueryClient();
   const productId = context.params?.urlParams?.[1] || '';
+  const baseUrl = process.env.WEB_HOST;
+  const url = `${baseUrl}${context.resolvedUrl?.split('?')?.[0]}`;
   await queryClient.prefetchQuery(
     ['ProductDetail', productId],
     () => productDetailsService.getProductDetails(productId, process.env.WEB_HOST),
@@ -89,28 +92,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     props: {
       dehydratedState: dehydrate(queryClient),
       productId,
+      url,
     },
   };
 };
-const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
+const Product: NextPageWithLayout<IProductProps> = ({ url, productId }: IProductProps) => {
   const similarProductsLink = useRef<HTMLDivElement>(null);
   const recommendedProductsLink = useRef<HTMLDivElement>(null);
-  const productId = props.productId;
   const [deliveryDetails, updateDeliveryDetails] = useState<IUpdatedDeliverDetailsProps>();
   const { updateCartItemQty } = useContext(CartItemQtyContext);
-
-  const [queryClient] = useState(
-    () =>
-      new QueryClient({
-        defaultOptions: {
-          queries: {
-            retry: false,
-            refetchOnWindowFocus: false,
-            staleTime: Infinity,
-          },
-        },
-      }),
-  );
 
   const { data: productData } = useQuery<IProductDetails>(
     ['ProductDetail', productId],
@@ -161,6 +151,7 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
     simpleSkus,
     showRfypCue,
     isProductSoldOut,
+    defaultSku,
     ...product
   } = useProduct({ productData, selectedSku });
 
@@ -362,7 +353,14 @@ const Product: NextPageWithLayout<IProductProps> = (props: IProductProps) => {
     <>
       {productData && productData.action === LOCAL_DATA.SUCCESS && (
         <>
-          <ProductHead {...{ productName, retailPrice }}></ProductHead>
+          <ProductHead
+            {...{
+              productName,
+              retailPrice,
+              schema: getSchemaData({ productData, defaultSku, url }),
+              canonicalUrl: getCanonicalUrl({ productData, url }),
+            }}
+          ></ProductHead>
           <ProductWrapper>
             {productData.imgurls && productData.imgurls.length > 0 && (
               <ProductCarouselDesktop

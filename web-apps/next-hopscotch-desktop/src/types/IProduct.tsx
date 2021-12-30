@@ -1,5 +1,6 @@
 export interface IProductProps {
   productId: string;
+  url: string;
 }
 
 export interface urlParamsProps {
