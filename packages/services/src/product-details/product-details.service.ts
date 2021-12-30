@@ -103,6 +103,13 @@ const getSizes = <P, R>(productId: P, baseURL = ''): Promise<R> => {
   return httpService.get<R>({ url });
 };
 
+const signUp = <P, R>(user: P): Promise<R> => {
+  return httpService.post<R>({
+    url: '/api/customer/signup/send/otp',
+    data: user,
+  });
+};
+
 const sendOtp = <P, R>(user: P): Promise<R> => {
   return httpService.post<R>({
     url: '/api/customer/validate-sendotp',
@@ -157,6 +164,7 @@ export const productDetailsService = {
   getResouce,
   getSizes,
   sendOtp,
+  signUp,
   verifyOtp,
   getEulerAutoSuggestions,
   getCustomerAddresses,

@@ -37,7 +37,7 @@ const PinCodeMobile = dynamic(() => import('@/components/pin-code'), {
   ssr: false,
 });
 
-const LoginPopup = dynamic(() => import('@/components/login-modal'), {
+const LoginPopup = dynamic(() => import('@/components/login-modal/mobile/LoginModal'), {
   ssr: false,
 });
 
@@ -153,7 +153,7 @@ const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile, url }
   const [{ contextData, properties }] = useSegment();
   // const pdpTrackingData = useProductTracking({ selectedSku, productDetails });
 
-  const closeLoginModalPopup = (status?: boolean) => {
+  const closeLoginModalPopup = (status?: string | boolean) => {
     if (status && addToWishlistStatus) {
       addToWishlistAfterModalClose();
     }
