@@ -1,8 +1,9 @@
-import { FooterDesktop, NavBarDesktop } from '@hs/components';
+import { FooterDesktop } from '@hs/components';
 import Head from 'next/head';
 import dynamic from 'next/dynamic';
 import { FC } from 'react';
 import { useModal } from 'react-hooks-use-modal';
+import { NavBarDesktop } from '../nav-bar';
 
 const SearchPopupComponent = dynamic(() => import('@/components/search-popup/SearchPopup'), {
   ssr: false,
