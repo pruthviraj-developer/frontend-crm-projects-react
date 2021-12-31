@@ -42,7 +42,7 @@ const Search: FC<ISearch> = ({ searchText }: ISearch) => {
   // end
 
   useEffect(() => {
-    setSearchBy(searchText);
+    setSearchBy(searchText || '');
   }, [searchText]);
 
   const getSuggestions = useCallback(() => {

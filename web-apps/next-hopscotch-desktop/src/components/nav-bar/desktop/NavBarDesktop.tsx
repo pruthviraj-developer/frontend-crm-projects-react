@@ -60,6 +60,7 @@ export const NavBarDesktop: FC<INavBarProps> = () => {
     const ref = elementRef && elementRef.current;
     function handleClickOutside(event: any) {
       if (ref && !ref.contains(event.target)) {
+        setSearchText('');
         setShowSearch(false);
       }
     }

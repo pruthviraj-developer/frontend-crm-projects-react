@@ -4,12 +4,12 @@ import { ISearchPopupProps } from './ISearchPopup';
 import { SearchPopupWrapper } from './StyledSearchPopup';
 import Search from '../search/Search';
 import { productDetailsService } from '@hs/services';
-import { IResourceProps } from '@/types';
+import { ISearchResourceProps } from '@/types';
 
 const SearchPopup: FC<ISearchPopupProps> = ({ close }: ISearchPopupProps) => {
-  const [resource, setResource] = useState<IResourceProps>();
-  const { data: response } = useQuery<IResourceProps>(['resourceData'], () =>
-    productDetailsService.getResouce<IResourceProps>(),
+  const [resource, setResource] = useState<ISearchResourceProps>();
+  const { data: response } = useQuery<ISearchResourceProps>(['resourceData'], () =>
+    productDetailsService.getResouce<ISearchResourceProps>(),
   );
   useEffect(() => {
     if (response?.action === 'success') {

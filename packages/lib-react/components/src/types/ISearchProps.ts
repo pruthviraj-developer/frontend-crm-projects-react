@@ -1,4 +1,4 @@
-import { ISearchResourceProps } from '@/types';
+import { ISearchResourceProps } from './ISearchResource';
 
 export interface ISearch {
   close?: () => void;

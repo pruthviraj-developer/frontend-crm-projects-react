@@ -70,3 +70,6 @@ export interface IDeliveryMessagesEntity {
   msg: string;
   type: number;
 }
+
+export * from './ISearchProps';
+export * from './ISearchResource';

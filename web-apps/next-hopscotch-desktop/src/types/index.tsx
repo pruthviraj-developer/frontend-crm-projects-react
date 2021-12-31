@@ -1,4 +1,4 @@
 export * from './IProduct';
 export * from './ISizeChart';
 export * from './IApp';
-export * from './ISearch';
+export * from './ISearchResource';

@@ -1,4 +1,4 @@
-export interface IResourceProps {
+export interface ISearchResourceProps {
   action: string;
   categories?: CategoriesEntity[] | null;
   brands?: BrandsEntity[] | null;
