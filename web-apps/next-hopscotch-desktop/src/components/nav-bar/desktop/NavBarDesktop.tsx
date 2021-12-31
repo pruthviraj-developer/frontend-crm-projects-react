@@ -1,4 +1,4 @@
-import React, { FC, useContext, useState } from 'react';
+import React, { FC, useRef, useContext, useEffect, useState } from 'react';
 import { NextNavLink } from '@hs/components';
 import {
   NavBarWrapper,
@@ -27,8 +27,9 @@ import { CartIcon, HopScotchIcon, IconSearch } from '@hs/icons';
 import { CartItemQtyContext } from '@hs/framework';
 import Search from '@/components/search/Search';
 
-export const NavBarDesktop: FC<INavBarProps> = ({ showSearchPopup }: INavBarProps) => {
+export const NavBarDesktop: FC<INavBarProps> = () => {
   // const router = useRouter();
+  const elementRef = useRef<any>();
   const [searchText, setSearchText] = useState('');
   const [showSearch, setShowSearch] = useState<boolean>(false);
   const cartContext = useContext(CartItemQtyContext);
@@ -42,7 +43,6 @@ export const NavBarDesktop: FC<INavBarProps> = ({ showSearchPopup }: INavBarProp
 
   const showSearchField = () => {
     setShowSearch(!showSearch);
-    // showSearchPopup();
   };
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,6 +50,26 @@ export const NavBarDesktop: FC<INavBarProps> = ({ showSearchPopup }: INavBarProp
   };
 
   const close = () => {};
+
+  useEffect(() => {
+    const body = document.querySelector('body');
+    if (body) {
+      body.style.overflow = showSearch ? 'hidden' : 'auto';
+    }
+
+    const ref = elementRef && elementRef.current;
+    function handleClickOutside(event: any) {
+      if (ref && !ref.contains(event.target)) {
+        setShowSearch(false);
+      }
+    }
+    // Bind the event listener
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showSearch]);
+
   return (
     <NavBarWrapper>
       <NotificationBar>
@@ -126,15 +146,15 @@ export const NavBarDesktop: FC<INavBarProps> = ({ showSearchPopup }: INavBarProp
         </NavLinkWrapper>
         <NavigationIconsWrapper>
           {showSearch ? (
+            <SearchWrapper>
+              <SearchIconWrapper onClick={showSearchField} icon={IconSearch} />
+              <InputSearch ref={elementRef} onChange={handleOnChange} placeholder="Search for products" />
+              <Search {...{ close, searchText }} />
+            </SearchWrapper>
+          ) : (
             <NavIconWrapper onClick={showSearchField} marginRight={true}>
               <IconWrapper icon={IconSearch} />
             </NavIconWrapper>
-          ) : (
-            <SearchWrapper>
-              <SearchIconWrapper onClick={showSearchField} icon={IconSearch} />
-              <InputSearch onChange={handleOnChange} placeholder="Search for products" />
-              <Search {...{ close, searchText }} />
-            </SearchWrapper>
           )}
           <Link
             href={{
