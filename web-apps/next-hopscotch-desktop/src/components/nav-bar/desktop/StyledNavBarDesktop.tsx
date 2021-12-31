@@ -6,6 +6,7 @@ const NavBarWrapper = styled.div`
   background-color: ${Colors.PINK[500]};
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
   width: 100%;
+  z-index: 1005;
 `;
 
 const HopscotchImage = styled.div`
@@ -118,6 +119,7 @@ const FilterWrapper = styled.div`
 `;
 
 const SearchWrapper = styled.div`
+  position: relative;
   display: flex;
   align-items: center;
   margin-bottom: 6px;

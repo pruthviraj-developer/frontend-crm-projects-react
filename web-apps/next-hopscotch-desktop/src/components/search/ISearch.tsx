@@ -3,6 +3,7 @@ import { IResourceProps } from '@/types';
 export interface ISearch {
   close: () => void;
   resource?: IResourceProps;
+  searchText: string;
 }
 
 export interface IRecentSearchesProps {

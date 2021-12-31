@@ -25,9 +25,11 @@ import Link from 'next/link';
 import { CartIcon, HopScotchIcon, IconSearch } from '@hs/icons';
 
 import { CartItemQtyContext } from '@hs/framework';
+import Search from '@/components/search/Search';
 
 export const NavBarDesktop: FC<INavBarProps> = ({ showSearchPopup }: INavBarProps) => {
   // const router = useRouter();
+  const [searchText, setSearchText] = useState('');
   const [showSearch, setShowSearch] = useState<boolean>(false);
   const cartContext = useContext(CartItemQtyContext);
   const query = {
@@ -38,7 +40,16 @@ export const NavBarDesktop: FC<INavBarProps> = ({ showSearchPopup }: INavBarProp
     customTileId: null,
   };
 
-  const showSearchField = () => {};
+  const showSearchField = () => {
+    setShowSearch(!showSearch);
+    // showSearchPopup();
+  };
+
+  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchText(e.target.value);
+  };
+
+  const close = () => {};
   return (
     <NavBarWrapper>
       <NotificationBar>
@@ -120,8 +131,9 @@ export const NavBarDesktop: FC<INavBarProps> = ({ showSearchPopup }: INavBarProp
             </NavIconWrapper>
           ) : (
             <SearchWrapper>
-              <SearchIconWrapper icon={IconSearch} />
-              <InputSearch placeholder="Search for products" />
+              <SearchIconWrapper onClick={showSearchField} icon={IconSearch} />
+              <InputSearch onChange={handleOnChange} placeholder="Search for products" />
+              <Search {...{ close, searchText }} />
             </SearchWrapper>
           )}
           <Link

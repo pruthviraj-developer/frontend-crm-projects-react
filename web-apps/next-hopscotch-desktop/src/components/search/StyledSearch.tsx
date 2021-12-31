@@ -1,13 +1,14 @@
 import styled from '@emotion/styled';
 // import { typography, Colors, HsTextAlign } from '@hs/utils';
-import { SvgIcon } from '@hs/icons';
+// import { SvgIcon } from '@hs/icons';
 
 const SearchWrapper = styled.div`
-  right: 0;
-  top: 86px;
+  top: 83px;
+  right: 77px;
   width: 100%;
   position: fixed;
   max-width: 354px;
+  z-index: 1005;
 `;
 
 const SearchField = styled.div`
@@ -29,19 +30,6 @@ const SearchField = styled.div`
   }
 `;
 
-const SearchForm = styled.form``;
-
-const CloseIcon = styled(SvgIcon)`
-  opacity: 0.5;
-  position: absolute;
-  padding: 0;
-  width: 16px;
-  height: 16px;
-  right: 18px;
-  top: 18px;
-  z-index: 1002;
-`;
-
 const SearchList = styled.ul`
   z-index: 1001;
   list-style-type: none;
@@ -57,6 +45,8 @@ const SearchList = styled.ul`
 `;
 
 const List = styled.li`
+  color: #333;
+  font-size: 14px;
   cursor: pointer;
   list-style: none;
   line-height: 16px;
@@ -64,7 +54,6 @@ const List = styled.li`
   padding: 12px 12px 12px 35px;
   p {
     color: rgba(0, 0, 0, 0.8);
-    font-size: 14px;
     line-height: 20px;
     margin: 0;
   }
@@ -86,4 +75,15 @@ const List = styled.li`
   }
 `;
 
-export { SearchWrapper, SearchForm, SearchField, SearchList, List, CloseIcon };
+const SearchLayout = styled.div`
+  left: 0;
+  top: 86px;
+  opacity: 0.5;
+  z-index: 1005;
+  position: fixed;
+  min-width: 100%;
+  min-height: 100%;
+  background-color: #000;
+`;
+
+export { SearchLayout, SearchWrapper, SearchField, SearchList, List };

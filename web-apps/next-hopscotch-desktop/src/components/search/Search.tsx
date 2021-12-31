@@ -1,17 +1,18 @@
 import React, { FC, useState, useEffect, useCallback } from 'react';
 import { ISearch, IRecentSearchesProps, IEulerAutoSuggestionsProps, IEulerSuggestionsEntity } from './ISearch';
-import { SearchWrapper, SearchField, SearchForm, CloseIcon, SearchList, List } from './StyledSearch';
-import { IconClose } from '@hs/icons';
+import { SearchLayout, SearchWrapper, SearchField, SearchList, List } from './StyledSearch';
 import { useDebounce, useLocalStorage } from '@hs/framework';
 import { productDetailsService } from '@hs/services';
 import { useRouter } from 'next/router';
+import { IResourceProps } from '@/types';
+import { useQuery } from 'react-query';
 
 const RECENT_SEARCH = 'RecentSearch';
 const BRAND_SUGGESTION = 'BrandSuggestion';
 const KEYWORD = 'Keyword';
 const CATEGORY_SUGGESTION = 'CategorySuggestion';
 
-const Search: FC<ISearch> = ({ close, resource }: ISearch) => {
+const Search: FC<ISearch> = ({ searchText }: ISearch) => {
   // let _recentSearch: boolean = true;
   const router = useRouter();
   const [searchBy, setSearchBy] = useState<string>('');
@@ -20,6 +21,29 @@ const Search: FC<ISearch> = ({ close, resource }: ISearch) => {
   // const readRecentSearchesFromLocalStorage: any = useReadLocalStorage(['recentSearches']);
   const [recentSearchData, setRecentSearchData] = useLocalStorage<any>('recentSearches', []);
   const [recentSearches, setRecentSearches] = useState(recentSearchData);
+
+  // resource url
+
+  const [resource, setResource] = useState<IResourceProps>();
+  const { data: response } = useQuery<IResourceProps>(['resourceData'], () =>
+    productDetailsService.getResouce<IResourceProps>(),
+  );
+  useEffect(() => {
+    if (response?.action === 'success') {
+      const brands = response.brands || [];
+      const categories = response.categories;
+      if (!brands || !categories || !brands.length || !categories.length) {
+        return;
+      }
+      setResource(response);
+    }
+  }, [response]);
+
+  // end
+
+  useEffect(() => {
+    setSearchBy(searchText);
+  }, [searchText]);
 
   const getSuggestions = useCallback(() => {
     (async () => {
@@ -97,6 +121,9 @@ const Search: FC<ISearch> = ({ close, resource }: ISearch) => {
         return;
       }
       getSuggestions();
+    } else {
+      setSuggestions([]);
+      setRecentSearches(recentSearchData);
     }
   }, [keyWord, resource, getSuggestions]);
 
@@ -112,15 +139,15 @@ const Search: FC<ISearch> = ({ close, resource }: ISearch) => {
     }
   };
 
-  const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
-    e ? e.preventDefault() : '';
-    // _recentSearch = false;
-    getSuggestions();
-  };
+  // const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
+  //   e ? e.preventDefault() : '';
+  //   // _recentSearch = false;
+  //   getSuggestions();
+  // };
 
-  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchBy(e.target.value);
-  };
+  // const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setSearchBy(e.target.value);
+  // };
 
   const selectAndSearch = (
     data: IEulerSuggestionsEntity | IRecentSearchesProps,
@@ -252,52 +279,47 @@ const Search: FC<ISearch> = ({ close, resource }: ISearch) => {
   };
 
   return (
-    <SearchWrapper>
-      <SearchField>
-        <SearchForm
-          onSubmit={(e) => {
-            return submitForm(e);
-          }}
-          noValidate
-          autoComplete={'off'}
-        >
-          <input type="text" name="search" onChange={handleOnChange} placeholder="Search for products" />
-          <CloseIcon onClick={close} icon={IconClose} />
-        </SearchForm>
-        <SearchList>
-          {recentSearches && recentSearches.length && suggestions && suggestions.length === 0 ? (
-            <>
-              <List>Recent Searches</List>
-              {recentSearches.map((data: IRecentSearchesProps, index: number) => {
+    <>
+      <SearchLayout />
+      <SearchWrapper>
+        <SearchField>
+          <SearchList>
+            {recentSearches && recentSearches.length && suggestions && suggestions.length === 0 ? (
+              <>
+                <List>Recent Searches</List>
+                {recentSearches.map((data: IRecentSearchesProps, index: number) => {
+                  return (
+                    <List
+                      key={index}
+                      onClick={() => {
+                        selectAndSearch(data, 'recent', index, null);
+                      }}
+                      dangerouslySetInnerHTML={{ __html: data.term || data.name }}
+                    />
+                  );
+                })}
+              </>
+            ) : suggestions && suggestions.length > 0 ? (
+              suggestions.map((data: IEulerSuggestionsEntity, index: number) => {
                 return (
                   <List
                     key={index}
                     onClick={() => {
-                      selectAndSearch(data, 'recent', index, null);
+                      selectAndSearch(data, null, index, null);
                     }}
-                    dangerouslySetInnerHTML={{ __html: data.term || data.name }}
+                    dangerouslySetInnerHTML={{
+                      __html: data.displayName || getHighlightSearchText(keyWord, data.label),
+                    }}
                   />
                 );
-              })}
-            </>
-          ) : suggestions && suggestions.length > 0 ? (
-            suggestions.map((data: IEulerSuggestionsEntity, index: number) => {
-              return (
-                <List
-                  key={index}
-                  onClick={() => {
-                    selectAndSearch(data, null, index, null);
-                  }}
-                  dangerouslySetInnerHTML={{ __html: data.displayName || getHighlightSearchText(keyWord, data.label) }}
-                />
-              );
-            })
-          ) : (
-            ''
-          )}
-        </SearchList>
-      </SearchField>
-    </SearchWrapper>
+              })
+            ) : (
+              ''
+            )}
+          </SearchList>
+        </SearchField>
+      </SearchWrapper>
+    </>
   );
 };
 
