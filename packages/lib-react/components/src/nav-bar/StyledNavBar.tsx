@@ -67,11 +67,12 @@ const CartIconQuantity = styled.span`
   position: absolute;
   top: 10px;
   left: 26px;
-  height: 18px;
-  min-width: 18px;
   display: flex;
   align-items: center;
   justify-content: space-around;
+  height: 15px;
+  min-width: 15px;
+  padding: 3px 4px 4px;
 `;
 
 const IconWrapper = styled(SvgIcon)`
