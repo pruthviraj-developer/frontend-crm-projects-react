@@ -1,4 +1,4 @@
-import React, { FC, useContext } from 'react';
+import React, { FC, useRef, useContext, useEffect, useState } from 'react';
 import { NextNavLink } from '../../next-nav-link';
 import {
   NavBarWrapper,
@@ -13,8 +13,10 @@ import {
   IconWrapper,
   FilteredBy,
   FilterWrapper,
+  SearchWrapper,
+  InputSearch,
+  SearchIconWrapper,
 } from './StyledNavBarDesktop';
-import { INavBarProps } from '../INavBar';
 
 // import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -22,11 +24,13 @@ import Link from 'next/link';
 import { CartIcon, HopScotchIcon, IconSearch } from '@hs/icons';
 
 import { CartItemQtyContext } from '@hs/framework';
+import { SearchDesktop } from './../../search-desktop';
 
-export const NavBarDesktop: FC<INavBarProps> = ({
-  showSearchPopup,
-}: INavBarProps) => {
+export const NavBarDesktop: FC = () => {
   // const router = useRouter();
+  const elementRef = useRef<any>();
+  const [searchText, setSearchText] = useState('');
+  const [showSearch, setShowSearch] = useState<boolean>(false);
   const cartContext = useContext(CartItemQtyContext);
   const query = {
     ref: 'logo',
@@ -35,6 +39,37 @@ export const NavBarDesktop: FC<INavBarProps> = ({
     department: null,
     customTileId: null,
   };
+
+  const showSearchField = () => {
+    setShowSearch(!showSearch);
+  };
+
+  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchText(e.target.value);
+  };
+
+  const close = () => {};
+
+  useEffect(() => {
+    const body = document.querySelector('body');
+    if (body) {
+      body.style.overflow = showSearch ? 'hidden' : 'auto';
+    }
+
+    const ref = elementRef && elementRef.current;
+    function handleClickOutside(event: any) {
+      if (ref && !ref.contains(event.target)) {
+        setSearchText('');
+        setShowSearch(false);
+      }
+    }
+    // Bind the event listener
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showSearch]);
+
   return (
     <NavBarWrapper>
       <NotificationBar>
@@ -110,9 +145,21 @@ export const NavBarDesktop: FC<INavBarProps> = ({
           />
         </NavLinkWrapper>
         <NavigationIconsWrapper>
-          <NavIconWrapper onClick={showSearchPopup} marginRight={true}>
-            <IconWrapper icon={IconSearch} />
-          </NavIconWrapper>
+          {showSearch ? (
+            <SearchWrapper>
+              <SearchIconWrapper onClick={showSearchField} icon={IconSearch} />
+              <InputSearch
+                ref={elementRef}
+                onChange={handleOnChange}
+                placeholder="Search for products"
+              />
+              <SearchDesktop {...{ close, searchText }} />
+            </SearchWrapper>
+          ) : (
+            <NavIconWrapper onClick={showSearchField} marginRight={true}>
+              <IconWrapper icon={IconSearch} />
+            </NavIconWrapper>
+          )}
           <Link
             href={{
               pathname: '/w/cart',

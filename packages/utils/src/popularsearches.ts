@@ -37,3 +37,10 @@ export const POPULAR_SEARCH_URLS = [
   { displayName: 'Girls Tshirts ', link: '/clothing/girls/tshirts' },
   { displayName: 'Girls Dresses', link: '/clothing/girls/dresses' },
 ];
+
+export const SEARCH_CONSTANTS = {
+  RECENT_SEARCH: 'RecentSearch',
+  BRAND_SUGGESTION: 'BrandSuggestion',
+  KEYWORD: 'Keyword',
+  CATEGORY_SUGGESTION: 'CategorySuggestion',
+};

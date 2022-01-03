@@ -6,6 +6,7 @@ const NavBarWrapper = styled.div`
   background-color: ${Colors.PINK[500]};
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
   width: 100%;
+  z-index: 1005;
 `;
 
 const HopscotchImage = styled.div`
@@ -30,9 +31,7 @@ const Link = styled('a')`
 const RightContent = styled.div`
   display: flex;
   justify-content: space-between;
-  padding: 0 ${typography.size.s5}px;
   height: 54px;
-  margin-right: 10px;
 `;
 
 const CartIconWrapper = styled.div`
@@ -66,6 +65,7 @@ const IconWrapper = styled(SvgIcon)`
 const NavigationIconsWrapper = styled.div`
   display: flex;
   align-items: center;
+  margin-right: 10px;
 `;
 
 const NavLinkWrapper = styled.div`
@@ -95,7 +95,6 @@ const NotificationBar = styled.div`
   font-weight: ${typography.weight.regular};
   display: flex;
   justify-content: end;
-  margin: 0 ${typography.size.s5}px;
   padding: 0 ${typography.size.s24}px;
 `;
 
@@ -119,6 +118,45 @@ const FilterWrapper = styled.div`
   margin: 0 32px 0 0;
 `;
 
+const SearchWrapper = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 6px;
+  margin-right: 15px;
+`;
+
+const InputSearch = styled.input`
+  border: none;
+  border-radius: 0;
+  background-color: #ed54a4;
+  box-shadow: none;
+  color: #fff;
+  height: 25px;
+  width: 320px;
+  border-bottom: 1px solid #ffffff33;
+  -webkit-appearance: none;
+  font-size: 1.4rem;
+  box-sizing: content-box;
+  padding: 0;
+  margin-left: 14px;
+  &:focus {
+    outline: none;
+    box-shadow: none;
+  }
+  &::placeholder {
+    color: #f5f5f5;
+    font-family: 'Averta', Helvetica, Arial, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu,
+      Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  }
+`;
+
+const SearchIconWrapper = styled(SvgIcon)`
+  min-width: 24px;
+  min-height: 24px;
+  margin-top: 4px;
+`;
+
 export {
   FilteredBy,
   FilterWrapper,
@@ -135,4 +173,7 @@ export {
   HelpLink,
   NotificationBar,
   NotificationBarLinkWrapper,
+  SearchWrapper,
+  InputSearch,
+  SearchIconWrapper,
 };

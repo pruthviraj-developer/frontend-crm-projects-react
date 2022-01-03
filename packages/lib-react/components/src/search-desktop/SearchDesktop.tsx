@@ -1,16 +1,23 @@
 import React, { FC, useState, useEffect, useCallback } from 'react';
-import { ISearch, IEulerAutoSuggestionsProps, IEulerSuggestionsEntity } from './ISearchDesktop';
-import { SearchLayout, SearchWrapper, SearchField, SearchList, List } from './StyledSearch';
+import {
+  ISearch,
+  IRecentSearchesProps,
+  IEulerAutoSuggestionsProps,
+  IEulerSuggestionsEntity,
+} from './ISearchDesktop';
+import {
+  SearchLayout,
+  SearchWrapper,
+  SearchField,
+  SearchList,
+  List,
+} from './StyledSearch';
 import { useDebounce, useLocalStorage } from '@hs/framework';
 import { productDetailsService } from '@hs/services';
 import { useRouter } from 'next/router';
-import { ISearchResourceProps } from '@/types';
+import { ISearchResourceProps } from 'types';
 import { useQuery } from 'react-query';
-
-const RECENT_SEARCH = 'RecentSearch';
-const BRAND_SUGGESTION = 'BrandSuggestion';
-const KEYWORD = 'Keyword';
-const CATEGORY_SUGGESTION = 'CategorySuggestion';
+import { SEARCH_CONSTANTS } from '@hs/utils';
 
 const SearchDesktop: FC<ISearch> = ({ searchText }: ISearch) => {
   // let _recentSearch: boolean = true;
@@ -19,14 +26,18 @@ const SearchDesktop: FC<ISearch> = ({ searchText }: ISearch) => {
   const [suggestions, setSuggestions] = useState<IEulerSuggestionsEntity[]>([]);
   const keyWord = useDebounce(searchBy, 500);
   // const readRecentSearchesFromLocalStorage: any = useReadLocalStorage(['recentSearches']);
-  const [recentSearchData, setRecentSearchData] = useLocalStorage<any>('recentSearches', []);
+  const [recentSearchData, setRecentSearchData] = useLocalStorage<any>(
+    'recentSearches',
+    []
+  );
   const [recentSearches, setRecentSearches] = useState(recentSearchData);
 
   // resource url
 
   const [resource, setResource] = useState<ISearchResourceProps>();
-  const { data: response } = useQuery<ISearchResourceProps>(['resourceData'], () =>
-    productDetailsService.getResouce<ISearchResourceProps>(),
+  const { data: response } = useQuery<ISearchResourceProps>(
+    ['resourceData'],
+    () => productDetailsService.getResouce<ISearchResourceProps>()
   );
   useEffect(() => {
     if (response?.action === 'success') {
@@ -48,7 +59,8 @@ const SearchDesktop: FC<ISearch> = ({ searchText }: ISearch) => {
   const getSuggestions = useCallback(() => {
     (async () => {
       try {
-        const response: IEulerAutoSuggestionsProps = await productDetailsService.getEulerAutoSuggestions(keyWord);
+        const response: IEulerAutoSuggestionsProps =
+          await productDetailsService.getEulerAutoSuggestions(keyWord);
         if (response.action === 'success') {
           setSuggestions(response.suggestions);
         }
@@ -100,7 +112,9 @@ const SearchDesktop: FC<ISearch> = ({ searchText }: ISearch) => {
         const getFilteredArray = (list: any, type: string, parent?: string) => {
           return list.filter(stringContains).map(function (each: any) {
             const getLabel = () => {
-              const parentName = parent ? ' in ' + (each.parentName || parent) : '';
+              const parentName = parent
+                ? ' in ' + (each.parentName || parent)
+                : '';
               return each.name + parentName;
             };
             return {
@@ -113,8 +127,12 @@ const SearchDesktop: FC<ISearch> = ({ searchText }: ISearch) => {
         };
 
         const suggestions = []
-          .concat(getFilteredArray(productTypeList, 'productTypeList', 'product'))
-          .concat(getFilteredArray(subCategories, 'subCategories', 'categories'))
+          .concat(
+            getFilteredArray(productTypeList, 'productTypeList', 'product')
+          )
+          .concat(
+            getFilteredArray(subCategories, 'subCategories', 'categories')
+          )
           .concat(getFilteredArray(categories, 'categories'))
           .concat(getFilteredArray(brands, 'brands', 'Brands'));
         setSuggestions(suggestions);
@@ -130,13 +148,21 @@ const SearchDesktop: FC<ISearch> = ({ searchText }: ISearch) => {
   const getSubCategorys = (categoryId: number) => {
     const categories = (resource && resource.categories) || [];
     if (categories && categories.length) {
-      const categoryList = categories.filter((category) => category.id === categoryId);
+      const categoryList = categories.filter(
+        (category) => category.id === categoryId
+      );
       if (categoryList[0] && categoryList[0].hasOwnProperty('subCategory')) {
-        const reduceValue = (initial: any, subCategory: any) => initial + ',' + subCategory.id;
-        return categoryList[0] && categoryList[0].subCategory && categoryList[0].subCategory.reduce(reduceValue, '');
+        const reduceValue = (initial: any, subCategory: any) =>
+          initial + ',' + subCategory.id;
+        return (
+          categoryList[0] &&
+          categoryList[0].subCategory &&
+          categoryList[0].subCategory.reduce(reduceValue, '')
+        );
       }
       return '';
     }
+    return '';
   };
 
   // const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
@@ -153,7 +179,7 @@ const SearchDesktop: FC<ISearch> = ({ searchText }: ISearch) => {
     data: IEulerSuggestionsEntity | IRecentSearchesProps,
     recent: string | null,
     suggestionIndex: number,
-    options: any,
+    options: any
   ) => {
     const searchObj = Object.assign({}, data, { recent: recent }, options);
     let q: any = {};
@@ -206,8 +232,14 @@ const SearchDesktop: FC<ISearch> = ({ searchText }: ISearch) => {
         });
         params.hplp = name;
       }
-      params.hsection = recent === 'recent' ? RECENT_SEARCH : extraSegdata.section;
-      params.funnel_section = recent === 'recent' ? RECENT_SEARCH : extraSegdata.section;
+      params.hsection =
+        recent === 'recent'
+          ? SEARCH_CONSTANTS.RECENT_SEARCH
+          : extraSegdata.section;
+      params.funnel_section =
+        recent === 'recent'
+          ? SEARCH_CONSTANTS.RECENT_SEARCH
+          : extraSegdata.section;
       // _self._SegmentService.setUniversal('Server autocomplete');
     } else {
       // if (type !== 'keyword') {
@@ -217,28 +249,40 @@ const SearchDesktop: FC<ISearch> = ({ searchText }: ISearch) => {
       if (type === 'brands') {
         q.filterQuery = 'brandId=' + id;
         q.brandId = id;
-        params.hsection = recent === 'recent' ? RECENT_SEARCH : BRAND_SUGGESTION;
+        params.hsection =
+          recent === 'recent'
+            ? SEARCH_CONSTANTS.RECENT_SEARCH
+            : SEARCH_CONSTANTS.BRAND_SUGGESTION;
         params.hplp = name;
-        params.funnel_section = BRAND_SUGGESTION;
+        params.funnel_section = SEARCH_CONSTANTS.BRAND_SUGGESTION;
       } else if (type === 'keyword') {
         q.filterQuery = 'keyWord=' + name;
         q.keyWord = name;
-        // params.hsection = _recentSearch ? RECENT_SEARCH : KEYWORD;
-        params.hsection = RECENT_SEARCH;
+        // params.hsection = _recentSearch ? SEARCH_CONSTANTS.RECENT_SEARCH : SEARCH_CONSTANTS.KEYWORD;
+        params.hsection = SEARCH_CONSTANTS.RECENT_SEARCH;
         // END As we are not using keyboard arrows
         params.hplp = name;
         params.orderRule = 3;
-        params.funnel_section = recent === 'recent' ? RECENT_SEARCH : KEYWORD;
+        params.funnel_section =
+          recent === 'recent'
+            ? SEARCH_CONSTANTS.RECENT_SEARCH
+            : SEARCH_CONSTANTS.KEYWORD;
       } else if (type === 'productTypeList') {
         q.filterQuery = 'productTypeId=' + id;
         q.productTypeId = id;
-        params.hsection = recent === 'recent' ? RECENT_SEARCH : CATEGORY_SUGGESTION;
+        params.hsection =
+          recent === 'recent'
+            ? SEARCH_CONSTANTS.RECENT_SEARCH
+            : SEARCH_CONSTANTS.CATEGORY_SUGGESTION;
         params.hplp = name;
         params.funnel_section = params.hsection;
       } else {
         const categoryIds = getSubCategorys(id);
         q.filterQuery = 'subCategorys=' + id + categoryIds;
-        params.hsection = recent === 'recent' ? RECENT_SEARCH : CATEGORY_SUGGESTION;
+        params.hsection =
+          recent === 'recent'
+            ? SEARCH_CONSTANTS.RECENT_SEARCH
+            : SEARCH_CONSTANTS.CATEGORY_SUGGESTION;
         params.hplp = name;
       }
     }
@@ -284,35 +328,46 @@ const SearchDesktop: FC<ISearch> = ({ searchText }: ISearch) => {
       <SearchWrapper>
         <SearchField>
           <SearchList>
-            {recentSearches && recentSearches.length && suggestions && suggestions.length === 0 ? (
+            {recentSearches &&
+            recentSearches.length &&
+            suggestions &&
+            suggestions.length === 0 ? (
               <>
                 <List>Recent Searches</List>
-                {recentSearches.map((data: IRecentSearchesProps, index: number) => {
+                {recentSearches.map(
+                  (data: IRecentSearchesProps, index: number) => {
+                    return (
+                      <List
+                        key={index}
+                        onClick={() => {
+                          selectAndSearch(data, 'recent', index, null);
+                        }}
+                        dangerouslySetInnerHTML={{
+                          __html: data.term || data.name,
+                        }}
+                      />
+                    );
+                  }
+                )}
+              </>
+            ) : suggestions && suggestions.length > 0 ? (
+              suggestions.map(
+                (data: IEulerSuggestionsEntity, index: number) => {
                   return (
                     <List
                       key={index}
                       onClick={() => {
-                        selectAndSearch(data, 'recent', index, null);
+                        selectAndSearch(data, null, index, null);
                       }}
-                      dangerouslySetInnerHTML={{ __html: data.term || data.name }}
+                      dangerouslySetInnerHTML={{
+                        __html:
+                          data.displayName ||
+                          getHighlightSearchText(keyWord, data.label),
+                      }}
                     />
                   );
-                })}
-              </>
-            ) : suggestions && suggestions.length > 0 ? (
-              suggestions.map((data: IEulerSuggestionsEntity, index: number) => {
-                return (
-                  <List
-                    key={index}
-                    onClick={() => {
-                      selectAndSearch(data, null, index, null);
-                    }}
-                    dangerouslySetInnerHTML={{
-                      __html: data.displayName || getHighlightSearchText(keyWord, data.label),
-                    }}
-                  />
-                );
-              })
+                }
+              )
             ) : (
               ''
             )}
