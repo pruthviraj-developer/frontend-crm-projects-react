@@ -1,3 +1,1 @@
-export interface INavBarProps {
-  showSearchPopup: () => void;
-}
+export interface INavBarProps {}
