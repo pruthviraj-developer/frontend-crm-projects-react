@@ -25,7 +25,7 @@ import Link from 'next/link';
 import { CartIcon, HopScotchIcon, IconSearch } from '@hs/icons';
 
 import { CartItemQtyContext } from '@hs/framework';
-import Search from '@/components/search/Search';
+import Search from '@/components/search-desktop/SearchDesktop';
 
 export const NavBarDesktop: FC<INavBarProps> = () => {
   // const router = useRouter();

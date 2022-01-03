@@ -1,10 +1,10 @@
 import React, { FC, useState, useEffect, useCallback } from 'react';
-import { ISearch, IRecentSearchesProps, IEulerAutoSuggestionsProps, IEulerSuggestionsEntity } from './ISearch';
+import { ISearch, IEulerAutoSuggestionsProps, IEulerSuggestionsEntity } from './ISearchDesktop';
 import { SearchLayout, SearchWrapper, SearchField, SearchList, List } from './StyledSearch';
 import { useDebounce, useLocalStorage } from '@hs/framework';
 import { productDetailsService } from '@hs/services';
 import { useRouter } from 'next/router';
-import { IResourceProps } from '@/types';
+import { ISearchResourceProps } from '@/types';
 import { useQuery } from 'react-query';
 
 const RECENT_SEARCH = 'RecentSearch';
@@ -12,7 +12,7 @@ const BRAND_SUGGESTION = 'BrandSuggestion';
 const KEYWORD = 'Keyword';
 const CATEGORY_SUGGESTION = 'CategorySuggestion';
 
-const Search: FC<ISearch> = ({ searchText }: ISearch) => {
+const SearchDesktop: FC<ISearch> = ({ searchText }: ISearch) => {
   // let _recentSearch: boolean = true;
   const router = useRouter();
   const [searchBy, setSearchBy] = useState<string>('');
@@ -24,9 +24,9 @@ const Search: FC<ISearch> = ({ searchText }: ISearch) => {
 
   // resource url
 
-  const [resource, setResource] = useState<IResourceProps>();
-  const { data: response } = useQuery<IResourceProps>(['resourceData'], () =>
-    productDetailsService.getResouce<IResourceProps>(),
+  const [resource, setResource] = useState<ISearchResourceProps>();
+  const { data: response } = useQuery<ISearchResourceProps>(['resourceData'], () =>
+    productDetailsService.getResouce<ISearchResourceProps>(),
   );
   useEffect(() => {
     if (response?.action === 'success') {
@@ -323,4 +323,4 @@ const Search: FC<ISearch> = ({ searchText }: ISearch) => {
   );
 };
 
-export default Search;
+export default SearchDesktop;

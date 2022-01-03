@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import { ISearchPopupProps } from './ISearchPopup';
 import { SearchPopupWrapper } from './StyledSearchPopup';
-import Search from '../search/Search';
+import { Search } from '../search';
 import { productDetailsService } from '@hs/services';
 import { ISearchResourceProps } from '@/types';
 

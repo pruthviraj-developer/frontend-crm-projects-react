@@ -1,2 +1,2 @@
-export * from './Search';
+export { default as Search } from './Search';
 export * from './ISearch';
