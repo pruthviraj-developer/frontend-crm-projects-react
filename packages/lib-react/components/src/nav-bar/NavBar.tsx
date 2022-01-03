@@ -5,7 +5,8 @@ import Link from 'next/link';
 import {
   NavBarWrapper,
   NavLinkWrapper,
-  NavIconWrapper,
+  NavIconWrapperSearch,
+  NavIconWrapperWishList,
   NavigationIconsWrapper,
   HopscotchImage,
   RightContent,
@@ -75,15 +76,16 @@ export const NavBar: FC<INavBarProps> = ({ showSearchPopup }: INavBarProps) => {
             fontSize="1.2rem"
             display="inline-block"
             margin="16px 0 0 5px"
+            padding="8px 6px 8px 5px"
           />
         </NavLinkWrapper>
         <NavigationIconsWrapper>
-          <NavIconWrapper onClick={showSearchPopup} marginRight={true}>
+          <NavIconWrapperSearch onClick={showSearchPopup}>
             <IconWrapper icon={IconSearch} />
-          </NavIconWrapper>
-          <NavIconWrapper onClick={gotoWishList}>
+          </NavIconWrapperSearch>
+          <NavIconWrapperWishList onClick={gotoWishList}>
             <IconWrapper icon={IconWishListDefault} />
-          </NavIconWrapper>
+          </NavIconWrapperWishList>
           <Link
             href={{
               pathname: '/v2/cart',

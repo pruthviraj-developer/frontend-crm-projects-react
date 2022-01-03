@@ -1,5 +1,10 @@
 import styled from '@emotion/styled';
-import { Colors, typography, HsTextAlign } from '@hs/utils';
+import {
+  Colors,
+  typography,
+  HsTextAlign,
+  mediaQueriesMaxWidth,
+} from '@hs/utils';
 import { SvgIcon } from '@hs/icons';
 
 const NavBarWrapper = styled.div`
@@ -37,12 +42,19 @@ const RightContent = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
+  ${mediaQueriesMaxWidth('mw280')`
+      display: block;
+      margin: auto;
+  `};
 `;
 
 const CartIconWrapper = styled.div`
   height: 52px;
   margin-right: 7px;
   position: relative;
+  ${mediaQueriesMaxWidth('mw350')`
+    margin: 0 2px 0 -4px;
+  `};
 `;
 
 const CartIconQuantity = styled.span`
@@ -74,12 +86,31 @@ const NavigationIconsWrapper = styled.div`
 `;
 
 const NavLinkWrapper = styled.div`
-  padding-top: 1px;
+  ${mediaQueriesMaxWidth('mw350')`
+   display:flex;
+  `};
 `;
 
 const NavIconWrapper = styled.div<{ marginRight?: boolean }>`
   padding: 4px 6px;
   margin-right: ${(props) => (props.marginRight ? '6px' : '0')};
+`;
+
+const NavIconWrapperSearch = styled.div`
+  padding: 4px 6px;
+  margin-right: 6px;
+  ${mediaQueriesMaxWidth('mw350')`
+    padding: 0 2px 0 4px;
+    margin-right: 0;
+  `};
+`;
+
+const NavIconWrapperWishList = styled.div<{ marginRight?: boolean }>`
+  padding: 4px 6px;
+  margin-right: 0;
+  ${mediaQueriesMaxWidth('mw350')`
+    padding-right: 0;
+  `};
 `;
 
 const HelpLink = styled.div`
@@ -91,6 +122,8 @@ export {
   NavBarWrapper,
   NavLinkWrapper,
   NavIconWrapper,
+  NavIconWrapperSearch,
+  NavIconWrapperWishList,
   NavigationIconsWrapper,
   HopscotchImage,
   CartIconWrapper,
