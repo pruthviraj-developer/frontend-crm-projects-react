@@ -529,7 +529,7 @@ const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile, url }
         {isLoginPopupOpen && <LoginPopup {...{ closeLoginPopup: closeLoginModalPopup }}></LoginPopup>}
       </LoginPopupModal>
       <GoToTop></GoToTop>
-      <pre style={{ width: '90%', overflowX: 'scroll' }}>{isMobile}</pre>
+      {/* <pre style={{ width: '90%', overflowX: 'scroll' }}>{isMobile}</pre> */}
     </>
   );
 };
