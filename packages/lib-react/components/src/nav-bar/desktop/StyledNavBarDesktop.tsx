@@ -40,32 +40,10 @@ const CartIconWrapper = styled.div`
   position: relative;
 `;
 
-const CartIconQuantity = styled.span`
-  font-size: 12px;
-  line-height: 13px;
-  font-weight: ${typography.weight.medium};
-  color: #ed54a4;
-  background: ${Colors.WHITE};
-  border-radius: 7px;
-  position: absolute;
-  top: 10px;
-  left: 26px;
-  height: 18px;
-  min-width: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-`;
-
-const IconWrapper = styled(SvgIcon)`
-  min-width: 24px;
-  min-height: 24px;
-`;
-
 const NavigationIconsWrapper = styled.div`
   display: flex;
   align-items: center;
-  margin-right: 10px;
+  margin: 2px 10px 0 0;
 `;
 
 const NavLinkWrapper = styled.div`
@@ -146,8 +124,9 @@ const InputSearch = styled.input`
   }
   &::placeholder {
     color: #f5f5f5;
-    font-family: 'Averta', Helvetica, Arial, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu,
-      Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+    font-family: 'Averta', Helvetica, Arial, -apple-system, BlinkMacSystemFont,
+      Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans,
+      Helvetica Neue, sans-serif;
   }
 `;
 
@@ -166,10 +145,8 @@ export {
   NavigationIconsWrapper,
   HopscotchImage,
   CartIconWrapper,
-  CartIconQuantity,
   RightContent,
   Link,
-  IconWrapper,
   HelpLink,
   NotificationBar,
   NotificationBarLinkWrapper,

@@ -11,9 +11,8 @@ import {
   HopscotchImage,
   RightContent,
   CartIconWrapper,
-  CartIconQuantity,
-  IconWrapper,
 } from './StyledNavBar';
+import { IconWrapper, CartIconQuantity } from './../StyledNavBar';
 import {
   CartItemQtyContext,
   LoginContext,

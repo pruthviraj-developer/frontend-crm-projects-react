@@ -9,15 +9,13 @@ import {
   HopscotchImage,
   RightContent,
   CartIconWrapper,
-  CartIconQuantity,
-  IconWrapper,
   FilteredBy,
   FilterWrapper,
   SearchWrapper,
   InputSearch,
   SearchIconWrapper,
 } from './StyledNavBarDesktop';
-
+import { IconWrapper, CartIconQuantity } from './../StyledNavBar';
 // import { useRouter } from 'next/router';
 import Link from 'next/link';
 
@@ -48,8 +46,6 @@ export const NavBarDesktop: FC = () => {
     setSearchText(e.target.value);
   };
 
-  const close = () => {};
-
   useEffect(() => {
     const body = document.querySelector('body');
     if (body) {
@@ -57,7 +53,7 @@ export const NavBarDesktop: FC = () => {
     }
 
     const ref = elementRef && elementRef.current;
-    function handleClickOutside(event: any) {
+    function handleClickOutside(event: MouseEvent) {
       if (ref && !ref.contains(event.target)) {
         setSearchText('');
         setShowSearch(false);
@@ -153,7 +149,7 @@ export const NavBarDesktop: FC = () => {
                 onChange={handleOnChange}
                 placeholder="Search for products"
               />
-              <SearchDesktop {...{ close, searchText }} />
+              <SearchDesktop {...{ searchText }} />
             </SearchWrapper>
           ) : (
             <NavIconWrapper onClick={showSearchField} marginRight={true}>

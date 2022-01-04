@@ -36,7 +36,7 @@ const SizeSelector: FC<ISizeSelectorProps> = ({
      * Alert if clicked on outside of element
      */
     const ref = elementRef && elementRef.current;
-    function handleClickOutside(event: any) {
+    function handleClickOutside(event: MouseEvent) {
       if (ref && !ref.contains(event.target)) {
         setIsDropDownOpen(false);
       }
