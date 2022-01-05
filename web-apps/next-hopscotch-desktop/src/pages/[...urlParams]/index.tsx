@@ -365,7 +365,7 @@ const Product: NextPageWithLayout<IProductProps> = ({ url, productId }: IProduct
             {productData.imgurls && productData.imgurls.length > 0 && (
               <ProductCarouselDesktop
                 {...{
-                  showArrows: true,
+                  showArrows: false,
                   autoPlay: false,
                   draggable: false,
                   focusOnSelect: false,

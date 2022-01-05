@@ -8,7 +8,6 @@ export const Layout: FC<unknown> = ({ children }) => {
       <Head>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <NavBarDesktop />
       <main>{children}</main>
       <FooterDesktop />
     </>

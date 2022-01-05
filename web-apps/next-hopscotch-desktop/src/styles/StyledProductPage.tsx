@@ -4,12 +4,6 @@ import { Colors, mediaQueries } from '@hs/utils';
 const ProductWrapper = styled.div`
   display: flex;
   margin: auto;
-  ${mediaQueries('lg')`
-    margin: auto;
-  `};
-  ${mediaQueries('xl')`
-    margin: auto 20px;
-  `};
 `;
 const ProductDetailsWrapper = styled.div`
   background: ${Colors.WHITE};

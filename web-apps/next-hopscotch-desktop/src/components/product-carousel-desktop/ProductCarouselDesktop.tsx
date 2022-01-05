@@ -41,14 +41,45 @@ export const ProductCarouselDesktop: FC<IProductCarouselDesktopProps> = ({
     };
   }, []);
 
+  const CustomRightArrow = (rest: any) => {
+    const {
+      onMove,
+      carouselState: { currentSlide, deviceType },
+    } = rest;
+
+    function handleClick() {
+      // do whatever you want on the right button click
+      console.log('Right button clicked, go to next slide');
+      // ... and don't forget to call onClick to slide
+    }
+    // onMove means if dragging or swiping in progress.
+    return <button onClick={() => handleClick()}> test</button>;
+  };
+
+  const CustomLeftArrow = (rest: any) => {
+    const {
+      onMove,
+      carouselState: { currentSlide, deviceType },
+    } = rest;
+
+    function handleClick() {
+      // do whatever you want on the right button click
+      console.log('Left button clicked, go to next slide');
+      // ... and don't forget to call onClick to slide
+    }
+    // onMove means if dragging or swiping in progress.
+    return <button onClick={() => handleClick()}> test</button>;
+  };
+
   return (
     <ProductCarouselWrapper>
       <CarouselWrapper>
         <Carousel
           ssr
+          customLeftArrow={<CustomLeftArrow />}
+          customRightArrow={<CustomRightArrow />}
           responsive={responsive}
           additionalTransfrom={0}
-          arrows={showArrows}
           autoPlaySpeed={3000}
           centerMode={false}
           className=""
@@ -57,10 +88,6 @@ export const ProductCarouselDesktop: FC<IProductCarouselDesktopProps> = ({
           infinite={false}
           keyBoardControl
           minimumTouchDrag={80}
-          renderButtonGroupOutside={renderButtonGroupOutside}
-          renderDotsOutside={renderDotsOutside}
-          showDots={showDots}
-          sliderClass=""
           slidesToSlide={slidesToSlide}
           swipeable={swipeable}
           dotListClass="product-carousel-dot-list"

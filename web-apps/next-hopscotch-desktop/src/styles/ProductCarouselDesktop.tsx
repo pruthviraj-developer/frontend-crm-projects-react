@@ -3,7 +3,7 @@ import 'react-multi-carousel/lib/styles.css';
 export const productCarouselStyles = (
   <Global
     styles={css`
-      .product-carousel-dot-list li button {
+      /* .product-carousel-dot-list li button {
         width: 8px;
         height: 8px;
         margin-right: 6px;
@@ -20,7 +20,7 @@ export const productCarouselStyles = (
       .product-carousel-dot-list li.react-multi-carousel-dot--active button {
         background-color: #707070;
         border: 1px solid #707070;
-      }
+      } */
       .product-carousel-container {
       }
       .product-carousel-item {
