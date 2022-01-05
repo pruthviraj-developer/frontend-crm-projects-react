@@ -6,10 +6,16 @@ import React, { useState, useEffect, ReactElement, useContext } from 'react';
 import { useModal } from 'react-hooks-use-modal';
 import { toast } from 'react-toastify';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
-const ProductMobile = dynamic(() => import('@/components/pdp'), {
+const ProductMobile = dynamic(() => import('@/components/pdp/mobile'), {
   ssr: true,
 });
-const Layout = dynamic(() => import('@/components/layout/Layout'), {
+const LayoutMobile = dynamic(() => import('@/components/layout/mobile'), {
+  ssr: true,
+});
+const ProductDesktop = dynamic(() => import('@/components/pdp/desktop'), {
+  ssr: true,
+});
+const LayoutDesktop = dynamic(() => import('@/components/layout/desktop'), {
   ssr: true,
 });
 
@@ -28,7 +34,7 @@ const SizeChartPopupComponent = dynamic(() => import('@/components/size-chart/Si
   ssr: false,
 });
 
-const SizeSelectorMobile = dynamic(() => import('@/components/size-selector'), {
+const SizeSelectorMobile = dynamic(() => import('@/components/size-selector/mobile'), {
   ssr: false,
 });
 
@@ -463,7 +469,7 @@ const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile, url }
               canonicalUrl: getCanonicalUrl({ productData, url }),
             }}
           ></ProductHead>
-          {
+          {isMobile && (
             <ProductMobile
               {...{
                 productId,
@@ -482,7 +488,24 @@ const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile, url }
                 addProductToCart,
               }}
             ></ProductMobile>
-          }
+          )}
+          {!isMobile && (
+            <ProductDesktop
+              {...{
+                productId,
+                productData,
+                selectedSku,
+                deliveryDetails,
+                recommendedProductDetails,
+                similarProductDetails,
+                openSizeChartPopup,
+                onSizeSelect,
+                openPinCodePopup,
+                openSizeSelector,
+                addProductToCart,
+              }}
+            ></ProductDesktop>
+          )}
           <PinCodePopupModel>
             {isPinCodePopupOpen && (
               <PinCodeMobile
@@ -537,6 +560,6 @@ const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile, url }
 export default Product;
 
 Product.getLayout = function getLayout(page: ReactElement) {
-  if (page.props.isMobile) return <Layout>{page}</Layout>;
-  else return <Layout>{page}</Layout>;
+  if (page.props.isMobile) return <LayoutMobile>{page}</LayoutMobile>;
+  else return <LayoutDesktop>{page}</LayoutDesktop>;
 };

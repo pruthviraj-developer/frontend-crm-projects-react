@@ -1,7 +1,6 @@
 import { FooterDesktop, NavBarDesktop } from '@hs/components';
 import { FC } from 'react';
-
-export const Layout: FC<unknown> = ({ children }) => {
+const Layout: FC<unknown> = ({ children }) => {
   return (
     <>
       <NavBarDesktop />
@@ -10,3 +9,5 @@ export const Layout: FC<unknown> = ({ children }) => {
     </>
   );
 };
+
+export default Layout;

@@ -6,7 +6,7 @@ const SizeSelectorWrapper = styled.div`
 `;
 
 const CustomSizePicker = styled.div<{
-  isOpen: Boolean;
+  isOpen: boolean;
 }>`
   border-radius: 4px;
   background-color: #fff;
@@ -47,7 +47,7 @@ const OptionsPreview = styled.div`
 `;
 
 const Options = styled.div<{
-  soldOut: Boolean;
+  soldOut: boolean;
 }>`
   padding: 16px;
   font-size: 14px;
@@ -71,7 +71,7 @@ const Options = styled.div<{
 `;
 
 const SelectPreview = styled.div<{
-  borderBottom: Boolean;
+  borderBottom: boolean;
 }>`
   width: 100%;
   display: flex;

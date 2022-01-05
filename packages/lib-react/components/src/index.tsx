@@ -18,3 +18,4 @@ export * from './header';
 export * from './see-similar-products';
 export * from './pin-code';
 export * from './login-modal';
+export * from './size-selector';

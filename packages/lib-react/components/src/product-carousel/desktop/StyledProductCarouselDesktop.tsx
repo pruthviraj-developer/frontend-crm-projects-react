@@ -1,23 +1,35 @@
 import styled from '@emotion/styled';
-import { typography } from '@hs/utils';
+import { typography, mediaQueries } from '@hs/utils';
 import { SvgIcon } from '@hs/icons';
-import Image from 'next/image';
+
 const CarouselWrapper = styled.div`
-  overflow: initial;
-  position: relative;
+  overflow-x: initial;
   white-space: nowrap;
-  text-align: center;
-  left: 0;
-  padding: 16px 36px 32px 8px;
+  position: relative;
+  padding: 16px 0px 32px 8px;
+  max-height: 570px;
 `;
 
 const ProductCarouselWrapper = styled.div`
+  padding-left: 8px;
+  background: #fff;
   position: relative;
+  width: 58.33333%;
+  ${mediaQueries('lg')`
+    width: 58.33333%;
+ `};
+  ${mediaQueries('xl')`
+    width: 66.66667%;
+  `};
 `;
 
 const ProductImageContainer = styled.div`
-  width: 360px;
-  height: 360px;
+  width: 100%;
+  height: 468px;
+  max-width: 558px;
+  ${mediaQueries('xl')`
+    height: 554px;
+  `};
 `;
 
 const SvgIconsElement = styled(SvgIcon)``;
@@ -36,8 +48,9 @@ const SimilarTextElement = styled.span<{
 const SimilarItemsLinkWrapper = styled.div<{
   width: number;
 }>`
-  right: 12px;
-  bottom: 12px;
+  top: 28px;
+  height: 46px;
+  right: 28px;
   padding: ${typography.size.s06}px;
   background: #fff;
   border-radius: ${typography.size.s24}px;
@@ -50,12 +63,13 @@ const SimilarItemsLinkWrapper = styled.div<{
   transition: width ease-out 300ms;
 `;
 
-const StyledImage = styled(Image)`
-  /* width: 100%;
+const TransparentImgOverlay = styled.div`
+  width: 100%;
   height: 100%;
-  position: relative;
-  min-height: 100%;
-  min-height: 100%; */
+  background: #00000000;
+  position: absolute;
+  top: 0;
+  left: 0;
 `;
 
 export {
@@ -65,5 +79,5 @@ export {
   SimilarItemsLinkWrapper,
   SvgIconsElement,
   SimilarTextElement,
-  StyledImage,
+  TransparentImgOverlay,
 };

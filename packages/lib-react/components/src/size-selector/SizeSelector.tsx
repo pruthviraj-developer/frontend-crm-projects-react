@@ -18,18 +18,22 @@ import {
   SizeSoldOut,
   SeeSimilarProducts,
 } from './StyledSizeSelector';
-import { IconAngleDown, IconDeliveryTruck, IconSeeSimilarWhite } from '@hs/icons';
+import {
+  IconAngleDown,
+  IconDeliveryTruck,
+  IconSeeSimilarWhite,
+} from '@hs/icons';
 import { ISizeSelectorProps } from './ISizeSelector';
 import { ISimpleSkusEntityProps } from '@hs/framework';
 const ADD_TO_CART_BUTTON = 'Add to cart button';
-const SizeSelector: FC<ISizeSelectorProps> = ({
+export const SizeSelector: FC<ISizeSelectorProps> = ({
   showRFYP,
   simpleSkus,
   selectedSku,
   onSizeSelect,
   goToProductRecommendation,
 }: ISizeSelectorProps) => {
-  const [isDropDownOpen, setIsDropDownOpen] = useState<Boolean>(false);
+  const [isDropDownOpen, setIsDropDownOpen] = useState<boolean>(false);
   const elementRef = useRef<any>();
   useEffect(() => {
     /**
@@ -56,8 +60,11 @@ const SizeSelector: FC<ISizeSelectorProps> = ({
   const getSize = () => {
     return (
       <SelectedSize>
-        <span>{selectedSku.attributes.size}</span>
-        {selectedSku.availableQuantity < 4 && <span>Only {selectedSku.availableQuantity} left</span>}
+        <span>{selectedSku?.attributes.size}</span>
+        {selectedSku?.availableQuantity &&
+          selectedSku?.availableQuantity < 4 && (
+            <span>Only {selectedSku?.availableQuantity} left</span>
+          )}
       </SelectedSize>
     );
   };
@@ -91,7 +98,9 @@ const SizeSelector: FC<ISizeSelectorProps> = ({
                         <span>Sold out</span>
                       ) : (
                         <Details>
-                          {sku.availableQuantity < 4 && <ItemsLeft>{sku.availableQuantity} left</ItemsLeft>}
+                          {sku.availableQuantity < 4 && (
+                            <ItemsLeft>{sku.availableQuantity} left</ItemsLeft>
+                          )}
                           <DeliveryDetails>
                             <DeliveryIcon icon={IconDeliveryTruck} />
                             {/* {sku.eddPrefix + ' ' + sku.deliveryMsg} */}
@@ -124,4 +133,3 @@ const SizeSelector: FC<ISizeSelectorProps> = ({
     </SizeSelectorWrapper>
   );
 };
-export default SizeSelector;

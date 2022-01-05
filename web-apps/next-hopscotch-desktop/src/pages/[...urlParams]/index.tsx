@@ -7,7 +7,9 @@ import { useModal } from 'react-hooks-use-modal';
 import { toast } from 'react-toastify';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
 import { Layout } from '@/components/layout/Layout';
-
+const ProductDesktop = dynamic(() => import('@/components/pdp'), {
+  ssr: true,
+});
 const SizeChartPopupComponent = dynamic(() => import('../../components/size-chart/SizeChart'), {
   ssr: false,
 });
@@ -16,33 +18,10 @@ const PinCodePopupComponent = dynamic(() => import('../../components/pin-code/Pi
   ssr: false,
 });
 
-import {
-  AddToCartDesktop,
-  AccordionDesktop,
-  RecommendedProductsDesktop,
-  ProductHead,
-  SizeAndChartLabelsDesktop,
-  ProductNamePriceDesktop,
-  DeliveryDetailsDesktop,
-} from '@hs/components';
-
-import { ProductCarouselDesktop } from '../../components/product-carousel-desktop/ProductCarouselDesktop';
-
+import { ProductHead } from '@hs/components';
 import { IProductProps, ICartAPIResponse, NextPageWithLayout, IUpdatedDeliverDetailsProps } from '@/types';
 import { cookiesService, productDetailsService } from '@hs/services';
-import {
-  ProductWrapper,
-  ProductDetailsWrapper,
-  CartLink,
-  CartNotification,
-  CartNotificationDetails,
-  CartHeader,
-  CartMessage,
-  CartLinkText,
-} from '@/styles';
-
-import SizeSelector from '../../components/size-selector/SizeSelector';
-
+import { CartLink, CartNotification, CartNotificationDetails, CartHeader, CartMessage, CartLinkText } from '@/styles';
 import {
   useRecommendation,
   IRecommendedProducts,
@@ -74,20 +53,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       staleTime: Infinity,
     },
   );
-  // await queryClient.prefetchQuery(
-  //   ['RecommendedProducts', productId],
-  //   () => productDetailsService.getRecommendedProducts(productId, { boutiqueId: undefined }, process.env.WEB_HOST),
-  //   {
-  //     staleTime: Infinity,
-  //   },
-  // );
-  // await queryClient.prefetchQuery(
-  //   ['SimilarProducts', productId],
-  //   () => productDetailsService.getSimilarProducts(productId, { boutiqueId: undefined }, process.env.WEB_HOST),
-  //   {
-  //     staleTime: Infinity,
-  //   },
-  // );
   return {
     props: {
       dehydratedState: dehydrate(queryClient),
@@ -361,100 +326,21 @@ const Product: NextPageWithLayout<IProductProps> = ({ url, productId }: IProduct
               canonicalUrl: getCanonicalUrl({ productData, url }),
             }}
           ></ProductHead>
-          <ProductWrapper>
-            {productData.imgurls && productData.imgurls.length > 0 && (
-              <ProductCarouselDesktop
-                {...{
-                  showArrows: true,
-                  autoPlay: false,
-                  draggable: false,
-                  focusOnSelect: false,
-                  renderButtonGroupOutside: false,
-                  renderDotsOutside: false,
-                  slidesToSlide: 1,
-                  swipeable: false,
-                  showDots: false,
-                  imgUrls: productData.imgurls,
-                  goToProductRecommendation,
-                }}
-              ></ProductCarouselDesktop>
-            )}
-            <ProductDetailsWrapper>
-              <ProductNamePriceDesktop
-                {...{
-                  productName,
-                  isProductSoldOut: !!productData.isProductSoldOut,
-                  retailPrice,
-                  retailPriceMax,
-                  selectedSku: selectedSku,
-                  regularPrice,
-                  discount,
-                }}
-              ></ProductNamePriceDesktop>
-              <SizeAndChartLabelsDesktop
-                {...{
-                  isOneSize,
-                  hasSizeChart: productData.hasSizeChart,
-                  qtyLeft,
-                  simpleSkus,
-                  onSizeChartClick: openSizeChartPopup,
-                }}
-              ></SizeAndChartLabelsDesktop>
-              {/* {!isOneSize && (
-                  <CustomSizePicker
-                    {...{
-                      simpleSkus,
-                      selectedSku: selectedSku,
-                      onSizeSelect,
-                    }}
-                  ></CustomSizePicker>
-                )}
-                {showRfypCue && showRFYP && (
-                  <RecommendedProductsLinks
-                    {...{ isProductSoldOut: !!productData.isProductSoldOut, goToProductRecommendation }}
-                  ></RecommendedProductsLinks>
-                )} */}
-
-              <SizeSelector
-                {...{ showRFYP, goToProductRecommendation, simpleSkus, showAddToCart: true, onSizeSelect, selectedSku }}
-              ></SizeSelector>
-              <AddToCartDesktop
-                {...{
-                  show: true,
-                  disabled: isProductSoldOut ? true : false,
-                  addProductToCart,
-                }}
-              ></AddToCartDesktop>
-              <DeliveryDetailsDesktop
-                {...{
-                  ...deliveryDetailsData,
-                  selectedSku: selectedSku,
-                  ...deliveryDetails,
-                  openPinCodePopup,
-                  openSizeSelector,
-                }}
-              ></DeliveryDetailsDesktop>
-              {productData.id && (
-                <AccordionDesktop
-                  {...{ ...product, isPresale, simpleSkus, selectedSku: selectedSku }}
-                ></AccordionDesktop>
-              )}
-            </ProductDetailsWrapper>
-          </ProductWrapper>
-
-          {showRFYP && (
-            <div ref={recommendedProductsLink}>
-              <RecommendedProductsDesktop {...recommendedForYou}></RecommendedProductsDesktop>
-            </div>
-          )}
-
-          {showSimilarProducts && (
-            <div ref={similarProductsLink}>
-              <RecommendedProductsDesktop {...similarProducts}></RecommendedProductsDesktop>
-            </div>
-          )}
-          {/* <AddToCart {...{ show: true, disabled: false, addProductToCart }}></AddToCart> */}
-
+          <ProductDesktop
+            {...{
+              productId,
+              productData,
+              selectedSku,
+              deliveryDetails,
+              recommendedProductDetails,
+              similarProductDetails,
+              openSizeChartPopup,
+              onSizeSelect,
+              openPinCodePopup,
+              openSizeSelector,
+              addProductToCart,
+            }}
+          ></ProductDesktop>
           <SizeChartPopupModal>
             {isSizeChartPopupOpen && productData && (
               <SizeChartPopupComponent
