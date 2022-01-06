@@ -1,33 +1,33 @@
 import React, { FC, useState } from 'react';
-import { FORM_ERROR_CODES, REGEX_PATTERNS } from '../constants';
+import { FORM_ERROR_CODES } from '../constants';
 import {
-  IMobileProps,
-  ILoginErrorResponse,
+  IUserProps,
   ILoginErrorMessageBar,
+  ILoginErrorResponse,
 } from '../ILoginModal';
-import {
-  ActionText,
-  MobileWrapper,
-  MobileNumber,
-  Button,
-  MessageWrapper,
-  ErrorMessage,
-  ErrorIcon,
-} from './StyledMobile';
+import { MobileWrapper, InputWrapper, InputField, Label } from './StyledMobile';
 
-import { IconErrorMessage } from '@hs/icons';
 import { productDetailsService } from '@hs/services';
-import { Loader } from '../loader';
+import { Button, Error, Loader, loginService } from '../common';
 
 const reason = { otpReason: 'SIGN_IN', type: 'SMS' };
 
-export const Mobile: FC<IMobileProps> = ({ updateForm }: IMobileProps) => {
-  const [loginId, setLoginId] = useState('');
+export const Mobile: FC<IUserProps> = ({
+  updateForm,
+  switchScreen,
+  loginBy,
+}: IUserProps) => {
+  const [loginId, setLoginId] = useState(loginBy || '');
   const [error, setErrorState] = useState<ILoginErrorMessageBar | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e ? e.preventDefault() : '';
     validateUserMobile();
+  };
+
+  const onNumberKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    const isNumber = loginService.checkIsNumber(event.keyCode);
+    isNumber ? '' : event.preventDefault();
   };
 
   const validateUserMobile = () => {
@@ -45,8 +45,6 @@ export const Mobile: FC<IMobileProps> = ({ updateForm }: IMobileProps) => {
         'mobile',
         "Check if you've entered a 10 digit Indian mobile number"
       );
-    } else if (!REGEX_PATTERNS.MOBILE.test(loginId)) {
-      setErrorMessage('mobile');
     }
     setErrorState(error);
     if (!error) {
@@ -90,12 +88,6 @@ export const Mobile: FC<IMobileProps> = ({ updateForm }: IMobileProps) => {
     setErrorState(null);
   };
 
-  const action = () => {
-    if (error && error.actionLink) {
-      window.location.href = `${window.location.protocol}//${window.location.host}/${error.actionLink}`;
-    }
-  };
-
   return (
     <MobileWrapper>
       {loading && <Loader />}
@@ -105,21 +97,17 @@ export const Mobile: FC<IMobileProps> = ({ updateForm }: IMobileProps) => {
         }}
         noValidate
       >
-        <MobileNumber
-          value={loginId}
-          onChange={handleOnChange}
-          placeholder="Mobile Number"
-        />
-        {error && (
-          <MessageWrapper onClick={action}>
-            <ErrorIcon icon={IconErrorMessage} />
-            <ErrorMessage>
-              {error.message}
-              {error.actionLink && <ActionText>{error.actionText}</ActionText>}
-            </ErrorMessage>
-          </MessageWrapper>
-        )}
-        <Button type="submit">SEND OTP</Button>
+        <InputWrapper>
+          <InputField
+            type="number"
+            value={loginId}
+            onKeyDown={onNumberKeyDown}
+            onChange={handleOnChange}
+          />
+          <Label className="label">Mobile Number</Label>
+        </InputWrapper>
+        {error && <Error {...{ switchScreen, error }} />}
+        <Button disabled={loginId.length != 10} name="SEND OTP" />
       </form>
     </MobileWrapper>
   );

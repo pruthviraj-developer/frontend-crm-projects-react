@@ -4,7 +4,7 @@ const ButtonWrapper = styled.div`
   padding: 12px 0 8px 0;
 `;
 
-const StyledButton = styled.button<{ disabled?: Boolean }>`
+const StyledButton = styled.button<{ disabled?: boolean }>`
   color: #fff;
   border: 0;
   width: 100%;

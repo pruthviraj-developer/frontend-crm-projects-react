@@ -1,9 +1,19 @@
 import React, { FC } from 'react';
-import { SIGNIN } from '../../constants';
 import { IFooterProps } from './IFooter';
 
-import { FooterWrapper, FooterDetails, ActionLink, Title, HrLine } from './StyledFooter';
-export const Footer: FC<IFooterProps> = ({ title, link, from, updateUserStatus }: IFooterProps) => {
+import {
+  FooterWrapper,
+  FooterDetails,
+  ActionLink,
+  Title,
+  HrLine,
+} from './StyledFooter';
+export const Footer: FC<IFooterProps> = ({
+  title,
+  link,
+  from,
+  updateUserStatus,
+}: IFooterProps) => {
   return (
     <FooterWrapper>
       <HrLine />

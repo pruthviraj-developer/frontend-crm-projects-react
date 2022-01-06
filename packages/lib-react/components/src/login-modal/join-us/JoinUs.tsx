@@ -1,7 +1,26 @@
 import React, { FC, useState } from 'react';
-import { IJoinUsProps, IUserProps, ISignUpSuccessResponseProps } from './IJoinUs';
-import { JoinUsWrapper, JoinUsContainer, InputWrapper, InputField, Label, Description } from './StyledJoinUs';
-import { Error, Button, Header, SubHeader, Footer, Loader, loginService } from '../common';
+import {
+  IJoinUsProps,
+  IUserProps,
+  ISignUpSuccessResponseProps,
+} from './IJoinUs';
+import {
+  JoinUsWrapper,
+  JoinUsContainer,
+  InputWrapper,
+  InputField,
+  Label,
+  Description,
+} from './StyledJoinUs';
+import {
+  Error,
+  Button,
+  Header,
+  SubHeader,
+  Footer,
+  Loader,
+  loginService,
+} from '../common';
 import {
   SIGNIN,
   SIGNUP,
@@ -21,7 +40,9 @@ import { ILoginErrorResponse, ILoginErrorMessageBar } from '../ILoginModal';
 const NAME = 'NAME';
 const EMAIL = 'EMAIL';
 const MOBILE = 'MOBILE';
-export const JoinUs: FC<IJoinUsProps> = ({ updateUserStatus }: IJoinUsProps) => {
+export const JoinUs: FC<IJoinUsProps> = ({
+  updateUserStatus,
+}: IJoinUsProps) => {
   const [currentState, setCurrentState] = useState<string | undefined>(SIGNUP);
   const [verified, setVerifiedState] = useState<IUserProps>();
   const [name, setName] = useState('');
@@ -32,7 +53,9 @@ export const JoinUs: FC<IJoinUsProps> = ({ updateUserStatus }: IJoinUsProps) => 
   const [errorEmail, setErrorEmail] = useState<string | null>(null);
   const [errorPhoneNo, setErrorPhoneNo] = useState<string | null>(null);
   const [error, setErrorState] = useState<ILoginErrorMessageBar | null>(null);
-  const [successResponse, setSuccessResponse] = useState<ISignUpSuccessResponseProps | undefined>();
+  const [successResponse, setSuccessResponse] = useState<
+    ISignUpSuccessResponseProps | undefined
+  >();
   const footerConstants = {
     title: 'Have an account?',
     link: SIGNIN,
@@ -84,29 +107,24 @@ export const JoinUs: FC<IJoinUsProps> = ({ updateUserStatus }: IJoinUsProps) => 
     const setError = (error: string) => {
       switch (fieldName) {
         case NAME:
-          {
-            setErrorName(error);
-          }
+          setErrorName(error);
           break;
         case EMAIL:
-          {
-            setErrorEmail(error);
-          }
+          setErrorEmail(error);
           break;
         case MOBILE:
-          {
-            setErrorPhoneNo(error);
-          }
+          setErrorPhoneNo(error);
           break;
       }
     };
     if (value) {
-      let pattern = new RegExp(REGEX_PATTERNS[fieldName]);
+      const pattern = new RegExp(REGEX_PATTERNS[fieldName]);
       const result = pattern.test(value);
       if (!result) {
         setError(FORM_ERROR_CODES[fieldName]);
         return true;
       }
+      return false;
     } else {
       setError(REQUIRED);
       return true;
@@ -125,7 +143,9 @@ export const JoinUs: FC<IJoinUsProps> = ({ updateUserStatus }: IJoinUsProps) => 
     }
     setVerifiedState({ otpReason: 'SIGN_UP', name, email, phoneNo });
     const checkErrorResponse = (errorData: ILoginErrorMessageBar) => {
-      const obj = loginService.getParamsObject(errorData.actionLink || errorData.redirectLink);
+      const obj = loginService.getParamsObject(
+        errorData.actionLink || errorData.redirectLink
+      );
       switch (obj.link) {
         case SIGN_IN_EMAIL_LINK:
           updateUserStatus(SIGNIN, EMAILSIGNIN, { ...errorData, ...obj });
@@ -141,11 +161,14 @@ export const JoinUs: FC<IJoinUsProps> = ({ updateUserStatus }: IJoinUsProps) => 
     (async () => {
       try {
         setLoading(true);
-        const response: ILoginErrorResponse = await productDetailsService.signUp(verified);
+        const response: ILoginErrorResponse =
+          await productDetailsService.signUp(verified);
         setLoading(false);
         if (response.action === 'success') {
           setCurrentState(VERIFY);
-          setSuccessResponse(response as unknown as ISignUpSuccessResponseProps);
+          setSuccessResponse(
+            response as unknown as ISignUpSuccessResponseProps
+          );
         } else {
           checkErrorResponse(response.messageBar);
         }
@@ -209,8 +232,12 @@ export const JoinUs: FC<IJoinUsProps> = ({ updateUserStatus }: IJoinUsProps) => 
                   }}
                 />
                 <Label className="label">Mobile Number</Label>
-                {errorPhoneNo && <Error {...{ error: { message: errorPhoneNo } }} />}
-                <Description>Verify your number to create your Account</Description>
+                {errorPhoneNo && (
+                  <Error {...{ error: { message: errorPhoneNo } }} />
+                )}
+                <Description>
+                  Verify your number to create your Account
+                </Description>
                 {error && <Error {...{ error }} />}
                 <Button name="Send otp" />
               </InputWrapper>

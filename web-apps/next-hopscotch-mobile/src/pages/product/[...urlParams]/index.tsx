@@ -42,7 +42,7 @@ const PinCodeMobile = dynamic(() => import('@/components/pin-code'), {
   ssr: false,
 });
 
-const LoginPopup = dynamic(() => import('@/components/login-modal/mobile/LoginModal'), {
+const LoginPopup = dynamic(() => import('@/components/login-modal'), {
   ssr: false,
 });
 

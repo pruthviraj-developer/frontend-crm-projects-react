@@ -70,10 +70,10 @@ const Resend = styled.button<{ convertText?: boolean }>`
   background: none;
 `;
 
-const MessageWrapper = styled.div`
+const MessageWrapper = styled.div<{ active?: boolean }>`
   display: flex;
-  align-items: flex-start;
-  background-color: #ffe0e0;
+  align-items: center;
+  background-color: ${(props) => (props.active ? '#e0f5fb' : '#ffe0e0')};
   padding: 12px 16px;
   border-radius: 4px;
   margin-bottom: 8px;

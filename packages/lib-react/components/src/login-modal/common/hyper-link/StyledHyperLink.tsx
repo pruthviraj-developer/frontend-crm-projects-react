@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { SvgIcon } from '@hs/icons';
+//import { SvgIcon } from '@hs/icons';
 const HyperLinkWrapper = styled.div`
   padding: 12px 0;
   display: flex;
