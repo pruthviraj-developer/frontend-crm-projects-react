@@ -10,6 +10,9 @@ import { IconArrowTop } from '@hs/icons';
 type Timer = ReturnType<typeof setTimeout>;
 export const GoToTopDesktop: FC = () => {
   const [showBackToTop, setShowBackToTop] = useState<boolean>(false);
+    const scrollToTop = () => {
+    window.scrollTo({ behavior: 'smooth', top: 0 });
+  };
   useEffect(() => {
     let timeOut: Timer;
     let lastScrollTop = 0;
@@ -39,7 +42,7 @@ export const GoToTopDesktop: FC = () => {
     };
   }, []);
   return showBackToTop === true ? (
-    <GoToTopWrapper>
+    <GoToTopWrapper onClick={scrollToTop}>
       <BackToTopIconWrapper>
         <BackToTopIcon icon={IconArrowTop}></BackToTopIcon>
       </BackToTopIconWrapper>
