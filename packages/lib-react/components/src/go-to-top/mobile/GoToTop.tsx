@@ -1,21 +1,26 @@
 import React, { FC, useEffect, useState } from 'react';
 
-import { GoToTopWrapper, BackToTopIconWrapper, BackToTopIcon, BackToTopText } from './StyledGoToTop';
+import {
+  GoToTopWrapper,
+  BackToTopIconWrapper,
+  BackToTopIcon,
+  BackToTopText,
+} from './StyledGoToTop';
 import { BackIcon } from '@hs/icons';
-
-const GoToTop: FC = () => {
+type Timer = ReturnType<typeof setTimeout>;
+export const GoToTop: FC = () => {
   const [showBackToTop, setShowBackToTop] = useState<boolean>(false);
   const scrollToTop = () => {
     window.scrollTo({ behavior: 'smooth', top: 0 });
   };
   useEffect(() => {
-    let timeOut: NodeJS.Timeout;
+    let timeOut: Timer;
     let lastScrollTop = 0;
     const handleScroll = () => {
       clearTimeout(timeOut);
       timeOut = setTimeout(() => {
-        let currentScrollTop = window.scrollY;
-        let difference = currentScrollTop - lastScrollTop;
+        const currentScrollTop = window.scrollY;
+        const difference = currentScrollTop - lastScrollTop;
         if (currentScrollTop > 500) {
           setShowBackToTop(true);
         } else if (currentScrollTop < 500) {
@@ -44,6 +49,7 @@ const GoToTop: FC = () => {
       </BackToTopIconWrapper>
       <BackToTopText>Back to top</BackToTopText>
     </GoToTopWrapper>
-  ) : null;
+  ) : (
+    <></>
+  );
 };
-export default GoToTop;

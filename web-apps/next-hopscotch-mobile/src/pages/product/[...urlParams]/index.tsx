@@ -67,7 +67,6 @@ import * as segment from '@/components/segment-analytic';
 import * as gtm from '@/components/google-tag-manager/GTMLib';
 // import { Layout } from '@/components/layout/Layout';
 import { ProductHead } from '@hs/components';
-import GoToTop from '@/components/go-to-top/GoToTop';
 
 const tryLater = 'Try Later';
 
@@ -551,7 +550,7 @@ const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile, url }
         {/* {isLoginPopupOpen && <LoginModal {...{ closeLoginPopup: closeLoginModalPopup }}></LoginModal>} */}
         {isLoginPopupOpen && <LoginPopup {...{ closeLoginPopup: closeLoginModalPopup }}></LoginPopup>}
       </LoginPopupModal>
-      <GoToTop></GoToTop>
+      {/* <GoToTop></GoToTop> */}
       {/* <pre style={{ width: '90%', overflowX: 'scroll' }}>{isMobile}</pre> */}
     </>
   );

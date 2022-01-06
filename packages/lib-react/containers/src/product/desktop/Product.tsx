@@ -16,6 +16,7 @@ import {
   ProductCarouselDesktop as ProductCarousel,
   AddToCartDesktop as AddToCart,
   SizeSelector,
+  GoToTopDesktop,
 } from '@hs/components';
 const ProductDesktop = ({
   productId,
@@ -166,6 +167,7 @@ const ProductDesktop = ({
           <RecommendedProducts {...similarProducts}></RecommendedProducts>
         </div>
       )}
+      <GoToTopDesktop></GoToTopDesktop>
     </>
   );
 };

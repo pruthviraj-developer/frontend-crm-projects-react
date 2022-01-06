@@ -9,6 +9,7 @@ import {
   RecommendedProductsLinks,
   ProductNamePrice,
   DeliveryDetails,
+  GoToTop,
 } from '@hs/components';
 import {
   useProduct,
@@ -175,6 +176,7 @@ const ProductMobile = ({
           addProductToCart,
         }}
       ></AddToCart>
+      <GoToTop></GoToTop>
     </>
   );
 };
