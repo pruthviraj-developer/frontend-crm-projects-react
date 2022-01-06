@@ -251,12 +251,18 @@ const Product: NextPageWithLayout<IProductProps> = ({ url, productId }: IProduct
   };
 
   // remove
-  const openSizeSelector = () => {};
+  const openSizeSelector = () => {
+    console.log('Open size selector logic pending');
+  };
   // end
 
   const addProductToCart = () => {
     if (selectedSku) {
       addToCart(selectedSku);
+    } else if (simpleSkus.length === 1) {
+      const sku = simpleSkus[0];
+      setSelectedSku(sku);
+      addToCart(sku);
     } else {
       openSizeSelector();
     }
