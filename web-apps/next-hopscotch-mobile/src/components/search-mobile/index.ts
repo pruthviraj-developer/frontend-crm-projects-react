@@ -1,2 +1,2 @@
-export * from './Search';
-export * from './ISearchPopup';
+import { SearchMobile } from '@hs/components';
+export default SearchMobile;

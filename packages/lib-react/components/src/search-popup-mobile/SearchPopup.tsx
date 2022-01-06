@@ -1,10 +1,23 @@
 import React, { FC, useState, useEffect, useCallback } from 'react';
-import { ISearch, IRecentSearchesProps, IEulerAutoSuggestionsProps, IEulerSuggestionsEntity } from './ISearchPopup';
-import { SearchWrapper, SearchField, SearchForm, CloseIcon, SearchList, List } from './StyledSearchPopup';
+import {
+  SearchWrapper,
+  SearchField,
+  SearchForm,
+  CloseIcon,
+  SearchList,
+  List,
+} from './StyledSearchPopup';
 import { IconClose } from '@hs/icons';
 import { useDebounce, useLocalStorage } from '@hs/framework';
 import { productDetailsService } from '@hs/services';
 import { useRouter } from 'next/router';
+
+import {
+  ISearch,
+  IRecentSearchesProps,
+  IEulerAutoSuggestionsProps,
+  IEulerSuggestionsEntity,
+} from 'types';
 
 const RECENT_SEARCH = 'RecentSearch';
 const BRAND_SUGGESTION = 'BrandSuggestion';
@@ -18,18 +31,21 @@ export const SearchPopup: FC<ISearch> = ({ close, resource }: ISearch) => {
   const [suggestions, setSuggestions] = useState<IEulerSuggestionsEntity[]>([]);
   const keyWord = useDebounce(searchBy, 500);
   // const readRecentSearchesFromLocalStorage: any = useReadLocalStorage(['recentSearches']);
-  const [recentSearchData, setRecentSearchData] = useLocalStorage<any>('recentSearches', []);
+  const [recentSearchData, setRecentSearchData] = useLocalStorage<any>(
+    'recentSearches',
+    []
+  );
   const [recentSearches, setRecentSearches] = useState(recentSearchData);
 
   const getSuggestions = useCallback(() => {
     (async () => {
       try {
-        const response: IEulerAutoSuggestionsProps = await productDetailsService.getEulerAutoSuggestions(keyWord);
+        const response: IEulerAutoSuggestionsProps =
+          await productDetailsService.getEulerAutoSuggestions(keyWord);
         if (response.action === 'success') {
           setSuggestions(response.suggestions);
         }
-      } finally {
-      }
+      } catch (e) {}
     })();
   }, [keyWord]);
 
@@ -76,7 +92,9 @@ export const SearchPopup: FC<ISearch> = ({ close, resource }: ISearch) => {
         const getFilteredArray = (list: any, type: string, parent?: string) => {
           return list.filter(stringContains).map(function (each: any) {
             const getLabel = () => {
-              const parentName = parent ? ' in ' + (each.parentName || parent) : '';
+              const parentName = parent
+                ? ' in ' + (each.parentName || parent)
+                : '';
               return each.name + parentName;
             };
             return {
@@ -89,27 +107,47 @@ export const SearchPopup: FC<ISearch> = ({ close, resource }: ISearch) => {
         };
 
         const suggestions = []
-          .concat(getFilteredArray(productTypeList, 'productTypeList', 'product'))
-          .concat(getFilteredArray(subCategories, 'subCategories', 'categories'))
+          .concat(
+            getFilteredArray(productTypeList, 'productTypeList', 'product')
+          )
+          .concat(
+            getFilteredArray(subCategories, 'subCategories', 'categories')
+          )
           .concat(getFilteredArray(categories, 'categories'))
           .concat(getFilteredArray(brands, 'brands', 'Brands'));
         setSuggestions(suggestions);
         return;
       }
       getSuggestions();
+    } else {
+      setSuggestions([]);
+      setRecentSearches(recentSearchData);
     }
   }, [keyWord, resource, getSuggestions]);
 
   const getSubCategorys = (categoryId: number) => {
     const categories = (resource && resource.categories) || [];
     if (categories && categories.length) {
-      const categoryList = categories.filter((category) => category.id === categoryId);
-      if (categoryList[0] && categoryList[0].hasOwnProperty('subCategory')) {
-        const reduceValue = (initial: any, subCategory: any) => initial + ',' + subCategory.id;
-        return categoryList[0] && categoryList[0].subCategory && categoryList[0].subCategory.reduce(reduceValue, '');
+      const categoryList = categories.filter(
+        (category) => category.id === categoryId
+      );
+      if (
+        Object.prototype.hasOwnProperty.call(
+          categoryList && categoryList[0],
+          'subCategory'
+        )
+      ) {
+        const reduceValue = (initial: any, subCategory: any) =>
+          initial + ',' + subCategory.id;
+        return (
+          categoryList[0] &&
+          categoryList[0].subCategory &&
+          categoryList[0].subCategory.reduce(reduceValue, '')
+        );
       }
       return '';
     }
+    return '';
   };
 
   const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
@@ -126,7 +164,7 @@ export const SearchPopup: FC<ISearch> = ({ close, resource }: ISearch) => {
     data: IEulerSuggestionsEntity | IRecentSearchesProps,
     recent: string | null,
     suggestionIndex: number,
-    options: any,
+    options: any
   ) => {
     const searchObj = Object.assign({}, data, { recent: recent }, options);
     let q: any = {};
@@ -179,8 +217,10 @@ export const SearchPopup: FC<ISearch> = ({ close, resource }: ISearch) => {
         });
         params.hplp = name;
       }
-      params.hsection = recent === 'recent' ? RECENT_SEARCH : extraSegdata.section;
-      params.funnel_section = recent === 'recent' ? RECENT_SEARCH : extraSegdata.section;
+      params.hsection =
+        recent === 'recent' ? RECENT_SEARCH : extraSegdata.section;
+      params.funnel_section =
+        recent === 'recent' ? RECENT_SEARCH : extraSegdata.section;
       // _self._SegmentService.setUniversal('Server autocomplete');
     } else {
       // if (type !== 'keyword') {
@@ -190,7 +230,8 @@ export const SearchPopup: FC<ISearch> = ({ close, resource }: ISearch) => {
       if (type === 'brands') {
         q.filterQuery = 'brandId=' + id;
         q.brandId = id;
-        params.hsection = recent === 'recent' ? RECENT_SEARCH : BRAND_SUGGESTION;
+        params.hsection =
+          recent === 'recent' ? RECENT_SEARCH : BRAND_SUGGESTION;
         params.hplp = name;
         params.funnel_section = BRAND_SUGGESTION;
       } else if (type === 'keyword') {
@@ -205,13 +246,15 @@ export const SearchPopup: FC<ISearch> = ({ close, resource }: ISearch) => {
       } else if (type === 'productTypeList') {
         q.filterQuery = 'productTypeId=' + id;
         q.productTypeId = id;
-        params.hsection = recent === 'recent' ? RECENT_SEARCH : CATEGORY_SUGGESTION;
+        params.hsection =
+          recent === 'recent' ? RECENT_SEARCH : CATEGORY_SUGGESTION;
         params.hplp = name;
         params.funnel_section = params.hsection;
       } else {
         const categoryIds = getSubCategorys(id);
         q.filterQuery = 'subCategorys=' + id + categoryIds;
-        params.hsection = recent === 'recent' ? RECENT_SEARCH : CATEGORY_SUGGESTION;
+        params.hsection =
+          recent === 'recent' ? RECENT_SEARCH : CATEGORY_SUGGESTION;
         params.hplp = name;
       }
     }
@@ -261,24 +304,36 @@ export const SearchPopup: FC<ISearch> = ({ close, resource }: ISearch) => {
           noValidate
           autoComplete={'off'}
         >
-          <input type="text" name="search" onChange={handleOnChange} placeholder="Search for products" />
+          <input
+            type="text"
+            name="search"
+            onChange={handleOnChange}
+            placeholder="Search for products"
+          />
           <CloseIcon onClick={close} icon={IconClose} />
         </SearchForm>
         <SearchList>
-          {recentSearches && recentSearches.length && suggestions && suggestions.length === 0 ? (
+          {recentSearches &&
+          recentSearches.length &&
+          suggestions &&
+          suggestions.length === 0 ? (
             <>
               <List>Recent Searches</List>
-              {recentSearches.map((data: IRecentSearchesProps, index: number) => {
-                return (
-                  <List
-                    key={index}
-                    onClick={() => {
-                      selectAndSearch(data, 'recent', index, null);
-                    }}
-                    dangerouslySetInnerHTML={{ __html: data.term || data.name }}
-                  />
-                );
-              })}
+              {recentSearches.map(
+                (data: IRecentSearchesProps, index: number) => {
+                  return (
+                    <List
+                      key={index}
+                      onClick={() => {
+                        selectAndSearch(data, 'recent', index, null);
+                      }}
+                      dangerouslySetInnerHTML={{
+                        __html: data.term || data.name,
+                      }}
+                    />
+                  );
+                }
+              )}
             </>
           ) : suggestions && suggestions.length > 0 ? (
             suggestions.map((data: IEulerSuggestionsEntity, index: number) => {
@@ -288,7 +343,11 @@ export const SearchPopup: FC<ISearch> = ({ close, resource }: ISearch) => {
                   onClick={() => {
                     selectAndSearch(data, null, index, null);
                   }}
-                  dangerouslySetInnerHTML={{ __html: data.displayName || getHighlightSearchText(keyWord, data.label) }}
+                  dangerouslySetInnerHTML={{
+                    __html:
+                      data.displayName ||
+                      getHighlightSearchText(keyWord, data.label),
+                  }}
                 />
               );
             })

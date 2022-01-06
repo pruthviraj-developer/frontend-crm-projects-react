@@ -1,15 +1,15 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
-import { ISearchPopupProps } from './ISearchPopup';
 import { SearchPopupWrapper } from './StyledSearchPopup';
-import { SearchPopup } from './../search-popup-mobile';
+import { SearchPopup } from '../search-popup-mobile';
 import { productDetailsService } from '@hs/services';
-import { ISearchResourceProps } from '@/types';
+import { ISearch, ISearchResourceProps } from 'types';
 
-const Search: FC<ISearchPopupProps> = ({ close }: ISearchPopupProps) => {
+const SearchMobile: FC<ISearch> = ({ close }: ISearch) => {
   const [resource, setResource] = useState<ISearchResourceProps>();
-  const { data: response } = useQuery<ISearchResourceProps>(['resourceData'], () =>
-    productDetailsService.getResouce<ISearchResourceProps>(),
+  const { data: response } = useQuery<ISearchResourceProps>(
+    ['resourceData'],
+    () => productDetailsService.getResouce<ISearchResourceProps>()
   );
   useEffect(() => {
     if (response?.action === 'success') {
@@ -27,4 +27,4 @@ const Search: FC<ISearchPopupProps> = ({ close }: ISearchPopupProps) => {
     </SearchPopupWrapper>
   );
 };
-export default Search;
+export default SearchMobile;
