@@ -2,7 +2,7 @@ import { Footer, NavBar } from '@hs/components';
 import dynamic from 'next/dynamic';
 import { FC } from 'react';
 import { useModal } from 'react-hooks-use-modal';
-const SearchPopupComponent = dynamic(() => import('@/components/search-popup/SearchPopup'), {
+const SearchPopupComponent = dynamic(() => import('@/components/search-mobile/Search'), {
   ssr: false,
 });
 const Layout: FC<unknown> = ({ children }) => {

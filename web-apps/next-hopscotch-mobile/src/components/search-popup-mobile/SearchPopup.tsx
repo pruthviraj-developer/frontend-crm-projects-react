@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect, useCallback } from 'react';
-import { ISearch, IRecentSearchesProps, IEulerAutoSuggestionsProps, IEulerSuggestionsEntity } from './ISearch';
-import { SearchWrapper, SearchField, SearchForm, CloseIcon, SearchList, List } from './StyledSearch';
+import { ISearch, IRecentSearchesProps, IEulerAutoSuggestionsProps, IEulerSuggestionsEntity } from './ISearchPopup';
+import { SearchWrapper, SearchField, SearchForm, CloseIcon, SearchList, List } from './StyledSearchPopup';
 import { IconClose } from '@hs/icons';
 import { useDebounce, useLocalStorage } from '@hs/framework';
 import { productDetailsService } from '@hs/services';
@@ -11,7 +11,7 @@ const BRAND_SUGGESTION = 'BrandSuggestion';
 const KEYWORD = 'Keyword';
 const CATEGORY_SUGGESTION = 'CategorySuggestion';
 
-const Search: FC<ISearch> = ({ close, resource }: ISearch) => {
+export const SearchPopup: FC<ISearch> = ({ close, resource }: ISearch) => {
   // let _recentSearch: boolean = true;
   const router = useRouter();
   const [searchBy, setSearchBy] = useState<string>('');
@@ -300,5 +300,3 @@ const Search: FC<ISearch> = ({ close, resource }: ISearch) => {
     </SearchWrapper>
   );
 };
-
-export default Search;
