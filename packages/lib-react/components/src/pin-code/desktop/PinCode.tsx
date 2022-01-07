@@ -1,32 +1,34 @@
 import React, { FC, useState, useEffect, useContext } from 'react';
 import {
-  IPinCodeAPIResponseProps,
-  IPinCodeProps,
-  IPinCodeErrorProps,
-} from '../IPinCode';
-import {
   PinCodeWrapper,
-  PinCodeContainer,
-  EnterPinCode,
-  ErrorMessage,
-  PinCodeNumber,
-  PinCodeForm,
-  PinCodeSubmit,
-  Loading,
   Header,
-  DeliveryAddressesContainer,
-  CloseIconWrapper,
-  CloseIcon,
-  Address,
+  ModalClose,
+  IconClose,
+  PinCodeBody,
   Title,
+  ErrorMessage,
+  Check,
+  PinCodeForm,
+  InputField,
+  InputWrapper,
+  Label,
+  Loading,
+  DeliveryAddressesContainer,
+  Address,
   Name,
 } from './StyledPinCode';
-import { IconClose } from '@hs/icons';
-import { IAddressListProps, IAllAddressItemsEntityProps } from '../IPinCode';
+import {
+  IPinCodeProps,
+  IPinCodeAPIResponseProps,
+  IPinCodeErrorProps,
+  IAllAddressItemsEntityProps,
+  IAddressListProps,
+} from '../IPinCode';
+import { IconDismiss } from '@hs/icons';
 import { productDetailsService } from '@hs/services';
 import { LoginContext, UserInfoContext } from '@hs/framework';
 const SUCCESS = 'success';
-export const PinCodeMobile: FC<IPinCodeProps> = ({
+export const PinCodeDesktop: FC<IPinCodeProps> = ({
   productId,
   pinCode,
   closePinCodePopup,
@@ -40,8 +42,10 @@ export const PinCodeMobile: FC<IPinCodeProps> = ({
     []
   );
 
+  const { updateLoginPopup } = useContext(LoginContext);
+  const { userInfo } = useContext(UserInfoContext);
   const getDefaultString = (val: string) => {
-    return val.toString().replace(/\D/g, '');
+    return val.replace(/\D/g, '');
   };
 
   const setFormatedValue = (val?: string, pin?: string) => {
@@ -59,27 +63,27 @@ export const PinCodeMobile: FC<IPinCodeProps> = ({
     }
     return '';
   };
-  const [pincode, setPinCode] = useState<string>(
+  const [pin, setPincode] = useState<string>(
     setFormatedValue(pinCode, pinCode) || ''
   );
-
-  const { updateLoginPopup } = useContext(LoginContext);
-  const { userInfo } = useContext(UserInfoContext);
-  const checkPinCodeDetails = (pincode: string) => {
+  const checkPinCodeDetails = (pin: string) => {
     (async () => {
-      if (pinCode === pincode) {
+      if (pin === pinCode) {
         closePinCodePopup();
         return;
       }
       try {
         setIsLoading(true);
         const response: IPinCodeAPIResponseProps =
-          await productDetailsService.checkForPincode({ productId, pincode });
+          await productDetailsService.checkForPincode({
+            productId,
+            pincode: pin,
+          });
         setIsLoading(false);
         if (!response.serviceable) {
           setError({ ...response, message: response.noPinCodeMessage });
         } else {
-          closePinCodePopup({ ...response, newPincode: pincode });
+          closePinCodePopup({ ...response, newPincode: pin });
         }
       } catch (error) {
         setError(error as unknown as IPinCodeAPIResponseProps);
@@ -88,12 +92,8 @@ export const PinCodeMobile: FC<IPinCodeProps> = ({
     })();
   };
 
-  const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
-    e ? e.preventDefault() : '';
-    checkPinCodeDetails(getDefaultString(pincode));
-  };
-
   const hasAddress = addressList && addressList.length;
+
   useEffect(() => {
     if (!(userInfo && userInfo.isLoggedIn)) {
       return;
@@ -117,15 +117,18 @@ export const PinCodeMobile: FC<IPinCodeProps> = ({
     })();
   }, [userInfo, closePinCodePopup, updateLoginPopup]);
 
+  const onSubmit = (event: React.SyntheticEvent) => {
+    event && event.preventDefault();
+    checkPinCodeDetails(getDefaultString(pin));
+  };
+
   return (
     <PinCodeWrapper>
-      <Header>
-        <Title> {hasAddress ? 'Edit' : 'Check'} Pincode</Title>
-        <CloseIconWrapper onClick={closePinCodePopup}>
-          <CloseIcon icon={IconClose} />
-        </CloseIconWrapper>
-      </Header>
-      <PinCodeContainer>
+      <Header>{hasAddress > 0 ? 'Edit' : 'Check'} pincode</Header>
+      <ModalClose>
+        <IconClose icon={IconDismiss} onClick={closePinCodePopup} />
+      </ModalClose>
+      <PinCodeBody>
         {hasAddress > 0 && (
           <>
             <Title>Select an address</Title>
@@ -137,7 +140,7 @@ export const PinCodeMobile: FC<IPinCodeProps> = ({
                       key={index}
                       onClick={() => {
                         if (address.isServicable) {
-                          const pin = address.zipCode || pincode;
+                          const pin = address.zipCode || pinCode;
                           if (pin) {
                             checkPinCodeDetails(pin);
                           } else {
@@ -156,33 +159,26 @@ export const PinCodeMobile: FC<IPinCodeProps> = ({
           </>
         )}
         {isLoadingAddress && <Loading>Loading address...</Loading>}
-        <EnterPinCode>
+        <Title>
           {hasAddress ? 'Or, enter your pincode' : 'Enter your pincode'}
-        </EnterPinCode>
-        <PinCodeForm
-          onSubmit={(e) => {
-            return submitForm(e);
-          }}
-          noValidate
-        >
-          <PinCodeNumber
-            value={pincode}
-            onChange={(event) => {
-              setPinCode(setFormatedValue(event.target.value, pincode));
-            }}
-            placeholder="Pincode"
-          />
-          <PinCodeSubmit
-            disabled={pincode.length < 7 || isLoading}
-            type="submit"
-          >
+        </Title>
+
+        <PinCodeForm onSubmit={onSubmit}>
+          <InputWrapper>
+            <InputField
+              value={pin}
+              onChange={(event) => {
+                setPincode(setFormatedValue(event.target.value, pin));
+              }}
+            />
+            <Label className="label">Pincode</Label>
+          </InputWrapper>
+          <Check disabled={pin.length < 7 || isLoading} type="submit">
             Check
-          </PinCodeSubmit>
-          {error && error.message && (
-            <ErrorMessage>{error.message}</ErrorMessage>
-          )}
+          </Check>
         </PinCodeForm>
-      </PinCodeContainer>
+        {error && error.message && <ErrorMessage>{error.message}</ErrorMessage>}
+      </PinCodeBody>
     </PinCodeWrapper>
   );
 };
