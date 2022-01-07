@@ -10,7 +10,7 @@ import { Layout } from '@/components/layout/Layout';
 const ProductDesktop = dynamic(() => import('@/components/pdp'), {
   ssr: true,
 });
-const SizeChartPopupComponent = dynamic(() => import('../../components/size-chart/SizeChart'), {
+const SizeChartPopupComponent = dynamic(() => import('../../components/size-chart'), {
   ssr: false,
 });
 

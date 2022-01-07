@@ -6,7 +6,7 @@ import { useQuery } from 'react-query';
 import { SizeChartPopupDesktop } from '../size-chart-popup-desktop';
 import { useSizeChart } from '../use-size-chart/useSizeChart';
 
-const SizeChart: FC<ISizeChartDtoProps> = ({ productName, id, onClickClose }: ISizeChartDtoProps) => {
+export const SizeChart: FC<ISizeChartDtoProps> = ({ productName, id, onClickClose }: ISizeChartDtoProps) => {
   const [displayType, setDisplayType] = useState<IDisplayType>();
 
   const { data: sizesData } = useQuery<ISizeChartProps>(
@@ -43,5 +43,3 @@ const SizeChart: FC<ISizeChartDtoProps> = ({ productName, id, onClickClose }: IS
     ></SizeChartPopupDesktop>
   );
 };
-
-export default SizeChart;

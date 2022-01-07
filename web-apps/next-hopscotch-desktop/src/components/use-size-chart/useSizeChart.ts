@@ -60,11 +60,13 @@ export const useSizeChart = ({ action, displayType, sizeChartDTOList }: ISizeCha
   }, [action, sizeChartDTOList]);
 
   const convertUnit = (unitType: string, unitIndex: number, index: number) => {
-    const sizeChartData = [...chartData];
-    if (sizeChartData?.[index]?.sizeChartParameterValueDTOList?.length) {
-      sizeChartData[index].sizeChartParameterValueDTOList.map(function (row) {
+    const sizeChartData = [...(chartData || [])];
+    const dto = sizeChartData?.[index]?.sizeChartParameterValueDTOList;
+    if (dto?.length) {
+      dto?.map(function (row) {
         row.valueList.forEach(function (colValue: string, colIndex: number) {
-          if (sizeChartData[index].parameterMeasureTypeList[colIndex] == unitType) {
+          const parameterType = sizeChartData[index].parameterMeasureTypeList as unknown as Array<string>;
+          if (parameterType && parameterType[colIndex] == unitType) {
             const colArray: any = colValue.replace(/\s/g, '').split('-');
             colArray.forEach(function (rangeValue: any, rangeIndex: number) {
               colArray[rangeIndex] = Math.round(rangeValue * unitIndex * 10) / 10;
@@ -110,7 +112,6 @@ export const useSizeChart = ({ action, displayType, sizeChartDTOList }: ISizeCha
     }
   }, [displayType]);
 
-  debugger;
   return {
     chartData,
     chartTableData,
