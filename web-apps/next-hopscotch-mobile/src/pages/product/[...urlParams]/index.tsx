@@ -6,19 +6,9 @@ import React, { useState, useEffect, ReactElement, useContext } from 'react';
 import { useModal } from 'react-hooks-use-modal';
 import { toast } from 'react-toastify';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
-const ProductMobile = dynamic(() => import('@/components/pdp/mobile'), {
-  ssr: true,
-});
-const LayoutMobile = dynamic(() => import('@/components/layout/mobile'), {
-  ssr: true,
-});
-const ProductDesktop = dynamic(() => import('@/components/pdp/desktop'), {
-  ssr: true,
-});
-const LayoutDesktop = dynamic(() => import('@/components/layout/desktop'), {
-  ssr: true,
-});
-
+import * as segment from '@/components/segment-analytic';
+import * as gtm from '@/components/google-tag-manager/GTMLib';
+import { ProductHead } from '@hs/components';
 import {
   IProductProps,
   IWishListProps,
@@ -29,23 +19,6 @@ import {
 } from '@/types';
 import { cookiesService, productDetailsService } from '@hs/services';
 import { CartLink, CartNotification, CartNotificationDetails, CartHeader, CartMessage, CartLinkText } from '@/styles';
-
-const SizeChartPopupComponent = dynamic(() => import('@/components/size-chart/SizeChart'), {
-  ssr: false,
-});
-
-const SizeSelectorMobile = dynamic(() => import('@/components/size-selector/mobile'), {
-  ssr: false,
-});
-
-const PinCodeMobile = dynamic(() => import('@/components/pin-code'), {
-  ssr: false,
-});
-
-const LoginPopup = dynamic(() => import('@/components/login-modal'), {
-  ssr: false,
-});
-
 import {
   IRecommendedProducts,
   useOneSize,
@@ -63,11 +36,38 @@ import {
   LOCAL_DATA,
 } from '@hs/framework';
 
-import * as segment from '@/components/segment-analytic';
-import * as gtm from '@/components/google-tag-manager/GTMLib';
-// import { Layout } from '@/components/layout/Layout';
-import { ProductHead } from '@hs/components';
+const SizeChartPopupComponent = dynamic(() => import('@/components/size-chart/SizeChart'), {
+  ssr: false,
+});
 
+const SizeSelectorMobile = dynamic(() => import('@/components/size-selector/mobile'), {
+  ssr: false,
+});
+
+const PinCodeMobile = dynamic(() => import('@/components/pin-code/mobile'), {
+  ssr: false,
+});
+
+const PinCodeDesktop = dynamic(() => import('@/components/pin-code/desktop'), {
+  ssr: false,
+});
+
+const LoginPopup = dynamic(() => import('@/components/login-modal'), {
+  ssr: false,
+});
+
+const ProductMobile = dynamic(() => import('@/components/pdp/mobile'), {
+  ssr: true,
+});
+const LayoutMobile = dynamic(() => import('@/components/layout/mobile'), {
+  ssr: true,
+});
+const ProductDesktop = dynamic(() => import('@/components/pdp/desktop'), {
+  ssr: true,
+});
+const LayoutDesktop = dynamic(() => import('@/components/layout/desktop'), {
+  ssr: true,
+});
 const tryLater = 'Try Later';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -506,8 +506,17 @@ const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile, url }
             ></ProductDesktop>
           )}
           <PinCodePopupModel>
-            {isPinCodePopupOpen && (
+            {isPinCodePopupOpen && isMobile && (
               <PinCodeMobile
+                {...{
+                  productId: productData.id,
+                  pinCode: deliveryDetails?.pinCode || productData.pinCode,
+                  closePinCodePopup: updateAndClosePinCodePopup,
+                }}
+              />
+            )}
+            {isPinCodePopupOpen && !isMobile && (
+              <PinCodeDesktop
                 {...{
                   productId: productData.id,
                   pinCode: deliveryDetails?.pinCode || productData.pinCode,
