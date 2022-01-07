@@ -12,6 +12,7 @@ export const SizeAndChartLabels: FC<ISizeAndChartLabelsProps> = ({
   simpleSkus,
   onSizeChartClick,
 }: ISizeAndChartLabelsProps) => {
+  debugger;
   return (
     <>
       {(!isOneSize ||

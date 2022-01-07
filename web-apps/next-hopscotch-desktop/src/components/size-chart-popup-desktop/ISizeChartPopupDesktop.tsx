@@ -2,7 +2,7 @@ export interface ISizeChartPopupDesktop {
   onClickClose: () => void;
   setLength: (arg0: number, arg1: string) => void;
   setWeight: (arg0: number, arg1: string) => void;
-  sizeChartData: ISizeChartDTOListEntityDesktop[];
+  sizeChartData?: ISizeChartDTOListEntityDesktop[];
   productName: string;
   chartTableData: ISizeChartParameterValueDTOListEntityDesktop | any;
   showWeightBlock: Array<boolean>;
@@ -18,9 +18,7 @@ export interface ISizeChartDTOListEntityDesktop {
   weightUnit: string;
   notesList?: string[] | null;
   cueImageUrlList?: string[] | null;
-  sizeChartParameterValueDTOList?:
-    | ISizeChartParameterValueDTOListEntityDesktop[]
-    | null;
+  sizeChartParameterValueDTOList?: ISizeChartParameterValueDTOListEntityDesktop[] | null;
   parameterNamesList?: string[] | null;
   parameterMeasureTypeList?: string[] | null;
   importantInfo: string;
