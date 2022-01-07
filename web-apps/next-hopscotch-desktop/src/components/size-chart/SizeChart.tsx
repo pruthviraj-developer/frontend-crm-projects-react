@@ -4,7 +4,7 @@ import { useState, FC } from 'react';
 import { IDisplayType, ISizeChartDtoProps } from './ISizeChart';
 import { useQuery } from 'react-query';
 import { SizeChartPopupDesktop } from '../size-chart-popup-desktop';
-import { useSizeChart } from '../use-size-chart/useSizeChart';
+import { useSizeChart } from '@hs/framework';
 
 export const SizeChart: FC<ISizeChartDtoProps> = ({ productName, id, onClickClose }: ISizeChartDtoProps) => {
   const [displayType, setDisplayType] = useState<IDisplayType>();
