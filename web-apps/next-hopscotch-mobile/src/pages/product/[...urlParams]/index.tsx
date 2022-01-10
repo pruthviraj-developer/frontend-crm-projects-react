@@ -34,6 +34,8 @@ import {
   LoginContext,
   UserInfoContext,
   LOCAL_DATA,
+  SESSION_DATA,
+  useSessionStorage,
 } from '@hs/framework';
 
 const SizeChartPopupComponent = dynamic(() => import('@/components/size-chart/SizeChart'), {
@@ -97,8 +99,10 @@ const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile, url }
   const [updatedWishListId, updateWishListId] = useState<number>();
   const [addToWishlistStatus, setAddToWishlistStatus] = useState<boolean>(false);
   const { updateCartItemQty } = useContext(CartItemQtyContext);
+  const [addedToCart, updateAddedToCart] = useState<boolean>(false);
   const { showLoginPopup } = useContext(LoginContext);
   const { userInfo } = useContext(UserInfoContext);
+  const [, setGotoCartLocation] = useSessionStorage<string>(SESSION_DATA.CART_LOCATION, null);
   const [LoginPopupModal, openLoginPopup, closeLoginPopup, isLoginPopupOpen] = useModal('root', {
     preventScroll: false,
     closeOnOverlayClick: true,
@@ -293,6 +297,7 @@ const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile, url }
           atc_user,
         });
         if (addToCartResponse.action === LOCAL_DATA.SUCCESS) {
+          updateAddedToCart(true);
           updateCartItemQty(addToCartResponse.cartItemQty);
           toast(getToasterContent(sku), {
             position: toast.POSITION.TOP_RIGHT,
@@ -374,6 +379,7 @@ const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile, url }
       contextData,
     });
     setSelectedSku(sku);
+    updateAddedToCart(false);
   };
 
   const showErrorNotification = (message: string) => {
@@ -471,6 +477,10 @@ const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile, url }
     }
   };
 
+  const goToCart = () => {
+    setGotoCartLocation('goto cart button');
+  };
+
   return (
     <>
       {productData && productData.action === LOCAL_DATA.SUCCESS && (
@@ -500,6 +510,8 @@ const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile, url }
                 openPinCodePopup,
                 openSizeSelector,
                 addProductToCart,
+                addedToCart,
+                goToCart,
               }}
             ></ProductMobile>
           )}
@@ -517,6 +529,8 @@ const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile, url }
                 openPinCodePopup,
                 openSizeSelector,
                 addProductToCart,
+                addedToCart,
+                goToCart,
               }}
             ></ProductDesktop>
           )}

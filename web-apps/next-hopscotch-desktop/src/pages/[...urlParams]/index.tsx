@@ -34,6 +34,8 @@ import {
   LOCAL_DATA,
   getSchemaData,
   getCanonicalUrl,
+  SESSION_DATA,
+  useSessionStorage,
 } from '@hs/framework';
 
 const tryLater = 'Try Later';
@@ -62,7 +64,7 @@ const Product: NextPageWithLayout<IProductProps> = ({ url, productId }: IProduct
   const [deliveryDetails, updateDeliveryDetails] = useState<IUpdatedDeliverDetailsProps>();
   const { updateCartItemQty } = useContext(CartItemQtyContext);
   const [addedToCart, updateAddedToCart] = useState<boolean>(false);
-
+  const [, setGotoCartLocation] = useSessionStorage<string>(SESSION_DATA.CART_LOCATION, null);
   const { data: productData } = useQuery<IProductDetails>(
     ['ProductDetail', productId],
     () => productDetailsService.getProductDetails(productId),
@@ -264,7 +266,7 @@ const Product: NextPageWithLayout<IProductProps> = ({ url, productId }: IProduct
   };
 
   const goToCart = () => {
-    console.log('test');
+    setGotoCartLocation('goto cart button');
   };
 
   return (
