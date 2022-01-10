@@ -15,13 +15,16 @@ import {
   RecommendedProductsDesktop as RecommendedProducts,
   ProductCarouselDesktop as ProductCarousel,
   AddToCartDesktop as AddToCart,
+  GoToCartDesktop as GoToCart,
   SizeSelector,
   GoToTopDesktop,
 } from '@hs/components';
 const ProductDesktop = ({
+  goToCart,
   productId,
   productData,
   selectedSku,
+  addedToCart,
   deliveryDetails,
   recommendedProductDetails,
   similarProductDetails,
@@ -127,13 +130,17 @@ const ProductDesktop = ({
               selectedSku,
             }}
           ></SizeSelector>
-          <AddToCart
-            {...{
-              show: true,
-              disabled: isProductSoldOut ? true : false,
-              addProductToCart,
-            }}
-          ></AddToCart>
+          {addedToCart ? (
+            <GoToCart goToCart={goToCart} />
+          ) : (
+            <AddToCart
+              {...{
+                show: true,
+                disabled: isProductSoldOut ? true : false,
+                addProductToCart,
+              }}
+            />
+          )}
           <DeliveryDetails
             {...{
               ...deliveryDetailsData,

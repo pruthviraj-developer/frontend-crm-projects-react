@@ -12,6 +12,8 @@ export interface IProductPage {
   recommendedProductDetails?: IRecommendedProducts;
   similarProductDetails?: IRecommendedProducts;
   updatedWishListId?: number;
+  addedToCart: boolean;
+  goToCart: () => void;
   openSizeChartPopup: () => void;
   onSizeSelect: (sku: ISimpleSkusEntityProps, fromLocation: string) => void;
   openPinCodePopup: () => void;

@@ -2,7 +2,7 @@ import type { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { useState, useEffect, useRef, ReactElement, useContext } from 'react';
+import React, { useState, useEffect, ReactElement, useContext } from 'react';
 import { useModal } from 'react-hooks-use-modal';
 import { toast } from 'react-toastify';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
@@ -23,10 +23,8 @@ import { IProductProps, ICartAPIResponse, NextPageWithLayout, IUpdatedDeliverDet
 import { cookiesService, productDetailsService } from '@hs/services';
 import { CartLink, CartNotification, CartNotificationDetails, CartHeader, CartMessage, CartLinkText } from '@/styles';
 import {
-  useRecommendation,
   IRecommendedProducts,
   useOneSize,
-  useDeliveryDetails,
   useProduct,
   useSegment,
   IProductDetails,
@@ -61,10 +59,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 const Product: NextPageWithLayout<IProductProps> = ({ url, productId }: IProductProps) => {
-  const similarProductsLink = useRef<HTMLDivElement>(null);
-  const recommendedProductsLink = useRef<HTMLDivElement>(null);
   const [deliveryDetails, updateDeliveryDetails] = useState<IUpdatedDeliverDetailsProps>();
   const { updateCartItemQty } = useContext(CartItemQtyContext);
+  const [addedToCart, updateAddedToCart] = useState<boolean>(false);
 
   const { data: productData } = useQuery<IProductDetails>(
     ['ProductDetail', productId],
@@ -102,67 +99,16 @@ const Product: NextPageWithLayout<IProductProps> = ({ url, productId }: IProduct
   });
 
   const [selectedSku, setSelectedSku] = useState<ISimpleSkusEntityProps | any>();
-  const {
-    productName,
-    retailPrice,
-    regularPrice,
-    retailPriceMax,
-    selectedSkuId,
-    discount,
-    isPresale,
-    finalSale,
-    qtyLeft,
-    simpleSkus,
-    showRfypCue,
-    isProductSoldOut,
-    defaultSku,
-    ...product
-  } = useProduct({ productData, selectedSku });
-
-  const { canShow: showSimilarProducts, ...similarProducts } = useRecommendation({
-    section: 'RFYP',
-    showmatching: true,
-    recommended: similarProductDetails,
-    id: 'similarproducts',
-    pid: productId,
-  });
-
-  const { canShow: showRFYP, ...recommendedForYou } = useRecommendation({
-    section: 'UserRecoPDP',
-    showmatching: false,
-    recommended: recommendedProductDetails,
-    id: 'productrecommendations',
-    pid: productId,
+  const { productName, retailPrice, simpleSkus, defaultSku } = useProduct({
+    productData,
+    selectedSku,
   });
 
   const { isOneSize } = useOneSize({
     productData,
   });
 
-  const deliveryDetailsData = useDeliveryDetails({
-    selectedSku: selectedSku,
-    productData,
-  });
-
-  const goToProductRecommendation = (fromLocation: string) => {
-    if (fromLocation) {
-      const currentRefElement = showRFYP ? recommendedProductsLink : similarProductsLink;
-      currentRefElement?.current?.scrollIntoView({ behavior: 'smooth' });
-      // segment.trackEvent({
-      //   evtName: segment.PDP_TRACKING_EVENTS.PDP_SEE_SIMILAR_CLICKED,
-      //   properties: {
-      //     ...properties,
-      //     reco_type: 'Similar products',
-      //     product_id: Number(productId),
-      //     from_location: fromLocation,
-      //   },
-      //   contextData,
-      // });
-    }
-  };
-
   const [{ contextData, properties }] = useSegment();
-  // const pdpTrackingData = useProductTracking({ selectedSku, productData });
 
   useEffect(() => {
     if (contextData && properties && productData) {
@@ -222,6 +168,7 @@ const Product: NextPageWithLayout<IProductProps> = ({ url, productId }: IProduct
         const addToCartResponse: ICartAPIResponse = await productDetailsService.addItemToCart(data);
         const atc_user = cookiesService.getCookies(COOKIE_DATA.WEBSITE_CUSTOMER_SEGMENT);
         if (addToCartResponse.action === LOCAL_DATA.SUCCESS) {
+          updateAddedToCart(true);
           updateCartItemQty(addToCartResponse.cartItemQty);
           toast(getToasterContent(sku), {
             position: toast.POSITION.TOP_RIGHT,
@@ -231,16 +178,6 @@ const Product: NextPageWithLayout<IProductProps> = ({ url, productId }: IProduct
             toastId: 'cartQuantiyChangeToaster',
             bodyClassName: 'cartQuantiyChangeBodyToaster',
           });
-          // segment.trackEvent({
-          //   evtName: segment.PDP_TRACKING_EVENTS.ADDED_TO_CART,
-          //   properties: {
-          //     ...properties,
-          //     ...getProductTrackingData({ productData, selectedSku: sku }),
-          //     atc_user,
-          //     addFrom: 'current=' + location.pathname,
-          //   },
-          //   contextData,
-          // });
           return;
         }
       } catch (error: any) {
@@ -269,17 +206,8 @@ const Product: NextPageWithLayout<IProductProps> = ({ url, productId }: IProduct
   };
 
   const onSizeSelect = (sku: ISimpleSkusEntityProps, fromLocation: string) => {
-    // segment.trackEvent({
-    //   evtName: segment.PDP_TRACKING_EVENTS.SIZE_CLICKED,
-    //   properties: {
-    //     ...properties,
-    //     ...getProductTrackingData({ productData, selectedSku: sku }),
-    //     addFrom: 'current=' + location.pathname,
-    //     from_location: fromLocation,
-    //   },
-    //   contextData,
-    // });
     setSelectedSku(sku);
+    updateAddedToCart(false);
   };
 
   const showErrorNotification = (message: string) => {
@@ -319,6 +247,10 @@ const Product: NextPageWithLayout<IProductProps> = ({ url, productId }: IProduct
     }
   };
 
+  const goToCart = () => {
+    console.log('test');
+  };
+
   return (
     <>
       {productData && productData.action === LOCAL_DATA.SUCCESS && (
@@ -344,6 +276,8 @@ const Product: NextPageWithLayout<IProductProps> = ({ url, productId }: IProduct
               openPinCodePopup,
               openSizeSelector,
               addProductToCart,
+              addedToCart,
+              goToCart,
             }}
           ></ProductDesktop>
           <SizeChartPopupModal>
