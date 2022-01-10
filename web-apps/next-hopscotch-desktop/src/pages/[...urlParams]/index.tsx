@@ -162,11 +162,27 @@ const Product: NextPageWithLayout<IProductProps> = ({ url, productId }: IProduct
   };
 
   const addToCart = (sku: ISimpleSkusEntityProps) => {
-    const data = { sku: sku.skuId, quantity: 1 };
+    const pickedProperties: Record<string, string | number> = { sku: sku.skuId, quantity: 1 };
+    const props: Record<string, string> = { ...properties } as unknown as Record<string, string>;
+    const propertiesSubset = ['funnel', 'funnel_tile', 'funnel_section', 'plp', 'source', 'section'];
+
+    for (let index = 0; index < propertiesSubset.length; index++) {
+      const element = propertiesSubset[index];
+      pickedProperties[element] = (props && props[element]) || '';
+    }
+
+    pickedProperties['sortBy'] = props['sort_by'] || '';
+    pickedProperties['sortBar'] = props['sortbar'] || '';
+    pickedProperties['subSection'] = props['subsection'] || '';
+    pickedProperties['sortBarGroup'] = props['sortbar_group'] || '';
+
     (async () => {
       try {
-        const addToCartResponse: ICartAPIResponse = await productDetailsService.addItemToCart(data);
         const atc_user = cookiesService.getCookies(COOKIE_DATA.WEBSITE_CUSTOMER_SEGMENT);
+        const addToCartResponse: ICartAPIResponse = await productDetailsService.addItemToCart({
+          ...pickedProperties,
+          atc_user,
+        });
         if (addToCartResponse.action === LOCAL_DATA.SUCCESS) {
           updateAddedToCart(true);
           updateCartItemQty(addToCartResponse.cartItemQty);
