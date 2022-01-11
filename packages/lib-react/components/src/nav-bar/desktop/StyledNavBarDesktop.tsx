@@ -8,7 +8,10 @@ const NavBarWrapper = styled.div`
   width: 100%;
   z-index: 1005;
 `;
-
+const NavBarCntnr = styled.div`
+  max-width: 1400px;
+  margin: auto;
+`;
 const HopscotchImage = styled.div`
   width: 112px;
   height: 100%;
@@ -153,4 +156,5 @@ export {
   SearchWrapper,
   InputSearch,
   SearchIconWrapper,
+  NavBarCntnr,
 };
