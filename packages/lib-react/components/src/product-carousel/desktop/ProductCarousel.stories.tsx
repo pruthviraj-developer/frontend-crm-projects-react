@@ -1,13 +1,13 @@
 import React from 'react';
 import { Story } from '@storybook/react/types-6-0';
 import { ProductCarouselDesktop } from './ProductCarouselDesktop';
-import { IProductCarouselProps } from '../IProductCarousel';
+import { IProductCarouselDesktopProps } from './IProductCarouselDesktop';
 export default {
   title: 'Carousel Desktop',
   component: ProductCarouselDesktop,
 };
 
-const Template: Story<IProductCarouselProps> = (args) => (
+const Template: Story<IProductCarouselDesktopProps> = (args) => (
   <ProductCarouselDesktop {...args} />
 );
 export const CarouselDesktop = Template.bind({});

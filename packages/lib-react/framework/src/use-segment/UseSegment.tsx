@@ -145,7 +145,7 @@ export const useSegment = () => {
           '[time] month_of_year': d.getMonth() + 1,
           '[time] week_of_year': getWeek(d),
         };
-      })
+      });
       setContextData({
         device: {
           model: deviceDetail?.device.model || deviceDetail?.os.name,
@@ -163,6 +163,7 @@ export const useSegment = () => {
           ),
           hs_device_id: cookiesService.getCookies(COOKIE_DATA.VISITOR_ID),
           hs_site: deviceDetail?.device.type === 'mobile' ? 'Mobile' : 'Web',
+          hs_framework: 'nextjs',
           utm_source: utmData['utm-source'] || 'none',
           utm_medium: utmData['utm-medium'] || 'none',
           utm_campaign: utmData['utm-campaign'] || 'none',

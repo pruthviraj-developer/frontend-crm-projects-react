@@ -12,13 +12,15 @@ export interface IProductPage {
   recommendedProductDetails?: IRecommendedProducts;
   similarProductDetails?: IRecommendedProducts;
   updatedWishListId?: number;
-  addToWishlist: () => void;
-  deleteFromWishlist: () => void;
+  addedToCart: boolean;
+  goToCart: () => void;
   openSizeChartPopup: () => void;
   onSizeSelect: (sku: ISimpleSkusEntityProps, fromLocation: string) => void;
   openPinCodePopup: () => void;
   openSizeSelector: () => void;
   addProductToCart: () => void;
+  addToWishlist?: () => void;
+  deleteFromWishlist?: () => void;
 }
 export interface IUpdatedDeliverDetailsProps {
   edd?: string;

@@ -6,13 +6,9 @@ import React, { useState, useEffect, ReactElement, useContext } from 'react';
 import { useModal } from 'react-hooks-use-modal';
 import { toast } from 'react-toastify';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
-const ProductMobile = dynamic(() => import('@/components/pdp'), {
-  ssr: true,
-});
-const Layout = dynamic(() => import('@/components/layout/Layout'), {
-  ssr: true,
-});
-
+import * as segment from '@/components/segment-analytic';
+import * as gtm from '@/components/google-tag-manager/GTMLib';
+import { ProductHead } from '@hs/components';
 import {
   IProductProps,
   IWishListProps,
@@ -23,23 +19,6 @@ import {
 } from '@/types';
 import { cookiesService, productDetailsService } from '@hs/services';
 import { CartLink, CartNotification, CartNotificationDetails, CartHeader, CartMessage, CartLinkText } from '@/styles';
-
-const SizeChartPopupComponent = dynamic(() => import('@/components/size-chart/SizeChart'), {
-  ssr: false,
-});
-
-const SizeSelectorMobile = dynamic(() => import('@/components/size-selector'), {
-  ssr: false,
-});
-
-const PinCodeMobile = dynamic(() => import('@/components/pin-code'), {
-  ssr: false,
-});
-
-const LoginPopup = dynamic(() => import('@/components/login-modal/mobile/LoginModal'), {
-  ssr: false,
-});
-
 import {
   IRecommendedProducts,
   useOneSize,
@@ -55,14 +34,42 @@ import {
   LoginContext,
   UserInfoContext,
   LOCAL_DATA,
+  SESSION_DATA,
+  useSessionStorage,
 } from '@hs/framework';
 
-import * as segment from '@/components/segment-analytic';
-import * as gtm from '@/components/google-tag-manager/GTMLib';
-// import { Layout } from '@/components/layout/Layout';
-import { ProductHead } from '@hs/components';
-import GoToTop from '@/components/go-to-top/GoToTop';
+const SizeChartPopupComponent = dynamic(() => import('@/components/size-chart/SizeChart'), {
+  ssr: false,
+});
 
+const SizeSelectorMobile = dynamic(() => import('@/components/size-selector/mobile'), {
+  ssr: false,
+});
+
+const PinCodeMobile = dynamic(() => import('@/components/pin-code/mobile'), {
+  ssr: false,
+});
+
+const PinCodeDesktop = dynamic(() => import('@/components/pin-code/desktop'), {
+  ssr: false,
+});
+
+const LoginPopup = dynamic(() => import('@/components/login-modal'), {
+  ssr: false,
+});
+
+const ProductMobile = dynamic(() => import('@/components/pdp/mobile'), {
+  ssr: true,
+});
+const LayoutMobile = dynamic(() => import('@/components/layout/mobile'), {
+  ssr: true,
+});
+const ProductDesktop = dynamic(() => import('@/components/pdp/desktop'), {
+  ssr: true,
+});
+const LayoutDesktop = dynamic(() => import('@/components/layout/desktop'), {
+  ssr: true,
+});
 const tryLater = 'Try Later';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -92,8 +99,10 @@ const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile, url }
   const [updatedWishListId, updateWishListId] = useState<number>();
   const [addToWishlistStatus, setAddToWishlistStatus] = useState<boolean>(false);
   const { updateCartItemQty } = useContext(CartItemQtyContext);
+  const [addedToCart, updateAddedToCart] = useState<boolean>(false);
   const { showLoginPopup } = useContext(LoginContext);
   const { userInfo } = useContext(UserInfoContext);
+  const [, setGotoCartLocation] = useSessionStorage<string>(SESSION_DATA.CART_LOCATION, null);
   const [LoginPopupModal, openLoginPopup, closeLoginPopup, isLoginPopupOpen] = useModal('root', {
     preventScroll: false,
     closeOnOverlayClick: true,
@@ -267,12 +276,28 @@ const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile, url }
   };
 
   const addToCart = (sku: ISimpleSkusEntityProps) => {
-    const data = { sku: sku.skuId, quantity: 1 };
+    const pickedProperties: Record<string, string | number> = { sku: sku.skuId, quantity: 1 };
+    const props: Record<string, string> = { ...properties } as unknown as Record<string, string>;
+    const propertiesSubset = ['funnel', 'funnel_tile', 'funnel_section', 'plp', 'source', 'section'];
+
+    for (let index = 0; index < propertiesSubset.length; index++) {
+      const element = propertiesSubset[index];
+      pickedProperties[element] = (props && props[element]) || '';
+    }
+
+    pickedProperties['sortBy'] = props['sort_by'] || '';
+    pickedProperties['sortBar'] = props['sortbar'] || '';
+    pickedProperties['subSection'] = props['subsection'] || '';
+    pickedProperties['sortBarGroup'] = props['sortbar_group'] || '';
     (async () => {
       try {
-        const addToCartResponse: ICartAPIResponse = await productDetailsService.addItemToCart(data);
         const atc_user = cookiesService.getCookies(COOKIE_DATA.WEBSITE_CUSTOMER_SEGMENT);
+        const addToCartResponse: ICartAPIResponse = await productDetailsService.addItemToCart({
+          ...pickedProperties,
+          atc_user,
+        });
         if (addToCartResponse.action === LOCAL_DATA.SUCCESS) {
+          updateAddedToCart(true);
           updateCartItemQty(addToCartResponse.cartItemQty);
           toast(getToasterContent(sku), {
             position: toast.POSITION.TOP_RIGHT,
@@ -354,6 +379,7 @@ const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile, url }
       contextData,
     });
     setSelectedSku(sku);
+    updateAddedToCart(false);
   };
 
   const showErrorNotification = (message: string) => {
@@ -451,6 +477,10 @@ const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile, url }
     }
   };
 
+  const goToCart = () => {
+    setGotoCartLocation('goto cart button');
+  };
+
   return (
     <>
       {productData && productData.action === LOCAL_DATA.SUCCESS && (
@@ -463,7 +493,7 @@ const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile, url }
               canonicalUrl: getCanonicalUrl({ productData, url }),
             }}
           ></ProductHead>
-          {
+          {isMobile && (
             <ProductMobile
               {...{
                 productId,
@@ -480,12 +510,42 @@ const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile, url }
                 openPinCodePopup,
                 openSizeSelector,
                 addProductToCart,
+                addedToCart,
+                goToCart,
               }}
             ></ProductMobile>
-          }
+          )}
+          {!isMobile && (
+            <ProductDesktop
+              {...{
+                productId,
+                productData,
+                selectedSku,
+                deliveryDetails,
+                recommendedProductDetails,
+                similarProductDetails,
+                openSizeChartPopup,
+                onSizeSelect,
+                openPinCodePopup,
+                openSizeSelector,
+                addProductToCart,
+                addedToCart,
+                goToCart,
+              }}
+            ></ProductDesktop>
+          )}
           <PinCodePopupModel>
-            {isPinCodePopupOpen && (
+            {isPinCodePopupOpen && isMobile && (
               <PinCodeMobile
+                {...{
+                  productId: productData.id,
+                  pinCode: deliveryDetails?.pinCode || productData.pinCode,
+                  closePinCodePopup: updateAndClosePinCodePopup,
+                }}
+              />
+            )}
+            {isPinCodePopupOpen && !isMobile && (
+              <PinCodeDesktop
                 {...{
                   productId: productData.id,
                   pinCode: deliveryDetails?.pinCode || productData.pinCode,
@@ -528,7 +588,7 @@ const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile, url }
         {/* {isLoginPopupOpen && <LoginModal {...{ closeLoginPopup: closeLoginModalPopup }}></LoginModal>} */}
         {isLoginPopupOpen && <LoginPopup {...{ closeLoginPopup: closeLoginModalPopup }}></LoginPopup>}
       </LoginPopupModal>
-      <GoToTop></GoToTop>
+      {/* <GoToTop></GoToTop> */}
       {/* <pre style={{ width: '90%', overflowX: 'scroll' }}>{isMobile}</pre> */}
     </>
   );
@@ -537,6 +597,6 @@ const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile, url }
 export default Product;
 
 Product.getLayout = function getLayout(page: ReactElement) {
-  if (page.props.isMobile) return <Layout>{page}</Layout>;
-  else return <Layout>{page}</Layout>;
+  if (page.props.isMobile) return <LayoutMobile>{page}</LayoutMobile>;
+  else return <LayoutDesktop>{page}</LayoutDesktop>;
 };

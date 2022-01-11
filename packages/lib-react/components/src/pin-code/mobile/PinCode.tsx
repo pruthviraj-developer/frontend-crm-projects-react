@@ -26,7 +26,7 @@ import { IAddressListProps, IAllAddressItemsEntityProps } from '../IPinCode';
 import { productDetailsService } from '@hs/services';
 import { LoginContext, UserInfoContext } from '@hs/framework';
 const SUCCESS = 'success';
-const PinCodeMobile: FC<IPinCodeProps> = ({
+export const PinCodeMobile: FC<IPinCodeProps> = ({
   productId,
   pinCode,
   closePinCodePopup,
@@ -186,5 +186,3 @@ const PinCodeMobile: FC<IPinCodeProps> = ({
     </PinCodeWrapper>
   );
 };
-
-export default PinCodeMobile;

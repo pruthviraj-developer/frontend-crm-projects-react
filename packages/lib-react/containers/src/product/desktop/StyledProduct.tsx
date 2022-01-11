@@ -3,12 +3,13 @@ import { Colors, mediaQueries } from '@hs/utils';
 export const ProductWrapper = styled.div`
   display: flex;
   margin: auto;
-  ${mediaQueries('lg')`
+  max-width: 1400px;
+  /* ${mediaQueries('lg')`
     margin: auto;
   `};
   ${mediaQueries('xl')`
     margin: auto 20px;
-  `};
+  `}; */
 `;
 export const ProductDetailsWrapper = styled.div`
   background: ${Colors.WHITE};

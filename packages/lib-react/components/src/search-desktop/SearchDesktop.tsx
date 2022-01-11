@@ -1,11 +1,5 @@
 import React, { FC, useState, useEffect, useCallback } from 'react';
 import {
-  ISearch,
-  IRecentSearchesProps,
-  IEulerAutoSuggestionsProps,
-  IEulerSuggestionsEntity,
-} from './ISearchDesktop';
-import {
   SearchLayout,
   SearchWrapper,
   SearchField,
@@ -15,7 +9,13 @@ import {
 import { useDebounce, useLocalStorage } from '@hs/framework';
 import { productDetailsService } from '@hs/services';
 import { useRouter } from 'next/router';
-import { ISearchResourceProps } from 'types';
+import {
+  ISearch,
+  IRecentSearchesProps,
+  ISearchResourceProps,
+  IEulerAutoSuggestionsProps,
+  IEulerSuggestionsEntity,
+} from 'types';
 import { useQuery } from 'react-query';
 import { SEARCH_CONSTANTS } from '@hs/utils';
 
@@ -64,8 +64,7 @@ const SearchDesktop: FC<ISearch> = ({ searchText }: ISearch) => {
         if (response.action === 'success') {
           setSuggestions(response.suggestions);
         }
-      } finally {
-      }
+      } catch (e) {}
     })();
   }, [keyWord]);
 
@@ -151,7 +150,12 @@ const SearchDesktop: FC<ISearch> = ({ searchText }: ISearch) => {
       const categoryList = categories.filter(
         (category) => category.id === categoryId
       );
-      if (categoryList[0] && categoryList[0].hasOwnProperty('subCategory')) {
+      if (
+        Object.prototype.hasOwnProperty.call(
+          categoryList && categoryList[0],
+          'subCategory'
+        )
+      ) {
         const reduceValue = (initial: any, subCategory: any) =>
           initial + ',' + subCategory.id;
         return (

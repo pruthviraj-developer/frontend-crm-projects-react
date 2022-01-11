@@ -2,13 +2,15 @@ import type { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { useState, useEffect, useRef, ReactElement, useContext } from 'react';
+import React, { useState, useEffect, ReactElement, useContext } from 'react';
 import { useModal } from 'react-hooks-use-modal';
 import { toast } from 'react-toastify';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
 import { Layout } from '@/components/layout/Layout';
-
-const SizeChartPopupComponent = dynamic(() => import('../../components/size-chart/SizeChart'), {
+const ProductDesktop = dynamic(() => import('@/components/pdp'), {
+  ssr: true,
+});
+const SizeChartPopupComponent = dynamic(() => import('../../components/size-chart'), {
   ssr: false,
 });
 
@@ -16,38 +18,13 @@ const PinCodePopupComponent = dynamic(() => import('../../components/pin-code/Pi
   ssr: false,
 });
 
-import {
-  AddToCartDesktop,
-  AccordionDesktop,
-  RecommendedProductsDesktop,
-  ProductHead,
-  SizeAndChartLabelsDesktop,
-  ProductNamePriceDesktop,
-  DeliveryDetailsDesktop,
-} from '@hs/components';
-
-import { ProductCarouselDesktop } from '../../components/product-carousel-desktop/ProductCarouselDesktop';
-
+import { ProductHead } from '@hs/components';
 import { IProductProps, ICartAPIResponse, NextPageWithLayout, IUpdatedDeliverDetailsProps } from '@/types';
 import { cookiesService, productDetailsService } from '@hs/services';
+import { CartLink, CartNotification, CartNotificationDetails, CartHeader, CartMessage, CartLinkText } from '@/styles';
 import {
-  ProductWrapper,
-  ProductDetailsWrapper,
-  CartLink,
-  CartNotification,
-  CartNotificationDetails,
-  CartHeader,
-  CartMessage,
-  CartLinkText,
-} from '@/styles';
-
-import SizeSelector from '../../components/size-selector/SizeSelector';
-
-import {
-  useRecommendation,
   IRecommendedProducts,
   useOneSize,
-  useDeliveryDetails,
   useProduct,
   useSegment,
   IProductDetails,
@@ -57,8 +34,9 @@ import {
   LOCAL_DATA,
   getSchemaData,
   getCanonicalUrl,
+  SESSION_DATA,
+  useSessionStorage,
 } from '@hs/framework';
-import GoToTopDesktop from '@/components/go-to-top/GoToTopDesktop';
 
 const tryLater = 'Try Later';
 
@@ -74,20 +52,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       staleTime: Infinity,
     },
   );
-  // await queryClient.prefetchQuery(
-  //   ['RecommendedProducts', productId],
-  //   () => productDetailsService.getRecommendedProducts(productId, { boutiqueId: undefined }, process.env.WEB_HOST),
-  //   {
-  //     staleTime: Infinity,
-  //   },
-  // );
-  // await queryClient.prefetchQuery(
-  //   ['SimilarProducts', productId],
-  //   () => productDetailsService.getSimilarProducts(productId, { boutiqueId: undefined }, process.env.WEB_HOST),
-  //   {
-  //     staleTime: Infinity,
-  //   },
-  // );
   return {
     props: {
       dehydratedState: dehydrate(queryClient),
@@ -97,11 +61,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 const Product: NextPageWithLayout<IProductProps> = ({ url, productId }: IProductProps) => {
-  const similarProductsLink = useRef<HTMLDivElement>(null);
-  const recommendedProductsLink = useRef<HTMLDivElement>(null);
   const [deliveryDetails, updateDeliveryDetails] = useState<IUpdatedDeliverDetailsProps>();
   const { updateCartItemQty } = useContext(CartItemQtyContext);
-
+  const [addedToCart, updateAddedToCart] = useState<boolean>(false);
+  const [, setGotoCartLocation] = useSessionStorage<string>(SESSION_DATA.CART_LOCATION, null);
   const { data: productData } = useQuery<IProductDetails>(
     ['ProductDetail', productId],
     () => productDetailsService.getProductDetails(productId),
@@ -138,67 +101,16 @@ const Product: NextPageWithLayout<IProductProps> = ({ url, productId }: IProduct
   });
 
   const [selectedSku, setSelectedSku] = useState<ISimpleSkusEntityProps | any>();
-  const {
-    productName,
-    retailPrice,
-    regularPrice,
-    retailPriceMax,
-    selectedSkuId,
-    discount,
-    isPresale,
-    finalSale,
-    qtyLeft,
-    simpleSkus,
-    showRfypCue,
-    isProductSoldOut,
-    defaultSku,
-    ...product
-  } = useProduct({ productData, selectedSku });
-
-  const { canShow: showSimilarProducts, ...similarProducts } = useRecommendation({
-    section: 'RFYP',
-    showmatching: true,
-    recommended: similarProductDetails,
-    id: 'similarproducts',
-    pid: productId,
-  });
-
-  const { canShow: showRFYP, ...recommendedForYou } = useRecommendation({
-    section: 'UserRecoPDP',
-    showmatching: false,
-    recommended: recommendedProductDetails,
-    id: 'productrecommendations',
-    pid: productId,
+  const { productName, retailPrice, simpleSkus, defaultSku } = useProduct({
+    productData,
+    selectedSku,
   });
 
   const { isOneSize } = useOneSize({
     productData,
   });
 
-  const deliveryDetailsData = useDeliveryDetails({
-    selectedSku: selectedSku,
-    productData,
-  });
-
-  const goToProductRecommendation = (fromLocation: string) => {
-    if (fromLocation) {
-      const currentRefElement = showRFYP ? recommendedProductsLink : similarProductsLink;
-      currentRefElement?.current?.scrollIntoView({ behavior: 'smooth' });
-      // segment.trackEvent({
-      //   evtName: segment.PDP_TRACKING_EVENTS.PDP_SEE_SIMILAR_CLICKED,
-      //   properties: {
-      //     ...properties,
-      //     reco_type: 'Similar products',
-      //     product_id: Number(productId),
-      //     from_location: fromLocation,
-      //   },
-      //   contextData,
-      // });
-    }
-  };
-
   const [{ contextData, properties }] = useSegment();
-  // const pdpTrackingData = useProductTracking({ selectedSku, productData });
 
   useEffect(() => {
     if (contextData && properties && productData) {
@@ -252,12 +164,29 @@ const Product: NextPageWithLayout<IProductProps> = ({ url, productId }: IProduct
   };
 
   const addToCart = (sku: ISimpleSkusEntityProps) => {
-    const data = { sku: sku.skuId, quantity: 1 };
+    const pickedProperties: Record<string, string | number> = { sku: sku.skuId, quantity: 1 };
+    const props: Record<string, string> = { ...properties } as unknown as Record<string, string>;
+    const propertiesSubset = ['funnel', 'funnel_tile', 'funnel_section', 'plp', 'source', 'section'];
+
+    for (let index = 0; index < propertiesSubset.length; index++) {
+      const element = propertiesSubset[index];
+      pickedProperties[element] = (props && props[element]) || '';
+    }
+
+    pickedProperties['sortBy'] = props['sort_by'] || '';
+    pickedProperties['sortBar'] = props['sortbar'] || '';
+    pickedProperties['subSection'] = props['subsection'] || '';
+    pickedProperties['sortBarGroup'] = props['sortbar_group'] || '';
+
     (async () => {
       try {
-        const addToCartResponse: ICartAPIResponse = await productDetailsService.addItemToCart(data);
         const atc_user = cookiesService.getCookies(COOKIE_DATA.WEBSITE_CUSTOMER_SEGMENT);
+        const addToCartResponse: ICartAPIResponse = await productDetailsService.addItemToCart({
+          ...pickedProperties,
+          atc_user,
+        });
         if (addToCartResponse.action === LOCAL_DATA.SUCCESS) {
+          updateAddedToCart(true);
           updateCartItemQty(addToCartResponse.cartItemQty);
           toast(getToasterContent(sku), {
             position: toast.POSITION.TOP_RIGHT,
@@ -267,16 +196,6 @@ const Product: NextPageWithLayout<IProductProps> = ({ url, productId }: IProduct
             toastId: 'cartQuantiyChangeToaster',
             bodyClassName: 'cartQuantiyChangeBodyToaster',
           });
-          // segment.trackEvent({
-          //   evtName: segment.PDP_TRACKING_EVENTS.ADDED_TO_CART,
-          //   properties: {
-          //     ...properties,
-          //     ...getProductTrackingData({ productData, selectedSku: sku }),
-          //     atc_user,
-          //     addFrom: 'current=' + location.pathname,
-          //   },
-          //   contextData,
-          // });
           return;
         }
       } catch (error: any) {
@@ -287,29 +206,26 @@ const Product: NextPageWithLayout<IProductProps> = ({ url, productId }: IProduct
   };
 
   // remove
-  const openSizeSelector = () => {};
+  const openSizeSelector = () => {
+    console.log('Open size selector logic pending');
+  };
   // end
 
   const addProductToCart = () => {
     if (selectedSku) {
       addToCart(selectedSku);
+    } else if (simpleSkus.length === 1) {
+      const sku = simpleSkus[0];
+      setSelectedSku(sku);
+      addToCart(sku);
     } else {
       openSizeSelector();
     }
   };
 
   const onSizeSelect = (sku: ISimpleSkusEntityProps, fromLocation: string) => {
-    // segment.trackEvent({
-    //   evtName: segment.PDP_TRACKING_EVENTS.SIZE_CLICKED,
-    //   properties: {
-    //     ...properties,
-    //     ...getProductTrackingData({ productData, selectedSku: sku }),
-    //     addFrom: 'current=' + location.pathname,
-    //     from_location: fromLocation,
-    //   },
-    //   contextData,
-    // });
     setSelectedSku(sku);
+    updateAddedToCart(false);
   };
 
   const showErrorNotification = (message: string) => {
@@ -349,6 +265,10 @@ const Product: NextPageWithLayout<IProductProps> = ({ url, productId }: IProduct
     }
   };
 
+  const goToCart = () => {
+    setGotoCartLocation('goto cart button');
+  };
+
   return (
     <>
       {productData && productData.action === LOCAL_DATA.SUCCESS && (
@@ -361,100 +281,23 @@ const Product: NextPageWithLayout<IProductProps> = ({ url, productId }: IProduct
               canonicalUrl: getCanonicalUrl({ productData, url }),
             }}
           ></ProductHead>
-          <ProductWrapper>
-            {productData.imgurls && productData.imgurls.length > 0 && (
-              <ProductCarouselDesktop
-                {...{
-                  showArrows: false,
-                  autoPlay: false,
-                  draggable: false,
-                  focusOnSelect: false,
-                  renderButtonGroupOutside: false,
-                  renderDotsOutside: false,
-                  slidesToSlide: 1,
-                  swipeable: false,
-                  showDots: false,
-                  imgUrls: productData.imgurls,
-                  goToProductRecommendation,
-                }}
-              ></ProductCarouselDesktop>
-            )}
-            <ProductDetailsWrapper>
-              <ProductNamePriceDesktop
-                {...{
-                  productName,
-                  isProductSoldOut: !!productData.isProductSoldOut,
-                  retailPrice,
-                  retailPriceMax,
-                  selectedSku: selectedSku,
-                  regularPrice,
-                  discount,
-                }}
-              ></ProductNamePriceDesktop>
-              <SizeAndChartLabelsDesktop
-                {...{
-                  isOneSize,
-                  hasSizeChart: productData.hasSizeChart,
-                  qtyLeft,
-                  simpleSkus,
-                  onSizeChartClick: openSizeChartPopup,
-                }}
-              ></SizeAndChartLabelsDesktop>
-              {/* {!isOneSize && (
-                  <CustomSizePicker
-                    {...{
-                      simpleSkus,
-                      selectedSku: selectedSku,
-                      onSizeSelect,
-                    }}
-                  ></CustomSizePicker>
-                )}
-                {showRfypCue && showRFYP && (
-                  <RecommendedProductsLinks
-                    {...{ isProductSoldOut: !!productData.isProductSoldOut, goToProductRecommendation }}
-                  ></RecommendedProductsLinks>
-                )} */}
-
-              <SizeSelector
-                {...{ showRFYP, goToProductRecommendation, simpleSkus, showAddToCart: true, onSizeSelect, selectedSku }}
-              ></SizeSelector>
-              <AddToCartDesktop
-                {...{
-                  show: true,
-                  disabled: isProductSoldOut ? true : false,
-                  addProductToCart,
-                }}
-              ></AddToCartDesktop>
-              <DeliveryDetailsDesktop
-                {...{
-                  ...deliveryDetailsData,
-                  selectedSku: selectedSku,
-                  ...deliveryDetails,
-                  openPinCodePopup,
-                  openSizeSelector,
-                }}
-              ></DeliveryDetailsDesktop>
-              {productData.id && (
-                <AccordionDesktop
-                  {...{ ...product, isPresale, simpleSkus, selectedSku: selectedSku }}
-                ></AccordionDesktop>
-              )}
-            </ProductDetailsWrapper>
-          </ProductWrapper>
-
-          {showRFYP && (
-            <div ref={recommendedProductsLink}>
-              <RecommendedProductsDesktop {...recommendedForYou}></RecommendedProductsDesktop>
-            </div>
-          )}
-
-          {showSimilarProducts && (
-            <div ref={similarProductsLink}>
-              <RecommendedProductsDesktop {...similarProducts}></RecommendedProductsDesktop>
-            </div>
-          )}
-          {/* <AddToCart {...{ show: true, disabled: false, addProductToCart }}></AddToCart> */}
-
+          <ProductDesktop
+            {...{
+              productId,
+              productData,
+              selectedSku,
+              deliveryDetails,
+              recommendedProductDetails,
+              similarProductDetails,
+              openSizeChartPopup,
+              onSizeSelect,
+              openPinCodePopup,
+              openSizeSelector,
+              addProductToCart,
+              addedToCart,
+              goToCart,
+            }}
+          ></ProductDesktop>
           <SizeChartPopupModal>
             {isSizeChartPopupOpen && productData && (
               <SizeChartPopupComponent
@@ -480,7 +323,7 @@ const Product: NextPageWithLayout<IProductProps> = ({ url, productId }: IProduct
           </PinCodePopupModal>
         </>
       )}
-      <GoToTopDesktop></GoToTopDesktop>
+      {/* <GoToTopDesktop></GoToTopDesktop> */}
       {/* <pre style={{ width: '60%', overflowX: 'scroll' }}>{JSON.stringify(productData, null, 4)}</pre> */}
     </>
   );

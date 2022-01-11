@@ -9,6 +9,8 @@ import {
   RecommendedProductsLinks,
   ProductNamePrice,
   DeliveryDetails,
+  GoToTop,
+  GoToCartMobile as GoToCart,
 } from '@hs/components';
 import {
   useProduct,
@@ -19,9 +21,11 @@ import {
 import { ProductDetailsWrapper } from './StyledProduct';
 import { IProductPage } from '../IProduct';
 const ProductMobile = ({
+  goToCart,
   productId,
   productData,
   selectedSku,
+  addedToCart,
   deliveryDetails,
   recommendedProductDetails,
   similarProductDetails,
@@ -168,13 +172,19 @@ const ProductMobile = ({
           </div>
         )}
       </ProductDetailsWrapper>
-      <AddToCart
-        {...{
-          show: true,
-          disabled: isProductSoldOut ? true : false,
-          addProductToCart,
-        }}
-      ></AddToCart>
+
+      {addedToCart ? (
+        <GoToCart goToCart={goToCart} />
+      ) : (
+        <AddToCart
+          {...{
+            show: true,
+            disabled: isProductSoldOut ? true : false,
+            addProductToCart,
+          }}
+        />
+      )}
+      <GoToTop></GoToTop>
     </>
   );
 };

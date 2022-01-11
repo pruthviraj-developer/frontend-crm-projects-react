@@ -12,35 +12,8 @@ const ErrorIcon = styled(SvgIcon)`
   min-width: 24px;
 `;
 
-const MobileWrapper = styled.div``;
-
-const MobileNumber = styled.input`
-  width: 100%;
-  height: 48px;
-  line-height: 20px;
-  padding: 12px;
-  border-radius: 4px;
-  background-color: #eff1f4;
-  border: transparent;
-  color: rgba(0, 0, 0, 0.8);
-  margin-bottom: 8px;
-`;
-
-const Button = styled.button`
-  color: #fff;
-  border: 0;
-  width: 100%;
-  min-height: 48px;
-  background-color: #ed54a4;
-  border-radius: 4px;
-  text-align: center;
-  letter-spacing: 0.4px;
-  font: inherit;
-  text-transform: uppercase;
-  line-height: 1.14;
-  /* font-size: 14px; */
-  font-weight: 700;
-  margin-top: 12px;
+const MobileWrapper = styled.div`
+  margin-top: 20px;
 `;
 
 const MessageWrapper = styled.div`
@@ -56,12 +29,53 @@ const ErrorMessage = styled.span`
   font-size: 1.2rem;
 `;
 
+const InputField = styled.input`
+  height: 48px;
+  width: 100%;
+  outline: none;
+  padding: 14px 12px 0 12px;
+  border-radius: 4px;
+  display: inline-block;
+  vertical-align: middle;
+  background-color: #eff1f4;
+  border: none;
+  /* &:focus + .label {
+    top: 10px;
+  } */
+  &:focus {
+    border-bottom: 2px solid #ed54a4;
+    & + .label {
+      top: 10px;
+    }
+  }
+  &:not([value='']) + .label {
+    top: 10px;
+  }
+`;
+
+const InputWrapper = styled.div<{ isFirst?: boolean }>`
+  position: relative;
+  margin-top: ${(props) => (props.isFirst ? '20px' : '12px')};
+`;
+
+const Label = styled.label`
+  pointer-events: none;
+  position: absolute;
+  font-size: 14px;
+  line-height: 14px;
+  left: 12px;
+  top: 18px;
+  transition: 0.2s ease all;
+  color: #a4a4a4;
+`;
+
 export {
   ActionText,
   MobileWrapper,
-  MobileNumber,
   MessageWrapper,
-  Button,
   ErrorIcon,
   ErrorMessage,
+  InputWrapper,
+  InputField,
+  Label,
 };

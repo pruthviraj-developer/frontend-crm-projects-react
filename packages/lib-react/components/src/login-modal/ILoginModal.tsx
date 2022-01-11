@@ -1,19 +1,25 @@
+import { IErrorProps } from './common';
+
 export interface ILoginModalProps {
-  closeLoginPopup: (status?: boolean) => void;
+  closeLoginPopup: (status?: string | boolean) => void;
 }
 
 export interface IHeaderProps {
-  closeLoginPopup: () => void;
   active: boolean;
-  back: () => void;
+  loginType?: string;
+  currentState?: string;
+  closeLoginPopup: () => void;
+  back: (status?: string) => void;
 }
 
 export interface ISubHeaderProps {
   title: string;
 }
 
-export interface IMobileProps {
+export interface IUserProps {
   updateForm: (args: IVerifiedDataProps) => void;
+  switchScreen: (error: IErrorProps) => void;
+  loginBy?: string;
 }
 
 export interface ILoginErrorResponse {
@@ -29,11 +35,18 @@ export interface ILoginErrorMessageBar {
   messageUIType?: string;
   messageDisplayTime?: string;
   code?: string;
+  redirectLink?: string;
+  id?: string;
 }
 
 export interface IVerifiedDataProps {
-  loginId?: string;
-  otpReason?: string;
   type?: string;
-  back?: (status?: boolean) => void;
+  from?: string;
+  name?: string;
+  email?: string;
+  loginId?: string;
+  phoneNo?: string;
+  message?: string;
+  otpReason?: string;
+  back?: (status?: boolean | string) => void;
 }

@@ -1,3 +1,12 @@
+export interface IRecentSearchesProps {
+  label: string;
+  name: string;
+  term: string;
+  id: number;
+  type: string;
+  recent?: null;
+}
+
 export interface ISearchResourceProps {
   action: string;
   categories?: CategoriesEntity[] | null;
@@ -18,6 +27,7 @@ export interface CategoriesEntity {
 export interface SubCategoryEntity {
   id: number;
   name: string;
+  parentName: string;
   productTypeList?: ProductTypeListEntity[] | null;
 }
 export interface ProductTypeListEntity {
@@ -77,4 +87,23 @@ export interface AwsInfo {
   regionPoolId: string;
   customerProfileBaseFolder: string;
   prefixProfilePic: string;
+}
+
+export interface IEulerAutoSuggestionsProps {
+  action: string;
+  suggestions: IEulerSuggestionsEntity[];
+}
+export interface IEulerSuggestionsEntity {
+  id: string;
+  type: string;
+  term: string;
+  search_params: string;
+  displayName: string;
+  trackingData: TrackingData;
+  label: string;
+  name: string;
+  recent?: null;
+}
+export interface TrackingData {
+  section: string;
 }

@@ -4,6 +4,8 @@ import { SvgIcon } from '@hs/icons';
 
 const RecommendedProductsWrapper = styled.div`
   background: #f5f5f5;
+  max-width: 1400px;
+  margin: auto;
 `;
 
 const RecommendedProductsTitle = styled.div`

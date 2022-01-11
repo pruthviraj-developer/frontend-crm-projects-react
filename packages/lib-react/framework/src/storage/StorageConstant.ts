@@ -31,4 +31,5 @@ export const COOKIE_DATA = {
 export const SESSION_DATA = {
   OA_DATA: 'oa_data',
   SEGMENT_DATA: 'SEGMENT_DATA',
+  CART_LOCATION: 'cartLocation',
 };

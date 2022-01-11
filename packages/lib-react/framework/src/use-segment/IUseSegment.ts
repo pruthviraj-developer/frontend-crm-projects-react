@@ -92,6 +92,7 @@ export interface ISegmentTraits {
   in_app_browser?: string;
   user_agent?: string;
   hs_referrer?: string;
+  hs_framework?: string;
 }
 export interface Page {
   path: string;

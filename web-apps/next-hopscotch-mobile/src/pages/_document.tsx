@@ -21,6 +21,7 @@ export default class MyDocument extends Document {
           <meta name="apple-mobile-web-app-title" content="Hopscotch"></meta>
           <meta property="og:image" content="https://static.hopscotch.in/web2/images/assets/hopscotch_typeface.png" />
           <meta property="og:type" content="website" />
+          <link rel="icon" href="/favicon.ico" />
           <script src="/n7/n7HD.js" async></script>
         </Head>
         <body>

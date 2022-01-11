@@ -1,6 +1,6 @@
 export interface IProductProps {
   productId: string;
-  isMobile: Boolean | string;
+  isMobile: Boolean;
   url: string;
 }
 

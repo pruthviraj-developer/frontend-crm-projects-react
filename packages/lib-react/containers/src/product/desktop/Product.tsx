@@ -14,23 +14,26 @@ import {
   AccordionDesktop as Accordion,
   RecommendedProductsDesktop as RecommendedProducts,
   ProductCarouselDesktop as ProductCarousel,
+  AddToCartDesktop as AddToCart,
+  GoToCartDesktop as GoToCart,
+  SizeSelector,
+  GoToTopDesktop,
 } from '@hs/components';
 const ProductDesktop = ({
+  goToCart,
   productId,
   productData,
   selectedSku,
+  addedToCart,
   deliveryDetails,
   recommendedProductDetails,
   similarProductDetails,
-  updatedWishListId,
-  addToWishlist,
-  deleteFromWishlist,
+  addProductToCart,
   openSizeChartPopup,
-  // onSizeSelect,
   openPinCodePopup,
   openSizeSelector,
-}: // addProductToCart,
-IProductPage) => {
+  onSizeSelect,
+}: IProductPage) => {
   const similarProductsLink = useRef<HTMLDivElement>(null);
   const recommendedProductsLink = useRef<HTMLDivElement>(null);
   const {
@@ -42,8 +45,6 @@ IProductPage) => {
     isPresale,
     qtyLeft,
     simpleSkus,
-    showRfypCue,
-    wishlistId,
     isProductSoldOut,
     ...product
   } = useProduct({ productData: productData, selectedSku: selectedSku });
@@ -103,17 +104,11 @@ IProductPage) => {
             {...{
               productName,
               isProductSoldOut: !!productData.isProductSoldOut,
-              wishlistId:
-                updatedWishListId === undefined
-                  ? wishlistId
-                  : updatedWishListId,
               retailPrice,
               retailPriceMax,
-              selectedSku: selectedSku,
+              selectedSku,
               regularPrice,
               discount,
-              addToWishlist,
-              deleteFromWishlist,
             }}
           ></ProductNamePrice>
           <SizeAndChartLabels
@@ -125,28 +120,31 @@ IProductPage) => {
               onSizeChartClick: openSizeChartPopup,
             }}
           ></SizeAndChartLabels>
-          {/* {!isOneSize && (
-                  <CustomSizePicker
-                    {...{
-                      simpleSkus,
-                      selectedSku: selectedSku,
-                      onSizeSelect,
-                    }}
-                  ></CustomSizePicker>
-                )}
-                {showRfypCue && showRFYP && (
-                  <RecommendedProductsLinks
-                    {...{ isProductSoldOut: !!productData.isProductSoldOut, goToProductRecommendation }}
-                  ></RecommendedProductsLinks>
-                )} */}
-
-          {/* <SizeSelector
-            {...{ showRFYP, goToProductRecommendation }}
-          ></SizeSelector> */}
+          <SizeSelector
+            {...{
+              showRFYP,
+              goToProductRecommendation,
+              simpleSkus,
+              showAddToCart: true,
+              onSizeSelect,
+              selectedSku,
+            }}
+          ></SizeSelector>
+          {addedToCart ? (
+            <GoToCart goToCart={goToCart} />
+          ) : (
+            <AddToCart
+              {...{
+                show: true,
+                disabled: isProductSoldOut ? true : false,
+                addProductToCart,
+              }}
+            />
+          )}
           <DeliveryDetails
             {...{
               ...deliveryDetailsData,
-              selectedSku: selectedSku,
+              selectedSku,
               ...deliveryDetails,
               openPinCodePopup,
               openSizeSelector,
@@ -158,7 +156,7 @@ IProductPage) => {
                 ...product,
                 isPresale,
                 simpleSkus,
-                selectedSku: selectedSku,
+                selectedSku,
               }}
             ></Accordion>
           )}
@@ -176,6 +174,7 @@ IProductPage) => {
           <RecommendedProducts {...similarProducts}></RecommendedProducts>
         </div>
       )}
+      <GoToTopDesktop></GoToTopDesktop>
     </>
   );
 };
