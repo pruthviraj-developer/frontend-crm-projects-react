@@ -3,11 +3,12 @@ import { typography, mediaQueries } from '@hs/utils';
 import { SvgIcon } from '@hs/icons';
 
 const CarouselWrapper = styled.div`
-  overflow-x: initial;
   white-space: nowrap;
   position: relative;
   padding: 16px 0px 32px 8px;
   max-height: 570px;
+  overflow-x: scroll;
+  overflow-y: hidden;
 `;
 
 const ProductCarouselWrapper = styled.div`
@@ -24,9 +25,10 @@ const ProductCarouselWrapper = styled.div`
 `;
 
 const ProductImageContainer = styled.div`
-  width: 100%;
   height: 468px;
   max-width: 558px;
+  min-width: 558px;
+  display: inline-block;
   ${mediaQueries('xl')`
     height: 558px;
   `};
@@ -64,12 +66,42 @@ const SimilarItemsLinkWrapper = styled.div<{
 `;
 
 const TransparentImgOverlay = styled.div`
-  width: 100%;
   height: 100%;
   background: #00000000;
   position: absolute;
   top: 0;
   left: 0;
+  max-width: 554px;
+  min-width: 554px;
+`;
+
+const RightButton = styled.div`
+  top: 45%;
+  opacity: 1;
+  z-index: 1;
+  right: 26px;
+  width: 48px;
+  height: 48px;
+  rsor: pointer;
+  position: absolute;
+  border-radius: 24px;
+  box-shadow: 0 2px 8px 0 rgb(0 0 0 / 8%);
+  transition: box-shadow 0.25s ease;
+  background: #fff;
+`;
+const LeftButton = styled.div`
+  top: 45%;
+  left: 26px;
+  opacity: 1;
+  z-index: 1;
+  width: 48px;
+  height: 48px;
+  cursor: pointer;
+  position: absolute;
+  border-radius: 24px;
+  box-shadow: 0 2px 8px 0 rgb(0 0 0 / 8%);
+  transition: box-shadow 0.25s ease;
+  background: #fff;
 `;
 
 export {
@@ -80,4 +112,6 @@ export {
   SvgIconsElement,
   SimilarTextElement,
   TransparentImgOverlay,
+  RightButton,
+  LeftButton,
 };

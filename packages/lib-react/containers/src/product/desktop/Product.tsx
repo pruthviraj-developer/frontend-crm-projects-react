@@ -13,12 +13,13 @@ import {
   DeliveryDetailsDesktop as DeliveryDetails,
   AccordionDesktop as Accordion,
   RecommendedProductsDesktop as RecommendedProducts,
-  ProductCarouselDesktop as ProductCarousel,
   AddToCartDesktop as AddToCart,
   GoToCartDesktop as GoToCart,
   SizeSelector,
   GoToTopDesktop,
 } from '@hs/components';
+import { ProductCarouselDesktop as ProductCarousel } from './../product-carousel';
+
 const ProductDesktop = ({
   goToCart,
   productId,
