@@ -170,6 +170,7 @@ const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile, url }
 
   useEffect(() => {
     setSelectedSku(null);
+    updateAddedToCart(false);
   }, [productId]);
 
   useEffect(() => {
@@ -362,7 +363,7 @@ const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile, url }
       const sku = simpleSkus[0];
       setSelectedSku(sku);
       addToCart(sku);
-    } else {
+    } else if (isMobile) {
       openSizeSelector();
     }
   };
