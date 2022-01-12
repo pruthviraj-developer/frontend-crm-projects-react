@@ -4,6 +4,7 @@ import { SvgIcon } from '@hs/icons';
 
 const AccordionWrapper = styled.div`
   margin: 32px 0 0 0;
+  cursor: pointer;
 `;
 
 const AccordionTitle = styled.div`
