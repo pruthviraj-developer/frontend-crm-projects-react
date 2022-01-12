@@ -28,6 +28,9 @@ const FooterBlock = styled.div`
     background: #f9f9f9;
     a {
       color: #ed54a4;
+      path {
+        fill: #ed54a4;
+      }
     }
   }
 `;

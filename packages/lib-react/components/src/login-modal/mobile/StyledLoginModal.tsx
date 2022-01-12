@@ -58,7 +58,7 @@ const HeaderTitle = styled.div`
 
 const SubHeaderWrapper = styled.div`
   color: rgba(0, 0, 0, 0.8);
-  font-size: 32px;
+  font-size: 3.2rem;
   font-weight: 700;
   line-height: 40px;
   letter-spacing: -0.2px;

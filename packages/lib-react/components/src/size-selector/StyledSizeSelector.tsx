@@ -160,6 +160,13 @@ const SelectedSize = styled.div`
   padding-right: 16px;
   color: #333;
 `;
+
+const ErrorMessage = styled.div`
+  margin: 8px 12px 0px 12px;
+  font-size: 1.2rem;
+  color: #f44;
+`;
+
 export {
   SizeSelectorWrapper,
   CustomSizePicker,
@@ -178,4 +185,5 @@ export {
   SeeSimilarIcon,
   SizeSoldOut,
   SeeSimilarProducts,
+  ErrorMessage,
 };

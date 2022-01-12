@@ -29,6 +29,7 @@ const TransparentImgOverlay = styled.div`
 
 const CarouselList = styled.div`
   display: inline-block;
+  cursor: pointer;
 `;
 
 export { CarouselList, ImageWrapper, TransparentImgOverlay, SaleRetailPrice };

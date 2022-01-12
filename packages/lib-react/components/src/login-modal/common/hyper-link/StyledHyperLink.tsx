@@ -16,7 +16,7 @@ const HyperLinkWrapper = styled.div`
 const HyperLinkTag = styled.a`
   color: #000;
   opacity: 0.56;
-  font-size: 14px;
+  /* font-size: 1.4rem; */
   letter-spacing: 0.2px;
   text-decoration: underline;
 `;

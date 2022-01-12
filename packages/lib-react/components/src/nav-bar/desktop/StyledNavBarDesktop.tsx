@@ -24,7 +24,7 @@ const Link = styled('a')`
   float: left;
   padding: 8px 6px;
   margin-top: 17px;
-  font-size: 12px;
+  font-size: 1.2rem;
   font-weight: 600;
   line-height: 1.33;
   letter-spacing: 0;
@@ -84,7 +84,7 @@ const FilteredBy = styled.span`
   opacity: 0.8;
   width: 100px;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 1.2rem;
   font-weight: 400;
   line-height: 28px;
   border-radius: 14px;

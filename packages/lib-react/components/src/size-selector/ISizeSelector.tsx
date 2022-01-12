@@ -7,4 +7,5 @@ export interface ISizeSelectorProps {
   simpleSkus: ISimpleSkusEntityProps[];
   onSizeSelect: (a: ISimpleSkusEntityProps, b: string) => void;
   selectedSku?: ISimpleSkusEntityProps;
+  isAddtoCartClicked?: boolean;
 }

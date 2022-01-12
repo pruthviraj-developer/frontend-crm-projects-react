@@ -20,7 +20,7 @@ const GoToTopWrapper = styled.span`
 
 const BackToTopText = styled.span`
   color: #707070;
-  font-size: 14px;
+  /* font-size: 14px; */
   font-weight: 600;
   line-height: 16px;
   position: relative;

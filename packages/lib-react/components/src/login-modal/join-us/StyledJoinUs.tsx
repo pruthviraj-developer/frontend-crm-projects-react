@@ -56,7 +56,7 @@ const InputWrapper = styled.div<{ isFirst?: boolean }>`
 const Label = styled.label`
   pointer-events: none;
   position: absolute;
-  font-size: 14px;
+  /* font-size: 14px; */
   line-height: 14px;
   left: 12px;
   top: 18px;
@@ -67,10 +67,17 @@ const Label = styled.label`
 const Description = styled.p`
   color: rgba(0, 0, 0, 0.56);
   margin: 0;
-  font-size: 12px;
+  font-size: 1.2rem;
   line-height: 1.33;
   letter-spacing: 0.4px;
   padding: 8px 0 0 12px;
 `;
 
-export { JoinUsWrapper, JoinUsContainer, InputWrapper, InputField, Label, Description };
+export {
+  JoinUsWrapper,
+  JoinUsContainer,
+  InputWrapper,
+  InputField,
+  Label,
+  Description,
+};

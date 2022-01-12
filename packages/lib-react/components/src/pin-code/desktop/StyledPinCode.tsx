@@ -14,7 +14,7 @@ const PinCodeWrapper = styled.div`
 const Header = styled.div`
   color: #333;
   padding: 16px;
-  font-size: 14px;
+  /* font-size: 14px; */
   font-weight: 600;
   line-height: 16px;
   text-align: center;
@@ -40,14 +40,14 @@ const PinCodeBody = styled.div`
 
 const Title = styled.div`
   color: #333;
-  font-size: 14px;
+  /* font-size: 14px; */
   font-weight: 600;
   line-height: 16px;
 `;
 
 const ErrorMessage = styled.div`
   color: #f44;
-  font-size: 12px;
+  font-size: 1.2rem;
   margin: 0 12px 12px;
 `;
 
@@ -58,7 +58,7 @@ const Check = styled.button<{ disabled: boolean }>`
   cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
   font-weight: 600;
   margin-left: 8px;
-  font-size: 1.4rem;
+  /* font-size: 1.4rem; */
   line-height: 16px;
   border-radius: 4px;
   background-color: #ed54a4;
@@ -72,7 +72,7 @@ const PinCodeForm = styled.form`
 const Label = styled.label`
   pointer-events: none;
   position: absolute;
-  font-size: 14px;
+  /* font-size: 14px; */
   line-height: 14px;
   left: 12px;
   top: 18px;
@@ -119,7 +119,7 @@ const Address = styled.div`
   margin-right: 8px;
   padding: 16px;
   cursor: pointer;
-  font-size: 1.4rem;
+  /* font-size: 1.4rem; */
   line-height: 16px;
   &:hover {
     color: #ed54a4;

@@ -36,7 +36,7 @@ const InputWrapper = styled.div<{ isFirst?: boolean }>`
 const Label = styled.label`
   pointer-events: none;
   position: absolute;
-  font-size: 14px;
+  /* font-size: 14px; */
   line-height: 14px;
   left: 12px;
   top: 18px;

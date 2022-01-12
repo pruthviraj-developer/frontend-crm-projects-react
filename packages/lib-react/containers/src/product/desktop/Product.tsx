@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import {
   useProduct,
   useOneSize,
@@ -34,6 +34,7 @@ const ProductDesktop = ({
   openSizeSelector,
   onSizeSelect,
 }: IProductPage) => {
+  const [isAddtoCartClicked, setIsAddtoCart] = useState<boolean>(false);
   const similarProductsLink = useRef<HTMLDivElement>(null);
   const recommendedProductsLink = useRef<HTMLDivElement>(null);
   const {
@@ -79,6 +80,12 @@ const ProductDesktop = ({
       currentRefElement?.current?.scrollIntoView({ behavior: 'smooth' });
     }
   };
+  useEffect(() => {
+    setIsAddtoCart(false);
+    return () => {
+      setIsAddtoCart(false);
+    };
+  }, [productId]);
   return (
     <>
       <ProductWrapper>
@@ -128,6 +135,7 @@ const ProductDesktop = ({
               showAddToCart: true,
               onSizeSelect,
               selectedSku,
+              isAddtoCartClicked,
             }}
           ></SizeSelector>
           {addedToCart ? (
@@ -137,7 +145,10 @@ const ProductDesktop = ({
               {...{
                 show: true,
                 disabled: isProductSoldOut ? true : false,
-                addProductToCart,
+                addProductToCart: () => {
+                  setIsAddtoCart(true);
+                  addProductToCart();
+                },
               }}
             />
           )}
