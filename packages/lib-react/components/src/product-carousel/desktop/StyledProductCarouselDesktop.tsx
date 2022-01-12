@@ -61,6 +61,7 @@ const SimilarItemsLinkWrapper = styled.div<{
   justify-content: space-around;
   width: ${(props) => props.width}px;
   transition: width ease-out 300ms;
+  cursor: pointer;
 `;
 
 const TransparentImgOverlay = styled.div`
