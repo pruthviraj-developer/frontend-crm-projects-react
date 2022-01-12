@@ -38,7 +38,11 @@ import {
   useSessionStorage,
 } from '@hs/framework';
 
-const SizeChartPopupComponent = dynamic(() => import('@/components/size-chart/SizeChart'), {
+const SizeChartPopupComponentDeskTop = dynamic(() => import('@/components/size-chart/desktop'), {
+  ssr: false,
+});
+
+const SizeChartPopupComponentMobile = dynamic(() => import('@/components/size-chart/mobile'), {
   ssr: false,
 });
 
@@ -557,15 +561,25 @@ const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile, url }
         </>
       )}
       <SizeChartPopupModal>
-        {isSizeChartPopupOpen && productData && (
-          <SizeChartPopupComponent
-            {...{
-              id: productData.id,
-              productName: productName,
-              onClickClose: closeSizeChartPopup,
-            }}
-          ></SizeChartPopupComponent>
-        )}
+        {isSizeChartPopupOpen &&
+          productData &&
+          (isMobile ? (
+            <SizeChartPopupComponentMobile
+              {...{
+                id: productData.id,
+                productName: productName,
+                onClickClose: closeSizeChartPopup,
+              }}
+            />
+          ) : (
+            <SizeChartPopupComponentDeskTop
+              {...{
+                id: productData.id,
+                productName: productName,
+                onClickClose: closeSizeChartPopup,
+              }}
+            />
+          ))}
       </SizeChartPopupModal>
 
       <SizeSelectorPopupModal>
