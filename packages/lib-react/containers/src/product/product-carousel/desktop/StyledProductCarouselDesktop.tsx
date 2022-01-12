@@ -75,10 +75,45 @@ const TransparentImgOverlay = styled.div`
   min-width: 554px;
 `;
 
-const RightButton = styled.div`
-  top: 45%;
+// const RightButton = styled.div`
+//   top: 45%;
+//   opacity: 1;
+//   z-index: 1;
+//   right: 26px;
+//   width: 48px;
+//   height: 48px;
+//   rsor: pointer;
+//   position: absolute;
+//   border-radius: 24px;
+//   box-shadow: 0 2px 8px 0 rgb(0 0 0 / 8%);
+//   transition: box-shadow 0.25s ease;
+//   background: #fff;
+// `;
+// const LeftButton = styled.div`
+// top: 45%;
+// left: 26px;
+// opacity: 1;
+// z-index: 1;
+// width: 48px;
+// height: 48px;
+// cursor: pointer;
+// position: absolute;
+// border-radius: 24px;
+// box-shadow: 0 2px 8px 0 rgb(0 0 0 / 8%);
+// transition: box-shadow 0.25s ease;
+// background: #fff;
+// `;
+
+const RightArrow = styled.div`
+  /* max-width: 30px;
+  max-height: 30px;
+  position: absolute;
+  top: 20%;
+  right: 26px;
+  width: 30px; */
+  top: 30%;
   opacity: 1;
-  z-index: 1;
+  /* z-index: 1; */
   right: 26px;
   width: 48px;
   height: 48px;
@@ -89,11 +124,17 @@ const RightButton = styled.div`
   transition: box-shadow 0.25s ease;
   background: #fff;
 `;
-const LeftButton = styled.div`
-  top: 45%;
+const LeftArrow = styled.div`
+  /* max-width: 30px;
+  max-height: 30px;
+  position: absolute;
+  top: 20%;
+  left: 26px;
+  width: 30px; */
+  top: 30%;
   left: 26px;
   opacity: 1;
-  z-index: 1;
+  /* z-index: 1; */
   width: 48px;
   height: 48px;
   cursor: pointer;
@@ -112,6 +153,8 @@ export {
   SvgIconsElement,
   SimilarTextElement,
   TransparentImgOverlay,
-  RightButton,
-  LeftButton,
+  // RightButton,
+  // LeftButton,
+  RightArrow,
+  LeftArrow,
 };
