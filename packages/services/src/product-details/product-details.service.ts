@@ -72,7 +72,11 @@ const getRecommendedProducts = <P, R>(
   });
 };
 
-const getProductDetails = <P, R>(productId: P, baseURL = ''): Promise<R> => {
+const getProductDetails = <P, R>(
+  productId: P,
+  baseURL = '',
+  headers = {}
+): Promise<R> => {
   const params = { currentTime: new Date().getTime() };
   let url = `/api/product/${productId}`;
   if (baseURL) url = baseURL + url;
@@ -89,6 +93,7 @@ const getProductDetails = <P, R>(productId: P, baseURL = ''): Promise<R> => {
   return httpService.get<R>({
     url,
     params,
+    headers,
   });
 };
 

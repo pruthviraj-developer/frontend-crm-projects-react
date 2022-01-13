@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosError } from 'axios';
-export const httpHeaders = {
+const httpHeaders = {
   'api-version': 'v1.8',
   'client-auth-method': 'v1',
   'client-id': 'web-client/3.0',
@@ -7,11 +7,12 @@ export const httpHeaders = {
   Accept: 'application/json, text/javascript, */*; q=0.01',
   'device-id': '',
   'install-id': '',
-  'Content-Type': 'application/json',
-  'x-nv-security-magic':
-    '1890568C010499FE34D23BA98C3D750828ADE507D5CB418832AF31F706845569',
+  'Content-Type': 'application/json'
 };
-type IHttpService = Pick<AxiosRequestConfig, 'url' | 'data' | 'params'>;
+export type IHttpService = Pick<
+  AxiosRequestConfig,
+  'url' | 'data' | 'params' | 'headers'
+>;
 
 const err = {
   action: 'failure',
@@ -49,11 +50,11 @@ const processRequest = <P = any>(
       }
     });
 };
-const get = <T>({ url, params }: IHttpService): Promise<T> => {
+const get = <T>({ url, params, headers }: IHttpService): Promise<T> => {
   const reqConfig: AxiosRequestConfig = {
     method: 'get',
     url,
-    headers: { ...httpHeaders },
+    headers: { ...httpHeaders, ...headers },
     params: params,
   };
   return processRequest(reqConfig);
