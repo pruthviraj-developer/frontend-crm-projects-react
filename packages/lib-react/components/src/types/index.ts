@@ -73,3 +73,4 @@ export interface IDeliveryMessagesEntity {
 
 export * from './ISearchProps';
 export * from './ISearchResource';
+export * from './ISizeChart';

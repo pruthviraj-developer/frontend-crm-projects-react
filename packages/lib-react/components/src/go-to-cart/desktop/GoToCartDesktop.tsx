@@ -12,7 +12,7 @@ export const GoToCartDesktop: FC<IGoToCartProps> = ({
   return (
     <Link
       href={{
-        pathname: '/v2/cart',
+        pathname: '/w/cart',
       }}
       passHref
     >

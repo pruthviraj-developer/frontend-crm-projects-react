@@ -57,9 +57,6 @@ export const SizeChartPopupDesktop: FC<ISizeChartPopup> = ({
             <SizeChartCloseIconDesktop icon={IconClose} />
           </SizeChartHeaderCloseIconDesktop>
         </SizeChartHeaderDesktop>
-        <SizeChartHeaderProductNameDesktop>
-          {productName}
-        </SizeChartHeaderProductNameDesktop>
       </SizeChartHeaderWrapperDesktop>
       <SizeChartBodyDesktop>
         {sizeChartData &&
@@ -82,6 +79,11 @@ export const SizeChartPopupDesktop: FC<ISizeChartPopup> = ({
                     </SizeChartDetailImagesDesktop>
                   )}
                   <SizeTableWrapperDesktop>
+                    {index === 0 && (
+                      <SizeChartHeaderProductNameDesktop>
+                        {productName}
+                      </SizeChartHeaderProductNameDesktop>
+                    )}
                     {sizeChart.sizeChartParameterValueDTOList && (
                       <>
                         {showLengthBlock[index] && (
@@ -136,6 +138,7 @@ export const SizeChartPopupDesktop: FC<ISizeChartPopup> = ({
                         )}
                       </>
                     )}
+
                     <SizeTableDesktop>
                       <SizeTableDetail>
                         <SizeTableBody>
@@ -164,25 +167,25 @@ export const SizeChartPopupDesktop: FC<ISizeChartPopup> = ({
                         </SizeTableBody>
                       </SizeTableDetail>
                     </SizeTableDesktop>
+                    {sizeChart.notesList && (
+                      <SizeTips>
+                        <SizeTipsTitle>
+                          Size notes and fitting tips:
+                        </SizeTipsTitle>
+                        <SizeTipsList>
+                          {sizeChart.notesList.map(
+                            (notes: string, notesIndex: number) => {
+                              return (
+                                <SizeTipsListItem key={notesIndex}>
+                                  {notes}
+                                </SizeTipsListItem>
+                              );
+                            }
+                          )}
+                        </SizeTipsList>
+                      </SizeTips>
+                    )}
                   </SizeTableWrapperDesktop>
-                  {sizeChart.notesList && (
-                    <SizeTips>
-                      <SizeTipsTitle>
-                        Size notes and fitting tips:
-                      </SizeTipsTitle>
-                      <SizeTipsList>
-                        {sizeChart.notesList.map(
-                          (notes: string, notesIndex: number) => {
-                            return (
-                              <SizeTipsListItem key={notesIndex}>
-                                {notes}
-                              </SizeTipsListItem>
-                            );
-                          }
-                        )}
-                      </SizeTipsList>
-                    </SizeTips>
-                  )}
                 </SizeChartDetailsWrapperDesktop>
               );
             }

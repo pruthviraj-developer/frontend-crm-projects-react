@@ -17,6 +17,7 @@ import {
   SelectedSize,
   SizeSoldOut,
   SeeSimilarProducts,
+  ErrorMessage,
 } from './StyledSizeSelector';
 import {
   IconAngleDown,
@@ -32,6 +33,7 @@ export const SizeSelector: FC<ISizeSelectorProps> = ({
   selectedSku,
   onSizeSelect,
   goToProductRecommendation,
+  isAddtoCartClicked = false,
 }: ISizeSelectorProps) => {
   const [isDropDownOpen, setIsDropDownOpen] = useState<boolean>(false);
   const elementRef = useRef<any>();
@@ -130,6 +132,9 @@ export const SizeSelector: FC<ISizeSelectorProps> = ({
           </OptionsPreviewList>
         )}
       </CustomSizePicker>
+      {isAddtoCartClicked && !selectedSku && (
+        <ErrorMessage>Please select a size</ErrorMessage>
+      )}
     </SizeSelectorWrapper>
   );
 };
