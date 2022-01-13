@@ -58,6 +58,10 @@ export const ProductCarouselDesktop: FC<IProductCarouselDesktopProps> = ({
     };
   }, []);
 
+  useEffect(() => {
+    instanceRef.current && instanceRef.current.moveToIdx(0);
+  }, [imgUrls]);
+
   const Arrow = (props: {
     disabled: boolean;
     left?: boolean;
@@ -95,7 +99,7 @@ export const ProductCarouselDesktop: FC<IProductCarouselDesktopProps> = ({
                 id={'carousel-' + index}
               >
                 <Image
-                  alt=""
+                  priority
                   layout="responsive"
                   draggable={false}
                   unoptimized
