@@ -176,7 +176,7 @@ export const useSegment = () => {
           experiments: getFormattedExperiments(),
           in_app_browser: getInAppBrowser(deviceDetail?.ua),
           user_agent: deviceDetail?.ua || '',
-          hs_referrer: 'string' || 'direct',
+          hs_referrer: window.document.referrer || 'direct',
         },
       });
     }

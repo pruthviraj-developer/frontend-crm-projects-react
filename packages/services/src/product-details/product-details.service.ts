@@ -80,16 +80,6 @@ const getProductDetails = <P, R>(
   const params = { currentTime: new Date().getTime() };
   let url = `/api/product/${productId}`;
   if (baseURL) url = baseURL + url;
-  // if (self._ConfigService.tiles.customTilesId) {
-  //   params.customTilesId = self._ConfigService.tiles.customTilesId;
-  //   params.from = self._ConfigService.tiles.from;
-  //   self._ConfigService.tiles.customTilesId = null;
-  //   self._ConfigService.tiles.from = null;
-  // } else if (self._ConfigService.tiles.cptId) {
-  //   params.cptId = self._ConfigService.tiles.cptId;
-  //   self._ConfigService.tiles.cptId = null;
-  // }
-
   return httpService.get<R>({
     url,
     params,
