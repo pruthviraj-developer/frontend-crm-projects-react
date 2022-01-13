@@ -92,6 +92,7 @@ const FooterLogoIconWrapper = styled.div`
 const FooterBlockTitle = styled.h5`
   margin: 10px 0 0 0;
   font-weight: ${typography.weight.medium};
+  font-size: 1.4rem;
 `;
 
 const LinkIcons = styled('a')`
