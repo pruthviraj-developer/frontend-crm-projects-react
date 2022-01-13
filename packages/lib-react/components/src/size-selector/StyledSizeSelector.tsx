@@ -100,10 +100,10 @@ const ItemsLeft = styled.span`
 `;
 
 const DeliveryDetails = styled.span`
-  color: #333333;
+  color: #fff;
   line-height: 13px;
   border-radius: 4px;
-  background-color: #ffcc33;
+  background-color: #35b35d;
   padding: 1px 6px 1px 10px;
   display: flex;
   align-items: center;
