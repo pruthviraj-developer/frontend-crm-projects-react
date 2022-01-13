@@ -71,78 +71,61 @@ const TransparentImgOverlay = styled.div`
   position: absolute;
   top: 0;
   left: 0;
-  max-width: 554px;
-  min-width: 554px;
+  max-width: 558px;
+  min-width: 558px;
 `;
 
-// const RightButton = styled.div`
-//   top: 45%;
-//   opacity: 1;
-//   z-index: 1;
-//   right: 26px;
-//   width: 48px;
-//   height: 48px;
-//   rsor: pointer;
-//   position: absolute;
-//   border-radius: 24px;
-//   box-shadow: 0 2px 8px 0 rgb(0 0 0 / 8%);
-//   transition: box-shadow 0.25s ease;
-//   background: #fff;
-// `;
-// const LeftButton = styled.div`
-// top: 45%;
-// left: 26px;
-// opacity: 1;
-// z-index: 1;
-// width: 48px;
-// height: 48px;
-// cursor: pointer;
-// position: absolute;
-// border-radius: 24px;
-// box-shadow: 0 2px 8px 0 rgb(0 0 0 / 8%);
-// transition: box-shadow 0.25s ease;
-// background: #fff;
-// `;
-
-const RightArrow = styled.div`
-  /* max-width: 30px;
-  max-height: 30px;
-  position: absolute;
-  top: 20%;
-  right: 26px;
-  width: 30px; */
-  top: 30%;
-  opacity: 1;
-  /* z-index: 1; */
+const RightArrow = styled.div<{ disabled: boolean }>`
+  top: 28.3%;
   right: 26px;
   width: 48px;
   height: 48px;
-  rsor: pointer;
+  cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
   position: absolute;
   border-radius: 24px;
-  box-shadow: 0 2px 8px 0 rgb(0 0 0 / 8%);
-  transition: box-shadow 0.25s ease;
   background: #fff;
+  box-shadow: ${(props) =>
+    props.disabled
+      ? '0 0 0 1px rgb(0 0 0 / 10%)'
+      : '0 2px 8px 0 rgb(0 0 0 / 8%)'};
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  &:hover {
+    box-shadow: 0 2px 4px 0 rgb(0 0 0 / 16%);
+  }
 `;
-const LeftArrow = styled.div`
-  /* max-width: 30px;
-  max-height: 30px;
-  position: absolute;
-  top: 20%;
+const LeftArrow = styled.div<{ disabled: boolean }>`
+  top: 28.3%;
   left: 26px;
-  width: 30px; */
-  top: 30%;
-  left: 26px;
-  opacity: 1;
-  /* z-index: 1; */
   width: 48px;
   height: 48px;
-  cursor: pointer;
+  cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
   position: absolute;
   border-radius: 24px;
-  box-shadow: 0 2px 8px 0 rgb(0 0 0 / 8%);
-  transition: box-shadow 0.25s ease;
   background: #fff;
+  box-shadow: ${(props) =>
+    props.disabled
+      ? '0 0 0 1px rgb(0 0 0 / 10%)'
+      : '0 2px 8px 0 rgb(0 0 0 / 8%)'};
+  &.left {
+    right: auto;
+    transform: rotate(180deg);
+  }
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  &:hover {
+    box-shadow: 0 2px 4px 0 rgb(0 0 0 / 16%);
+  }
+`;
+
+const CarouselIcon = styled(SvgIcon)`
+  width: 12px;
+  height: 14px;
+  &:hover {
+    fill: red;
+  }
 `;
 
 export {
@@ -153,8 +136,7 @@ export {
   SvgIconsElement,
   SimilarTextElement,
   TransparentImgOverlay,
-  // RightButton,
-  // LeftButton,
   RightArrow,
   LeftArrow,
+  CarouselIcon,
 };
