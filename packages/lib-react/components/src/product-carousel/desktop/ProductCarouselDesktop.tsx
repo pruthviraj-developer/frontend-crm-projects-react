@@ -20,7 +20,7 @@ export const ProductCarouselDesktop: FC<IProductCarouselDesktopProps> = ({
   imgUrls,
   goToProductRecommendation,
 }: IProductCarouselDesktopProps) => {
-  const imageSize = '564px';
+  // const imageSize = '564px';
   const [currentSlide, setCurrentSlide] = React.useState(0);
   const [loaded, setLoaded] = useState(false);
   const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>(
@@ -59,7 +59,26 @@ export const ProductCarouselDesktop: FC<IProductCarouselDesktopProps> = ({
   }, []);
 
   useEffect(() => {
-    instanceRef.current && instanceRef.current.moveToIdx(0);
+    instanceRef.current?.update(
+      {
+        initial: 0,
+        mode: 'free',
+        slideChanged(s) {
+          setCurrentSlide(s.track.details.rel);
+        },
+        created() {
+          setLoaded(true);
+        },
+        slides: {
+          perView: 1.68,
+          spacing: 12,
+        },
+        defaultAnimation: {
+          duration: 1500,
+        },
+      },
+      0
+    );
   }, [imgUrls]);
 
   const Arrow = (props: {
@@ -89,23 +108,23 @@ export const ProductCarouselDesktop: FC<IProductCarouselDesktopProps> = ({
   return (
     <ProductCarouselWrapper>
       {/* <CustomLeftArrow /> */}
-      <CarouselWrapper ref={sliderRef} className="keen-slider">
+      <CarouselWrapper ref={sliderRef} className="keen-slider" key="slider">
         {imgUrls &&
           imgUrls.map((img, index: number) => {
             return (
               <ProductImageContainer
-                key={index}
+                key={img.imgUrlFull}
                 className="keen-slider__slide"
                 id={'carousel-' + index}
               >
                 <Image
                   priority
-                  layout="responsive"
+                  layout="fill"
                   draggable={false}
-                  unoptimized
-                  width={imageSize}
-                  height={imageSize}
-                  src={`${img.imgUrlFull}&tr=w-${imageSize},c-at_max,dpr-2,n-medium`}
+                  loader={({ src, width }) =>
+                    `${src}&tr=w-${width},c-at_max,n-medium`
+                  }
+                  src={img.imgUrlFull}
                 />
                 <TransparentImgOverlay></TransparentImgOverlay>
               </ProductImageContainer>
