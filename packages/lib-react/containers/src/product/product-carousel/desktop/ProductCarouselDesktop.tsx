@@ -20,7 +20,7 @@ export const ProductCarouselDesktop: FC<IProductCarouselDesktopProps> = ({
   imgUrls,
   goToProductRecommendation,
 }: IProductCarouselDesktopProps) => {
-  const imageSize = '558px';
+  const imageSize = '564px';
   const [currentSlide, setCurrentSlide] = React.useState(0);
   const [loaded, setLoaded] = useState(false);
   const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>(
@@ -38,7 +38,7 @@ export const ProductCarouselDesktop: FC<IProductCarouselDesktopProps> = ({
         spacing: 12,
       },
       defaultAnimation: {
-        duration: 3000,
+        duration: 1500,
       },
     },
     [

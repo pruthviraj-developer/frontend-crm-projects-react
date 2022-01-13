@@ -25,12 +25,12 @@ const ProductCarouselWrapper = styled.div`
 `;
 
 const ProductImageContainer = styled.div`
-  height: 468px;
-  max-width: 558px;
-  min-width: 558px;
+  height: 564px;
+  max-width: 564px;
+  min-height: 564px;
   display: inline-block;
   ${mediaQueries('xl')`
-    height: 558px;
+    height: 564px;
   `};
 `;
 
@@ -71,8 +71,8 @@ const TransparentImgOverlay = styled.div`
   position: absolute;
   top: 0;
   left: 0;
-  max-width: 558px;
-  min-width: 558px;
+  max-width: 564px;
+  min-height: 564px;
 `;
 
 const RightArrow = styled.div<{ disabled: boolean }>`
@@ -80,6 +80,7 @@ const RightArrow = styled.div<{ disabled: boolean }>`
   right: 26px;
   width: 48px;
   height: 48px;
+  opacity: ${(props) => (props.disabled ? 0.5 : 1)};
   cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
   position: absolute;
   border-radius: 24px;
@@ -93,6 +94,11 @@ const RightArrow = styled.div<{ disabled: boolean }>`
   justify-content: space-around;
   &:hover {
     box-shadow: 0 2px 4px 0 rgb(0 0 0 / 16%);
+    svg {
+      path {
+        fill: ${(props) => (props.disabled ? '#a4a4a4' : '#ed54a4')};
+      }
+    }
   }
 `;
 const LeftArrow = styled.div<{ disabled: boolean }>`
@@ -100,6 +106,7 @@ const LeftArrow = styled.div<{ disabled: boolean }>`
   left: 26px;
   width: 48px;
   height: 48px;
+  opacity: ${(props) => (props.disabled ? 0.5 : 1)};
   cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
   position: absolute;
   border-radius: 24px;
@@ -117,15 +124,17 @@ const LeftArrow = styled.div<{ disabled: boolean }>`
   justify-content: space-around;
   &:hover {
     box-shadow: 0 2px 4px 0 rgb(0 0 0 / 16%);
+    svg {
+      path {
+        fill: ${(props) => (props.disabled ? '#a4a4a4' : '#ed54a4')};
+      }
+    }
   }
 `;
 
 const CarouselIcon = styled(SvgIcon)`
   width: 12px;
   height: 14px;
-  &:hover {
-    fill: red;
-  }
 `;
 
 export {
