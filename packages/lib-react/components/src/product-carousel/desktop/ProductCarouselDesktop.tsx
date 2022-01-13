@@ -1,7 +1,8 @@
 import React, { FC, useEffect, useState } from 'react';
 import Image from 'next/image';
-import Carousel from 'react-multi-carousel';
-import { IconSeeSimilar } from '@hs/icons';
+import { IconSeeSimilar, IconCarouselCaret } from '@hs/icons';
+
+import { useKeenSlider } from 'keen-slider/react';
 import {
   ProductCarouselWrapper,
   CarouselWrapper,
@@ -10,28 +11,44 @@ import {
   SimilarTextElement,
   SvgIconsElement,
   TransparentImgOverlay,
+  RightArrow,
+  LeftArrow,
+  CarouselIcon,
 } from './StyledProductCarouselDesktop';
-import { IProductCarouselDesktopProps, IProductCarouselDesktopBreakPoints } from './IProductCarouselDesktop';
+import { IProductCarouselDesktopProps } from './IProductCarouselDesktop';
 export const ProductCarouselDesktop: FC<IProductCarouselDesktopProps> = ({
-  focusOnSelect,
-  showArrows,
-  draggable,
-  renderButtonGroupOutside,
-  renderDotsOutside,
-  slidesToSlide,
-  swipeable,
-  showDots,
   imgUrls,
   goToProductRecommendation,
 }: IProductCarouselDesktopProps) => {
-  const imageSize = 360;
-  const responsive: IProductCarouselDesktopBreakPoints | any = {
-    desktop: { breakpoint: { max: 3000, min: 1024 }, items: 1, partialVisibilityGutter: 359 },
-    mobile: { breakpoint: { max: 464, min: 0 }, items: 1 },
-    tablet: { breakpoint: { max: 1024, min: 464 }, items: 1, partialVisibilityGutter: 40 },
-  };
-  const [similarItemsDisplayWith, setSimilarItemsDisplayWith] = useState<number>(140);
+  const imageSize = '564px';
+  const [currentSlide, setCurrentSlide] = React.useState(0);
+  const [loaded, setLoaded] = useState(false);
+  const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>(
+    {
+      initial: 0,
+      mode: 'free',
+      slideChanged(s) {
+        setCurrentSlide(s.track.details.rel);
+      },
+      created() {
+        setLoaded(true);
+      },
+      slides: {
+        perView: 1.68,
+        spacing: 12,
+      },
+      defaultAnimation: {
+        duration: 1500,
+      },
+    },
+    [
+      // add plugins here
+    ]
+  );
 
+  // const totalImages = (imgUrls && imgUrls.length) || 0;
+  const [similarItemsDisplayWith, setSimilarItemsDisplayWith] =
+    useState<number>(140);
   useEffect(() => {
     const timer = setTimeout(() => {
       setSimilarItemsDisplayWith(46);
@@ -41,58 +58,87 @@ export const ProductCarouselDesktop: FC<IProductCarouselDesktopProps> = ({
     };
   }, []);
 
+  const Arrow = (props: {
+    disabled: boolean;
+    left?: boolean;
+    onClick: (e: any) => void;
+  }) => {
+    return (
+      <>
+        {props.left ? (
+          <LeftArrow
+            disabled={props.disabled}
+            onClick={props.onClick}
+            className="left"
+          >
+            <CarouselIcon icon={IconCarouselCaret} />
+          </LeftArrow>
+        ) : (
+          <RightArrow disabled={props.disabled} onClick={props.onClick}>
+            <CarouselIcon icon={IconCarouselCaret} />
+          </RightArrow>
+        )}
+      </>
+    );
+  };
+
   return (
     <ProductCarouselWrapper>
-      <CarouselWrapper>
-        <Carousel
-          ssr
-          responsive={responsive}
-          additionalTransfrom={0}
-          arrows={showArrows}
-          autoPlaySpeed={3000}
-          centerMode={false}
-          className=""
-          draggable={draggable}
-          focusOnSelect={focusOnSelect}
-          infinite={false}
-          keyBoardControl
-          minimumTouchDrag={80}
-          renderButtonGroupOutside={renderButtonGroupOutside}
-          renderDotsOutside={renderDotsOutside}
-          showDots={showDots}
-          sliderClass=""
-          slidesToSlide={slidesToSlide}
-          swipeable={swipeable}
-          dotListClass="product-carousel-dot-list"
-          containerClass="product-carousel-container"
-          deviceType="desktop"
-          partialVisible={true}
-          itemClass="product-carousel-item"
-        >
-          {imgUrls &&
-            imgUrls.map((img, index: number) => {
-              return (
-                <ProductImageContainer key={index}>
-                  <Image
-                    alt=""
-                    layout="fill"
-                    draggable={false}
-                    unoptimized
-                    src={`${img.imgUrlFull}&tr=w-${imageSize},c-at_max,dpr-2,n-medium`}
-                  />
-                  <TransparentImgOverlay></TransparentImgOverlay>
-                </ProductImageContainer>
-              );
-            })}
-        </Carousel>
+      {/* <CustomLeftArrow /> */}
+      <CarouselWrapper ref={sliderRef} className="keen-slider">
+        {imgUrls &&
+          imgUrls.map((img, index: number) => {
+            return (
+              <ProductImageContainer
+                key={index}
+                className="keen-slider__slide"
+                id={'carousel-' + index}
+              >
+                <Image
+                  alt=""
+                  layout="responsive"
+                  draggable={false}
+                  unoptimized
+                  width={imageSize}
+                  height={imageSize}
+                  src={`${img.imgUrlFull}&tr=w-${imageSize},c-at_max,dpr-2,n-medium`}
+                />
+                <TransparentImgOverlay></TransparentImgOverlay>
+              </ProductImageContainer>
+            );
+          })}
       </CarouselWrapper>
+      {/* <CustomRightArrow /> */}
+      {loaded && instanceRef.current && (
+        <>
+          <Arrow
+            left
+            onClick={(e: any) => {
+              e.stopPropagation() || instanceRef.current?.prev();
+            }}
+            disabled={currentSlide === 0}
+          />
+
+          <Arrow
+            onClick={(e: any) => {
+              e.stopPropagation() || instanceRef.current?.next();
+            }}
+            disabled={
+              currentSlide ===
+              instanceRef.current.track.details?.slides?.length - 1
+            }
+          />
+        </>
+      )}
       <SimilarItemsLinkWrapper
         width={similarItemsDisplayWith}
         onClick={() => {
           goToProductRecommendation('Overlay');
         }}
       >
-        <SimilarTextElement width={similarItemsDisplayWith}>SEE SIMILAR</SimilarTextElement>
+        <SimilarTextElement width={similarItemsDisplayWith}>
+          SEE SIMILAR
+        </SimilarTextElement>
         <SvgIconsElement icon={IconSeeSimilar} />
       </SimilarItemsLinkWrapper>
     </ProductCarouselWrapper>

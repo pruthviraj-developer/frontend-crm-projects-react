@@ -8,6 +8,7 @@ import {
 import { ProductDetailsWrapper, ProductWrapper } from './StyledProduct';
 import { IProductPage } from '../IProduct';
 import {
+  ProductCarouselDesktop as ProductCarousel,
   ProductNamePriceDesktop as ProductNamePrice,
   SizeAndChartLabelsDesktop as SizeAndChartLabels,
   DeliveryDetailsDesktop as DeliveryDetails,
@@ -18,7 +19,6 @@ import {
   SizeSelector,
   GoToTopDesktop,
 } from '@hs/components';
-import { ProductCarouselDesktop as ProductCarousel } from './../product-carousel';
 
 const ProductDesktop = ({
   goToCart,

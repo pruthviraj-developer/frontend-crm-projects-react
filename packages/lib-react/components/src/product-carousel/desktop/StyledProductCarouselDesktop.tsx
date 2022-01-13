@@ -3,11 +3,12 @@ import { typography, mediaQueries } from '@hs/utils';
 import { SvgIcon } from '@hs/icons';
 
 const CarouselWrapper = styled.div`
-  overflow-x: initial;
   white-space: nowrap;
   position: relative;
   padding: 16px 0px 32px 8px;
   max-height: 570px;
+  overflow-x: scroll;
+  overflow-y: hidden;
 `;
 
 const ProductCarouselWrapper = styled.div`
@@ -24,11 +25,12 @@ const ProductCarouselWrapper = styled.div`
 `;
 
 const ProductImageContainer = styled.div`
-  width: 100%;
-  height: 468px;
-  max-width: 558px;
+  height: 564px;
+  max-width: 564px;
+  min-height: 564px;
+  display: inline-block;
   ${mediaQueries('xl')`
-    height: 558px;
+    height: 564px;
   `};
 `;
 
@@ -61,16 +63,78 @@ const SimilarItemsLinkWrapper = styled.div<{
   justify-content: space-around;
   width: ${(props) => props.width}px;
   transition: width ease-out 300ms;
-  cursor: pointer;
 `;
 
 const TransparentImgOverlay = styled.div`
-  width: 100%;
   height: 100%;
   background: #00000000;
   position: absolute;
   top: 0;
   left: 0;
+  max-width: 564px;
+  min-height: 564px;
+`;
+
+const RightArrow = styled.div<{ disabled: boolean }>`
+  top: 28.3%;
+  right: 26px;
+  width: 48px;
+  height: 48px;
+  opacity: ${(props) => (props.disabled ? 0.5 : 1)};
+  cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
+  position: absolute;
+  border-radius: 24px;
+  background: #fff;
+  box-shadow: ${(props) =>
+    props.disabled
+      ? '0 0 0 1px rgb(0 0 0 / 10%)'
+      : '0 2px 8px 0 rgb(0 0 0 / 8%)'};
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  &:hover {
+    box-shadow: 0 2px 4px 0 rgb(0 0 0 / 16%);
+    svg {
+      path {
+        fill: ${(props) => (props.disabled ? '#a4a4a4' : '#ed54a4')};
+      }
+    }
+  }
+`;
+const LeftArrow = styled.div<{ disabled: boolean }>`
+  top: 28.3%;
+  left: 26px;
+  width: 48px;
+  height: 48px;
+  opacity: ${(props) => (props.disabled ? 0.5 : 1)};
+  cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
+  position: absolute;
+  border-radius: 24px;
+  background: #fff;
+  box-shadow: ${(props) =>
+    props.disabled
+      ? '0 0 0 1px rgb(0 0 0 / 10%)'
+      : '0 2px 8px 0 rgb(0 0 0 / 8%)'};
+  &.left {
+    right: auto;
+    transform: rotate(180deg);
+  }
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  &:hover {
+    box-shadow: 0 2px 4px 0 rgb(0 0 0 / 16%);
+    svg {
+      path {
+        fill: ${(props) => (props.disabled ? '#a4a4a4' : '#ed54a4')};
+      }
+    }
+  }
+`;
+
+const CarouselIcon = styled(SvgIcon)`
+  width: 12px;
+  height: 14px;
 `;
 
 export {
@@ -81,4 +145,7 @@ export {
   SvgIconsElement,
   SimilarTextElement,
   TransparentImgOverlay,
+  RightArrow,
+  LeftArrow,
+  CarouselIcon,
 };

@@ -33,12 +33,10 @@
     "name": "@hs/containers",
     "author": "Rishikant Tiwari",
     "module": "dist/containers.esm.js",
-    "size-limit": [
-        {
-            "path": "dist/containers.esm.js",
-            "limit": "20 KB"
-        }
-    ],
+    "size-limit": [{
+        "path": "dist/containers.esm.js",
+        "limit": "20 KB"
+    }],
     "peerDependencies": {
         "react": "17.0.2",
         "@hs/components": "1.0.0",
@@ -72,8 +70,5 @@
         "tsdx": "0.14.1",
         "tslib": "2.3.1",
         "typescript": "4.3.5"
-    },
-    "dependencies": {
-        "keen-slider": "^6.6.3"
     }
 }
