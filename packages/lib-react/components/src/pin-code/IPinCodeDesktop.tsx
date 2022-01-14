@@ -1,3 +1,5 @@
+import { IPinCodeAPIResponseProps, IPinCodeErrorProps } from '..';
+
 // import { IDeliveryMessagesEntity } from 'types';
 export interface IDeliveryMessagesEntity {
   action: string;
@@ -5,34 +7,20 @@ export interface IDeliveryMessagesEntity {
   type: number;
 }
 
-export interface IPinCodeProps {
+export interface IPinCodeWrapperProps {
   pinCode?: string;
   productId: number;
-  isAddressLoading: boolean;
-  address?: IAllAddressItemsEntityProps[];
   closePinCodePopup: (args?: any) => void;
 }
 
-export interface IPinCodeAPIResponseProps {
-  action: string;
-  simpleSkus: any;
-  serviceable: boolean;
-  codAvailable: boolean;
-  edd: string;
-  eddPrefix: string;
-  deliveryMessages?: IDeliveryMessagesEntity[] | null;
-  eddColor: string;
-  eddTextColor: string;
-  isEddDifferentForSKUs: boolean;
-  isReturnInfoDifferentForSKUs: boolean;
-  showSizePickerDropdown: boolean;
-  sizePickerDropdownLabel: string;
-  message: string;
-  noPinCodeMessage: string;
-}
-
-export interface IPinCodeErrorProps {
-  message: string;
+export interface IPinCodeProps {
+  pinCode?: string;
+  isAddressLoading: boolean;
+  isPinCodeLoading: boolean;
+  address?: IAllAddressItemsEntityProps[];
+  closePopup: (args?: any) => void;
+  checkPinCode: (pincode: string) => void;
+  errorPinCode?: IPinCodeAPIResponseProps | IPinCodeErrorProps;
 }
 
 export interface IPinCodeSimpleSkus {

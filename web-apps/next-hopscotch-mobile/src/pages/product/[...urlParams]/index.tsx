@@ -54,7 +54,7 @@ const PinCodeMobile = dynamic(() => import('@/components/pin-code-d/mobile'), {
   ssr: false,
 });
 
-const PinCodeDesktop = dynamic(() => import('@/components/pin-code-d/desktop'), {
+const PinCodeDesktop = dynamic(() => import('@/components/pin-code/desktop'), {
   ssr: false,
 });
 

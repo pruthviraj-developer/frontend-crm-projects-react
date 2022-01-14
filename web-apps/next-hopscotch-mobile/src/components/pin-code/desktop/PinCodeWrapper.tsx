@@ -2,7 +2,7 @@ import React, { FC, useState, useEffect, useContext } from 'react';
 import { productDetailsService } from '@hs/services';
 import { LoginContext, UserInfoContext } from '@hs/framework';
 import { IAddressListProps, IPinCodeWrapperProps, IPinCodeAPIResponseProps, IPinCodeErrorProps } from '../IPinCode';
-import { PinCodeDesktop } from './PinCodeDesktop';
+import { PinCodeDesktop } from '@hs/components';
 import { useQuery } from 'react-query';
 export const PinCodeWrapper: FC<IPinCodeWrapperProps> = ({
   productId,

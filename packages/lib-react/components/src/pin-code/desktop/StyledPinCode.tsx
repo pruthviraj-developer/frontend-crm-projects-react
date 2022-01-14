@@ -14,7 +14,6 @@ const PinCodeWrapper = styled.div`
 const Header = styled.div`
   color: #333;
   padding: 16px;
-  /* font-size: 14px; */
   font-weight: 600;
   line-height: 16px;
   text-align: center;
@@ -40,7 +39,6 @@ const PinCodeBody = styled.div`
 
 const Title = styled.div`
   color: #333;
-  /* font-size: 14px; */
   font-weight: 600;
   line-height: 16px;
 `;
@@ -139,20 +137,20 @@ const Loading = styled.div`
 `;
 
 export {
-  PinCodeWrapper,
-  Header,
-  ModalClose,
-  IconClose,
-  PinCodeBody,
-  Title,
-  ErrorMessage,
-  Check,
-  PinCodeForm,
-  InputField,
-  InputWrapper,
-  Label,
-  Loading,
-  DeliveryAddressesContainer,
-  Address,
   Name,
+  Check,
+  Title,
+  Label,
+  Header,
+  Address,
+  Loading,
+  IconClose,
+  ModalClose,
+  InputField,
+  PinCodeBody,
+  PinCodeForm,
+  InputWrapper,
+  ErrorMessage,
+  PinCodeWrapper,
+  DeliveryAddressesContainer,
 };
