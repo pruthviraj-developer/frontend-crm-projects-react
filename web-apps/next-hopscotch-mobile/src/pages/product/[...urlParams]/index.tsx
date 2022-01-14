@@ -50,11 +50,11 @@ const SizeSelectorMobile = dynamic(() => import('@/components/size-selector/mobi
   ssr: false,
 });
 
-const PinCodeMobile = dynamic(() => import('@/components/pin-code/mobile'), {
+const PinCodeMobile = dynamic(() => import('@/components/pin-code-d/mobile'), {
   ssr: false,
 });
 
-const PinCodeDesktop = dynamic(() => import('@/components/pin-code/desktop'), {
+const PinCodeDesktop = dynamic(() => import('@/components/pin-code-d/desktop'), {
   ssr: false,
 });
 
@@ -77,7 +77,7 @@ const LayoutDesktop = dynamic(() => import('@/components/layout/desktop'), {
 const tryLater = 'Try Later';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { cookie,'x-nv-security-magic':magicHeader } = context.req.headers;
+  const { cookie, 'x-nv-security-magic': magicHeader } = context.req.headers;
   const queryClient = new QueryClient();
   const productId = context.params?.urlParams?.[0] || '';
   const isMobile = context.req.headers['x-nv-device'] === 'sp';
@@ -85,7 +85,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const url = `${baseUrl}${context.resolvedUrl?.split('?')?.[0]}`;
   await queryClient.prefetchQuery(
     ['ProductDetail', productId],
-    () => productDetailsService.getProductDetails(productId, baseUrl, { cookie ,'x-nv-security-magic':magicHeader}),
+    () => productDetailsService.getProductDetails(productId, baseUrl, { cookie, 'x-nv-security-magic': magicHeader }),
     {
       staleTime: Infinity,
     },
