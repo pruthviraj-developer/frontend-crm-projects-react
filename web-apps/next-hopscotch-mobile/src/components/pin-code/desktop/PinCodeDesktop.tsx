@@ -19,56 +19,31 @@ import {
 } from './StyledPinCode';
 import { IPinCodeProps, IPinCodeAPIResponseProps, IPinCodeErrorProps, IAllAddressItemsEntityProps } from '../IPinCode';
 import { IconDismiss } from '@hs/icons';
-import { productDetailsService } from '@hs/services';
 import { formatPinCode } from '@hs/framework';
-// const SUCCESS = 'success';
 export const PinCodeDesktop: FC<IPinCodeProps> = ({
   address,
   pinCode,
-  productId,
   isAddressLoading,
-  closePinCodePopup,
+  isPinCodeLoading,
+  closePopup,
+  checkPinCode,
+  errorPinCode,
 }: IPinCodeProps) => {
-  const [error, setError] = useState<IPinCodeAPIResponseProps | IPinCodeErrorProps>();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<IPinCodeAPIResponseProps | IPinCodeErrorProps | undefined>();
   const [pin, setPincode] = useState<string>(formatPinCode(pinCode, pinCode) || '');
-  const checkPinCodeDetails = (pin: string) => {
-    (async () => {
-      if (pin === pinCode) {
-        closePinCodePopup();
-        return;
-      }
-      try {
-        setIsLoading(true);
-        const response: IPinCodeAPIResponseProps = await productDetailsService.checkForPincode({
-          productId,
-          pincode: pin,
-        });
-        setIsLoading(false);
-        if (!response.serviceable) {
-          setError({ ...response, message: response.noPinCodeMessage });
-        } else {
-          closePinCodePopup({ ...response, newPincode: pin });
-        }
-      } catch (error) {
-        setError(error as unknown as IPinCodeAPIResponseProps);
-        setIsLoading(false);
-      }
-    })();
-  };
-
   const hasAddress = (address && address.length) || 0;
 
   const onSubmit = (event: React.SyntheticEvent) => {
     event && event.preventDefault();
-    checkPinCodeDetails(pin.toString().replace(/\D/g, ''));
+    setError({ message: '' });
+    checkPinCode(pin.toString().replace(/\D/g, ''));
   };
 
   return (
     <PinCodeWrapper>
       <Header>{hasAddress > 0 ? 'Edit' : 'Check'} pincode</Header>
       <ModalClose>
-        <IconClose icon={IconDismiss} onClick={closePinCodePopup} />
+        <IconClose icon={IconDismiss} onClick={closePopup} />
       </ModalClose>
       <PinCodeBody>
         {hasAddress > 0 && (
@@ -84,7 +59,7 @@ export const PinCodeDesktop: FC<IPinCodeProps> = ({
                         if (address.isServicable) {
                           const pin = address.zipCode || pinCode;
                           if (pin) {
-                            checkPinCodeDetails(pin);
+                            checkPinCode(pin);
                           } else {
                             setError({ message: 'Please enter pincode.' });
                           }
@@ -112,11 +87,12 @@ export const PinCodeDesktop: FC<IPinCodeProps> = ({
             />
             <Label className="label">Pincode</Label>
           </InputWrapper>
-          <Check disabled={pin.length < 7 || isLoading} type="submit">
+          <Check disabled={pin.length < 7 || isPinCodeLoading} type="submit">
             Check
           </Check>
         </PinCodeForm>
         {error && error.message && <ErrorMessage>{error.message}</ErrorMessage>}
+        {errorPinCode && errorPinCode.message && <ErrorMessage>{errorPinCode.message}</ErrorMessage>}
       </PinCodeBody>
     </PinCodeWrapper>
   );

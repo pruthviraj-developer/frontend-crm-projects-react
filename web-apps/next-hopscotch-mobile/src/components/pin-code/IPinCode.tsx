@@ -5,12 +5,20 @@ export interface IDeliveryMessagesEntity {
   type: number;
 }
 
-export interface IPinCodeProps {
+export interface IPinCodeWrapperProps {
   pinCode?: string;
   productId: number;
-  isAddressLoading: boolean;
-  address?: IAllAddressItemsEntityProps[];
   closePinCodePopup: (args?: any) => void;
+}
+
+export interface IPinCodeProps {
+  pinCode?: string;
+  isAddressLoading: boolean;
+  isPinCodeLoading: boolean;
+  address?: IAllAddressItemsEntityProps[];
+  closePopup: (args?: any) => void;
+  checkPinCode: (pincode: string) => void;
+  errorPinCode?: IPinCodeAPIResponseProps | IPinCodeErrorProps;
 }
 
 export interface IPinCodeAPIResponseProps {
@@ -29,6 +37,7 @@ export interface IPinCodeAPIResponseProps {
   sizePickerDropdownLabel: string;
   message: string;
   noPinCodeMessage: string;
+  newPincode?: string;
 }
 
 export interface IPinCodeErrorProps {
