@@ -14,6 +14,7 @@ export const NextNavLink: FC<INextNavLinkProps> = ({
   fontWeight = 'inherit',
   fontSize = '1.4rem',
   lineHeight = '16px',
+  hoverOpacity = '1',
   hoverColor,
 }: INextNavLinkProps) => {
   return (
@@ -33,6 +34,7 @@ export const NextNavLink: FC<INextNavLinkProps> = ({
         fontsize={fontSize}
         lineHeight={lineHeight}
         hoverColor={hoverColor}
+        hoverOpacity={hoverOpacity}
       >
         {name}
       </LinkTag>

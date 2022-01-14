@@ -10,4 +10,5 @@ export interface INextNavLinkProps {
   fontSize?: string;
   lineHeight?: string;
   hoverColor?: string;
+  hoverOpacity?: string;
 }
