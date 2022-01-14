@@ -10,6 +10,7 @@ const LinkTag = styled.a<{
   fontsize: string;
   lineHeight: string;
   hoverColor?: string;
+  hoverOpacity?: string;
 }>`
   color: ${(props) => props.color};
   display: ${(props) => props.display};
@@ -20,8 +21,10 @@ const LinkTag = styled.a<{
   letter-spacing: 0;
   text-decoration: none;
   font-weight: ${(props) => props.fontweight};
+  transition: opacity 0.2s ease-in;
   &:hover {
     color: ${(props) => props.hoverColor || props.color};
+    opacity: ${(props) => props.hoverOpacity};
   }
 `;
 
