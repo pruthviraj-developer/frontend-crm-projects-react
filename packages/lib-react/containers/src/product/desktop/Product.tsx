@@ -130,7 +130,7 @@ const ProductDesktop = ({
           ></SizeAndChartLabels>
           <SizeSelector
             {...{
-              showRFYP,
+              showRFYP: showRFYP || showSimilarProducts,
               goToProductRecommendation,
               simpleSkus,
               showAddToCart: true,
