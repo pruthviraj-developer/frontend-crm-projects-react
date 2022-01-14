@@ -7,9 +7,10 @@ export const useRecommendation = ({
   pid,
   section,
 }: IRecommendedProps) => {
-  const canShow =
+  const canShow = !!(
     recommended?.recommendProductDetailList &&
-    recommended?.recommendProductDetailList?.length > 6;
+    recommended?.recommendProductDetailList?.length > 6
+  );
   return {
     section,
     subsection: 'Carousel',

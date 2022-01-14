@@ -34,9 +34,16 @@ export const SizeSelector: FC<ISizeSelectorProps> = ({
   onSizeSelect,
   goToProductRecommendation,
   isAddtoCartClicked = false,
+  canOpenDropDown = false,
+  onDropDownClose,
 }: ISizeSelectorProps) => {
   const [isDropDownOpen, setIsDropDownOpen] = useState<boolean>(false);
   const elementRef = useRef<any>();
+
+  useEffect(() => {
+    if (canOpenDropDown) setIsDropDownOpen(canOpenDropDown);
+  }, [canOpenDropDown]);
+
   useEffect(() => {
     /**
      * Alert if clicked on outside of element
@@ -45,6 +52,7 @@ export const SizeSelector: FC<ISizeSelectorProps> = ({
     function handleClickOutside(event: MouseEvent) {
       if (ref && !ref.contains(event.target)) {
         setIsDropDownOpen(false);
+        onDropDownClose();
       }
     }
 
@@ -53,7 +61,7 @@ export const SizeSelector: FC<ISizeSelectorProps> = ({
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  });
+  }, []);
 
   const handleClickInside = () => {
     setIsDropDownOpen(true);

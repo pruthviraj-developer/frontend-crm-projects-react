@@ -79,6 +79,7 @@ export const NavBarDesktop: FC = () => {
             padding="8px 12px 6px"
             fontWeight="400"
             fontSize="1.2rem"
+            hoverOpacity="0.8"
           />
           <NextNavLink
             href="/help"
@@ -87,6 +88,7 @@ export const NavBarDesktop: FC = () => {
             padding="8px 0 8px 12px"
             fontWeight="400"
             fontSize="1.2rem"
+            hoverOpacity="0.8"
           />
         </NotificationBar>
         <RightContent>
@@ -111,6 +113,7 @@ export const NavBarDesktop: FC = () => {
                 line-height="16px"
                 padding="20px 0 18px 0"
                 color="#fff"
+                hoverOpacity="0.8"
               />
               <FilteredBy>
                 <NextNavLink
@@ -131,6 +134,7 @@ export const NavBarDesktop: FC = () => {
               line-height="16px"
               padding="20px 0 18px 0"
               color="#fff"
+              hoverOpacity="0.8"
             />
             <NextNavLink
               href="/blog/"
@@ -141,6 +145,7 @@ export const NavBarDesktop: FC = () => {
               line-height="16px"
               padding="20px 0 18px 0"
               color="#fff"
+              hoverOpacity="0.8"
             />
           </NavLinkWrapper>
           <NavigationIconsWrapper>
