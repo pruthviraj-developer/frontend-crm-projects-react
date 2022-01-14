@@ -8,4 +8,6 @@ export interface ISizeSelectorProps {
   onSizeSelect: (a: ISimpleSkusEntityProps, b: string) => void;
   selectedSku?: ISimpleSkusEntityProps;
   isAddtoCartClicked?: boolean;
+  canOpenDropDown: boolean;
+  onDropDownClose:()=>void;
 }

@@ -32,10 +32,10 @@ const ProductDesktop = ({
   addProductToCart,
   openSizeChartPopup,
   openPinCodePopup,
-  openSizeSelector,
   onSizeSelect,
 }: IProductPage) => {
   const [isAddtoCartClicked, setIsAddtoCart] = useState<boolean>(false);
+  const [canOpenDropDown, setCanOpenDropDown] = useState<boolean>(false);
   const similarProductsLink = useRef<HTMLDivElement>(null);
   const recommendedProductsLink = useRef<HTMLDivElement>(null);
   const {
@@ -83,8 +83,10 @@ const ProductDesktop = ({
   };
   useEffect(() => {
     setIsAddtoCart(false);
+    setCanOpenDropDown(false);
     return () => {
       setIsAddtoCart(false);
+      setCanOpenDropDown(false);
     };
   }, [productId]);
   return (
@@ -137,6 +139,10 @@ const ProductDesktop = ({
               onSizeSelect,
               selectedSku,
               isAddtoCartClicked,
+              canOpenDropDown,
+              onDropDownClose: () => {
+                setCanOpenDropDown(false);
+              },
             }}
           ></SizeSelector>
           {addedToCart ? (
@@ -159,7 +165,9 @@ const ProductDesktop = ({
               selectedSku,
               ...deliveryDetails,
               openPinCodePopup,
-              openSizeSelector,
+              openSizeSelector: () => {
+                setCanOpenDropDown(true);
+              },
             }}
           ></DeliveryDetails>
           {productData.id && (
