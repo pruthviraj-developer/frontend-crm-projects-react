@@ -20,7 +20,7 @@ import {
 import { IPinCodeProps, IPinCodeAPIResponseProps, IPinCodeErrorProps, IAllAddressItemsEntityProps } from '../IPinCode';
 import { IconDismiss } from '@hs/icons';
 import { productDetailsService } from '@hs/services';
-// import { LoginContext, UserInfoContext } from '@hs/framework';
+import { formatPinCode } from '@hs/framework';
 // const SUCCESS = 'success';
 export const PinCodeDesktop: FC<IPinCodeProps> = ({
   address,
@@ -31,29 +31,7 @@ export const PinCodeDesktop: FC<IPinCodeProps> = ({
 }: IPinCodeProps) => {
   const [error, setError] = useState<IPinCodeAPIResponseProps | IPinCodeErrorProps>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  // const { updateLoginPopup } = useContext(LoginContext);
-  // const { userInfo } = useContext(UserInfoContext);
-  const getDefaultString = (val: string) => {
-    return val.replace(/\D/g, '');
-  };
-
-  const setFormatedValue = (val?: string, pin?: string) => {
-    if (val) {
-      const value = getDefaultString(val).replace(/^0+/, '');
-      if (value.length === 3 && pin && pin.length === 4) {
-        return value.substr(0, 2);
-      } else if (value.length > 6 && value[0] !== '0') {
-        return value.substr(0, 3) + '-' + value.substr(3, 3);
-      } else if (value.length > 2) {
-        return value.substr(0, 3) + '-' + value.substr(3);
-      } else {
-        return value;
-      }
-    }
-    return '';
-  };
-  const [pin, setPincode] = useState<string>(setFormatedValue(pinCode, pinCode) || '');
+  const [pin, setPincode] = useState<string>(formatPinCode(pinCode, pinCode) || '');
   const checkPinCodeDetails = (pin: string) => {
     (async () => {
       if (pin === pinCode) {
@@ -81,32 +59,9 @@ export const PinCodeDesktop: FC<IPinCodeProps> = ({
 
   const hasAddress = (address && address.length) || 0;
 
-  // useEffect(() => {
-  //   if (!(userInfo && userInfo.isLoggedIn)) {
-  //     return;
-  //   }
-  //   (async () => {
-  //     try {
-  //       setIsLoadingAddress(true);
-  //       const response: IAddressListProps =
-  //         await productDetailsService.getCustomerAddresses();
-  //       if (response.action === SUCCESS) {
-  //         setAddressList(response.allAddressItems);
-  //       }
-  //     } catch (error) {
-  //       if (error && error['message'] === 'login required') {
-  //         closePinCodePopup();
-  //         updateLoginPopup(true);
-  //       }
-  //     } finally {
-  //       setIsLoadingAddress(false);
-  //     }
-  //   })();
-  // }, [userInfo, closePinCodePopup, updateLoginPopup]);
-
   const onSubmit = (event: React.SyntheticEvent) => {
     event && event.preventDefault();
-    checkPinCodeDetails(getDefaultString(pin));
+    checkPinCodeDetails(pin.toString().replace(/\D/g, ''));
   };
 
   return (
@@ -152,7 +107,7 @@ export const PinCodeDesktop: FC<IPinCodeProps> = ({
             <InputField
               value={pin}
               onChange={(event) => {
-                setPincode(setFormatedValue(event.target.value, pin));
+                setPincode(formatPinCode(event.target.value, pin));
               }}
             />
             <Label className="label">Pincode</Label>
