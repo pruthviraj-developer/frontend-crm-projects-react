@@ -16,6 +16,7 @@ const HopscotchImage = styled.div`
   width: 112px;
   height: 100%;
   margin: 0 28px 0 12px;
+  cursor: pointer;
 `;
 
 const Link = styled('a')`
@@ -41,6 +42,7 @@ const CartIconWrapper = styled.div`
   height: 52px;
   margin-right: 6px;
   position: relative;
+  cursor: pointer;
 `;
 
 const NavigationIconsWrapper = styled.div`
@@ -61,6 +63,7 @@ const NotificationBarLinkWrapper = styled.div`
 const NavIconWrapper = styled.div<{ marginRight?: boolean }>`
   padding: 4px 6px;
   margin-right: ${(props) => (props.marginRight ? '6px' : '0')};
+  cursor: pointer;
 `;
 
 const HelpLink = styled.div`
@@ -137,6 +140,7 @@ const SearchIconWrapper = styled(SvgIcon)`
   min-width: 24px;
   min-height: 24px;
   margin-top: 4px;
+  cursor: pointer;
 `;
 
 export {
