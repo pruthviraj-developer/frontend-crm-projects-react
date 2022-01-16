@@ -1,1 +1,1 @@
-export * from './PinCode';
+export * from './PinCodeWrapper';
