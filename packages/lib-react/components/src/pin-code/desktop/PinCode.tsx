@@ -19,11 +19,11 @@ import {
 } from './StyledPinCode';
 
 import {
-  IPinCodeAPIResponseProps,
+  IPinCodeProps,
   IPinCodeErrorProps,
+  IPinCodeAPIResponseProps,
   IAllAddressItemsEntityProps,
 } from '../IPinCode';
-import { IPinCodeProps } from '../IPinCodeDesktop';
 import { IconDismiss } from '@hs/icons';
 import { formatPinCode } from '@hs/framework';
 export const PinCodeDesktop: FC<IPinCodeProps> = ({

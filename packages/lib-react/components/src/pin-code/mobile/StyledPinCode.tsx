@@ -68,21 +68,6 @@ const Name = styled.div`
   margin-bottom: 4px;
 `;
 
-const PinCodeNumber = styled.input`
-  width: 100%;
-  max-width: 173px;
-  display: inline-block;
-  vertical-align: middle;
-  height: 48px;
-  line-height: 20px;
-  padding: 12px;
-  border-radius: 4px;
-  background-color: #eff1f4;
-  border: transparent;
-  color: rgba(0, 0, 0, 0.8);
-  margin-bottom: 8px;
-`;
-
 const PinCodeForm = styled.form`
   padding-top: 12px;
 `;
@@ -120,13 +105,50 @@ const Loading = styled.div`
   color: ${Colors.PINK[500]};
 `;
 
+const InputWrapper = styled.div`
+  position: relative;
+  display: inline-block;
+`;
+
+const Label = styled.label`
+  pointer-events: none;
+  position: absolute;
+  /* font-size: 14px; */
+  line-height: 14px;
+  left: 12px;
+  top: 18px;
+  transition: 0.2s ease all;
+  color: #a4a4a4;
+`;
+
+const InputField = styled.input`
+  width: 100%;
+  height: 48px;
+  max-width: 173px;
+  line-height: 16px;
+  margin-bottom: 8px;
+  outline: none;
+  display: inline-block;
+  vertical-align: middle;
+  background-color: #fff;
+  border: 1px solid #e6e6e6;
+  border-radius: 4px;
+  padding: 16px 16px 0 12px;
+  color: rgba(0, 0, 0, 0.8);
+  &:focus + .label {
+    top: 10px;
+  }
+  &:not([value='']) + .label {
+    top: 10px;
+  }
+`;
+
 export {
   PinCodeWrapper,
   PinCodeContainer,
   DeliveryAddressesContainer,
   EnterPinCode,
   ErrorMessage,
-  PinCodeNumber,
   PinCodeForm,
   PinCodeSubmit,
   Loading,
@@ -136,4 +158,8 @@ export {
   Title,
   Name,
   Address,
+  // new fields
+  InputWrapper,
+  InputField,
+  Label,
 };

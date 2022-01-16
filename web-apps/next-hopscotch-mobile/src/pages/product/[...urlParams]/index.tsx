@@ -50,7 +50,7 @@ const SizeSelectorMobile = dynamic(() => import('@/components/size-selector/mobi
   ssr: false,
 });
 
-const PinCodeMobile = dynamic(() => import('@/components/pin-code-d/mobile'), {
+const PinCodeMobile = dynamic(() => import('@/components/pin-code/mobile'), {
   ssr: false,
 });
 

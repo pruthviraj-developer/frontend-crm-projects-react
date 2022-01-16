@@ -1,11 +1,5 @@
 import { IDeliveryMessagesEntity } from 'types';
 
-export interface IPinCodeProps {
-  pinCode?: string;
-  productId: number;
-  closePinCodePopup: (args?: any) => void;
-}
-
 export interface IPinCodeAPIResponseProps {
   action: string;
   simpleSkus: any;
@@ -28,6 +22,22 @@ export interface IPinCodeErrorProps {
   message: string;
 }
 
+export interface IPinCodeWrapperProps {
+  pinCode?: string;
+  productId: number;
+  closePinCodePopup: (args?: any) => void;
+}
+
+export interface IPinCodeProps {
+  pinCode?: string;
+  isAddressLoading: boolean;
+  isPinCodeLoading: boolean;
+  address?: IAllAddressItemsEntityProps[];
+  closePopup: (args?: any) => void;
+  checkPinCode: (pincode: string) => void;
+  errorPinCode?: IPinCodeAPIResponseProps | IPinCodeErrorProps;
+}
+
 export interface IPinCodeSimpleSkus {
   skuId: string;
   deliveryMsg: string;
@@ -45,6 +55,7 @@ export interface IAddressListProps {
   action: string;
   allAddressItems: IAllAddressItemsEntityProps[];
 }
+
 export interface IAllAddressItemsEntityProps {
   id: number;
   name: string;
