@@ -93,7 +93,10 @@ const RightArrow = styled.div<{ disabled: boolean }>`
   align-items: center;
   justify-content: space-around;
   &:hover {
-    box-shadow: 0 2px 4px 0 rgb(0 0 0 / 16%);
+    box-shadow: ${(props) =>
+      props.disabled
+        ? '0 0 0 1px rgb(0 0 0 / 10%)'
+        : '0 2px 4px 0 rgb(0 0 0 / 16%)'};
     svg {
       path {
         fill: ${(props) => (props.disabled ? '#a4a4a4' : '#ed54a4')};
@@ -123,7 +126,10 @@ const LeftArrow = styled.div<{ disabled: boolean }>`
   align-items: center;
   justify-content: space-around;
   &:hover {
-    box-shadow: 0 2px 4px 0 rgb(0 0 0 / 16%);
+    box-shadow: ${(props) =>
+      props.disabled
+        ? '0 0 0 1px rgb(0 0 0 / 10%)'
+        : '0 2px 4px 0 rgb(0 0 0 / 16%)'};
     svg {
       path {
         fill: ${(props) => (props.disabled ? '#a4a4a4' : '#ed54a4')};
