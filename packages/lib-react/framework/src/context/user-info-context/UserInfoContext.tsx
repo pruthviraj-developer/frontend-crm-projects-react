@@ -33,7 +33,7 @@ export const UserInfoProvider: FC<unknown> = ({ children }) => {
       {
         staleTime: Infinity,
         retry: false,
-        enabled: userInfo && userInfo.isLoggedIn,
+        enabled: userInfo && userInfo.isLoggedIn === true ? true : false,
       }
     );
 
