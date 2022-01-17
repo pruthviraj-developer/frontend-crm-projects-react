@@ -15,6 +15,7 @@ import {
   InputSearch,
   SearchIconWrapper,
   NavBarCntnr,
+  NotificationDot,
 } from './StyledNavBarDesktop';
 import { IconWrapper, CartIconQuantity } from './../StyledNavBar';
 // import { useRouter } from 'next/router';
@@ -71,6 +72,7 @@ export const NavBarDesktop: FC = () => {
     <NavBarWrapper>
       <NavBarCntnr>
         <NotificationBar>
+          <NotificationDot />
           <NextNavLink
             href="/my/account/orders"
             queryParams={{ funnel: 'Account' }}

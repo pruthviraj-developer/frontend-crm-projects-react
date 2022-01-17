@@ -66,6 +66,7 @@ const NavLinkWrapper = styled.div`
   ${mediaQueriesMaxWidth('mw350')`
    display:flex;
   `};
+  position: relative;
 `;
 
 const NavIconWrapper = styled.div<{ marginRight?: boolean }>`
@@ -95,10 +96,21 @@ const HelpLink = styled.div`
   font-weight: 500;
 `;
 
+const NotificationDot = styled.div`
+  top: 23px;
+  left: 55px;
+  width: 6px;
+  height: 6px;
+  position: absolute;
+  border-radius: 50%;
+  background-color: ${Colors.WHITE};
+`;
+
 export {
   NavBarWrapper,
   NavLinkWrapper,
   NavIconWrapper,
+  NotificationDot,
   NavIconWrapperSearch,
   NavIconWrapperWishList,
   NavigationIconsWrapper,

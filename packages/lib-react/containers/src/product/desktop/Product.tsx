@@ -178,7 +178,7 @@ const ProductDesktop = ({
                 simpleSkus,
                 selectedSku,
               }}
-            ></Accordion>
+            />
           )}
         </ProductDetailsWrapper>
       </ProductWrapper>

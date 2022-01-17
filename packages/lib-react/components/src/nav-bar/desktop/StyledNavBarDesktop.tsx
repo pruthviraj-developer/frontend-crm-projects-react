@@ -80,6 +80,7 @@ const NotificationBar = styled.div`
   display: flex;
   justify-content: end;
   padding: 0 ${typography.size.s24}px;
+  position: relative;
 `;
 
 const FilteredBy = styled.span`
@@ -143,6 +144,16 @@ const SearchIconWrapper = styled(SvgIcon)`
   cursor: pointer;
 `;
 
+const NotificationDot = styled.div`
+  top: 8px;
+  right: 145px;
+  width: 6px;
+  height: 6px;
+  position: absolute;
+  border-radius: 50%;
+  background-color: ${Colors.WHITE};
+`;
+
 export {
   FilteredBy,
   FilterWrapper,
@@ -155,6 +166,7 @@ export {
   RightContent,
   Link,
   HelpLink,
+  NotificationDot,
   NotificationBar,
   NotificationBarLinkWrapper,
   SearchWrapper,

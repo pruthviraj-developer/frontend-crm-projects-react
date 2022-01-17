@@ -159,7 +159,7 @@ const ProductMobile = ({
         {productData.id && (
           <Accordion
             {...{ ...product, isPresale, simpleSkus, selectedSku: selectedSku }}
-          ></Accordion>
+          />
         )}
         {showRFYP && (
           <div ref={recommendedProductsLink}>

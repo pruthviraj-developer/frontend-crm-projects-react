@@ -5,6 +5,7 @@ import Link from 'next/link';
 import {
   NavBarWrapper,
   NavLinkWrapper,
+  NotificationDot,
   NavIconWrapperSearch,
   NavIconWrapperWishList,
   NavigationIconsWrapper,
@@ -61,6 +62,7 @@ export const NavBar: FC<INavBarProps> = ({ showSearchPopup }: INavBarProps) => {
       </Link>
       <RightContent>
         <NavLinkWrapper>
+          <NotificationDot />
           <NextNavLink
             href="/my/account/orders/"
             name="Account"
