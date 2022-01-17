@@ -146,21 +146,26 @@ const getCustomerAddresses = <R>(): Promise<R> => {
   return httpService.get<R>({ url: '/api/delivery/addresses' });
 };
 
+const getAccountCardsCount = <R>(): Promise<R> => {
+  return httpService.get<R>({ url: '/api/accountcard/count' });
+};
+
 export const productDetailsService = {
+  signUp,
+  sendOtp,
+  verifyOtp,
   addItemToCart,
   addToWishlist,
-  deleteFromWishlist,
-  checkForPincode,
   searchProducts,
+  checkForPincode,
+  deleteFromWishlist,
+  getSizes,
+  getResouce,
+  getUserInfo,
   getProductDetails,
   getSimilarProducts,
-  getRecommendedProducts,
-  getUserInfo,
-  getResouce,
-  getSizes,
-  sendOtp,
-  signUp,
-  verifyOtp,
-  getEulerAutoSuggestions,
   getCustomerAddresses,
+  getAccountCardsCount,
+  getRecommendedProducts,
+  getEulerAutoSuggestions,
 };

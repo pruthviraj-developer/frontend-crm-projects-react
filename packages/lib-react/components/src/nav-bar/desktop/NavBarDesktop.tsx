@@ -15,6 +15,7 @@ import {
   InputSearch,
   SearchIconWrapper,
   NavBarCntnr,
+  NotificationDot,
 } from './StyledNavBarDesktop';
 import { IconWrapper, CartIconQuantity } from './../StyledNavBar';
 // import { useRouter } from 'next/router';
@@ -22,7 +23,7 @@ import Link from 'next/link';
 
 import { CartIcon, HopScotchIcon, IconSearch } from '@hs/icons';
 
-import { CartItemQtyContext } from '@hs/framework';
+import { CartItemQtyContext, UserInfoContext } from '@hs/framework';
 import { SearchDesktop } from './../../search-desktop';
 
 export const NavBarDesktop: FC = () => {
@@ -31,6 +32,7 @@ export const NavBarDesktop: FC = () => {
   const [searchText, setSearchText] = useState('');
   const [showSearch, setShowSearch] = useState<boolean>(false);
   const cartContext = useContext(CartItemQtyContext);
+  const { showAccountNotification } = useContext(UserInfoContext);
   const query = {
     ref: 'logo',
     funnel: 'Discover',
@@ -71,6 +73,7 @@ export const NavBarDesktop: FC = () => {
     <NavBarWrapper>
       <NavBarCntnr>
         <NotificationBar>
+          {showAccountNotification && <NotificationDot />}
           <NextNavLink
             href="/my/account/orders"
             queryParams={{ funnel: 'Account' }}

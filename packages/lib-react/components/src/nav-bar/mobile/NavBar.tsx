@@ -5,6 +5,7 @@ import Link from 'next/link';
 import {
   NavBarWrapper,
   NavLinkWrapper,
+  NotificationDot,
   NavIconWrapperSearch,
   NavIconWrapperWishList,
   NavigationIconsWrapper,
@@ -28,7 +29,7 @@ import {
 export const NavBar: FC<INavBarProps> = ({ showSearchPopup }: INavBarProps) => {
   const cartContext = useContext(CartItemQtyContext);
   const { updateLoginPopup } = useContext(LoginContext);
-  const { userInfo } = useContext(UserInfoContext);
+  const { userInfo, showAccountNotification } = useContext(UserInfoContext);
   const router = useRouter();
   const gotoWishList = () => {
     if (!(userInfo && userInfo.isLoggedIn)) {
@@ -61,6 +62,7 @@ export const NavBar: FC<INavBarProps> = ({ showSearchPopup }: INavBarProps) => {
       </Link>
       <RightContent>
         <NavLinkWrapper>
+          {showAccountNotification && <NotificationDot />}
           <NextNavLink
             href="/my/account/orders/"
             name="Account"

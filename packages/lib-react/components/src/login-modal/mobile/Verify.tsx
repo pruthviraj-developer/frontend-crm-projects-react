@@ -1,7 +1,7 @@
 import React, { FC, useState, useContext } from 'react';
 import { productDetailsService } from '@hs/services';
 import { IconErrorMessage, IconInfoMessage } from '@hs/icons';
-import { LoginContext } from '@hs/framework';
+import { LoginContext, UserInfoContext } from '@hs/framework';
 import { REGEX_PATTERNS, SIGNUP, SIGNIN } from '../constants';
 import { ILoginErrorResponse, ILoginErrorMessageBar } from './IVerify';
 import { IVerifiedDataProps } from '../ILoginModal';
@@ -35,6 +35,7 @@ export const Verify: FC<IVerifiedDataProps> = ({
   const [counter, setCounter] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
   const { verifyOtp } = useContext(LoginContext);
+  const { updateUserInfo } = useContext(UserInfoContext);
   const [success, setSuccess] = useState<string | undefined>();
   const [error, setErrorState] = useState<ILoginErrorMessageBar | undefined>();
   const convertForUI = (str = '') => {
@@ -137,6 +138,7 @@ export const Verify: FC<IVerifiedDataProps> = ({
             });
             setLoading(false);
             if (response.action === 'success' && response.isLoggedIn) {
+              updateUserInfo(response);
               back && back(true);
             } else {
               setErrorState(response.messageBar);
