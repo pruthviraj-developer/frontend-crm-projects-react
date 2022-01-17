@@ -26,7 +26,7 @@ export const PinCodeWrapper: FC<IPinCodeWrapperProps> = ({
   const { updateLoginPopup } = useContext(LoginContext);
 
   useEffect(() => {
-    if (errorLoadingAddress && errorLoadingAddress['message'] === 'login required') {
+    if (errorLoadingAddress instanceof Error && errorLoadingAddress['message'] === 'login required') {
       closePinCodePopup();
       updateLoginPopup(true);
     }
