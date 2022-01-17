@@ -6,8 +6,8 @@ import {
   cookiesService,
 } from '@hs/services';
 import { IUserInfoProps } from 'product/types';
-import { COOKIE_DATA } from '../../storage';
-import { UserInfoProps } from './IUserInfoContext';
+import { COOKIE_DATA, LOCAL_DATA } from '../../storage';
+import { UserInfoProps, INotificationProps } from './IUserInfoContext';
 
 export const UserInfoContext = createContext<UserInfoProps>(
   {} as UserInfoProps
@@ -15,6 +15,8 @@ export const UserInfoContext = createContext<UserInfoProps>(
 
 export const UserInfoProvider: FC<unknown> = ({ children }) => {
   const [userInfo, setUserInfo] = useState<IUserInfoProps | undefined>();
+  const [showAccountNotification, setAccountNotification] =
+    useState<boolean>(false);
   const { data: info, isSuccess } = useQuery<IUserInfoProps>(
     'info',
     productDetailsService.getUserInfo,
@@ -23,6 +25,17 @@ export const UserInfoProvider: FC<unknown> = ({ children }) => {
       retry: false,
     }
   );
+
+  const { data: notification, isSuccess: isNotificationSuccess } =
+    useQuery<INotificationProps>(
+      'notification',
+      productDetailsService.getAccountCardsCount,
+      {
+        staleTime: Infinity,
+        retry: false,
+        enabled: userInfo && userInfo.isLoggedIn,
+      }
+    );
 
   const setCookie = (key: string, value: any) => {
     const expireProp = {
@@ -58,8 +71,20 @@ export const UserInfoProvider: FC<unknown> = ({ children }) => {
     setCookie(COOKIE_DATA.CUSTOMER_INFO, data);
     cookiesService.deleteCookie(COOKIE_DATA.GUEST_CUSTOMER_INFO);
   };
+
+  useEffect(() => {
+    setAccountNotification(false);
+    if (isNotificationSuccess && userInfo?.isLoggedIn) {
+      if (notification?.action === LOCAL_DATA.SUCCESS) {
+        setAccountNotification(notification.count ? true : false);
+      }
+    }
+  }, [userInfo, notification, isNotificationSuccess]);
+
   return (
-    <UserInfoContext.Provider value={{ userInfo, updateUserInfo }}>
+    <UserInfoContext.Provider
+      value={{ userInfo, showAccountNotification, updateUserInfo }}
+    >
       {children}
     </UserInfoContext.Provider>
   );
