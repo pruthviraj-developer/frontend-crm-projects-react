@@ -282,25 +282,37 @@ const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile, url }
   };
 
   const addToCart = (sku: ISimpleSkusEntityProps) => {
-    const pickedProperties: Record<string, string | number> = { sku: sku.skuId, quantity: 1 };
-    const props: Record<string, string> = { ...properties } as unknown as Record<string, string>;
-    const propertiesSubset = ['funnel', 'funnel_tile', 'funnel_section', 'plp', 'source', 'section'];
-
-    for (let index = 0; index < propertiesSubset.length; index++) {
-      const element = propertiesSubset[index];
-      pickedProperties[element] = (props && props[element]) || '';
-    }
-
-    pickedProperties['sortBy'] = props['sort_by'] || '';
-    pickedProperties['sortBar'] = props['sortbar'] || '';
-    pickedProperties['subSection'] = props['subsection'] || '';
-    pickedProperties['sortBarGroup'] = props['sortbar_group'] || '';
+    const {
+      funnel,
+      funnel_tile,
+      funnel_section,
+      plp,
+      source,
+      section,
+      sort_by: sortBy,
+      sortbar: sortBar,
+      subsection: subSection,
+      sortbar_group: sortBarGroup,
+    } = properties || {};
     (async () => {
       try {
         const atc_user = cookiesService.getCookies(COOKIE_DATA.WEBSITE_CUSTOMER_SEGMENT);
         const addToCartResponse: ICartAPIResponse = await productDetailsService.addItemToCart({
-          ...pickedProperties,
+          addFrom: 'current=' + location.pathname,
+          funnel,
+          funnel_tile,
+          addFromDetails: 'nextjs',
+          funnel_section,
+          plp,
+          source,
+          section,
+          sortBy,
+          sortBar,
+          subSection,
+          sortBarGroup,
           atc_user,
+          sku: sku.skuId,
+          quantity: 1,
         });
         if (addToCartResponse.action === LOCAL_DATA.SUCCESS) {
           updateAddedToCart(true);
