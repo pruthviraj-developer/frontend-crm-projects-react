@@ -438,24 +438,38 @@ const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile, url }
 
   const addToWishlistAfterModalClose = () => {
     let retailPrice = selectedSku?.retailPrice || productData?.retailPrice || 0;
+    const atc_user = cookiesService.getCookies(COOKIE_DATA.WEBSITE_CUSTOMER_SEGMENT);
+    const {
+      funnel,
+      funnel_tile,
+      funnel_section,
+      plp,
+      source,
+      section,
+      sort_by: sortBy,
+      sortbar: sortBar,
+      subsection: subSection,
+      sortbar_group: sortBarGroup,
+    } = properties || {};
     const wishlistItem = {
       sku: selectedSkuId || '',
       productId: productData?.id,
       price: retailPrice,
       attribution: {
-        // source: oa_data['source'],
-        // funnel: oa_data['funnel'],
-        // funnel_tile: oa_data['funnel_tile'],
-        // funnel_section: oa_data['funnel_section'],
-        funnel_row: '',
-        // section: oa_data['section'],
-        subSection: 'CT3006',
-        // plp: oa_data['plp'],
-        sortBar: 'All',
-        sortBarGroup: 'All',
-        sortBy: 'System',
-        // quick_shop: oa_data['quickshop'],
-        // atc_user: atc_user,
+        funnel,
+        funnel_tile,
+        quick_shop: 'No',
+        funnel_section,
+        plp,
+        source,
+        section,
+        sortBy,
+        sortBar,
+        subSection,
+        sortBarGroup,
+        atc_user,
+        addFromDetails: 'nextjs',
+        hs_framework: 'nextjs',
       },
     };
 
