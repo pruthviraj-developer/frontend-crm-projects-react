@@ -23,7 +23,11 @@ import Link from 'next/link';
 
 import { CartIcon, HopScotchIcon, IconSearch } from '@hs/icons';
 
-import { CartItemQtyContext, UserInfoContext } from '@hs/framework';
+import {
+  CartItemQtyContext,
+  UserInfoContext,
+  useSelectedSort,
+} from '@hs/framework';
 import { SearchDesktop } from './../../search-desktop';
 
 export const NavBarDesktop: FC = () => {
@@ -33,6 +37,7 @@ export const NavBarDesktop: FC = () => {
   const [showSearch, setShowSearch] = useState<boolean>(false);
   const cartContext = useContext(CartItemQtyContext);
   const { showAccountNotification } = useContext(UserInfoContext);
+  const sortedTile = useSelectedSort();
   const query = {
     ref: 'logo',
     funnel: 'Discover',
@@ -118,15 +123,17 @@ export const NavBarDesktop: FC = () => {
                 color="#fff"
                 hoverOpacity="0.8"
               />
-              <FilteredBy>
-                <NextNavLink
-                  href="/?funnel=Discover&amp;from_screen=product&amp;ref=navigation&amp;department=null&amp;customTileId=null"
-                  name="Boys 1-5 years"
-                  display="inline-block"
-                  margin="0"
-                  padding="0"
-                />
-              </FilteredBy>
+              {sortedTile && (
+                <FilteredBy>
+                  <NextNavLink
+                    href="/?funnel=Discover&amp;from_screen=product&amp;ref=navigation&amp;department=null&amp;customTileId=null"
+                    name={sortedTile}
+                    display="inline-block"
+                    margin="0"
+                    padding="0"
+                  />
+                </FilteredBy>
+              )}
             </FilterWrapper>
             <NextNavLink
               href="/moments?funnel=Moments&amp;from_screen=product"
