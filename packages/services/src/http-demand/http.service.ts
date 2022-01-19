@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosError } from 'axios';
-export const httpHeaders = {
+const httpHeaders = {
   'api-version': 'v1.8',
   'client-auth-method': 'v1',
   'client-id': 'web-client/3.0',
@@ -7,13 +7,18 @@ export const httpHeaders = {
   Accept: 'application/json, text/javascript, */*; q=0.01',
   'device-id': '',
   'install-id': '',
-  'Content-Type': 'application/json',
+  'Content-Type': 'application/json'
 };
-type IHttpService = Pick<AxiosRequestConfig, 'url' | 'data' | 'params'>;
+export type IHttpService = Pick<
+  AxiosRequestConfig,
+  'url' | 'data' | 'params' | 'headers'
+>;
 
-const handleUnauthorised = () => {
-  window.location.href = '/intranet/login';
+const err = {
+  action: 'failure',
+  message: 'login required',
 };
+
 const processRequest = <P = any>(
   requestConfig: AxiosRequestConfig
 ): Promise<P> => {
@@ -31,12 +36,10 @@ const processRequest = <P = any>(
     })
     .catch(function (error: AxiosError) {
       if (error.response && 401 === error.response.status) {
-        handleUnauthorised();
-        return Promise.reject(error);
+        return Promise.reject(err);
       } else if (error.response && error.response.status >= 500) {
         return Promise.reject(error.response || {});
       } else if (error.message === 'Network Error') {
-        handleUnauthorised();
         return Promise.reject(error);
       } else {
         const errorMessage = error.response?.data;
@@ -47,12 +50,12 @@ const processRequest = <P = any>(
       }
     });
 };
-const get = <T>({ url, params }: IHttpService): Promise<T> => {
+const get = <T>({ url, params, headers }: IHttpService): Promise<T> => {
   const reqConfig: AxiosRequestConfig = {
     method: 'get',
     url,
-    headers: { ...httpHeaders },
-    params,
+    headers: { ...httpHeaders, ...headers },
+    params: params,
   };
   return processRequest(reqConfig);
 };
