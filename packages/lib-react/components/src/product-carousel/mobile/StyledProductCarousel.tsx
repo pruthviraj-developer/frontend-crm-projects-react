@@ -4,7 +4,7 @@ import { typography } from '@hs/utils';
 import { SvgIcon } from '@hs/icons';
 import Image from 'next/image';
 const CarouselWrapper = styled.div`
-  overflow-x: scroll;
+  overflow-x: hidden;
   white-space: nowrap;
   transition: margin-left 1.5s ease;
   position: relative;
@@ -13,14 +13,13 @@ const CarouselWrapper = styled.div`
 const ProductCarouselWrapper = styled.div`
   position: relative;
   /* margin-top: 56px; */
-  .react-multi-carousel-item {
-    height: 100vw !important;
-  }
+  height: 100vw !important;
 `;
 
 const ProductImageContainer = styled.div`
-  /* width: 360px;
-  height: 360px; */
+  width: 360px;
+  height: 375px;
+  display: inline-block;
   .pdpImages {
     top: 112px !important;
   }
@@ -64,12 +63,43 @@ const StyledImage = styled(Image)`
   min-height: 100%; */
 `;
 
+const TransparentImgOverlay = styled.div`
+  height: 100%;
+  background: #00000000;
+  position: absolute;
+  top: 0;
+  left: 0;
+`;
+
+const Dots = styled.div`
+  bottom: 15px;
+  margin-left: 16px;
+  display: flex;
+  text-align: left;
+  position: absolute;
+  justify-content: start;
+`;
+
+const Dot = styled.button<{ active: boolean }>`
+  width: 6px;
+  height: 6px;
+  padding: 0;
+  margin-right: 6px;
+  border-radius: 6px;
+  transform: scale(1.2);
+  background-color: ${(props) => (props.active ? '#707070' : '#e6e6e6')};
+  border: 1px solid ${(props) => (props.active ? '#707070' : '#e6e6e6')};
+`;
+
 export {
-  CarouselWrapper,
-  ProductCarouselWrapper,
-  ProductImageContainer,
-  SimilarItemsLinkWrapper,
+  Dot,
+  Dots,
+  StyledImage,
   SvgIconsElement,
   SimilarTextElement,
-  StyledImage,
+  CarouselWrapper,
+  ProductCarouselWrapper,
+  SimilarItemsLinkWrapper,
+  ProductImageContainer,
+  TransparentImgOverlay,
 };

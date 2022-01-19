@@ -15,11 +15,12 @@ import {
   LeftArrow,
   CarouselIcon,
 } from './StyledProductCarouselDesktop';
-import { IProductCarouselDesktopProps } from './IProductCarouselDesktop';
-export const ProductCarouselDesktop: FC<IProductCarouselDesktopProps> = ({
+import { IProductCarouselProps } from '../IProductCarousel';
+export const ProductCarouselDesktop: FC<IProductCarouselProps> = ({
   imgUrls,
+  isProductSoldOut,
   goToProductRecommendation,
-}: IProductCarouselDesktopProps) => {
+}: IProductCarouselProps) => {
   // const imageSize = '564px';
   const [currentSlide, setCurrentSlide] = React.useState(0);
   const [loaded, setLoaded] = useState(false);
@@ -50,13 +51,16 @@ export const ProductCarouselDesktop: FC<IProductCarouselDesktopProps> = ({
   const [similarItemsDisplayWith, setSimilarItemsDisplayWith] =
     useState<number>(140);
   useEffect(() => {
+    if (isProductSoldOut) {
+      return;
+    }
     const timer = setTimeout(() => {
       setSimilarItemsDisplayWith(46);
     }, 2000);
     return () => {
       clearTimeout(timer);
     };
-  }, []);
+  }, [isProductSoldOut]);
 
   useEffect(() => {
     instanceRef.current?.update(

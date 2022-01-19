@@ -55,7 +55,6 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         }}
       />
       {globalStyles}
-      {productCarouselStyles}
       <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps.dehydratedState}>
           <GoogleTagManager>
