@@ -18,7 +18,7 @@ const ProductCarouselWrapper = styled.div`
 
 const ProductImageContainer = styled.div`
   width: 360px;
-  height: 375px;
+  height: 100vw;
   display: inline-block;
   .pdpImages {
     top: 112px !important;
@@ -72,7 +72,7 @@ const TransparentImgOverlay = styled.div`
 `;
 
 const Dots = styled.div`
-  bottom: 15px;
+  bottom: 13px;
   margin-left: 16px;
   display: flex;
   text-align: left;
@@ -81,14 +81,14 @@ const Dots = styled.div`
 `;
 
 const Dot = styled.button<{ active: boolean }>`
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
   padding: 0;
   margin-right: 6px;
   border-radius: 6px;
-  transform: scale(1.2);
+  transform: ${(props) => (props.active ? 'scale(1.2)' : 'scale(1)')};
   background-color: ${(props) => (props.active ? '#707070' : '#e6e6e6')};
-  border: 1px solid ${(props) => (props.active ? '#707070' : '#e6e6e6')};
+  border: 1px solid #e6e6e6;
 `;
 
 export {
