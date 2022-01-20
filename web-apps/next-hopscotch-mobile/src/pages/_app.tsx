@@ -1,6 +1,6 @@
 import Script from 'next/script';
 import React, { useState } from 'react';
-import { globalStyles, productCarouselStyles } from '@/styles';
+import { globalStyles } from '@/styles';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Hydrate } from 'react-query/hydration';
 import GoogleTagManager from '@/components/google-tag-manager/GoogleTagManager';

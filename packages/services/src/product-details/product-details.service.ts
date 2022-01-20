@@ -1,4 +1,4 @@
-import { httpService } from '../http';
+import { httpService } from '../http-demand';
 
 const addToWishlist = <P, R>(wishItem: P): Promise<R> => {
   return httpService.post<R>({
