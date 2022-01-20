@@ -7,8 +7,7 @@ const CarouselWrapper = styled.div`
   position: relative;
   padding: 16px 0px 32px 8px;
   max-height: 570px;
-  overflow-x: scroll;
-  overflow-y: hidden;
+  overflow: hidden;
 `;
 
 const ProductCarouselWrapper = styled.div`
@@ -71,27 +70,25 @@ const TransparentImgOverlay = styled.div`
   position: absolute;
   top: 0;
   left: 0;
+  width: 100%;
   max-width: 564px;
   min-height: 564px;
 `;
 
 const RightArrow = styled.div<{ disabled: boolean }>`
-  top: 28.3%;
-  right: 26px;
   width: 48px;
   height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background: #fff;
+  border-radius: 24px;
   opacity: ${(props) => (props.disabled ? 0.5 : 1)};
   cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
-  position: absolute;
-  border-radius: 24px;
-  background: #fff;
   box-shadow: ${(props) =>
     props.disabled
       ? '0 0 0 1px rgb(0 0 0 / 10%)'
       : '0 2px 8px 0 rgb(0 0 0 / 8%)'};
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
   &:hover {
     box-shadow: ${(props) =>
       props.disabled
@@ -104,16 +101,17 @@ const RightArrow = styled.div<{ disabled: boolean }>`
     }
   }
 `;
+
 const LeftArrow = styled.div<{ disabled: boolean }>`
-  top: 28.3%;
-  left: 26px;
   width: 48px;
   height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background: #fff;
+  border-radius: 24px;
   opacity: ${(props) => (props.disabled ? 0.5 : 1)};
   cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
-  position: absolute;
-  border-radius: 24px;
-  background: #fff;
   box-shadow: ${(props) =>
     props.disabled
       ? '0 0 0 1px rgb(0 0 0 / 10%)'
@@ -122,9 +120,6 @@ const LeftArrow = styled.div<{ disabled: boolean }>`
     right: auto;
     transform: rotate(180deg);
   }
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
   &:hover {
     box-shadow: ${(props) =>
       props.disabled
@@ -143,15 +138,25 @@ const CarouselIcon = styled(SvgIcon)`
   height: 14px;
 `;
 
+const Arrows = styled.div`
+  top: 257px;
+  position: absolute;
+  display: flex;
+  justify-content: space-between;
+  width: 94%;
+  margin: auto 18px;
+`;
+
 export {
   CarouselWrapper,
   ProductCarouselWrapper,
-  ProductImageContainer,
   SimilarItemsLinkWrapper,
   SvgIconsElement,
   SimilarTextElement,
+  ProductImageContainer,
   TransparentImgOverlay,
-  RightArrow,
+  Arrows,
   LeftArrow,
+  RightArrow,
   CarouselIcon,
 };

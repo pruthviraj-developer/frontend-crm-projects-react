@@ -11,6 +11,7 @@ import {
   SimilarTextElement,
   SvgIconsElement,
   TransparentImgOverlay,
+  Arrows,
   RightArrow,
   LeftArrow,
   CarouselIcon,
@@ -137,7 +138,7 @@ export const ProductCarouselDesktop: FC<IProductCarouselProps> = ({
       </CarouselWrapper>
       {/* <CustomRightArrow /> */}
       {loaded && instanceRef.current && (
-        <>
+        <Arrows>
           <Arrow
             left
             onClick={(e: any) => {
@@ -155,7 +156,7 @@ export const ProductCarouselDesktop: FC<IProductCarouselProps> = ({
               instanceRef.current.track.details?.slides?.length - 1
             }
           />
-        </>
+        </Arrows>
       )}
       <SimilarItemsLinkWrapper
         width={similarItemsDisplayWith}
