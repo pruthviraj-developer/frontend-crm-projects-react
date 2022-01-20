@@ -40,14 +40,13 @@ export const PinCodeWrapper: FC<IPinCodeWrapperProps> = ({
 
     (async () => {
       try {
-        setIsPinCodeLoading(false);
+        setIsPinCodeLoading(true);
         setPinCodeError({ message: '' });
         const response: IPinCodeAPIResponseProps = await productDetailsService.checkForPincode({
           productId,
           pincode,
         });
         setIsPinCodeLoading(false);
-        debugger;
         if (!response.serviceable) {
           setPinCodeError({ ...response, message: response.noPinCodeMessage });
         } else {

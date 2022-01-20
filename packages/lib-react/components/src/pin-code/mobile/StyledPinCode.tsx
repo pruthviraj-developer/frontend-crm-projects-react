@@ -121,7 +121,7 @@ const Label = styled.label`
   color: #a4a4a4;
 `;
 
-const InputField = styled.input`
+const InputField = styled.input<{ isError: boolean }>`
   width: 100%;
   height: 48px;
   max-width: 173px;
@@ -131,7 +131,7 @@ const InputField = styled.input`
   display: inline-block;
   vertical-align: middle;
   background-color: #fff;
-  border: 1px solid #e6e6e6;
+  border: 1px solid ${(props) => (props.isError ? '#f44' : '#e6e6e6')};
   border-radius: 4px;
   padding: 16px 16px 0 12px;
   color: rgba(0, 0, 0, 0.8);

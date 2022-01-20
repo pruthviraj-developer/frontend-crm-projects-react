@@ -47,6 +47,10 @@ export const PinCodeMobile: FC<IPinCodeProps> = ({
   const onSubmit = (event: React.SyntheticEvent) => {
     event && event.preventDefault();
     setError({ message: '' });
+    if (pin.length < 7) {
+      setError({ message: 'Please enter pincode.' });
+      return;
+    }
     checkPinCode(pin.toString().replace(/\D/g, ''));
   };
 
@@ -97,16 +101,19 @@ export const PinCodeMobile: FC<IPinCodeProps> = ({
           <InputWrapper>
             <InputField
               value={pin}
+              isError={
+                (error && error.message) ||
+                (errorPinCode && errorPinCode.message)
+                  ? true
+                  : false
+              }
               onChange={(event) => {
                 setPincode(formatPinCode(event.target.value, pin));
               }}
             />
             <Label className="label">Pincode</Label>
           </InputWrapper>
-          <PinCodeSubmit
-            disabled={pin.length < 7 || isPinCodeLoading}
-            type="submit"
-          >
+          <PinCodeSubmit disabled={isPinCodeLoading} type="submit">
             Check
           </PinCodeSubmit>
           {error && error.message && (
