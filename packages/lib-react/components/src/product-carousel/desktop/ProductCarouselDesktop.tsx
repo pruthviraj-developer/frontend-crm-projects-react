@@ -25,28 +25,31 @@ export const ProductCarouselDesktop: FC<IProductCarouselProps> = ({
   // const imageSize = '564px';
   const [currentSlide, setCurrentSlide] = React.useState(0);
   const [loaded, setLoaded] = useState(false);
-  const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>(
-    {
-      initial: 0,
-      mode: 'free',
-      slideChanged(s) {
-        setCurrentSlide(s.track.details.rel);
-      },
-      created() {
-        setLoaded(true);
-      },
-      slides: {
-        perView: 1.68,
-        spacing: 12,
-      },
-      defaultAnimation: {
-        duration: 1500,
+  const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>({
+    initial: 0,
+    mode: 'free',
+    slideChanged(s) {
+      setCurrentSlide(s.track.details.rel);
+    },
+    created() {
+      setLoaded(true);
+    },
+    slides: {
+      perView: 1.2,
+      spacing: 12,
+    },
+    defaultAnimation: {
+      duration: 1500,
+    },
+    breakpoints: {
+      '(min-width: 821px)': {
+        slides: {
+          perView: 1.68,
+          spacing: 12,
+        },
       },
     },
-    [
-      // add plugins here
-    ]
-  );
+  });
 
   // const totalImages = (imgUrls && imgUrls.length) || 0;
   const [similarItemsDisplayWith, setSimilarItemsDisplayWith] =
@@ -75,11 +78,19 @@ export const ProductCarouselDesktop: FC<IProductCarouselProps> = ({
           setLoaded(true);
         },
         slides: {
-          perView: 1.68,
+          perView: 1.2,
           spacing: 12,
         },
         defaultAnimation: {
           duration: 1500,
+        },
+        breakpoints: {
+          '(min-width: 821px)': {
+            slides: {
+              perView: 1.68,
+              spacing: 12,
+            },
+          },
         },
       },
       0

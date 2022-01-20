@@ -24,12 +24,12 @@ const ProductCarouselWrapper = styled.div`
 `;
 
 const ProductImageContainer = styled.div`
-  height: 564px;
+  height: 56vw;
   max-width: 564px;
-  min-height: 564px;
+  min-height: 56vw;
   display: inline-block;
   ${mediaQueries('xl')`
-    height: 564px;
+    height: 56vw;
   `};
 `;
 
@@ -72,7 +72,7 @@ const TransparentImgOverlay = styled.div`
   left: 0;
   width: 100%;
   max-width: 564px;
-  min-height: 564px;
+  min-height: 56vw;
 `;
 
 const RightArrow = styled.div<{ disabled: boolean }>`
@@ -140,11 +140,12 @@ const CarouselIcon = styled(SvgIcon)`
 
 const Arrows = styled.div`
   top: 257px;
+  left: 20px;
+  width: 95%;
+  padding-left: 6px;
   position: absolute;
   display: flex;
   justify-content: space-between;
-  width: 94%;
-  margin: auto 18px;
 `;
 
 export {
