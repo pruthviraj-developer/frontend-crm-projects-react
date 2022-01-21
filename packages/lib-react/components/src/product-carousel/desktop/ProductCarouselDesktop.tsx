@@ -35,7 +35,7 @@ export const ProductCarouselDesktop: FC<IProductCarouselProps> = ({
       setLoaded(true);
     },
     slides: {
-      perView: 1.14,
+      perView: 1.132,
       spacing: 11.63,
     },
     defaultAnimation: {
@@ -78,7 +78,7 @@ export const ProductCarouselDesktop: FC<IProductCarouselProps> = ({
           setLoaded(true);
         },
         slides: {
-          perView: 1.14,
+          perView: 1.132,
           spacing: 11.63,
         },
         defaultAnimation: {
