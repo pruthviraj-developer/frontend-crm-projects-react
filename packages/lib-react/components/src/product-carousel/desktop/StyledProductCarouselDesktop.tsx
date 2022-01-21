@@ -24,13 +24,19 @@ const ProductCarouselWrapper = styled.div`
 `;
 
 const ProductImageContainer = styled.div`
-  height: 56vw;
-  max-width: 564px;
-  min-height: 56vw;
+  width: 100%;
+  max-height: calc(50vw - 8px);
+  height: calc(50vw - 8px);
   display: inline-block;
   ${mediaQueries('xl')`
     height: 56vw;
+    max-height: 558px;
   `};
+  img {
+    height: 100%;
+    width: 100%;
+    margin: 0 auto;
+  }
 `;
 
 const SvgIconsElement = styled(SvgIcon)``;
