@@ -36,7 +36,7 @@ export const ProductCarouselDesktop: FC<IProductCarouselProps> = ({
     },
     slides: {
       perView: 1.2,
-      spacing: 11,
+      spacing: 11.64,
     },
     defaultAnimation: {
       duration: 1500,
@@ -44,8 +44,8 @@ export const ProductCarouselDesktop: FC<IProductCarouselProps> = ({
     breakpoints: {
       '(min-width: 821px)': {
         slides: {
-          perView: 1.645,
-          spacing: 11,
+          perView: 1.642,
+          spacing: 11.64,
         },
       },
     },
@@ -79,7 +79,7 @@ export const ProductCarouselDesktop: FC<IProductCarouselProps> = ({
         },
         slides: {
           perView: 1.2,
-          spacing: 11,
+          spacing: 11.64,
         },
         defaultAnimation: {
           duration: 1500,
@@ -87,8 +87,8 @@ export const ProductCarouselDesktop: FC<IProductCarouselProps> = ({
         breakpoints: {
           '(min-width: 821px)': {
             slides: {
-              perView: 1.645,
-              spacing: 11,
+              perView: 1.642,
+              spacing: 11.64,
             },
           },
         },
