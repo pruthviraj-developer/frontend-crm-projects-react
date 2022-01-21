@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { typography, mediaQueries } from '@hs/utils';
+import { typography, mediaQueries, mediaQueriesMaxWidth } from '@hs/utils';
 import { SvgIcon } from '@hs/icons';
 
 const CarouselWrapper = styled.div`
@@ -28,8 +28,11 @@ const ProductImageContainer = styled.div`
   max-height: calc(50vw - 8px);
   height: calc(50vw - 8px);
   display: inline-block;
+  ${mediaQueriesMaxWidth('mw820')`
+      height: 56vw;
+      max-height: 56vw;
+  `};
   ${mediaQueries('xl')`
-    height: 56vw;
     max-height: 558px;
   `};
 `;
