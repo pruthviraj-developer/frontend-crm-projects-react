@@ -59,6 +59,7 @@ export interface IUpdatedDeliverDetailsProps {
   edd?: string;
   pinCode: string;
   eddPrefix: string;
+  deliveryMsg: string;
   deliveryMessages: IProductDetailsDeliveryMessageOrDeliveryMessagesEntity[];
 }
 

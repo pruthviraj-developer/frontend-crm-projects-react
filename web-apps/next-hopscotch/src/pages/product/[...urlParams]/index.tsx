@@ -505,6 +505,7 @@ const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile, url }
         pinCode: newValues.newPincode,
         eddPrefix: newValues.eddPrefix,
         deliveryMessages: newValues.deliveryMessages,
+        deliveryMsg: newValues.edd,
       });
     }
   };
