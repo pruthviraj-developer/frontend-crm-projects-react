@@ -134,7 +134,7 @@ export const ProductCarouselDesktop: FC<IProductCarouselProps> = ({
                 id={'carousel-' + index}
               >
                 <Image
-                  priority
+                  priority={index < 2}
                   layout="fill"
                   draggable={false}
                   loader={({ src, width }) =>

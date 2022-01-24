@@ -80,7 +80,7 @@ export const ProductCarousel: FC<IProductCarouselProps> = ({
                 id={'carousel-' + index}
               >
                 <Image
-                  priority
+                  priority={index === 0}
                   layout="fill"
                   draggable={false}
                   loader={({ src, width }) =>
