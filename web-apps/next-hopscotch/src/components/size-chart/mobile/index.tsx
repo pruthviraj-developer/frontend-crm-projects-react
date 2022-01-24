@@ -1,8 +1,8 @@
-import { SizeChartPopupDesktop } from '@hs/components';
+import { SizeChartPopup } from '@hs/components';
 import { ISizeChartProps } from '@/types';
 import { productDetailsService } from '@hs/services';
 import { useState, FC } from 'react';
-import { ISizeChartDtoProps, IDisplayType } from './../ISizeChart';
+import { ISizeChartDtoProps, IDisplayType } from '../ISizeChart';
 import { useQuery } from 'react-query';
 import { useSizeChart } from '@hs/framework';
 
@@ -22,7 +22,7 @@ const SizeChart: FC<ISizeChartDtoProps> = ({ productName, id, onClickClose }: IS
   });
 
   return (
-    <SizeChartPopupDesktop
+    <SizeChartPopup
       {...{
         productName,
         onClickClose,
@@ -39,7 +39,7 @@ const SizeChart: FC<ISizeChartDtoProps> = ({ productName, id, onClickClose }: IS
         isLengthActive,
         isWeightActive,
       }}
-    ></SizeChartPopupDesktop>
+    ></SizeChartPopup>
   );
 };
 

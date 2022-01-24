@@ -19,4 +19,4 @@ applications:
       cache:
         paths:
           - .next/cache/**/*
-    appRoot: web-apps/next-hopscotch-mobile
+    appRoot: web-apps/next-hopscotch
