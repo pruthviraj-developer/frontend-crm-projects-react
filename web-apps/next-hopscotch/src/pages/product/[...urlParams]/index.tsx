@@ -36,6 +36,7 @@ import {
   LOCAL_DATA,
   SESSION_DATA,
   useSessionStorage,
+  useSetUtmParams,
 } from '@hs/framework';
 
 const SizeChartPopupComponentDeskTop = dynamic(() => import('@/components/size-chart/desktop'), {
@@ -226,6 +227,7 @@ const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile, url }
     }
   }, [showLoginPopup, openLoginPopup]);
 
+  useSetUtmParams();
   const addToWishlist = () => {
     if (userInfo && userInfo.isLoggedIn) {
       addToWishlistAfterModalClose();

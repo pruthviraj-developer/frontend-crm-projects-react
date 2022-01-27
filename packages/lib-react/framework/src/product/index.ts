@@ -7,3 +7,4 @@ export * from './use-recommendation';
 export * from './use-delivery-details';
 export * from './product-tracking-utils';
 export * from './use-selected-sort';
+export * from './use-set-utm-params';

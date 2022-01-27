@@ -150,10 +150,15 @@ const getAccountCardsCount = <R>(): Promise<R> => {
   return httpService.get<R>({ url: '/api/accountcard/count' });
 };
 
+const postUtmParams = <P, R>(data: P): Promise<R> => {
+  return httpService.post<R>({ url: '/api/utm-info', data });
+};
+
 export const productDetailsService = {
   signUp,
   sendOtp,
   verifyOtp,
+  postUtmParams,
   addItemToCart,
   addToWishlist,
   searchProducts,
