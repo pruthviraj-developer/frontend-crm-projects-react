@@ -1,19 +1,10 @@
-import { useQuery } from 'react-query';
 import { useRouter } from 'next/router';
 import { productDetailsService } from '@hs/services';
 
-export const useSetUtmParams = () => {
+export const useSetUtmParams = (): any => {
   let hasUtm = false;
   let postData: any = {};
-  const {} = useQuery(
-    ['utm-info', postData],
-    () => productDetailsService.postUtmParams(postData),
-    {
-      staleTime: Infinity,
-      enabled: postData && postData.utm_source,
-    }
-  );
-
+  const router = useRouter();
   const getHostName = (url: string) => {
     var a = document.createElement('a');
     a.href = url;
@@ -22,7 +13,6 @@ export const useSetUtmParams = () => {
 
   const loadUtmFromLocation = () => {
     // var queryParams = this._$location.search() || {};
-    const router = useRouter();
     const queryParams = router.query;
 
     var utmParams: any = {};
@@ -34,7 +24,7 @@ export const useSetUtmParams = () => {
         hasUtm = true;
       }
     }
-    if (!hasUtm && document && document.referrer) {
+    if (typeof document != undefined && !hasUtm && document.referrer) {
       // no utm parameter set, check referrer
       let referrer = getHostName(document.referrer);
       if (referrer) {
@@ -47,15 +37,26 @@ export const useSetUtmParams = () => {
     return utmParams;
   };
 
-  let p = loadUtmFromLocation();
-  let params: any = {};
-  for (let key in p) {
-    params[key] = Array.isArray(p[key]) ? p[key][p[key].length - 1] : p[key];
-  }
-  postData = {
-    utm_source: params['utm_source'] || '',
-    utm_medium: params['utm_medium'] || '',
-    utm_campaign: params['utm_campaign'] || '',
-    deeplink: params['deeplink'] || '',
+  const postUtmParams = () => {
+    (async () => {
+      try {
+        let p = loadUtmFromLocation();
+        let params: any = {};
+        for (let key in p) {
+          params[key] = Array.isArray(p[key])
+            ? p[key][p[key].length - 1]
+            : p[key];
+        }
+        postData = {
+          utm_source: params['utm_source'] || '',
+          utm_medium: params['utm_medium'] || '',
+          utm_campaign: params['utm_campaign'] || '',
+          deeplink: params['deeplink'] || '',
+        };
+        await productDetailsService.postUtmParams(postData);
+      } catch (e) {}
+    })();
   };
+
+  return [postUtmParams];
 };
