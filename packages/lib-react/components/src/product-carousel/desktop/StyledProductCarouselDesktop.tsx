@@ -75,8 +75,8 @@ const TransparentImgOverlay = styled.div`
   top: 0;
   left: 0;
   width: 100%;
-  max-width: 564px;
-  min-height: 56vw;
+  /* max-width: 564px;
+  min-height: 56vw; */
 `;
 
 const RightArrow = styled.div<{ disabled: boolean }>`
