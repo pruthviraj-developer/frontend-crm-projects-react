@@ -136,6 +136,7 @@ export const ProductCarouselDesktop: FC<IProductCarouselProps> = ({
                 <Image
                   priority={index < 2}
                   layout="fill"
+                  objectFit="fill"
                   draggable={false}
                   loader={({ src, width }) =>
                     `${src}&tr=w-${width},c-at_max,n-medium`
