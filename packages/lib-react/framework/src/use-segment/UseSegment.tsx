@@ -2,8 +2,8 @@ import {
   IUseSegmentProps,
   IContextData,
   ISegmentProperties,
-  IUtmParam,
 } from './IUseSegment';
+import { IUtmParam } from './../types';
 import Parser from 'ua-parser-js';
 import { useEffect, useState } from 'react';
 import {

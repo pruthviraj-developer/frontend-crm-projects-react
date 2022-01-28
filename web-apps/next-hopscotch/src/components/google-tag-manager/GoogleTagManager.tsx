@@ -15,7 +15,7 @@ const GoogleTagManager: FC<unknown> = ({ children }) => {
 
   useEffect(() => {
     gtm.pageview(router.asPath, { shallow: false });
-  }, []);
+  }, [router.asPath]);
 
   useEffect(() => {
     if (router.asPath.indexOf('?') > -1) {

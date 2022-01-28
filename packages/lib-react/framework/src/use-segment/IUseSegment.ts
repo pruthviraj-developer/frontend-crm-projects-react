@@ -101,11 +101,3 @@ export interface Page {
   title: string;
   url: string;
 }
-export interface IUtmParam {
-  'utm-source'?: string;
-  'utm-medium'?: string;
-  'utm-campaign'?: string;
-  'utm-term'?: string;
-  'utm-content'?: string;
-  'utm-date'?: string;
-}

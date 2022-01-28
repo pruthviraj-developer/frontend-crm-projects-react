@@ -150,8 +150,8 @@ const getAccountCardsCount = <R>(): Promise<R> => {
   return httpService.get<R>({ url: '/api/accountcard/count' });
 };
 
-const postUtmParams = <P, R>(data: P): Promise<R> => {
-  return httpService.post<R>({ url: '/api/utm-info', data });
+const postUtmParams = <P, R>(params: P): Promise<R> => {
+  return httpService.post<R>({ url: '/api/utm-info', params, data: params });
 };
 
 export const productDetailsService = {

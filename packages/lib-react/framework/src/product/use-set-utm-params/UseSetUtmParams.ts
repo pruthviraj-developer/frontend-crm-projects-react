@@ -1,60 +1,93 @@
 import { useRouter } from 'next/router';
-import { productDetailsService } from '@hs/services';
+import {
+  productDetailsService,
+  cookiesService,
+  timeService,
+} from '@hs/services';
+import { IUtmParam } from './../../types';
 
-export const useSetUtmParams = (): any => {
-  let hasUtm = false;
-  let postData: any = {};
+export const useSetUtmParams = (): unknown => {
+  const UTM_PARAMS_COOKIE_NAME = 'hs_utm_params';
+  const UTM_STORAGE_TIME = 60 * 1000 * 1 * 60;
+  const DEEPLINK_STORAGE_TIME = 24 * 60 * 60 * 1000;
   const router = useRouter();
   const getHostName = (url: string) => {
-    var a = document.createElement('a');
+    const a = document.createElement('a');
     a.href = url;
     return a.hostname;
   };
 
   const loadUtmFromLocation = () => {
     // var queryParams = this._$location.search() || {};
-    const queryParams = router.query;
-
-    var utmParams: any = {};
-    for (var key in queryParams) {
-      if (queryParams.hasOwnProperty(key) && key.indexOf('utm_') === 0) {
-        const paramData = ((queryParams && queryParams[key]) ||
-          '') as unknown as string;
-        utmParams[key] = paramData.replace(/[%#–]/g, '_');
-        hasUtm = true;
-      }
+    const { utm_source, utm_medium, utm_campaign, deeplink }: IUtmParam =
+      router.query;
+    if (deeplink) {
+      setDeeplinkParams({ deeplink });
     }
-    if (typeof document != undefined && !hasUtm && document.referrer) {
-      // no utm parameter set, check referrer
-      let referrer = getHostName(document.referrer);
+    if (utm_source || utm_medium || utm_campaign) {
+      const getFormattedData = (value = '') => {
+        return value.replace(/[%#–]/g, '_');
+      };
+      setUtmParams({ utm_source, utm_medium, utm_campaign });
+      return {
+        utm_medium: getFormattedData(utm_medium),
+        utm_source: getFormattedData(utm_source),
+        utm_campaign: getFormattedData(utm_campaign),
+        deeplink,
+      };
+    } else if (typeof document != undefined && document.referrer) {
+      const referrer = getHostName(document.referrer);
       if (referrer) {
-        utmParams = {};
-        utmParams['utm_source'] = referrer;
-        utmParams['utm_medium'] = 'search';
-        hasUtm = true;
+        return {
+          utm_source: referrer,
+          utm_medium: 'search',
+        };
       }
     }
-    return utmParams;
+    return {};
+  };
+
+  const getTime = (storageTime: number) => {
+    return {
+      expires: new Date(timeService.getCurrentTime() + storageTime),
+    };
+  };
+
+  const setUtmParams = (params: IUtmParam) => {
+    if (params) {
+      cookiesService.setCookies({
+        key: UTM_PARAMS_COOKIE_NAME,
+        value: params,
+        options: getTime(UTM_STORAGE_TIME),
+      });
+    }
+  };
+
+  const setDeeplinkParams = (deeplinkParams: IUtmParam) => {
+    if (deeplinkParams) {
+      cookiesService.setCookies({
+        key: 'hs_deeplink_params',
+        value: deeplinkParams,
+        options: getTime(DEEPLINK_STORAGE_TIME),
+      });
+    }
   };
 
   const postUtmParams = () => {
     (async () => {
-      try {
-        let p = loadUtmFromLocation();
-        let params: any = {};
-        for (let key in p) {
-          params[key] = Array.isArray(p[key])
-            ? p[key][p[key].length - 1]
-            : p[key];
-        }
-        postData = {
-          utm_source: params['utm_source'] || '',
-          utm_medium: params['utm_medium'] || '',
-          utm_campaign: params['utm_campaign'] || '',
-          deeplink: params['deeplink'] || '',
-        };
-        await productDetailsService.postUtmParams(postData);
-      } catch (e) {}
+      const p: any = loadUtmFromLocation();
+      const params: any = {};
+      for (const key in p) {
+        params[key] = Array.isArray(p[key])
+          ? p[key][p[key].length - 1]
+          : p[key];
+      }
+      await productDetailsService.postUtmParams({
+        utm_source: params['utm_source'] || '',
+        utm_medium: params['utm_medium'] || '',
+        utm_campaign: params['utm_campaign'] || '',
+        deeplink: params['deeplink'] || '',
+      });
     })();
   };
 
