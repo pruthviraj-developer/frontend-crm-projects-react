@@ -92,12 +92,14 @@ export const FooterDesktop: FC = () => {
             <LinkIcons
               href="https://itunes.apple.com/in/app/hopscotch-find-something-new/id945949424"
               target="_blank"
+               rel="noopener noreferrer"
             >
               <DownloadIcon icon={AppleIcon}></DownloadIcon>
             </LinkIcons>
             <LinkIcons
               href="https://play.google.com/store/apps/details?id=in.hopscotch.android"
               target="_blank"
+               rel="noopener noreferrer"
             >
               <DownloadIcon icon={PlayIcon}></DownloadIcon>
             </LinkIcons>
@@ -110,24 +112,28 @@ export const FooterDesktop: FC = () => {
             <LinkIcons
               href="https://www.facebook.com/Hopscotch.India"
               target="_blank"
+               rel="noopener noreferrer"
             >
               <DownloadIcon icon={FacebookIcon}></DownloadIcon>
             </LinkIcons>
             <LinkIcons
               href="https://twitter.com/Hopscotchindia"
               target="_blank"
+               rel="noopener noreferrer"
             >
               <DownloadIcon icon={TwitterIcon}></DownloadIcon>
             </LinkIcons>
             <LinkIcons
               href="https://www.instagram.com/hopscotch.in/"
               target="_blank"
+              rel="noopener noreferrer"
             >
               <DownloadIcon icon={InstagramIcon}></DownloadIcon>
             </LinkIcons>
             <LinkIcons
               href="https://www.pinterest.com/hopscotchindia/"
               target="_blank"
+               rel="noopener noreferrer"
             >
               <DownloadIcon icon={PIntrestIcon}></DownloadIcon>
             </LinkIcons>
