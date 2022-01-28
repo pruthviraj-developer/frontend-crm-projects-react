@@ -9,4 +9,7 @@ export interface IUtmParam {
   utm_campaign?: string;
   utm_source?: string;
   utm_medium?: string;
+  utm_term?: string;
+  utm_content?: string;
+  utm_date?: string;
 }

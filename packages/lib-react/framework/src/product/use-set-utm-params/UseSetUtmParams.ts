@@ -19,8 +19,15 @@ export const useSetUtmParams = (): unknown => {
 
   const loadUtmFromLocation = () => {
     // var queryParams = this._$location.search() || {};
-    const { utm_source, utm_medium, utm_campaign, deeplink }: IUtmParam =
-      router.query;
+    const {
+      deeplink,
+      utm_term,
+      utm_date,
+      utm_source,
+      utm_medium,
+      utm_content,
+      utm_campaign,
+    }: IUtmParam = router.query;
     if (deeplink) {
       setDeeplinkParams({ deeplink });
     }
@@ -28,7 +35,14 @@ export const useSetUtmParams = (): unknown => {
       const getFormattedData = (value = '') => {
         return value.replace(/[%#–]/g, '_');
       };
-      setUtmParams({ utm_source, utm_medium, utm_campaign });
+      setUtmParams({
+        'utm-date': utm_date,
+        'utm-term': utm_term,
+        'utm-medium': utm_medium,
+        'utm-source': utm_source,
+        'utm-content': utm_content,
+        'utm-campaign': utm_campaign,
+      });
       return {
         utm_medium: getFormattedData(utm_medium),
         utm_source: getFormattedData(utm_source),
