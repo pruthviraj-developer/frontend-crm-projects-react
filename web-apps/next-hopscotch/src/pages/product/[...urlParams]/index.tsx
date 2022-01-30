@@ -230,7 +230,7 @@ const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile, url }
 
   useEffect(() => {
     postUtmParams && postUtmParams();
-  }, []);
+  }, [postUtmParams]);
 
   const addToWishlist = () => {
     if (userInfo && userInfo.isLoggedIn) {
