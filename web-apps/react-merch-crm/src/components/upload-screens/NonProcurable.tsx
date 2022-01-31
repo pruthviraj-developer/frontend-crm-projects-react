@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect } from 'react';
 import styled from '@emotion/styled';
-import { FileUploadPage, FileUploadState, FileUploadSideBarOption, SubmitHelper } from '@hs/containers';
+import { FileUploadPage, FileUploadState, FileUploadSideBarOption, SubmitHelper } from '@hs-crm/containers';
 import { merchStatusChangeService } from '@hs/services';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';

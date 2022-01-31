@@ -6,7 +6,7 @@ import {
   FileUploadSideBarOption,
   DropDownValuesWithType,
   SubmitHelper,
-} from '@hs/containers';
+} from '@hs-crm/containers';
 import { merchStatusChangeService } from '@hs/services';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';

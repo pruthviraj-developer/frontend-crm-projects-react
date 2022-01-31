@@ -4,7 +4,7 @@ import styled from '@emotion/styled';
 import { Formik, Form, Field } from 'formik';
 import { Grid, Paper, Button, TextField as MuiTextField } from '@material-ui/core';
 import { Autocomplete, AutocompleteRenderInputParams } from '@material-ui/lab';
-import { useCategory } from '@hs/hooks';
+import { useCategory } from '@hs-crm/hooks';
 import { IFilters, OptionsType } from './IFilters';
 import { FiltersValidationSchema } from './FiltersValidation';
 const useFilterStyles = makeStyles({

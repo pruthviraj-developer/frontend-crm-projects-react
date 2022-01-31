@@ -6,8 +6,8 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { FilterListPage, FiltersListPageProps } from '@hs/containers';
-import { HsSelectableTable, SelectableTableProps, ChecksBalanceTableToolbar } from '@hs/components';
+import { FilterListPage, FiltersListPageProps } from '@hs-crm/containers';
+import { HsSelectableTable, SelectableTableProps, ChecksBalanceTableToolbar } from '@hs-crm/components';
 import styled from '@emotion/styled';
 import { toast } from 'react-toastify';
 import { makeStyles } from '@material-ui/core/styles';
@@ -15,7 +15,7 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import { reorderService } from '@hs/services';
 import { Colors } from '@hs/utils';
-import { LeftNavBar, LeftNavBarProps } from '@hs/components';
+import { LeftNavBar, LeftNavBarProps } from '@hs-crm/components';
 import { DashBoardIcon } from '@hs/icons';
 const navItems: LeftNavBarProps = {
   navList: [{ linkUrl: '/checks-and-balances', linkText: 'Dashboard', icon: DashBoardIcon }],

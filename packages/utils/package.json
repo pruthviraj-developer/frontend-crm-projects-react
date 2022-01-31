@@ -15,12 +15,9 @@
     "build": "tsdx build --format esm",
     "test": "tsdx test",
     "lint": "tsdx lint",
-    "prepare": "tsdx build --format esm"
-  },
-  "peerDependencies": {
-    "react": "17.0.2",
-    "react-dom": "17.0.2",
-    "react-router": "5.2.0"
+    "prepare": "tsdx build --format esm",
+    "size": "size-limit",
+    "analyze": "size-limit --why"
   },
   "husky": {
     "hooks": {
@@ -35,16 +32,29 @@
   },
   "name": "@hs/utils",
   "author": "Rishikant Tiwari",
-  "module": "dist/util.esm.js",
+  "module": "dist/utils.esm.js",
+  "size-limit": [
+    {
+      "path": "dist/utils.esm.js",
+      "limit": "10 KB"
+    }
+  ],
+  "peerDependencies": {
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-router": "5.2.0",
+    "@material-ui/core": "4.12.3",
+    "colornames": "^1.1.1"
+  },
   "devDependencies": {
+    "@material-ui/core": "4.12.3",
+    "colornames": "^1.1.1",
+    "@size-limit/preset-small-lib": "^5.0.3",
     "@types/colornames": "^1.1.1",
     "husky": "6.0.0",
+    "size-limit": "^5.0.3",
     "tsdx": "0.14.1",
-    "tslib": "2.2.0",
-    "typescript": "4.1.2"
-  },
-  "dependencies": {
-    "@material-ui/core": "4.11.4",
-    "colornames": "^1.1.1"
+    "tslib": "2.3.1",
+    "typescript": "4.3.5"
   }
 }

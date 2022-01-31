@@ -15,7 +15,7 @@ import { Colors } from '@hs/utils';
 import { Formik, Form, Field } from 'formik';
 import { Autocomplete, AutocompleteRenderInputParams } from 'formik-material-ui-lab';
 import { IDashboardSetData, IFilterPostData, IFilterParams } from '../../types/IDashBoard';
-import { ReorderFiltersProps, ReorderFiltersOptions, HSTableV1, HsTablePropsV1 } from '@hs/components';
+import { ReorderFiltersProps, ReorderFiltersOptions, HSTableV1, HsTablePropsV1 } from '@hs-crm/components';
 import {
   Brand,
   FilterType,

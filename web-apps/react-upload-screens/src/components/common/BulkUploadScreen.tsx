@@ -1,9 +1,9 @@
 import React, { FC, useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import styled from '@emotion/styled';
-import { FileUploadPage, FileUploadState, SubmitHelper } from '@hs/containers';
+import { FileUploadPage, FileUploadState, SubmitHelper } from '@hs-crm/containers';
 import { bulkUploadService } from '@hs/services';
-import { ErrorPanel } from '@hs/components';
+import { ErrorPanel } from '@hs-crm/components';
 import { bulkUploadProps } from '../../types/IBulkUpload';
 import { Helmet } from 'react-helmet';
 import * as Yup from 'yup';

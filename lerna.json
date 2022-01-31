@@ -1,6 +1,11 @@
 {
-  "packages": ["packages/*", "packages/react-lib/*", "web-apps/*"],
-  "version": "0.0.0",
+  "packages": [
+    "packages/*",
+    "packages/lib-react-crm/*",
+    "packages/lib-react/*",
+    "web-apps/*"
+  ],
+  "version": "independent",
   "npmClient": "yarn",
   "useWorkspaces": true
 }

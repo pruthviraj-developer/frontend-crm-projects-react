@@ -1,11 +1,11 @@
 import React, { FC, useState } from 'react';
 import styled from '@emotion/styled';
 import { IHeaderType } from './IDashboard';
-import { FileUploadPage, FileUploadSideBarOption, SubmitHelper } from '@hs/containers';
+import { FileUploadPage, FileUploadSideBarOption, SubmitHelper } from '@hs-crm/containers';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 import { makeStyles } from '@material-ui/core/styles';
-import { ErrorPanel } from '@hs/components';
+import { ErrorPanel } from '@hs-crm/components';
 import { IDropDownChangeType, FileUploadState, IFileUploadResponse } from './IUploadScreen';
 import { financeAccountingService } from '@hs/services';
 import { useHistory } from 'react-router-dom';

@@ -1,0 +1,89 @@
+{
+    "version": "1.0.0",
+    "license": "MIT",
+    "main": "dist/components.esm.js",
+    "typings": "dist/index.d.ts",
+    "files": [
+        "dist",
+        "src"
+    ],
+    "engines": {
+        "node": ">=12"
+    },
+    "scripts": {
+        "start": "cross-env NODE_ENV=development tsdx watch --format esm --verbose",
+        "build": "tsdx build --format esm",
+        "test": "tsdx test --passWithNoTests",
+        "lint": "tsdx lint",
+        "prepare": "tsdx build --format esm",
+        "size": "size-limit",
+        "analyze": "size-limit --why"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "tsdx lint"
+        }
+    },
+    "prettier": {
+        "printWidth": 80,
+        "semi": true,
+        "singleQuote": true,
+        "trailingComma": "es5"
+    },
+    "name": "@hs/components",
+    "author": "Rishikant Tiwari",
+    "module": "dist/components.esm.js",
+    "size-limit": [{
+        "path": "dist/components.esm.js",
+        "limit": "40 KB"
+    }],
+    "peerDependencies": {
+        "@hs/framework": "^1.0.0",
+        "@hs/utils": "^1.0.0",
+        "@hs/icons": "^1.0.0",
+        "@emotion/react": "11.4.1",
+        "@emotion/styled": "11.3.0",
+        "react": "17.0.2",
+        "next": "11.1.0"
+    },
+    "peerDependenciesMeta": {
+        "@hs/icon": {
+            "optional": true
+        },
+        "@hs/utils": {
+            "optional": true
+        },
+        "@hs/framework": {
+            "optional": true
+        },
+        "@emotion/react": {
+            "optional": true
+        },
+        "@emotion/styled": {
+            "optional": true
+        },
+        "react": {
+            "optional": true
+        },
+        "next": {
+            "optional": true
+        }
+    },
+    "devDependencies": {
+        "@babel/core": "^7.10.3",
+        "@types/react": "17.0.19",
+        "@emotion/babel-plugin": "11.3.0",
+        "@size-limit/preset-small-lib": "^5.0.3",
+        "babel-loader": "^8.1.0",
+        "cross-env": "^7.0.2",
+        "eslint-config-react-app": "^5.2.1",
+        "husky": "6.0.0",
+        "size-limit": "^5.0.3",
+        "tsdx": "0.14.1",
+        "tslib": "2.3.1",
+        "typescript": "4.3.5"
+    },
+    "dependencies": {
+        "keen-slider": "^6.6.3"
+    }
+}

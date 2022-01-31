@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Route, Redirect, Switch, useRouteMatch } from 'react-router-dom';
 import { DashBoardIcon } from '@hs/icons';
-import { LeftNavBar, LeftNavBarProps } from '@hs/components';
+import { LeftNavBar, LeftNavBarProps } from '@hs-crm/components';
 import ShareToVendor from './ShareToVendor';
 import Dashboard from './Dashboard';
 import Images from './Images';

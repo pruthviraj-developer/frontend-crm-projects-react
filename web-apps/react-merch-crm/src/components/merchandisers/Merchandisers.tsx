@@ -16,7 +16,7 @@ import {
   Button,
 } from '@material-ui/core';
 
-import { HSTableV2, HsTableV2Props, tableRowsV2, TableAction } from '@hs/components';
+import { HSTableV2, HsTableV2Props, tableRowsV2, TableAction } from '@hs-crm/components';
 import {
   merchandisersService,
   merchandisersFiltersObject,

@@ -3,3 +3,5 @@ storybook-static
 .react-playground
 *.log
 .vscode
+.DS_Store
+*.pem

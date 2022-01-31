@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { Route, Redirect, Switch, useRouteMatch } from 'react-router-dom';
 import { DashBoardIcon, NonProcIcon, TransferIcon } from '@hs/icons';
 
-import { LeftNavBar, LeftNavBarProps } from '@hs/components';
+import { LeftNavBar, LeftNavBarProps } from '@hs-crm/components';
 import Merchandisers from '../merchandisers/Merchandisers';
 import SosDashboard from './sos-dashboard';
 import {

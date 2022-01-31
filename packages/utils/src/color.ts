@@ -1,12 +1,16 @@
 import toHex from 'colornames';
+
 export const primaryColor = {
   100: '#ed54a4',
   200: '#ee65ad',
 };
+
 export const secondaryColor = {
   100: '#777',
+  300: '#707070',
   200: '#22e6c5bd',
 };
+
 export const tertiaryColor = {
   100: '#204265',
   200: '#09ADE0',
@@ -17,6 +21,7 @@ export const Colors = {
   WHITE: '#FFFFFF',
   GRAY: '#f9f9f9',
   GRAY20: '#333333',
+  GRAY50: '#f5f5f5',
   DARKGRAY: '#a4a4a4',
   MERCURY: '#e6e6e6',
   GREEN: {
@@ -65,6 +70,10 @@ export const Colors = {
   BLUE: {
     500: '#2a3441',
   },
+};
+
+export const HsTextAlign = {
+  center: 'center',
 };
 
 export const getHexCode = (name: string): string | undefined => {
