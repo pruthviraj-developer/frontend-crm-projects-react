@@ -1,29 +1,38 @@
-import { useEffect, FC } from 'react';
+import { useEffect, FC, useContext } from 'react';
 import { useRouter } from 'next/router';
-import { useSessionStorage, SESSION_DATA, IUtmParam, IFunnelData, ISegmentData, COOKIE_DATA } from '@hs/framework';
+import {
+  useSessionStorage,
+  SESSION_DATA,
+  IUtmParam,
+  IFunnelData,
+  ISegmentData,
+  COOKIE_DATA,
+  UserInfoContext,
+} from '@hs/framework';
 import { cookiesService, timeService } from '@hs/services';
+
+const getFormattedData = (value = '') => {
+  return value.replace(/[%#–]/g, '_');
+};
+
+const getHostName = (url: string) => {
+  const a = new URL(url);
+  return a.hostname;
+};
+
+const getTime = (storageTime: number) => {
+  return {
+    expires: new Date(timeService.getCurrentTime() + storageTime),
+  };
+};
 const DataManager: FC<unknown> = ({ children }) => {
   const router = useRouter();
+  const { updateUtmParams } = useContext(UserInfoContext);
   const [, setOaData] = useSessionStorage<IFunnelData>(SESSION_DATA.OA_DATA, null);
   const [, setSegmentData] = useSessionStorage<ISegmentData>(SESSION_DATA.SEGMENT_DATA, null);
   const UTM_STORAGE_TIME = 60 * 1000 * 1 * 60;
   const DEEPLINK_STORAGE_TIME = 24 * 60 * 60 * 1000;
   const { deeplink, utm_term, utm_date, utm_source, utm_medium, utm_content, utm_campaign }: IUtmParam = router.query;
-
-  const getFormattedData = (value = '') => {
-    return value.replace(/[%#–]/g, '_');
-  };
-
-  const getHostName = (url: string) => {
-    const a = new URL(url);
-    return a.hostname;
-  };
-
-  const getTime = (storageTime: number) => {
-    return {
-      expires: new Date(timeService.getCurrentTime() + storageTime),
-    };
-  };
 
   const setUtmParams = (params: IUtmParam) => {
     cookiesService.setCookies({
@@ -67,6 +76,7 @@ const DataManager: FC<unknown> = ({ children }) => {
   };
   useEffect(() => {
     loadUtmFromLocation();
+    updateUtmParams();
   }, []);
 
   useEffect(() => {

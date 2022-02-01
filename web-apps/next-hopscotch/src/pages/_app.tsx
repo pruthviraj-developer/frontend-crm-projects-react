@@ -58,15 +58,15 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
       {globalStyles}
       <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps.dehydratedState}>
-          <DataManager>
-            <GoogleTagManager>
-              <UserInfoProvider>
+          <GoogleTagManager>
+            <UserInfoProvider>
+              <DataManager>
                 <CartItemQtyProvider>
                   <LoginProvider>{getLayout(<Component {...pageProps} />)}</LoginProvider>
                 </CartItemQtyProvider>
-              </UserInfoProvider>
-            </GoogleTagManager>
-          </DataManager>
+              </DataManager>
+            </UserInfoProvider>
+          </GoogleTagManager>
         </Hydrate>
         {/* <ReactQueryDevtools initialIsOpen={false} /> */}
       </QueryClientProvider>
