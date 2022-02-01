@@ -17,33 +17,14 @@ export const UserInfoProvider: FC<unknown> = ({ children }) => {
   const [userInfo, setUserInfo] = useState<IUserInfoProps | undefined>();
   const [showAccountNotification, setAccountNotification] =
     useState<boolean>(false);
-  const utmParams: IUtmParam = cookiesService.getCookieData(
-    COOKIE_DATA.HS_UTM_PARAMS
-  );
-  let params: IUtmParam = {};
-  if (utmParams) {
-    params = {
-      utm_campaign: utmParams['utm-campaign'],
-      utm_medium: utmParams['utm-medium'],
-      utm_source: utmParams['utm-source'],
-    };
-    if (utmParams['utm-content']) {
-      params['utm-content'] = utmParams['utm-content'];
-    }
-    if (utmParams['utm_date']) {
-      params['utm_date'] = utmParams['utm_date'];
-    }
-    if (utmParams['utm_term']) {
-      params['utm_term'] = utmParams['utm_term'];
-    }
-  }
-
+  const [params, setParams] = useState<IUtmParam | undefined>();
   const { data: info, isSuccess } = useQuery<IUserInfoProps>(
     'info',
     () => productDetailsService.getUserInfo(params),
     {
       staleTime: Infinity,
       retry: false,
+      enabled: params != undefined,
     }
   );
 
@@ -103,8 +84,29 @@ export const UserInfoProvider: FC<unknown> = ({ children }) => {
   }, [userInfo, notification, isNotificationSuccess]);
 
   useEffect(() => {
+    let params: IUtmParam = {};
+    const utmParams: IUtmParam = cookiesService.getCookieData(
+      COOKIE_DATA.HS_UTM_PARAMS
+    );
     const deepLink: IUtmParam =
       cookiesService.getCookieData(COOKIE_DATA.HS_DEEPLINK_PARAMS) || {};
+    if (utmParams) {
+      params = {
+        utm_campaign: utmParams['utm-campaign'],
+        utm_medium: utmParams['utm-medium'],
+        utm_source: utmParams['utm-source'],
+      };
+      if (utmParams['utm-content']) {
+        params['utm-content'] = utmParams['utm-content'];
+      }
+      if (utmParams['utm_date']) {
+        params['utm_date'] = utmParams['utm_date'];
+      }
+      if (utmParams['utm_term']) {
+        params['utm_term'] = utmParams['utm_term'];
+      }
+    }
+    setParams(params);
     const deeplink = deepLink.deeplink || '';
     const { utm_campaign = '', utm_medium = '', utm_source = '' } = params;
     productDetailsService.postUtmParams(params, {

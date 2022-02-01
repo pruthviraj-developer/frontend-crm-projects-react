@@ -67,6 +67,9 @@ const DataManager: FC<unknown> = ({ children }) => {
   };
   useEffect(() => {
     loadUtmFromLocation();
+  }, []);
+
+  useEffect(() => {
     if (router.asPath.indexOf('?') > -1) {
       const routeWithoutParams = router.asPath.split('?')?.[0];
       const {
@@ -80,9 +83,12 @@ const DataManager: FC<unknown> = ({ children }) => {
         quickshop = 'No',
       }: IFunnelData = router.query;
       const { from_screen, from_section, extraSegdata }: ISegmentData = router.query;
+      const { utm_source }: IUtmParam = router.query;
       setOaData({ funnel, funnel_tile, funnel_section, section, sub_section, source, plp, quickshop });
       setSegmentData({ from_screen, from_section, extraSegdata });
-      router.replace(routeWithoutParams, undefined, { shallow: true });
+      if (!utm_source) {
+        router.replace(routeWithoutParams, undefined, { shallow: true });
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.asPath]);
