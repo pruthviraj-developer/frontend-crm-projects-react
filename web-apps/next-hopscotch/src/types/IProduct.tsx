@@ -1,7 +1,10 @@
+import { IProductDetails } from '@hs/framework';
+
 export interface IProductProps {
   productId: string;
-  isMobile: Boolean;
+  isMobile: boolean;
   url: string;
+  error?: IProductDetails | boolean;
 }
 
 export interface urlParamsProps {
@@ -17,6 +20,7 @@ export interface IWishListProps {
   action: string;
   message: string;
   wishlistItemId: number;
+  error?: boolean;
 }
 
 export interface ICartAPIResponse {
@@ -79,3 +83,5 @@ export interface ErrorStateProps {
   action: string;
   message: string;
 }
+
+export interface IProductError {}
