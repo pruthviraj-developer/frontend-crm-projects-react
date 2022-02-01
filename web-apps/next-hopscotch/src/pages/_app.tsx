@@ -4,6 +4,7 @@ import { globalStyles } from '@/styles';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Hydrate } from 'react-query/hydration';
 import GoogleTagManager from '@/components/google-tag-manager/GoogleTagManager';
+import DataManager from '@/components/data-manager/DataManager';
 import { GTM_ID } from '@/components/google-tag-manager';
 // import { ReactQueryDevtools } from 'react-query/devtools';
 import Head from 'next/head';
@@ -57,13 +58,15 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
       {globalStyles}
       <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps.dehydratedState}>
-          <GoogleTagManager>
-            <UserInfoProvider>
-              <CartItemQtyProvider>
-                <LoginProvider>{getLayout(<Component {...pageProps} />)}</LoginProvider>
-              </CartItemQtyProvider>
-            </UserInfoProvider>
-          </GoogleTagManager>
+          <DataManager>
+            <GoogleTagManager>
+              <UserInfoProvider>
+                <CartItemQtyProvider>
+                  <LoginProvider>{getLayout(<Component {...pageProps} />)}</LoginProvider>
+                </CartItemQtyProvider>
+              </UserInfoProvider>
+            </GoogleTagManager>
+          </DataManager>
         </Hydrate>
         {/* <ReactQueryDevtools initialIsOpen={false} /> */}
       </QueryClientProvider>

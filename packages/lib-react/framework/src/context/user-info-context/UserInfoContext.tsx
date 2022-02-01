@@ -8,7 +8,7 @@ import {
 import { IUserInfoProps } from 'product/types';
 import { COOKIE_DATA, LOCAL_DATA } from '../../storage';
 import { UserInfoProps, INotificationProps } from './IUserInfoContext';
-
+import { IUtmParam } from './../../types';
 export const UserInfoContext = createContext<UserInfoProps>(
   {} as UserInfoProps
 );
@@ -17,9 +17,30 @@ export const UserInfoProvider: FC<unknown> = ({ children }) => {
   const [userInfo, setUserInfo] = useState<IUserInfoProps | undefined>();
   const [showAccountNotification, setAccountNotification] =
     useState<boolean>(false);
+  const utmParams: IUtmParam = cookiesService.getCookieData(
+    COOKIE_DATA.HS_UTM_PARAMS
+  );
+  let params: IUtmParam = {};
+  if (utmParams) {
+    params = {
+      utm_campaign: utmParams['utm-campaign'],
+      utm_medium: utmParams['utm-medium'],
+      utm_source: utmParams['utm-source'],
+    };
+    if (utmParams['utm-content']) {
+      params['utm-content'] = utmParams['utm-content'];
+    }
+    if (utmParams['utm_date']) {
+      params['utm_date'] = utmParams['utm_date'];
+    }
+    if (utmParams['utm_term']) {
+      params['utm_term'] = utmParams['utm_term'];
+    }
+  }
+
   const { data: info, isSuccess } = useQuery<IUserInfoProps>(
     'info',
-    productDetailsService.getUserInfo,
+    () => productDetailsService.getUserInfo(params),
     {
       staleTime: Infinity,
       retry: false,
@@ -80,6 +101,19 @@ export const UserInfoProvider: FC<unknown> = ({ children }) => {
       }
     }
   }, [userInfo, notification, isNotificationSuccess]);
+
+  useEffect(() => {
+    const deepLink: IUtmParam =
+      cookiesService.getCookieData(COOKIE_DATA.HS_DEEPLINK_PARAMS) || {};
+    const deeplink = deepLink.deeplink || '';
+    const { utm_campaign = '', utm_medium = '', utm_source = '' } = params;
+    productDetailsService.postUtmParams(params, {
+      deeplink,
+      utm_campaign,
+      utm_medium,
+      utm_source,
+    });
+  }, []);
 
   return (
     <UserInfoContext.Provider

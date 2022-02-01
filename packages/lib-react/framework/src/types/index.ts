@@ -1,15 +1,15 @@
 export interface IUtmParam {
+  'utm-date'?: string;
+  'utm-term'?: string;
   'utm-source'?: string;
   'utm-medium'?: string;
   'utm-campaign'?: string;
-  'utm-term'?: string;
   'utm-content'?: string;
-  'utm-date'?: string;
+  utm_term?: string;
+  utm_date?: string;
   deeplink?: string;
-  utm_campaign?: string;
   utm_source?: string;
   utm_medium?: string;
-  utm_term?: string;
   utm_content?: string;
-  utm_date?: string;
+  utm_campaign?: string;
 }
