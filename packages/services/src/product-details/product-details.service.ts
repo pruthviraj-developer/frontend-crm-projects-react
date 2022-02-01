@@ -87,9 +87,9 @@ const getProductDetails = <P, R>(
   });
 };
 
-const getUserInfo = <R>(): Promise<R> => {
+const getUserInfo = <P, R>(params: P): Promise<R> => {
   const url = '/api/customer/info';
-  return httpService.get<R>({ url });
+  return httpService.get<R>({ url, params });
 };
 
 const getSizes = <P, R>(productId: P, baseURL = ''): Promise<R> => {
@@ -150,8 +150,12 @@ const getAccountCardsCount = <R>(): Promise<R> => {
   return httpService.get<R>({ url: '/api/accountcard/count' });
 };
 
-const postUtmParams = <P, R>(params: P): Promise<R> => {
-  return httpService.post<R>({ url: '/api/utm-info', params, data: params });
+const postUtmParams = <P, R>(params: P, data: P): Promise<R> => {
+  return httpService.post<R>({
+    url: '/api/utm-info',
+    params,
+    data,
+  });
 };
 
 export const productDetailsService = {

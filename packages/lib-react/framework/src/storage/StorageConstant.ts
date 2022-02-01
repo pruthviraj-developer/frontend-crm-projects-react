@@ -23,6 +23,7 @@ export const COOKIE_DATA = {
   LAST_VISIT_DATE: 'lastVisitdate',
   DAYS_SINCE_LAST_VISIT: 'daysSinceLastVisit',
   HS_UTM_PARAMS: 'hs_utm_params',
+  HS_DEEPLINK_PARAMS: 'hs_deeplink_params',
   CART_ITEM_QTY: 'cart_item_quantity',
   PERSISTENT_TICKET: 'hs_persistent_ticket',
   CUSTOMER_INFO: 'hs_customer_info',

@@ -36,7 +36,6 @@ import {
   LOCAL_DATA,
   SESSION_DATA,
   useSessionStorage,
-  useSetUtmParams,
 } from '@hs/framework';
 
 const SizeChartPopupComponentDeskTop = dynamic(() => import('@/components/size-chart/desktop'), {
@@ -108,7 +107,6 @@ const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile, url }
   const [addedToCart, updateAddedToCart] = useState<boolean>(false);
   const { showLoginPopup } = useContext(LoginContext);
   const { userInfo } = useContext(UserInfoContext);
-  const [postUtmParams] = useSetUtmParams();
   const [, setGotoCartLocation] = useSessionStorage<string>(SESSION_DATA.CART_LOCATION, null);
   const [LoginPopupModal, openLoginPopup, closeLoginPopup, isLoginPopupOpen] = useModal('root', {
     preventScroll: false,
@@ -227,10 +225,6 @@ const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile, url }
       openLoginPopup();
     }
   }, [showLoginPopup, openLoginPopup]);
-
-  useEffect(() => {
-    postUtmParams && postUtmParams();
-  }, [postUtmParams]);
 
   const addToWishlist = () => {
     if (userInfo && userInfo.isLoggedIn) {

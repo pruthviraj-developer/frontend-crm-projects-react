@@ -8,7 +8,7 @@ import {
 import { IUserInfoProps } from 'product/types';
 import { COOKIE_DATA, LOCAL_DATA } from '../../storage';
 import { UserInfoProps, INotificationProps } from './IUserInfoContext';
-
+import { IUtmParam } from './../../types';
 export const UserInfoContext = createContext<UserInfoProps>(
   {} as UserInfoProps
 );
@@ -17,12 +17,14 @@ export const UserInfoProvider: FC<unknown> = ({ children }) => {
   const [userInfo, setUserInfo] = useState<IUserInfoProps | undefined>();
   const [showAccountNotification, setAccountNotification] =
     useState<boolean>(false);
+  const [utmParams, setUtmParams] = useState<IUtmParam>();
   const { data: info, isSuccess } = useQuery<IUserInfoProps>(
     'info',
-    productDetailsService.getUserInfo,
+    () => productDetailsService.getUserInfo({ ...utmParams }),
     {
       staleTime: Infinity,
       retry: false,
+      enabled: utmParams != undefined,
     }
   );
 
@@ -71,6 +73,29 @@ export const UserInfoProvider: FC<unknown> = ({ children }) => {
     setCookie(COOKIE_DATA.CUSTOMER_INFO, data);
     cookiesService.deleteCookie(COOKIE_DATA.GUEST_CUSTOMER_INFO);
   };
+  const updateUtmParams = () => {
+    let params: IUtmParam = {};
+    const cookieUtmParams: IUtmParam = cookiesService.getCookieData(
+      COOKIE_DATA.HS_UTM_PARAMS
+    );
+    if (cookieUtmParams) {
+      params = {
+        utm_campaign: cookieUtmParams['utm-campaign'],
+        utm_medium: cookieUtmParams['utm-medium'],
+        utm_source: cookieUtmParams['utm-source'],
+      };
+      if (cookieUtmParams['utm-content']) {
+        params['utm-content'] = cookieUtmParams['utm-content'];
+      }
+      if (cookieUtmParams['utm-date']) {
+        params['utm_date'] = cookieUtmParams['utm-date'];
+      }
+      if (cookieUtmParams['utm-term']) {
+        params['utm_term'] = cookieUtmParams['utm-term'];
+      }
+    }
+    setUtmParams(params);
+  };
 
   useEffect(() => {
     setAccountNotification(false);
@@ -81,9 +106,34 @@ export const UserInfoProvider: FC<unknown> = ({ children }) => {
     }
   }, [userInfo, notification, isNotificationSuccess]);
 
+  useEffect(() => {
+    if (utmParams) {
+      const deepLink: IUtmParam =
+        cookiesService.getCookieData(COOKIE_DATA.HS_DEEPLINK_PARAMS) || {};
+      const deeplink = deepLink.deeplink || '';
+      const params: IUtmParam = { ...utmParams };
+      const {
+        utm_campaign = '',
+        utm_medium = '',
+        utm_source = '',
+      }: IUtmParam = params;
+      productDetailsService.postUtmParams(params, {
+        deeplink,
+        utm_campaign,
+        utm_medium,
+        utm_source,
+      });
+    }
+  }, [utmParams]);
+
   return (
     <UserInfoContext.Provider
-      value={{ userInfo, showAccountNotification, updateUserInfo }}
+      value={{
+        userInfo,
+        showAccountNotification,
+        updateUserInfo,
+        updateUtmParams,
+      }}
     >
       {children}
     </UserInfoContext.Provider>
