@@ -54,15 +54,22 @@ const DataManager: FC<unknown> = ({ children }) => {
     if (deeplink) {
       setDeeplinkParams({ deeplink });
     }
-    if (utm_campaign || utm_content || utm_source || utm_medium || utm_date || utm_term) {
-      setUtmParams({
-        'utm-date': getFormattedData(utm_date),
-        'utm-term': getFormattedData(utm_term),
+    if (utm_campaign || utm_source || utm_medium) {
+      let utmParams: IUtmParam = {
         'utm-medium': getFormattedData(utm_medium),
         'utm-source': getFormattedData(utm_source),
-        'utm-content': getFormattedData(utm_content),
         'utm-campaign': getFormattedData(utm_campaign),
-      });
+      };
+      if (utm_content) {
+        utmParams['utm-content'] = getFormattedData(utm_content);
+      }
+      if (utm_date) {
+        utmParams['utm-date'] = getFormattedData(utm_date);
+      }
+      if (utm_term) {
+        utmParams['utm-term'] = getFormattedData(utm_term);
+      }
+      setUtmParams(utmParams);
     } else if (typeof document != undefined && document.referrer) {
       const referrer = getHostName(document.referrer);
       if (referrer) {
