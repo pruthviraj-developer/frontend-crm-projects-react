@@ -150,7 +150,7 @@ const ProductDesktop = ({
           ) : (
             <AddToCart
               {...{
-                show: true,
+                show: isProductSoldOut ? false : true,
                 disabled: isProductSoldOut ? true : false,
                 addProductToCart: () => {
                   setIsAddtoCart(true);
@@ -159,17 +159,19 @@ const ProductDesktop = ({
               }}
             />
           )}
-          <DeliveryDetails
-            {...{
-              ...deliveryDetailsData,
-              selectedSku,
-              ...deliveryDetails,
-              openPinCodePopup,
-              openSizeSelector: () => {
-                setCanOpenDropDown(true);
-              },
-            }}
-          ></DeliveryDetails>
+          {isProductSoldOut === false && (
+            <DeliveryDetails
+              {...{
+                ...deliveryDetailsData,
+                selectedSku,
+                ...deliveryDetails,
+                openPinCodePopup,
+                openSizeSelector: () => {
+                  setCanOpenDropDown(true);
+                },
+              }}
+            />
+          )}
           {productData.id && (
             <Accordion
               {...{

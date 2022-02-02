@@ -25,4 +25,16 @@ const AddToCartButton = styled.button<{ disabled: boolean }>`
   }
 `;
 
-export { AddToCartWrapper, AddToCartButton };
+const SoldOut = styled.div`
+  display: inline-block;
+  margin-top: 30px;
+  padding: 4px 6px;
+  font-size: 14px;
+  line-height: 16px;
+  font-weight: 600;
+  background-color: #f44;
+  color: #fff;
+  border-radius: 4px;
+`;
+
+export { AddToCartWrapper, AddToCartButton, SoldOut };

@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { IAddToCartProps } from '../IAddToCart';
-import { AddToCartWrapper, AddToCartButton } from './StyledAddToCart';
+import { AddToCartWrapper, AddToCartButton, SoldOut } from './StyledAddToCart';
 export const AddToCartDesktop: FC<IAddToCartProps> = ({
   addProductToCart,
   disabled,
@@ -18,6 +18,6 @@ export const AddToCartDesktop: FC<IAddToCartProps> = ({
       </AddToCartButton>
     </AddToCartWrapper>
   ) : (
-    <div style={{ display: 'none' }}></div>
+    <SoldOut>Sold out</SoldOut>
   );
 };
