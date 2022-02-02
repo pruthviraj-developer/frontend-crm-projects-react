@@ -56,7 +56,7 @@ const FooterLogoIcon = styled(SvgIcon)`
 
 const FooterLinks = styled.ul`
   margin: 0;
-  padding: ${typography.size.s3}px 0;
+  padding: ${typography.size.s0}px 0;
   font-weight: 500;
 `;
 
