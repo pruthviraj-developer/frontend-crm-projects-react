@@ -19,8 +19,8 @@ module.exports = {
         destination: process.env.WEB_HOST + '/api/:path*',
       },
       {
-        source: '/product/:path*',
-        destination: '/product/:path*',
+        source: '/product/:id(\\d{1,})/:path*',
+        destination: '/product/:id(\\d{1,})/:path*',
       },
       {
         source: '/:path*',
