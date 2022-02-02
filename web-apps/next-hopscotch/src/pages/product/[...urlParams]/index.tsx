@@ -14,7 +14,7 @@ const LayoutDesktop = dynamic(() => import('@/components/layout/desktop'), {
   ssr: true,
 });
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { cookie, 'x-nv-security-magic': magicHeader } = context.req.headers;
+  const { cookie = null, 'x-nv-security-magic': magicHeader = null } = context.req.headers;
   const queryClient = new QueryClient();
   const productId = context.params?.urlParams?.[0] || '';
   const isMobile = context.req.headers['x-nv-device'] === 'sp';
@@ -44,7 +44,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile, url, error }: IProductProps) => {
-  if (error ) {
+  if (error) {
     const err = error as IProductDetails;
     return <Error statusCode={404} title={err?.message} />;
   }
