@@ -5,6 +5,7 @@ const AddToCartWrapper = styled.div``;
 
 const AddToCartButton = styled.button<{ disabled: boolean }>`
   cursor: pointer;
+  font-family: inherit;
   font-size: 1.4rem;
   font-weight: 600;
   line-height: 16px;
@@ -17,7 +18,7 @@ const AddToCartButton = styled.button<{ disabled: boolean }>`
   background-color: ${(props) =>
     props.disabled ? 'rgba(237,84,164,.36)' : '#ed54a4'};
   color: ${(props) => (props.disabled ? 'hsla(0,0%,100%,.6)' : Colors.WHITE)};
-  margin: ${typography.size.s3}px 0 ${typography.size.s08}px 0;
+  margin: ${typography.size.s2}px 0 ${typography.size.s08}px 0;
   padding: ${typography.size.s3}px;
   &:hover {
     background-color: #e8288d;
