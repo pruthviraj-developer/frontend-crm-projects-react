@@ -18,7 +18,8 @@ const getDashedParameter = (product: IProductCarouselDetailsEntityList) => {
   dashSeparatedUrlProductName += product.name || product.productName;
   dashSeparatedUrlProductName = dashSeparatedUrlProductName
     .replace(/\s+/g, '-')
-    .replace(/-+/g, '-');
+    .replace(/-+/g, '-')
+    .toLowerCase();
   return dashSeparatedUrlProductName;
 };
 const getFormattedPrice = (price?: number) => {

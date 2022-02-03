@@ -12,7 +12,6 @@ import {
   IProductProps,
   IWishListProps,
   ICartAPIResponse,
-  NextPageWithLayout,
   IErrorStateProps,
   IUpdatedDeliverDetailsProps,
 } from '@/types';
