@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 /* eslint react/prop-types: 0 */
 import React, { FC, useState, useEffect, useCallback } from 'react';
-import { HSTable, HsTableProps, HsSnackbar, HsSnackbarProps } from '@hs/components';
+import { HSTable, HsTableProps, HsSnackbar, HsSnackbarProps } from '@hs-crm/components';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import PublishIcon from '@material-ui/icons/Publish';

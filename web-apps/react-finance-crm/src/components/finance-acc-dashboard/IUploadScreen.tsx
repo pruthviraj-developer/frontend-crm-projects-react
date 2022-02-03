@@ -1,5 +1,5 @@
-import { FileUploadListOption } from '@hs/containers';
-import { FileType } from '@hs/components';
+import { FileUploadListOption } from '@hs-crm/containers';
+import { FileType } from '@hs-crm/components';
 import { FormikValues } from 'formik';
 
 export type ListType = FileUploadListOption[];

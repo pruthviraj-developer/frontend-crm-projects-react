@@ -135,8 +135,8 @@ const Dashboard: FC<DashboardProps> = ({ header }: DashboardProps) => {
             count={tableData?.data?.totalRecords || 0}
             rowsPerPage={size}
             page={page}
-            onChangePage={handleChangePage}
-            onChangeRowsPerPage={handleChangeRowsPerPage}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
           />
         </StyledHsTable>
       )}

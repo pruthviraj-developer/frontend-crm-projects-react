@@ -3,8 +3,8 @@ import { Helmet } from 'react-helmet';
 import { toast } from 'react-toastify';
 import styled from '@emotion/styled';
 import * as Yup from 'yup';
-import { FileUploadPage, FileUploadState, SubmitHelper } from '@hs/containers';
-import { LeftNavBar, LeftNavBarProps } from '@hs/components';
+import { FileUploadPage, FileUploadState, SubmitHelper } from '@hs-crm/containers';
+import { LeftNavBar, LeftNavBarProps } from '@hs-crm/components';
 import { financeAccountingService } from '@hs/services';
 import { UploadIcon } from '@hs/icons';
 

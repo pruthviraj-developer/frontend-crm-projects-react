@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react';
 import styled from '@emotion/styled';
 import { toast } from 'react-toastify';
 import { makeStyles } from '@material-ui/core/styles';
-import { HSTableV1, FilterPan } from '@hs/components';
+import { HSTableV1, FilterPan, FilterPanProps } from '@hs-crm/components';
 import {
   IHeaderType,
   INewDashboardData,
@@ -11,7 +11,6 @@ import {
   ITableDataType,
   IPostDataType,
 } from './IDashboard';
-import { FilterPanProps } from '@hs/components';
 import { financeAccountingService } from '@hs/services';
 import { useQuery } from 'react-query';
 import { Helmet } from 'react-helmet';

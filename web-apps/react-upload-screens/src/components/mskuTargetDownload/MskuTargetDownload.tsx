@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { LeftNavBar, LeftNavBarProps } from '@hs/components';
+import { LeftNavBar, LeftNavBarProps } from '@hs-crm/components';
 import { ArchiveIcon } from '@hs/icons';
 import { Helmet } from 'react-helmet';
 import Button from '@material-ui/core/Button';

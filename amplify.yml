@@ -1,0 +1,22 @@
+version: 1
+applications:
+  - frontend:
+      phases:
+        preBuild:
+          commands:
+            - 'yarn global add lerna'
+            - 'lerna bootstrap --ignore @hs-crm*/*'
+            - 'lerna run --parallel  --scope "@hs/services" --scope "@hs/icons" --scope "@hs/utils" build'
+            - 'lerna run --scope "@hs/framework" --scope "@hs/components" --scope "@hs/containers" build'
+
+        build:
+          commands:
+            - 'yarn run build'
+      artifacts:
+        baseDirectory: .next
+        files:
+          - '**/*'
+      cache:
+        paths:
+          - .next/cache/**/*
+    appRoot: web-apps/next-hopscotch

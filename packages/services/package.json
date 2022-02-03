@@ -15,7 +15,9 @@
     "build": "tsdx build --format esm",
     "test": "tsdx test",
     "lint": "tsdx lint",
-    "prepare": "tsdx build --format esm"
+    "prepare": "tsdx build --format esm",
+    "size": "size-limit",
+    "analyze": "size-limit --why"
   },
   "peerDependencies": {},
   "husky": {
@@ -32,14 +34,23 @@
   "name": "@hs/services",
   "author": "Rishikant Tiwari",
   "module": "dist/services.esm.js",
+  "size-limit": [
+    {
+      "path": "dist/services.esm.js",
+      "limit": "10 KB"
+    }
+  ],
   "devDependencies": {
+    "@size-limit/preset-small-lib": "^5.0.3",
+    "@types/js-cookie": "^2.2.7",
     "husky": "6.0.0",
+    "size-limit": "^5.0.3",
     "tsdx": "0.14.1",
-    "tslib": "2.2.0",
-    "typescript": "4.1.2"
+    "tslib": "2.3.1",
+    "typescript": "4.3.5"
   },
   "dependencies": {
-    "axios": "0.21.1",
-    "query-string": "^7.0.0"
+    "axios": "0.21.4",
+    "js-cookie": "^3.0.1"
   }
 }

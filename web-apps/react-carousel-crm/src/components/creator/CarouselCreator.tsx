@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { CreateNonCarouselPage, CreateNonCarouselProps } from '@hs/containers';
+import { CreateNonCarouselPage, CreateNonCarouselProps } from '@hs-crm/containers';
 import styled from '@emotion/styled';
 import { Switch, Route, useParams } from 'react-router-dom';
 
