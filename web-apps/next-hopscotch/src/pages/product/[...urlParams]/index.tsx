@@ -1,6 +1,6 @@
 import Error from 'next/error';
 import { productDetailsService } from '@hs/services';
-import { NextPageWithLayout, IProductProps } from '@/types';
+import { NextPageWithLayout, IProductProps, IProductError } from '@/types';
 import type { GetServerSideProps } from 'next';
 import { QueryClient, dehydrate } from 'react-query';
 import dynamic from 'next/dynamic';
@@ -20,7 +20,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const isMobile = context.req.headers['x-nv-device'] === 'sp';
   const baseUrl = process.env.WEB_HOST;
   const url = `${baseUrl}${context.resolvedUrl?.split('?')?.[0]}`;
-  let error: IProductDetails | boolean = false;
+  let error: IProductError | boolean = false;
   try {
     const data = await queryClient.fetchQuery<IProductDetails>(
       ['ProductDetail', productId],
@@ -29,9 +29,21 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         staleTime: Infinity,
       },
     );
-  } catch (err) {
-    error = err as IProductDetails;
-    context.res.statusCode = 404;
+  } catch (err: any) {
+    console.log('err.status', err.status);
+    if (err && err.status != 500) {
+      error = {
+        statusCode: 404,
+        message: (err as IProductDetails).message,
+      };
+      context.res.statusCode = 404;
+    } else {
+      error = {
+        statusCode: err.status as number,
+        message: err.data.message,
+      };
+      context.res.statusCode = err.status as number;
+    }
   }
   return {
     props: {
@@ -45,8 +57,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile, url, error }: IProductProps) => {
   if (error) {
-    const err = error as IProductDetails;
-    return <Error statusCode={404} title={err?.message} />;
+    const err = error as IProductError;
+    return <Error statusCode={err?.statusCode} title={err?.message} />;
   }
   return <ProductPage {...{ productId, isMobile, url }}></ProductPage>;
 };

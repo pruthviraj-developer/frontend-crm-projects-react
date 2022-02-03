@@ -146,6 +146,12 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
   useEffect(() => {
     setSelectedSku(null);
     updateAddedToCart(false);
+    if (simpleSkus && simpleSkus.length === 1) {
+      const sku = simpleSkus[0];
+      if (sku.availableQuantity) {
+        setSelectedSku(sku);
+      }
+    }
   }, [productId]);
 
   useEffect(() => {

@@ -4,7 +4,7 @@ export interface IProductProps {
   productId: string;
   isMobile: boolean;
   url: string;
-  error?: IProductDetails | boolean;
+  error?: IProductError | boolean;
 }
 
 export interface urlParamsProps {
@@ -84,4 +84,7 @@ export interface ErrorStateProps {
   message: string;
 }
 
-export interface IProductError {}
+export interface IProductError {
+  statusCode: number;
+  message?: string;
+}
