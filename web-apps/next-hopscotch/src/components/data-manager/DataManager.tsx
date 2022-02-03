@@ -15,11 +15,6 @@ const getFormattedData = (value = '') => {
   return value.replace(/[%#–]/g, '_');
 };
 
-const getHostName = (url: string) => {
-  const a = new URL(url);
-  return a.hostname;
-};
-
 const getTime = (storageTime: number) => {
   return {
     expires: new Date(timeService.getCurrentTime() + storageTime),
@@ -70,15 +65,6 @@ const DataManager: FC<unknown> = ({ children }) => {
         utmParams['utm-term'] = getFormattedData(utm_term);
       }
       setUtmParams(utmParams);
-    } else if (typeof document != undefined && document.referrer) {
-      const referrer = getHostName(document.referrer);
-      if (referrer) {
-        setUtmParams({
-          'utm-source': referrer,
-          'utm-medium': 'search',
-          'utm-campaign': '',
-        });
-      }
     }
   };
   useEffect(() => {

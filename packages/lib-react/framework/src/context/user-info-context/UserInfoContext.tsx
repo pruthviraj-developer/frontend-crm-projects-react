@@ -13,6 +13,11 @@ export const UserInfoContext = createContext<UserInfoProps>(
   {} as UserInfoProps
 );
 
+const getHostName = (url: string) => {
+  const a = new URL(url);
+  return a.hostname;
+};
+
 export const UserInfoProvider: FC<unknown> = ({ children }) => {
   const [userInfo, setUserInfo] = useState<IUserInfoProps | undefined>();
   const [showAccountNotification, setAccountNotification] =
@@ -78,7 +83,7 @@ export const UserInfoProvider: FC<unknown> = ({ children }) => {
     const cookieUtmParams: IUtmParam = cookiesService.getCookieData(
       COOKIE_DATA.HS_UTM_PARAMS
     );
-    if (cookieUtmParams) {
+    if (cookieUtmParams && cookieUtmParams['utm-source']) {
       params = {
         utm_campaign: cookieUtmParams['utm-campaign'],
         utm_medium: cookieUtmParams['utm-medium'],
@@ -93,8 +98,19 @@ export const UserInfoProvider: FC<unknown> = ({ children }) => {
       if (cookieUtmParams['utm-term']) {
         params['utm_term'] = cookieUtmParams['utm-term'];
       }
+      setUtmParams(params);
+    } else {
+      let params = {};
+      if (typeof document != undefined && document.referrer) {
+        const referrer = getHostName(document.referrer);
+        params = {
+          'utm-source': referrer,
+          'utm-medium': 'search',
+          'utm-campaign': '',
+        };
+      }
+      setUtmParams(params);
     }
-    setUtmParams(params);
   };
 
   useEffect(() => {
