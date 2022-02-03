@@ -1,5 +1,3 @@
-import { IProductDetails } from '@hs/framework';
-
 export interface IProductProps {
   productId: string;
   isMobile: boolean;

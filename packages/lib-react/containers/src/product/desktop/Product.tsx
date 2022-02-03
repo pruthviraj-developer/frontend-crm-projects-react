@@ -130,21 +130,25 @@ const ProductDesktop = ({
               onSizeChartClick: openSizeChartPopup,
             }}
           ></SizeAndChartLabels>
-          <SizeSelector
-            {...{
-              showRFYP: showRFYP || showSimilarProducts,
-              goToProductRecommendation,
-              simpleSkus,
-              showAddToCart: true,
-              onSizeSelect,
-              selectedSku,
-              isAddtoCartClicked,
-              canOpenDropDown,
-              onDropDownClose: () => {
-                setCanOpenDropDown(false);
-              },
-            }}
-          ></SizeSelector>
+          {isOneSize === false ? (
+            <SizeSelector
+              {...{
+                showRFYP: showRFYP || showSimilarProducts,
+                goToProductRecommendation,
+                simpleSkus,
+                showAddToCart: true,
+                onSizeSelect,
+                selectedSku,
+                isAddtoCartClicked,
+                canOpenDropDown,
+                onDropDownClose: () => {
+                  setCanOpenDropDown(false);
+                },
+              }}
+            ></SizeSelector>
+          ) : (
+            ''
+          )}
           {addedToCart ? (
             <GoToCart goToCart={goToCart} />
           ) : (

@@ -12,27 +12,29 @@ export const SizeAndChartLabelsDesktop: FC<ISizeAndChartLabelsProps> = ({
   simpleSkus,
   onSizeChartClick,
 }: ISizeAndChartLabelsProps) => {
+  const showSizeLabels = isOneSize === false || hasSizeChart === true;
   return (
     <>
-      {(!isOneSize ||
-        hasSizeChart ||
-        (qtyLeft && qtyLeft < 6) ||
-        simpleSkus.length < 2) && (
-        <SizeAndChartLabelsWrapperDesktop>
-          <div>{!isOneSize && <SizeDesktop>Size</SizeDesktop>}</div>
-          <div>
-            {hasSizeChart && (
-              <ViewSizeChartDesktop
-                onClick={() => {
-                  onSizeChartClick();
-                }}
-              >
-                View size chart
-              </ViewSizeChartDesktop>
-            )}
-          </div>
-        </SizeAndChartLabelsWrapperDesktop>
-      )}
+      {showSizeLabels &&
+        (!isOneSize ||
+          hasSizeChart ||
+          (qtyLeft && qtyLeft < 6) ||
+          simpleSkus.length < 2) && (
+          <SizeAndChartLabelsWrapperDesktop>
+            <div>{!isOneSize && <SizeDesktop>Size</SizeDesktop>}</div>
+            <div>
+              {hasSizeChart && (
+                <ViewSizeChartDesktop
+                  onClick={() => {
+                    onSizeChartClick();
+                  }}
+                >
+                  View size chart
+                </ViewSizeChartDesktop>
+              )}
+            </div>
+          </SizeAndChartLabelsWrapperDesktop>
+        )}
     </>
   );
 };
