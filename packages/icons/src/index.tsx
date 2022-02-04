@@ -49,6 +49,7 @@ import ICIconCarouselCaret from './images/icon-carouselcaret.svg';
 import ICIconCarouselCaretPink from './images/icon-carouselcaret-pink.svg';
 import ICChevronRight from './images/ic-chevron-right.svg';
 import ICFaceBookLinkIcon from './images/icon-loginv2-facebook-link.svg';
+import ICRotateScreenIcon from './images/rotate-screen.svg';
 
 export const CreateIcon = ICCreate;
 export const BackIcon = ICBack;
@@ -100,3 +101,4 @@ export const IconCarouselCaretPink = ICIconCarouselCaretPink;
 export const IconArrowTop = ICIconArrowTop;
 export const ChevronRight = ICChevronRight;
 export const FaceBookLinkIcon = ICFaceBookLinkIcon;
+export const RotateScreenIcon = ICRotateScreenIcon;
