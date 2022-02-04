@@ -41,7 +41,7 @@ const RightContent = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
-  ${mediaQueriesMaxWidth('mw280')`
+  ${mediaQueriesMaxWidth('xs')`
       display: block;
       margin: auto;
   `};
@@ -51,7 +51,7 @@ const CartIconWrapper = styled.div`
   height: 52px;
   margin-right: 7px;
   position: relative;
-  ${mediaQueriesMaxWidth('mw350')`
+  ${mediaQueriesMaxWidth('sm')`
     margin: 0 2px 0 -4px;
   `};
 `;
@@ -63,7 +63,7 @@ const NavigationIconsWrapper = styled.div`
 `;
 
 const NavLinkWrapper = styled.div`
-  ${mediaQueriesMaxWidth('mw350')`
+  ${mediaQueriesMaxWidth('sm')`
    display:flex;
   `};
   position: relative;
@@ -77,7 +77,7 @@ const NavIconWrapper = styled.div<{ marginRight?: boolean }>`
 const NavIconWrapperSearch = styled.div`
   padding: 4px 6px;
   margin-right: 6px;
-  ${mediaQueriesMaxWidth('mw350')`
+  ${mediaQueriesMaxWidth('sm')`
     padding: 0 2px 0 4px;
     margin-right: 0;
   `};
@@ -86,7 +86,7 @@ const NavIconWrapperSearch = styled.div`
 const NavIconWrapperWishList = styled.div<{ marginRight?: boolean }>`
   padding: 4px 6px;
   margin-right: 0;
-  ${mediaQueriesMaxWidth('mw350')`
+  ${mediaQueriesMaxWidth('sm')`
     padding-right: 0;
   `};
 `;
