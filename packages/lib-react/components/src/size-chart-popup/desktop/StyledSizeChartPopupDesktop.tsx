@@ -76,6 +76,7 @@ const SizeChartDetail = styled.div`
 
 const SizeChartDetailImagesDesktop = styled.div`
   max-width: 41.66667%;
+  min-width: 41.66667%;
 `;
 
 const SizeChartDetailImageDesktop = styled.div`

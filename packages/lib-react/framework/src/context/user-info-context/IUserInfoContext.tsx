@@ -1,8 +1,9 @@
 import { IUserInfoProps } from 'product/types';
+import { IUtmParam } from './../../types';
 export interface UserInfoProps {
   userInfo?: IUserInfoProps;
   showAccountNotification: boolean;
-  updateUtmParams: () => void;
+  updateUtmParams: (data: IUtmParam) => void;
   updateUserInfo: (data: IUserInfoProps) => void;
 }
 

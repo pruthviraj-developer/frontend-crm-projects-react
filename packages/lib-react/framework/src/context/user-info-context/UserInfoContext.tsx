@@ -20,6 +20,7 @@ const getHostName = (url: string) => {
 
 export const UserInfoProvider: FC<unknown> = ({ children }) => {
   const [userInfo, setUserInfo] = useState<IUserInfoProps | undefined>();
+  const [postParams, setPostUtmParams] = useState<IUtmParam>({});
   const [showAccountNotification, setAccountNotification] =
     useState<boolean>(false);
   const [utmParams, setUtmParams] = useState<IUtmParam>();
@@ -78,11 +79,12 @@ export const UserInfoProvider: FC<unknown> = ({ children }) => {
     setCookie(COOKIE_DATA.CUSTOMER_INFO, data);
     cookiesService.deleteCookie(COOKIE_DATA.GUEST_CUSTOMER_INFO);
   };
-  const updateUtmParams = () => {
+  const updateUtmParams = (postParams: IUtmParam) => {
     let params: IUtmParam = {};
     const cookieUtmParams: IUtmParam = cookiesService.getCookieData(
       COOKIE_DATA.HS_UTM_PARAMS
     );
+    setPostUtmParams(postParams);
     if (cookieUtmParams && cookieUtmParams['utm-source']) {
       params = {
         utm_campaign: cookieUtmParams['utm-campaign'],
@@ -124,20 +126,11 @@ export const UserInfoProvider: FC<unknown> = ({ children }) => {
 
   useEffect(() => {
     if (utmParams) {
-      const deepLink: IUtmParam =
-        cookiesService.getCookieData(COOKIE_DATA.HS_DEEPLINK_PARAMS) || {};
-      const deeplink = deepLink.deeplink || '';
-      const params: IUtmParam = { ...utmParams };
-      const {
-        utm_campaign = '',
-        utm_medium = '',
-        utm_source = '',
-      }: IUtmParam = params;
-      productDetailsService.postUtmParams(params, {
-        deeplink,
-        utm_campaign,
-        utm_medium,
-        utm_source,
+      productDetailsService.postUtmParams(utmParams, {
+        deeplink: postParams.deeplink || '',
+        utm_campaign: postParams['utm-campaign'] || '',
+        utm_medium: postParams['utm-medium'] || '',
+        utm_source: postParams['utm-source'] || '',
       });
     }
   }, [utmParams]);

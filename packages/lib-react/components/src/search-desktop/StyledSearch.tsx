@@ -3,12 +3,12 @@ import styled from '@emotion/styled';
 // import { SvgIcon } from '@hs/icons';
 
 const SearchWrapper = styled.div`
-  top: 83px;
+  top: 86px;
   right: 77px;
   width: 100%;
   position: fixed;
   max-width: 354px;
-  z-index: 1005;
+  z-index: 1006;
 `;
 
 const SearchField = styled.div`
@@ -73,17 +73,9 @@ const List = styled.li`
   &:hover {
     background-color: #f9f9f9;
   }
+  &.recent-search {
+    cursor: default;
+  }
 `;
 
-const SearchLayout = styled.div`
-  left: 0;
-  top: 86px;
-  opacity: 0.5;
-  z-index: 1005;
-  position: fixed;
-  min-width: 100%;
-  min-height: 100%;
-  background-color: #000;
-`;
-
-export { SearchLayout, SearchWrapper, SearchField, SearchList, List };
+export { SearchWrapper, SearchField, SearchList, List };

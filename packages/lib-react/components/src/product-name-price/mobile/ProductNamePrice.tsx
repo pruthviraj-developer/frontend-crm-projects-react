@@ -92,5 +92,5 @@ export const ProductNamePrice: FC<IProductNamePriceProps> = ({
       </>
     );
   }
-  return <div style={{ display: 'none' }}></div>;
+  return <></>;
 };

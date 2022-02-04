@@ -5,7 +5,7 @@ import { SizeChartPopupDesktop } from './SizeChartPopupDesktop';
 import { ISizeChartPopupDesktop } from './ISizeChartPopupDesktop';
 
 export default {
-  title: 'Size Chart',
+  title: 'Size Chart Desktop',
   component: SizeChartPopupDesktop,
 };
 

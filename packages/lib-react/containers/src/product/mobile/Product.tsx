@@ -89,19 +89,9 @@ const ProductMobile = ({
     <>
       <ProductCarousel
         {...{
-          showArrows: false,
-          autoPlay: true,
-          draggable: false,
-          focusOnSelect: false,
-          renderButtonGroupOutside: false,
-          renderDotsOutside: false,
-          slidesToSlide: 1,
-          swipeable: true,
-          showDots: true,
+          isProductSoldOut,
           imgUrls: productData.imgurls,
           goToProductRecommendation,
-          showRFYP,
-          isProductSoldOut,
         }}
       ></ProductCarousel>
       <ProductDetailsWrapper>
@@ -178,8 +168,7 @@ const ProductMobile = ({
       ) : (
         <AddToCart
           {...{
-            show: true,
-            disabled: isProductSoldOut ? true : false,
+            isProductSoldOut,
             addProductToCart,
           }}
         />

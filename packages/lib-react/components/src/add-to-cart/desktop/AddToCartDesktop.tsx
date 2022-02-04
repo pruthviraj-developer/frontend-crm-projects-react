@@ -3,10 +3,10 @@ import { IAddToCartProps } from '../IAddToCart';
 import { AddToCartWrapper, AddToCartButton, SoldOut } from './StyledAddToCart';
 export const AddToCartDesktop: FC<IAddToCartProps> = ({
   addProductToCart,
-  disabled,
-  show,
+  isProductSoldOut = false,
+  disabled = false,
 }: IAddToCartProps) => {
-  return show ? (
+  return !isProductSoldOut ? (
     <AddToCartWrapper>
       <AddToCartButton
         onClick={() => {

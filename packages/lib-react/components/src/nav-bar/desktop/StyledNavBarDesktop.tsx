@@ -154,6 +154,17 @@ const NotificationDot = styled.div`
   background-color: ${Colors.WHITE};
 `;
 
+const SearchLayout = styled.div`
+  left: 0;
+  top: 86px;
+  opacity: 0.5;
+  z-index: 1005;
+  position: fixed;
+  min-width: 100%;
+  min-height: 100%;
+  background-color: #000;
+`;
+
 export {
   FilteredBy,
   FilterWrapper,
@@ -173,4 +184,5 @@ export {
   InputSearch,
   SearchIconWrapper,
   NavBarCntnr,
+  SearchLayout,
 };

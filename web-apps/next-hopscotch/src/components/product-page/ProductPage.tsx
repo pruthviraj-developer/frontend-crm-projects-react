@@ -591,7 +591,6 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
           <SizeSelectorMobile
             {...{
               closePopup: closeSizeSelector,
-              showAddToCart: true,
               onSizeChartClick: openSizeChartPopup,
               simpleSkus,
               selectedSku: selectedSku,

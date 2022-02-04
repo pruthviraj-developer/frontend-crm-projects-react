@@ -1,5 +1,5 @@
 export interface IAddToCartProps {
-  disabled: boolean;
-  show: boolean;
+  disabled?: boolean;
+  isProductSoldOut?: boolean;
   addProductToCart: () => void;
 }

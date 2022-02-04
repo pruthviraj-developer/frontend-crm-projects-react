@@ -1,11 +1,5 @@
 import React, { FC, useState, useEffect, useCallback } from 'react';
-import {
-  SearchLayout,
-  SearchWrapper,
-  SearchField,
-  SearchList,
-  List,
-} from './StyledSearch';
+import { SearchWrapper, SearchField, SearchList, List } from './StyledSearch';
 import { useDebounce, useLocalStorage } from '@hs/framework';
 import { productDetailsService } from '@hs/services';
 import { useRouter } from 'next/router';
@@ -330,7 +324,6 @@ const SearchDesktop: FC<ISearch> = ({ searchText }: ISearch) => {
 
   return (
     <>
-      <SearchLayout />
       <SearchWrapper>
         <SearchField>
           <SearchList>
@@ -339,7 +332,7 @@ const SearchDesktop: FC<ISearch> = ({ searchText }: ISearch) => {
             suggestions &&
             suggestions.length === 0 ? (
               <>
-                <List>Recent Searches</List>
+                <List className="recent-search">Recent Searches</List>
                 {recentSearches.map(
                   (data: IRecentSearchesProps, index: number) => {
                     return (

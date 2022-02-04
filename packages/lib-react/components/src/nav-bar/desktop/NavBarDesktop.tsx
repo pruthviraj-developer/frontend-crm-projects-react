@@ -16,6 +16,7 @@ import {
   SearchIconWrapper,
   NavBarCntnr,
   NotificationDot,
+  SearchLayout,
 } from './StyledNavBarDesktop';
 import { IconWrapper, CartIconQuantity } from './../StyledNavBar';
 // import { useRouter } from 'next/router';
@@ -45,7 +46,6 @@ export const NavBarDesktop: FC = () => {
     department: null,
     customTileId: null,
   };
-
   const showSearchField = () => {
     setShowSearch(!showSearch);
   };
@@ -165,12 +165,14 @@ export const NavBarDesktop: FC = () => {
                   onClick={showSearchField}
                   icon={IconSearch}
                 />
-                <InputSearch
-                  ref={elementRef}
-                  onChange={handleOnChange}
-                  placeholder="Search for products"
-                />
-                <SearchDesktop {...{ searchText }} />
+                <div ref={elementRef}>
+                  <InputSearch
+                    onChange={handleOnChange}
+                    placeholder="Search for products"
+                  />
+                  <SearchDesktop {...{ searchText }} />
+                </div>
+                <SearchLayout />
               </SearchWrapper>
             ) : (
               <NavIconWrapper onClick={showSearchField} marginRight={true}>

@@ -46,11 +46,12 @@ const DataManager: FC<unknown> = ({ children }) => {
   };
 
   const loadUtmFromLocation = () => {
+    let utmParams: IUtmParam = {};
     if (deeplink) {
       setDeeplinkParams({ deeplink });
     }
     if (utm_campaign || utm_source || utm_medium) {
-      let utmParams: IUtmParam = {
+      utmParams = {
         'utm-medium': getFormattedData(utm_medium),
         'utm-source': getFormattedData(utm_source),
         'utm-campaign': getFormattedData(utm_campaign),
@@ -66,10 +67,10 @@ const DataManager: FC<unknown> = ({ children }) => {
       }
       setUtmParams(utmParams);
     }
+    updateUtmParams({ deeplink, ...utmParams });
   };
   useEffect(() => {
     loadUtmFromLocation();
-    updateUtmParams();
   }, []);
 
   useEffect(() => {
