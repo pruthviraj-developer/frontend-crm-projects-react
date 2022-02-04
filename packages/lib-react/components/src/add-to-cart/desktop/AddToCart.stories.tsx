@@ -14,7 +14,7 @@ const Template: Story<IAddToCartProps> = (args) => (
 );
 export const AddToCartComponentDisabled = Template.bind({});
 
-AddToCartComponentDisabled.args = {isProductSoldOut: true };
+AddToCartComponentDisabled.args = { isProductSoldOut: true };
 export const AddToCartComponentActive = Template.bind({});
 
-AddToCartComponentActive.args = { isProductSoldOut: false};
+AddToCartComponentActive.args = { isProductSoldOut: false };

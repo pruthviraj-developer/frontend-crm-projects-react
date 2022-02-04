@@ -89,9 +89,9 @@ const ProductMobile = ({
     <>
       <ProductCarousel
         {...{
-            isProductSoldOut,
-            imgUrls: productData.imgurls,
-           goToProductRecommendation,
+          isProductSoldOut,
+          imgUrls: productData.imgurls,
+          goToProductRecommendation,
         }}
       ></ProductCarousel>
       <ProductDetailsWrapper>
@@ -168,7 +168,7 @@ const ProductMobile = ({
       ) : (
         <AddToCart
           {...{
-           isProductSoldOut,
+            isProductSoldOut,
             addProductToCart,
           }}
         />

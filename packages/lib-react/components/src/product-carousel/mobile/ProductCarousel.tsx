@@ -67,6 +67,9 @@ export const ProductCarousel: FC<IProductCarouselProps> = ({
       },
       0
     );
+    return () => {
+      instanceRef.current?.destroy();
+    };
   }, [imgUrls]);
   return (
     <ProductCarouselWrapper>

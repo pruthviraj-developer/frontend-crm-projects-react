@@ -26,11 +26,29 @@ const ProductCarouselWrapper = styled.div`
 const ProductImageContainer = styled.div`
   width: 100%;
   max-height: calc(50vw - 8px);
-  height: calc(50vw - 8px);
+  min-height: calc(50vw - 8px);
+  max-width: calc(50vw - 8px);
+  min-width: calc(50vw - 8px);
   display: inline-block;
   ${mediaQueries('xl')`
     max-height: 558px;
-    height:558px
+    min-height:558px;
+    max-width: 558px;
+    min-width: 558px;
+  `};
+`;
+const Slide = styled.div`
+  width: 100%;
+  max-height: calc(50vw - 8px);
+  min-height: calc(50vw - 8px);
+  max-width: 73px;
+  min-width: 73px;
+  display: inline-block;
+  ${mediaQueries('xl')`
+    max-height: 558px;
+    min-height:558px;
+    max-width: 73px;
+    min-width: 73px;
   `};
 `;
 
@@ -140,13 +158,16 @@ const CarouselIcon = styled(SvgIcon)`
 `;
 
 const Arrows = styled.div`
-  top: 257px;
+  top: calc(25vw - 26px);
   left: 20px;
   width: 95%;
   padding-left: 6px;
   position: absolute;
   display: flex;
   justify-content: space-between;
+  ${mediaQueries('xl')`
+      top: 257px;
+  `};
 `;
 
 export {
@@ -161,4 +182,5 @@ export {
   LeftArrow,
   RightArrow,
   CarouselIcon,
+  Slide,
 };

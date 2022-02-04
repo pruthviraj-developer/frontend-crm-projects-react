@@ -3,8 +3,8 @@ import { IAddToCartProps } from '../IAddToCart';
 import { AddToCartWrapper, AddToCartButton } from './StyledAddToCart';
 export const AddToCart: FC<IAddToCartProps> = ({
   addProductToCart,
-  isProductSoldOut=false,
-  disabled=false,
+  isProductSoldOut = false,
+  disabled = false,
 }: IAddToCartProps) => {
   return !isProductSoldOut ? (
     <AddToCartWrapper>
@@ -12,7 +12,7 @@ export const AddToCart: FC<IAddToCartProps> = ({
         onClick={() => {
           addProductToCart();
         }}
-         disabled={disabled}
+        disabled={disabled}
       >
         ADD TO CART
       </AddToCartButton>
