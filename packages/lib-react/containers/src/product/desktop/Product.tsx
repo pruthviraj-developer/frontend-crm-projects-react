@@ -95,15 +95,7 @@ const ProductDesktop = ({
         {productData.imgurls && productData.imgurls.length > 0 && (
           <ProductCarousel
             {...{
-              showArrows: true,
-              autoPlay: false,
-              draggable: false,
-              focusOnSelect: false,
-              renderButtonGroupOutside: false,
-              renderDotsOutside: false,
-              slidesToSlide: 1,
-              swipeable: false,
-              showDots: false,
+              isProductSoldOut,
               imgUrls: productData.imgurls,
               goToProductRecommendation,
             }}
@@ -113,7 +105,7 @@ const ProductDesktop = ({
           <ProductNamePrice
             {...{
               productName,
-              isProductSoldOut: !!productData.isProductSoldOut,
+              isProductSoldOut,
               retailPrice,
               retailPriceMax,
               selectedSku,
@@ -154,8 +146,7 @@ const ProductDesktop = ({
           ) : (
             <AddToCart
               {...{
-                show: isProductSoldOut ? false : true,
-                disabled: isProductSoldOut ? true : false,
+               isProductSoldOut,
                 addProductToCart: () => {
                   setIsAddtoCart(true);
                   addProductToCart();

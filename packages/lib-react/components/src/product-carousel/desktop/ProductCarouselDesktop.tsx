@@ -17,6 +17,35 @@ import {
   CarouselIcon,
 } from './StyledProductCarouselDesktop';
 import { IProductCarouselProps } from '../IProductCarousel';
+const getSlides = (length, smallDevice) => {
+  const slideArr: Record<string, number>[] = [];
+  if (!smallDevice) {
+    if (length === 1) {
+      slideArr.push({ size: 0.6031, origin: 0.2 });
+    } else {
+      for (let i = 1; i < length; i++) {
+        slideArr.push({
+          size: 0.6031,
+          spacing: 0.014,
+        });
+      }
+      slideArr.push({ size: 0.6031, origin: 0.305 });
+    }
+  } else {
+    if (length === 1) {
+      slideArr.push({ size: 0.83, origin: 0.05 });
+    } else {
+      for (let i = 1; i < length; i++) {
+        slideArr.push({
+          size: 0.83,
+          spacing: 0.016,
+        });
+      }
+      slideArr.push({ size: 0.83, origin: 0.016 });
+    }
+  }
+  return slideArr;
+};
 export const ProductCarouselDesktop: FC<IProductCarouselProps> = ({
   imgUrls,
   isProductSoldOut,
@@ -34,19 +63,13 @@ export const ProductCarouselDesktop: FC<IProductCarouselProps> = ({
     created() {
       setLoaded(true);
     },
-    slides: {
-      perView: 1.132,
-      spacing: 11.63,
-    },
+    slides: () => getSlides(imgUrls && imgUrls.length, false),
     defaultAnimation: {
       duration: 1500,
     },
     breakpoints: {
-      '(min-width: 821px)': {
-        slides: {
-          perView: 1.642,
-          spacing: 11.63,
-        },
+      '(max-width: 64em)': {
+        slides: () => getSlides(imgUrls && imgUrls.length, true),
       },
     },
   });
@@ -67,34 +90,30 @@ export const ProductCarouselDesktop: FC<IProductCarouselProps> = ({
   }, [isProductSoldOut]);
 
   useEffect(() => {
-    instanceRef.current?.update(
-      {
-        initial: 0,
-        mode: 'free',
-        slideChanged(s) {
-          setCurrentSlide(s.track.details.rel);
-        },
-        created() {
-          setLoaded(true);
-        },
-        slides: {
-          perView: 1.132,
-          spacing: 11.63,
-        },
-        defaultAnimation: {
-          duration: 1500,
-        },
-        breakpoints: {
-          '(min-width: 821px)': {
-            slides: {
-              perView: 1.642,
-              spacing: 11.63,
+    if (imgUrls) {
+      instanceRef.current?.update(
+        {
+          initial: 0,
+          mode: 'free',
+          slideChanged(s) {
+            setCurrentSlide(s.track.details.rel);
+          },
+          created() {
+            setLoaded(true);
+          },
+          slides: () => getSlides(imgUrls.length, false),
+          defaultAnimation: {
+            duration: 1500,
+          },
+          breakpoints: {
+            '(max-width: 64em)': {
+              slides: () => getSlides(imgUrls.length, true),
             },
           },
         },
-      },
-      0
-    );
+        0
+      );
+    }
   }, [imgUrls]);
 
   const Arrow = (props: {
@@ -149,7 +168,7 @@ export const ProductCarouselDesktop: FC<IProductCarouselProps> = ({
           })}
       </CarouselWrapper>
       {/* <CustomRightArrow /> */}
-      {loaded && instanceRef.current && (
+      {loaded && imgUrls && imgUrls?.length > 1 && instanceRef.current && (
         <Arrows>
           <Arrow
             left

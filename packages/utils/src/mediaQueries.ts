@@ -15,5 +15,5 @@ export const mediaQueries = (key: keyof typeof breakpoints) => {
 
 export const mediaQueriesMaxWidth = (key: keyof typeof breakpoints) => {
   return (style: TemplateStringsArray | string) =>
-    `@media (max-width: ${breakpoints[key]}px) { ${style} }`;
+    `@media (max-width: ${breakpoints[key]}em) { ${style} }`;
 };

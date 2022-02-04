@@ -7,7 +7,6 @@ import {
   ProductOfferPriceDesktop,
   ProductVendorPriceDesktop,
   ProductDiscountPriceDesktop,
-  ProductSoldDesktop,
 } from './StyledProductNamePriceDesktop';
 import { IProductNamePriceProps } from '../IProductNamePrice';
 
@@ -21,7 +20,6 @@ export const ProductNamePriceDesktop: FC<IProductNamePriceProps> = ({
   regularPrice,
   discount,
   selectedSku,
-  isProductSoldOut,
 }: IProductNamePriceProps) => {
   if (retailPrice) {
     const showOffer = () => {
@@ -49,7 +47,6 @@ export const ProductNamePriceDesktop: FC<IProductNamePriceProps> = ({
 
     return (
       <>
-        {isProductSoldOut && <ProductSoldDesktop>Sold out</ProductSoldDesktop>}
         <ProductPricingWrapperDesktop>
           <ProductNamePriceWrapperDesktop>
             <ProductNameDesktop>{productName}</ProductNameDesktop>
@@ -76,5 +73,5 @@ export const ProductNamePriceDesktop: FC<IProductNamePriceProps> = ({
       </>
     );
   }
-  return <div style={{ display: 'none' }}></div>;
+  return <></>;
 };

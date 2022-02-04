@@ -92,25 +92,6 @@ CarouselDesktop.args = {
     },
     {
       imgUrl:
-        'https://qastatic.hopscotch.in/fstatic/product/201907/5919f92f-f297-47dc-862a-9e56645a0ae9_medium.jpg?version=1563968384227',
-      imgUrlLarge:
-        'https://qastatic.hopscotch.in/fstatic/product/201907/5919f92f-f297-47dc-862a-9e56645a0ae9_large.jpg?version=1563968384227',
-      imgUrlFull:
-        'https://qastatic.hopscotch.in/fstatic/product/201907/5919f92f-f297-47dc-862a-9e56645a0ae9_full.jpg?version=1563968384227',
-      imgUrlThumbnail:
-        'https://qastatic.hopscotch.in/fstatic/product/201907/5919f92f-f297-47dc-862a-9e56645a0ae9_thumbnail.jpg?version=1563968384227',
-      isCover: false,
-      imgUrlHeight: 360,
-      imgUrlWidth: 360,
-      imgUrlLargeHeight: 600,
-      imgUrlLargeWidth: 600,
-      imgUrlFullHeight: 1000,
-      imgUrlFullWidth: 1000,
-      imgUrlThumbnailHeight: 70,
-      imgUrlThumbnailWidth: 70,
-    },
-    {
-      imgUrl:
         'https://qastatic.hopscotch.in/fstatic/product/201907/21f8c817-c568-4a20-ba4f-14ebe18a51cd_medium.jpg?version=1563968393466',
       imgUrlLarge:
         'https://qastatic.hopscotch.in/fstatic/product/201907/21f8c817-c568-4a20-ba4f-14ebe18a51cd_large.jpg?version=1563968393466',
@@ -125,6 +106,25 @@ CarouselDesktop.args = {
       imgUrlLargeWidth: 600,
       imgUrlFullHeight: 2085,
       imgUrlFullWidth: 2085,
+      imgUrlThumbnailHeight: 70,
+      imgUrlThumbnailWidth: 70,
+    },
+    {
+      imgUrl:
+        'https://qastatic.hopscotch.in/fstatic/product/201907/5919f92f-f297-47dc-862a-9e56645a0ae9_medium.jpg?version=1563968384227',
+      imgUrlLarge:
+        'https://qastatic.hopscotch.in/fstatic/product/201907/5919f92f-f297-47dc-862a-9e56645a0ae9_large.jpg?version=1563968384227',
+      imgUrlFull:
+        'https://qastatic.hopscotch.in/fstatic/product/201907/5919f92f-f297-47dc-862a-9e56645a0ae9_full.jpg?version=1563968384227',
+      imgUrlThumbnail:
+        'https://qastatic.hopscotch.in/fstatic/product/201907/5919f92f-f297-47dc-862a-9e56645a0ae9_thumbnail.jpg?version=1563968384227',
+      isCover: false,
+      imgUrlHeight: 360,
+      imgUrlWidth: 360,
+      imgUrlLargeHeight: 600,
+      imgUrlLargeWidth: 600,
+      imgUrlFullHeight: 1000,
+      imgUrlFullWidth: 1000,
       imgUrlThumbnailHeight: 70,
       imgUrlThumbnailWidth: 70,
     },

@@ -29,7 +29,6 @@ const SizeSelectorMobile: FC<ISizeSelectorPopupProps> = ({
   pinCode,
   simpleSkus,
   selectedSku,
-  showAddToCart,
   addProductToCart,
   onSizeChartClick,
   onSizeSelect,
@@ -112,7 +111,6 @@ const SizeSelectorMobile: FC<ISizeSelectorPopupProps> = ({
           </OptionsContainer>
           <AddToCart
             {...{
-              show: showAddToCart || false,
               addProductToCart: addProduct,
               disabled: !selectedSkuId,
             }}

@@ -28,12 +28,13 @@ const ProductImageContainer = styled.div`
   max-height: calc(50vw - 8px);
   height: calc(50vw - 8px);
   display: inline-block;
-  ${mediaQueriesMaxWidth('mw820')`
+  /* ${mediaQueriesMaxWidth('mw820')`
       height: 50.5vw;
       max-height: 50.5vw;
-  `};
+  `}; */
   ${mediaQueries('xl')`
     max-height: 558px;
+    height:558px
   `};
 `;
 

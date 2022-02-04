@@ -46,19 +46,6 @@ const ProductNameDesktop = styled.h1`
   font-weight: ${typography.weight.regular};
   line-height: 22px;
 `;
-
-const ProductSoldDesktop = styled.div`
-  color: ${Colors.WHITE};
-  display: inline-block;
-  background-color: #f44;
-  font-size: ${typography.size.s2}px;
-  line-height: ${typography.size.s3}px;
-  font-weight: ${typography.weight.medium};
-  margin: ${typography.size.s3}px 0 0 0;
-  border-radius: ${typography.size.s04}px;
-  padding: ${typography.size.s04}px ${typography.size.s06}px;
-`;
-
 export {
   ProductPricingWrapperDesktop,
   ProductNamePriceWrapperDesktop,
@@ -67,5 +54,4 @@ export {
   ProductOfferPriceDesktop,
   ProductVendorPriceDesktop,
   ProductDiscountPriceDesktop,
-  ProductSoldDesktop,
 };
