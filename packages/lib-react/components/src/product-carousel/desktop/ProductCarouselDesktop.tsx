@@ -15,43 +15,15 @@ import {
   RightArrow,
   LeftArrow,
   CarouselIcon,
+  Slide,
 } from './StyledProductCarouselDesktop';
 import { IProductCarouselProps } from '../IProductCarousel';
-const getSlides = (length, smallDevice) => {
-  const slideArr: Record<string, number>[] = [];
-  if (!smallDevice) {
-    if (length === 1) {
-      slideArr.push({ size: 0.6031, origin: 0.2 });
-    } else {
-      for (let i = 1; i < length; i++) {
-        slideArr.push({
-          size: 0.6031,
-          spacing: 0.014,
-        });
-      }
-      slideArr.push({ size: 0.6031, origin: 0.305 });
-    }
-  } else {
-    if (length === 1) {
-      slideArr.push({ size: 0.83, origin: 0.05 });
-    } else {
-      for (let i = 1; i < length; i++) {
-        slideArr.push({
-          size: 0.83,
-          spacing: 0.016,
-        });
-      }
-      slideArr.push({ size: 0.83, origin: 0.016 });
-    }
-  }
-  return slideArr;
-};
+
 export const ProductCarouselDesktop: FC<IProductCarouselProps> = ({
   imgUrls,
   isProductSoldOut,
   goToProductRecommendation,
 }: IProductCarouselProps) => {
-  // const imageSize = '564px';
   const [currentSlide, setCurrentSlide] = React.useState(0);
   const [loaded, setLoaded] = useState(false);
   const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>({
@@ -63,18 +35,15 @@ export const ProductCarouselDesktop: FC<IProductCarouselProps> = ({
     created() {
       setLoaded(true);
     },
-    slides: () => getSlides(imgUrls && imgUrls.length, false),
+    slides:
+      imgUrls && imgUrls.length > 1
+        ? { perView: 'auto', spacing: 12 }
+        : { perView: 'auto', spacing: 12, origin: 'center' },
     defaultAnimation: {
       duration: 1500,
     },
-    breakpoints: {
-      '(max-width: 64em)': {
-        slides: () => getSlides(imgUrls && imgUrls.length, true),
-      },
-    },
   });
 
-  // const totalImages = (imgUrls && imgUrls.length) || 0;
   const [similarItemsDisplayWith, setSimilarItemsDisplayWith] =
     useState<number>(140);
   useEffect(() => {
@@ -101,19 +70,20 @@ export const ProductCarouselDesktop: FC<IProductCarouselProps> = ({
           created() {
             setLoaded(true);
           },
-          slides: () => getSlides(imgUrls.length, false),
+          slides:
+            imgUrls.length > 1
+              ? { perView: 'auto', spacing: 12 }
+              : { perView: 'auto', spacing: 12, origin: 'center' },
           defaultAnimation: {
             duration: 1500,
-          },
-          breakpoints: {
-            '(max-width: 64em)': {
-              slides: () => getSlides(imgUrls.length, true),
-            },
           },
         },
         0
       );
     }
+    return () => {
+      instanceRef.current?.destroy();
+    };
   }, [imgUrls]);
 
   const Arrow = (props: {
@@ -142,7 +112,6 @@ export const ProductCarouselDesktop: FC<IProductCarouselProps> = ({
 
   return (
     <ProductCarouselWrapper>
-      {/* <CustomLeftArrow /> */}
       <CarouselWrapper ref={sliderRef} className="keen-slider" key="slider">
         {imgUrls &&
           imgUrls.map((img, index: number) => {
@@ -166,8 +135,8 @@ export const ProductCarouselDesktop: FC<IProductCarouselProps> = ({
               </ProductImageContainer>
             );
           })}
+        <Slide className="keen-slider__slide" />
       </CarouselWrapper>
-      {/* <CustomRightArrow /> */}
       {loaded && imgUrls && imgUrls?.length > 1 && instanceRef.current && (
         <Arrows>
           <Arrow
@@ -183,8 +152,7 @@ export const ProductCarouselDesktop: FC<IProductCarouselProps> = ({
               e.stopPropagation() || instanceRef.current?.next();
             }}
             disabled={
-              currentSlide ===
-              instanceRef.current.track.details?.slides?.length - 1
+              currentSlide >= instanceRef.current.track.details?.maxIdx - 1
             }
           />
         </Arrows>

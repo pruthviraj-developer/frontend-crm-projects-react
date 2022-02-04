@@ -146,7 +146,7 @@ const ProductDesktop = ({
           ) : (
             <AddToCart
               {...{
-               isProductSoldOut,
+                isProductSoldOut,
                 addProductToCart: () => {
                   setIsAddtoCart(true);
                   addProductToCart();
