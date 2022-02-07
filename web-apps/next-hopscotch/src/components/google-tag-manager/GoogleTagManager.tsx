@@ -16,9 +16,9 @@ const GoogleTagManager: FC<unknown> = ({ children }) => {
               userId: userInfo.userId,
               email: userInfo.email,
               name: userInfo.firstName + ' ' + userInfo.lastName,
-              dimension1: deviceDetail.device.type || 'computer',
+              dimension1: deviceDetail?.device?.type || 'computer',
             }
-          : { dimension1: deviceDetail.device.type || 'computer' },
+          : { dimension1: deviceDetail?.device?.type || 'computer' },
       });
     },
     [userInfo, deviceDetail?.device?.type],
