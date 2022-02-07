@@ -103,6 +103,8 @@ const FilterWrapper = styled.div`
   margin: 0 32px 0 0;
 `;
 
+const SearchForm = styled.form``;
+
 const SearchWrapper = styled.div`
   position: relative;
   display: flex;
@@ -181,6 +183,7 @@ export {
   NotificationBar,
   NotificationBarLinkWrapper,
   SearchWrapper,
+  SearchForm,
   InputSearch,
   SearchIconWrapper,
   NavBarCntnr,

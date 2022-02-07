@@ -1,7 +1,7 @@
 export interface IRecentSearchesProps {
   label: string;
   name: string;
-  term: string;
+  term?: string;
   id: number;
   type: string;
   recent?: null;

@@ -155,7 +155,13 @@ export const SearchPopup: FC<ISearch> = ({ close, resource }: ISearch) => {
   const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e ? e.preventDefault() : '';
     // _recentSearch = false;
-    getSuggestions();
+    const data: IRecentSearchesProps = {
+      label: searchBy as string,
+      name: searchBy as string,
+      id: -1,
+      type: 'keyword',
+    };
+    selectAndSearch(data, null, 0, null);
   };
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {

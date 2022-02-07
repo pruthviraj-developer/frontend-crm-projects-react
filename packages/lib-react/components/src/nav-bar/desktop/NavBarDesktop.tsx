@@ -12,6 +12,7 @@ import {
   FilteredBy,
   FilterWrapper,
   SearchWrapper,
+  SearchForm,
   InputSearch,
   SearchIconWrapper,
   NavBarCntnr,
@@ -36,6 +37,7 @@ export const NavBarDesktop: FC = () => {
   const elementRef = useRef<any>();
   const [searchText, setSearchText] = useState('');
   const [showSearch, setShowSearch] = useState<boolean>(false);
+  const [isFormSubmit, setFormSubmitted] = useState<boolean>(false);
   const cartContext = useContext(CartItemQtyContext);
   const { showAccountNotification } = useContext(UserInfoContext);
   const sortedTile = useSelectedSort();
@@ -51,7 +53,14 @@ export const NavBarDesktop: FC = () => {
   };
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormSubmitted(false);
     setSearchText(e.target.value);
+  };
+
+  const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
+    e ? e.preventDefault() : '';
+    // _recentSearch = false;
+    setFormSubmitted(true);
   };
 
   useEffect(() => {
@@ -166,11 +175,19 @@ export const NavBarDesktop: FC = () => {
                   icon={IconSearch}
                 />
                 <div ref={elementRef}>
-                  <InputSearch
-                    onChange={handleOnChange}
-                    placeholder="Search for products"
-                  />
-                  <SearchDesktop {...{ searchText }} />
+                  <SearchForm
+                    onSubmit={(e) => {
+                      return submitForm(e);
+                    }}
+                    noValidate
+                    autoComplete={'off'}
+                  >
+                    <InputSearch
+                      onChange={handleOnChange}
+                      placeholder="Search for products"
+                    />
+                  </SearchForm>
+                  <SearchDesktop {...{ searchText, isFormSubmit }} />
                 </div>
                 <SearchLayout />
               </SearchWrapper>
