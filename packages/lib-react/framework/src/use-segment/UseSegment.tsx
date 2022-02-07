@@ -4,7 +4,6 @@ import {
   ISegmentProperties,
 } from './IUseSegment';
 import { IUtmParam } from './../types';
-import Parser from 'ua-parser-js';
 import { useEffect, useState } from 'react';
 import {
   COOKIE_DATA,
@@ -17,6 +16,7 @@ import {
   ISortData,
 } from '../storage';
 import { cookiesService } from '@hs/services';
+import { useDeviceDetail } from '../use-device-detail';
 
 const getSessionInfo = (sessionInfostr: string) => {
   const infoArr = sessionInfostr.split(',');
@@ -75,7 +75,7 @@ const getWeek = (date: Date) => {
 };
 
 export const useSegment = () => {
-  const [deviceDetail, setDeviceDetail] = useState<Parser.IResult>();
+  const deviceDetail = useDeviceDetail();
   const [contextData, setContextData] = useState<IContextData>();
   const [properties, setProperties] = useState<ISegmentProperties>();
   const [funnelData] = useSessionStorage<IFunnelData>(
@@ -99,10 +99,6 @@ export const useSegment = () => {
       cookiesService.getCookies(COOKIE_DATA.EXPERIMENTS) || 'none';
     return experiments.split(',');
   };
-
-  useEffect(() => {
-    setDeviceDetail({ ...new Parser().getResult() });
-  }, []);
 
   useEffect(() => {
     if (deviceDetail) {

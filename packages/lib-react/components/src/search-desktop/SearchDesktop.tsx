@@ -13,7 +13,7 @@ import {
 import { useQuery } from 'react-query';
 import { SEARCH_CONSTANTS } from '@hs/utils';
 
-const SearchDesktop: FC<ISearch> = ({ searchText }: ISearch) => {
+const SearchDesktop: FC<ISearch> = ({ searchText, isFormSubmit }: ISearch) => {
   // let _recentSearch: boolean = true;
   const router = useRouter();
   const [searchBy, setSearchBy] = useState<string>('');
@@ -44,11 +44,22 @@ const SearchDesktop: FC<ISearch> = ({ searchText }: ISearch) => {
     }
   }, [response]);
 
-  // end
+  const setAndSearch = () => {
+    const data: IRecentSearchesProps = {
+      label: searchText as string,
+      name: searchText as string,
+      id: -1,
+      type: 'keyword',
+    };
+    selectAndSearch(data, null, 0, null);
+  };
 
   useEffect(() => {
     setSearchBy(searchText || '');
-  }, [searchText]);
+    if (isFormSubmit) {
+      setAndSearch();
+    }
+  }, [searchText, isFormSubmit]);
 
   const getSuggestions = useCallback(() => {
     (async () => {
@@ -179,7 +190,7 @@ const SearchDesktop: FC<ISearch> = ({ searchText }: ISearch) => {
     data: IEulerSuggestionsEntity | IRecentSearchesProps,
     recent: string | null,
     suggestionIndex: number,
-    options: any
+    options?: any
   ) => {
     const searchObj = Object.assign({}, data, { recent: recent }, options);
     let q: any = {};

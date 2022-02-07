@@ -168,32 +168,37 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
   }, [contextData, productData, properties]);
 
   useEffect(() => {
-    if (productData && productId && productName) {
-      gtm.trackEvent({
-        event: gtm.PRODUCT_IMPRESSION,
-        data: {
-          ecommerce: {
-            detail: {
-              products: [
-                {
-                  id: Number(productId),
-                  name: productName,
-                  brand: productData.brandName,
-                  price: productData.retailPrice,
-                  category: productData.categoryId,
+    if (productData && productId && productName && userInfo) {
+      const id = setTimeout(
+        () =>
+          gtm.trackEvent({
+            event: gtm.PRODUCT_IMPRESSION,
+            data: {
+              ecommerce: {
+                detail: {
+                  products: [
+                    {
+                      id: Number(productId),
+                      name: productName,
+                      brand: productData.brandName,
+                      price: productData.retailPrice,
+                      category: productData.categoryId,
+                    },
+                  ],
                 },
-              ],
+              },
+              productSkus: productData?.simpleSkus.map((sku: ISimpleSkusEntityProps) => sku.skuId),
+              productId: Number(productId),
+              productName: productName,
+              productCategory: productData.categoryId,
+              productPrice: productData.retailPrice,
             },
-          },
-          productSkus: productData?.simpleSkus.map((sku: ISimpleSkusEntityProps) => sku.skuId),
-          productId: Number(productId),
-          productName: productName,
-          productCategory: productData.categoryId,
-          productPrice: productData.retailPrice,
-        },
-      });
+          }),
+        0,
+      );
+      return ()=>{clearTimeout(id)}
     }
-  }, [productData, productId, productName]);
+  }, [productData, productId, productName, userInfo]);
 
   useEffect(() => {
     if (showLoginPopup) {
