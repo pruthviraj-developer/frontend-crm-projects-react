@@ -22,7 +22,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const url = `${baseUrl}${context.resolvedUrl?.split('?')?.[0]}`;
   let error: IProductError | boolean = false;
   try {
-    const data = await queryClient.fetchQuery<IProductDetails>(
+    await queryClient.fetchQuery<IProductDetails>(
       ['ProductDetail', productId],
       () => productDetailsService.getProductDetails(productId, baseUrl, { cookie, 'x-nv-security-magic': magicHeader }),
       {
