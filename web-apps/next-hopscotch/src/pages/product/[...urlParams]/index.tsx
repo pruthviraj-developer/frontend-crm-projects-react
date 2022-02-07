@@ -18,8 +18,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const queryClient = new QueryClient();
   const productId = context.params?.urlParams?.[0] || '';
   const isMobile = context.req.headers['x-nv-device'] === 'sp';
-  const baseUrl = process.env.WEB_HOST;
-  const url = `${baseUrl}${context.resolvedUrl?.split('?')?.[0]}`;
+  const baseUrl = process.env.WEB_HOST as string;
+  let url = context.resolvedUrl?.split('?')?.[0];
+  url = url?.indexOf(baseUrl) > 0 ? url : `${baseUrl}${url}`;
   let error: IProductError | boolean = false;
   try {
     await queryClient.fetchQuery<IProductDetails>(
