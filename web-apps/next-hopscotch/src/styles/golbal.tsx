@@ -47,6 +47,7 @@ export const globalStyles = (
           url('//static.hopscotch.in/web2/fonts/averta-regular-webfont.woff') format('woff');
         font-weight: 400;
         font-style: normal;
+        font-display: swap;
       }
 
       @font-face {
@@ -55,6 +56,7 @@ export const globalStyles = (
           url('//static.hopscotch.in/web2/fonts/averta-semibold-webfont.woff') format('woff');
         font-weight: 600;
         font-style: normal;
+        font-display: swap;
       }
 
       @font-face {
@@ -63,6 +65,7 @@ export const globalStyles = (
           url('//static.hopscotch.in/web2/fonts/averta-bold-webfont.woff') format('woff');
         font-weight: 700;
         font-style: normal;
+        font-display: swap;
       }
     `}
   />

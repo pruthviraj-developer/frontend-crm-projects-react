@@ -22,6 +22,24 @@ export default class MyDocument extends Document {
           <meta property="og:image" content="https://static.hopscotch.in/web2/images/assets/hopscotch_typeface.png" />
           <meta property="og:type" content="website" />
           <link rel="icon" href="/favicon.ico" />
+          <link
+            rel="preload"
+            href="https://static.hopscotch.in/web2/fonts/averta-semibold-webfont.woff2"
+            as="font"
+            crossOrigin="anonymous"
+          />
+          <link
+            rel="preload"
+            href="https://static.hopscotch.in/web2/fonts/averta-regular-webfont.woff2"
+            as="font"
+            crossOrigin="anonymous"
+          />
+          <link
+            rel="preload"
+            href="https://static.hopscotch.in/web2/fonts/averta-bold-webfont.woff2"
+            as="font"
+            crossOrigin="anonymous"
+          />
           <script src="/n7/n7HD.js" async></script>
         </Head>
         <body>
