@@ -8,7 +8,7 @@ const RecommendedProductsWrapper = styled.div`
   margin: auto;
 `;
 
-const RecommendedProductsTitle = styled.div`
+const RecommendedProductsTitle = styled.h2`
   border-top: 1px solid #e6e6e6;
   padding: 4rem 0 2.8rem;
   text-align: center;

@@ -74,7 +74,7 @@ const StyledIcon = styled(SvgIcon)`
   max-width: ${typography.size.s3}px;
 `;
 
-const FooterBlockTitle = styled.h5`
+const FooterBlockTitle = styled.div`
   margin: 19px 0 0 0;
   font-size: 1.2rem;
   font-weight: ${typography.weight.medium};

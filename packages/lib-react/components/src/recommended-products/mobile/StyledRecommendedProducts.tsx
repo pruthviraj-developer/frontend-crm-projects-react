@@ -5,7 +5,7 @@ const RecommendedProductsWrapper = styled.div`
   background: #f5f5f5;
 `;
 
-const RecommendedProductsTitle = styled.div`
+const RecommendedProductsTitle = styled.h2`
   padding: 24px 0 16px 16px;
   font-size: 1.8rem;
   font-weight: ${typography.weight.medium};
