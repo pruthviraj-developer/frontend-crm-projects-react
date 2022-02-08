@@ -107,7 +107,7 @@ export const Footer: FC = () => {
           <FooterBlockTitle>Download our apps</FooterBlockTitle>
           <ConnectToApps>
             <LinkIcons
-              href="https://itunes.apple.com/in/app/hopscotch-find-something-new/id945949424"
+              href="https://apps.apple.com/in/app/hopscotch-find-something-new/id945949424"
               target="_blank"
               rel="noopener noreferrer"
             >
