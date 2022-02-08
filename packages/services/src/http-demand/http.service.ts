@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosError } from 'axios';
+import { cookiesService } from '../store';
 const httpHeaders = {
   'api-version': 'v1.8',
   'client-auth-method': 'v1',
@@ -54,7 +55,14 @@ const get = <T>({ url, params, headers }: IHttpService): Promise<T> => {
   const reqConfig: AxiosRequestConfig = {
     method: 'get',
     url,
-    headers: { ...httpHeaders, ...headers },
+    headers: {
+      ...httpHeaders,
+      'device-id': cookiesService.getCookies('VISITOR_ID') || '',
+      'hs-persistent-ticket':
+        cookiesService.getCookies('hs_persistent_ticket') || '',
+      experiments: cookiesService.getCookies('EXPERIMENTS') || '',
+      ...headers,
+    },
     params: params,
   };
   return processRequest(reqConfig);
@@ -63,7 +71,13 @@ const post = <T>({ url, params, data }: IHttpService): Promise<T> => {
   const reqConfig: AxiosRequestConfig = {
     method: 'post',
     url,
-    headers: { ...httpHeaders },
+    headers: {
+      ...httpHeaders,
+      'device-id': cookiesService.getCookies('VISITOR_ID'),
+      'hs-persistent-ticket':
+        cookiesService.getCookies('hs_persistent_ticket') || '',
+      experiments: cookiesService.getCookies('EXPERIMENTS') || '',
+    },
     params,
     data,
   };
@@ -73,7 +87,10 @@ const deleteApi = <T>({ url, params, data }: IHttpService): Promise<T> => {
   const reqConfig: AxiosRequestConfig = {
     method: 'delete',
     url,
-    headers: { ...httpHeaders },
+    headers: {
+      ...httpHeaders,
+      'device-id': cookiesService.getCookies('VISITOR_ID'),
+    },
     params,
     data,
   };
@@ -83,7 +100,10 @@ const put = <T>({ url, params, data }: IHttpService): Promise<T> => {
   const reqConfig: AxiosRequestConfig = {
     method: 'put',
     url,
-    headers: { ...httpHeaders },
+    headers: {
+      ...httpHeaders,
+      'device-id': cookiesService.getCookies('VISITOR_ID'),
+    },
     params,
     data,
   };

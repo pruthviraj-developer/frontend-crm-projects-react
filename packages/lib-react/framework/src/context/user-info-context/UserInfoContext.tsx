@@ -102,7 +102,6 @@ export const UserInfoProvider: FC<unknown> = ({ children }) => {
       }
       setUtmParams(params);
     } else {
-      let params = {};
       if (typeof document != undefined && document.referrer) {
         const referrer = getHostName(document.referrer);
         params = {
@@ -125,15 +124,13 @@ export const UserInfoProvider: FC<unknown> = ({ children }) => {
   }, [userInfo, notification, isNotificationSuccess]);
 
   useEffect(() => {
-    if (utmParams) {
-      productDetailsService.postUtmParams(utmParams, {
-        deeplink: postParams.deeplink || '',
-        utm_campaign: postParams['utm-campaign'] || '',
-        utm_medium: postParams['utm-medium'] || '',
-        utm_source: postParams['utm-source'] || '',
-      });
-    }
-  }, [utmParams]);
+    productDetailsService.postUtmParams({
+      deeplink: postParams.deeplink || '',
+      utm_campaign: postParams['utm-campaign'] || '',
+      utm_medium: postParams['utm-medium'] || '',
+      utm_source: postParams['utm-source'] || '',
+    });
+  }, []);
 
   return (
     <UserInfoContext.Provider
