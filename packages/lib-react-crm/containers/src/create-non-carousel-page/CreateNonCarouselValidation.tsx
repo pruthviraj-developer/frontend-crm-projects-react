@@ -20,6 +20,8 @@ export const CarouselFormValidation = Yup.object().shape({
           'End date should be greater than start date'
         )
     ),
+  userTypes: Yup.array(),
+  customerIds: Yup.string(),
   tiles: Yup.array()
     .of(
       Yup.object().shape({

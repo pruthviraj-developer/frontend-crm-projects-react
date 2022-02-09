@@ -24,6 +24,8 @@ export interface CreateNonCarouselPageState {
   tileHeight?: number;
   tileWidth?: number;
   tiles: Tile[];
+  userTypes: [];
+  customerIds: string;
 }
 
 export interface CreateNonCarouselProps {

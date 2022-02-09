@@ -5,7 +5,7 @@ module.exports = function (app) {
     '/react-monorepo/PageCarousel/api/',
     createProxyMiddleware({
       pathRewrite: { '^/react-monorepo/PageCarousel/api': '' },
-      target: 'http://qa.hopscotch.in',
+      target: 'https://crm.qa.hopscotch.in',
       secure: false,
       changeOrigin: true,
     }),
@@ -14,7 +14,16 @@ module.exports = function (app) {
     '/react-monorepo/PageCarousel/edit-carousel/api/',
     createProxyMiddleware({
       pathRewrite: { '^/react-monorepo/PageCarousel/edit-carousel/api': '' },
-      target: 'http://qa.hopscotch.in',
+      target: 'https://crm.qa.hopscotch.in',
+      secure: false,
+      changeOrigin: true,
+    }),
+  );
+
+  app.use(
+    '/intranet/login/',
+    createProxyMiddleware({
+      target: 'http://crm.qa.hopscotch.in/',
       secure: false,
       changeOrigin: true,
     }),

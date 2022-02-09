@@ -30,7 +30,12 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import DateFnsUtils from '@date-io/date-fns';
 import { HsSnackbar, HsSnackbarProps } from '@hs-crm/components';
 import { format } from 'date-fns';
-import { carouselService, SortListOption, ListOption } from '@hs/services';
+import {
+  carouselService,
+  SortListOption,
+  List,
+  ListOption,
+} from '@hs/services';
 import {
   CreateNonCarouselPageState,
   CreateNonCarouselProps,
@@ -60,8 +65,10 @@ const initialValues: CreateNonCarouselPageState = {
   position: '',
   platform: [],
   startDate: new Date(),
-  endDate: new Date(),
+  endDate: new Date(Date.now() + 3600 * 1000 * 24),
   tiles: [],
+  userTypes: [],
+  customerIds: '',
 };
 const snackBarProps: Pick<HsSnackbarProps, 'open' | 'type' | 'message'> = {
   open: false,
@@ -79,7 +86,17 @@ export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
   };
 
   const listData = useGetCarouselList();
-
+  const userTypeList: List = listData.userTypeList.list;
+  const getResponseFormat = (data: string[], list: List) => {
+    const dataList = [];
+    for (let index = 0; index < list.length; index++) {
+      const element = list[index];
+      if (data.includes(element.id)) {
+        dataList.push(element);
+      }
+    }
+    return dataList;
+  };
   useEffect(() => {
     (async () => {
       try {
@@ -91,7 +108,13 @@ export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
           const title = carouselData.title
             ? carouselData.title.substr(0, 20)
             : '';
-          setData({ ...carouselData, title });
+          const userTypeResponse = carouselData.userTypes;
+          const response: any = Object.assign({}, carouselData);
+          response['userTypes'] = getResponseFormat(
+            userTypeResponse,
+            userTypeList
+          );
+          setData({ ...response, title });
         } else {
           setData(initialValues);
         }
@@ -192,6 +215,7 @@ export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
             }
             const postData = {
               ...values,
+              userTypes: values.userTypes.map((data: ListOption) => data.id),
               startDate: startDate,
               endDate: endDate,
               tiles: [...values.tiles].map((tile, index) => ({
@@ -342,6 +366,36 @@ export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
                             </Grid>
                             <Grid item xs>
                               <Field
+                                multiple
+                                name="userTypes"
+                                label="Select User Type"
+                                variant="standard"
+                                component={Autocomplete}
+                                options={userTypeList}
+                                getOptionSelected={(
+                                  option: ListOption,
+                                  selectedValue: ListOption
+                                ) => option.id == selectedValue?.id}
+                                getOptionLabel={(option: ListOption) =>
+                                  option.name
+                                }
+                                renderInput={(
+                                  params: AutocompleteRenderInputParams
+                                ) => (
+                                  <MuiTextField
+                                    {...params}
+                                    // helperText={
+                                    //   touched['userTypes'] &&
+                                    //   errors['userTypes']
+                                    // }
+                                    label="User Type"
+                                    variant="outlined"
+                                  />
+                                )}
+                              />
+                            </Grid>
+                            <Grid item xs>
+                              <Field
                                 component={DateTimePicker}
                                 fullWidth
                                 ampm={false}
@@ -356,6 +410,15 @@ export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
                                 ampm={false}
                                 name="endDate"
                                 label="End Date"
+                              />
+                            </Grid>
+                            <Grid item xs>
+                              <label> Customer Ids</label>
+                              <Field
+                                name="customerIds"
+                                as="textarea"
+                                placeholder="Customer Ids"
+                                style={{ width: '100%', height: '100px' }}
                               />
                             </Grid>
                           </Grid>
