@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -34,9 +35,14 @@ import {
   LOCAL_DATA,
   SESSION_DATA,
   useSessionStorage,
+  IOfferDetailsProps,
 } from '@hs/framework';
 
 const SizeChartPopupComponentDeskTop = dynamic(() => import('@/components/size-chart/desktop'), {
+  ssr: false,
+});
+
+const OffersPopUpComponent = dynamic(() => import('@/components/offers-popup'), {
   ssr: false,
 });
 
@@ -69,11 +75,13 @@ const ProductDesktop = dynamic(() => import('@/components/pdp/desktop'), {
 const tryLater = 'Try Later';
 
 export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
+  const router = useRouter();
   const [deliveryDetails, updateDeliveryDetails] = useState<IUpdatedDeliverDetailsProps>();
   const [updatedWishListId, updateWishListId] = useState<number>();
   const [addToWishlistStatus, setAddToWishlistStatus] = useState<boolean>(false);
   const { updateCartItemQty } = useContext(CartItemQtyContext);
   const [addedToCart, updateAddedToCart] = useState<boolean>(false);
+  const [offersUrl, setOffersUrl] = useState<string>('');
   const { showLoginPopup } = useContext(LoginContext);
   const { userInfo } = useContext(UserInfoContext);
   const [, setGotoCartLocation] = useSessionStorage<string>(SESSION_DATA.CART_LOCATION, null);
@@ -83,6 +91,11 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
   });
 
   const [SizeChartPopupModal, openSizeChartPopup, closeSizeChartPopup, isSizeChartPopupOpen] = useModal('root', {
+    preventScroll: false,
+    closeOnOverlayClick: true,
+  });
+
+  const [OffersPopupModal, openOffersPopup, closeOffersPopup, isOffersPopupOpen] = useModal('root', {
     preventScroll: false,
     closeOnOverlayClick: true,
   });
@@ -117,6 +130,14 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
   const { data: similarProductDetails } = useQuery<IRecommendedProducts>(
     ['SimilarProducts', productId],
     () => productDetailsService.getSimilarProducts(productId, { boutiqueId: undefined }),
+    {
+      enabled: productId !== undefined,
+    },
+  );
+
+  const { data: offerDetails } = useQuery<IOfferDetailsProps>(
+    ['OfferDetails', productId],
+    () => productDetailsService.getPromotions(productId),
     {
       enabled: productId !== undefined,
     },
@@ -196,7 +217,9 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
           }),
         0,
       );
-      return ()=>{clearTimeout(id)}
+      return () => {
+        clearTimeout(id);
+      };
     }
   }, [productData, productId, productName, userInfo]);
 
@@ -494,6 +517,53 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
     setGotoCartLocation('goto cart button');
   };
 
+  const seeAllOffers = (actionURI?: string) => {
+    if (offerDetails) {
+      const cardCount: number = offerDetails?.cardCount || 0;
+      if (cardCount > 1) {
+        const getEncodedString = (elem?: string | number | boolean) => {
+          return elem ? encodeURIComponent(elem) : elem;
+        };
+        const promotionUrl =
+          `/v2/offers?site=web&fromScreen=${encodeURIComponent('Product details')}` +
+          `&productId=${getEncodedString(productId)}` +
+          `&bestPrice=${getEncodedString(offerDetails.bestPrice)}` +
+          `&saving=${getEncodedString(offerDetails.saving)}` +
+          `&offerCardsCount=${getEncodedString(offerDetails.cardCount)}`;
+        // let promotionUrl = '/';
+        // if (window.location.hostname === 'localhost') {
+        //   promotionUrl =
+        //     window.location.protocol +
+        //     '//' +
+        //     'localhost:3002' +
+        //     `/v2/offers?site=web&fromScreen=${encodeURIComponent('Product details')}` +
+        //     `&productId=${getEncodedString(productId)}` +
+        //     `&bestPrice=${getEncodedString(offerDetails.bestPrice)}` +
+        //     `&saving=${getEncodedString(offerDetails.saving)}` +
+        //     `&offerCardsCount=${getEncodedString(offerDetails.cardCount)}`;
+        // }
+        setOffersUrl(promotionUrl);
+        openOffersPopup();
+      } else {
+        const urlParams: Record<string, string | number | undefined> = {
+          site: 'mweb',
+          fromScreen: 'Product details',
+          productId,
+          offerCardsCount: offerDetails.cardCount,
+        };
+        if (offerDetails.promoOfferText) {
+          urlParams['saving'] = offerDetails.saving;
+          urlParams['bestPrice'] = offerDetails.bestPrice;
+          urlParams['promoOfferText'] = offerDetails.promoOfferText;
+        }
+        router.push({
+          pathname: actionURI || offerDetails.actionURI,
+          query: urlParams,
+        });
+      }
+    }
+  };
+
   return (
     <>
       {productData && productData.action === LOCAL_DATA.SUCCESS && (
@@ -509,41 +579,45 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
           {isMobile && (
             <ProductMobile
               {...{
+                goToCart,
                 productId,
-                productData,
+                addedToCart,
                 selectedSku,
-                deliveryDetails,
-                recommendedProductDetails,
-                similarProductDetails,
-                updatedWishListId,
-                addToWishlist,
-                deleteFromWishlist,
-                openSizeChartPopup,
+                productData,
+                seeAllOffers,
+                offerDetails,
                 onSizeSelect,
+                addToWishlist,
+                deliveryDetails,
                 openPinCodePopup,
                 openSizeSelector,
                 addProductToCart,
-                addedToCart,
-                goToCart,
+                updatedWishListId,
+                deleteFromWishlist,
+                openSizeChartPopup,
+                similarProductDetails,
+                recommendedProductDetails,
               }}
             ></ProductMobile>
           )}
           {!isMobile && (
             <ProductDesktop
               {...{
+                goToCart,
                 productId,
-                productData,
+                addedToCart,
                 selectedSku,
-                deliveryDetails,
-                recommendedProductDetails,
-                similarProductDetails,
-                openSizeChartPopup,
+                productData,
+                seeAllOffers,
+                offerDetails,
                 onSizeSelect,
+                deliveryDetails,
                 openPinCodePopup,
                 openSizeSelector,
                 addProductToCart,
-                addedToCart,
-                goToCart,
+                openSizeChartPopup,
+                similarProductDetails,
+                recommendedProductDetails,
               }}
             ></ProductDesktop>
           )}
@@ -590,6 +664,19 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
             />
           ))}
       </SizeChartPopupModal>
+
+      <OffersPopupModal>
+        {isOffersPopupOpen ? (
+          <OffersPopUpComponent
+            {...{
+              closeOffersPopup,
+              offersUrl,
+            }}
+          />
+        ) : (
+          <></>
+        )}
+      </OffersPopupModal>
 
       <SizeSelectorPopupModal>
         {isSizeSelectorPopupOpen && (

@@ -11,6 +11,7 @@ import {
   DeliveryDetails,
   GoToTop,
   GoToCartMobile as GoToCart,
+  Offers,
 } from '@hs/components';
 import {
   useProduct,
@@ -21,22 +22,24 @@ import {
 import { ProductDetailsWrapper } from './StyledProduct';
 import { IProductPage } from '../IProduct';
 const ProductMobile = ({
-  goToCart,
   productId,
   productData,
   selectedSku,
   addedToCart,
+  offerDetails,
   deliveryDetails,
-  recommendedProductDetails,
-  similarProductDetails,
   updatedWishListId,
-  addToWishlist,
-  deleteFromWishlist,
-  openSizeChartPopup,
+  similarProductDetails,
+  recommendedProductDetails,
+  goToCart,
+  seeAllOffers,
   onSizeSelect,
-  openPinCodePopup,
+  addToWishlist,
   openSizeSelector,
   addProductToCart,
+  openPinCodePopup,
+  deleteFromWishlist,
+  openSizeChartPopup,
 }: IProductPage) => {
   const similarProductsLink = useRef<HTMLDivElement>(null);
   const recommendedProductsLink = useRef<HTMLDivElement>(null);
@@ -85,6 +88,7 @@ const ProductMobile = ({
       currentRefElement?.current?.scrollIntoView({ behavior: 'smooth' });
     }
   };
+
   return (
     <>
       <ProductCarousel
@@ -93,7 +97,7 @@ const ProductMobile = ({
           imgUrls: productData.imgurls,
           goToProductRecommendation,
         }}
-      ></ProductCarousel>
+      />
       <ProductDetailsWrapper>
         <ProductNamePrice
           {...{
@@ -109,7 +113,17 @@ const ProductMobile = ({
             addToWishlist,
             deleteFromWishlist,
           }}
-        ></ProductNamePrice>
+        />
+        {offerDetails && (
+          <Offers
+            {...{
+              ...offerDetails,
+              seeAllOffers: () => {
+                seeAllOffers('/v2/offers');
+              },
+            }}
+          />
+        )}
         {isProductSoldOut === false && (
           <SizeAndChartLabels
             {...{
@@ -119,7 +133,7 @@ const ProductMobile = ({
               simpleSkus,
               onSizeChartClick: openSizeChartPopup,
             }}
-          ></SizeAndChartLabels>
+          />
         )}
         {!isOneSize && (
           <CustomSizePicker
@@ -128,12 +142,12 @@ const ProductMobile = ({
               selectedSku: selectedSku,
               onSizeSelect,
             }}
-          ></CustomSizePicker>
+          />
         )}
         {showRfypCue && (showRFYP || showSimilarProducts) && (
           <RecommendedProductsLinks
             {...{ isProductSoldOut, goToProductRecommendation }}
-          ></RecommendedProductsLinks>
+          />
         )}
         {isProductSoldOut === false && (
           <DeliveryDetails
@@ -144,7 +158,7 @@ const ProductMobile = ({
               openPinCodePopup,
               openSizeSelector,
             }}
-          ></DeliveryDetails>
+          />
         )}
         {productData.id && (
           <Accordion
@@ -153,12 +167,12 @@ const ProductMobile = ({
         )}
         {showRFYP && (
           <div ref={recommendedProductsLink}>
-            <RecommendedProducts {...recommendedForYou}></RecommendedProducts>
+            <RecommendedProducts {...recommendedForYou} />
           </div>
         )}
         {showSimilarProducts && (
           <div ref={similarProductsLink}>
-            <RecommendedProducts {...similarProducts}></RecommendedProducts>
+            <RecommendedProducts {...similarProducts} />
           </div>
         )}
       </ProductDetailsWrapper>
@@ -173,7 +187,7 @@ const ProductMobile = ({
           }}
         />
       )}
-      <GoToTop></GoToTop>
+      <GoToTop />
     </>
   );
 };
