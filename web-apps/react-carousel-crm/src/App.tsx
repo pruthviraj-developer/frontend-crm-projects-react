@@ -1,5 +1,5 @@
 import React from 'react';
-import { ThemeProvider } from 'emotion-theming';
+import { ThemeProvider } from '@emotion/react';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import { LeftNavBar, LeftNavBarProps } from '@hs-crm/components';

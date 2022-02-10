@@ -1,5 +1,5 @@
 {
-  "name": "react-demand-crm",
+  "name": "@hs-crm-app/react-demand-crm",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
