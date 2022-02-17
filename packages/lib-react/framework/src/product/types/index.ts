@@ -194,3 +194,19 @@ export interface IUserInfoProps {
   resendOTPAuto: boolean;
   persistentTicket: string;
 }
+
+export interface IOfferDetailsProps {
+  title: string;
+  promoDetails: string;
+  bestPrice: string;
+  saving: string;
+  actionText: string;
+  bestPricePromoCode: string;
+  isPromoAvailable: boolean;
+  isMerchRule: boolean;
+  cardCount: number;
+  promoOfferText: string;
+  action: string;
+  actionURI: string;
+  seeAllOffers: () => void;
+}
