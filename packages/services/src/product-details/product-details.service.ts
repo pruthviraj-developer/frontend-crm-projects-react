@@ -158,7 +158,7 @@ const postUtmParams = <P, R>(data: P): Promise<R> => {
 };
 
 const getPromotions = <P, R>(productId: P): Promise<R> => {
-  return httpService.get<R>({ url: `api/promotion/product/${productId}` });
+  return httpService.get<R>({ url: `/api/promotion/product/${productId}` });
 };
 
 export const productDetailsService = {
