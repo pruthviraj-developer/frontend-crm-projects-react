@@ -118,7 +118,7 @@ const ProductDesktop = ({
               discount,
             }}
           />
-          {offerDetails && (
+          {offerDetails && offerDetails.isPromoAvailable && (
             <Offers
               {...{
                 ...offerDetails,
