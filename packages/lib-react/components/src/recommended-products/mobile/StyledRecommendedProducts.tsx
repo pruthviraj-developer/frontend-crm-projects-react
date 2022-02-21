@@ -11,6 +11,7 @@ const RecommendedProductsTitle = styled.h2`
   font-weight: ${typography.weight.medium};
   line-height: 22px;
   border-top: 1px solid #e6e6e6;
+  margin: 0;
 `;
 
 const RecommendedMatchingWrapper = styled.div`
