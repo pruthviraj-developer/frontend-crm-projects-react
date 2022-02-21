@@ -23,3 +23,4 @@ export * from './search-mobile';
 export * from './go-to-top';
 export * from './go-to-cart';
 export * from './offers';
+export * from './display-banner';

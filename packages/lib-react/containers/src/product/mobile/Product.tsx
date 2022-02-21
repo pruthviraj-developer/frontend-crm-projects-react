@@ -12,6 +12,7 @@ import {
   GoToTop,
   GoToCartMobile as GoToCart,
   Offers,
+  DisplayBanner,
 } from '@hs/components';
 import {
   useProduct,
@@ -165,6 +166,7 @@ const ProductMobile = ({
             {...{ ...product, isPresale, simpleSkus, selectedSku: selectedSku }}
           />
         )}
+        <DisplayBanner />
         {showRFYP && (
           <div ref={recommendedProductsLink}>
             <RecommendedProducts {...recommendedForYou} />

@@ -19,6 +19,7 @@ import {
   SizeSelector,
   GoToTopDesktop,
   Offers,
+  DisplayBanner,
 } from '@hs/components';
 
 const ProductDesktop = ({
@@ -192,6 +193,7 @@ const ProductDesktop = ({
               }}
             />
           )}
+          <DisplayBanner />
         </ProductDetailsWrapper>
       </ProductWrapper>
 
