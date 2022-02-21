@@ -114,7 +114,7 @@ const ProductMobile = ({
             deleteFromWishlist,
           }}
         />
-        {offerDetails && (
+        {offerDetails && offerDetails.isPromoAvailable && (
           <Offers
             {...{
               ...offerDetails,
