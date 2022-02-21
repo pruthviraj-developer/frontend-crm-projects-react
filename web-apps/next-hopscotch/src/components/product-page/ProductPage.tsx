@@ -258,7 +258,7 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
         <CartNotification>
           <Link
             href={{
-              pathname: '/v2/cart',
+              pathname: isMobile ? '/v2/cart' : '/w/cart',
             }}
             passHref
           >
