@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { makeStyles } from '@material-ui/core/styles';
 import { HSTableV1 } from '@hs/components';
@@ -6,9 +6,10 @@ import { FilterPan, FilterPanProps } from '@hs/components';
 import { IPostDataType, IDashboardDataResponse, IHeaderType, IPageType, ITableDataType } from './IDashBoard';
 import { Helmet } from 'react-helmet';
 import { ArchivedDashBoardWrapper, ArchivedFilterWrapper, TableWrapper } from './Style';
-import { getArchivedFiltersData, dashboardColumns } from './Constant';
+import { ArchivedFiltersData, DashboardColumns, RecommendationOption } from './Constant';
 import { recommendationService } from '@hs/services';
 import { useQuery } from 'react-query';
+import { IRecommendationCarouselList } from '../create/IAddEdit';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -41,6 +42,7 @@ const ArchivedDashboard: FC<{ header: string }> = ({ header }: IHeaderType) => {
   const classes = useStyles();
   const [postFilterData, setPostFilterData] = useState({});
   const [filterPage, setFilterPage] = useState<IPageType>(defaultPageFilters);
+  const [filtersData, setFilterData] = useState(ArchivedFiltersData);
 
   const { data: dashboardData, isSuccess: isDashboardSuccess } = useQuery<
     IDashboardDataResponse,
@@ -66,7 +68,7 @@ const ArchivedDashboard: FC<{ header: string }> = ({ header }: IHeaderType) => {
     title: '',
     count: (dashboardData && dashboardData.totalRecords) || 0,
     activePage: filterPage.pageNo,
-    columns: dashboardColumns,
+    columns: DashboardColumns,
     rows: dashboardData ? dashboardData['models'] : [],
     rowsPerPage: filterPage.pageSize || 10,
     filterRowsPerPage: [10, 20, 50, 100],
@@ -78,10 +80,22 @@ const ArchivedDashboard: FC<{ header: string }> = ({ header }: IHeaderType) => {
     setPostFilterData(data);
   };
 
-  const filterData: FilterPanProps = {
-    data: getArchivedFiltersData,
+  let filterData: FilterPanProps = {
+    data: filtersData,
     onChange: onChangeHandler,
   };
+
+  useEffect(() => {
+    (async () => {
+      try {
+        let listType: IRecommendationCarouselList[] = await recommendationService.getRecommendCarouselTypes();
+        setFilterData([
+          ...ArchivedFiltersData,
+          { ...RecommendationOption, options: [...listType, ...RecommendationOption.options] },
+        ]);
+      } catch (e) {}
+    })();
+  }, []);
 
   return (
     <>

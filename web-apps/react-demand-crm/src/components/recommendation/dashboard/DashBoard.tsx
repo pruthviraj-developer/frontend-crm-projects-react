@@ -9,7 +9,7 @@ import { FilterPan, FilterPanProps } from '@hs/components';
 import { IPostDataType, IDashboardDataResponse, IdialogFromSubmit } from './IDashBoard';
 import { Helmet } from 'react-helmet';
 import { DashBoardWrapper, FilterWrapper } from './Style';
-import { getFiltersData, dashboardColumns } from './Constant';
+import { FiltersData, DashboardColumns, RecommendationOption } from './Constant';
 import { RecommendationTableToolbar } from './RecommendationTableToolbar';
 import { makeStyles } from '@material-ui/core/styles';
 import { Colors } from '@hs/utils';
@@ -20,6 +20,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import { toast } from 'react-toastify';
 import { recommendationService } from '@hs/services';
+import { IRecommendationCarouselList } from '../create/IAddEdit';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -67,6 +68,7 @@ const DashBoard: FC<{ header: string }> = ({ header }) => {
     models: [],
     totalRecords: 0,
   });
+  const [filterList, setFilterList] = useState(FiltersData);
 
   useEffect(() => {
     (async () => {
@@ -92,6 +94,18 @@ const DashBoard: FC<{ header: string }> = ({ header }) => {
       }
     })();
   }, [filterParams]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        let listType: IRecommendationCarouselList[] = await recommendationService.getRecommendCarouselTypes();
+        setFilterList([
+          ...FiltersData,
+          { ...RecommendationOption, options: [...listType, ...RecommendationOption.options] },
+        ]);
+      } catch (e) {}
+    })();
+  }, []);
 
   const fetchTableData = (e: any) => {
     setFilterParams({ ...filterParams, pageNo: e.pageNo + 1, pageSize: e.pageSize });
@@ -184,7 +198,7 @@ const DashBoard: FC<{ header: string }> = ({ header }) => {
 
   const selectTableData: SelectableTableProps = {
     rows: dashboardData && dashboardData['models'] ? dashboardData['models'] : [],
-    columns: dashboardColumns,
+    columns: DashboardColumns,
 
     rowsPerPageOptions: [5, 10, 15, 20],
     displayRowsPerPage: filterParams.pageSize || 10,
@@ -213,7 +227,7 @@ const DashBoard: FC<{ header: string }> = ({ header }) => {
   };
 
   const filterPanData: FilterPanProps = {
-    data: getFiltersData,
+    data: filterList,
     onChange: onChangeHandler,
   };
 

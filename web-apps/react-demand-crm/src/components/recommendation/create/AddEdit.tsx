@@ -7,7 +7,7 @@ import styled from '@emotion/styled';
 import { makeStyles } from '@material-ui/core/styles';
 import { useParams } from 'react-router-dom';
 import { recommendationService } from '@hs/services';
-import { IFormValues, IFormResponse } from './IAddEdit';
+import { IFormValues, IFormResponse, IRecommendationCarouselList } from './IAddEdit';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 
@@ -54,6 +54,12 @@ const AddEdit: FC<{ header: string }> = ({ header }) => {
   const params = useParams<{ id: string }>();
   const helperTestClasses = helperTextStyles();
   const [initialData, setInitialData] = useState(initialValues);
+  const [recommendationCarouselList, setRecommendationCarouselList] = useState([
+    {
+      display: '---',
+      key: '',
+    },
+  ]);
   const validationSchema = Yup.object().shape({
     modelName: Yup.string().required('Please Enter Model Name'),
     rcType: Yup.string().required('Please Choose Recommendation Carousel'),
@@ -81,6 +87,8 @@ const AddEdit: FC<{ header: string }> = ({ header }) => {
   useEffect(() => {
     (async () => {
       try {
+        let listType: IRecommendationCarouselList[] = await recommendationService.getRecommendCarouselTypes();
+        listType.length > 0 && setRecommendationCarouselList(listType);
         if (params.id) {
           const data: IFormValues = await recommendationService.getModelData({ id: params.id });
           setInitialData(data);
@@ -132,12 +140,11 @@ const AddEdit: FC<{ header: string }> = ({ header }) => {
                         className={classes.fields}
                         FormHelperTextProps={{ classes: helperTestClasses }}
                       >
-                        <MenuItem key="rc1" value="rc1">
-                          {'rc1 - Recommendation Carousel 1 i.e P to P mapping'}
-                        </MenuItem>
-                        <MenuItem key="rc2" value="rc2">
-                          {'rc2 - Recommendation Carousel 2 i.e. C to P mapping'}
-                        </MenuItem>
+                        {recommendationCarouselList.map((item: IRecommendationCarouselList) => (
+                          <MenuItem key={item.key} value={item.key}>
+                            {item.display}
+                          </MenuItem>
+                        ))}
                       </Field>
                     </Grid>
                     <Grid item xs={12}>
