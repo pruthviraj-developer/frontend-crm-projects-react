@@ -1,26 +1,29 @@
 import {
+  IOfferDetailsProps,
   IProductDetails,
-  ISimpleSkusEntityProps,
   IRecommendedProducts,
+  ISimpleSkusEntityProps,
 } from '@hs/framework';
 
 export interface IProductPage {
   productId: string;
+  addedToCart: boolean;
+  updatedWishListId?: number;
   productData: IProductDetails;
+  offerDetails?: IOfferDetailsProps;
   selectedSku?: ISimpleSkusEntityProps;
+  similarProductDetails?: IRecommendedProducts;
   deliveryDetails?: IUpdatedDeliverDetailsProps;
   recommendedProductDetails?: IRecommendedProducts;
-  similarProductDetails?: IRecommendedProducts;
-  updatedWishListId?: number;
-  addedToCart: boolean;
   goToCart: () => void;
-  openSizeChartPopup: () => void;
-  onSizeSelect: (sku: ISimpleSkusEntityProps, fromLocation: string) => void;
+  addToWishlist?: () => void;
   openPinCodePopup: () => void;
   openSizeSelector: () => void;
   addProductToCart: () => void;
-  addToWishlist?: () => void;
+  openSizeChartPopup: () => void;
   deleteFromWishlist?: () => void;
+  onSizeSelect: (sku: ISimpleSkusEntityProps, fromLocation: string) => void;
+  seeAllOffers: (actionURI: string) => void;
 }
 export interface IUpdatedDeliverDetailsProps {
   edd?: string;
@@ -30,7 +33,7 @@ export interface IUpdatedDeliverDetailsProps {
 }
 
 export interface IProductDetailsDeliveryMessageOrDeliveryMessagesEntity {
-  action: string;
   msg: string;
   type: number;
+  action: string;
 }

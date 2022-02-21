@@ -12,8 +12,7 @@ export const globalStyles = (
         background-color: #f5f5f5;
         font-size: 1.4rem;
         color: #333;
-        font-family: 'Averta', Helvetica, Arial, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu,
-          Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+        font-family: 'Averta', Helvetica, Arial, sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
       }

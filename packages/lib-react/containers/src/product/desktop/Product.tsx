@@ -18,21 +18,24 @@ import {
   GoToCartDesktop as GoToCart,
   SizeSelector,
   GoToTopDesktop,
+  Offers,
 } from '@hs/components';
 
 const ProductDesktop = ({
-  goToCart,
   productId,
   productData,
   selectedSku,
   addedToCart,
+  offerDetails,
   deliveryDetails,
   recommendedProductDetails,
   similarProductDetails,
-  addProductToCart,
-  openSizeChartPopup,
-  openPinCodePopup,
+  goToCart,
+  seeAllOffers,
   onSizeSelect,
+  addProductToCart,
+  openPinCodePopup,
+  openSizeChartPopup,
 }: IProductPage) => {
   const [isAddtoCartClicked, setIsAddtoCart] = useState<boolean>(false);
   const [canOpenDropDown, setCanOpenDropDown] = useState<boolean>(false);
@@ -81,6 +84,7 @@ const ProductDesktop = ({
       currentRefElement?.current?.scrollIntoView({ behavior: 'smooth' });
     }
   };
+
   useEffect(() => {
     setIsAddtoCart(false);
     setCanOpenDropDown(false);
@@ -89,6 +93,7 @@ const ProductDesktop = ({
       setCanOpenDropDown(false);
     };
   }, [productId]);
+
   return (
     <>
       <ProductWrapper>
@@ -99,7 +104,7 @@ const ProductDesktop = ({
               imgUrls: productData.imgurls,
               goToProductRecommendation,
             }}
-          ></ProductCarousel>
+          />
         )}
         <ProductDetailsWrapper>
           <ProductNamePrice
@@ -112,7 +117,17 @@ const ProductDesktop = ({
               regularPrice,
               discount,
             }}
-          ></ProductNamePrice>
+          />
+          {offerDetails && (
+            <Offers
+              {...{
+                ...offerDetails,
+                seeAllOffers: () => {
+                  seeAllOffers('/w/offers');
+                },
+              }}
+            />
+          )}
           <SizeAndChartLabels
             {...{
               isOneSize,
@@ -121,7 +136,7 @@ const ProductDesktop = ({
               simpleSkus,
               onSizeChartClick: openSizeChartPopup,
             }}
-          ></SizeAndChartLabels>
+          />
           {isOneSize === false ? (
             <SizeSelector
               {...{
@@ -137,7 +152,7 @@ const ProductDesktop = ({
                   setCanOpenDropDown(false);
                 },
               }}
-            ></SizeSelector>
+            />
           ) : (
             ''
           )}
@@ -182,16 +197,16 @@ const ProductDesktop = ({
 
       {showRFYP && (
         <div ref={recommendedProductsLink}>
-          <RecommendedProducts {...recommendedForYou}></RecommendedProducts>
+          <RecommendedProducts {...recommendedForYou} />
         </div>
       )}
 
       {showSimilarProducts && (
         <div ref={similarProductsLink}>
-          <RecommendedProducts {...similarProducts}></RecommendedProducts>
+          <RecommendedProducts {...similarProducts} />
         </div>
       )}
-      <GoToTopDesktop></GoToTopDesktop>
+      <GoToTopDesktop />
     </>
   );
 };
