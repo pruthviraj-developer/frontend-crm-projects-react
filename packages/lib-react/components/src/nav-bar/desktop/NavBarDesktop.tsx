@@ -89,8 +89,7 @@ export const NavBarDesktop: FC = () => {
         <NotificationBar>
           {showAccountNotification && <NotificationDot />}
           <NextNavLink
-            href="/my/account/orders"
-            queryParams={{ funnel: 'Account' }}
+            href="my/account/orders/?funnel=Account"
             name="Account"
             margin="0"
             padding="8px 12px 6px"

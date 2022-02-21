@@ -64,7 +64,7 @@ export const NavBar: FC<INavBarProps> = ({ showSearchPopup }: INavBarProps) => {
         <NavLinkWrapper>
           {showAccountNotification && <NotificationDot />}
           <NextNavLink
-            href="/my/account/orders/"
+            href="my/account/orders/?funnel=Account"
             name="Account"
             display="inline-block"
             fontSize="1.2rem"
