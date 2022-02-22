@@ -16,10 +16,18 @@ const GoToTopWrapper = styled.span`
   background-color: #fff;
   background-color: rgba(255, 255, 255, 0.85);
   box-shadow: 0 2px 4px 0 rgb(51 51 51 / 20%);
+  &:hover {
+    color: #ed54a4;
+    div {
+      color: #ed54a4;
+      path {
+        fill: #ed54a4;
+      }
+    }
+  }
 `;
 
 const BackToTopText = styled.span`
-  color: #707070;
   /* font-size: 14px; */
   font-weight: 600;
   line-height: 16px;

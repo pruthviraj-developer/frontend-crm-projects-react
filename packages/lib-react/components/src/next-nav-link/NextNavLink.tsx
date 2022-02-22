@@ -23,7 +23,7 @@ export const NextNavLink: FC<INextNavLinkProps> = ({
         pathname: href,
         query: queryParams,
       }}
-      passHref
+      passHref={true}
     >
       <LinkTag
         color={color}

@@ -89,7 +89,7 @@ export const NavBarDesktop: FC = () => {
         <NotificationBar>
           {showAccountNotification && <NotificationDot />}
           <NextNavLink
-            href="my/account/orders/?funnel=Account"
+            href="/my/account/orders"
             name="Account"
             margin="0"
             padding="8px 12px 6px"
@@ -121,7 +121,7 @@ export const NavBarDesktop: FC = () => {
             </Link>
             <FilterWrapper>
               <NextNavLink
-                href="/?funnel=Discover&amp;from_screen=product"
+                href="/"
                 name="Discover"
                 display="inline-block"
                 margin="0"
@@ -135,7 +135,7 @@ export const NavBarDesktop: FC = () => {
               {sortedTile && (
                 <FilteredBy>
                   <NextNavLink
-                    href="/?funnel=Discover&amp;from_screen=product&amp;ref=navigation&amp;department=null&amp;customTileId=null"
+                    href="/"
                     name={sortedTile}
                     display="inline-block"
                     margin="0"
@@ -145,7 +145,7 @@ export const NavBarDesktop: FC = () => {
               )}
             </FilterWrapper>
             <NextNavLink
-              href="/moments?funnel=Moments&amp;from_screen=product"
+              href="/moments"
               name="Moments"
               display="inline-block"
               margin="0 32px 0 0"

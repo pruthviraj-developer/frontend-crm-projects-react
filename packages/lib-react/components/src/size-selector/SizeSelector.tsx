@@ -64,7 +64,7 @@ export const SizeSelector: FC<ISizeSelectorProps> = ({
   }, []);
 
   const handleClickInside = () => {
-    setIsDropDownOpen(true);
+    setIsDropDownOpen(!isDropDownOpen);
   };
 
   const getSize = () => {
