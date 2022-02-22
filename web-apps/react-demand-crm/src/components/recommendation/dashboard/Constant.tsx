@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { FilterPanDataType } from '@hs/components';
+import { FilterPanDataType } from '@hs-crm/components';
 
 export const FiltersData: FilterPanDataType[] = [
   {

@@ -1,8 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { makeStyles } from '@material-ui/core/styles';
-import { HSTableV1 } from '@hs/components';
-import { FilterPan, FilterPanProps } from '@hs/components';
+import { HSTableV1, FilterPan, FilterPanProps } from '@hs-crm/components';
 import { IPostDataType, IDashboardDataResponse, IHeaderType, IPageType, ITableDataType } from './IDashBoard';
 import { Helmet } from 'react-helmet';
 import { ArchivedDashBoardWrapper, ArchivedFilterWrapper, TableWrapper } from './Style';
