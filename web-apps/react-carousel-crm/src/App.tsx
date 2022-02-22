@@ -29,7 +29,7 @@ function App() {
             <Switch>
               <Redirect exact from="/" to="/dashboard" />
               <Route path="/dashboard">
-                <DashBoard />
+                <DashBoard title="Page Carousel DashBoard" key="dashboard" />
               </Route>
               <Route path="/create-carousel">
                 <CarouselCreator />
@@ -38,7 +38,7 @@ function App() {
                 <CarouselCreator />
               </Route>
               <Route path="/archivedlist">
-                <DashBoard />
+                <DashBoard title="Page Carousel Archived Board" key="archivedlist" />
               </Route>
               <Route path="/faq">
                 <FAQScreen />

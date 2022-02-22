@@ -13,6 +13,7 @@ import { tableList, tableParams } from '@hs/services';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
 import { SelectedCircle, SvgIcon } from '@hs/icons';
+import { IDashboardProps } from './IDashBoard';
 const DashBoardWrapper = styled.div`
   margin-left: 90px;
 `;
@@ -26,7 +27,7 @@ const snackBarProps: Pick<HsSnackbarProps, 'open' | 'type' | 'message'> = {
   message: 'Test',
 };
 
-const DashBoard: FC = () => {
+const DashBoard: FC<IDashboardProps> = ({ title }) => {
   // const snackBarProps = {
   //   open: false,
   //   type: 'error' as const,
@@ -374,7 +375,7 @@ const DashBoard: FC = () => {
   };
   return (
     <DashBoardWrapper>
-      <h1>Page Carousel DashBoard</h1>
+      <h1>{title}</h1>
       {count > 0 && <HSTable {...TableData} />}
       {count === 0 && <h5> Loading or no data</h5>}
       {snackBarError.open && <HsSnackbar {...snackBarError} onSnackBarClose={onSnackBarClose} />}
