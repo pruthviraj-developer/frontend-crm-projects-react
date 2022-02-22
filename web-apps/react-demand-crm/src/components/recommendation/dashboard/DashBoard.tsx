@@ -4,8 +4,9 @@ import {
   SelectableTableProps,
   DatePickerComponent,
   DatePickerComponentPropsType,
-} from '@hs/components';
-import { FilterPan, FilterPanProps } from '@hs/components';
+  FilterPan,
+  FilterPanProps,
+} from '@hs-crm/components';
 import { IPostDataType, IDashboardDataResponse, IdialogFromSubmit } from './IDashBoard';
 import { Helmet } from 'react-helmet';
 import { DashBoardWrapper, FilterWrapper } from './Style';
