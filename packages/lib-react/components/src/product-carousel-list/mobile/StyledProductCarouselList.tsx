@@ -3,7 +3,7 @@ import { typography } from '@hs/utils';
 
 const CarouselListWrapper = styled.div`
   overflow-x: scroll;
-  padding-bottom: 15px;
+  padding: 0px 8px 15px;
   white-space: nowrap;
   transition: margin-left 1.5s ease;
   display: inline-block;
