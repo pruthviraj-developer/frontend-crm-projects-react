@@ -45,7 +45,7 @@ const processRequest = <P = any>(
       } else {
         const errorMessage = error.response?.data;
         if (errorMessage) {
-          return Promise.reject(errorMessage);
+          return Promise.reject(error.response);
         }
         return Promise.reject(error);
       }

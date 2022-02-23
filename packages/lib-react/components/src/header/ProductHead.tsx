@@ -7,11 +7,13 @@ export const ProductHead = ({
   retailPrice,
   schema,
   canonicalUrl,
+  url,
+  discovery,
 }: IHeadProps) => {
   const keyword = productName?.replace(/-|:|_/gi, ' ');
   const description = `Buy ${productName} online in India at ₹${retailPrice}. &#x2714;15 Days Easy Returns, &#x2714;Cash on Delivery, &#x2714;Latest Designs, &#x2714;Pan India shipping.`;
   const pattern = /-{2,}|(\s)|[+]/g;
-  const isNoIndexPage = canonicalUrl && pattern.test(canonicalUrl);
+  const isNoIndexPage = (url && pattern.test(url)) || discovery;
   return (
     <Head>
       <title>{`Shop Online ${productName} at ₹${retailPrice}`}</title>

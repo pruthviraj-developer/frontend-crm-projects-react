@@ -574,6 +574,8 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
               retailPrice,
               schema: getSchemaData({ productData, defaultSku, url: url }),
               canonicalUrl: getCanonicalUrl({ productData, url }),
+              url,
+              discovery: !!productData?.discovery,
             }}
           ></ProductHead>
           {isMobile && (

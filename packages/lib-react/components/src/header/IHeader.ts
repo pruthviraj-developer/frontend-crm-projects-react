@@ -3,4 +3,6 @@ export interface IHeadProps {
   retailPrice?: number;
   schema: string;
   canonicalUrl: string;
+  url: string;
+  discovery: boolean;
 }
