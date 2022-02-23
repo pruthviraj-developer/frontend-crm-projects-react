@@ -32,7 +32,7 @@ const RecommendedMatchingWrapper = styled.div`
 const RecommendedProductWrapper = styled.div`
   width: 100%;
   max-width: 100%;
-  overflow-x: scroll;
+  overflow-x: hidden;
   position: relative;
   scrollbar-width: none;
   &::-webkit-scrollbar {
@@ -84,8 +84,8 @@ const CarouselIcon = styled(SvgIcon)`
 `;
 
 const CarouselListWrapper = styled.div`
-  overflow-x: visible;
-  padding-bottom: 15px;
+  overflow-x: hidden;
+  padding: 0px 10px 15px;
   white-space: nowrap;
   transition: margin-left 1.5s ease;
   display: inline-block;
