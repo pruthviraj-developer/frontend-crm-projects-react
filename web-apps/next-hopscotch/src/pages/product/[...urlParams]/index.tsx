@@ -31,13 +31,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     );
   } catch (err: any) {
-    if (err && err.status != 500) {
-      error = {
-        statusCode: 410,
-        message: (err as IProductDetails).message,
-      };
-      context.res.statusCode = 410;
-    } else {
+    if (err) {
       error = {
         statusCode: err.status as number,
         message: err.data.message,
