@@ -75,13 +75,14 @@ const Scroller = styled.div`
     right: auto;
     transform: rotate(180deg);
   }
-`;
-
-const CarouselIcon = styled(SvgIcon)`
   &:hover {
-    fill: red;
+    path {
+      fill: #ed54a4;
+    }
   }
 `;
+
+const CarouselIcon = styled(SvgIcon)``;
 
 const CarouselListWrapper = styled.div`
   overflow-x: hidden;
