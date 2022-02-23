@@ -68,6 +68,7 @@ export interface IProductDetails {
   isWishlisted: boolean;
   pinCode: string;
   message?: string;
+  discovery?: boolean;
 }
 
 export interface ISimpleSkusEntityProps {
