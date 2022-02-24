@@ -3,10 +3,10 @@ import styled from '@emotion/styled';
 // import { SvgIcon } from '@hs/icons';
 
 const SearchWrapper = styled.div`
-  top: 86px;
-  right: 77px;
+  top: 43px;
+  left: 5px;
   width: 100%;
-  position: fixed;
+  position: absolute;
   max-width: 354px;
   z-index: 1006;
 `;
