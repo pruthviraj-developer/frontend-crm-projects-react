@@ -517,7 +517,7 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
     setGotoCartLocation('goto cart button');
   };
 
-  const seeAllOffers = (actionURI?: string) => {
+  const seeAllOffers = () => {
     if (offerDetails) {
       const cardCount: number = offerDetails?.cardCount || 0;
       if (cardCount > 1) {
@@ -557,7 +557,7 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
           urlParams['promoOfferText'] = offerDetails.promoOfferText;
         }
         router.push({
-          pathname: actionURI || offerDetails.actionURI,
+          pathname: offerDetails.actionURI,
           query: urlParams,
         });
       }

@@ -123,9 +123,7 @@ const ProductDesktop = ({
             <Offers
               {...{
                 ...offerDetails,
-                seeAllOffers: () => {
-                  seeAllOffers('/w/offers');
-                },
+                seeAllOffers,
               }}
             />
           )}
