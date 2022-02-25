@@ -23,7 +23,7 @@ export interface IProductPage {
   openSizeChartPopup: () => void;
   deleteFromWishlist?: () => void;
   onSizeSelect: (sku: ISimpleSkusEntityProps, fromLocation: string) => void;
-  seeAllOffers: (actionURI: string) => void;
+  seeAllOffers: () => void;
 }
 export interface IUpdatedDeliverDetailsProps {
   edd?: string;

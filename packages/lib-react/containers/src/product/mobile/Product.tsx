@@ -119,9 +119,7 @@ const ProductMobile = ({
           <Offers
             {...{
               ...offerDetails,
-              seeAllOffers: () => {
-                seeAllOffers('/v2/offers');
-              },
+              seeAllOffers,
             }}
           />
         )}
