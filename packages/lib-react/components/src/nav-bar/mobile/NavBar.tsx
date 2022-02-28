@@ -19,6 +19,8 @@ import {
   CartItemQtyContext,
   LoginContext,
   UserInfoContext,
+  useSessionStorage,
+  SESSION_DATA,
 } from '@hs/framework';
 import { INavBarProps } from '../INavBar';
 import {
@@ -32,10 +34,17 @@ export const NavBar: FC<INavBarProps> = ({ showSearchPopup }: INavBarProps) => {
   const cartContext = useContext(CartItemQtyContext);
   const { updateLoginPopup } = useContext(LoginContext);
   const { userInfo, showAccountNotification } = useContext(UserInfoContext);
+  const [getCurrentUrl] = useSessionStorage<string>(
+    SESSION_DATA.CURRENT_URL,
+    null
+  );
   const router = useRouter();
-
   const goBack = () => {
-    if (document.referrer === '' || document.referrer.includes('hopscotch')) {
+    if (
+      document.referrer === '' ||
+      document.referrer.includes('hopscotch') ||
+      getCurrentUrl
+    ) {
       router.back();
     } else {
       router.push({
