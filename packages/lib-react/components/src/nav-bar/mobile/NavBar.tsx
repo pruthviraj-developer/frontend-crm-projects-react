@@ -34,17 +34,10 @@ export const NavBar: FC<INavBarProps> = ({ showSearchPopup }: INavBarProps) => {
   const cartContext = useContext(CartItemQtyContext);
   const { updateLoginPopup } = useContext(LoginContext);
   const { userInfo, showAccountNotification } = useContext(UserInfoContext);
-  const [getCurrentUrl] = useSessionStorage<string>(
-    SESSION_DATA.CURRENT_URL,
-    null
-  );
+  const [currentUrl] = useSessionStorage<string>(SESSION_DATA.CURRENT_URL, '');
   const router = useRouter();
   const goBack = () => {
-    if (
-      document.referrer === '' ||
-      document.referrer.includes('hopscotch') ||
-      getCurrentUrl
-    ) {
+    if (document.referrer.includes('hopscotch') || currentUrl) {
       router.back();
     } else {
       router.push({
