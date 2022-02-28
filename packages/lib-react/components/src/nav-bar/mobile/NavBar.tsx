@@ -11,6 +11,7 @@ import {
   NavigationIconsWrapper,
   HopscotchImage,
   RightContent,
+  BackIconWrapper,
   CartIconWrapper,
 } from './StyledNavBar';
 import { IconWrapper, CartIconQuantity } from './../StyledNavBar';
@@ -24,6 +25,7 @@ import {
   CartIcon,
   HopScotchIcon,
   IconSearch,
+  IconArrowWhite,
   IconWishListDefault,
 } from '@hs/icons';
 export const NavBar: FC<INavBarProps> = ({ showSearchPopup }: INavBarProps) => {
@@ -31,6 +33,12 @@ export const NavBar: FC<INavBarProps> = ({ showSearchPopup }: INavBarProps) => {
   const { updateLoginPopup } = useContext(LoginContext);
   const { userInfo, showAccountNotification } = useContext(UserInfoContext);
   const router = useRouter();
+
+  const goBack = () => {
+    router.push({
+      pathname: '/',
+    });
+  };
   const gotoWishList = () => {
     if (!(userInfo && userInfo.isLoggedIn)) {
       updateLoginPopup(true);
@@ -50,6 +58,9 @@ export const NavBar: FC<INavBarProps> = ({ showSearchPopup }: INavBarProps) => {
   };
   return (
     <NavBarWrapper>
+      <BackIconWrapper onClick={goBack}>
+        <IconWrapper icon={IconArrowWhite} />
+      </BackIconWrapper>
       <Link
         href={{
           pathname: '/',
