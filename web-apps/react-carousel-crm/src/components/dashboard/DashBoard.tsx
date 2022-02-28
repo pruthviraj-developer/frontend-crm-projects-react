@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 /* eslint react/prop-types: 0 */
-import React, { FC, useState, useEffect, useCallback } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { HSTable, HsTableProps, HsSnackbar, HsSnackbarProps } from '@hs-crm/components';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
@@ -44,7 +44,8 @@ const DashBoard: FC<IDashboardProps> = ({ title }) => {
   const onSnackBarClose = (open: boolean) => {
     setSnackBarError({ ...snackBarError, open });
   };
-  const geTableData = useCallback(() => {
+
+  useEffect(() => {
     (async () => {
       try {
         let tableData: any = { totalRecords: 0 };
@@ -70,10 +71,6 @@ const DashBoard: FC<IDashboardProps> = ({ title }) => {
         });
       }
     })();
-  }, []);
-
-  useEffect(() => {
-    geTableData();
   }, [filterParams]);
 
   useEffect(() => {
