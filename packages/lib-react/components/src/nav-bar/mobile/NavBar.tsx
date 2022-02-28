@@ -35,9 +35,13 @@ export const NavBar: FC<INavBarProps> = ({ showSearchPopup }: INavBarProps) => {
   const router = useRouter();
 
   const goBack = () => {
-    router.push({
-      pathname: '/',
-    });
+    if (document.referrer === '' || document.referrer.includes('hopscotch')) {
+      router.back();
+    } else {
+      router.push({
+        pathname: '/',
+      });
+    }
   };
   const gotoWishList = () => {
     if (!(userInfo && userInfo.isLoggedIn)) {
