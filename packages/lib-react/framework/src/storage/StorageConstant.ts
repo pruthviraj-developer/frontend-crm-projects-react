@@ -33,5 +33,4 @@ export const SESSION_DATA = {
   OA_DATA: 'oa_data',
   SEGMENT_DATA: 'SEGMENT_DATA',
   CART_LOCATION: 'cartLocation',
-  CURRENT_URL: 'current_url',
 };

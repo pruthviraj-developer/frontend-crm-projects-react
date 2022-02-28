@@ -19,8 +19,6 @@ import {
   CartItemQtyContext,
   LoginContext,
   UserInfoContext,
-  useSessionStorage,
-  SESSION_DATA,
 } from '@hs/framework';
 import { INavBarProps } from '../INavBar';
 import {
@@ -30,19 +28,21 @@ import {
   IconArrowWhite,
   IconWishListDefault,
 } from '@hs/icons';
-export const NavBar: FC<INavBarProps> = ({ showSearchPopup }: INavBarProps) => {
+export const NavBar: FC<INavBarProps> = ({
+  showSearchPopup,
+  updatedUrl,
+}: INavBarProps) => {
   const cartContext = useContext(CartItemQtyContext);
   const { updateLoginPopup } = useContext(LoginContext);
   const { userInfo, showAccountNotification } = useContext(UserInfoContext);
-  const [currentUrl] = useSessionStorage<string>(SESSION_DATA.CURRENT_URL, '');
   const router = useRouter();
   const goBack = () => {
-    if (document.referrer.includes('hopscotch') || currentUrl) {
-      router.back();
-    } else {
+    if (!document.referrer.includes('hopscotch') && updatedUrl === '') {
       router.push({
         pathname: '/',
       });
+    } else {
+      router.back();
     }
   };
   const gotoWishList = () => {
