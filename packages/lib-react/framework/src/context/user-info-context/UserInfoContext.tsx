@@ -20,7 +20,7 @@ const getHostName = (url: string) => {
 
 export const UserInfoProvider: FC<unknown> = ({ children }) => {
   const [userInfo, setUserInfo] = useState<IUserInfoProps | undefined>();
-  const [postParams, setPostUtmParams] = useState<IUtmParam>({});
+  // const [postParams, setPostUtmParams] = useState<IUtmParam>({});
   const [showAccountNotification, setAccountNotification] =
     useState<boolean>(false);
   const [utmParams, setUtmParams] = useState<IUtmParam>();
@@ -33,7 +33,6 @@ export const UserInfoProvider: FC<unknown> = ({ children }) => {
       enabled: utmParams != undefined,
     }
   );
-
   const { data: notification, isSuccess: isNotificationSuccess } =
     useQuery<INotificationProps>(
       'notification',
@@ -84,7 +83,13 @@ export const UserInfoProvider: FC<unknown> = ({ children }) => {
     const cookieUtmParams: IUtmParam = cookiesService.getCookieData(
       COOKIE_DATA.HS_UTM_PARAMS
     );
-    setPostUtmParams(postParams);
+    productDetailsService.postUtmParams({
+      deeplink: postParams.deeplink || '',
+      utm_campaign: postParams['utm-campaign'] || '',
+      utm_medium: postParams['utm-medium'] || '',
+      utm_source: postParams['utm-source'] || '',
+    });
+    // setPostUtmParams(paramsList);
     if (cookieUtmParams && cookieUtmParams['utm-source']) {
       params = {
         utm_campaign: cookieUtmParams['utm-campaign'],
@@ -122,15 +127,6 @@ export const UserInfoProvider: FC<unknown> = ({ children }) => {
       }
     }
   }, [userInfo, notification, isNotificationSuccess]);
-
-  useEffect(() => {
-    productDetailsService.postUtmParams({
-      deeplink: postParams.deeplink || '',
-      utm_campaign: postParams['utm-campaign'] || '',
-      utm_medium: postParams['utm-medium'] || '',
-      utm_source: postParams['utm-source'] || '',
-    });
-  }, []);
 
   return (
     <UserInfoContext.Provider
