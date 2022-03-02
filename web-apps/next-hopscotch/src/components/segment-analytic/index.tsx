@@ -1,4 +1,5 @@
-import { IContextData, ISegmentProperties, timeTrackingData } from '@hs/framework';
+import { cookiesService } from '@hs/services';
+import { COOKIE_DATA, IContextData, ISegmentProperties, timeTrackingData } from '@hs/framework';
 const ERROR_OCCUERED = 'error_occured';
 export const PDP_TRACKING_EVENTS = {
   PRODUCT_VIEWED: 'product_viewed',
@@ -22,12 +23,17 @@ export interface IPropsType {
 
 export const trackEvent = ({ evtName, properties, contextData }: IPropsType) => {
   const timeData = timeTrackingData();
+  const user_type = cookiesService.getCookies(COOKIE_DATA.WEBSITE_CUSTOMER_SEGMENT);
   try {
-    (window as any).analytics.track(evtName, {...properties,...timeData}, contextData);
+    (window as any).analytics.track(
+      evtName,
+      { ...properties, ...timeData },
+      { ...contextData, ...{ ...contextData?.traits, user_type } },
+    );
   } catch (error: any) {
     const errorData = {
       event_name: evtName,
-      data: { ...properties,...timeData, contextData },
+      data: { ...properties, ...timeData, contextData },
       error_message: error.toString(),
       error_stack: error.stack,
     };
