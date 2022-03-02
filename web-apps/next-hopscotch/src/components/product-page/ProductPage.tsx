@@ -105,7 +105,7 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
     closeOnOverlayClick: true,
   });
 
-  const [PinCodePopupModel, openPinCodePopup, closePinCodePopup, isPinCodePopupOpen] = useModal('root', {
+  const [PinCodePopupModel, openPinCodeModel, closePinCodePopup, isPinCodePopupOpen] = useModal('root', {
     preventScroll: false,
     closeOnOverlayClick: true,
   });
@@ -161,6 +161,25 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
     }
     setAddToWishlistStatus(false);
     closeLoginPopup();
+  };
+
+  const openPinCodePopup = () => {
+    trackPinCodeChecked(segment.PDP_TRACKING_EVENTS.PINCODE_CHECK_CLICKED);
+    openPinCodeModel();
+  };
+
+  const trackPinCodeChecked = (evtName: string, pincode?: string) => {
+    segment.trackEvent({
+      evtName,
+      properties: {
+        ...properties,
+        ...getProductTrackingData({ productData: productData }),
+        addFrom: 'current=' + location.pathname,
+        from_pincode: deliveryDetails?.pinCode || productData?.pinCode || 'standard',
+        pincode,
+      },
+      contextData,
+    });
   };
 
   useEffect(() => {
@@ -637,6 +656,7 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
                   productId: productData.id,
                   pinCode: deliveryDetails?.pinCode || productData.pinCode,
                   closePinCodePopup: updateAndClosePinCodePopup,
+                  trackPinCodeChecked,
                 }}
               />
             )}
@@ -646,6 +666,7 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
                   productId: productData.id,
                   pinCode: deliveryDetails?.pinCode || productData.pinCode,
                   closePinCodePopup: updateAndClosePinCodePopup,
+                  trackPinCodeChecked,
                 }}
               />
             )}

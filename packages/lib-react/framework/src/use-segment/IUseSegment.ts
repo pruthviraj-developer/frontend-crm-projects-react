@@ -57,6 +57,8 @@ export interface ISegmentProperties {
   from_location?: string;
   reco_type?: string;
   atc_user?: string;
+  pincode?: string;
+  from_pincode?: string;
 }
 export interface IContextData {
   device?: Device;

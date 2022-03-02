@@ -4,10 +4,12 @@ import { LoginContext, UserInfoContext } from '@hs/framework';
 import { IAddressListProps, IPinCodeWrapperProps, IPinCodeAPIResponseProps, IPinCodeErrorProps } from '../IPinCode';
 import { PinCodeDesktop } from '@hs/components';
 import { useQuery } from 'react-query';
+import * as segment from '@/components/segment-analytic';
 export const PinCodeWrapper: FC<IPinCodeWrapperProps> = ({
   productId,
   pinCode,
   closePinCodePopup,
+  trackPinCodeChecked,
 }: IPinCodeWrapperProps) => {
   const { userInfo } = useContext(UserInfoContext);
   const {
@@ -33,6 +35,7 @@ export const PinCodeWrapper: FC<IPinCodeWrapperProps> = ({
   }, [errorLoadingAddress, closePinCodePopup, updateLoginPopup]);
 
   const checkPinCode = (pincode: string) => {
+    trackPinCodeChecked(segment.PDP_TRACKING_EVENTS.PINCODE_CHECKED, pincode);
     if (pincode === pinCode) {
       closePinCodePopup();
       return;
