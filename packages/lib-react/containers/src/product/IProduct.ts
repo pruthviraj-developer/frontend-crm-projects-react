@@ -24,6 +24,7 @@ export interface IProductPage {
   deleteFromWishlist?: () => void;
   onSizeSelect: (sku: ISimpleSkusEntityProps, fromLocation: string) => void;
   seeAllOffers: () => void;
+  trackProductRecommendation: (fromLocation: string) => void;
 }
 export interface IUpdatedDeliverDetailsProps {
   edd?: string;

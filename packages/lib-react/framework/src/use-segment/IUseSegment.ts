@@ -24,6 +24,8 @@ export interface ISegmentProperties {
   from_age?: number;
   to_age?: number;
   sizes?: number;
+  add_from?: string;
+  add_from_details?: string;
   addFrom?: string;
   addFromDetails?: string;
   v_country?: string;

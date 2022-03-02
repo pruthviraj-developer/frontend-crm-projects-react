@@ -9,6 +9,7 @@ export const PDP_TRACKING_EVENTS = {
   PRODUCT_ADDED_TO_WISHLIST: 'product_added_to_wishlist',
   PRODUCT_REMOVED_FROM_WISHLIST: 'product_removed_from_wishlist',
   PDP_SEE_SIMILAR_CLICKED: 'reco_clicked',
+  SIZE_CHART_VIEWED: 'size_chart_viewed',
   SIZE_CLICKED: 'select_size_clicked',
   ERROR_OCCUERED: 'error_occured',
 };
