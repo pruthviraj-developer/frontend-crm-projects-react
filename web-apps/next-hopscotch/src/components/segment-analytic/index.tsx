@@ -1,4 +1,4 @@
-import { IContextData, ISegmentProperties } from '@hs/framework';
+import { IContextData, ISegmentProperties, timeTrackingData } from '@hs/framework';
 const ERROR_OCCUERED = 'error_occured';
 export const PDP_TRACKING_EVENTS = {
   PRODUCT_VIEWED: 'product_viewed',
@@ -21,12 +21,13 @@ export interface IPropsType {
 }
 
 export const trackEvent = ({ evtName, properties, contextData }: IPropsType) => {
+  const timeData = timeTrackingData();
   try {
-    (window as any).analytics.track(evtName, properties, contextData);
+    (window as any).analytics.track(evtName, {...properties,...timeData}, contextData);
   } catch (error: any) {
     const errorData = {
       event_name: evtName,
-      data: { ...properties, contextData },
+      data: { ...properties,timeData, contextData },
       error_message: error.toString(),
       error_stack: error.stack,
     };

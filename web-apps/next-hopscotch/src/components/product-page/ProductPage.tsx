@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import { useModal } from 'react-hooks-use-modal';
 import { toast } from 'react-toastify';
 import { useQuery } from 'react-query';
@@ -32,6 +32,7 @@ import {
   CartItemQtyContext,
   LoginContext,
   UserInfoContext,
+  TrackingDataContext,
   LOCAL_DATA,
   SESSION_DATA,
   useSessionStorage,
@@ -84,6 +85,7 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
   const [offersUrl, setOffersUrl] = useState<string>('');
   const { showLoginPopup } = useContext(LoginContext);
   const { userInfo } = useContext(UserInfoContext);
+  const { properties: trackingProperties } = useContext(TrackingDataContext);
   const [, setGotoCartLocation] = useSessionStorage<string>(SESSION_DATA.CART_LOCATION, null);
   const [LoginPopupModal, openLoginPopup, closeLoginPopup, isLoginPopupOpen] = useModal('root', {
     preventScroll: false,
@@ -152,9 +154,12 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
     productData: productData,
   });
 
-  const [{ contextData, properties }] = useSegment();
+  const [{ contextData }] = useSegment();
   // const pdpTrackingData = useProductTracking({ selectedSku, productDetails });
-
+  const prevValue = useRef<{ trackingProperties: any; productData: IProductDetails | undefined }>({
+    trackingProperties,
+    productData: undefined,
+  }).current;
   const closeLoginModalPopup = (status?: string | boolean) => {
     if (status && addToWishlistStatus) {
       addToWishlistAfterModalClose();
@@ -172,7 +177,7 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
     segment.trackEvent({
       evtName,
       properties: {
-        ...properties,
+        ...trackingProperties,
         ...getProductTrackingData({ productData: productData }),
         add_from: 'current=' + location.pathname,
         from_pincode: deliveryDetails?.pinCode || productData?.pinCode || 'standard',
@@ -186,7 +191,7 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
     segment.trackEvent({
       evtName: segment.PDP_TRACKING_EVENTS.PDP_SEE_SIMILAR_CLICKED,
       properties: {
-        ...properties,
+        ...trackingProperties,
         ...getProductTrackingData({ productData: productData }),
         from_screen: 'Product details',
         reco_type: 'Similar products',
@@ -205,7 +210,7 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
     segment.trackEvent({
       evtName,
       properties: {
-        ...properties,
+        ...trackingProperties,
         ...getProductTrackingData({ productData: productData }),
         add_from: 'current=' + location.pathname,
         add_from_details: 'nextjs',
@@ -228,25 +233,29 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
   }, [productId]);
 
   useEffect(() => {
-    if (contextData && properties && productData && contextData.traits?.hs_device_id !== '') {
-      const id = setTimeout(
-        () =>
-          segment.trackEvent({
-            evtName: segment.PDP_TRACKING_EVENTS.PRODUCT_VIEWED,
-            properties: {
-              ...properties,
-              ...getProductTrackingData({ productData: productData }),
-              add_from: 'current=' + location.pathname,
-            },
-            contextData,
-          }),
-        0,
-      );
-      return () => {
-        clearTimeout(id);
-      };
+    if (
+      prevValue.productData !== productData &&
+      prevValue.trackingProperties !== trackingProperties &&
+      contextData?.traits &&
+      contextData.traits?.hs_device_id !== ''
+    ) {
+      prevValue.productData = productData;
+      prevValue.trackingProperties = trackingProperties;
+      segment.trackEvent({
+        evtName: segment.PDP_TRACKING_EVENTS.PRODUCT_VIEWED,
+        properties: {
+          ...trackingProperties,
+          ...getProductTrackingData({ productData: productData }),
+          add_from: 'current=' + location.pathname,
+        },
+        contextData,
+      });
     }
-  }, [contextData, productData, properties]);
+    return () => {
+      prevValue.productData = productData;
+      prevValue.trackingProperties = trackingProperties;
+    };
+  }, [contextData, productData, trackingProperties, prevValue]);
 
   useEffect(() => {
     if (productData && productId && productName && userInfo) {
@@ -356,7 +365,7 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
       sortbar: sortBar,
       subsection: subSection,
       sortbar_group: sortBarGroup,
-    } = properties || {};
+    } = trackingProperties || {};
     (async () => {
       try {
         const atc_user = cookiesService.getCookies(COOKIE_DATA.WEBSITE_CUSTOMER_SEGMENT);
@@ -391,7 +400,7 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
           segment.trackEvent({
             evtName: segment.PDP_TRACKING_EVENTS.ADDED_TO_CART,
             properties: {
-              ...properties,
+              ...trackingProperties,
               ...getProductTrackingData({ productData: productData, selectedSku: sku }),
               atc_user,
               add_from: 'current=' + location.pathname,
@@ -453,7 +462,7 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
     segment.trackEvent({
       evtName: segment.PDP_TRACKING_EVENTS.SIZE_CLICKED,
       properties: {
-        ...properties,
+        ...trackingProperties,
         ...getProductTrackingData({ productData: productData, selectedSku: sku }),
         add_from: 'current=' + location.pathname,
         from_location: fromLocation,
@@ -492,7 +501,7 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
           segment.trackEvent({
             evtName: segment.PDP_TRACKING_EVENTS.PRODUCT_REMOVED_FROM_WISHLIST,
             properties: {
-              ...properties,
+              ...trackingProperties,
               ...getProductTrackingData({ productData: productData }),
               from_screen: 'Wishlist',
               from_location: 'Product tile',
@@ -524,7 +533,7 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
       sortbar: sortBar,
       subsection: subSection,
       sortbar_group: sortBarGroup,
-    } = properties || {};
+    } = trackingProperties || {};
     const wishlistItem = {
       sku: selectedSkuId || '',
       productId: productData?.id,
@@ -555,7 +564,7 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
           segment.trackEvent({
             evtName: segment.PDP_TRACKING_EVENTS.PRODUCT_ADDED_TO_WISHLIST,
             properties: {
-              ...properties,
+              ...trackingProperties,
               ...getProductTrackingData({ productData: productData }),
               from_location: 'Wishlist icon',
               from_screen: 'Product details',

@@ -1,5 +1,4 @@
 import axios, { AxiosRequestConfig, AxiosError } from 'axios';
-import { cookiesService } from '../store';
 const httpHeaders = {
   'api-version': 'v1.8',
   'client-auth-method': 'v1',

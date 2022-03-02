@@ -98,3 +98,26 @@ export const getCanonicalUrl = ({ productData, url }: ICanonicalUrl) => {
   canonicalURL = `${productURL}/${canonicalProductName}`;
   return canonicalURL;
 };
+const getWeek = (date: Date) => {
+  const onejan = new Date(date.getFullYear(), 0, 1);
+  const week = Math.ceil(
+    ((date.getTime() - onejan.getTime()) / 86400000 + onejan.getDay() + 1) / 7
+  );
+  return week;
+};
+
+export const timeTrackingData = () => {
+  const currentTime = new Date();
+  const currentOffset = currentTime.getTimezoneOffset();
+  const ISTOffset = 330; // IST offset UTC +5:30
+  const d = new Date(
+    currentTime.getTime() + (ISTOffset + currentOffset) * 60000
+  );
+  return {
+    '[time] hour_of_day': d.getHours(),
+    '[time] day_of_week': (d.getDay() + 1) % 7,
+    '[time] day_of_month': d.getDate(),
+    '[time] month_of_year': d.getMonth() + 1,
+    '[time] week_of_year': getWeek(d),
+  };
+};

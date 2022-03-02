@@ -11,7 +11,7 @@ import Head from 'next/head';
 import { ToastContainer } from 'react-toastify';
 import { AppPropsWithLayout } from '@/types';
 
-import { LoginProvider, UserInfoProvider, CartItemQtyProvider, COOKIE_DATA } from '@hs/framework';
+import { LoginProvider, UserInfoProvider, CartItemQtyProvider,TrackingDataProvider, COOKIE_DATA } from '@hs/framework';
 import { cookiesService } from '@hs/services';
 import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 import { useMemo } from 'react';
@@ -97,11 +97,13 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         <Hydrate state={pageProps.dehydratedState}>
           <UserInfoProvider>
             <GoogleTagManager>
-              <DataManager>
-                <CartItemQtyProvider>
-                  <LoginProvider>{getLayout(<Component {...pageProps} />)}</LoginProvider>
-                </CartItemQtyProvider>
-              </DataManager>
+              <TrackingDataProvider>
+                <DataManager>
+                  <CartItemQtyProvider>
+                    <LoginProvider>{getLayout(<Component {...pageProps} />)}</LoginProvider>
+                  </CartItemQtyProvider>
+                </DataManager>
+              </TrackingDataProvider>
             </GoogleTagManager>
           </UserInfoProvider>
         </Hydrate>

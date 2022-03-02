@@ -8,6 +8,7 @@ import {
   ISegmentData,
   COOKIE_DATA,
   UserInfoContext,
+  TrackingDataContext,
 } from '@hs/framework';
 import { cookiesService, timeService } from '@hs/services';
 
@@ -23,6 +24,7 @@ const getTime = (storageTime: number) => {
 const DataManager: FC<unknown> = ({ children }) => {
   const router = useRouter();
   const { updateUtmParams } = useContext(UserInfoContext);
+  const { updateProperties } = useContext(TrackingDataContext);
   const [, setOaData] = useSessionStorage<IFunnelData>(SESSION_DATA.OA_DATA, null);
   const [, setSegmentData] = useSessionStorage<ISegmentData>(SESSION_DATA.SEGMENT_DATA, null);
   const UTM_STORAGE_TIME = 60 * 1000 * 1 * 60;
@@ -86,10 +88,23 @@ const DataManager: FC<unknown> = ({ children }) => {
         plp,
         quickshop = 'No',
       }: IFunnelData = router.query;
-      const { from_screen, from_section, extraSegdata=null }: ISegmentData = router.query;
+      const { from_screen, from_section, extraSegdata = null }: ISegmentData = router.query;
       const { utm_source }: IUtmParam = router.query;
       setOaData({ funnel, funnel_tile, funnel_section, section, sub_section, source, plp, quickshop });
       setSegmentData({ from_screen, from_section, extraSegdata });
+      updateProperties({
+        funnel,
+        funnel_tile,
+        funnel_section,
+        section,
+        subsection:sub_section,
+        source,
+        plp,
+        quickshop,
+        from_screen,
+        from_section,
+        extraSegdata,
+      });
       if (!utm_source) {
         router.replace(routeWithoutParams, undefined, { shallow: true });
       }
