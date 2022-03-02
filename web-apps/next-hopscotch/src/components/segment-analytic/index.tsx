@@ -33,7 +33,7 @@ export const trackEvent = ({ evtName, properties, contextData }: IPropsType) => 
   } catch (error: any) {
     const errorData = {
       event_name: evtName,
-      data: { ...properties, ...timeData, contextData },
+      data: { ...properties, ...timeData, contextData: { ...contextData, ...{ ...contextData?.traits, user_type } } },
       error_message: error.toString(),
       error_stack: error.stack,
     };
