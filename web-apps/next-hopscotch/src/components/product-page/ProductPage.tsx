@@ -252,8 +252,8 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
       });
     }
     return () => {
-      prevValue.productData = productData;
-      prevValue.trackingProperties = trackingProperties;
+      prevValue.productData = undefined;
+      // prevValue.trackingProperties = undefined;
     };
   }, [contextData, productData, trackingProperties, prevValue]);
 
