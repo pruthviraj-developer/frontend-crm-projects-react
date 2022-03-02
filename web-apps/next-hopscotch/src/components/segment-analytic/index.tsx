@@ -1,5 +1,5 @@
 import { cookiesService } from '@hs/services';
-import { COOKIE_DATA, IContextData, ISegmentProperties, timeTrackingData } from '@hs/framework';
+import { COOKIE_DATA, IContextData, ISegmentProperties, IUserInfoProps, timeTrackingData } from '@hs/framework';
 const ERROR_OCCUERED = 'error_occured';
 export const PDP_TRACKING_EVENTS = {
   PRODUCT_VIEWED: 'product_viewed',
@@ -39,4 +39,17 @@ export const trackEvent = ({ evtName, properties, contextData }: IPropsType) => 
     };
     (window as any).analytics.track(ERROR_OCCUERED, errorData);
   }
+};
+
+export const identify = (userinfo: IUserInfoProps, contextData: IContextData) => {
+  const user_type = cookiesService.getCookies(COOKIE_DATA.WEBSITE_CUSTOMER_SEGMENT);
+  let userId;
+  if (userinfo && userinfo?.userId) {
+    userId = userinfo.userId;
+  }
+  (window as any).analytics.identify(
+    userId,
+    { ...contextData?.traits, user_type },
+    { ...contextData, ...{ ...contextData?.traits, user_type } },
+  );
 };

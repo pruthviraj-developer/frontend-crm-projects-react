@@ -233,11 +233,18 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
   }, [productId]);
 
   useEffect(() => {
+    if (contextData?.traits && contextData.traits?.hs_device_id !== '' && userInfo) {
+      segment.identify(userInfo, contextData);
+    }
+  }, [contextData, userInfo]);
+
+  useEffect(() => {
     if (
       prevValue.productData !== productData &&
       prevValue.trackingProperties !== trackingProperties &&
       contextData?.traits &&
-      contextData.traits?.hs_device_id !== ''
+      contextData.traits?.hs_device_id !== '' &&
+      userInfo
     ) {
       prevValue.productData = productData;
       prevValue.trackingProperties = trackingProperties;
@@ -255,7 +262,7 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
       prevValue.productData = undefined;
       // prevValue.trackingProperties = undefined;
     };
-  }, [contextData, productData, trackingProperties, prevValue]);
+  }, [contextData, productData, trackingProperties, prevValue, userInfo]);
 
   useEffect(() => {
     if (productData && productId && productName && userInfo) {
