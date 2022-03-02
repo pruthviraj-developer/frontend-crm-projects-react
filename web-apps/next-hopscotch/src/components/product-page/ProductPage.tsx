@@ -175,16 +175,23 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
   }, [productId]);
 
   useEffect(() => {
-    if (contextData && properties && productData) {
-      segment.trackEvent({
-        evtName: segment.PDP_TRACKING_EVENTS.PRODUCT_VIEWED,
-        properties: {
-          ...properties,
-          ...getProductTrackingData({ productData: productData }),
-          addFrom: 'current=' + location.pathname,
-        },
-        contextData,
-      });
+    if (contextData && properties && productData && contextData.traits?.hs_device_id !== '') {
+      const id = setTimeout(
+        () =>
+          segment.trackEvent({
+            evtName: segment.PDP_TRACKING_EVENTS.PRODUCT_VIEWED,
+            properties: {
+              ...properties,
+              ...getProductTrackingData({ productData: productData }),
+              addFrom: 'current=' + location.pathname,
+            },
+            contextData,
+          }),
+        0,
+      );
+      return () => {
+        clearTimeout(id);
+      };
     }
   }, [contextData, productData, properties]);
 

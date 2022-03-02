@@ -1,5 +1,5 @@
 import Script from 'next/script';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { globalStyles } from '@/styles';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Hydrate } from 'react-query/hydration';
@@ -11,7 +11,10 @@ import Head from 'next/head';
 import { ToastContainer } from 'react-toastify';
 import { AppPropsWithLayout } from '@/types';
 
-import { LoginProvider, UserInfoProvider, CartItemQtyProvider } from '@hs/framework';
+import { LoginProvider, UserInfoProvider, CartItemQtyProvider, COOKIE_DATA } from '@hs/framework';
+import { cookiesService } from '@hs/services';
+import axios, { AxiosRequestConfig, AxiosError } from 'axios';
+import { useMemo } from 'react';
 
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const [queryClient] = useState(
@@ -25,6 +28,40 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
           },
         },
       }),
+  );
+  const UUID = useMemo(() => {
+    /*
+     * Function taken from http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
+     * to generate UUID from client side
+     */
+    let d = new Date().getTime();
+    if (
+      typeof window !== 'undefined' &&
+      window.performance &&
+      typeof window.performance.now === typeof function () {}
+    ) {
+      d += performance.now(); //use high-precision timer if available
+    }
+    const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+      const r = (d + Math.random() * 16) % 16 | 0;
+      d = Math.floor(d / 16);
+      return (c == 'x' ? r : (r & 0x3) | 0x8).toString(16);
+    });
+    return uuid;
+  }, []);
+
+  axios.interceptors.request.use(
+    function (config: AxiosRequestConfig) {
+      // Do something before request is sent
+      config.headers['device-id'] = cookiesService.getCookies(COOKIE_DATA.VISITOR_ID) || UUID;
+      config.headers['hs-persistent-ticket'] = cookiesService.getCookies(COOKIE_DATA.PERSISTENT_TICKET) || '';
+      config.headers['experiments'] = cookiesService.getCookies(COOKIE_DATA.EXPERIMENTS) || '';
+      return config;
+    },
+    function (error) {
+      // Do something with request error
+      return Promise.reject(error);
+    },
   );
   const getLayout = Component.getLayout ?? ((page) => page);
   return (

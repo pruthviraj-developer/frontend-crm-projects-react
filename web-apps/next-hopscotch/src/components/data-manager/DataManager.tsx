@@ -86,7 +86,7 @@ const DataManager: FC<unknown> = ({ children }) => {
         plp,
         quickshop = 'No',
       }: IFunnelData = router.query;
-      const { from_screen, from_section, extraSegdata }: ISegmentData = router.query;
+      const { from_screen, from_section, extraSegdata=null }: ISegmentData = router.query;
       const { utm_source }: IUtmParam = router.query;
       setOaData({ funnel, funnel_tile, funnel_section, section, sub_section, source, plp, quickshop });
       setSegmentData({ from_screen, from_section, extraSegdata });

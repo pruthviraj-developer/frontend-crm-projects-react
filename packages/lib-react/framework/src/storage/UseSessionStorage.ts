@@ -50,7 +50,7 @@ export function useSessionStorage<T>(
       setStoredValue(newValue);
 
       // We dispatch a custom event so every useLocalStorage hook are notified
-      // window.dispatchEvent(new Event('local-storage'));
+      window.dispatchEvent(new Event('session-storage'));
     } catch (error) {
       // eslint-disable-next-line no-console
       // console.warn(`Error setting session key “${key}”:`, error);
@@ -61,22 +61,22 @@ export function useSessionStorage<T>(
     setStoredValue(readValue());
   }, []);
 
-  // useEffect(() => {
-  //   const handleStorageChange = () => {
-  //     setStoredValue(readValue());
-  //   };
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setStoredValue(readValue());
+    };
 
-  //   // this only works for other documents, not the current one
-  //   window.addEventListener('storage', handleStorageChange);
+    // this only works for other documents, not the current one
+    window.addEventListener('storage', handleStorageChange);
 
-  //   // this is a custom event, triggered in writeValueToLocalStorage
-  //   window.addEventListener('session-storage', handleStorageChange);
+    // this is a custom event, triggered in writeValueToLocalStorage
+    window.addEventListener('session-storage', handleStorageChange);
 
-  //   return () => {
-  //     window.removeEventListener('storage', handleStorageChange);
-  //     window.removeEventListener('local-storage', handleStorageChange);
-  //   };
-  // }, []);
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('session-storage', handleStorageChange);
+    };
+  }, []);
 
   return [storedValue, setValue];
 }
