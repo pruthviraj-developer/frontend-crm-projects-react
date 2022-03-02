@@ -61,4 +61,7 @@ export interface ISegmentProperties {
   atc_user?: string;
   pincode?: string;
   from_pincode?: string;
+  quickshop?: string;
+  from_section?: string;
+  extraSegdata?:any;
 }
