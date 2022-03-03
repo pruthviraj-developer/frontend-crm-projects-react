@@ -63,5 +63,7 @@ export interface ISegmentProperties {
   from_pincode?: string;
   quickshop?: string;
   from_section?: string;
-  extraSegdata?:any;
+  extraSegdata?: any;
+  authentication_type?: string;
+  validation_type?: string;
 }

@@ -13,6 +13,7 @@ export const PDP_TRACKING_EVENTS = {
   SIZE_CHART_VIEWED: 'size_chart_viewed',
   SIZE_CLICKED: 'select_size_clicked',
   ERROR_OCCUERED: 'error_occured',
+  LOGIN_VIEWED: 'login_viewed',
 };
 
 export interface IPropsType {
