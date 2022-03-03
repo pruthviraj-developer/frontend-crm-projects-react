@@ -195,7 +195,7 @@ const LoginModal: FC<ILoginModalProps> = ({
           </SignInContainer>
         </LoginModalWrapper>
       )}
-      {user === SIGNUP && <JoinUs {...{ updateUserStatus }} />}
+      {user === SIGNUP && <JoinUs {...{ updateUserStatus, trackEvent }} />}
     </>
   );
 };

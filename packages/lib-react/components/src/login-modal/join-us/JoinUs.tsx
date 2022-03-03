@@ -42,6 +42,7 @@ const EMAIL = 'EMAIL';
 const MOBILE = 'MOBILE';
 export const JoinUs: FC<IJoinUsProps> = ({
   updateUserStatus,
+  trackEvent,
 }: IJoinUsProps) => {
   const [currentState, setCurrentState] = useState<string | undefined>(SIGNUP);
   const [verified, setVerifiedState] = useState<IUserProps>();
@@ -165,6 +166,12 @@ export const JoinUs: FC<IJoinUsProps> = ({
           await productDetailsService.signUp(verified);
         setLoading(false);
         if (response.action === 'success') {
+          trackEvent('otp_sent', {
+            authentication_type: 'Email',
+            email,
+            mobile: phoneNo,
+            verification_reason: 'SIGN_UP',
+          });
           setCurrentState(VERIFY);
           setSuccessResponse(
             response as unknown as ISignUpSuccessResponseProps
