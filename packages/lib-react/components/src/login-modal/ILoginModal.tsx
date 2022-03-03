@@ -2,6 +2,10 @@ import { IErrorProps } from './common';
 
 export interface ILoginModalProps {
   closeLoginPopup: (status?: string | boolean) => void;
+  trackEvent: (
+    evtName: string,
+    additionalProperties: Record<string, string | number | boolean>
+  ) => void;
 }
 
 export interface IHeaderProps {
@@ -17,6 +21,10 @@ export interface ISubHeaderProps {
 }
 
 export interface IUserProps {
+  trackEvent: (
+    evtName: string,
+    additionalProperties: Record<string, string | number | boolean>
+  ) => void;
   updateForm: (args: IVerifiedDataProps) => void;
   switchScreen: (error: IErrorProps) => void;
   loginBy?: string;

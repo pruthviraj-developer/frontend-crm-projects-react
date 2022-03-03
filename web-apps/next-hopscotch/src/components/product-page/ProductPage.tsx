@@ -325,6 +325,17 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
       });
       setAddToWishlistStatus(true);
       openLoginPopup();
+      segment.trackEvent({
+        evtName: segment.PDP_TRACKING_EVENTS.LOGIN_VIEWED,
+        properties: {
+          ...properties,
+          ...getProductTrackingData({ productData: productData }),
+          from_screen: 'Product details',
+          authentication_type: 'Mobile',
+          validation_type: 'OTP',
+        },
+        contextData,
+      });
     }
   };
 
@@ -661,6 +672,17 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
     }
   };
 
+  const trackEvent = (evtName: string, additionalProperties: Record<string, string | number | boolean>) => {
+    segment.trackEvent({
+      evtName,
+      properties: {
+        ...properties,
+        ...getProductTrackingData({ productData: productData }),
+        ...additionalProperties,
+      },
+      contextData,
+    });
+  };
   return (
     <>
       {productData && productData.action === LOCAL_DATA.SUCCESS && (
@@ -798,7 +820,7 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
 
       <LoginPopupModal>
         {/* {isLoginPopupOpen && <LoginModal {...{ closeLoginPopup: closeLoginModalPopup }}></LoginModal>} */}
-        {isLoginPopupOpen && <LoginPopup {...{ closeLoginPopup: closeLoginModalPopup }}></LoginPopup>}
+        {isLoginPopupOpen && <LoginPopup {...{ closeLoginPopup: closeLoginModalPopup, trackEvent }}></LoginPopup>}
       </LoginPopupModal>
       {/* <GoToTop></GoToTop> */}
       {/* <pre style={{ width: '90%', overflowX: 'scroll' }}>{isMobile}</pre> */}
