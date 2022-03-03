@@ -20,14 +20,23 @@ export interface IPropsType {
   properties: ISegmentProperties;
   contextData?: IContextData;
 }
-
+const getSessionInfo = (sessionInfostr: string) => {
+  const infoArr = sessionInfostr.split(',');
+  const sessionInfo = new Map<string, string>();
+  for (let i = 0; i < infoArr.length; i++) {
+    const arr = infoArr[i].split('=');
+    sessionInfo.set(arr[0], arr[1]);
+  }
+  return sessionInfo;
+};
 export const trackEvent = ({ evtName, properties, contextData }: IPropsType) => {
   const timeData = timeTrackingData();
   const user_type = cookiesService.getCookies(COOKIE_DATA.WEBSITE_CUSTOMER_SEGMENT);
+  const sessionInfo = getSessionInfo(cookiesService.getCookies(COOKIE_DATA.OTHER_SESSION_INFO) || '');
   try {
     (window as any).analytics.track(
       evtName,
-      { ...properties, ...timeData },
+      { ...properties, ...timeData, _session_start_time: sessionInfo.get(COOKIE_DATA.SESSION_START_TIME) },
       { ...contextData, ...{ traits: { ...contextData?.traits, user_type } } },
     );
   } catch (error: any) {
