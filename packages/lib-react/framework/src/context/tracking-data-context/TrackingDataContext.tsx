@@ -1,7 +1,5 @@
-import { cookiesService } from '@hs/services';
 import React, { createContext, useState, useEffect, FC } from 'react';
 import {
-  COOKIE_DATA,
   IFunnelData,
   ISegmentData,
   ISortData,
@@ -40,15 +38,6 @@ const getSortBarData = (sortData?: ISortData) => {
   }
   return data;
 };
-const getSessionInfo = (sessionInfostr: string) => {
-  const infoArr = sessionInfostr.split(',');
-  const sessionInfo = new Map<string, string>();
-  for (let i = 0; i < infoArr.length; i++) {
-    const arr = infoArr[i].split('=');
-    sessionInfo.set(arr[0], arr[1]);
-  }
-  return sessionInfo;
-};
 export const TrackingDataProvider: FC<unknown> = ({ children }) => {
   const [properties, setProperties] = useState<ISegmentProperties>();
   const [funnelData] = useSessionStorage<IFunnelData>(
@@ -78,9 +67,6 @@ export const TrackingDataProvider: FC<unknown> = ({ children }) => {
     }));
   };
   useEffect(() => {
-    const sessionInfo = getSessionInfo(
-      cookiesService.getCookies(COOKIE_DATA.OTHER_SESSION_INFO) || ''
-    );
     const sortTrackingData = getSortBarData(sortbarData);
     setProperties(() => {
       return {
@@ -100,7 +86,6 @@ export const TrackingDataProvider: FC<unknown> = ({ children }) => {
         character: 'Not applicable',
         sort_by: sortTrackingData.sort_by,
         universal: 'None',
-        _session_start_time: sessionInfo.get(COOKIE_DATA.SESSION_START_TIME),
       };
     });
   }, []);
