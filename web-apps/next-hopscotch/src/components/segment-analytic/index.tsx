@@ -28,12 +28,16 @@ export const trackEvent = ({ evtName, properties, contextData }: IPropsType) => 
     (window as any).analytics.track(
       evtName,
       { ...properties, ...timeData },
-      { ...contextData, ...{ ...contextData?.traits, user_type } },
+      { ...contextData, ...{ traits: { ...contextData?.traits, user_type } } },
     );
   } catch (error: any) {
     const errorData = {
       event_name: evtName,
-      data: { ...properties, ...timeData, contextData: { ...contextData, ...{ ...contextData?.traits, user_type } } },
+      data: {
+        ...properties,
+        ...timeData,
+        contextData: { ...contextData, ...{ traits: { ...contextData?.traits, user_type } } },
+      },
       error_message: error.toString(),
       error_stack: error.stack,
     };
@@ -50,6 +54,6 @@ export const identify = (userinfo: IUserInfoProps, contextData: IContextData) =>
   (window as any).analytics.identify(
     userId,
     { ...contextData?.traits, user_type },
-    { ...contextData, ...{ ...contextData?.traits, user_type } },
+    { ...contextData, ...{ traits: { ...contextData?.traits, user_type } } },
   );
 };
