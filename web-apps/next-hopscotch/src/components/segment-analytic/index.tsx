@@ -1,4 +1,5 @@
-import { IContextData, ISegmentProperties } from '@hs/framework';
+import { cookiesService } from '@hs/services';
+import { COOKIE_DATA, IContextData, ISegmentProperties, IUserInfoProps, timeTrackingData } from '@hs/framework';
 const ERROR_OCCUERED = 'error_occured';
 export const PDP_TRACKING_EVENTS = {
   PRODUCT_VIEWED: 'product_viewed',
@@ -9,8 +10,10 @@ export const PDP_TRACKING_EVENTS = {
   PRODUCT_ADDED_TO_WISHLIST: 'product_added_to_wishlist',
   PRODUCT_REMOVED_FROM_WISHLIST: 'product_removed_from_wishlist',
   PDP_SEE_SIMILAR_CLICKED: 'reco_clicked',
+  SIZE_CHART_VIEWED: 'size_chart_viewed',
   SIZE_CLICKED: 'select_size_clicked',
   ERROR_OCCUERED: 'error_occured',
+  LOGIN_VIEWED: 'login_viewed',
 };
 
 export interface IPropsType {
@@ -18,17 +21,49 @@ export interface IPropsType {
   properties: ISegmentProperties;
   contextData?: IContextData;
 }
-
+const getSessionInfo = (sessionInfostr: string) => {
+  const infoArr = sessionInfostr.split(',');
+  const sessionInfo = new Map<string, string>();
+  for (let i = 0; i < infoArr.length; i++) {
+    const arr = infoArr[i].split('=');
+    sessionInfo.set(arr[0], arr[1]);
+  }
+  return sessionInfo;
+};
 export const trackEvent = ({ evtName, properties, contextData }: IPropsType) => {
+  const timeData = timeTrackingData();
+  const user_type = cookiesService.getCookies(COOKIE_DATA.WEBSITE_CUSTOMER_SEGMENT);
+  const sessionInfo = getSessionInfo(cookiesService.getCookies(COOKIE_DATA.OTHER_SESSION_INFO) || '');
   try {
-    (window as any).analytics.track(evtName, properties, contextData);
+    (window as any).analytics.track(
+      evtName,
+      { ...properties, ...timeData, _session_start_time: sessionInfo.get(COOKIE_DATA.SESSION_START_TIME) },
+      { ...contextData, ...{ traits: { ...contextData?.traits, user_type } } },
+    );
   } catch (error: any) {
     const errorData = {
       event_name: evtName,
-      data: { ...properties, contextData },
+      data: {
+        ...properties,
+        ...timeData,
+        contextData: { ...contextData, ...{ traits: { ...contextData?.traits, user_type } } },
+      },
       error_message: error.toString(),
       error_stack: error.stack,
     };
     (window as any).analytics.track(ERROR_OCCUERED, errorData);
   }
+};
+
+export const identify = (userinfo: IUserInfoProps, contextData: IContextData) => {
+  const user_type = cookiesService.getCookies(COOKIE_DATA.WEBSITE_CUSTOMER_SEGMENT);
+  let userId;
+  if (userinfo && userinfo?.userId) {
+    userId = userinfo.userId;
+  }
+  (window as any).analytics.identify(
+    userId,
+    { ...contextData?.traits, user_type },
+    { ...contextData, ...{ traits: { ...contextData?.traits, user_type } } },
+  );
 };

@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import { useModal } from 'react-hooks-use-modal';
 import { toast } from 'react-toastify';
 import { useQuery } from 'react-query';
@@ -32,6 +32,7 @@ import {
   CartItemQtyContext,
   LoginContext,
   UserInfoContext,
+  TrackingDataContext,
   LOCAL_DATA,
   SESSION_DATA,
   useSessionStorage,
@@ -73,7 +74,7 @@ const ProductDesktop = dynamic(() => import('@/components/pdp/desktop'), {
   ssr: true,
 });
 const tryLater = 'Try Later';
-
+const ADD_TO_CART_BUTTON = 'Add to cart button';
 export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
   const router = useRouter();
   const [deliveryDetails, updateDeliveryDetails] = useState<IUpdatedDeliverDetailsProps>();
@@ -84,13 +85,14 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
   const [offersUrl, setOffersUrl] = useState<string>('');
   const { showLoginPopup } = useContext(LoginContext);
   const { userInfo } = useContext(UserInfoContext);
+  const { properties: trackingProperties } = useContext(TrackingDataContext);
   const [, setGotoCartLocation] = useSessionStorage<string>(SESSION_DATA.CART_LOCATION, null);
   const [LoginPopupModal, openLoginPopup, closeLoginPopup, isLoginPopupOpen] = useModal('root', {
     preventScroll: false,
     closeOnOverlayClick: true,
   });
 
-  const [SizeChartPopupModal, openSizeChartPopup, closeSizeChartPopup, isSizeChartPopupOpen] = useModal('root', {
+  const [SizeChartPopupModal, openSizeChartPopupModel, closeSizeChartPopup, isSizeChartPopupOpen] = useModal('root', {
     preventScroll: false,
     closeOnOverlayClick: true,
   });
@@ -105,7 +107,7 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
     closeOnOverlayClick: true,
   });
 
-  const [PinCodePopupModel, openPinCodePopup, closePinCodePopup, isPinCodePopupOpen] = useModal('root', {
+  const [PinCodePopupModel, openPinCodeModel, closePinCodePopup, isPinCodePopupOpen] = useModal('root', {
     preventScroll: false,
     closeOnOverlayClick: true,
   });
@@ -152,15 +154,71 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
     productData: productData,
   });
 
-  const [{ contextData, properties }] = useSegment();
+  const [{ contextData }] = useSegment();
   // const pdpTrackingData = useProductTracking({ selectedSku, productDetails });
-
+  const prevValue = useRef<{ trackingProperties: any; productData: IProductDetails | undefined }>({
+    trackingProperties,
+    productData: undefined,
+  }).current;
   const closeLoginModalPopup = (status?: string | boolean) => {
     if (status && addToWishlistStatus) {
       addToWishlistAfterModalClose();
     }
     setAddToWishlistStatus(false);
     closeLoginPopup();
+  };
+
+  const openPinCodePopup = () => {
+    trackPinCodeChecked(segment.PDP_TRACKING_EVENTS.PINCODE_CHECK_CLICKED);
+    openPinCodeModel();
+  };
+
+  const trackPinCodeChecked = (evtName: string, pincode?: string) => {
+    segment.trackEvent({
+      evtName,
+      properties: {
+        ...trackingProperties,
+        ...getProductTrackingData({ productData: productData }),
+        add_from: 'current=' + location.pathname,
+        from_pincode: deliveryDetails?.pinCode || productData?.pinCode || 'standard',
+        pincode,
+      },
+      contextData,
+    });
+  };
+
+  const trackProductRecommendation = (from_location: string) => {
+    segment.trackEvent({
+      evtName: segment.PDP_TRACKING_EVENTS.PDP_SEE_SIMILAR_CLICKED,
+      properties: {
+        ...trackingProperties,
+        ...getProductTrackingData({ productData: productData }),
+        from_screen: 'Product details',
+        reco_type: 'Similar products',
+        from_location,
+      },
+      contextData,
+    });
+  };
+
+  const openSizeChartPopup = (from_location?: string) => {
+    trackSizeChart(segment.PDP_TRACKING_EVENTS.SIZE_CHART_VIEWED, from_location);
+    openSizeChartPopupModel();
+  };
+
+  const trackSizeChart = (evtName: string, from_location?: string) => {
+    segment.trackEvent({
+      evtName,
+      properties: {
+        ...trackingProperties,
+        ...getProductTrackingData({ productData: productData }),
+        add_from: 'current=' + location.pathname,
+        add_from_details: 'nextjs',
+        from_screen: 'Product details',
+        from_location: from_location || 'PDP',
+      },
+      contextData,
+    });
   };
 
   useEffect(() => {
@@ -175,18 +233,36 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
   }, [productId]);
 
   useEffect(() => {
-    if (contextData && properties && productData) {
+    if (contextData?.traits && contextData.traits?.hs_device_id !== '' && userInfo) {
+      segment.identify(userInfo, contextData);
+    }
+  }, [contextData, userInfo]);
+
+  useEffect(() => {
+    if (
+      prevValue.productData !== productData &&
+      prevValue.trackingProperties !== trackingProperties &&
+      contextData?.traits &&
+      contextData.traits?.hs_device_id !== '' &&
+      userInfo
+    ) {
+      prevValue.productData = productData;
+      prevValue.trackingProperties = trackingProperties;
       segment.trackEvent({
         evtName: segment.PDP_TRACKING_EVENTS.PRODUCT_VIEWED,
         properties: {
-          ...properties,
+          ...trackingProperties,
           ...getProductTrackingData({ productData: productData }),
-          addFrom: 'current=' + location.pathname,
+          add_from: 'current=' + location.pathname,
         },
         contextData,
       });
     }
-  }, [contextData, productData, properties]);
+    return () => {
+      prevValue.productData = undefined;
+      // prevValue.trackingProperties = undefined;
+    };
+  }, [contextData, productData, trackingProperties, prevValue, userInfo]);
 
   useEffect(() => {
     if (productData && productId && productName && userInfo) {
@@ -249,6 +325,17 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
       });
       setAddToWishlistStatus(true);
       openLoginPopup();
+      segment.trackEvent({
+        evtName: segment.PDP_TRACKING_EVENTS.LOGIN_VIEWED,
+        properties: {
+          ...trackingProperties,
+          ...getProductTrackingData({ productData: productData }),
+          from_screen: 'Product details',
+          authentication_type: 'Mobile',
+          validation_type: 'OTP',
+        },
+        contextData,
+      });
     }
   };
 
@@ -296,7 +383,7 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
       sortbar: sortBar,
       subsection: subSection,
       sortbar_group: sortBarGroup,
-    } = properties || {};
+    } = trackingProperties || {};
     (async () => {
       try {
         const atc_user = cookiesService.getCookies(COOKIE_DATA.WEBSITE_CUSTOMER_SEGMENT);
@@ -331,10 +418,10 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
           segment.trackEvent({
             evtName: segment.PDP_TRACKING_EVENTS.ADDED_TO_CART,
             properties: {
-              ...properties,
+              ...trackingProperties,
               ...getProductTrackingData({ productData: productData, selectedSku: sku }),
               atc_user,
-              addFrom: 'current=' + location.pathname,
+              add_from: 'current=' + location.pathname,
             },
             contextData,
           });
@@ -384,6 +471,7 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
       setSelectedSku(sku);
       addToCart(sku);
     } else if (isMobile) {
+      trackSizeChart(segment.PDP_TRACKING_EVENTS.SIZE_CLICKED, ADD_TO_CART_BUTTON);
       openSizeSelector();
     }
   };
@@ -392,9 +480,9 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
     segment.trackEvent({
       evtName: segment.PDP_TRACKING_EVENTS.SIZE_CLICKED,
       properties: {
-        ...properties,
+        ...trackingProperties,
         ...getProductTrackingData({ productData: productData, selectedSku: sku }),
-        addFrom: 'current=' + location.pathname,
+        add_from: 'current=' + location.pathname,
         from_location: fromLocation,
       },
       contextData,
@@ -428,6 +516,16 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
         );
         if (wishListStatus.action === LOCAL_DATA.SUCCESS) {
           updateWishListId(0);
+          segment.trackEvent({
+            evtName: segment.PDP_TRACKING_EVENTS.PRODUCT_REMOVED_FROM_WISHLIST,
+            properties: {
+              ...trackingProperties,
+              ...getProductTrackingData({ productData: productData }),
+              from_screen: 'Wishlist',
+              from_location: 'Product tile',
+            },
+            contextData,
+          });
           if (navigator && navigator.vibrate) {
             navigator.vibrate(200);
           }
@@ -453,7 +551,7 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
       sortbar: sortBar,
       subsection: subSection,
       sortbar_group: sortBarGroup,
-    } = properties || {};
+    } = trackingProperties || {};
     const wishlistItem = {
       sku: selectedSkuId || '',
       productId: productData?.id,
@@ -471,7 +569,7 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
         subSection,
         sortBarGroup,
         atc_user,
-        addFromDetails: 'nextjs',
+        add_from_details: 'nextjs',
         hs_framework: 'nextjs',
       },
     };
@@ -481,6 +579,16 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
         const wishListStatus: IWishListProps = await productDetailsService.addToWishlist(wishlistItem);
         if (wishListStatus.action === LOCAL_DATA.SUCCESS) {
           updateWishListId(wishListStatus.wishlistItemId);
+          segment.trackEvent({
+            evtName: segment.PDP_TRACKING_EVENTS.PRODUCT_ADDED_TO_WISHLIST,
+            properties: {
+              ...trackingProperties,
+              ...getProductTrackingData({ productData: productData }),
+              from_location: 'Wishlist icon',
+              from_screen: 'Product details',
+            },
+            contextData,
+          });
           if (navigator && navigator.vibrate) {
             navigator.vibrate(200);
           }
@@ -564,6 +672,17 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
     }
   };
 
+  const trackEvent = (evtName: string, additionalProperties: Record<string, string | number | boolean>) => {
+    segment.trackEvent({
+      evtName,
+      properties: {
+        ...trackingProperties,
+        ...getProductTrackingData({ productData: productData }),
+        ...additionalProperties,
+      },
+      contextData,
+    });
+  };
   return (
     <>
       {productData && productData.action === LOCAL_DATA.SUCCESS && (
@@ -599,6 +718,7 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
                 openSizeChartPopup,
                 similarProductDetails,
                 recommendedProductDetails,
+                trackProductRecommendation,
               }}
             ></ProductMobile>
           )}
@@ -620,6 +740,7 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
                 openSizeChartPopup,
                 similarProductDetails,
                 recommendedProductDetails,
+                trackProductRecommendation,
               }}
             ></ProductDesktop>
           )}
@@ -630,6 +751,7 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
                   productId: productData.id,
                   pinCode: deliveryDetails?.pinCode || productData.pinCode,
                   closePinCodePopup: updateAndClosePinCodePopup,
+                  trackPinCodeChecked,
                 }}
               />
             )}
@@ -639,6 +761,7 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
                   productId: productData.id,
                   pinCode: deliveryDetails?.pinCode || productData.pinCode,
                   closePinCodePopup: updateAndClosePinCodePopup,
+                  trackPinCodeChecked,
                 }}
               />
             )}
@@ -697,7 +820,7 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
 
       <LoginPopupModal>
         {/* {isLoginPopupOpen && <LoginModal {...{ closeLoginPopup: closeLoginModalPopup }}></LoginModal>} */}
-        {isLoginPopupOpen && <LoginPopup {...{ closeLoginPopup: closeLoginModalPopup }}></LoginPopup>}
+        {isLoginPopupOpen && <LoginPopup {...{ closeLoginPopup: closeLoginModalPopup, trackEvent }}></LoginPopup>}
       </LoginPopupModal>
       {/* <GoToTop></GoToTop> */}
       {/* <pre style={{ width: '90%', overflowX: 'scroll' }}>{isMobile}</pre> */}

@@ -37,6 +37,7 @@ const ProductDesktop = ({
   addProductToCart,
   openPinCodePopup,
   openSizeChartPopup,
+  trackProductRecommendation,
 }: IProductPage) => {
   const [isAddtoCartClicked, setIsAddtoCart] = useState<boolean>(false);
   const [canOpenDropDown, setCanOpenDropDown] = useState<boolean>(false);
@@ -78,12 +79,11 @@ const ProductDesktop = ({
       pid: productId,
     });
   const goToProductRecommendation = (fromLocation: string) => {
-    if (fromLocation) {
-      const currentRefElement = showRFYP
-        ? recommendedProductsLink
-        : similarProductsLink;
-      currentRefElement?.current?.scrollIntoView({ behavior: 'smooth' });
-    }
+    trackProductRecommendation(fromLocation);
+    const currentRefElement = showRFYP
+      ? recommendedProductsLink
+      : similarProductsLink;
+    currentRefElement?.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
   useEffect(() => {

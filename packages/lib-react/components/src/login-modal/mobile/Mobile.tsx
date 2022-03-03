@@ -13,6 +13,7 @@ import { Button, Error, Loader, loginService } from '../common';
 const reason = { otpReason: 'SIGN_IN', type: 'SMS' };
 
 export const Mobile: FC<IUserProps> = ({
+  trackEvent,
   updateForm,
   switchScreen,
   loginBy,
@@ -63,6 +64,11 @@ export const Mobile: FC<IUserProps> = ({
           });
         setLoading(false);
         if (response.action === 'success') {
+          trackEvent('otp_sent', {
+            authentication_type: 'Mobile',
+            mobile: loginId,
+            verification_reason: reason.otpReason,
+          });
           updateForm({
             loginId,
             ...reason,

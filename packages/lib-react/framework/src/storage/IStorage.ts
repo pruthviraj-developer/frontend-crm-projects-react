@@ -12,7 +12,7 @@ export interface IFunnelData {
 export interface ISegmentData {
   from_screen?: string;
   from_section?: string;
-  extraSegdata?: string;
+  extraSegdata?: string | null;
 }
 
 export interface ISortData {

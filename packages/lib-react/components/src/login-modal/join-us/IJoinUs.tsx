@@ -6,6 +6,10 @@ export interface IJoinUsProps {
     type?: string,
     error?: ILoginErrorMessageBar
   ) => void;
+  trackEvent: (
+    evtName: string,
+    additionalProperties: Record<string, string | number | boolean>
+  ) => void;
 }
 export interface IUserProps {
   name: string;

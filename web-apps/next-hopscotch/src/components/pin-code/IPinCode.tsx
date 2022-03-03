@@ -9,6 +9,7 @@ export interface IPinCodeWrapperProps {
   pinCode?: string;
   productId: number;
   closePinCodePopup: (args?: any) => void;
+  trackPinCodeChecked: (event: string, pincode: string) => void;
 }
 
 export interface IPinCodeProps {

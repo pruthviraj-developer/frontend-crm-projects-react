@@ -41,6 +41,7 @@ const ProductMobile = ({
   openPinCodePopup,
   deleteFromWishlist,
   openSizeChartPopup,
+  trackProductRecommendation,
 }: IProductPage) => {
   const similarProductsLink = useRef<HTMLDivElement>(null);
   const recommendedProductsLink = useRef<HTMLDivElement>(null);
@@ -82,12 +83,11 @@ const ProductMobile = ({
       pid: productId,
     });
   const goToProductRecommendation = (fromLocation: string) => {
-    if (fromLocation) {
-      const currentRefElement = showRFYP
-        ? recommendedProductsLink
-        : similarProductsLink;
-      currentRefElement?.current?.scrollIntoView({ behavior: 'smooth' });
-    }
+    trackProductRecommendation(fromLocation);
+    const currentRefElement = showRFYP
+      ? recommendedProductsLink
+      : similarProductsLink;
+    currentRefElement?.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (

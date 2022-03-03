@@ -11,6 +11,7 @@ import {
 const reason = { otpReason: 'SIGN_IN' };
 
 export const Email: FC<IUserProps> = ({
+  trackEvent,
   updateForm,
   switchScreen,
   loginBy,
@@ -54,6 +55,11 @@ export const Email: FC<IUserProps> = ({
           });
         setLoading(false);
         if (response.action === 'success') {
+          trackEvent('otp_sent', {
+            authentication_type: 'Email',
+            email: loginId,
+            verification_reason: reason.otpReason,
+          });
           updateForm({
             loginId,
             ...reason,

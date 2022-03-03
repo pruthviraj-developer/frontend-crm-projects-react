@@ -12,7 +12,6 @@ import { Mobile } from './Mobile';
 import { Email } from '../email';
 import { Error, Footer, HyperLink, IErrorProps, loginService } from '../common';
 import { JoinUs } from '../join-us';
-
 import {
   SIGNIN,
   SIGNUP,
@@ -22,13 +21,21 @@ import {
   SIGN_UP_NOW_LINK,
   SIGN_IN_MOBILE_LINK,
   SIGN_IN_EMAIL_LINK,
+  REGEX_PATTERNS,
 } from '../constants';
 import { ILoginErrorMessageBar } from './../ILoginModal';
 
 const subTitle = 'Sign in';
-
+const EVENTS = {
+  JOIN_VIEWED: 'join_viewed',
+  LOGIN_VIEWED: 'login_viewed',
+  OTP_SENT: 'otp_sent',
+  OTP_VERIFIED: 'otp_verified',
+};
+const REGEXEMAIL = new RegExp(REGEX_PATTERNS.REGEX_EMAIL);
 const LoginModal: FC<ILoginModalProps> = ({
   closeLoginPopup,
+  trackEvent,
 }: ILoginModalProps) => {
   const [currentState, setCurrentState] = useState(SIGNIN);
   const [verified, setVerifiedData] = useState<IVerifiedDataProps>();
@@ -47,6 +54,18 @@ const LoginModal: FC<ILoginModalProps> = ({
     } else if (status === MOBILESIGNIN) {
       setLoginType(MOBILESIGNIN);
     } else if (currentState === VERIFY) {
+      const isEmail: boolean = REGEXEMAIL.test(verified?.loginId || '');
+      const properties = {
+        verification_reason: verified?.otpReason || 'SIGN_IN',
+      };
+      if (isEmail) {
+        properties['authentication_type'] = 'Email';
+        properties['email'] = verified?.loginId;
+      } else {
+        properties['authentication_type'] = 'Mobile';
+        properties['mobile'] = verified?.loginId;
+      }
+      trackEvent(EVENTS.OTP_VERIFIED, properties);
       closeLoginPopup(status);
     } else {
       closeLoginPopup();
@@ -75,6 +94,17 @@ const LoginModal: FC<ILoginModalProps> = ({
       setErrorState(null);
     }
     setUser(status || SIGNIN);
+    let authentication_type = 'Email';
+    let EVENT: string = EVENTS.JOIN_VIEWED;
+    if (status === SIGNIN) {
+      EVENT = EVENTS.LOGIN_VIEWED;
+      authentication_type = 'Mobile';
+    }
+    trackEvent(EVENT, {
+      from_screen: 'Product details',
+      authentication_type,
+      validation_type: 'OTP',
+    });
   };
 
   const footerConstants = {
@@ -107,6 +137,15 @@ const LoginModal: FC<ILoginModalProps> = ({
   const switchToEmailOrMobile = (loginType: string) => {
     setLoginBy('');
     setLoginType(loginType);
+    let authentication_type = 'Email';
+    if (loginType === MOBILESIGNIN) {
+      authentication_type = 'Mobile';
+    }
+    trackEvent(EVENTS.LOGIN_VIEWED, {
+      from_screen: 'Product details',
+      authentication_type,
+      validation_type: 'OTP',
+    });
   };
 
   return (
@@ -137,9 +176,13 @@ const LoginModal: FC<ILoginModalProps> = ({
             <SignInWrapper>
               {currentState === SIGNIN &&
                 (loginType === MOBILESIGNIN ? (
-                  <Mobile {...{ updateForm, loginBy, switchScreen }} />
+                  <Mobile
+                    {...{ trackEvent, updateForm, loginBy, switchScreen }}
+                  />
                 ) : (
-                  <Email {...{ updateForm, loginBy, switchScreen }} />
+                  <Email
+                    {...{ trackEvent, updateForm, loginBy, switchScreen }}
+                  />
                 ))}
               {currentState === VERIFY && <Verify {...{ ...verified, back }} />}
             </SignInWrapper>
@@ -152,7 +195,7 @@ const LoginModal: FC<ILoginModalProps> = ({
           </SignInContainer>
         </LoginModalWrapper>
       )}
-      {user === SIGNUP && <JoinUs {...{ updateUserStatus }} />}
+      {user === SIGNUP && <JoinUs {...{ updateUserStatus, trackEvent }} />}
     </>
   );
 };
