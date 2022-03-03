@@ -21,6 +21,7 @@ import {
   SIGN_UP_NOW_LINK,
   SIGN_IN_MOBILE_LINK,
   SIGN_IN_EMAIL_LINK,
+  REGEX_PATTERNS,
 } from '../constants';
 import { ILoginErrorMessageBar } from './../ILoginModal';
 
@@ -31,6 +32,7 @@ const EVENTS = {
   OTP_SENT: 'otp_sent',
   OTP_VERIFIED: 'otp_verified',
 };
+const REGEXEMAIL = new RegExp(REGEX_PATTERNS.REGEX_EMAIL);
 const LoginModal: FC<ILoginModalProps> = ({
   closeLoginPopup,
   trackEvent,
@@ -52,15 +54,16 @@ const LoginModal: FC<ILoginModalProps> = ({
     } else if (status === MOBILESIGNIN) {
       setLoginType(MOBILESIGNIN);
     } else if (currentState === VERIFY) {
+      const isEmail: boolean = REGEXEMAIL.test(verified?.loginId || '');
       const properties = {
         verification_reason: verified?.otpReason || 'SIGN_IN',
-        authentication_type: verified?.email ? 'Email' : 'Mobile',
       };
-      if (status === MOBILESIGNIN) {
-        properties['mobile'] = verified?.loginId;
-      }
-      if (status === EMAILSIGNIN) {
+      if (isEmail) {
+        properties['authentication_type'] = 'Email';
         properties['email'] = verified?.loginId;
+      } else {
+        properties['authentication_type'] = 'Mobile';
+        properties['mobile'] = verified?.loginId;
       }
       trackEvent(EVENTS.OTP_VERIFIED, properties);
       closeLoginPopup(status);
