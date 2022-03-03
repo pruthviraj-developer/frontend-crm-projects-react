@@ -202,7 +202,7 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
   };
 
   const openSizeChartPopup = (from_location?: string) => {
-    trackSizeChart(segment.PDP_TRACKING_EVENTS.SIZE_CLICKED, from_location);
+    trackSizeChart(segment.PDP_TRACKING_EVENTS.SIZE_CHART_VIEWED, from_location);
     openSizeChartPopupModel();
   };
 
@@ -328,7 +328,7 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
       segment.trackEvent({
         evtName: segment.PDP_TRACKING_EVENTS.LOGIN_VIEWED,
         properties: {
-          ...properties,
+          ...trackingProperties,
           ...getProductTrackingData({ productData: productData }),
           from_screen: 'Product details',
           authentication_type: 'Mobile',
@@ -676,7 +676,7 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
     segment.trackEvent({
       evtName,
       properties: {
-        ...properties,
+        ...trackingProperties,
         ...getProductTrackingData({ productData: productData }),
         ...additionalProperties,
       },

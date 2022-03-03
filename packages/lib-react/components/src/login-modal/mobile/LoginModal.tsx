@@ -52,6 +52,17 @@ const LoginModal: FC<ILoginModalProps> = ({
     } else if (status === MOBILESIGNIN) {
       setLoginType(MOBILESIGNIN);
     } else if (currentState === VERIFY) {
+      const properties = {
+        verification_reason: verified?.otpReason || 'SIGN_IN',
+        authentication_type: verified?.email ? 'Email' : 'Mobile',
+      };
+      if (status === MOBILESIGNIN) {
+        properties['mobile'] = verified?.loginId;
+      }
+      if (status === EMAILSIGNIN) {
+        properties['email'] = verified?.loginId;
+      }
+      trackEvent(EVENTS.OTP_VERIFIED, properties);
       closeLoginPopup(status);
     } else {
       closeLoginPopup();
