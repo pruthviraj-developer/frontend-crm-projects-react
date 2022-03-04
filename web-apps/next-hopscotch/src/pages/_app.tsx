@@ -11,8 +11,8 @@ import Head from 'next/head';
 import { ToastContainer } from 'react-toastify';
 import { AppPropsWithLayout } from '@/types';
 
-import { LoginProvider, UserInfoProvider, CartItemQtyProvider,TrackingDataProvider, COOKIE_DATA } from '@hs/framework';
-import { cookiesService } from '@hs/services';
+import { LoginProvider, UserInfoProvider, CartItemQtyProvider, TrackingDataProvider, COOKIE_DATA } from '@hs/framework';
+import { cookiesService, timeService } from '@hs/services';
 import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 import { useMemo } from 'react';
 
@@ -29,31 +29,44 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         },
       }),
   );
-  const UUID = useMemo(() => {
+  const DEVICE_ID = useMemo(() => {
     /*
      * Function taken from http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
      * to generate UUID from client side
      */
-    let d = new Date().getTime();
-    if (
-      typeof window !== 'undefined' &&
-      window.performance &&
-      typeof window.performance.now === typeof function () {}
-    ) {
-      d += performance.now(); //use high-precision timer if available
+    let VISITOR_ID = cookiesService.getCookies(COOKIE_DATA.VISITOR_ID);
+    if (VISITOR_ID) {
+      return VISITOR_ID;
+    } else {
+      let d = new Date().getTime();
+      if (
+        typeof window !== 'undefined' &&
+        window.performance &&
+        typeof window.performance.now === typeof function () {}
+      ) {
+        d += performance.now(); //use high-precision timer if available
+      }
+      const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        const r = (d + Math.random() * 16) % 16 | 0;
+        d = Math.floor(d / 16);
+        return (c == 'x' ? r : (r & 0x3) | 0x8).toString(16);
+      });
+      const expireProp = {
+        expires: new Date(timeService.getCurrentTime() + 30 * 24 * 60 * 60 * 1000),
+      };
+      cookiesService.setCookies({
+        key: COOKIE_DATA.VISITOR_ID,
+        value: uuid,
+        options: expireProp,
+      });
+      return uuid;
     }
-    const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-      const r = (d + Math.random() * 16) % 16 | 0;
-      d = Math.floor(d / 16);
-      return (c == 'x' ? r : (r & 0x3) | 0x8).toString(16);
-    });
-    return uuid;
   }, []);
 
   axios.interceptors.request.use(
     function (config: AxiosRequestConfig) {
       // Do something before request is sent
-      config.headers['device-id'] = cookiesService.getCookies(COOKIE_DATA.VISITOR_ID) || UUID;
+      config.headers['device-id'] = DEVICE_ID;
       config.headers['hs-persistent-ticket'] = cookiesService.getCookies(COOKIE_DATA.PERSISTENT_TICKET) || '';
       config.headers['experiments'] = cookiesService.getCookies(COOKIE_DATA.EXPERIMENTS) || '';
       return config;
