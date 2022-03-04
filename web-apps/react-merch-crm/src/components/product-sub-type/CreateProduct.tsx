@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
-import { Formik, Field, Form } from 'formik';
+import { Formik, Field, Form, FormikHelpers } from 'formik';
 import styled from '@emotion/styled';
 import clsx from 'clsx';
 import { toast } from 'react-toastify';
@@ -18,6 +18,7 @@ import {
   IPostValues,
   IAttributesData,
   IAttributeListDataResponse,
+  IAttributeListSelectValues,
 } from './ICreateProduct';
 import { TextField as MuiTextField, Grid, Paper, Button } from '@material-ui/core';
 import { TextField } from 'formik-material-ui';
@@ -213,9 +214,9 @@ const CreateProduct: FC<{ header: string }> = ({ header }: ICreateProductSubtype
     }
   };
 
-  const onFiltersSubmit = (values: any, actions: any) => {
+  const onFiltersSubmit = (values: IPostValues, actions: FormikHelpers<IPostValues>) => {
     const actionMessage = header.indexOf('Create') > -1 ? 'added' : 'updated';
-    let postObject: any = {};
+    let postObject: Record<string, unknown> = {};
     ['categoryId', 'subcategoryId', 'productTypeId', 'productSubtypeName'].forEach((ele: string) => {
       if (values[ele]) {
         postObject[ele] = values[ele]['key'] || values[ele];
@@ -468,7 +469,7 @@ const CreateProduct: FC<{ header: string }> = ({ header }: ICreateProductSubtype
                                 }}
                                 defaultValue={[]}
                                 getOptionLabel={(option: IProductTypeDropDownProps) => option.value || option.key || ''}
-                                renderOption={(option: IValueOfSelected, selectedValue: any) => {
+                                renderOption={(option: IValueOfSelected, selectedValue: IAttributeListSelectValues) => {
                                   const displayLabel = option.value || option.key;
                                   if (displayLabel && displayLabel.toLowerCase() === 'select all') {
                                     return (

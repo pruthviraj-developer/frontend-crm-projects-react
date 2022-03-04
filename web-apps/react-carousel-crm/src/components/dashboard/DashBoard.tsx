@@ -48,7 +48,7 @@ const DashBoard: FC<IDashboardProps> = ({ title }) => {
   useEffect(() => {
     (async () => {
       try {
-        let tableData: any = { totalRecords: 0 };
+        let tableData: tableData = { totalRecords: 0 };
         const params = { ...filterParams, pageNo: filterParams.pageNo + 1 };
         if (location.pathname === '/dashboard') {
           tableData = await carouselService.getTableData(params);
@@ -86,7 +86,7 @@ const DashBoard: FC<IDashboardProps> = ({ title }) => {
   const getUpdatedTableData = (filters: tableParams) => {
     setFilterParams(filters);
   };
-  const saveCloneData = (res: any) => {
+  const saveCloneData = (res: Record<string, unknown>) => {
     const postData = { ...res, title: `Cloned ${res.title}` };
     (async () => {
       try {
@@ -116,7 +116,7 @@ const DashBoard: FC<IDashboardProps> = ({ title }) => {
       }
     })();
   };
-  const cloneAndCreate = (rowData: CloneHeroCarouselWithId) => {
+  const cloneAndCreate = (rowData: tableList) => {
     (async () => {
       try {
         const res = await carouselService.getNonHeroCarouselData<CloneHeroCarouselWithId>(rowData.id);
@@ -137,7 +137,7 @@ const DashBoard: FC<IDashboardProps> = ({ title }) => {
     })();
   };
 
-  const updateStatus = (rowData: CloneHeroCarouselWithId) => {
+  const updateStatus = (rowData: tableList) => {
     if (rowData.type === 'clone') {
       cloneAndCreate(rowData);
     } else if (rowData.type === 'delete') {
@@ -206,14 +206,14 @@ const DashBoard: FC<IDashboardProps> = ({ title }) => {
       })();
     }
   };
-  const action = (row: any) => {
+  const action = (row: tableList) => {
     updateStatus(row);
   };
   const columns = [
     {
       id: 'id',
       label: 'Id',
-      render: (value: any, rowData: any, isTitle?: boolean) => {
+      render: (value: number, rowData: tableList, isTitle?: boolean) => {
         if (isTitle) {
           return value;
         }
@@ -240,7 +240,7 @@ const DashBoard: FC<IDashboardProps> = ({ title }) => {
       id: 'title',
       label: 'Title',
       width: 100,
-      render: (props: any, data: any, isTitle?: boolean) => {
+      render: (props: string, data: tableList, isTitle?: boolean) => {
         if (isTitle) {
           return data.title;
         }
@@ -309,7 +309,7 @@ const DashBoard: FC<IDashboardProps> = ({ title }) => {
     },
     {
       label: 'Action',
-      render: (props: any, data: Record<string, unknown>) => {
+      render: (props: HsTableProps, data: Record<string, unknown>) => {
         if (data) {
           return (
             <div style={{ display: 'flex' }}>
@@ -320,7 +320,7 @@ const DashBoard: FC<IDashboardProps> = ({ title }) => {
                 aria-label="Publish"
                 onClick={() => {
                   if (props) {
-                    props.action({ ...data, type: 'publish' });
+                    props.action && props.action({ ...data, type: 'publish' });
                   }
                 }}
               >
@@ -333,7 +333,7 @@ const DashBoard: FC<IDashboardProps> = ({ title }) => {
                 aria-label="clone"
                 onClick={() => {
                   if (props) {
-                    props.action({ ...data, type: 'clone' });
+                    props.action && props.action({ ...data, type: 'clone' });
                   }
                 }}
               >
@@ -346,7 +346,7 @@ const DashBoard: FC<IDashboardProps> = ({ title }) => {
                 aria-label="Delete"
                 onClick={() => {
                   if (props) {
-                    props.action({ ...data, type: 'delete' });
+                    props.action && props.action({ ...data, type: 'delete' });
                   }
                 }}
               >

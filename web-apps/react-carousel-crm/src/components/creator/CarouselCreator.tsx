@@ -9,7 +9,8 @@ const StyledCreateorWrapper = styled.div`
 `;
 const CarouselCreator: FC = () => {
   /* eslint-disable no-unused-vars */
-  const onSubmit = (_data: any) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const onSubmit = (_data: CreateNonCarouselProps) => {
     // alert(data);
     // console.log(data);
   };

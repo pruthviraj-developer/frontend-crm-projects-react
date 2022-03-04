@@ -1,3 +1,4 @@
+import { FormikValues } from 'formik';
 export interface ICreateProductSubtypeProps {
   header: string;
 }
@@ -38,6 +39,8 @@ export interface IOptionsType {
 export interface IValueOfSelected {
   key: string;
   value: string;
+  first?: string | number;
+  second?: string | number;
 }
 
 export interface ProductAttributeType {
@@ -79,7 +82,7 @@ export interface IAttributePostValueType {
   attributeValues: Array<string> | [];
 }
 
-export interface IPostValues {
+export interface IPostValues extends FormikValues {
   categoryId: IValueOfSelected;
   subcategoryId: IValueOfSelected;
   productTypeId: IValueOfSelected;
@@ -106,4 +109,9 @@ export interface IAttributeListDataResponse {
   action: string;
   attributes: IAttributesData[] | [];
   message?: Array<string>;
+}
+
+export interface IAttributeListSelectValues {
+  inputValue: string | number;
+  selected: boolean;
 }

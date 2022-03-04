@@ -29,7 +29,7 @@ export interface CarouselImageUpload {
 }
 
 export type tableList = {
-  id?: number;
+  id?: number | string;
   title?: string;
   sorts?: string[];
   startDate?: Date;
@@ -39,6 +39,8 @@ export type tableList = {
   updatedBy?: string;
   updatedOn?: Date;
   active?: boolean;
+  position?: number;
+  type?: string;
 };
 
 export type tableData = {
@@ -90,8 +92,8 @@ export interface NonHeroCarousel {
 }
 
 export type CloneHeroCarouselWithId = {
-  id?: string;
-  type: string;
+  id?: string | number;
+  type?: string;
 };
 
 export type tableParams = { pageSize: number; pageNo: number };

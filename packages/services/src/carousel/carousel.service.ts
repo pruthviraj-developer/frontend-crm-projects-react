@@ -20,20 +20,22 @@ const getArchivedTableData = (params: tableParams): Promise<tableData> => {
   return httpService.get({ url, params });
 };
 
-const getNonHeroCarouselData = <R>(id: string | undefined): Promise<R> => {
+const getNonHeroCarouselData = <R>(
+  id: string | number | undefined
+): Promise<R> => {
   const url = `api/carouselservice/pagecarousel/${id}`;
   return httpService.get<R>({ url });
 };
 
 const deleteNonHeroCarouselData = (
-  id: string | undefined
+  id: string | number | undefined
 ): Promise<NonHeroCarousel> => {
   const url = `api/carouselservice/pagecarousel/${id}`;
   return httpService.delete<NonHeroCarousel>({ url });
 };
 
 const updateNonHeroCarouselData = (
-  id: string | undefined
+  id: string | number | undefined
 ): Promise<NonHeroCarousel> => {
   const url = `api/carouselservice/pagecarousel/publish/${id}`;
   return httpService.put<NonHeroCarousel>({ url });
