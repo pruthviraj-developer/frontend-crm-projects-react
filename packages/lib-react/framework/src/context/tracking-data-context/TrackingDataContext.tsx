@@ -70,7 +70,7 @@ export const TrackingDataProvider: FC<unknown> = ({ children }) => {
     const sortTrackingData = getSortBarData(sortbarData);
     setProperties(() => {
       return {
-        funnel: funnelData?.funnel || 'DIRECT',
+        funnel: funnelData?.funnel || '',
         funnel_tile: funnelData?.funnel_tile || '',
         funnel_section: funnelData?.funnel_section || '',
         source: funnelData?.source || '',
