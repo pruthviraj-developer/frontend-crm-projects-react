@@ -8,15 +8,6 @@ import { COOKIE_DATA } from '../storage';
 import { cookiesService } from '@hs/services';
 import { useDeviceDetail } from '../use-device-detail';
 
-const getSessionInfo = (sessionInfostr: string) => {
-  const infoArr = sessionInfostr.split(',');
-  const sessionInfo = new Map<string, string>();
-  for (let i = 0; i < infoArr.length; i++) {
-    const arr = infoArr[i].split('=');
-    sessionInfo.set(arr[0], arr[1]);
-  }
-  return sessionInfo;
-};
 const IN_APP_BROWSER_MAP = new Map<string, string>([
   ['Instagram', 'INSTAGRAM'],
   ['FBAN', 'FACEBOOK'],
@@ -42,9 +33,6 @@ export const useSegment = () => {
 
   useEffect(() => {
     if (deviceDetail) {
-      const sessionInfo = getSessionInfo(
-        cookiesService.getCookies(COOKIE_DATA.OTHER_SESSION_INFO) || ''
-      );
       const utmData = cookiesService.getCookieData<IUtmParam>(
         COOKIE_DATA.HS_UTM_PARAMS
       );
@@ -72,9 +60,6 @@ export const useSegment = () => {
           utm_term: utmData['utm-term'] || 'none',
           utm_content: utmData['utm-content'] || 'none',
           utm_date: utmData['utm-date'] || 'none',
-          last_visit_date: sessionInfo.get(COOKIE_DATA.LAST_VISIT_DATE) || '',
-          days_since_last_visit:
-            sessionInfo.get(COOKIE_DATA.DAYS_SINCE_LAST_VISIT) || '',
           experiments: getFormattedExperiments(),
           in_app_browser: getInAppBrowser(deviceDetail?.ua),
           user_agent: deviceDetail?.ua || '',
