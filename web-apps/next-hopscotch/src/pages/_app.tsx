@@ -35,7 +35,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
      * to generate UUID from client side
      */
     let VISITOR_ID = cookiesService.getCookies(COOKIE_DATA.VISITOR_ID);
-    if (VISITOR_ID) {
+    if (VISITOR_ID && VISITOR_ID !== 'undefined') {
       return VISITOR_ID;
     } else {
       let d = new Date().getTime();
