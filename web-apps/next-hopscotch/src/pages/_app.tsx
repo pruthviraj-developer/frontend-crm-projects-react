@@ -1,5 +1,5 @@
 import Script from 'next/script';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { globalStyles } from '@/styles';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Hydrate } from 'react-query/hydration';
@@ -12,8 +12,8 @@ import { ToastContainer } from 'react-toastify';
 import { AppPropsWithLayout } from '@/types';
 
 import { LoginProvider, UserInfoProvider, CartItemQtyProvider, TrackingDataProvider, COOKIE_DATA } from '@hs/framework';
-import { cookiesService, timeService } from '@hs/services';
-import axios, { AxiosRequestConfig, AxiosError } from 'axios';
+import { cookiesService, deviceService } from '@hs/services';
+import axios, { AxiosRequestConfig } from 'axios';
 import { useMemo } from 'react';
 
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
@@ -34,33 +34,8 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
      * Function taken from http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
      * to generate UUID from client side
      */
-    let VISITOR_ID = cookiesService.getCookies(COOKIE_DATA.VISITOR_ID);
-    if (VISITOR_ID && VISITOR_ID !== 'undefined') {
-      return VISITOR_ID;
-    } else {
-      let d = new Date().getTime();
-      if (
-        typeof window !== 'undefined' &&
-        window.performance &&
-        typeof window.performance.now === typeof function () {}
-      ) {
-        d += performance.now(); //use high-precision timer if available
-      }
-      const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-        const r = (d + Math.random() * 16) % 16 | 0;
-        d = Math.floor(d / 16);
-        return (c == 'x' ? r : (r & 0x3) | 0x8).toString(16);
-      });
-      const expireProp = {
-        expires: new Date(timeService.getCurrentTime() + 30 * 24 * 60 * 60 * 1000),
-      };
-      cookiesService.setCookies({
-        key: COOKIE_DATA.VISITOR_ID,
-        value: uuid,
-        options: expireProp,
-      });
-      return uuid;
-    }
+    const VISITOR_ID = cookiesService.getCookies(COOKIE_DATA.VISITOR_ID);
+    return VISITOR_ID && VISITOR_ID != 'undefined' ? VISITOR_ID : deviceService.getDeviceId();
   }, []);
 
   axios.interceptors.request.use(

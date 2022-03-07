@@ -16,7 +16,7 @@ export const LOCAL_DATA = {
 
 export const COOKIE_DATA = {
   WEBSITE_CUSTOMER_SEGMENT: 'WEBSITE_customersegment',
-  VISITOR_ID: 'VISITOR_ID',
+  VISITOR_ID: 'VISITOR_ID', // same value hard coded in service file device.service.ts do not change
   EXPERIMENTS: 'EXPERIMENTS',
   OTHER_SESSION_INFO: 'OtherSessionInfo',
   SESSION_START_TIME: 'sessionStartTime',
