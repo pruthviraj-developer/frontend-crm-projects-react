@@ -11,3 +11,4 @@ export * from './recommendation';
 export * from './product-details';
 export * from './time';
 export * from './store';
+export * from './device-id';
