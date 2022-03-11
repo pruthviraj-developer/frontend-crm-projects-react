@@ -5,3 +5,4 @@ storybook-static
 .vscode
 .DS_Store
 *.pem
+.vercel
