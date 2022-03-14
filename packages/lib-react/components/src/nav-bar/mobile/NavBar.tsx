@@ -28,23 +28,11 @@ import {
   IconArrowWhite,
   IconWishListDefault,
 } from '@hs/icons';
-export const NavBar: FC<INavBarProps> = ({
-  showSearchPopup,
-  updatedUrl,
-}: INavBarProps) => {
+export const NavBar: FC<INavBarProps> = ({ showSearchPopup }: INavBarProps) => {
   const cartContext = useContext(CartItemQtyContext);
   const { updateLoginPopup } = useContext(LoginContext);
   const { userInfo, showAccountNotification } = useContext(UserInfoContext);
   const router = useRouter();
-  const goBack = () => {
-    if (!document.referrer.includes('hopscotch') && updatedUrl === '') {
-      router.push({
-        pathname: '/',
-      });
-    } else {
-      router.back();
-    }
-  };
   const gotoWishList = () => {
     if (!(userInfo && userInfo.isLoggedIn)) {
       updateLoginPopup(true);
@@ -64,9 +52,16 @@ export const NavBar: FC<INavBarProps> = ({
   };
   return (
     <NavBarWrapper>
-      <BackIconWrapper onClick={goBack}>
-        <IconWrapper icon={IconArrowWhite} />
-      </BackIconWrapper>
+      <Link
+        href={{
+          pathname: '/',
+          query,
+        }}
+      >
+        <BackIconWrapper>
+          <IconWrapper icon={IconArrowWhite} />
+        </BackIconWrapper>
+      </Link>
       <Link
         href={{
           pathname: '/',
