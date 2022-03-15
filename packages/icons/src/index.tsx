@@ -1,6 +1,7 @@
 export * from './SvgIcon';
 import ICCreate from './crm-icons/ic-create.svg';
 import ICBack from './crm-icons/ic-white-back.svg';
+import ICArrowWhite from './images/icon-arrow-white.svg';
 import ICDashBoard from './crm-icons/ic-dashboard.svg';
 import ICArchive from './crm-icons/ic-archive.svg';
 import ICCloudUpload from './crm-icons/ic-cloud-upload.svg';
@@ -102,3 +103,4 @@ export const IconArrowTop = ICIconArrowTop;
 export const ChevronRight = ICChevronRight;
 export const FaceBookLinkIcon = ICFaceBookLinkIcon;
 export const RotateScreenIcon = ICRotateScreenIcon;
+export const IconArrowWhite = ICArrowWhite;

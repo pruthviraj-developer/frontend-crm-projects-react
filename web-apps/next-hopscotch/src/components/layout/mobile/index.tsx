@@ -32,10 +32,11 @@ const Layout: FC<unknown> = ({ children }) => {
       window.removeEventListener('orientationchange', orientationChange);
     };
   }, []);
+
   return (
     <>
       {showOrientationChange && <OrientationScreen />}
-      <NavBar showSearchPopup={openSearchPopup}></NavBar>
+      <NavBar showSearchPopup={openSearchPopup} />
       <main>{children}</main>
       <Footer />
       <SearchPopupModal>

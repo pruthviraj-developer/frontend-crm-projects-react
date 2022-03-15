@@ -22,6 +22,12 @@ const NavBarWrapper = styled.div`
 const HopscotchImage = styled.div`
   width: 112px;
   height: 100%;
+  @media (max-width: 360px) {
+    width: 104px;
+  }
+  @media (max-width: 320px) {
+    display: none;
+  }
 `;
 
 const Link = styled('a')`
@@ -41,10 +47,6 @@ const RightContent = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
-  ${mediaQueriesMaxWidth('xs')`
-      display: block;
-      margin: auto;
-  `};
 `;
 
 const CartIconWrapper = styled.div`
@@ -54,6 +56,9 @@ const CartIconWrapper = styled.div`
   ${mediaQueriesMaxWidth('sm')`
     margin: 0 2px 0 -4px;
   `};
+  @media (max-width: 390px) {
+    margin-right: 3px;
+  }
 `;
 
 const NavigationIconsWrapper = styled.div`
@@ -81,6 +86,10 @@ const NavIconWrapperSearch = styled.div`
     padding: 0 2px 0 4px;
     margin-right: 0;
   `};
+  @media (max-width: 390px) {
+    padding: 4px;
+    margin-right: 3px;
+  }
 `;
 
 const NavIconWrapperWishList = styled.div<{ marginRight?: boolean }>`
@@ -89,6 +98,9 @@ const NavIconWrapperWishList = styled.div<{ marginRight?: boolean }>`
   ${mediaQueriesMaxWidth('sm')`
     padding-right: 0;
   `};
+  @media (max-width: 390px) {
+    padding: 4px;
+  }
 `;
 
 const HelpLink = styled.div`
@@ -106,6 +118,17 @@ const NotificationDot = styled.div`
   background-color: ${Colors.WHITE};
 `;
 
+const BackIconWrapper = styled.div`
+  padding: 5px;
+  margin: 5px 0 0 5px;
+  @media (max-width: 320px) {
+    margin: 10px 0 0 5px;
+  }
+  @media (min-width: 321px) and (max-width: 360px) {
+    padding: 0px;
+  }
+`;
+
 export {
   NavBarWrapper,
   NavLinkWrapper,
@@ -119,4 +142,5 @@ export {
   RightContent,
   Link,
   HelpLink,
+  BackIconWrapper,
 };

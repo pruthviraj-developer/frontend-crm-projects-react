@@ -11,6 +11,7 @@ import {
   NavigationIconsWrapper,
   HopscotchImage,
   RightContent,
+  BackIconWrapper,
   CartIconWrapper,
 } from './StyledNavBar';
 import { IconWrapper, CartIconQuantity } from './../StyledNavBar';
@@ -24,6 +25,7 @@ import {
   CartIcon,
   HopScotchIcon,
   IconSearch,
+  IconArrowWhite,
   IconWishListDefault,
 } from '@hs/icons';
 export const NavBar: FC<INavBarProps> = ({ showSearchPopup }: INavBarProps) => {
@@ -50,6 +52,16 @@ export const NavBar: FC<INavBarProps> = ({ showSearchPopup }: INavBarProps) => {
   };
   return (
     <NavBarWrapper>
+      <Link
+        href={{
+          pathname: '/',
+          query,
+        }}
+      >
+        <BackIconWrapper>
+          <IconWrapper icon={IconArrowWhite} />
+        </BackIconWrapper>
+      </Link>
       <Link
         href={{
           pathname: '/',
