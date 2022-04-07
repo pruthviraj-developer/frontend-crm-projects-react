@@ -23,7 +23,7 @@ module.exports = function (app) {
   app.use(
     '/intranet/login/',
     createProxyMiddleware({
-      target: 'http://crm.qa.hopscotch.in/',
+      target: 'https://qa-vpn.hopscotch.in/',
       secure: false,
       changeOrigin: true,
     }),

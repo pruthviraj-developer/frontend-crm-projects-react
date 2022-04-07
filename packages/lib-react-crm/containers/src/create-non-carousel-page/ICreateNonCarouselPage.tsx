@@ -12,10 +12,17 @@ export interface Tile {
   actionId?: string;
   position: number;
 }
+export interface TileImage {
+  url: string;
+  width?: string;
+  height?: string;
+}
 
 export interface CreateNonCarouselPageState {
   title: string;
+  titleImage: TileImage;
   carouselType: string;
+  navigation: 'true' | 'false';
   sorts: [];
   position: '';
   platform: [];

@@ -36,6 +36,15 @@ export const StyledCarouselCard = styled(Card)`
   min-width: 230px;
   padding: 16;
 `;
+
+export const StyledCarouselTitle = styled(Card)`
+  margin-bottom: 17px;
+`;
+
+export const StyledCarouselType = styled.div`
+  float: left;
+`;
+
 export const StyledFooter = styled.div`
   padding: 15px;
   background-color: ${Colors.GREY_SHADE[500]};

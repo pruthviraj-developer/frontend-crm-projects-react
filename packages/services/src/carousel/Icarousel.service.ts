@@ -41,6 +41,7 @@ export type tableList = {
   active?: boolean;
   position?: number;
   type?: string;
+  navigation?: 'true' | 'false';
 };
 
 export type tableData = {

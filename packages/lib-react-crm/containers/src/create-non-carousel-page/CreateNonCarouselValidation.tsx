@@ -1,8 +1,10 @@
 import * as Yup from 'yup';
 
 export const CarouselFormValidation = Yup.object().shape({
-  title: Yup.string().max(20, "Title can't be more than 20 characters"),
-  position: Yup.number().required('Position is required'),
+  title: Yup.string()
+    .max(20, "Title can't be more than 20 characters")
+    .required('Title is required'),
+  position: Yup.number().positive('Position must be greater than zero'),
   carouselType: Yup.number().required('Carousel type is required'),
   platform: Yup.array().of(Yup.string()).required('Platform is required'),
   sorts: Yup.array().required('Sort is required'),

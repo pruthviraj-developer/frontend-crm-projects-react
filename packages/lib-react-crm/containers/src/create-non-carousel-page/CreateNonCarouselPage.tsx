@@ -48,6 +48,8 @@ import {
   StyledCarouselCard,
   StyledFooter,
   StyledCreateNonHeroCarouselPage,
+  StyledCarouselTitle,
+  StyledCarouselType,
 } from './StyledCreateNonCarouselPage';
 import { useGetCarouselList } from './CreateNonCarouselHooks';
 import { CarouselFormValidation } from './CreateNonCarouselValidation';
@@ -60,6 +62,11 @@ import {
 
 const initialValues: CreateNonCarouselPageState = {
   title: '',
+  titleImage: {
+    url: '',
+    height: '',
+    width: '',
+  },
   carouselType: '',
   sorts: [],
   position: '',
@@ -69,6 +76,7 @@ const initialValues: CreateNonCarouselPageState = {
   tiles: [],
   userTypes: [],
   customerIds: '',
+  navigation: 'false',
 };
 const snackBarProps: Pick<HsSnackbarProps, 'open' | 'type' | 'message'> = {
   open: false,
@@ -114,6 +122,7 @@ export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
             userTypeResponse,
             userTypeList
           );
+          response['navigation'] = response['navigation'] ? 'true' : 'false';
           setData({ ...response, title });
         } else {
           setData(initialValues);
@@ -213,9 +222,17 @@ export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
               });
               return;
             }
+            if (
+              values.navigation == 'true' &&
+              values['titleImage'] &&
+              values['titleImage'].url
+            ) {
+              values['titleImage'] = { url: '', height: '', width: '' };
+            }
             const postData = {
               ...values,
               userTypes: values.userTypes.map((data: ListOption) => data.id),
+              navigation: values.navigation == 'true' ? true : false,
               startDate: startDate,
               endDate: endDate,
               tiles: [...values.tiles].map((tile, index) => ({
@@ -282,6 +299,7 @@ export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
                                 type="text"
                                 label="Position"
                                 variant={'outlined'}
+                                disabled={values.navigation == 'true'}
                               />
                             </Grid>
                             <Grid item xs>
@@ -395,6 +413,28 @@ export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
                               />
                             </Grid>
                             <Grid item xs>
+                              <StyledCarouselType>
+                                <label>
+                                  <Field
+                                    type="radio"
+                                    name="navigation"
+                                    value="false"
+                                  />
+                                  Page Carousel
+                                </label>
+                              </StyledCarouselType>
+                              <StyledCarouselType>
+                                <label>
+                                  <Field
+                                    type="radio"
+                                    name="navigation"
+                                    value="true"
+                                  />
+                                  Navigation Carousel
+                                </label>
+                              </StyledCarouselType>
+                            </Grid>
+                            <Grid item xs>
                               <Field
                                 component={DateTimePicker}
                                 fullWidth
@@ -427,6 +467,65 @@ export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
                     </StyledCreateCarouselPage>
                   </Grid>
                   <Grid item xs={9}>
+                    {values.navigation == 'false' && (
+                      <StyledCarouselTitle>
+                        <Grid item xs={8}>
+                          <StyledCarouselCard
+                            key={'card0'}
+                            variant={'elevation'}
+                          >
+                            <CardHeader
+                              action={
+                                <IconButton
+                                  onClick={() => {
+                                    setFieldValue('titleImage.url', '');
+                                    setFieldValue('titleImage.width', '');
+                                    setFieldValue('titleImage.height', '');
+                                  }}
+                                >
+                                  <DeleteForeverIcon fontSize={'large'} />
+                                </IconButton>
+                              }
+                              title={'Page Carousel Title'}
+                            />
+                            <CardContent>
+                              <CardActionArea>
+                                <Field
+                                  id={`image.title`}
+                                  component={ImageUpload}
+                                  previewHeight="100"
+                                  previewWidth="500"
+                                  name={`titleImage.url`}
+                                  imageUrl={values.titleImage?.url}
+                                  onChange={async (value: ImageListType) => {
+                                    try {
+                                      const resp =
+                                        await carouselService.imageUpload({
+                                          file: value[0].file,
+                                        });
+                                      setFieldValue(
+                                        `titleImage.url`,
+                                        `https://${resp.imageURLPrefix}/fstatic${resp.imageResponse.imageUrl}?version=${resp.imageResponse.version}`
+                                      );
+                                      setFieldValue(
+                                        'titleImage.height',
+                                        resp.imageResponse.imageAreas[0].height
+                                      );
+                                      setFieldValue(
+                                        'titleImage.width',
+                                        resp.imageResponse.imageAreas[0].width
+                                      );
+                                    } catch (err) {
+                                      setFieldValue('titleImage', undefined);
+                                    }
+                                  }}
+                                ></Field>
+                              </CardActionArea>
+                            </CardContent>
+                          </StyledCarouselCard>
+                        </Grid>
+                      </StyledCarouselTitle>
+                    )}
                     <FieldArray name="tiles">
                       {({ remove, push, move }) => (
                         <StyledCarouselCardPage>

@@ -247,7 +247,9 @@ const DashBoard: FC<IDashboardProps> = ({ title }) => {
         if (props || data) {
           return (
             <>
-              <NavLink to={{ pathname: `/edit-carousel/${data.id}` }}>{data.title}</NavLink>
+              <NavLink to={{ pathname: `/edit-carousel/${data.id}` }}>
+                {data.title} {data.navigation && '(Navigation)'}
+              </NavLink>
             </>
           );
         }
