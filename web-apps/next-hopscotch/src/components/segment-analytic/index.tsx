@@ -31,41 +31,48 @@ const getSessionInfo = (sessionInfostr: string) => {
   return sessionInfo;
 };
 export const trackEvent = ({ evtName, properties, contextData }: IPropsType) => {
-  const timeData = timeTrackingData();
-  const user_type = cookiesService.getCookies(COOKIE_DATA.WEBSITE_CUSTOMER_SEGMENT);
-  const sessionInfo = getSessionInfo(cookiesService.getCookies(COOKIE_DATA.OTHER_SESSION_INFO) || '');
-  const last_visit_date = sessionInfo.get(COOKIE_DATA.LAST_VISIT_DATE) || '';
-  const days_since_last_visit = sessionInfo.get(COOKIE_DATA.DAYS_SINCE_LAST_VISIT) || '';
-  try {
-    (window as any).analytics.track(
-      evtName,
-      { ...properties, ...timeData, _session_start_time: sessionInfo.get(COOKIE_DATA.SESSION_START_TIME) },
-      { ...contextData, ...{ traits: { ...contextData?.traits, user_type, last_visit_date, days_since_last_visit } } },
-    );
-  } catch (error: any) {
-    const errorData = {
-      event_name: evtName,
-      data: {
-        ...properties,
-        ...timeData,
-        contextData: { ...contextData, ...{ traits: { ...contextData?.traits, user_type } } },
-      },
-      error_message: error.toString(),
-      error_stack: error.stack,
-    };
-    (window as any).analytics.track(ERROR_OCCUERED, errorData);
+  if (!(window as any)?.isBot()) {
+    const timeData = timeTrackingData();
+    const user_type = cookiesService.getCookies(COOKIE_DATA.WEBSITE_CUSTOMER_SEGMENT);
+    const sessionInfo = getSessionInfo(cookiesService.getCookies(COOKIE_DATA.OTHER_SESSION_INFO) || '');
+    const last_visit_date = sessionInfo.get(COOKIE_DATA.LAST_VISIT_DATE) || '';
+    const days_since_last_visit = sessionInfo.get(COOKIE_DATA.DAYS_SINCE_LAST_VISIT) || '';
+    try {
+      (window as any).analytics.track(
+        evtName,
+        { ...properties, ...timeData, _session_start_time: sessionInfo.get(COOKIE_DATA.SESSION_START_TIME) },
+        {
+          ...contextData,
+          ...{ traits: { ...contextData?.traits, user_type, last_visit_date, days_since_last_visit } },
+        },
+      );
+    } catch (error: any) {
+      const errorData = {
+        event_name: evtName,
+        data: {
+          ...properties,
+          ...timeData,
+          contextData: { ...contextData, ...{ traits: { ...contextData?.traits, user_type } } },
+        },
+        error_message: error.toString(),
+        error_stack: error.stack,
+      };
+      (window as any).analytics.track(ERROR_OCCUERED, errorData);
+    }
   }
 };
 
 export const identify = (userinfo: IUserInfoProps, contextData: IContextData) => {
-  const user_type = cookiesService.getCookies(COOKIE_DATA.WEBSITE_CUSTOMER_SEGMENT);
-  let userId;
-  if (userinfo && userinfo?.userId) {
-    userId = userinfo.userId;
+  if (!(window as any)?.isBot()) {
+    const user_type = cookiesService.getCookies(COOKIE_DATA.WEBSITE_CUSTOMER_SEGMENT);
+    let userId;
+    if (userinfo && userinfo?.userId) {
+      userId = userinfo.userId;
+    }
+    (window as any).analytics.identify(
+      userId,
+      { ...contextData?.traits, user_type },
+      { ...contextData, ...{ traits: { ...contextData?.traits, user_type } } },
+    );
   }
-  (window as any).analytics.identify(
-    userId,
-    { ...contextData?.traits, user_type },
-    { ...contextData, ...{ traits: { ...contextData?.traits, user_type } } },
-  );
 };
