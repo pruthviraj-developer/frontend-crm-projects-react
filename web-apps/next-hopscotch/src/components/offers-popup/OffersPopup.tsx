@@ -1,5 +1,7 @@
-import { FC } from 'react';
+import { FC, useContext, useEffect } from 'react';
 import { IconClose } from '@hs/icons';
+import * as segment from '@/components/segment-analytic';
+import { TrackingDataContext, useSegment } from '@hs/framework';
 import {
   // Details,
   CloseIcon,
@@ -22,15 +24,46 @@ import {
 
 import { IOfferPopupProps } from './IOffersPopupProps';
 
-export const OffersPopup: FC<IOfferPopupProps> = ({ offersUrl, closeOffersPopup }: IOfferPopupProps) => {
+export const OffersPopup: FC<IOfferPopupProps> = ({ offersUrl, product_id, closeOffersPopup }: IOfferPopupProps) => {
   let styles = {
     borderRadius: '8px',
     height: 'calc(100vh - 56px)',
     border: 'none',
   };
-  const onLoad = () => {
-    console.log('Iframe loaded');
-  };
+
+  let offersNotTracked: boolean = true;
+  const [{ contextData }] = useSegment();
+  const { properties: trackingProperties } = useContext(TrackingDataContext);
+  useEffect(() => {
+    const addDataFunc = (e: MessageEvent<any> | any) => {
+      if (e.data) {
+        try {
+          const data: Record<string, unknown> = JSON.parse(e.data);
+          const properties = Object.assign({}, data['properties']);
+          if (offersNotTracked) {
+            offersNotTracked = false;
+            segment.trackEvent({
+              evtName: data.event as string,
+              properties: {
+                add_from: 'current=' + location.pathname,
+                product_id,
+                ...properties,
+                ...trackingProperties,
+                universal: undefined,
+              },
+              contextData,
+            });
+          }
+        } catch (ex) {
+          console.error('error parsing event data');
+          return;
+        }
+      }
+    };
+    window.addEventListener('message', addDataFunc);
+    return () => window.removeEventListener('keyup', addDataFunc);
+  }, []);
+
   return (
     <OffersScreenWrapper>
       <OffersTitleWrapper>
@@ -57,7 +90,7 @@ export const OffersPopup: FC<IOfferPopupProps> = ({ offersUrl, closeOffersPopup 
       </OfferDetailsWrapper> */}
 
       <>
-        <iframe src={offersUrl} width="100%" style={styles} onLoad={onLoad}>
+        <iframe src={offersUrl} width="100%" style={styles}>
           Sorry your browser does not support inline frames.
         </iframe>
       </>
