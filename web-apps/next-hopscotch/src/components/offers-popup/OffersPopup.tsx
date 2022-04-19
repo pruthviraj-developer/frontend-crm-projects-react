@@ -1,5 +1,6 @@
 import { FC, useContext, useEffect } from 'react';
 import { IconClose } from '@hs/icons';
+import { useRouter } from 'next/router';
 import * as segment from '@/components/segment-analytic';
 import { TrackingDataContext, useSegment } from '@hs/framework';
 import {
@@ -32,6 +33,7 @@ export const OffersPopup: FC<IOfferPopupProps> = ({ offersUrl, product_id, close
   };
 
   let offersNotTracked: boolean = true;
+  const router = useRouter();
   const [{ contextData }] = useSegment();
   const { properties: trackingProperties } = useContext(TrackingDataContext);
   useEffect(() => {
@@ -40,19 +42,32 @@ export const OffersPopup: FC<IOfferPopupProps> = ({ offersUrl, product_id, close
         try {
           const data: Record<string, unknown> = JSON.parse(e.data);
           const properties = Object.assign({}, data['properties']);
-          if (offersNotTracked) {
-            offersNotTracked = false;
-            segment.trackEvent({
-              evtName: data.event as string,
-              properties: {
-                add_from: 'current=' + location.pathname,
-                product_id,
-                ...properties,
-                ...trackingProperties,
-                universal: undefined,
-              },
-              contextData,
-            });
+
+          switch (data.eventName) {
+            case 'fireAnalyticsEvent':
+              if (offersNotTracked) {
+                offersNotTracked = false;
+                segment.trackEvent({
+                  evtName: data.event as string,
+                  properties: {
+                    add_from: 'current=' + location.pathname,
+                    product_id,
+                    ...properties,
+                    ...trackingProperties,
+                    universal: undefined,
+                  },
+                  contextData,
+                });
+              }
+              break;
+            case 'navigate':
+              // self._window.location.href = self._window.location.origin + data.applink;
+              router.push({
+                pathname: data.applink as string,
+              });
+              break;
+            default:
+              break;
           }
         } catch (ex) {
           console.error('error parsing event data');
