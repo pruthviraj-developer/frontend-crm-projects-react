@@ -76,7 +76,7 @@ export const OffersPopup: FC<IOfferPopupProps> = ({ offersUrl, product_id, close
       }
     };
     window.addEventListener('message', addDataFunc);
-    return () => window.removeEventListener('keyup', addDataFunc);
+    return () => window.removeEventListener('message', addDataFunc);
   }, []);
 
   return (
