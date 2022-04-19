@@ -1,6 +1,5 @@
 import { FC, useContext, useEffect } from 'react';
 import { IconClose } from '@hs/icons';
-import { useRouter } from 'next/router';
 import * as segment from '@/components/segment-analytic';
 import { TrackingDataContext, useSegment } from '@hs/framework';
 import {
@@ -33,7 +32,6 @@ export const OffersPopup: FC<IOfferPopupProps> = ({ offersUrl, product_id, close
   };
 
   let offersNotTracked: boolean = true;
-  const router = useRouter();
   const [{ contextData }] = useSegment();
   const { properties: trackingProperties } = useContext(TrackingDataContext);
   useEffect(() => {
@@ -61,10 +59,7 @@ export const OffersPopup: FC<IOfferPopupProps> = ({ offersUrl, product_id, close
               }
               break;
             case 'navigate':
-              // self._window.location.href = self._window.location.origin + data.applink;
-              router.push({
-                pathname: data.applink as string,
-              });
+              window.location.href = window.location.origin + data.applink;
               break;
             default:
               break;
