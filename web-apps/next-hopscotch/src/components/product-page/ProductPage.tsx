@@ -797,6 +797,7 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
               closeOffersPopup,
               offersUrl,
               product_id: productData.id,
+              contextData,
             }}
           />
         ) : (

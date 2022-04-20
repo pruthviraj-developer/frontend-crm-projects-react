@@ -1,7 +1,7 @@
 import { FC, useContext, useEffect } from 'react';
 import { IconClose } from '@hs/icons';
 import * as segment from '@/components/segment-analytic';
-import { TrackingDataContext, useSegment } from '@hs/framework';
+import { TrackingDataContext } from '@hs/framework';
 import {
   // Details,
   CloseIcon,
@@ -24,7 +24,12 @@ import {
 
 import { IOfferPopupProps } from './IOffersPopupProps';
 
-export const OffersPopup: FC<IOfferPopupProps> = ({ offersUrl, product_id, closeOffersPopup }: IOfferPopupProps) => {
+export const OffersPopup: FC<IOfferPopupProps> = ({
+  offersUrl,
+  product_id,
+  contextData,
+  closeOffersPopup,
+}: IOfferPopupProps) => {
   let styles = {
     borderRadius: '8px',
     height: 'calc(100vh - 56px)',
@@ -32,7 +37,6 @@ export const OffersPopup: FC<IOfferPopupProps> = ({ offersUrl, product_id, close
   };
 
   let offersNotTracked: boolean = true;
-  const [{ contextData }] = useSegment();
   const { properties: trackingProperties } = useContext(TrackingDataContext);
   useEffect(() => {
     const addDataFunc = (e: MessageEvent<any> | any) => {
@@ -40,7 +44,6 @@ export const OffersPopup: FC<IOfferPopupProps> = ({ offersUrl, product_id, close
         try {
           const data: Record<string, unknown> = JSON.parse(e.data);
           const properties = Object.assign({}, data['properties']);
-
           switch (data.eventName) {
             case 'fireAnalyticsEvent':
               if (offersNotTracked) {
