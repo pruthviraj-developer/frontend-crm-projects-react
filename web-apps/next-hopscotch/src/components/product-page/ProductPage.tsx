@@ -791,11 +791,13 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
       </SizeChartPopupModal>
 
       <OffersPopupModal>
-        {isOffersPopupOpen ? (
+        {isOffersPopupOpen && productData ? (
           <OffersPopUpComponent
             {...{
               closeOffersPopup,
               offersUrl,
+              product_id: productData.id,
+              contextData,
             }}
           />
         ) : (
