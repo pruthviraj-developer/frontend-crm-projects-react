@@ -98,7 +98,6 @@ export const identify = (userinfo: IUserInfoProps, contextData: IContextData) =>
           data['session_' + key.replace('-', '_')] = utmsCookieObject[key];
         }
         data.utm_content = utmsCookieObject['utm-content'] || 'none';
-        debugger;
         trackEvent({
           evtName: SESSION_STARTED,
           properties: {
