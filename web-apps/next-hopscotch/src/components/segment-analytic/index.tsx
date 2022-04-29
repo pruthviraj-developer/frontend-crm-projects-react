@@ -89,13 +89,22 @@ export const identify = (userinfo: IUserInfoProps, contextData: IContextData) =>
         localStorage.setItem(LAST_VISIT_DATE, lastVisitdate);
         localStorage.setItem(SESSION_START_TIME, sessionStartTime);
         localStorage.setItem(DAYS_SINCE_LAST_VISIT, daysSinceLastVisit);
-        const data: any = {};
+        const data: Record<string, string> = {
+          session_utm_campaign: 'none',
+          session_utm_medium: 'none',
+          session_utm_source: 'none',
+        };
         for (let key in utmsCookieObject) {
           data['session_' + key.replace('-', '_')] = utmsCookieObject[key];
         }
+        data.utm_content = utmsCookieObject['utm-content'] || 'none';
+        debugger;
         trackEvent({
           evtName: SESSION_STARTED,
-          properties: { session_deeplink: window.location.pathname, ...data },
+          properties: {
+            session_deeplink: window.location.pathname,
+            ...data,
+          },
           contextData,
         });
       }
