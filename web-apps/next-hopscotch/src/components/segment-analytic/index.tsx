@@ -86,9 +86,9 @@ export const identify = (userinfo: IUserInfoProps, contextData: IContextData) =>
       const lastVisitdate = sessionInfo.get(COOKIE_DATA.LAST_VISIT_DATE) || '';
       const daysSinceLastVisit = sessionInfo.get(COOKIE_DATA.DAYS_SINCE_LAST_VISIT) || '';
       if (_sessionStartTime === '' || _sessionStartTime !== sessionStartTime) {
-        localStorage.setItem(LAST_VISIT_DATE, lastVisitdate.toString());
-        localStorage.setItem(SESSION_START_TIME, sessionStartTime.toString());
-        localStorage.setItem(DAYS_SINCE_LAST_VISIT, daysSinceLastVisit.toString());
+        localStorage.setItem(LAST_VISIT_DATE, JSON.stringify(lastVisitdate));
+        localStorage.setItem(SESSION_START_TIME, JSON.stringify(sessionStartTime));
+        localStorage.setItem(DAYS_SINCE_LAST_VISIT, JSON.stringify(daysSinceLastVisit));
         const data: Record<string, string> = {
           session_utm_campaign: 'none',
           session_utm_medium: 'none',
