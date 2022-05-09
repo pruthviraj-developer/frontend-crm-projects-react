@@ -5,7 +5,7 @@ export const platformOptions = () =>
   [
     { display: 'IOS', value: 'IOS' },
     { display: 'ANDROID', value: 'ANDROID' },
-    // { display: 'MWEB', value: 'MWEB' },
+    { display: 'MWEB', value: 'MWEB' },
   ].map((item) => (
     <StyledMenuItem key={item.value} value={item.value}>
       {item.display}
