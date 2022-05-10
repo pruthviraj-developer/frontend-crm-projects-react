@@ -67,7 +67,14 @@ export const trackEvent = ({ evtName, properties, contextData }: IPropsType) => 
 };
 
 export const identify = (userinfo: IUserInfoProps, contextData: IContextData) => {
-  const _sessionStartTime = localStorage.getItem(SESSION_START_TIME) || '';
+  let _sessionStartTime = '';
+  try {
+    const sessionTime = localStorage.getItem(SESSION_START_TIME);
+    _sessionStartTime = sessionTime ? JSON.parse(sessionTime) : '';
+  } catch (e) {
+    //
+  }
+
   if (!(window as any)?.isBot()) {
     const user_type = cookiesService.getCookies(COOKIE_DATA.WEBSITE_CUSTOMER_SEGMENT);
     const utmsCookieObject: any = cookiesService.getCookieData(COOKIE_DATA.HS_UTM_PARAMS) || {};
