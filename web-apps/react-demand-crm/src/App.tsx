@@ -7,10 +7,12 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-d
 import { LightTheme } from '@hs/utils';
 import { ToastContainer } from 'react-toastify';
 import { QueryClient, QueryClientProvider } from 'react-query';
-// import { ReactQueryDevtools } from 'react-query/devtools';
+//import { ReactQueryDevtools } from 'react-query/devtools';
+import { Loader } from '@hs-crm/components';
 
 const queryClient = new QueryClient();
 const Recommendation = React.lazy(() => import('./components/recommendation'));
+const ReversePickup = React.lazy(() => import('./components/reverse-pickup'));
 
 const App: FC = () => {
   return (
@@ -20,10 +22,15 @@ const App: FC = () => {
           <MuiThemeProvider theme={LightTheme}>
             <Router basename="/react-monorepo/demand">
               <Switch>
-                <Redirect exact from="/" to="/recommendation" />
+                <Redirect exact from="/" to="/reverse-pickup" />
                 <Route path="/recommendation">
-                  <Suspense fallback={<div>Loading...</div>}>
+                  <Suspense fallback={<Loader />}>
                     <Recommendation />
+                  </Suspense>
+                </Route>
+                <Route path="/reverse-pickup">
+                  <Suspense fallback={<Loader />}>
+                    <ReversePickup />
                   </Suspense>
                 </Route>
                 {/* <Route path="*">
