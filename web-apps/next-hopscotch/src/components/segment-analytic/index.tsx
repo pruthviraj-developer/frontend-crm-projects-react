@@ -1,6 +1,10 @@
 import { cookiesService } from '@hs/services';
 import { COOKIE_DATA, IContextData, ISegmentProperties, IUserInfoProps, timeTrackingData } from '@hs/framework';
 const ERROR_OCCUERED = 'error_occured';
+const LAST_VISIT_DATE = 'lastVisitdate';
+const SESSION_STARTED = 'session_started';
+const SESSION_START_TIME = 'sessionStartTime';
+const DAYS_SINCE_LAST_VISIT = 'daysSinceLastVisit';
 export const PDP_TRACKING_EVENTS = {
   PRODUCT_VIEWED: 'product_viewed',
   ADDED_TO_CART: 'product_added_to_cart',
@@ -63,8 +67,17 @@ export const trackEvent = ({ evtName, properties, contextData }: IPropsType) => 
 };
 
 export const identify = (userinfo: IUserInfoProps, contextData: IContextData) => {
+  let _sessionStartTime = '';
+  try {
+    const sessionTime = localStorage.getItem(SESSION_START_TIME);
+    _sessionStartTime = sessionTime ? JSON.parse(sessionTime) : '';
+  } catch (e) {
+    //
+  }
+
   if (!(window as any)?.isBot()) {
     const user_type = cookiesService.getCookies(COOKIE_DATA.WEBSITE_CUSTOMER_SEGMENT);
+    const utmsCookieObject: any = cookiesService.getCookieData(COOKIE_DATA.HS_UTM_PARAMS) || {};
     let userId;
     if (userinfo && userinfo?.userId) {
       userId = userinfo.userId;
@@ -74,5 +87,33 @@ export const identify = (userinfo: IUserInfoProps, contextData: IContextData) =>
       { ...contextData?.traits, user_type },
       { ...contextData, ...{ traits: { ...contextData?.traits, user_type } } },
     );
+    const sessionInfo = getSessionInfo(cookiesService.getCookies(COOKIE_DATA.OTHER_SESSION_INFO) || '');
+    if (sessionInfo) {
+      const sessionStartTime = sessionInfo.get(SESSION_START_TIME) || '';
+      const lastVisitdate = sessionInfo.get(COOKIE_DATA.LAST_VISIT_DATE) || '';
+      const daysSinceLastVisit = sessionInfo.get(COOKIE_DATA.DAYS_SINCE_LAST_VISIT) || '';
+      if (_sessionStartTime === '' || _sessionStartTime !== sessionStartTime) {
+        localStorage.setItem(LAST_VISIT_DATE, JSON.stringify(lastVisitdate));
+        localStorage.setItem(SESSION_START_TIME, JSON.stringify(sessionStartTime));
+        localStorage.setItem(DAYS_SINCE_LAST_VISIT, JSON.stringify(daysSinceLastVisit));
+        const data: Record<string, string> = {
+          session_utm_campaign: 'none',
+          session_utm_medium: 'none',
+          session_utm_source: 'none',
+        };
+        for (let key in utmsCookieObject) {
+          data['session_' + key.replace('-', '_')] = utmsCookieObject[key];
+        }
+        data.utm_content = utmsCookieObject['utm-content'] || 'none';
+        trackEvent({
+          evtName: SESSION_STARTED,
+          properties: {
+            session_deeplink: window.location.pathname,
+            ...data,
+          },
+          contextData,
+        });
+      }
+    }
   }
 };

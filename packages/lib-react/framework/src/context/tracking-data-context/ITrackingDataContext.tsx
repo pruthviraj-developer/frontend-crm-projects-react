@@ -38,6 +38,7 @@ export interface ISegmentProperties {
   character?: string;
   weave?: string;
   universal?: string;
+  session_deeplink?: string;
   '[time] hour_of_day'?: number;
   '[time] day_of_week'?: number;
   '[time] day_of_month'?: number;
