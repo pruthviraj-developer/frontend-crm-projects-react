@@ -6,6 +6,7 @@ export interface IFunnelData {
   sub_section?: string;
   source?: string;
   plp?: string;
+  sku?: string;
   quickshop?: string;
   subsection?: string;
 }

@@ -54,7 +54,7 @@ const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile, url, 
     const err = error as IProductError;
     return <Error statusCode={err?.statusCode} title={err?.message} />;
   }
-  return <ProductPage {...{ productId, isMobile, url }}></ProductPage>;
+  return <ProductPage key={productId} {...{ productId, isMobile, url }}></ProductPage>;
 };
 
 export default Product;
