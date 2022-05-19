@@ -35,7 +35,7 @@ const getSessionInfo = (sessionInfostr: string) => {
   return sessionInfo;
 };
 export const trackEvent = ({ evtName, properties, contextData }: IPropsType) => {
-  if (!(window as any)?.isBot()) {
+  if (!(typeof (window as any)?.isBot === 'function' && (window as any)?.isBot())) {
     const timeData = timeTrackingData();
     const user_type = cookiesService.getCookies(COOKIE_DATA.WEBSITE_CUSTOMER_SEGMENT);
     const sessionInfo = getSessionInfo(cookiesService.getCookies(COOKIE_DATA.OTHER_SESSION_INFO) || '');
@@ -74,8 +74,7 @@ export const identify = (userinfo: IUserInfoProps, contextData: IContextData) =>
   } catch (e) {
     //
   }
-
-  if (!(window as any)?.isBot()) {
+  if (!(typeof (window as any)?.isBot === 'function' && (window as any)?.isBot())) {
     const user_type = cookiesService.getCookies(COOKIE_DATA.WEBSITE_CUSTOMER_SEGMENT);
     const utmsCookieObject: any = cookiesService.getCookieData(COOKIE_DATA.HS_UTM_PARAMS) || {};
     let userId;
