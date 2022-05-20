@@ -11,7 +11,7 @@ const getSelectedSku = (
   const skus = getSimpleSkus(simpleSkus || []);
   for (let i = 0; i < skus.length; i++) {
     const sku = skus[i];
-    if (skuid && skuid.toUpperCase() === sku.skuId) {
+    if (skuid && skuid.toUpperCase() === sku.skuId.toUpperCase()) {
       selectedSku = sku;
       break;
     }
