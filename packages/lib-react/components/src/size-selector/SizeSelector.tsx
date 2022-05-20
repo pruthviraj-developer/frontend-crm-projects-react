@@ -68,13 +68,13 @@ export const SizeSelector: FC<ISizeSelectorProps> = ({
   };
 
   const getSize = () => {
+    const availableQuantity = selectedSku?.availableQuantity || 0;
     return (
       <SelectedSize>
         <span>{selectedSku?.attributes.size}</span>
-        {selectedSku?.availableQuantity &&
-          selectedSku?.availableQuantity < 4 && (
-            <span>Only {selectedSku?.availableQuantity} left</span>
-          )}
+        {availableQuantity > 0 && availableQuantity < 4 && (
+          <span>Only {availableQuantity} left</span>
+        )}
       </SelectedSize>
     );
   };
