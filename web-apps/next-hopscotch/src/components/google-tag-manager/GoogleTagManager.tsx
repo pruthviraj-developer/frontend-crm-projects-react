@@ -9,17 +9,18 @@ const GoogleTagManager: FC<unknown> = ({ children }) => {
   const router = useRouter();
   const routeChangeHandler = useCallback(
     (url: URL | string, { shallow }: IRouteChange) => {
-      gtm.pageview(url, {
-        shallow,
-        data: userInfo?.isLoggedIn
-          ? {
-              userId: userInfo.userId,
-              email: userInfo.email,
-              name: userInfo.firstName + ' ' + userInfo.lastName,
-              dimension1: deviceDetail?.device?.type || 'computer',
-            }
-          : { dimension1: deviceDetail?.device?.type || 'computer' },
-      });
+      userInfo &&
+        gtm.pageview(url, {
+          shallow,
+          data: userInfo?.isLoggedIn
+            ? {
+                userId: userInfo.userId,
+                email: userInfo.email,
+                name: userInfo.firstName + ' ' + userInfo.lastName,
+                dimension1: deviceDetail?.device?.type || 'computer',
+              }
+            : { dimension1: deviceDetail?.device?.type || 'computer' },
+        });
     },
     [userInfo, deviceDetail?.device?.type],
   );
