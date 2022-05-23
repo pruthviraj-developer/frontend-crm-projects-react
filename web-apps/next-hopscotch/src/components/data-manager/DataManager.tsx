@@ -86,6 +86,7 @@ const DataManager: FC<unknown> = ({ children }) => {
         subsection: sub_section,
         source = '',
         plp,
+        sku,
         quickshop = 'No',
       }: IFunnelData = router.query;
       const { from_screen, from_section, extraSegdata = null }: ISegmentData = router.query;
@@ -97,7 +98,7 @@ const DataManager: FC<unknown> = ({ children }) => {
         funnel_tile,
         funnel_section,
         section,
-        subsection:sub_section,
+        subsection: sub_section,
         source,
         plp,
         quickshop,
@@ -105,7 +106,7 @@ const DataManager: FC<unknown> = ({ children }) => {
         from_section,
         extraSegdata,
       });
-      if (!utm_source) {
+      if (!(utm_source || sku)) {
         router.replace(routeWithoutParams, undefined, { shallow: true });
       }
     }

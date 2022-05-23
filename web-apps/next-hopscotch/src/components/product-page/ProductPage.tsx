@@ -37,6 +37,7 @@ import {
   SESSION_DATA,
   useSessionStorage,
   IOfferDetailsProps,
+  getSelectedSkuById,
 } from '@hs/framework';
 
 const SizeChartPopupComponentDeskTop = dynamic(() => import('@/components/size-chart/desktop'), {
@@ -145,7 +146,10 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
     },
   );
 
-  const [selectedSku, setSelectedSku] = useState<ISimpleSkusEntityProps | any>();
+  const [selectedSku, setSelectedSku] = useState<ISimpleSkusEntityProps | any>(
+    getSelectedSkuById({ simpleSkus: productData?.simpleSkus, skuid: router.query.sku as string }),
+  );
+
   const { productName, retailPrice, selectedSkuId, simpleSkus, wishlistId, defaultSku } = useProduct({
     productData: productData,
     selectedSku: selectedSku,
@@ -222,7 +226,6 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
   };
 
   useEffect(() => {
-    setSelectedSku(null);
     updateAddedToCart(false);
     if (simpleSkus && simpleSkus.length === 1) {
       const sku = simpleSkus[0];
@@ -691,7 +694,7 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
             {...{
               productName,
               retailPrice,
-              schema: getSchemaData({ productData, defaultSku, url: url }),
+              schema: getSchemaData({ productData, defaultSku: selectedSku || defaultSku, url: url }),
               canonicalUrl: getCanonicalUrl({ productData, url }),
               url,
               discovery: !!productData?.discovery,
