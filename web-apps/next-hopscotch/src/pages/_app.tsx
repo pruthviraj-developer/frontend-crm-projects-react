@@ -72,7 +72,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
       />
       <Script
         id="segment-script"
-        strategy="afterInteractive"
+        strategy="beforeInteractive"
         type="text/javascript"
         dangerouslySetInnerHTML={{
           __html: `

@@ -9,9 +9,10 @@ import {
   COOKIE_DATA,
   UserInfoContext,
   TrackingDataContext,
+  useSegment,
 } from '@hs/framework';
 import { cookiesService, timeService } from '@hs/services';
-
+import * as segment from '@/components/segment-analytic';
 const getFormattedData = (value = '') => {
   return value.replace(/[%#–]/g, '_');
 };
@@ -21,9 +22,11 @@ const getTime = (storageTime: number) => {
     expires: new Date(timeService.getCurrentTime() + storageTime),
   };
 };
+
 const DataManager: FC<unknown> = ({ children }) => {
   const router = useRouter();
-  const { updateUtmParams } = useContext(UserInfoContext);
+  const [{ contextData }] = useSegment();
+  const { updateUtmParams, userInfo } = useContext(UserInfoContext);
   const { updateProperties } = useContext(TrackingDataContext);
   const [, setOaData] = useSessionStorage<IFunnelData>(SESSION_DATA.OA_DATA, null);
   const [, setSegmentData] = useSessionStorage<ISegmentData>(SESSION_DATA.SEGMENT_DATA, null);
@@ -74,6 +77,12 @@ const DataManager: FC<unknown> = ({ children }) => {
   useEffect(() => {
     loadUtmFromLocation();
   }, []);
+
+  useEffect(() => {
+    if (contextData?.traits && contextData.traits?.hs_device_id !== '' && userInfo) {
+      segment.identify(userInfo, contextData);
+    }
+  }, [contextData, userInfo]);
 
   useEffect(() => {
     if (router.asPath.indexOf('?') > -1) {
