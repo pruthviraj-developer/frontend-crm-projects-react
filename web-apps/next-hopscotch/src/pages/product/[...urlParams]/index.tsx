@@ -17,7 +17,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const { cookie = null, 'x-nv-security-magic': magicHeader = null } = context.req.headers;
   const queryClient = new QueryClient();
   const productId = context.params?.urlParams?.[0] || '';
-  const isMobile = context.req.headers['x-nv-device'] === 'sp';
+  const isMobile = context.req.headers['x-nv-device'] === 'sp' || context.req.headers['x-nv-device'] === 'app';
   const baseUrl = process.env.WEB_HOST as string;
   let url = context.resolvedUrl?.split('?')?.[0];
   url = url?.indexOf(baseUrl) !== -1 ? url : `${baseUrl}${url}`;
