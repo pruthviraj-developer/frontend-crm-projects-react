@@ -236,12 +236,6 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
   }, [productId]);
 
   useEffect(() => {
-    if (contextData?.traits && contextData.traits?.hs_device_id !== '' && userInfo) {
-      segment.identify(userInfo, contextData);
-    }
-  }, [contextData, userInfo]);
-
-  useEffect(() => {
     if (
       prevValue.productData !== productData &&
       prevValue.trackingProperties !== trackingProperties &&
