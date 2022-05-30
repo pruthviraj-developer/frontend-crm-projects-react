@@ -12,7 +12,7 @@ export const httpHeaders = {
 type IHttpService = Pick<AxiosRequestConfig, 'url' | 'data' | 'params'>;
 
 const handleUnauthorised = () => {
-  window.location.href = '/intranet/login';
+  // window.location.href = '/intranet/login';
 };
 const processRequest = <P = any>(
   requestConfig: AxiosRequestConfig

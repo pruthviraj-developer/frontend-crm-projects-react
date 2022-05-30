@@ -40,6 +40,24 @@ const getCarouselData = <P, R>(params: P): Promise<R> => {
   });
 };
 
+const getMSKUProductListing = <P , R>(params?: P): Promise<R> => {
+  const url = `/crm-api/intranet/msku-service/get`;
+return httpService.get<R>({ url,params });
+};
+
+const getMSKUList = <P , R>(params?: P): Promise<R> => {
+const url =
+  '/crm-api/intranet/msku-service/get';
+return httpService.get<R>({ url, params });
+};
+
+const updateMskuProductStatus = <P, R>(data: P): Promise<R> => {
+const url =
+  '/crm-api/intranet/msku-service/post?action=changeStatusKeepOrCull';
+return httpService.post<R>({ url, data });
+}
+
+
 export const merchIntelligenceService = {
   getTableData,
   getMskus,
@@ -47,4 +65,7 @@ export const merchIntelligenceService = {
   getChartsData,
   postDashboardData,
   getCarouselData,
+  getMSKUProductListing,
+  getMSKUList,
+  updateMskuProductStatus
 };

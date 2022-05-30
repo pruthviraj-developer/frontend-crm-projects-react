@@ -79,6 +79,9 @@ const updateDashboardAction = <P, R>(data: P): Promise<R> => {
   return httpService.patch({ url, params: { ...data } });
 };
 
+
+
+
 export const reorderService = {
   createConstraint,
   getConstraint,
@@ -90,5 +93,5 @@ export const reorderService = {
   getTableData,
   updateOrders,
   getDashboardData,
-  updateDashboardAction,
+  updateDashboardAction
 };

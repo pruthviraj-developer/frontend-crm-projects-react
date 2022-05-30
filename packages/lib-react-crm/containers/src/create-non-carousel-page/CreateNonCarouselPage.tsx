@@ -429,6 +429,9 @@ export const CreateNonCarouselPage: FC<CreateNonCarouselProps> = (
                                     type="radio"
                                     name="navigation"
                                     value="true"
+                                    onClick={() => {
+                                      setFieldValue('position', 1);
+                                    }}
                                   />
                                   Navigation Carousel
                                 </label>

@@ -6,6 +6,7 @@ const getDeviceId = () => {
   if (
     typeof window !== 'undefined' &&
     window.performance &&
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     typeof window.performance.now === typeof function () {}
   ) {
     d += performance.now(); //use high-precision timer if available
