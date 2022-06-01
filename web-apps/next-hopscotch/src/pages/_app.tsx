@@ -41,9 +41,11 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   axios.interceptors.request.use(
     function (config: AxiosRequestConfig) {
       // Do something before request is sent
-      config.headers['device-id'] = DEVICE_ID;
-      config.headers['hs-persistent-ticket'] = cookiesService.getCookies(COOKIE_DATA.PERSISTENT_TICKET) || '';
-      config.headers['experiments'] = cookiesService.getCookies(COOKIE_DATA.EXPERIMENTS) || '';
+      if (!config.url?.includes('/api/product/')) {
+        config.headers['device-id'] = DEVICE_ID;
+        config.headers['hs-persistent-ticket'] = cookiesService.getCookies(COOKIE_DATA.PERSISTENT_TICKET) || '';
+        config.headers['experiments'] = cookiesService.getCookies(COOKIE_DATA.EXPERIMENTS) || '';
+      }
       return config;
     },
     function (error) {
