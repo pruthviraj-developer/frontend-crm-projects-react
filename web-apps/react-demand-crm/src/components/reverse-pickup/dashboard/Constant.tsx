@@ -5,9 +5,9 @@ export const HopscotchColumns = [
     label: 'Order ID',
   },
   {
-    id: 'returnItemId',
-    key: 'returnItemId',
-    label: 'Return Item Id',
+    id: 'rmaNo',
+    key: 'rmaNo',
+    label: 'RMA',
   },
   {
     id: 'trackingNumber',
@@ -23,11 +23,6 @@ export const HopscotchColumns = [
     id: 'hsku',
     key: 'hsku',
     label: 'HSKU',
-  },
-  {
-    id: 'displayOrderCode',
-    key: 'displayOrderCode',
-    label: 'Display Order Code',
   },
   {
     id: 'warehouse',
@@ -78,9 +73,9 @@ export const MarketPlaceColumns = [
     label: 'Order ID',
   },
   {
-    id: 'returnItemId',
-    key: 'returnItemId',
-    label: 'Return Item Id',
+    id: 'rmaNo',
+    key: 'rmaNo',
+    label: 'RMA',
   },
   {
     id: 'trackingNumber',
