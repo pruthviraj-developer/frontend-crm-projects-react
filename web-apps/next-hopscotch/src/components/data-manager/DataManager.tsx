@@ -13,8 +13,16 @@ import {
 } from '@hs/framework';
 import { cookiesService, timeService } from '@hs/services';
 import * as segment from '@/components/segment-analytic';
-const getFormattedData = (value = '') => {
-  return value.replace(/[%#–]/g, '_');
+const getFormattedData = (value: any = '') => {
+  if (typeof value === 'string' || value instanceof String) {
+    return value.replace(/[%#–]/g, '_');
+  } else {
+    try {
+      return value[value.length - 1].replace(/[%#–]/g, '_');
+    } catch (e) {
+      return value;
+    }
+  }
 };
 
 const getTime = (storageTime: number) => {
@@ -33,7 +41,6 @@ const DataManager: FC<unknown> = ({ children }) => {
   const UTM_STORAGE_TIME = 60 * 1000 * 1 * 60;
   const DEEPLINK_STORAGE_TIME = 24 * 60 * 60 * 1000;
   const { deeplink, utm_term, utm_date, utm_source, utm_medium, utm_content, utm_campaign }: IUtmParam = router.query;
-
   const setUtmParams = (params: IUtmParam) => {
     cookiesService.setCookies({
       key: COOKIE_DATA.HS_UTM_PARAMS,
