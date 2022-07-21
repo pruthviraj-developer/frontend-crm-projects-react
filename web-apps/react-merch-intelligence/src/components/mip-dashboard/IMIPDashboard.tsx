@@ -1,5 +1,5 @@
 import { tableDataType } from "@hs-crm/components";
-
+import { IPlpFilterEntityProps } from "@hs-crm/components";
 export interface MIPDashboardProps {
     action: string
     statusCode: number
@@ -8,7 +8,8 @@ export interface MIPDashboardProps {
   
   export interface Data {
     totalRecords: number
-    mskuList: MskuList[]
+    mskuList: MskuList[],
+    pFilters: IPlpFilterEntityProps
   }
   
   export interface MskuList {

@@ -12,12 +12,12 @@ const DashboardCardWrapper = styled.div`
 
 const DashboardImageWrapper = styled.div`
     margin-right: 35px;
-    width: 160px;
+    width: 175px;
 }
 `;
 
 const DashboardImage = styled.img`
-    max-width: 150px;
+    max-width: 170px;
     border: 5px solid ${Colors.WHITE};
     border-radius: 5px;
     box-shadow: 4px 4px 10px #ccc;
@@ -36,6 +36,7 @@ const ReviewButton = styled(Button)`
     color: ${Colors.WHITE} !important;
     font-size: 13px !important;
     font-weight: bolder;
+    padding: 10px 35px;
 `;
 
 const NameTemplateWrapper = styled.div`

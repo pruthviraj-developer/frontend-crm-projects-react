@@ -4,6 +4,22 @@ import {Button} from '@material-ui/core';
 
 const CardTableWrapper = styled.div<{hasButton:boolean}>`
     position: absolute !important;
+    width: ${(props) =>{
+      if(props.hasButton){
+        return `calc(100% - 24px)`
+      }
+      else{
+        return '100%'
+      }
+    }}; 
+    left: ${(props) =>{
+      if(props.hasButton){
+        return `13px`
+      }
+      else{
+        return '0px'
+      }
+    }}; 
     bottom: ${(props) =>{
       if(props.hasButton){
         return `50px`
@@ -12,7 +28,7 @@ const CardTableWrapper = styled.div<{hasButton:boolean}>`
         return '0px'
       }
     }};
-    width: 100%;
+    z-index: 30;
     max-height: 0;
     transition: max-height 0.5s ease-out;
     overflow: hidden;
@@ -20,7 +36,7 @@ const CardTableWrapper = styled.div<{hasButton:boolean}>`
       font-weight: 400 !important;
     }
     .MuiTableCell-root{
-        padding: 5px 20px;
+        padding: 4px 20px;
 
     }
 `;
