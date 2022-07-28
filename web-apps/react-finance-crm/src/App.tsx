@@ -7,9 +7,12 @@ import './App.css';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { Loader } from '@hs-crm/components';
 // import { ReactQueryDevtools } from 'react-query/devtools';
 
+
 const Dashboard = React.lazy(() => import(/* webpackChunkName: 'finance' */ './components/finance-acc-dashboard'));
+const VendorContract = React.lazy(() => import('./components/vendor-contract'));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -32,6 +35,11 @@ const App: FC = () => {
                 <Route path="/custom-duty">
                   <Suspense fallback={<div>Loading...</div>}>
                     <Dashboard />
+                  </Suspense>
+                </Route>
+                <Route path="/vendor/:vendorId/contracts">
+                  <Suspense fallback={<Loader></Loader>}>
+                    <VendorContract />
                   </Suspense>
                 </Route>
               </Switch>

@@ -6,4 +6,5 @@ lerna bootstrap
 echo "==============Starting Lerna build==============="
 lerna run --parallel  --scope \"@hs/services\" --scope \"@hs/icons\" --scope \"@hs/utils\" build
 lerna run --scope "@hs-crm/*" build
-lerna  run --parallel --scope  "@hs-crm-app/react-carousel-crm" --scope  "@hs-crm-app/react-demand-crm" --scope  "@hs-crm-app/react-merch-intelligence" build
+
+lerna  run --parallel --scope  "@hs-crm-app/react-carousel-crm" --scope  "@hs-crm-app/react-demand-crm" --scope  "@hs-crm-app/react-merch-intelligence" --scope  "@hs-crm-app/react-finance-crm"  build

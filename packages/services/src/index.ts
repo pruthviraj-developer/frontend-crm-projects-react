@@ -13,3 +13,4 @@ export * from './time';
 export * from './store';
 export * from './device-id';
 export * from './reverse-pickup';
+export * from './vendor';
