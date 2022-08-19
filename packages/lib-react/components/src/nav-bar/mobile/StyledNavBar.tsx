@@ -1,10 +1,5 @@
 import styled from '@emotion/styled';
-import {
-  Colors,
-  typography,
-  HsTextAlign,
-  mediaQueriesMaxWidth,
-} from '@hs/utils';
+import { Colors, HsTextAlign, mediaQueriesMaxWidth } from '@hs/utils';
 
 const NavBarWrapper = styled.div`
   background-color: ${Colors.PINK[500]};
@@ -12,6 +7,7 @@ const NavBarWrapper = styled.div`
   height: 56px;
   width: 100%;
   display: flex;
+  justify-content: space-between;
   align-items: ${HsTextAlign.center};
   position: fixed;
   top: 0;
@@ -20,33 +16,27 @@ const NavBarWrapper = styled.div`
 `;
 
 const HopscotchImage = styled.div`
-  width: 112px;
-  height: 100%;
+  display: block;
   @media (max-width: 360px) {
-    width: 104px;
-  }
-  @media (max-width: 320px) {
     display: none;
   }
 `;
 
-const Link = styled('a')`
-  color: ${Colors.WHITE};
-  font-weight: ${typography.weight.medium};
-  float: left;
-  padding: 8px 6px;
-  margin-top: 17px;
-  font-size: 1.2rem;
-  font-weight: 600;
-  line-height: 1.33;
-  letter-spacing: 0;
-  text-decoration: none;
+const HopscotchShortImage = styled.div`
+  display: none;
+  @media (max-width: 360px) {
+    display: block;
+  }
+`;
+
+const LeftContent = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 const RightContent = styled.div`
   display: flex;
   justify-content: space-between;
-  width: 100%;
 `;
 
 const CartIconWrapper = styled.div`
@@ -65,13 +55,6 @@ const NavigationIconsWrapper = styled.div`
   display: flex;
   align-items: center;
   margin-top: 4px;
-`;
-
-const NavLinkWrapper = styled.div`
-  ${mediaQueriesMaxWidth('sm')`
-   display:flex;
-  `};
-  position: relative;
 `;
 
 const NavIconWrapper = styled.div<{ marginRight?: boolean }>`
@@ -103,44 +86,21 @@ const NavIconWrapperWishList = styled.div<{ marginRight?: boolean }>`
   }
 `;
 
-const HelpLink = styled.div`
-  margin-left: 5px;
-  font-weight: 500;
-`;
-
-const NotificationDot = styled.div`
-  top: 23px;
-  left: 55px;
-  width: 6px;
-  height: 6px;
-  position: absolute;
-  border-radius: 50%;
-  background-color: ${Colors.WHITE};
-`;
-
 const BackIconWrapper = styled.div`
   padding: 5px;
-  margin: 5px 0 0 5px;
-  @media (max-width: 320px) {
-    margin: 10px 0 0 5px;
-  }
-  @media (min-width: 321px) and (max-width: 360px) {
-    padding: 0px;
-  }
+  margin-left: 5px;
 `;
 
 export {
+  LeftContent,
+  RightContent,
   NavBarWrapper,
-  NavLinkWrapper,
   NavIconWrapper,
-  NotificationDot,
+  HopscotchImage,
+  CartIconWrapper,
+  BackIconWrapper,
+  HopscotchShortImage,
   NavIconWrapperSearch,
   NavIconWrapperWishList,
   NavigationIconsWrapper,
-  HopscotchImage,
-  CartIconWrapper,
-  RightContent,
-  Link,
-  HelpLink,
-  BackIconWrapper,
 };

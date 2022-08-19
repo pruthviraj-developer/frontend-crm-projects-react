@@ -1,18 +1,17 @@
 import React, { FC, useContext } from 'react';
 import { useRouter } from 'next/router';
-import { NextNavLink } from '../../next-nav-link';
 import Link from 'next/link';
 import {
+  LeftContent,
+  RightContent,
   NavBarWrapper,
-  NavLinkWrapper,
-  NotificationDot,
+  HopscotchImage,
+  BackIconWrapper,
+  CartIconWrapper,
+  HopscotchShortImage,
   NavIconWrapperSearch,
   NavIconWrapperWishList,
   NavigationIconsWrapper,
-  HopscotchImage,
-  RightContent,
-  BackIconWrapper,
-  CartIconWrapper,
 } from './StyledNavBar';
 import { IconWrapper, CartIconQuantity } from './../StyledNavBar';
 import {
@@ -23,15 +22,16 @@ import {
 import { INavBarProps } from '../INavBar';
 import {
   CartIcon,
-  HopScotchIcon,
   IconSearch,
+  HopScotchIcon,
   IconArrowWhite,
+  HopScotchShortIcon,
   IconWishListDefault,
 } from '@hs/icons';
 export const NavBar: FC<INavBarProps> = ({ showSearchPopup }: INavBarProps) => {
   const cartContext = useContext(CartItemQtyContext);
   const { updateLoginPopup } = useContext(LoginContext);
-  const { userInfo, showAccountNotification } = useContext(UserInfoContext);
+  const { userInfo } = useContext(UserInfoContext);
   const router = useRouter();
   const gotoWishList = () => {
     if (!(userInfo && userInfo.isLoggedIn)) {
@@ -52,46 +52,39 @@ export const NavBar: FC<INavBarProps> = ({ showSearchPopup }: INavBarProps) => {
   };
   return (
     <NavBarWrapper>
-      <Link
-        href={{
-          pathname: '/',
-          query,
-        }}
-      >
-        <BackIconWrapper>
-          <IconWrapper icon={IconArrowWhite} />
-        </BackIconWrapper>
-      </Link>
-      <Link
-        href={{
-          pathname: '/',
-          query,
-        }}
-      >
-        <HopscotchImage>
-          <HopScotchIcon></HopScotchIcon>
-        </HopscotchImage>
-      </Link>
+      <LeftContent>
+        <Link
+          href={{
+            pathname: '/',
+            query,
+          }}
+        >
+          <BackIconWrapper>
+            <IconWrapper icon={IconArrowWhite} />
+          </BackIconWrapper>
+        </Link>
+        <Link
+          href={{
+            pathname: '/',
+            query,
+          }}
+        >
+          <HopscotchImage>
+            <HopScotchIcon />
+          </HopscotchImage>
+        </Link>
+        <Link
+          href={{
+            pathname: '/',
+            query,
+          }}
+        >
+          <HopscotchShortImage>
+            <HopScotchShortIcon />
+          </HopscotchShortImage>
+        </Link>
+      </LeftContent>
       <RightContent>
-        <NavLinkWrapper>
-          {showAccountNotification && <NotificationDot />}
-          <NextNavLink
-            href="/my/account/orders"
-            name="Account"
-            display="inline-block"
-            fontSize="1.2rem"
-            fontWeight="600"
-          />
-          <NextNavLink
-            href="/helpcenter"
-            name="Help"
-            fontWeight="600"
-            fontSize="1.2rem"
-            display="inline-block"
-            margin="16px 0 0 5px"
-            padding="8px 6px 8px 5px"
-          />
-        </NavLinkWrapper>
         <NavigationIconsWrapper>
           <NavIconWrapperSearch onClick={showSearchPopup}>
             <IconWrapper icon={IconSearch} />
