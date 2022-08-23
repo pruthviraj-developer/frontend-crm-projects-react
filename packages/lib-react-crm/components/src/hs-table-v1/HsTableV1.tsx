@@ -111,9 +111,10 @@ export const HSTableV1: FC<HsTablePropsV1> = (props: HsTablePropsV1) => {
                       textOverflow: 'ellipsis',
                       fontWeight: 'bold',
                       textAlign: 'center',
+                      padding: column.padding ? column.padding : 'auto',
                     }}
                   >
-                    {column.label}
+                    {column.customHeader ? column.customHeader() : column.label}
                   </TableCell>
                 ))}
               </TableRow>
@@ -140,7 +141,9 @@ export const HSTableV1: FC<HsTablePropsV1> = (props: HsTablePropsV1) => {
                               maxWidth: column.width ? column.width : 'auto',
                               overflow: 'hidden',
                               textOverflow: 'ellipsis',
-                              padding: '16px 10px',
+                              padding: column.padding
+                                ? column.padding
+                                : '16px 10px',
                               textAlign: 'center',
                             }}
                           >
