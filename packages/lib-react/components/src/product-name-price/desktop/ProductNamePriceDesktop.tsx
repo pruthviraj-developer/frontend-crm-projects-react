@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import {
+  AllTaxes,
   ProductPricingWrapperDesktop,
   ProductNamePriceWrapperDesktop,
   ProductNameDesktop,
@@ -75,6 +76,11 @@ export const ProductNamePriceDesktop: FC<IProductNamePriceProps> = ({
                   {discount}% off
                 </ProductDiscountPriceDesktop>
               </ProductOfferPriceDesktop>
+            )}
+            {getRetailPrice() === false ? (
+              <AllTaxes>Inclusive of all taxes</AllTaxes>
+            ) : (
+              <></>
             )}
           </ProductNamePriceWrapperDesktop>
         </ProductPricingWrapperDesktop>

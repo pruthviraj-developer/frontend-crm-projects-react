@@ -46,6 +46,12 @@ const ProductNameDesktop = styled.h1`
   font-weight: ${typography.weight.regular};
   line-height: 22px;
 `;
+
+const AllTaxes = styled.h5`
+  margin: 0;
+  font-weight: 400;
+`;
+
 export {
   ProductPricingWrapperDesktop,
   ProductNamePriceWrapperDesktop,
@@ -54,4 +60,5 @@ export {
   ProductOfferPriceDesktop,
   ProductVendorPriceDesktop,
   ProductDiscountPriceDesktop,
+  AllTaxes,
 };

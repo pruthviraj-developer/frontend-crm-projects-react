@@ -67,6 +67,11 @@ const ProductSold = styled.div`
   border-radius: ${typography.size.s04}px;
 `;
 
+const AllTaxes = styled.h5`
+  margin: 0;
+  font-weight: 400;
+`;
+
 export {
   ProductPricingWrapper,
   ProductNamePriceWrapper,
@@ -78,4 +83,5 @@ export {
   ProductName,
   WishListWrapper,
   WishListIcon,
+  AllTaxes,
 };
