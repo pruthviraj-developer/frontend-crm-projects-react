@@ -23,13 +23,13 @@ const ProductOfferPrice = styled.div`
   margin-left: 4px;
 `;
 
-const ProductVendorPrice = styled.span`
+const ProductVendorPrice = styled.span<{ isMrp?: boolean }>`
   color: ${Colors.DARKGRAY};
   line-height: ${typography.size.s2}px;
   font-weight: ${typography.weight.medium};
-  text-decoration: line-through;
+  text-decoration: ${(props) => (props.isMrp ? 'none' : 'line-through')};
   vertical-align: top;
-  padding-left: ${typography.size.s08}px;
+  padding-left: ${(props) => (props.isMrp ? '8px' : '0')};
 `;
 
 const ProductDiscountPrice = styled.span`

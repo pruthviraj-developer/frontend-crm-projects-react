@@ -19,14 +19,14 @@ const ProductOfferPriceDesktop = styled.div`
   display: inline-block;
 `;
 
-const ProductVendorPriceDesktop = styled.span`
+const ProductVendorPriceDesktop = styled.span<{ isMrp?: boolean }>`
   color: ${Colors.DARKGRAY};
   font-size: ${typography.size.s2}px;
   line-height: ${typography.size.s3}px;
   font-weight: ${typography.weight.medium};
-  text-decoration: line-through;
+  text-decoration: ${(props) => (props.isMrp ? 'none' : 'line-through')};
   vertical-align: top;
-  padding: 1px 0 0 12px;
+  padding: ${(props) => (props.isMrp ? '1px 0 0 12px' : '1px 0 0 0')};
   display: inline-block;
 `;
 

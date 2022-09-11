@@ -58,6 +58,11 @@ export const ProductNamePrice: FC<IProductNamePriceProps> = ({
         {isProductSoldOut && <ProductSold>Sold out</ProductSold>}
         <ProductPricingWrapper>
           <ProductNamePriceWrapper>
+            {getDiscountDetails() === false && getRetailPrice() === false ? (
+              <ProductPrice>MRP:</ProductPrice>
+            ) : (
+              <></>
+            )}
             <ProductPrice>₹{getFormattedPrice(retailPrice)}</ProductPrice>
             {getRetailPrice() && (
               <ProductPrice>
@@ -66,6 +71,7 @@ export const ProductNamePrice: FC<IProductNamePriceProps> = ({
             )}
             {getDiscountDetails() && (
               <ProductOfferPrice>
+                <ProductVendorPrice isMrp={true}>MRP:</ProductVendorPrice>
                 <ProductVendorPrice>
                   ₹{getFormattedPrice(regularPrice)}
                 </ProductVendorPrice>
