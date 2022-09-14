@@ -10,6 +10,7 @@ import {
   ProductSold,
   WishListWrapper,
   WishListIcon,
+  AllTaxes,
 } from './StyledProductNamePrice';
 import { IProductNamePriceProps } from '../IProductNamePrice';
 import { IconWishList, IconWishListFilled } from '@hs/icons';
@@ -58,6 +59,11 @@ export const ProductNamePrice: FC<IProductNamePriceProps> = ({
         {isProductSoldOut && <ProductSold>Sold out</ProductSold>}
         <ProductPricingWrapper>
           <ProductNamePriceWrapper>
+            {getDiscountDetails() === false && getRetailPrice() === false ? (
+              <ProductPrice>MRP:</ProductPrice>
+            ) : (
+              <></>
+            )}
             <ProductPrice>₹{getFormattedPrice(retailPrice)}</ProductPrice>
             {getRetailPrice() && (
               <ProductPrice>
@@ -66,11 +72,17 @@ export const ProductNamePrice: FC<IProductNamePriceProps> = ({
             )}
             {getDiscountDetails() && (
               <ProductOfferPrice>
+                <ProductVendorPrice isMrp={true}>MRP:</ProductVendorPrice>
                 <ProductVendorPrice>
                   ₹{getFormattedPrice(regularPrice)}
                 </ProductVendorPrice>
                 <ProductDiscountPrice>{discount}% off</ProductDiscountPrice>
               </ProductOfferPrice>
+            )}
+            {getRetailPrice() === false ? (
+              <AllTaxes>Inclusive of all taxes</AllTaxes>
+            ) : (
+              <></>
             )}
             <ProductName>{productName}</ProductName>
           </ProductNamePriceWrapper>
