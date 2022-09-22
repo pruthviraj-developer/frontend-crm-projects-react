@@ -6,6 +6,12 @@ const getFilterList = <R>(): Promise<R> => {
   return httpService.get<R>({ url });
 };
 
+const getReturnSummary = <R>(): Promise<R> => {
+  const url =
+    '/crm-api/intranet/cancel-return-service/warehouse-return-summary';
+  https: return httpService.get<R>({ url });
+};
+
 const getTableData = <P, R>(data: P): Promise<R> => {
   const url =
     '/crm-api/intranet/cancel-return-service/post?action=fetch-return-dashboard-result-data';
@@ -19,6 +25,7 @@ const getSheetUrl = <P, R>(data: P): Promise<R> => {
 };
 
 export const reversepickupService = {
+  getReturnSummary,
   getFilterList,
   getSheetUrl,
   getTableData,

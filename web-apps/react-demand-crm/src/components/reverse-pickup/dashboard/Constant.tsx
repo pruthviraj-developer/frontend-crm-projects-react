@@ -4,6 +4,59 @@ import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import { TableCellStyle } from './Style';
 
+const receivedSkidMarketDetails = [
+  {
+    key: 'oldSkid',
+    label: 'OldSkid',
+    customCss: {
+      fontWeight: 'bold',
+      minWidth: '100px',
+      maxWidth: '100px',
+      wordWrap: 'break-word',
+    },
+  },
+  {
+    key: 'newSkid',
+    label: 'NewSkid',
+    customCss: {
+      fontWeight: 'bold',
+      minWidth: '100px',
+      maxWidth: '100px',
+      wordWrap: 'break-word',
+    },
+  },
+  {
+    key: 'receivingZone',
+    label: 'ReceivingZone',
+    customCss: {
+      fontWeight: 'bold',
+      minWidth: '100px',
+      maxWidth: '100px',
+      wordWrap: 'break-word',
+    },
+  },
+  {
+    key: 'putawayBy',
+    label: 'PutawayBy',
+    customCss: {
+      fontWeight: 'bold',
+      minWidth: '150px',
+      maxWidth: '150px',
+      wordWrap: 'break-word',
+    },
+  },
+  {
+    key: 'receivedBy',
+    label: 'ReceivedBy',
+    customCss: {
+      fontWeight: 'bold',
+      minWidth: '150px',
+      maxWidth: '150px',
+      wordWrap: 'break-word',
+    },
+  },
+];
+
 const receivedSkidDetails = [
   {
     key: 'oldSkid',
@@ -48,6 +101,66 @@ const receivedSkidDetails = [
   {
     key: 'receivedBy',
     label: 'ReceivedBy',
+    customCss: {
+      fontWeight: 'bold',
+      minWidth: '150px',
+      maxWidth: '150px',
+      wordWrap: 'break-word',
+    },
+  },
+  {
+    key: 'rmaCreatedDate',
+    label: 'RMA Created Date',
+    customCss: {
+      fontWeight: 'bold',
+      minWidth: '150px',
+      maxWidth: '150px',
+      wordWrap: 'break-word',
+    },
+  },
+  {
+    key: 'cpPickupDate',
+    label: 'CP Pickup Date',
+    customCss: {
+      fontWeight: 'bold',
+      minWidth: '150px',
+      maxWidth: '150px',
+      wordWrap: 'break-word',
+    },
+  },
+  {
+    key: 'cpDeliveryDate',
+    label: 'CP Delivery Date',
+    customCss: {
+      fontWeight: 'bold',
+      minWidth: '150px',
+      maxWidth: '150px',
+      wordWrap: 'break-word',
+    },
+  },
+  {
+    key: 'whInwardDateReturn',
+    label: 'WHInward Date Return',
+    customCss: {
+      fontWeight: 'bold',
+      minWidth: '150px',
+      maxWidth: '150px',
+      wordWrap: 'break-word',
+    },
+  },
+  {
+    key: 'receivedDate',
+    label: 'Received Date',
+    customCss: {
+      fontWeight: 'bold',
+      minWidth: '150px',
+      maxWidth: '150px',
+      wordWrap: 'break-word',
+    },
+  },
+  {
+    key: 'finalStatus',
+    label: 'Final Status',
     customCss: {
       fontWeight: 'bold',
       minWidth: '150px',
@@ -130,7 +243,7 @@ export const HopscotchColumns = [
         <Table key={'receivedSkidDetails'}>
           <TableHead>
             <TableCellStyle
-              colSpan={5}
+              colSpan={11}
               align="center"
               style={{
                 fontWeight: 'bold',
@@ -208,6 +321,66 @@ export const HopscotchColumns = [
                         }}
                       >
                         {childRow.receivedBy ? childRow.receivedBy : '-'}
+                      </TableCellStyle>
+                      <TableCellStyle
+                        style={{
+                          minWidth: '150px',
+                          maxWidth: '150px',
+                          wordWrap: 'break-word',
+                          borderBottom: row.receivedSkidDetails.length - 1 === index ? '0' : '',
+                        }}
+                      >
+                        {childRow.rmaCreatedDate || '-'}
+                      </TableCellStyle>
+                      <TableCellStyle
+                        style={{
+                          minWidth: '150px',
+                          maxWidth: '150px',
+                          wordWrap: 'break-word',
+                          borderBottom: row.receivedSkidDetails.length - 1 === index ? '0' : '',
+                        }}
+                      >
+                        {childRow.cpPickupDate || '-'}
+                      </TableCellStyle>
+                      <TableCellStyle
+                        style={{
+                          minWidth: '150px',
+                          maxWidth: '150px',
+                          wordWrap: 'break-word',
+                          borderBottom: row.receivedSkidDetails.length - 1 === index ? '0' : '',
+                        }}
+                      >
+                        {childRow.cpDeliveryDate || '-'}
+                      </TableCellStyle>
+                      <TableCellStyle
+                        style={{
+                          minWidth: '150px',
+                          maxWidth: '150px',
+                          wordWrap: 'break-word',
+                          borderBottom: row.receivedSkidDetails.length - 1 === index ? '0' : '',
+                        }}
+                      >
+                        {childRow.whInwardDateReturn || '-'}
+                      </TableCellStyle>
+                      <TableCellStyle
+                        style={{
+                          minWidth: '150px',
+                          maxWidth: '150px',
+                          wordWrap: 'break-word',
+                          borderBottom: row.receivedSkidDetails.length - 1 === index ? '0' : '',
+                        }}
+                      >
+                        {childRow.receivedDate || '-'}
+                      </TableCellStyle>
+                      <TableCellStyle
+                        style={{
+                          minWidth: '150px',
+                          maxWidth: '150px',
+                          wordWrap: 'break-word',
+                          borderBottom: row.receivedSkidDetails.length - 1 === index ? '0' : '',
+                        }}
+                      >
+                        {childRow.finalStatus || '-'}
                       </TableCellStyle>
                     </TableRow>
                   ))}
@@ -315,7 +488,7 @@ export const MarketPlaceColumns = [
             </TableCellStyle>
           </TableHead>
           <TableHead>
-            {receivedSkidDetails.map((column: any) => (
+            {receivedSkidMarketDetails.map((column: any) => (
               <TableCellStyle style={column.customCss}>{column.label}</TableCellStyle>
             ))}
           </TableHead>
