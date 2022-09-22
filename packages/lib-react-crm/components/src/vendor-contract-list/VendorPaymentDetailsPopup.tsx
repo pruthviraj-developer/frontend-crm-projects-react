@@ -28,13 +28,14 @@ export const VendorPaymentDetailsPopup: FC<IViewPaymentDetails> = ({
     factorySourcing,
     rtvDays,
     isActive,
-    paymentDetails
+    paymentDetails,
+    vendorName
 }) => {
 
     return (
         <PopupDetailsWrapper>
             <PopupContentWrapper>
-                <PoupTextComponent head="Vendor Name" text="Simba"></PoupTextComponent>
+                <PoupTextComponent head="Vendor Name" text={vendorName? vendorName : ''}></PoupTextComponent>
                 <PoupTextComponent head="Po Type" text={poType}></PoupTextComponent>
                 <PoupTextComponent head="Default" text={isDefault ? 'Yes' : 'No'}></PoupTextComponent>
                 <PoupTextComponent head="Factory Sourcing" text={factorySourcing ? 'Yes' : 'No'}></PoupTextComponent>
