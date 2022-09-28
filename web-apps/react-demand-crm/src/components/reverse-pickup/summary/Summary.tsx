@@ -3,8 +3,14 @@ import { Helmet } from 'react-helmet';
 import { toast } from 'react-toastify';
 import { HSTableV1, Loader } from '@hs-crm/components';
 import { TableWrapper } from './Style';
-import { useState } from 'react';
-import { ISummaryDashboardResponse, ITableDataType, IHeaderType, IPageType } from './ISummaryDashboard';
+import { useState, useEffect } from 'react';
+import {
+  ISummaryDashboardResponse,
+  ITableDataType,
+  IHeaderType,
+  IPageType,
+  IWarehouseReturnedQuantityFinalStatusEntityProps,
+} from './ISummaryDashboard';
 import { useQuery } from 'react-query';
 import { reversepickupService } from '@hs/services';
 
@@ -50,6 +56,7 @@ const showError = (error: Record<string, string>) => {
 };
 
 const Summary: FC<{ header: string }> = ({ header }: IHeaderType) => {
+  const [returnData, setReturnData] = useState<IWarehouseReturnedQuantityFinalStatusEntityProps[]>([]);
   const {
     data: dashboardData,
     isSuccess: isDashboardSuccess,
@@ -66,54 +73,18 @@ const Summary: FC<{ header: string }> = ({ header }: IHeaderType) => {
     },
   );
 
+  useEffect(() => {
+    if (dashboardData?.data?.warehouseReturnedQuantityFinalStatus?.length) {
+      setReturnData(dashboardData?.data?.warehouseReturnedQuantityFinalStatus);
+    }
+  }, [dashboardData]);
+
   const tableData: ITableDataType = {
     title: '',
     count: 0,
     activePage: 0,
     columns: DashboardColumns,
-    rows:
-      [
-        {
-          type: 'test',
-          totalQuantity: 200,
-          ndlQuantity: 12102,
-          kolQuantity: 232,
-          wheQuantity: 898,
-          bngQuantity: 98,
-        },
-        {
-          type: 'test',
-          totalQuantity: 200,
-          ndlQuantity: 12102,
-          kolQuantity: 232,
-          wheQuantity: 898,
-          bngQuantity: 98,
-        },
-        {
-          type: 'test',
-          totalQuantity: 200,
-          ndlQuantity: 12102,
-          kolQuantity: 232,
-          wheQuantity: 898,
-          bngQuantity: 98,
-        },
-        {
-          type: 'test',
-          totalQuantity: 200,
-          ndlQuantity: 12102,
-          kolQuantity: 232,
-          wheQuantity: 898,
-          bngQuantity: 98,
-        },
-        {
-          type: 'test',
-          totalQuantity: 200,
-          ndlQuantity: 12102,
-          kolQuantity: 232,
-          wheQuantity: 898,
-          bngQuantity: 98,
-        },
-      ] || [],
+    rows: returnData || [],
     rowsPerPage: 10,
     filterRowsPerPage: [],
     fetchTableData: () => {},

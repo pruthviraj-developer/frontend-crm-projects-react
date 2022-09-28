@@ -28,7 +28,7 @@ const ReversePickup: FC = () => {
           <DashBoard header="Marketplace" />
         </Route>
         <Route path={`${path}/summary`}>
-          <Summary header="Summary" />
+          <Summary header="Return Summary" />
         </Route>
       </Switch>
     </>
