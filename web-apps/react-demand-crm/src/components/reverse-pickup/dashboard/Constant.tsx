@@ -4,59 +4,6 @@ import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import { TableCellStyle } from './Style';
 
-const receivedSkidMarketDetails = [
-  {
-    key: 'oldSkid',
-    label: 'OldSkid',
-    customCss: {
-      fontWeight: 'bold',
-      minWidth: '100px',
-      maxWidth: '100px',
-      wordWrap: 'break-word',
-    },
-  },
-  {
-    key: 'newSkid',
-    label: 'NewSkid',
-    customCss: {
-      fontWeight: 'bold',
-      minWidth: '100px',
-      maxWidth: '100px',
-      wordWrap: 'break-word',
-    },
-  },
-  {
-    key: 'receivingZone',
-    label: 'ReceivingZone',
-    customCss: {
-      fontWeight: 'bold',
-      minWidth: '100px',
-      maxWidth: '100px',
-      wordWrap: 'break-word',
-    },
-  },
-  {
-    key: 'putawayBy',
-    label: 'PutawayBy',
-    customCss: {
-      fontWeight: 'bold',
-      minWidth: '150px',
-      maxWidth: '150px',
-      wordWrap: 'break-word',
-    },
-  },
-  {
-    key: 'receivedBy',
-    label: 'ReceivedBy',
-    customCss: {
-      fontWeight: 'bold',
-      minWidth: '150px',
-      maxWidth: '150px',
-      wordWrap: 'break-word',
-    },
-  },
-];
-
 const receivedSkidDetails = [
   {
     key: 'oldSkid',
@@ -140,7 +87,7 @@ const receivedSkidDetails = [
   },
   {
     key: 'whInwardDateReturn',
-    label: 'WHInward Date Return',
+    label: 'WhInward Date Return',
     customCss: {
       fontWeight: 'bold',
       minWidth: '150px',
@@ -169,6 +116,13 @@ const receivedSkidDetails = [
     },
   },
 ];
+
+const getData = (data: string | number | null) => {
+  if (data && data != null) {
+    return data;
+  }
+  return '-';
+};
 
 export const HopscotchColumns = [
   {
@@ -280,7 +234,7 @@ export const HopscotchColumns = [
                           borderBottom: row.receivedSkidDetails.length - 1 === index ? '0' : '',
                         }}
                       >
-                        {childRow.oldSkid ? childRow.oldSkid : '-'}
+                        {getData(childRow.oldSkid)}
                       </TableCellStyle>
                       <TableCellStyle
                         style={{
@@ -290,7 +244,7 @@ export const HopscotchColumns = [
                           borderBottom: row.receivedSkidDetails.length - 1 === index ? '0' : '',
                         }}
                       >
-                        {childRow.newSkid ? childRow.newSkid : '-'}
+                        {getData(childRow.newSkid)}
                       </TableCellStyle>
                       <TableCellStyle
                         style={{
@@ -300,7 +254,7 @@ export const HopscotchColumns = [
                           borderBottom: row.receivedSkidDetails.length - 1 === index ? '0' : '',
                         }}
                       >
-                        {childRow.receivingZone ? childRow.receivingZone : '-'}
+                        {getData(childRow.receivingZone)}
                       </TableCellStyle>
                       <TableCellStyle
                         style={{
@@ -310,7 +264,7 @@ export const HopscotchColumns = [
                           borderBottom: row.receivedSkidDetails.length - 1 === index ? '0' : '',
                         }}
                       >
-                        {childRow.putawayBy ? childRow.putawayBy : '-'}
+                        {getData(childRow.putawayBy)}
                       </TableCellStyle>
                       <TableCellStyle
                         style={{
@@ -320,7 +274,7 @@ export const HopscotchColumns = [
                           borderBottom: row.receivedSkidDetails.length - 1 === index ? '0' : '',
                         }}
                       >
-                        {childRow.receivedBy ? childRow.receivedBy : '-'}
+                        {getData(childRow.receivedBy)}
                       </TableCellStyle>
                       <TableCellStyle
                         style={{
@@ -330,7 +284,7 @@ export const HopscotchColumns = [
                           borderBottom: row.receivedSkidDetails.length - 1 === index ? '0' : '',
                         }}
                       >
-                        {childRow.rmaCreatedDate || '-'}
+                        {getData(childRow.rmaCreatedDate)}
                       </TableCellStyle>
                       <TableCellStyle
                         style={{
@@ -340,7 +294,7 @@ export const HopscotchColumns = [
                           borderBottom: row.receivedSkidDetails.length - 1 === index ? '0' : '',
                         }}
                       >
-                        {childRow.cpPickupDate || '-'}
+                        {getData(childRow.cpPickupDate)}
                       </TableCellStyle>
                       <TableCellStyle
                         style={{
@@ -350,7 +304,7 @@ export const HopscotchColumns = [
                           borderBottom: row.receivedSkidDetails.length - 1 === index ? '0' : '',
                         }}
                       >
-                        {childRow.cpDeliveryDate || '-'}
+                        {getData(childRow.cpDeliveryDate)}
                       </TableCellStyle>
                       <TableCellStyle
                         style={{
@@ -360,7 +314,7 @@ export const HopscotchColumns = [
                           borderBottom: row.receivedSkidDetails.length - 1 === index ? '0' : '',
                         }}
                       >
-                        {childRow.whInwardDateReturn || '-'}
+                        {getData(childRow.whInwardDateReturn)}
                       </TableCellStyle>
                       <TableCellStyle
                         style={{
@@ -370,7 +324,7 @@ export const HopscotchColumns = [
                           borderBottom: row.receivedSkidDetails.length - 1 === index ? '0' : '',
                         }}
                       >
-                        {childRow.receivedDate || '-'}
+                        {getData(childRow.receivedDate)}
                       </TableCellStyle>
                       <TableCellStyle
                         style={{
@@ -380,7 +334,7 @@ export const HopscotchColumns = [
                           borderBottom: row.receivedSkidDetails.length - 1 === index ? '0' : '',
                         }}
                       >
-                        {childRow.finalStatus || '-'}
+                        {getData(childRow.finalStatus)}
                       </TableCellStyle>
                     </TableRow>
                   ))}
@@ -478,7 +432,7 @@ export const MarketPlaceColumns = [
         <Table key={'receivedSkidDetails'}>
           <TableHead>
             <TableCellStyle
-              colSpan={5}
+              colSpan={11}
               align="center"
               style={{
                 fontWeight: 'bold',
@@ -488,7 +442,7 @@ export const MarketPlaceColumns = [
             </TableCellStyle>
           </TableHead>
           <TableHead>
-            {receivedSkidMarketDetails.map((column: any) => (
+            {receivedSkidDetails.map((column: any) => (
               <TableCellStyle style={column.customCss}>{column.label}</TableCellStyle>
             ))}
           </TableHead>
@@ -515,7 +469,7 @@ export const MarketPlaceColumns = [
                           borderBottom: row.receivedSkidDetails.length - 1 === index ? '0' : '',
                         }}
                       >
-                        {childRow.oldSkid ? childRow.oldSkid : '-'}
+                        {getData(childRow.oldSkid)}
                       </TableCellStyle>
                       <TableCellStyle
                         style={{
@@ -525,7 +479,7 @@ export const MarketPlaceColumns = [
                           borderBottom: row.receivedSkidDetails.length - 1 === index ? '0' : '',
                         }}
                       >
-                        {childRow.newSkid ? childRow.newSkid : '-'}
+                        {getData(childRow.newSkid)}
                       </TableCellStyle>
                       <TableCellStyle
                         style={{
@@ -535,7 +489,7 @@ export const MarketPlaceColumns = [
                           borderBottom: row.receivedSkidDetails.length - 1 === index ? '0' : '',
                         }}
                       >
-                        {childRow.receivingZone ? childRow.receivingZone : '-'}
+                        {getData(childRow.receivingZone)}
                       </TableCellStyle>
                       <TableCellStyle
                         style={{
@@ -545,7 +499,7 @@ export const MarketPlaceColumns = [
                           borderBottom: row.receivedSkidDetails.length - 1 === index ? '0' : '',
                         }}
                       >
-                        {childRow.putawayBy ? childRow.putawayBy : '-'}
+                        {getData(childRow.putawayBy)}
                       </TableCellStyle>
                       <TableCellStyle
                         style={{
@@ -555,7 +509,67 @@ export const MarketPlaceColumns = [
                           borderBottom: row.receivedSkidDetails.length - 1 === index ? '0' : '',
                         }}
                       >
-                        {childRow.receivedBy ? childRow.receivedBy : '-'}
+                        {getData(childRow.receivedBy)}
+                      </TableCellStyle>
+                      <TableCellStyle
+                        style={{
+                          minWidth: '150px',
+                          maxWidth: '150px',
+                          wordWrap: 'break-word',
+                          borderBottom: row.receivedSkidDetails.length - 1 === index ? '0' : '',
+                        }}
+                      >
+                        {getData(childRow.rmaCreatedDate)}
+                      </TableCellStyle>
+                      <TableCellStyle
+                        style={{
+                          minWidth: '150px',
+                          maxWidth: '150px',
+                          wordWrap: 'break-word',
+                          borderBottom: row.receivedSkidDetails.length - 1 === index ? '0' : '',
+                        }}
+                      >
+                        {getData(childRow.cpPickupDate)}
+                      </TableCellStyle>
+                      <TableCellStyle
+                        style={{
+                          minWidth: '150px',
+                          maxWidth: '150px',
+                          wordWrap: 'break-word',
+                          borderBottom: row.receivedSkidDetails.length - 1 === index ? '0' : '',
+                        }}
+                      >
+                        {getData(childRow.cpDeliveryDate)}
+                      </TableCellStyle>
+                      <TableCellStyle
+                        style={{
+                          minWidth: '150px',
+                          maxWidth: '150px',
+                          wordWrap: 'break-word',
+                          borderBottom: row.receivedSkidDetails.length - 1 === index ? '0' : '',
+                        }}
+                      >
+                        {getData(childRow.whInwardDateReturn)}
+                      </TableCellStyle>
+                      <TableCellStyle
+                        style={{
+                          minWidth: '150px',
+                          maxWidth: '150px',
+                          wordWrap: 'break-word',
+                          borderBottom: row.receivedSkidDetails.length - 1 === index ? '0' : '',
+                        }}
+                      >
+                        {getData(childRow.receivedDate)}
+                      </TableCellStyle>
+                      <TableCellStyle
+                        style={{
+                          minWidth: '150px',
+                          maxWidth: '150px',
+                          wordWrap: 'break-word',
+                          borderBottom: row.receivedSkidDetails.length - 1 === index ? '0' : '',
+                        }}
+                      >
+                        {getData(childRow.finalStatus)}
                       </TableCellStyle>
                     </TableRow>
                   ))}
