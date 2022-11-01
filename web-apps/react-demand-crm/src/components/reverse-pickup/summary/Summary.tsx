@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
 import { Helmet } from 'react-helmet';
-import { toast } from 'react-toastify';
 import { HSTableV1, Loader } from '@hs-crm/components';
 import { TableWrapper } from './Style';
 import { useState, useEffect } from 'react';
@@ -8,7 +7,6 @@ import {
   ISummaryDashboardResponse,
   ITableDataType,
   IHeaderType,
-  IPageType,
   IWarehouseReturnedQuantityFinalStatusEntityProps,
 } from './ISummaryDashboard';
 import { useQuery } from 'react-query';
@@ -58,9 +56,7 @@ const Summary: FC<{ header: string }> = ({ header }: IHeaderType) => {
     ['SummaryData'],
     () => reversepickupService.getReturnSummary(),
     {
-      staleTime: Infinity,
       retry: false,
-      refetchOnWindowFocus: false,
       onError: (error) => {
         if (error.action === 'failure') {
           setMessage(error.message);
