@@ -57,6 +57,7 @@ const Summary: FC<{ header: string }> = ({ header }: IHeaderType) => {
     () => reversepickupService.getReturnSummary(),
     {
       retry: false,
+      refetchOnWindowFocus: false,
       onError: (error) => {
         if (error.action === 'failure') {
           setMessage(error.message);
