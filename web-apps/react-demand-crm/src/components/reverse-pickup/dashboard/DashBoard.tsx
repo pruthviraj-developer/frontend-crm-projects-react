@@ -65,26 +65,30 @@ const DashBoard: FC<{ header: string }> = ({ header }: IHeaderType) => {
   };
 
   const downloadFile = async () => {
-    let res: any = await reversepickupService.getSheetUrl({
-      ...pageParam,
-      pageNo: pageParam.pageNo + 1,
-      ...postFilterData,
-      isHopscotchOrder: header === 'Hopscotch',
-    });
-
-    const sheetKey = res.data?.sheetKey;
-    if (sheetKey) {
-      let resp = await bulkUploadService.downloadTemplate({
-        action: 'getUrlBySheetKey',
-        sheetKey: sheetKey,
+    try {
+      var res: any = await reversepickupService.getSheetUrl({
+        ...pageParam,
+        pageNo: pageParam.pageNo + 1,
+        ...postFilterData,
+        isHopscotchOrder: header === 'Hopscotch',
       });
 
-      if (resp.data.is_available) {
-        window.open(resp.data.url, '_blank');
-        resp.data.message !== '' && toast.success(resp.data.message);
-      } else {
-        toast.warn(resp.data.message);
+      const sheetKey = res.data?.sheetKey;
+      if (sheetKey) {
+        let resp = await bulkUploadService.downloadTemplate({
+          action: 'getUrlBySheetKey',
+          sheetKey: sheetKey,
+        });
+
+        if (resp.data.is_available) {
+          window.open(resp.data.url, '_blank');
+          resp.data.message !== '' && toast.success(resp.data.message);
+        } else {
+          toast.warn(resp.data.message);
+        }
       }
+    } catch (error) {
+      toast.error(error && error.message);
     }
     return res;
   };
