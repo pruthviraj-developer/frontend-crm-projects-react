@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
 import { Helmet } from 'react-helmet';
-import { toast } from 'react-toastify';
 import { HSTableV1, Loader } from '@hs-crm/components';
 import { TableWrapper } from './Style';
 import { useState, useEffect } from 'react';
@@ -8,7 +7,6 @@ import {
   ISummaryDashboardResponse,
   ITableDataType,
   IHeaderType,
-  IPageType,
   IWarehouseReturnedQuantityFinalStatusEntityProps,
 } from './ISummaryDashboard';
 import { useQuery } from 'react-query';
@@ -47,15 +45,8 @@ export const DashboardColumns = [
   },
 ];
 
-const showError = (error: Record<string, string>) => {
-  let message = 'Please try later';
-  if (error.action === 'FAILURE' && error.messageList[0]) {
-    message = error.messageList[0];
-  }
-  toast.error(message);
-};
-
 const Summary: FC<{ header: string }> = ({ header }: IHeaderType) => {
+  const [message, setMessage] = useState<string>('');
   const [returnData, setReturnData] = useState<IWarehouseReturnedQuantityFinalStatusEntityProps[]>([]);
   const {
     data: dashboardData,
@@ -65,10 +56,12 @@ const Summary: FC<{ header: string }> = ({ header }: IHeaderType) => {
     ['SummaryData'],
     () => reversepickupService.getReturnSummary(),
     {
-      staleTime: Infinity,
       retry: false,
+      refetchOnWindowFocus: false,
       onError: (error) => {
-        showError(error);
+        if (error.action === 'failure') {
+          setMessage(error.message);
+        }
       },
     },
   );
@@ -76,6 +69,8 @@ const Summary: FC<{ header: string }> = ({ header }: IHeaderType) => {
   useEffect(() => {
     if (dashboardData?.data?.warehouseReturnedQuantityFinalStatus?.length) {
       setReturnData(dashboardData?.data?.warehouseReturnedQuantityFinalStatus);
+    } else {
+      setMessage('No Records Found');
     }
   }, [dashboardData]);
 
@@ -99,7 +94,7 @@ const Summary: FC<{ header: string }> = ({ header }: IHeaderType) => {
       {isDashboardLoading && <Loader />}
       <TableWrapper>
         {!isDashboardLoading && isDashboardSuccess && tableData.rows?.length > 0 && <HSTableV1 {...tableData} />}
-        {isDashboardSuccess && tableData.rows?.length === 0 && <h4>No Records Found</h4>}
+        {(!isDashboardSuccess || tableData.rows?.length === 0) && !isDashboardLoading && <h4>{message}</h4>}
       </TableWrapper>
     </>
   );
