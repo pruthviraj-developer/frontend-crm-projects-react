@@ -1,5 +1,4 @@
 import { httpService } from '../http';
-
 const getCategory = <T>(): Promise<T> => {
   const url = '/crm-api/intranet/category/getAll';
   return httpService.get<T>({ url });

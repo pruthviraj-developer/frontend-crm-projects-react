@@ -59,7 +59,7 @@ import ICIconFilterNoResult from './crm-icons/icon-filternoresult.svg';
 import IIconCubes from './crm-icons/cubes.svg';
 import ICIconAngleRight from './crm-icons/icon-angle-right-v2.svg';
 import ICIconClearYellow from './crm-icons/ic-clear-yellow.svg';
-
+import ICIconPlpOfferCard from './images/ic-plp-offer-card.svg';
 export const CreateIcon = ICCreate;
 export const BackIcon = ICBack;
 export const DashBoardIcon = ICDashBoard;
@@ -120,3 +120,4 @@ export const IconArrowWhite = ICArrowWhite;
 export const IconClearYellow = ICIconClearYellow;
 export const IconFilterNoResult = ICIconFilterNoResult;
 export const IconCubes = IIconCubes;
+export const IconPlpOfferCard = ICIconPlpOfferCard;

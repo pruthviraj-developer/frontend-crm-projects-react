@@ -31,6 +31,7 @@ export const useProduct = ({ productData, selectedSku }: ProductProps) => {
     moreInfo,
     retailPriceMax,
     wishlistId,
+    quantity,
   } = productData;
   const retailPrice = selectedSku?.retailPrice || productData.retailPrice;
   const skuData: ISimpleSkusEntityProps = selectedSku || defaultSku;
@@ -63,5 +64,9 @@ export const useProduct = ({ productData, selectedSku }: ProductProps) => {
     wishlistId,
     selectedSkuId: selectedSku && selectedSku.skuId,
     defaultSku,
+    hasSizeChart: productData.hasSizeChart,
+    isTile: productData.isTile,
+    tileAction: productData.tileAction,
+    quantity,
   };
 };

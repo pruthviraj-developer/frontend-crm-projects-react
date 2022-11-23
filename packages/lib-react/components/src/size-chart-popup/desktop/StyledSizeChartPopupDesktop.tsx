@@ -31,6 +31,7 @@ const SizeChartHeaderCloseIconDesktop = styled.div`
   position: absolute;
   right: ${typography.size.s3}px;
   top: ${typography.size.s1}px;
+  cursor: pointer;
 `;
 
 const SizeChartCloseIconDesktop = styled(SvgIcon)`
@@ -130,7 +131,6 @@ const SizeOptionTypeDesktop = styled.div`
 const SizeTableDesktop = styled.div`
   font-size: ${typography.size.s2}px;
   line-height: ${typography.size.m4}px;
-  overflow-x: scroll;
 `;
 
 const SizeTableDetail = styled.table`

@@ -3,6 +3,7 @@ export interface IProductDetails {
   subProductTypeId: number;
   action: string;
   id: number;
+  name: string;
   productDesc: string;
   brandName: string;
   hasSizeChart: boolean;
@@ -25,6 +26,7 @@ export interface IProductDetails {
   highlightEDD: number;
   categoryName: string;
   subcategoryName: string;
+  subCategoryName?: string;
   productTypeName: string;
   onSale: number;
   fromAge: number;
@@ -67,8 +69,11 @@ export interface IProductDetails {
   imgurls?: IImageUrl[];
   isWishlisted: boolean;
   pinCode: string;
+  pincode?: string;
   message?: string;
   discovery?: boolean;
+  isTile: number;
+  tileAction?: string;
 }
 
 export interface ISimpleSkusEntityProps {
@@ -86,6 +91,7 @@ export interface ISimpleSkusEntityProps {
   discount: number;
   isPresale: number;
   canWishList: number;
+  deliveryDate?: number;
   maxDeliveryDays: number;
   highlightEDD: number;
   onSale: number;

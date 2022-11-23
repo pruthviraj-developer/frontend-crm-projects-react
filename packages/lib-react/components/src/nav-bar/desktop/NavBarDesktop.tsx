@@ -140,6 +140,7 @@ export const NavBarDesktop: FC = () => {
                     display="inline-block"
                     margin="0"
                     padding="0"
+                    fontSize="1.2rem"
                   />
                 </FilteredBy>
               )}
@@ -148,7 +149,7 @@ export const NavBarDesktop: FC = () => {
               href="/moments"
               name="Moments"
               display="inline-block"
-              margin="0 32px 0 0"
+              margin="0 32px 0 4px"
               fontSize="14px"
               fontWeight="600"
               line-height="16px"
@@ -160,7 +161,7 @@ export const NavBarDesktop: FC = () => {
               href="/blog/"
               name="Blog"
               display="inline-block"
-              margin="0 32px 0 0"
+              margin="0 32px 0 4px"
               fontSize="14px"
               fontWeight="600"
               line-height="16px"
@@ -185,6 +186,7 @@ export const NavBarDesktop: FC = () => {
                     autoComplete={'off'}
                   >
                     <InputSearch
+                      autoFocus
                       onChange={handleOnChange}
                       placeholder="Search for products"
                     />

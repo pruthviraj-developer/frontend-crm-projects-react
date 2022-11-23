@@ -1,5 +1,6 @@
 export interface IFunnelData {
   funnel?: string;
+  resetFunnel?: string;
   funnel_tile?: string;
   funnel_section?: string;
   section?: string;

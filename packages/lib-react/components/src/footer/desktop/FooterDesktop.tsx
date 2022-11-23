@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-// import { IPopularSearchUrlDeskTopProps } from './IFooterDesktop';
+import { IFooterProps, IPopularSearchUrlProps } from '../IFooter';
 import {
   AppleIcon,
   PlayIcon,
@@ -28,35 +28,43 @@ import {
   FooterEnd,
   FooterLogoIcon,
   FooterLogoIconWrapper,
-  // PopularSearches,
-  // PopularSearchesTitle,
-  // PopularSearchesLinks,
-  // PopularSearchesLink,
+  PopularSearches,
+  PopularSearchesTitle,
+  PopularSearchesLinks,
+  PopularSearchesLink,
   StyledIcon,
 } from './StyledFooterDesktop';
 import { NextNavLink } from '../../next-nav-link';
 
-// import { POPULAR_SEARCH_URLS } from '@hs/utils';
+import { POPULAR_SEARCH_URLS } from '@hs/utils';
 
-export const FooterDesktop: FC = () => {
+export const FooterDesktop: FC<IFooterProps> = ({
+  urlPath,
+  showPopularSearch,
+}: IFooterProps) => {
   const currentYear = new Date().getFullYear();
+  const SEARCH_URLS = POPULAR_SEARCH_URLS.filter(
+    (item) => item.link != urlPath
+  );
   return (
     <FooterWrapper>
-      {/* <PopularSearches>
-        <PopularSearchesTitle>Popular Searches</PopularSearchesTitle>
-        <PopularSearchesLinks>
-          {POPULAR_SEARCH_URLS.map(
-            (data: IPopularSearchUrlDeskTopProps, index: number) => (
+      {showPopularSearch ? (
+        <PopularSearches>
+          <PopularSearchesTitle>Popular Searches</PopularSearchesTitle>
+          <PopularSearchesLinks>
+            {SEARCH_URLS.map((data: IPopularSearchUrlProps, index: number) => (
               <PopularSearchesLink key={index} href={data.link}>
                 {data.displayName}
               </PopularSearchesLink>
-            )
-          )}
-        </PopularSearchesLinks>
-      </PopularSearches> */}
+            ))}
+          </PopularSearchesLinks>
+        </PopularSearches>
+      ) : (
+        <></>
+      )}
       <FooterSection>
         <FooterBlock>
-          <StyledIcon icon={InfoIcon}></StyledIcon>
+          <StyledIcon aria-label="info help" icon={InfoIcon}></StyledIcon>
           <FooterBlockTitle>Need help?</FooterBlockTitle>
           <NextNavLink
             href="/help"
@@ -71,7 +79,7 @@ export const FooterDesktop: FC = () => {
           />
         </FooterBlock>
         <FooterBlock>
-          <StyledIcon icon={MailIcon}></StyledIcon>
+          <StyledIcon aria-label="mail" icon={MailIcon}></StyledIcon>
           <FooterBlockTitle>24x7 support</FooterBlockTitle>
           <NextNavLink
             href="mailto:wecare@hopscotch.in"
@@ -94,14 +102,20 @@ export const FooterDesktop: FC = () => {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <DownloadIcon icon={AppleIcon}></DownloadIcon>
+              <DownloadIcon
+                aria-label="apple play store"
+                icon={AppleIcon}
+              ></DownloadIcon>
             </LinkIcons>
             <LinkIcons
               href="https://play.google.com/store/apps/details?id=in.hopscotch.android"
               target="_blank"
               rel="noopener noreferrer"
             >
-              <DownloadIcon icon={PlayIcon}></DownloadIcon>
+              <DownloadIcon
+                aria-label="google play store"
+                icon={PlayIcon}
+              ></DownloadIcon>
             </LinkIcons>
           </ConnectToApps>
         </FooterBlock>
@@ -114,28 +128,40 @@ export const FooterDesktop: FC = () => {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <DownloadIcon icon={FacebookIcon}></DownloadIcon>
+              <DownloadIcon
+                aria-label="facebook"
+                icon={FacebookIcon}
+              ></DownloadIcon>
             </LinkIcons>
             <LinkIcons
               href="https://twitter.com/Hopscotchindia"
               target="_blank"
               rel="noopener noreferrer"
             >
-              <DownloadIcon icon={TwitterIcon}></DownloadIcon>
+              <DownloadIcon
+                aria-label="twitter"
+                icon={TwitterIcon}
+              ></DownloadIcon>
             </LinkIcons>
             <LinkIcons
               href="https://www.instagram.com/hopscotch.in/"
               target="_blank"
               rel="noopener noreferrer"
             >
-              <DownloadIcon icon={InstagramIcon}></DownloadIcon>
+              <DownloadIcon
+                aria-label="instagram"
+                icon={InstagramIcon}
+              ></DownloadIcon>
             </LinkIcons>
             <LinkIcons
               href="https://www.pinterest.com/hopscotchindia/"
               target="_blank"
               rel="noopener noreferrer"
             >
-              <DownloadIcon icon={PIntrestIcon}></DownloadIcon>
+              <DownloadIcon
+                aria-label="pintrest"
+                icon={PIntrestIcon}
+              ></DownloadIcon>
             </LinkIcons>
           </ConnectToApps>
         </FooterBlock>
@@ -144,7 +170,10 @@ export const FooterDesktop: FC = () => {
         <FooterLinks>
           <Link href="/">
             <FooterLogoIconWrapper>
-              <FooterLogoIcon icon={HsLogoPink}></FooterLogoIcon>
+              <FooterLogoIcon
+                aria-label="Hopscotch"
+                icon={HsLogoPink}
+              ></FooterLogoIcon>
             </FooterLogoIconWrapper>
           </Link>
           <FooterLink>

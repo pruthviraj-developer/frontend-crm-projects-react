@@ -45,6 +45,7 @@ export interface ISegmentProperties {
   '[time] month_of_year'?: number;
   '[time] week_of_year'?: number;
   funnel?: string;
+  resetFunnel?: string;
   funnel_tile?: string;
   funnel_section?: string;
   source?: string;
@@ -67,4 +68,13 @@ export interface ISegmentProperties {
   extraSegdata?: any;
   authentication_type?: string;
   validation_type?: string;
+  plp_type?: string;
+  feed_size?: number;
+  sort_order?: string | number;
+  merch_promo?: string;
+  promo_code?: string;
+  position?: number | string;
+  product_listing_id?: string;
+  product_listing_name?: string;
+  custom_product_tile_id?: number;
 }

@@ -71,6 +71,7 @@ export const TrackingDataProvider: FC<unknown> = ({ children }) => {
     setProperties(() => {
       return {
         funnel: funnelData?.funnel || '',
+        resetFunnel: funnelData?.resetFunnel || '',
         funnel_tile: funnelData?.funnel_tile || '',
         funnel_section: funnelData?.funnel_section || '',
         source: funnelData?.source || '',

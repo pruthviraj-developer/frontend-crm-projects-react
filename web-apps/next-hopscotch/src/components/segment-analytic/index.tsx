@@ -1,6 +1,7 @@
 import { cookiesService } from '@hs/services';
 import { COOKIE_DATA, IContextData, ISegmentProperties, IUserInfoProps, timeTrackingData } from '@hs/framework';
 const ERROR_OCCUERED = 'error_occured';
+const SIZE_CLICKED = 'select_size_clicked';
 const LAST_VISIT_DATE = 'lastVisitdate';
 const SESSION_STARTED = 'session_started';
 const SESSION_START_TIME = 'sessionStartTime';
@@ -15,9 +16,19 @@ export const PDP_TRACKING_EVENTS = {
   PRODUCT_REMOVED_FROM_WISHLIST: 'product_removed_from_wishlist',
   PDP_SEE_SIMILAR_CLICKED: 'reco_clicked',
   SIZE_CHART_VIEWED: 'size_chart_viewed',
-  SIZE_CLICKED: 'select_size_clicked',
+  SIZE_CLICKED: SIZE_CLICKED,
   ERROR_OCCUERED: 'error_occured',
   LOGIN_VIEWED: 'login_viewed',
+};
+
+export const PLP_TRACKING_EVENTS = {
+  PRODUCT_LISTING_VIEWED: 'product_listing_viewed',
+  FILTER_CLEARED: 'filter_cleared',
+  FILTER_APPLIED: 'filter_applied',
+  SMART_FILTER_APPLIED: 'smart_filter_applied',
+  SIZE_CLICKED: SIZE_CLICKED,
+  SORTING_APPLIED : 'sorting_applied',
+  PLP_SCROLLED : 'plp_scrolled'
 };
 
 export interface IPropsType {

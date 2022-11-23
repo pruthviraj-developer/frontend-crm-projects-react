@@ -89,7 +89,6 @@ const ProductMobile = ({
       : similarProductsLink;
     currentRefElement?.current?.scrollIntoView({ behavior: 'smooth' });
   };
-
   return (
     <>
       <ProductCarousel

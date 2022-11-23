@@ -15,7 +15,7 @@ const NavBarCntnr = styled.div`
 const HopscotchImage = styled.div`
   width: 112px;
   height: 100%;
-  margin: 0 28px 0 12px;
+  margin: 0 28px 4px 12px;
   cursor: pointer;
 `;
 
@@ -89,10 +89,10 @@ const FilteredBy = styled.span`
   width: 100px;
   cursor: pointer;
   font-size: 1.2rem;
-  font-weight: 400;
+  font-weight: 600;
   line-height: 28px;
   border-radius: 14px;
-  margin-left: 4px;
+  margin-left: 8px;
   text-align: center;
   position: relative;
   display: inline-block;

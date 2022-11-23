@@ -1,12 +1,12 @@
 import Error from 'next/error';
-import { productDetailsService } from '@hs/services';
-import { NextPageWithLayout, IProductProps, IProductError } from '@/types';
-import type { GetServerSideProps } from 'next';
-import { QueryClient, dehydrate } from 'react-query';
 import dynamic from 'next/dynamic';
 import { ReactElement } from 'react';
-import { ProductPage } from '@/components/product-page/ProductPage';
+import type { GetServerSideProps } from 'next';
 import { IProductDetails } from '@hs/framework';
+import { QueryClient, dehydrate } from 'react-query';
+import { productDetailsService } from '@hs/services';
+import { ProductPage } from '@/components/product-page/ProductPage';
+import { NextPageWithLayout, IProductProps, IProductError } from '@/types';
 const LayoutMobile = dynamic(() => import('@/components/layout/mobile'), {
   ssr: true,
 });

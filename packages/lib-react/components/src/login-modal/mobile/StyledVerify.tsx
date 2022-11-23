@@ -57,6 +57,7 @@ const OtpSeperator = styled.div<{ show: boolean }>`
 
 const Resend = styled.button<{ convertText?: boolean }>`
   /* font-size: 14px; */
+  font-family: inherit;
   font-weight: ${(props) => (props.convertText ? 700 : 400)};
   line-height: 1.14;
   letter-spacing: 0.4px;

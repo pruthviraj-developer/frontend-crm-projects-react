@@ -1,6 +1,7 @@
 import toHex from 'colornames';
 
 export const primaryColor = {
+  50: '#ed54a40a',
   100: '#ed54a4',
   200: '#ee65ad',
 };
@@ -24,6 +25,10 @@ export const Colors = {
   GRAY50: '#f5f5f5',
   DARKGRAY: '#a4a4a4',
   MERCURY: '#e6e6e6',
+  FULLBLACK: '#000',
+  YELLOW: {
+    100: '#fc3',
+  },
   GREEN: {
     100: '#D1FCF4',
     200: '#A2F9EA',
@@ -34,9 +39,11 @@ export const Colors = {
     700: '#00CBA9',
     800: '#00B092',
     900: '#008E77',
+    1000: '#62bd7f',
   },
   RED: {
     100: '#09ADE0',
+    200: '#f44',
     300: '#F9867B',
     400: '#F45D53',
     500: '#EB1000',

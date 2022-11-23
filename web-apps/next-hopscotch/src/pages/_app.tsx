@@ -1,15 +1,15 @@
+import Head from 'next/head';
 import Script from 'next/script';
 import React, { useState } from 'react';
 import { globalStyles } from '@/styles';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import { Hydrate } from 'react-query/hydration';
-import GoogleTagManager from '@/components/google-tag-manager/GoogleTagManager';
-import DataManager from '@/components/data-manager/DataManager';
-import { GTM_ID } from '@/components/google-tag-manager';
-// import { ReactQueryDevtools } from 'react-query/devtools';
-import Head from 'next/head';
-import { ToastContainer } from 'react-toastify';
 import { AppPropsWithLayout } from '@/types';
+import { Hydrate } from 'react-query/hydration';
+import { ToastContainer } from 'react-toastify';
+import { GTM_ID } from '@/components/google-tag-manager';
+import { ReactQueryDevtools } from 'react-query/devtools';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import DataManager from '@/components/data-manager/DataManager';
+import GoogleTagManager from '@/components/google-tag-manager/GoogleTagManager';
 
 import { LoginProvider, UserInfoProvider, CartItemQtyProvider, TrackingDataProvider, COOKIE_DATA } from '@hs/framework';
 import { cookiesService, deviceService } from '@hs/services';
@@ -41,7 +41,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   axios.interceptors.request.use(
     function (config: AxiosRequestConfig) {
       // Do something before request is sent
-      if (!config.url?.includes('/api/product/')) {
+      if (!(config.url?.includes('/api/product/') || config.url?.includes('/api/products/v4'))) {
         config.headers['device-id'] = DEVICE_ID;
         config.headers['hs-persistent-ticket'] = cookiesService.getCookies(COOKIE_DATA.PERSISTENT_TICKET) || '';
         config.headers['experiments'] = cookiesService.getCookies(COOKIE_DATA.EXPERIMENTS) || '';
@@ -97,7 +97,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
             </GoogleTagManager>
           </UserInfoProvider>
         </Hydrate>
-        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+        <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
       <ToastContainer
         style={{ fontFamily: 'inherit' }}

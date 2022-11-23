@@ -235,6 +235,16 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
     }
   }, [productId]);
 
+
+  useEffect(()=>{
+    if(isSizeChartPopupOpen){
+      document.body.style.overflow = 'hidden';
+    }
+    else{
+      document.body.style.overflow = 'auto';
+    }
+  },[isSizeChartPopupOpen])
+
   useEffect(() => {
     if (
       prevValue.productData !== productData &&
@@ -773,7 +783,7 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
               {...{
                 id: productData.id,
                 productName: productName,
-                onClickClose: closeSizeChartPopup,
+                closeSizeChartPopup,
               }}
             />
           ) : (
@@ -781,7 +791,7 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
               {...{
                 id: productData.id,
                 productName: productName,
-                onClickClose: closeSizeChartPopup,
+                closeSizeChartPopup,
               }}
             />
           ))}

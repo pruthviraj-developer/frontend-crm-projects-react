@@ -22,6 +22,7 @@ const GoToCartButton = styled.button`
   font-weight: 600;
   line-height: 16px;
   position: relative;
+  font-family: inherit;
   letter-spacing: normal;
   width: 100%;
   height: 50px;

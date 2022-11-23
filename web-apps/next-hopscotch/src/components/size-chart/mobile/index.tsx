@@ -6,7 +6,7 @@ import { ISizeChartDtoProps, IDisplayType } from '../ISizeChart';
 import { useQuery } from 'react-query';
 import { useSizeChart } from '@hs/framework';
 
-const SizeChart: FC<ISizeChartDtoProps> = ({ productName, id, onClickClose }: ISizeChartDtoProps) => {
+const SizeChart: FC<ISizeChartDtoProps> = ({ productName, id, closeSizeChartPopup }: ISizeChartDtoProps) => {
   const [displayType, setDisplayType] = useState<IDisplayType>();
   const { data: sizesData } = useQuery<ISizeChartProps>(
     ['sizeChartData', id],
@@ -25,7 +25,7 @@ const SizeChart: FC<ISizeChartDtoProps> = ({ productName, id, onClickClose }: IS
     <SizeChartPopup
       {...{
         productName,
-        onClickClose,
+        onClickClose: closeSizeChartPopup,
         sizeChartData: chartData,
         chartTableData,
         setLength: (index: number, unit: string) => {

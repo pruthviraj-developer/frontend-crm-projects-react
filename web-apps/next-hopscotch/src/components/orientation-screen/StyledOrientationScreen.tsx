@@ -1,8 +1,6 @@
 import styled from '@emotion/styled';
-import { typography, Colors, secondaryColor, primaryColor } from '@hs/utils';
 import { SvgIcon } from '@hs/icons';
 import { keyframes } from '@emotion/core';
-import OrientationScreen from './OrientationScreen';
 
 const AnimateSccreen = keyframes`
 0% {

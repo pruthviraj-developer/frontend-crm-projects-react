@@ -35,7 +35,7 @@ export const useDeliveryDetails = ({
     eddTextColor,
     eddPrefix,
     deliveryMsg,
-    pinCode: productData.pinCode,
+    pinCode: productData.pinCode || productData.pincode,
     isEddDifferentForSKUs: productData.isEddDifferentForSKUs,
     showInternationaPreorder: showInternationaPreorder(),
   };

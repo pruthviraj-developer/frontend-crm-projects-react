@@ -28,6 +28,7 @@ const SizeChartHeaderCloseIcon = styled.div`
   position: absolute;
   right: ${typography.size.s3}px;
   top: ${typography.size.s1}px;
+  cursor: pointer;
 `;
 
 const SizeChartCloseIcon = styled(SvgIcon)`

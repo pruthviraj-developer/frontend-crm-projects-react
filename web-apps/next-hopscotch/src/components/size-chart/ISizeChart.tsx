@@ -1,5 +1,5 @@
 export interface ISizeChartDtoProps {
-  onClickClose: () => void;
+  closeSizeChartPopup: () => void;
   productName: string;
   id: number;
 }

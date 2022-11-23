@@ -16,6 +16,7 @@ const StyledButton = styled.button<{ disabled?: boolean }>`
   text-transform: uppercase;
   line-height: 1.14;
   font-weight: 700;
+  font-family: inherit;
   opacity: ${(props) => (props.disabled ? 0.36 : 1)};
 `;
 

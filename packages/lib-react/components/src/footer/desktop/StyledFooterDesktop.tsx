@@ -101,41 +101,41 @@ const LinkIcons = styled('a')`
   display: inline-block;
 `;
 
-// const PopularSearches = styled.section`
-//   margin: 10px 40px;
-//   padding: 5px;
-//   border-bottom: 1px solid ${Colors.MERCURY};
-// `;
+const PopularSearches = styled.section`
+  margin: 15px auto;
+  border-bottom: 1px solid ${Colors.MERCURY};
+  max-width: 1400px;
+`;
 
-// const PopularSearchesLinks = styled.div`
-//   margin: 15px auto;
-//   display: inline-flex;
-//   flex-wrap: wrap;
-// `;
+const PopularSearchesLinks = styled.div`
+  margin: 15px auto;
+  display: inline-flex;
+  flex-wrap: wrap;
+`;
 
-// const PopularSearchesTitle = styled.div`
-//   color: ${Colors.GRAY20};
-//   font-size: ${typography.size.s3}px;
-//   line-height: ${typography.size.s3}px;
-//   font-weight: ${typography.weight.medium};
-// `;
+const PopularSearchesTitle = styled.div`
+  color: ${Colors.GRAY20};
+  font-size: ${typography.size.s3}px;
+  line-height: ${typography.size.s3}px;
+  font-weight: ${typography.weight.medium};
+`;
 
-// const PopularSearchesLink = styled('a')`
-//   color: ${secondaryColor[100]};
-//   font-size: ${typography.size.s15}px;
-//   font-weight: ${typography.weight.regular};
-//   text-decoration: none;
-//   line-height: 23px;
-//   cursor: pointer;
-//   padding: 0 1px;
-//   &:after {
-//     content: '|';
-//     margin-left: 3px;
-//   }
-//   &:last-child:after {
-//     content: '';
-//   }
-// `;
+const PopularSearchesLink = styled('a')`
+  color: ${secondaryColor[100]};
+  font-size: ${typography.size.s15}px;
+  font-weight: ${typography.weight.regular};
+  text-decoration: none;
+  line-height: 23px;
+  cursor: pointer;
+  &:after {
+    content: '|';
+    margin-left: 7px;
+    margin-right: 4px;
+  }
+  &:last-child:after {
+    content: '';
+  }
+`;
 
 const FooterEnd = styled.div`
   padding: 4px 36px;
@@ -165,9 +165,9 @@ export {
   FooterLinks,
   FooterLink,
   Link,
-  // PopularSearches,
-  // PopularSearchesLinks,
-  // PopularSearchesTitle,
-  // PopularSearchesLink,
+  PopularSearches,
+  PopularSearchesLinks,
+  PopularSearchesTitle,
+  PopularSearchesLink,
   StyledIcon,
 };

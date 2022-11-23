@@ -3,7 +3,7 @@ import { GTM_ID } from '@/components/google-tag-manager';
 export default class MyDocument extends Document {
   render() {
     return (
-      <Html>
+      <Html lang="en">
         <Head>
           <meta name="theme-color" content="#ed54a4" />
           <meta name="apple-mobile-web-app-status-bar-style" content="#ed54a4" />
