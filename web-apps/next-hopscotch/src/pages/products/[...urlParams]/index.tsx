@@ -29,6 +29,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   let error: IProductListingError | boolean = false;
   let totalPages = 1;
   let queryParams: any = {};
+  let funnelAndSectionParams: any = {};
   if (context.query.q) {
     queryParams = JSON.parse(context.query.q as any);
     if (queryParams['fromSmartFilter'] && queryParams.smartFilterSequence) {
@@ -45,6 +46,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         queryParams[queryParams.smartFilterSequence] = queryParams.smartFilterValue;
       }
     }
+  } else {
+    funnelAndSectionParams = context.query;
+    delete funnelAndSectionParams.urlParams;
   }
 
   for (const property in queryParams) {
@@ -95,6 +99,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       queryParams,
       productListId,
       productListName,
+      funnelAndSectionParams,
       showPopularSearch: true,
     },
   };
@@ -108,6 +113,7 @@ const ProductListing: NextPageWithLayout<IProductListingProps> = ({
   queryParams,
   productListId,
   productListName,
+  funnelAndSectionParams,
   showPopularSearch,
 }: IProductListingProps) => {
   if (error) {
@@ -116,7 +122,18 @@ const ProductListing: NextPageWithLayout<IProductListingProps> = ({
   }
   return (
     <ProductListingPage
-      {...{ productListId, productListName, isMobile, url, urlPath, error, queryParams, totalPages, showPopularSearch }}
+      {...{
+        productListId,
+        productListName,
+        isMobile,
+        url,
+        urlPath,
+        error,
+        queryParams,
+        totalPages,
+        funnelAndSectionParams,
+        showPopularSearch,
+      }}
     />
   );
 };

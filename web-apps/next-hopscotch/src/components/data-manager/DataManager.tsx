@@ -109,20 +109,22 @@ const DataManager: FC<unknown> = ({ children }) => {
       const { utm_source }: IUtmParam = router.query;
       setOaData({ funnel, funnel_tile, funnel_section, section, sub_section, source, plp, quickshop });
       setSegmentData({ from_screen, from_section, extraSegdata });
-      updateProperties({
-        funnel,
-        funnel_tile,
-        funnel_section,
-        section,
-        subsection: sub_section,
-        source,
-        plp,
-        quickshop,
-        from_screen,
-        from_section,
-        extraSegdata,
-      });
-      if (!(utm_source || sku)) {
+      setTimeout(() => {
+        updateProperties({
+          funnel,
+          funnel_tile,
+          funnel_section,
+          section,
+          subsection: sub_section,
+          source,
+          plp,
+          quickshop,
+          from_screen,
+          from_section,
+          extraSegdata,
+        });
+      }, 0);
+      if (!(utm_source || sku) && !router.asPath.includes('/products/')) {
         router.replace(routeWithoutParams, undefined, { shallow: true });
       }
     }

@@ -50,12 +50,11 @@ const tryLater = 'Try Later';
 export const ProductListingPage = ({
   url,
   isMobile,
-  plpRoute,
-  plpRoutes,
   totalPages,
   queryParams,
   productListId,
   productListName,
+  funnelAndSectionParams,
 }: IProductListingProps) => {
   const [{ contextData }] = useSegment();
   const { userInfo } = useContext(UserInfoContext);
@@ -93,144 +92,123 @@ export const ProductListingPage = ({
   useEffect(() => {
     //add eventlistener to window
     const handleScroll = () => {
-        if(window.scrollY){
+      if (window.scrollY) {
         setScrollY(window.scrollY);
-        }
+      }
     };
-    
-    if(!hasScrolled){
-      onScrollStop(()=>handleScroll())
+
+    if (!hasScrolled) {
+      onScrollStop(() => handleScroll());
     }
-    
   }, []);
 
-  useEffect(()=>{
-    if(hasScrolled){
-      const elemsWithIds = document.querySelectorAll(".productItem");
-      let inViewFilterArray:Array<any> = [];
-      const observer = new IntersectionObserver(elems => {
+  useEffect(() => {
+    if (hasScrolled) {
+      const elemsWithIds = document.querySelectorAll('.productItem');
+      let inViewFilterArray: Array<any> = [];
+      const observer = new IntersectionObserver((elems) => {
         elems.forEach(({ target, isIntersecting }) => {
-          if(isIntersecting){
-            inViewFilterArray.push(target.getAttribute("id"))
+          if (isIntersecting) {
+            inViewFilterArray.push(target.getAttribute('id'));
           }
           observer.disconnect();
         });
       });
-      
-      setTimeout(()=>{
-        getPlpScrolledProps(inViewFilterArray,(data)=>{
-          trackEvents(segment.PLP_TRACKING_EVENTS.PLP_SCROLLED,data);
+
+      setTimeout(() => {
+        getPlpScrolledProps(inViewFilterArray, (data) => {
+          trackEvents(segment.PLP_TRACKING_EVENTS.PLP_SCROLLED, data);
         });
-      },500)
-      
-      
-      elemsWithIds.forEach(elem => observer.observe(elem));
-    }
-    
-  },[hasScrolled]); 
+      }, 500);
 
-  useEffect(()=>{
-    
-    if(!hasScrolled && scrollY){
+      elemsWithIds.forEach((elem) => observer.observe(elem));
+    }
+  }, [hasScrolled]);
+
+  useEffect(() => {
+    if (!hasScrolled && scrollY) {
       setHasScrolled(true);
-      
     }
-    
-  },[scrollY]);
+  }, [scrollY]);
 
-  const getPlpScrolledProps = (inViewProductArray:Array<any>,cb:(data:any)=>void) => {
+  const getPlpScrolledProps = (inViewProductArray: Array<any>, cb: (data: any) => void) => {
     let screenWidth = window.innerWidth;
     let screenHeight = window.innerHeight;
     let productsPerRow = screenWidth > 1023 ? 3 : 2;
     let productList = productListData?.pages[0].records;
-    let brandArr:Array<any> = [];
-    let categoryArr:Array<any> = [];
-    let subCatArr:Array<any> = [];
-    let prodIdArr:Array<any> = [];
-    let prodTypeArr:Array<any> = [];
+    let brandArr: Array<any> = [];
+    let categoryArr: Array<any> = [];
+    let subCatArr: Array<any> = [];
+    let prodIdArr: Array<any> = [];
+    let prodTypeArr: Array<any> = [];
 
     let plpScrolledAttribute = {
-      
-      "products_per_row": productsPerRow,
-      "screen_height": screenHeight,
-      "scrolled_height": scrollY,
-      "scrolled_row": 0,
-      "universal" : ""
-    }
-    inViewProductArray.forEach((item,productIndex) => {
-      let filteredProduct = productList?.find((product:any,index:number)=>
-      {
-        if(product.isTile){
-          plpScrolledAttribute.universal = "CPT" + product.id;
+      products_per_row: productsPerRow,
+      screen_height: screenHeight,
+      scrolled_height: scrollY,
+      scrolled_row: 0,
+      universal: '',
+    };
+    inViewProductArray.forEach((item, productIndex) => {
+      let filteredProduct = productList?.find((product: any, index: number) => {
+        if (product.isTile) {
+          plpScrolledAttribute.universal = 'CPT' + product.id;
         }
-        if(product.id == item){
-          plpScrolledAttribute.scrolled_row = Math.ceil((index+1)/productsPerRow);
+        if (product.id == item) {
+          plpScrolledAttribute.scrolled_row = Math.ceil((index + 1) / productsPerRow);
           return product;
         }
-      }) ;
-      if(filteredProduct)
-      {
+      });
+      if (filteredProduct) {
         let subCategory = filteredProduct.subCategoryName;
         let category = filteredProduct.categoryName;
         let brand = filteredProduct.brandName;
         let productId = filteredProduct.id;
         let productType = filteredProduct.productTypeName;
-        if(subCategory && !subCatArr.includes(subCategory))
-        {
-          subCatArr.push(subCategory)
+        if (subCategory && !subCatArr.includes(subCategory)) {
+          subCatArr.push(subCategory);
         }
-        if(category && !categoryArr.includes(subCategory))
-        {
-          categoryArr.push(category)
+        if (category && !categoryArr.includes(subCategory)) {
+          categoryArr.push(category);
         }
-        if(brand && !brandArr.includes(brand))
-        {
-          brandArr.push(brand)
+        if (brand && !brandArr.includes(brand)) {
+          brandArr.push(brand);
         }
-        if(productId && !prodIdArr.includes(productId))
-        {
-          prodIdArr.push(String(productId))
+        if (productId && !prodIdArr.includes(productId)) {
+          prodIdArr.push(String(productId));
         }
-        if(productType && !prodTypeArr.includes(productType))
-        {
-          prodTypeArr.push(productType)
+        if (productType && !prodTypeArr.includes(productType)) {
+          prodTypeArr.push(productType);
         }
       }
-      
-      
-      if(productIndex + 1 === inViewProductArray.length)
-      {
+
+      if (productIndex + 1 === inViewProductArray.length) {
         let dynamicData = {
-          brand:[...brandArr],
-          category:[...categoryArr],
+          brand: [...brandArr],
+          category: [...categoryArr],
           product_id: [...prodIdArr],
           product_type: [...prodTypeArr],
           subcategory: [...subCatArr],
-        }
-        let finalObject = Object.assign({}, plpScrolledAttribute, dynamicData)
+        };
+        let finalObject = Object.assign({}, plpScrolledAttribute, dynamicData);
         cb(finalObject);
-        
       }
-      
-    })
+    });
+  };
 
-  }
-
-  const onScrollStop = (callback:()=>void) => {
-    let isScrolling:any;
+  const onScrollStop = (callback: () => void) => {
+    let isScrolling: any;
     window.addEventListener(
       'scroll',
-      e => {
+      (e) => {
         clearTimeout(isScrolling);
         isScrolling = setTimeout(() => {
           callback();
-          
         }, 150);
       },
-      false
+      false,
     );
   };
-
 
   const queryClient = useQueryClient();
   const SizeChartPopupComponentDesktop = dynamic(() => import('@/components/size-chart/desktop'), {
@@ -307,20 +285,26 @@ export const ProductListingPage = ({
   useEffect(() => {
     const filtersObject = Object.keys(selectedFilters).length;
     let queryParameters = '';
-    const additionalPlpUrlsList = plpRoutes ? Object.values(plpRoutes as unknown as object) : [];
-    const plpIds = additionalPlpUrlsList.map((urlsList) => urlsList.params.id);
-    if (plpIds.includes(productListId)) {
-      router.push(plpRoute as unknown as string, undefined, {
-        shallow: true,
-      });
-    } else {
-      if (filtersObject) {
-        queryParameters = `?q=${window.encodeURI(JSON.stringify(selectedFilters))}`;
-      }
-      router.push(`/products/${productListId}/${productListName}${queryParameters}`, undefined, {
-        shallow: true,
-      });
+    let baseUrl = `/products/${productListId}`;
+    if (productListName) {
+      baseUrl += `/${productListName}`;
     }
+    if (filtersObject) {
+      queryParameters = `?q=${window.encodeURI(JSON.stringify(selectedFilters))}`;
+    } else if (funnelAndSectionParams && Object.keys(funnelAndSectionParams).length) {
+      const serialize = (obj: any) => {
+        var str = [];
+        for (var p in obj)
+          if (obj.hasOwnProperty(p)) {
+            str.push(encodeURIComponent(p) + '=' + encodeURIComponent(obj[p]));
+          }
+        return str.join('&');
+      };
+      queryParameters = `?${serialize(funnelAndSectionParams)}`;
+    }
+    router.push(`${baseUrl}${queryParameters}`, undefined, {
+      shallow: true,
+    });
   }, [selectedFilters, productListId, productListName]);
 
   useEffect(() => {
@@ -331,7 +315,7 @@ export const ProductListingPage = ({
 
   function fetchSeoData() {
     let seoHtmlDataPromise = productListService.getSeoHtmlDescription<string | number, IPlpSeoDataProps>(productListId);
-    seoHtmlDataPromise.then((data:any) => {
+    seoHtmlDataPromise.then((data: any) => {
       if (data?.description) {
         setSeoHtmlData(data.description);
       }
@@ -421,7 +405,6 @@ export const ProductListingPage = ({
       source,
       subsection,
     } = trackingProperties as ISegmentProperties;
-    let promoProperties = {};
     // if (data.promoPLPSegmentEvents) {
     //   promoProperties = {
     //     merch_promo: 'Yes',
@@ -605,9 +588,11 @@ export const ProductListingPage = ({
       if (filteredArray.length > 1) {
         isFromRefineFilter = true;
       } else {
-        const values = selectedPlpFilters[data.param].split(',');
-        if (values.length > 1) {
-          isFromRefineFilter = true;
+        if (selectedPlpFilters && selectedPlpFilters[data.param]) {
+          const values = selectedPlpFilters[data.param].split(',');
+          if (values.length > 1) {
+            isFromRefineFilter = true;
+          }
         }
       }
     } else {
@@ -1108,9 +1093,24 @@ export const ProductListingPage = ({
       canonicalStatus: seoCanonicalUrl == '' ? false : true,
     };
   };
+  const [showLoader, setShowLoader] = useState<boolean>(false);
+  useEffect(() => {
+    router.beforePopState(({ as }) => {
+      if (as !== router.asPath) {
+        setShowLoader(true);
+        router.reload();
+        return false;
+      }
+      return true;
+    });
+    return () => {
+      router.beforePopState(() => true);
+    };
+  }, [router]);
 
   return (
     <>
+      {showLoader && <Loader />}
       {isFetching && loadingMore === false && <Loader />}
       {productListData?.pages[0].records.length === 0 ? (
         <ClearFilters {...{ clearFilters: clearAllFilters }} />

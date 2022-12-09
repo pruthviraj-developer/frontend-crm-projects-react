@@ -7,6 +7,7 @@ export interface IProductListingProps {
   totalPages: number;
   productListId: string;
   productListName: string;
+  funnelAndSectionParams?: Record<string, string>;
   showPopularSearch?: boolean;
   plpRoutes?: Record<string, IPlpRoutesListProps>;
   error?: IProductListingError | boolean;
