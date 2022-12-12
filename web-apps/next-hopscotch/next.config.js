@@ -23,8 +23,8 @@ module.exports = {
         destination: '/product/:id(\\d{1,})/:path*',
       },
       {
-        source: '/products/:id(\\d{1,})/:path*',
-        destination: '/products/:id(\\d{1,})/:path*',
+        source: '/products/:productsid(\\d{1,})/:productspath*',
+        destination: '/products/:productsid(\\d{1,})/:productspath*',
       },
       {
         source: '/:path*',

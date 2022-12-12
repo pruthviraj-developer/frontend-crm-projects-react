@@ -49,6 +49,37 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   } else {
     funnelAndSectionParams = context.query;
     delete funnelAndSectionParams.urlParams;
+    // <-- start -->
+    // code for id and path in products config code
+    // console.log('context.query', context.query);
+    // const getValue = (data: string, paramValue: string) => {
+    //   const values = data ? data.split(',') : [];
+    //   console.log('values', values);
+    //   for (let index = 0; index < values.length; index++) {
+    //     if (values[index] != paramValue) {
+    //       return values[index];
+    //     }
+    //   }
+    // };
+
+    // if (funnelAndSectionParams.id === productListId && funnelAndSectionParams.path === productListName) {
+    //   delete funnelAndSectionParams.id;
+    //   delete funnelAndSectionParams.path;
+    // } else {
+    //   const id = getValue(funnelAndSectionParams.id, productListId);
+    //   if (id) {
+    //     funnelAndSectionParams.id = id;
+    //   } else {
+    //     delete funnelAndSectionParams.id;
+    //   }
+    //   const path = getValue(funnelAndSectionParams.path, productListName);
+    //   if (path) {
+    //     funnelAndSectionParams.path = path;
+    //   } else {
+    //     delete funnelAndSectionParams.path;
+    //   }
+    // }
+    // <-- end -->
   }
 
   for (const property in queryParams) {
