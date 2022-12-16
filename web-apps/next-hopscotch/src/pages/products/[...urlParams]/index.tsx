@@ -7,6 +7,7 @@ import { IProductListingData } from '@hs/framework';
 import { QueryClient, dehydrate } from 'react-query';
 import { ProductListingPage } from '@/components/product-listing-page';
 import { NextPageWithLayout, IProductListingProps, IProductListingError } from '@/types';
+import HomePageRedirect from '@/components/home-page-redirect';
 
 const LayoutMobile = dynamic(() => import('@/components/layout/mobile'), {
   ssr: true,
@@ -49,18 +50,17 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   } else {
     funnelAndSectionParams = context.query;
     delete funnelAndSectionParams.urlParams;
-    // <-- start -->
-    // code for id and path in products config code
-    // console.log('context.query', context.query);
+    delete funnelAndSectionParams.productsid;
+    delete funnelAndSectionParams.productspath;
     // const getValue = (data: string, paramValue: string) => {
     //   const values = data ? data.split(',') : [];
-    //   console.log('values', values);
     //   for (let index = 0; index < values.length; index++) {
     //     if (values[index] != paramValue) {
     //       return values[index];
     //     }
     //   }
     // };
+    // console.log(funnelAndSectionParams);
 
     // if (funnelAndSectionParams.id === productListId && funnelAndSectionParams.path === productListName) {
     //   delete funnelAndSectionParams.id;
@@ -73,13 +73,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     //     delete funnelAndSectionParams.id;
     //   }
     //   const path = getValue(funnelAndSectionParams.path, productListName);
+    //   console.log(path);
+    //   console.log(productListName && productListName.trim() === path && path.trim());
     //   if (path) {
     //     funnelAndSectionParams.path = path;
     //   } else {
     //     delete funnelAndSectionParams.path;
     //   }
     // }
-    // <-- end -->
   }
 
   for (const property in queryParams) {
@@ -96,7 +97,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
           {
             id: productListId,
             pageNo: pageParam,
-            pageSize: 72,
+            pageSize: 36,
             ...queryParams,
           },
           baseUrl,
@@ -149,6 +150,10 @@ const ProductListing: NextPageWithLayout<IProductListingProps> = ({
 }: IProductListingProps) => {
   if (error) {
     const err = error as IProductListingError;
+
+    if (err?.statusCode === 500 && !productListName) {
+      return <HomePageRedirect />;
+    }
     return <Error statusCode={err?.statusCode} title={err?.message} />;
   }
   return (

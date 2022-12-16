@@ -265,7 +265,7 @@ export const ProductListingPage = ({
       productListService.getProductList<any, IProductListingData>({
         id: productListId,
         pageNo: pageParam,
-        pageSize: 72,
+        pageSize: 36,
         ...selectedFilters,
       }),
     {
@@ -1107,6 +1107,15 @@ export const ProductListingPage = ({
       router.beforePopState(() => true);
     };
   }, [router]);
+
+  useEffect(() => {
+    window.addEventListener('popstate', function (event) {
+      let currentUrl = window.location.pathname;
+      if (!currentUrl.includes('products/')) {
+        window.location.reload();
+      }
+    });
+  }, []);
 
   return (
     <>

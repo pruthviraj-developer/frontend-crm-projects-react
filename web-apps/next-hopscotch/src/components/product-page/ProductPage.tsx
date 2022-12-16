@@ -225,6 +225,15 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
     });
   };
 
+  useEffect(()=>{
+    window.addEventListener('popstate', function(event) {
+      let currentUrl =  window.location.pathname;
+      if(!currentUrl.includes('product/')){
+        window.location.reload();
+      }
+    })
+  },[])
+
   useEffect(() => {
     updateAddedToCart(false);
     if (simpleSkus && simpleSkus.length === 1) {
