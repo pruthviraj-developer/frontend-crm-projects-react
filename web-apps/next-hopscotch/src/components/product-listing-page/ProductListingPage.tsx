@@ -56,6 +56,7 @@ export const ProductListingPage = ({
   productListName,
   funnelAndSectionParams,
 }: IProductListingProps) => {
+  const lazyLoadProductsRef = useRef(null);
   const [{ contextData }] = useSegment();
   const { userInfo } = useContext(UserInfoContext);
   const { updateCartItemQty } = useContext(CartItemQtyContext);
@@ -215,9 +216,9 @@ export const ProductListingPage = ({
     ssr: false,
   });
 
-  const SizeChartPopupComponentMobile = dynamic(() => import('@/components/size-chart/mobile'), {
-    ssr: false,
-  });
+  // const SizeChartPopupComponentMobile = dynamic(() => import('@/components/size-chart/mobile'), {
+  //   ssr: false,
+  // });
 
   const openSizeChartPopup = (productData: IPlpRecordProps, from_location?: string) => {
     setProductData(productData);
@@ -1117,6 +1118,32 @@ export const ProductListingPage = ({
     });
   }, []);
 
+  const lazyLoadProductsRefOptions = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0,
+  };
+  useEffect(() => {
+    const fetchMoreProducts = (entries: any) => {
+      entries.forEach((entry: any) => {
+        if (entry.isIntersecting) {
+          if (entry.intersectionRatio > 0.75) {
+            if (isFetching === false) {
+              viewMore();
+            }
+          }
+        }
+      });
+    };
+    let iObserver = new IntersectionObserver(fetchMoreProducts, lazyLoadProductsRefOptions);
+    if (lazyLoadProductsRef && lazyLoadProductsRef.current)
+      iObserver.observe(lazyLoadProductsRef.current as unknown as HTMLElement);
+    return () => {
+      if (lazyLoadProductsRef && lazyLoadProductsRef.current)
+        iObserver.unobserve(lazyLoadProductsRef.current as unknown as HTMLElement);
+    };
+  }, [lazyLoadProductsRef, lazyLoadProductsRefOptions]);
+
   return (
     <>
       {showLoader && <Loader />}
@@ -1187,8 +1214,14 @@ export const ProductListingPage = ({
               />
             )}
           </SizeChartPopupModal>
-          {hasNextPage ? <ViewMore {...{ remainingProductCount, loadingMore, viewMore }} /> : <></>}
-          {seoHtmlData ? <SeoHtmlFooterDesktop description={seoHtmlData} /> : ''}
+          {hasNextPage ? (
+            <div ref={loadingMore ? null : lazyLoadProductsRef}>
+              <ViewMore {...{ remainingProductCount, loadingMore, viewMore }} />
+            </div>
+          ) : (
+            <></>
+          )}
+          {seoHtmlData ? <SeoHtmlFooterDesktop description={seoHtmlData} /> : <></>}
         </>
       )}
     </>
