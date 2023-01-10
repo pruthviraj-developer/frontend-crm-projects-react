@@ -86,6 +86,7 @@ export const ProductCarousel: FC<IProductCarouselProps> = ({
                   priority={index === 0}
                   layout="fill"
                   draggable={false}
+                  alt="hopscotch"
                   loader={({ src, width }) =>
                     `${src}&tr=w-${width},c-at_max,n-medium`
                   }

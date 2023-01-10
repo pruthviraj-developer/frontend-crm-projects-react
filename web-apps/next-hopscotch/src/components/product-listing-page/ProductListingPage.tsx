@@ -71,6 +71,7 @@ export const ProductListingPage = ({
   const [plpTrackingVarialbes, setPlpTrackingVarialbes] = useState<Record<string, number | boolean>>();
   const [seoHtmlData, setSeoHtmlData] = useState<string>('');
   const [hasLoadedFirstTime, setHasLoadedFirstTime] = useState<boolean>(true);
+  const [isLazyLoading, setIsLazyLoading] = useState<boolean>(true);
   const prevValue = useRef<{ trackingProperties: any; productListData: IProductListingData | undefined }>({
     trackingProperties,
     productListData: undefined,
@@ -1128,7 +1129,8 @@ export const ProductListingPage = ({
       entries.forEach((entry: any) => {
         if (entry.isIntersecting) {
           if (entry.intersectionRatio > 0.75) {
-            if (isFetching === false) {
+            if (isFetching === false && isLazyLoading) {
+              setIsLazyLoading(false);
               viewMore();
             }
           }
