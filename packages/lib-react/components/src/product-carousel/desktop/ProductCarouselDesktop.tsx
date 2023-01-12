@@ -125,6 +125,7 @@ export const ProductCarouselDesktop: FC<IProductCarouselProps> = ({
                   priority={index < 2}
                   layout="fill"
                   objectFit="fill"
+                  alt="hopscotch"
                   draggable={false}
                   loader={({ src, width }) =>
                     `${src}&tr=w-${width},c-at_max,n-medium`

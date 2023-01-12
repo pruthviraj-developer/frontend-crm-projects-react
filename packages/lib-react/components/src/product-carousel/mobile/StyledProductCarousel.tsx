@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 
 import { typography } from '@hs/utils';
 import { SvgIcon } from '@hs/icons';
-import Image from 'next/image';
+
 const CarouselWrapper = styled.div`
   overflow-x: hidden;
   white-space: nowrap;
@@ -55,14 +55,6 @@ const SimilarItemsLinkWrapper = styled.div<{
   transition: width ease-out 300ms;
 `;
 
-const StyledImage = styled(Image)`
-  /* width: 100%;
-  height: 100%;
-  position: relative;
-  min-height: 100%;
-  min-height: 100%; */
-`;
-
 const TransparentImgOverlay = styled.div`
   height: 100%;
   background: #00000000;
@@ -94,7 +86,6 @@ const Dot = styled.button<{ active: boolean }>`
 export {
   Dot,
   Dots,
-  StyledImage,
   SvgIconsElement,
   SimilarTextElement,
   CarouselWrapper,
