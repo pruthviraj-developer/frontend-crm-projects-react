@@ -25,6 +25,7 @@ export const getProductTrackingData = ({
     name: productData.productName || productData.name,
     brand: productData.brandName,
     price: selectedProductSku.retailPrice,
+    value : selectedProductSku.retailPrice,
     mrp: selectedProductSku.regularPrice,
     discount_percentage: selectedProductSku.discount,
     category: productData.categoryName,
@@ -40,6 +41,14 @@ export const getProductTrackingData = ({
     from_age: productData.fromAge,
     to_age: productData.toAge,
     sizes: productData.simpleSkus.length,
+    content_name: productData.productName || productData.name,
+    content_ids : [productData.id],
+    content_type: 'product',
+    contents: [{
+      id: productData.id,
+      quantity: 1,
+      item_price : productData.retailPrice,
+  }],
     return: productData.isReturnInfoDifferentForSKUs
       ? DIFFERENT_FOR_SIZES
       : selectedProductSku.deliveryMessage?.msg,

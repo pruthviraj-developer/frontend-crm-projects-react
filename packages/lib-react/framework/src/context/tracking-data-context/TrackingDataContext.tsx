@@ -87,6 +87,7 @@ export const TrackingDataProvider: FC<unknown> = ({ children }) => {
         character: 'Not applicable',
         sort_by: sortTrackingData.sort_by,
         universal: 'None',
+        currency : 'INR'
       };
     });
   }, []);

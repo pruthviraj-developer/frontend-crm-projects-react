@@ -874,6 +874,10 @@ export const ProductListingPage = ({
             delivery_date,
             add_from_details,
             discount_percentage,
+            content_name, 
+            content_ids ,
+            content_type,
+            contents, 
           } = getProductTrackingProperties(productData, sku);
           trackEvent(segment.PDP_TRACKING_EVENTS.ADDED_TO_CART, {
             mrp,
@@ -903,6 +907,10 @@ export const ProductListingPage = ({
             discount_percentage,
             size: sku.attributes.size,
             subtotal: sku.retailPrice * quantity,
+            content_name, 
+            content_ids ,
+            content_type,
+            contents, 
           });
 
           gtm.trackEvent({
@@ -979,6 +987,10 @@ export const ProductListingPage = ({
         subcategory,
         product_type,
         discount_percentage,
+        content_name, 
+        content_ids ,
+        content_type,
+        contents, 
       } = getProductTrackingData({ productData, selectedSku }) as unknown as Record<string, string | number>;
       return {
         mrp,
@@ -998,6 +1010,10 @@ export const ProductListingPage = ({
         discount_percentage,
         to_age: selectedSku.toAge,
         from_age: selectedSku.fromAge,
+        content_name, 
+        content_ids ,
+        content_type,
+        contents, 
       };
     };
     const additionalProperties = {

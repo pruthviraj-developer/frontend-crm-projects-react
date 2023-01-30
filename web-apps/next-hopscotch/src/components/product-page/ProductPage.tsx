@@ -264,6 +264,9 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
     ) {
       prevValue.productData = productData;
       prevValue.trackingProperties = trackingProperties;
+      if(productData && !productData.name && !productData.productName){
+        productData.name = productName;
+      }
       segment.trackEvent({
         evtName: segment.PDP_TRACKING_EVENTS.PRODUCT_VIEWED,
         properties: {
