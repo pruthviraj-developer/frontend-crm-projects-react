@@ -12,6 +12,8 @@ export const useDeliveryDetails = ({
   const isProductInternational = productData.isInternationalPreorder || false;
   const productPreOrderInfo = productData.preorderInfo;
   const productPreOrderAction = productData.preorderAction;
+  const updatedDeliveryMessages = [];
+
   if (isSkuInternational && selectedSku) {
     selectedSkuPreOrderInfo = selectedSku.preorderInfo;
     selectedSkuPreOrderAction = selectedSku.preorderAction;
@@ -23,12 +25,26 @@ export const useDeliveryDetails = ({
     deliveryMsg = selectedSku.deliveryMsg;
   }
 
+  if (selectedSku && productData?.deliveryMessages) {
+    updatedDeliveryMessages.push(...productData?.deliveryMessages);
+  }
+
+  if (
+    selectedSku &&
+    productData.showSizePickerDropdown &&
+    productData.isReturnInfoDifferentForSKUs
+  ) {
+    updatedDeliveryMessages.push(selectedSku.deliveryMessage);
+  }
+
   const showInternationaPreorder = () => {
     return selectedSku ? isSkuInternational : isProductInternational;
   };
 
   return {
-    deliveryMessages: productData.deliveryMessages || [],
+    deliveryMessages: selectedSku?.deliveryMessage
+      ? updatedDeliveryMessages
+      : productData.deliveryMessages || [],
     preOrderInfo: selectedSkuPreOrderInfo || productPreOrderInfo,
     preOrderAction: selectedSkuPreOrderAction || productPreOrderAction,
     eddColor,
