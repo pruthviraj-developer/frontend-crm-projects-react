@@ -10,7 +10,7 @@ import {
   WishListIcon,
 } from './StyledSoldProductPrice';
 import { ISoldProductPriceProps } from './ISoldProductPrice';
-import { IconWishList } from '@hs/icons';
+import { IconWishlistHeartEmpty } from '@hs/icons';
 
 export const SoldProductPrice: FC<ISoldProductPriceProps> =
   // eslint-disable-next-line no-empty-pattern
@@ -27,7 +27,7 @@ export const SoldProductPrice: FC<ISoldProductPriceProps> =
             </ProductName>
           </ProductOfferPrice>
           <WishListWrapper>
-            <WishListIcon icon={IconWishList} fill={'#bbb'} />
+            <WishListIcon icon={IconWishlistHeartEmpty} fill={'#bbb'} />
           </WishListWrapper>
         </ProductNamePriceWrapper>
       </ProductWrapper>

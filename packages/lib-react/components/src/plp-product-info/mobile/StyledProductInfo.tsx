@@ -1,6 +1,27 @@
 import styled from '@emotion/styled';
 import { Colors, typography } from '@hs/utils';
 import { SvgIcon } from '@hs/icons';
+import { keyframes }  from '@emotion/core';
+
+const heartbeatAnim = () => keyframes`
+ 0%{transform: scale( .8 );}
+  20%
+  {
+    transform: scale( 1 );
+  }
+  40%
+  {
+    transform: scale( 1.2 );
+  }
+  60%
+  {
+    transform: scale( 1 );
+  }
+  100%
+  {
+    transform: scale( .9 );
+  }
+`
 
 const ProductWrapper = styled.div`
   white-space: nowrap;
@@ -94,7 +115,9 @@ const WishListWrapper = styled.div`
 `;
 
 const WishListIcon = styled(SvgIcon)<{ selected?: number }>`
-  opacity: ${(props) => (props.selected ? 1 : 0.5)};
+  animation: ${heartbeatAnim} .3s ease-in-out ;
+  width: 24px;
+  height: 24px;
 `;
 
 const Details = styled.div`

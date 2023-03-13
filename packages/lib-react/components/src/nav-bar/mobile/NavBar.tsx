@@ -26,7 +26,7 @@ import {
   HopScotchIcon,
   IconArrowWhite,
   HopScotchShortIcon,
-  IconWishListDefault,
+  IconWishlistHeartEmptyWhite,
 } from '@hs/icons';
 export const NavBar: FC<INavBarProps> = ({ showSearchPopup }: INavBarProps) => {
   const cartContext = useContext(CartItemQtyContext);
@@ -90,7 +90,7 @@ export const NavBar: FC<INavBarProps> = ({ showSearchPopup }: INavBarProps) => {
             <IconWrapper icon={IconSearch} />
           </NavIconWrapperSearch>
           <NavIconWrapperWishList onClick={gotoWishList}>
-            <IconWrapper icon={IconWishListDefault} />
+            <IconWrapper width="19" height="18" icon={IconWishlistHeartEmptyWhite} />
           </NavIconWrapperWishList>
           <Link
             href={{

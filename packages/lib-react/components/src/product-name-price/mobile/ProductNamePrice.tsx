@@ -13,7 +13,7 @@ import {
   AllTaxes,
 } from './StyledProductNamePrice';
 import { IProductNamePriceProps } from '../IProductNamePrice';
-import { IconWishList, IconWishListFilled } from '@hs/icons';
+import { IconWishlistHeartEmpty, IconWishlistHeartFilled } from '@hs/icons';
 
 const getFormattedPrice = (price?: number) => {
   return price && price.toLocaleString('en-IN');
@@ -96,7 +96,7 @@ export const ProductNamePrice: FC<IProductNamePriceProps> = ({
                 }
                 addToWishlist && addToWishlist();
               }}
-              icon={wishlistId ? IconWishListFilled : IconWishList}
+              icon={wishlistId ? IconWishlistHeartFilled : IconWishlistHeartEmpty}
               fill={wishlistId ? '#ED54A4' : '#bbb'}
             />
           </WishListWrapper>

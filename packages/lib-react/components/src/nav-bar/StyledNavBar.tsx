@@ -19,9 +19,10 @@ const CartIconQuantity = styled.span`
   min-width: 15px;
   padding: 3px 4px 4px;
 `;
-const IconWrapper = styled(SvgIcon)`
-  min-width: 24px;
-  min-height: 24px;
+
+const IconWrapper = styled(SvgIcon)<{ width?: string; height?: string; }>`
+  min-width: ${(props) => (props.width ? 'none' : '24px')}; 
+  min-height: ${(props) => (props.height ? 'none' : '24px')};
 `;
 
 export { CartIconQuantity, IconWrapper };

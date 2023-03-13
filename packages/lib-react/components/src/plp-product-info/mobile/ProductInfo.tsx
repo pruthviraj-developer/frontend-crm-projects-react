@@ -12,7 +12,7 @@ import {
   WishListIcon,
   WishListWrapper,
 } from './StyledProductInfo';
-import { IconWishList, IconWishListFilled } from '@hs/icons';
+import { IconWishlistHeartEmpty, IconWishlistHeartFilled } from '@hs/icons';
 import { formatterService } from '@hs/services';
 import { IProductInfoProps } from '../IProductInfo';
 
@@ -58,7 +58,7 @@ export const ProductInfoMobile: FC<IProductInfoProps> = ({
               }
               addToWishlist && addToWishlist();
             }}
-            icon={wishlistId ? IconWishListFilled : IconWishList}
+            icon={wishlistId ? IconWishlistHeartFilled : IconWishlistHeartEmpty}
             fill={wishlistId ? '#ED54A4' : '#bbb'}
           />
         </WishListWrapper>
