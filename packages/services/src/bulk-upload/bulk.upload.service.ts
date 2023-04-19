@@ -4,6 +4,9 @@ import {
   templateDownloadRes,
   bulkUploadParams,
   bulkUploadRes,
+  eddVendorDownloadRes,
+  eddVendorUpload,
+  eddVendorUploadRes,
 } from './Ibulk.upload.service';
 
 const downloadTemplate = (
@@ -34,7 +37,25 @@ const bulkUpload = ({
   return httpService.fileUpload<bulkUploadRes>({ url, data, params });
 };
 
+const eddVendorTemplate = (): Promise<eddVendorDownloadRes> => {
+  const url = '/crm-api/intranet/vendoredd/downloadexcel';
+  return httpService.get<eddVendorDownloadRes>({ url });
+};
+
+const eddVendorFileUpload = ({
+  file,
+}: eddVendorUpload): Promise<eddVendorUploadRes> => {
+  const data = new FormData();
+  if (file) {
+    data.append('file', file);
+  }
+  const url = '/crm-api/intranet/vendoredd/uploadexcel';
+  return httpService.fileUpload<eddVendorUploadRes>({ url, data, params: '' });
+};
+
 export const bulkUploadService = {
   downloadTemplate,
   bulkUpload,
+  eddVendorTemplate,
+  eddVendorFileUpload,
 };

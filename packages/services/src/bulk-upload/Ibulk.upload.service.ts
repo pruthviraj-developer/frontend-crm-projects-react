@@ -8,6 +8,16 @@ export interface templateDownloadResType {
   message: string;
   sheetKey?: string;
 }
+
+export interface eddVendorDownloadRes {
+  action: string;
+  data: eddTemplateResType;
+}
+export interface eddTemplateResType {
+  isAvailable: boolean;
+  url: string;
+  message?: string;
+}
 export interface bulkUploadParamsType {
   action: string;
 }
@@ -30,4 +40,17 @@ export interface bulkUploadRes {
 export interface templateDownloadParam {
   action?: string;
   sheetKey?: string;
+}
+
+export interface eddVendorUpload {
+  file?: string | Blob;
+}
+
+export interface eddVendorUploadRes {
+  action: string;
+  data: eddVendorUploadResType;
+}
+
+export interface eddVendorUploadResType {
+  messages: string[];
 }

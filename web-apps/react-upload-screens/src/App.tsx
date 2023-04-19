@@ -16,6 +16,8 @@ const MskuTargetDownload = React.lazy(
 
 const ShipmentIdCreation = React.lazy(() => import('./components/shipmentIdCreation/ShipmentIdCreation'));
 
+const EddVendorUpdate = React.lazy(() => import('./components/edd-vendor/EddVendorUpdate'));
+
 const App: FC = () => {
   return (
     <div className="App">
@@ -46,6 +48,11 @@ const App: FC = () => {
               <Route path="/shipmentIdCreation">
                 <Suspense fallback={<div>Loading...</div>}>
                   <ShipmentIdCreation header={'ShipmentId Creation Upload'} />
+                </Suspense>
+              </Route>
+              <Route path="/edd-vendor">
+                <Suspense fallback={<div>Loading...</div>}>
+                  <EddVendorUpdate />
                 </Suspense>
               </Route>
             </Switch>
