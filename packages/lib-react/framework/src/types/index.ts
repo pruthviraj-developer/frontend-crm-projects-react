@@ -13,5 +13,3 @@ export interface IUtmParam {
   utm_content?: string;
   utm_campaign?: string;
 }
-export * from './IProductList';
-export * from './IProductListFilter';

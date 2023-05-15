@@ -13,7 +13,6 @@ export * from './product-details';
 export * from './time';
 export * from './store';
 export * from './formatter';
-export * from './product-list';
 export * from './device-id';
 export * from './reverse-pickup';
 export * from './vendor';

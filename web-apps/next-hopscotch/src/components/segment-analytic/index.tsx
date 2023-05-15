@@ -11,7 +11,6 @@ export const PDP_TRACKING_EVENTS = {
   ADDED_TO_CART: 'product_added_to_cart',
   PINCODE_CHECK_CLICKED: 'pincode_check_clicked',
   PINCODE_CHECKED: 'pincode_checked',
-  PLP_SCROLLED: 'plp_scrolled',
   PRODUCT_ADDED_TO_WISHLIST: 'product_added_to_wishlist',
   PRODUCT_REMOVED_FROM_WISHLIST: 'product_removed_from_wishlist',
   PDP_SEE_SIMILAR_CLICKED: 'reco_clicked',
@@ -20,17 +19,6 @@ export const PDP_TRACKING_EVENTS = {
   ERROR_OCCUERED: 'error_occured',
   LOGIN_VIEWED: 'login_viewed',
 };
-
-export const PLP_TRACKING_EVENTS = {
-  PRODUCT_LISTING_VIEWED: 'product_listing_viewed',
-  FILTER_CLEARED: 'filter_cleared',
-  FILTER_APPLIED: 'filter_applied',
-  SMART_FILTER_APPLIED: 'smart_filter_applied',
-  SIZE_CLICKED: SIZE_CLICKED,
-  SORTING_APPLIED : 'sorting_applied',
-  PLP_SCROLLED : 'plp_scrolled'
-};
-
 export interface IPropsType {
   evtName: string;
   properties: ISegmentProperties;
@@ -45,6 +33,7 @@ const getSessionInfo = (sessionInfostr: string) => {
   }
   return sessionInfo;
 };
+
 export const trackEvent = ({ evtName, properties, contextData }: IPropsType) => {
   if (!(typeof (window as any)?.isBot === 'function' && (window as any)?.isBot())) {
     const timeData = timeTrackingData();
