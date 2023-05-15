@@ -28,7 +28,10 @@ import {
   HopScotchShortIcon,
   IconWishlistHeartEmptyWhite,
 } from '@hs/icons';
-export const NavBar: FC<INavBarProps> = ({ showSearchPopup }: INavBarProps) => {
+export const NavBar: FC<INavBarProps> = ({
+  showSearchPopup,
+  updatedUrl,
+}: INavBarProps) => {
   const cartContext = useContext(CartItemQtyContext);
   const { updateLoginPopup } = useContext(LoginContext);
   const { userInfo } = useContext(UserInfoContext);
@@ -50,19 +53,23 @@ export const NavBar: FC<INavBarProps> = ({ showSearchPopup }: INavBarProps) => {
     department: null,
     customTileId: null,
   };
+
+  const onBackClick = () => {
+    if (!document.referrer.includes('hopscotch') && updatedUrl === '') {
+      router.push({
+        pathname: '/',
+      });
+    } else {
+      router.back();
+    }
+  };
+
   return (
     <NavBarWrapper>
       <LeftContent>
-        <Link
-          href={{
-            pathname: '/',
-            query,
-          }}
-        >
-          <BackIconWrapper>
-            <IconWrapper icon={IconArrowWhite} />
-          </BackIconWrapper>
-        </Link>
+        <BackIconWrapper onClick={onBackClick}>
+          <IconWrapper icon={IconArrowWhite} />
+        </BackIconWrapper>
         <Link
           href={{
             pathname: '/',
@@ -90,7 +97,11 @@ export const NavBar: FC<INavBarProps> = ({ showSearchPopup }: INavBarProps) => {
             <IconWrapper icon={IconSearch} />
           </NavIconWrapperSearch>
           <NavIconWrapperWishList onClick={gotoWishList}>
-            <IconWrapper width="19" height="18" icon={IconWishlistHeartEmptyWhite} />
+            <IconWrapper
+              width="19"
+              height="18"
+              icon={IconWishlistHeartEmptyWhite}
+            />
           </NavIconWrapperWishList>
           <Link
             href={{
