@@ -7,5 +7,5 @@ echo "==============Starting Lerna build==============="
 lerna run --parallel  --scope \"@hs/services\" --scope \"@hs/icons\" --scope \"@hs/utils\" build
 lerna run --scope "@hs-crm/*" build
 
-lerna  run --parallel --scope  "@hs-crm-app/react-upload-screens" build
+lerna  run --parallel --scope  "@hs-crm-app/react-merch-crm" build
 # --scope  "@hs-crm-app/react-demand-crm" --scope  "@hs-crm-app/react-merch-intelligence" --scope  "@hs-crm-app/react-finance-crm"  build

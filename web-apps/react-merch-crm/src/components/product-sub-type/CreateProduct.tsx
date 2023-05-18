@@ -84,6 +84,8 @@ const FiltersWrapper = styled.div`
 `;
 
 const tryLater = 'Please try later';
+const AttributeReqMsg = 'Select Atleast One Attribute';
+
 const showError = (error: Record<string, string>) => {
   let message = tryLater;
   if (error.action === 'FAILURE' && error.message) {
@@ -116,15 +118,15 @@ const CreateProduct: FC<{ header: string }> = ({ header }: ICreateProductSubtype
     subcategoryId: Yup.string().required('Please select sub category'),
     productTypeId: Yup.string().required('Please select product type'),
     productSubtypeName: Yup.string().required('Product sub type name is required'),
-    attributeList: Yup.array()
-      .of(
-        Yup.object().shape({
-          attributeId: Yup.string(),
-          attributeValues: Yup.array().of(Yup.string()).required().min(1, 'At least one attribute value is required'),
-        }),
-      )
-      .required()
-      .min(attributeList && attributeList.length, 'All attributes are mandatory'),
+    // attributeList: Yup.array()
+    //   .of(
+    //     Yup.object().shape({
+    //       attributeId: Yup.string(),
+    //       attributeValues: Yup.array().of(Yup.string()).required().min(1, 'At least one attribute value is required'),
+    //     }),
+    //   )
+    //   .required()
+    //   .min(attributeList && attributeList.length, 'All attributes are mandatory'),
   });
 
   const [categoryId, setCategoryId] = useState<string | number>('');
@@ -222,8 +224,12 @@ const CreateProduct: FC<{ header: string }> = ({ header }: ICreateProductSubtype
         postObject[ele] = values[ele]['key'] || values[ele];
       }
     });
-
-    const attrList: IAttributePostValue[] = [...values.attributeList];
+    const attrList: IAttributePostValue[] = values.attributeList.filter((row) => row.attributeValues.length);
+    if (!attrList.length) {
+      toast.error(AttributeReqMsg);
+      actions.setSubmitting(false);
+      return;
+    }
     const valObj: IAttributePostValueType[] = [];
     attrList.forEach((itm: IAttributePostValue) => {
       if (itm && itm.attributeValues) {
