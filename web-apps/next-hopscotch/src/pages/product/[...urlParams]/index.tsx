@@ -25,10 +25,23 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   let url = context.resolvedUrl?.split('?')?.[0];
   url = url?.indexOf(baseUrl) !== -1 ? url : `${baseUrl}${url}`;
   let error: IProductError | boolean = false;
+  let from_screen: unknown = 'direct';
+  const queryParams = context.query;
+  if (queryParams.from_screen) {
+    from_screen = queryParams.from_screen;
+  } else if (queryParams.utm_source) {
+    from_screen = queryParams.utm_source;
+  }
   try {
     await queryClient.fetchQuery<IProductDetails>(
       ['ProductDetail', productId],
-      () => productDetailsService.getProductDetails(productId, baseUrl, { cookie, 'x-nv-security-magic': magicHeader }),
+      () =>
+        productDetailsService.getProductDetails(productId, baseUrl, {
+          cookie,
+          'x-nv-security-magic': magicHeader,
+          'device-type': isMobile ? 'mobile' : 'computer',
+          'from-screen': from_screen,
+        }),
       {
         staleTime: Infinity,
       },
@@ -48,16 +61,23 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       productId,
       url,
       isMobile,
+      from_screen,
       error,
     },
   };
 };
-const Product: NextPageWithLayout<IProductProps> = ({ productId, isMobile, url, error }: IProductProps) => {
+const Product: NextPageWithLayout<IProductProps> = ({
+  productId,
+  isMobile,
+  url,
+  from_screen,
+  error,
+}: IProductProps) => {
   if (error) {
     const err = error as IProductError;
     return <Error statusCode={err?.statusCode} title={err?.message} />;
   }
-  return <ProductPage key={productId} {...{ productId, isMobile, url }}></ProductPage>;
+  return <ProductPage key={productId} {...{ productId, isMobile, url, from_screen }}></ProductPage>;
 };
 
 export default Product;

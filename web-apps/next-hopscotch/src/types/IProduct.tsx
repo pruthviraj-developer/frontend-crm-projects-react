@@ -2,6 +2,7 @@ export interface IProductProps {
   productId: string;
   isMobile: boolean;
   url: string;
+  from_screen: string;
   error?: IProductError | boolean;
 }
 

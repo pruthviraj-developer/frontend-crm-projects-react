@@ -76,7 +76,7 @@ const ProductDesktop = dynamic(() => import('@/components/pdp/desktop'), {
 });
 const tryLater = 'Try Later';
 const ADD_TO_CART_BUTTON = 'Add to cart button';
-export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
+export const ProductPage = ({ productId, isMobile, url, from_screen }: IProductProps) => {
   const router = useRouter();
   const [deliveryDetails, updateDeliveryDetails] = useState<IUpdatedDeliverDetailsProps>();
   const [updatedWishListId, updateWishListId] = useState<number>();
@@ -115,7 +115,11 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
 
   const { data: productData } = useQuery<IProductDetails>(
     ['ProductDetail', productId],
-    () => productDetailsService.getProductDetails(productId),
+    () =>
+      productDetailsService.getProductDetails(productId, '', {
+        'device-type': isMobile ? 'mobile' : 'computer',
+        'from-screen': from_screen,
+      }),
     {
       staleTime: Infinity,
       enabled: productId !== undefined,
@@ -225,14 +229,14 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
     });
   };
 
-  useEffect(()=>{
-    window.addEventListener('popstate', function(event) {
-      let currentUrl =  window.location.pathname;
-      if(!currentUrl.includes('product/')){
+  useEffect(() => {
+    window.addEventListener('popstate', function (event) {
+      let currentUrl = window.location.pathname;
+      if (!currentUrl.includes('product/')) {
         window.location.reload();
       }
-    })
-  },[])
+    });
+  }, []);
 
   useEffect(() => {
     updateAddedToCart(false);
@@ -244,15 +248,13 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
     }
   }, [productId]);
 
-
-  useEffect(()=>{
-    if(isSizeChartPopupOpen){
+  useEffect(() => {
+    if (isSizeChartPopupOpen) {
       document.body.style.overflow = 'hidden';
-    }
-    else{
+    } else {
       document.body.style.overflow = 'auto';
     }
-  },[isSizeChartPopupOpen])
+  }, [isSizeChartPopupOpen]);
 
   useEffect(() => {
     if (
@@ -264,7 +266,7 @@ export const ProductPage = ({ productId, isMobile, url }: IProductProps) => {
     ) {
       prevValue.productData = productData;
       prevValue.trackingProperties = trackingProperties;
-      if(productData && !productData.name && !productData.productName){
+      if (productData && !productData.name && !productData.productName) {
         productData.name = productName;
       }
       segment.trackEvent({
