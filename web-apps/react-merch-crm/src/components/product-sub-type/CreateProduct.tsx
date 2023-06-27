@@ -224,7 +224,7 @@ const CreateProduct: FC<{ header: string }> = ({ header }: ICreateProductSubtype
         postObject[ele] = values[ele]['key'] || values[ele];
       }
     });
-    const attrList: IAttributePostValue[] = values.attributeList.filter((row) => row.attributeValues.length);
+    const attrList: IAttributePostValue[] = values.attributeList.filter((row) => row?.attributeValues?.length);
     if (!attrList.length) {
       toast.error(AttributeReqMsg);
       actions.setSubmitting(false);
