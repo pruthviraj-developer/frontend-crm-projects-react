@@ -76,7 +76,16 @@ const ProductDesktop = dynamic(() => import('@/components/pdp/desktop'), {
 });
 const tryLater = 'Try Later';
 const ADD_TO_CART_BUTTON = 'Add to cart button';
-export const ProductPage = ({ productId, isMobile, url, from_screen }: IProductProps) => {
+export const ProductPage = ({
+  productId,
+  isMobile,
+  url,
+  from_screen,
+  ClientIPAddress,
+  TrueClientIPAddress,
+  ClientIPAddressLowerCase,
+  TrueClientIPAddressLowerCase,
+}: IProductProps) => {
   const router = useRouter();
   const [deliveryDetails, updateDeliveryDetails] = useState<IUpdatedDeliverDetailsProps>();
   const [updatedWishListId, updateWishListId] = useState<number>();
@@ -275,6 +284,10 @@ export const ProductPage = ({ productId, isMobile, url, from_screen }: IProductP
           ...trackingProperties,
           ...getProductTrackingData({ productData: productData }),
           add_from: 'current=' + location.pathname,
+          ClientIPAddress,
+          TrueClientIPAddress,
+          ClientIPAddressLowerCase,
+          TrueClientIPAddressLowerCase,
         },
         contextData,
       });

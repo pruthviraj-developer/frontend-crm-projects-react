@@ -14,7 +14,14 @@ const LayoutDesktop = dynamic(() => import('@/components/layout/desktop'), {
   ssr: true,
 });
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { cookie = null, 'x-nv-security-magic': magicHeader = null } = context.req.headers;
+  const {
+    cookie = null,
+    'x-nv-security-magic': magicHeader = null,
+    'X-Nv-True-Client-Ip': TrueClientIPAddress = null,
+    'X-True-Client-Ip': ClientIPAddress = null,
+    'X-nv-true-client-ip': TrueClientIPAddressLowerCase = null,
+    'x-true-client-ip': ClientIPAddressLowerCase = null,
+  } = context.req.headers;
   const queryClient = new QueryClient();
   const productId = context.params?.urlParams?.[0] || '';
   const isMobile =
@@ -32,6 +39,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   } else if (queryParams.utm_source) {
     from_screen = queryParams.utm_source;
   }
+  // console.log(ClientIPAddress);
+  // console.log(TrueClientIPAddress);
+  console.log('device type');
+  console.log(context.req.headers['x-nv-device']);
   try {
     await queryClient.fetchQuery<IProductDetails>(
       ['ProductDetail', productId],
@@ -63,6 +74,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       isMobile,
       from_screen,
       error,
+      ClientIPAddress,
+      TrueClientIPAddress,
+      ClientIPAddressLowerCase,
+      TrueClientIPAddressLowerCase,
     },
   };
 };
@@ -72,12 +87,30 @@ const Product: NextPageWithLayout<IProductProps> = ({
   url,
   from_screen,
   error,
+  ClientIPAddress,
+  TrueClientIPAddress,
+  ClientIPAddressLowerCase,
+  TrueClientIPAddressLowerCase,
 }: IProductProps) => {
   if (error) {
     const err = error as IProductError;
     return <Error statusCode={err?.statusCode} title={err?.message} />;
   }
-  return <ProductPage key={productId} {...{ productId, isMobile, url, from_screen }}></ProductPage>;
+  return (
+    <ProductPage
+      key={productId}
+      {...{
+        productId,
+        isMobile,
+        url,
+        from_screen,
+        ClientIPAddress,
+        ClientIPAddressLowerCase,
+        TrueClientIPAddress,
+        TrueClientIPAddressLowerCase,
+      }}
+    ></ProductPage>
+  );
 };
 
 export default Product;

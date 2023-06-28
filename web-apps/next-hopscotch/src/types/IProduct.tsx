@@ -4,6 +4,10 @@ export interface IProductProps {
   url: string;
   from_screen: string;
   error?: IProductError | boolean;
+  ClientIPAddress?: string | unknown;
+  TrueClientIPAddress?: string | unknown;
+  ClientIPAddressLowerCase?: string | unknown;
+  TrueClientIPAddressLowerCase?: string | unknown;
 }
 
 export interface urlParamsProps {

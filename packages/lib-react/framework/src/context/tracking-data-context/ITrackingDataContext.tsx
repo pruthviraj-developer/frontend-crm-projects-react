@@ -77,4 +77,8 @@ export interface ISegmentProperties {
   product_listing_id?: string;
   product_listing_name?: string;
   custom_product_tile_id?: number;
+  ClientIPAddress?: string | unknown;
+  TrueClientIPAddress?: string | unknown;
+  ClientIPAddressLowerCase?: string | unknown;
+  TrueClientIPAddressLowerCase?: string | unknown;
 }
