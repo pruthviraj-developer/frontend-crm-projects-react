@@ -40,23 +40,36 @@ const getCarouselData = <P, R>(params: P): Promise<R> => {
   });
 };
 
-const getMSKUProductListing = <P , R>(params?: P): Promise<R> => {
+const getMSKUProductListing = <P, R>(params?: P): Promise<R> => {
   const url = `/crm-api/intranet/msku-service/get`;
-return httpService.get<R>({ url,params });
+  return httpService.get<R>({ url, params });
 };
 
-const getMSKUList = <P , R>(params?: P): Promise<R> => {
-const url =
-  '/crm-api/intranet/msku-service/get';
-return httpService.get<R>({ url, params });
+const getMSKUList = <P, R>(params?: P): Promise<R> => {
+  const url = '/crm-api/intranet/msku-service/get';
+  return httpService.get<R>({ url, params });
 };
 
 const updateMskuProductStatus = <P, R>(data: P): Promise<R> => {
-const url =
-  '/crm-api/intranet/msku-service/post?action=changeStatusKeepOrCull';
-return httpService.post<R>({ url, data });
-}
+  const url =
+    '/crm-api/intranet/msku-service/post?action=mipPstGenderDiscoveryProductDecision';
+  return httpService.post<R>({ url, data });
+};
 
+const getPstGenderList = <P, R>(params?: P): Promise<R> => {
+  const url = '/crm-api/intranet/msku-service/get';
+  return httpService.get<R>({ url, params });
+};
+
+const getPidReviewList = <P, R>(params?: P): Promise<R> => {
+  const url = '/crm-api/intranet/msku-service/get';
+  return httpService.get<R>({ url, params });
+};
+
+const downloadSheetMip = <P, R>(params?: P): Promise<R> => {
+  const url = '/crm-api/intranet/msku-service/get';
+  return httpService.get<R>({ url, params });
+};
 
 export const merchIntelligenceService = {
   getTableData,
@@ -67,5 +80,8 @@ export const merchIntelligenceService = {
   getCarouselData,
   getMSKUProductListing,
   getMSKUList,
-  updateMskuProductStatus
+  updateMskuProductStatus,
+  getPstGenderList,
+  getPidReviewList,
+  downloadSheetMip,
 };

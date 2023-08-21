@@ -1,11 +1,11 @@
 import React from 'react';
-import { MIPProductListCard } from './MIPProductListCard';
+import { MipPidCard } from './MipPidCard';
 import { Story } from '@storybook/react/types-6-0';
-import { MIPProductListCardProps } from './IMIPProductListCard';
+import { MipPidCardProps } from './IMipPidCard';
 
 export default {
-  title: 'MIP Product Card',
-  component: MIPProductListCard,
+  title: 'MIP PId Card',
+  component: MipPidCard,
 };
 
 const sampleProductData = {
@@ -34,11 +34,11 @@ const sampleProductData = {
   catalog: false,
 };
 
-const Template: Story<MIPProductListCardProps> = (args) => {
-  return <MIPProductListCard {...args} />;
+const Template: Story<MipPidCardProps> = (args) => {
+  return <MipPidCard {...args} />;
 };
 
-export const MIPProductListCardComponent = Template.bind({});
-MIPProductListCardComponent.args = {
+export const MipPidCardComponent = Template.bind({});
+MipPidCardComponent.args = {
   ...sampleProductData,
 };

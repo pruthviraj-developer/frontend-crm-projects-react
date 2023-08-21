@@ -3,7 +3,7 @@ import { Colors, primaryColor, secondaryColor, typography } from '@hs/utils';
 import { SvgIcon } from '@hs/icons';
 const FiltersWrapper = styled.div`
   min-width: 238px;
-  max-width: 238px;
+  //max-width: 238px;
   font-size: 1.4rem;
   height: fit-content;
   background-color: ${Colors.WHITE};
@@ -45,7 +45,7 @@ const ToggleIcon = styled(SvgIcon)<{ active?: boolean }>`
   transition: transform 0.2s;
 `;
 
-const FilterListTitle = styled.div<{ isAccordionActive?: boolean }>`
+const FilterListTitle = styled.div`
   cursor: pointer;
   padding: 13px 24px;
   position: relative;
@@ -77,6 +77,8 @@ const CheckBoxWrapper = styled.label`
   width: 100%;
   cursor: pointer;
   padding: 8px 24px;
+  float: left;
+  display: flex;
 `;
 
 const CheckBox = styled.input`
@@ -148,14 +150,13 @@ const RadioButtonChecked = styled(SvgIcon)`
   background-color: ${primaryColor[100]};
 `;
 
-const ColorsWrapper = styled.div`
-  width: 100%;
-  margin: 0 0 12px;
-  line-height: 16px;
-  font-size: 1.2rem;
-  color: ${Colors.DARKGRAY};
-  padding: 8px 20px 8px 24px;
-  font-weight: ${typography.weight.medium};
+const PstGenderWrapper = styled.div`
+  padding: 10px 16px;
+`;
+
+const RangeSliderWrapper = styled.div`
+  padding: 0 25px 13px 25px;
+  margin-top: 15px;
 `;
 
 const ColorLabel = styled.label<{ bgcolor: string }>`
@@ -293,6 +294,20 @@ const ColorList = styled.div`
   display: inline-block;
 `;
 
+const PstGenderList = styled.div<{ active?: boolean }>`
+  display: inline-block;
+  border: ${(props) =>
+    props.active ? 'solid 1px #ed54a5' : '1px solid #dfe1e6'};
+  border-radius: 20px;
+  font-size: 14px;
+  background-color: #f2f2f2;
+  color: ${(props) => (props.active ? '#ed54a4' : '#707070')};
+  padding: 10px;
+  cursor: pointer;
+  line-height: 1.14;
+  margin: 4px;
+`;
+
 export {
   Title,
   CheckBox,
@@ -303,7 +318,6 @@ export {
   ColorLabel,
   ColorChecked,
   CheckBoxIcon,
-  ColorsWrapper,
   CheckBoxWrapper,
   CheckBoxLabelText,
   FilterName,
@@ -325,4 +339,7 @@ export {
   CategoriesList,
   SubCategoryNameList,
   SubCategoryFiltersList,
+  PstGenderList,
+  PstGenderWrapper,
+  RangeSliderWrapper,
 };

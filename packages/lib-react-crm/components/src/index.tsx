@@ -22,3 +22,5 @@ export * from './mip-list-card';
 export * from './loader';
 export * from './vendor-contract-list';
 export * from './add-vendor-form';
+export * from './mip-pst-gender';
+export * from './mip-pid-card';

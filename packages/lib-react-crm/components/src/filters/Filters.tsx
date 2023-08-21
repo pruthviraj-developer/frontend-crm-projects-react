@@ -1,16 +1,10 @@
-import React, { FC, useEffect, useState } from 'react';
-import {
-  IconAngleDown,
-  IconAngleRight,
-  CheckBoxWhite,
-  IconTickDark,
-  IconTickLight,
-} from '@hs/icons';
+import React, { FC, useState } from 'react';
+import DoneIcon from '@material-ui/icons/Done';
+import { RangeSlider } from '../range-slider';
+import { IconAngleDown, CheckBoxWhite } from '@hs/icons';
 
 import {
   IPlpFilter1Props,
-  IPlpFilter2Props,
-  IPlpFilter3Props,
   IPlpFilterProps,
   IFilterSectionProps,
 } from './IFilters';
@@ -26,96 +20,71 @@ import {
   FilterSection,
   FilterListTitle,
   CheckBoxWrapper,
-  ColorList,
-  ColorLabel,
-  ColorChecked,
-  ColorsWrapper,
-  CheckBox,
+  //CheckBox,
   FilterList,
   CheckBoxIcon,
   CheckBoxLabelText,
   CheckBoxIconChecked,
   RadioButton,
   RadioButtonChecked,
-  Wrapper,
-  Category,
-  CategoryName,
-  AllCategories,
-  SubCategories,
-  SubCategoryName,
-  BackToCategories,
-  CategoriesList,
-  SubCategoryNameList,
-  SubCategoryFiltersList,
+  PstGenderList,
+  PstGenderWrapper,
+  RangeSliderWrapper,
 } from './StyledFilters';
-
-const CATEGORY = 'Category';
 
 export const Filters: FC<IPlpFilterProps> = ({
   filterSection,
-  updateFilter,
   clearFilters,
+  //updateFilter,
+  selectedList = [],
+  handleSelectedList,
 }: IPlpFilterProps) => {
   const [activeFilter, setActiveFilter] = useState<string | undefined>(
     filterSection?.[0]?.name
   );
-  const [categories, setCategories] = useState<IPlpFilter1Props | undefined>();
-  const [subCategories, setSubCategories] = useState<
-    IPlpFilter2Props | undefined
-  >();
-  const hexToRgb = (hex: string) => {
-    //    Please refer to
-    //    https://stackoverflow.com/questions/21646738/convert-hex-to-rgba
-    let c;
-    let rgb;
-    if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
-      c = hex.substring(1).split('');
-      if (c.length == 3) {
-        c = [c[0], c[0], c[1], c[1], c[2], c[2]];
+
+  //const [filterData, setFilterData] = useState<any>();
+  let selectedListData = {};
+
+  selectedList.map((list: any) => {
+    selectedListData = { ...selectedListData, [list.key]: list.param };
+  });
+
+  const getSelectedPriceFilter = () => {
+    if (selectedListData['priceRangeFilter']) {
+      return selectedListData['priceRangeFilter'].split('~').map(Number);
+    }
+    return null;
+  };
+
+  const handleChange = (key, filter, isMultiSelect) => {
+    if (selectedListData[key]) {
+      if (!isMultiSelect) {
+        selectedListData[key] = filter.name;
+      } else {
+        const list = selectedListData[key].split(',');
+        const index = list.indexOf(filter.name);
+        if (index !== -1) {
+          list.splice(index, 1);
+        } else {
+          list.push(filter.name);
+        }
+        selectedListData[key] = list.join(',');
       }
-      c = '0x' + c.join('');
-      rgb = { r: (c >> 16) & 255, g: (c >> 8) & 255, b: c & 255 };
+    } else {
+      selectedListData = { ...selectedListData, [key]: filter.name };
     }
-    return rgb;
+    handleSelectedList && handleSelectedList({ ...selectedListData });
   };
 
-  const getBrightness = (hex: string) => {
-    //    Please refer to
-    //    http://www.w3.org/TR/AERT#color-contrast
-    const rgb = hexToRgb(hex);
-    return rgb && (rgb.r * 299 + rgb.g * 587 + rgb.b * 114) / 1000 < 128;
-  };
-
-  const resetCategories = () => {
-    if (categories) {
-      updateFilter(categories.param, categories, false, 'clear');
-    }
-    setCategories(undefined);
-    setSubCategories(undefined);
-  };
-
-  useEffect(() => {
-    if (activeFilter === CATEGORY) {
-      const categories = filterSection?.find((data) => data.name === CATEGORY);
-      const selectedCategories = categories?.filterList[0].filter.find(
-        (data) => data.isSelected
-      );
-      const selectedSubCategories = selectedCategories?.filter?.find(
-        (data) => data.isSelected
-      );
-      if (selectedSubCategories) {
-        setSubCategories(selectedSubCategories);
-      }
-    }
-  }, [filterSection]);
-
-  const resetToAllCategories = () => {
-    return (
-      <SubCategories onClick={resetCategories}>
-        <BackToCategories icon={IconAngleRight} />
-        <AllCategories>All Categories</AllCategories>
-      </SubCategories>
-    );
+  const updateRangeFilter = (data, priceRangefilter) => {
+    const updatePriceRange = `${data[0]}~${data[1]}`;
+    const rangeFilter = {
+      ...priceRangefilter,
+      id: updatePriceRange,
+      name: updatePriceRange,
+    };
+    handleChange(priceRangefilter.param, rangeFilter, false);
   };
 
   const getDropDownList = (
@@ -123,44 +92,39 @@ export const Filters: FC<IPlpFilterProps> = ({
     filter: IPlpFilter1Props[]
   ) => {
     const list = filter.map((filter: IPlpFilter1Props, subIndex: number) => {
-      if (filterObject.uiType === 'tree') {
+      if (filterObject.uiType === 'pstGenderType') {
         return (
-          <Wrapper key={subIndex}>
-            <Category
-              onClick={() => {
-                setCategories(filter);
-                updateFilter(filter.param, filter, false, filter.type);
-              }}
-            >
-              <CategoryName>{filter.name}</CategoryName>
-              <ToggleIcon
-                className="toggleIcon"
-                active={false}
-                icon={IconAngleRight}
-              />
-            </Category>
-          </Wrapper>
-        );
-      }
-      if (filterObject.uiType === 'colour') {
-        return (
-          <ColorList
+          <PstGenderList
+            active={filter.isSelected ? true : false}
             key={subIndex}
             onClick={() => {
-              updateFilter(filter.param, filter, filterObject.isMultiSelect);
+              handleChange(filter.param, filter, filterObject.isMultiSelect);
             }}
           >
-            {filter.isSelected ? (
-              <ColorChecked
-                bgcolor={filter.value}
-                icon={
-                  getBrightness(filter.value) ? IconTickLight : IconTickDark
-                }
+            {filter.isSelected && (
+              <DoneIcon
+                key={subIndex}
+                style={{ marginRight: '5px', verticalAlign: 'bottom' }}
               />
-            ) : (
-              <ColorLabel bgcolor={filter.value}></ColorLabel>
             )}
-          </ColorList>
+            {filter.name}
+          </PstGenderList>
+        );
+      } else if (filterObject.uiType === 'priceRange') {
+        const rangeList = filter.id.split('~');
+        const updateRangeList = getSelectedPriceFilter();
+        const min = +rangeList[0];
+        const max = +rangeList[1];
+        return (
+          <RangeSliderWrapper>
+            <RangeSlider
+              min={min}
+              max={max}
+              key={`${updateRangeList}${max}`}
+              value={updateRangeList || [min, max]}
+              updateRange={(data) => updateRangeFilter(data, filter)}
+            />
+          </RangeSliderWrapper>
         );
       }
       return (
@@ -169,7 +133,9 @@ export const Filters: FC<IPlpFilterProps> = ({
           active={filter.isSelected ? true : false}
           onClick={(e) => {
             e.preventDefault();
-            updateFilter(filter.param, filter, filterObject.isMultiSelect);
+            // updateFilter &&
+            //   updateFilter(filter.param, filter, filterObject.isMultiSelect);
+            handleChange(filter.param, filter, filterObject.isMultiSelect);
           }}
         >
           <CheckBoxWrapper>
@@ -184,114 +150,18 @@ export const Filters: FC<IPlpFilterProps> = ({
             ) : (
               <RadioButton />
             )}
-            <CheckBox
+            {/* <CheckBox
               name={filter.sectionTracking}
               type={filterObject.isMultiSelect ? 'checkbox' : 'radio'}
-            />
+            /> */}
             <CheckBoxLabelText>{filter.name}</CheckBoxLabelText>
           </CheckBoxWrapper>
         </FilterList>
       );
     });
 
-    if (filterObject.uiType === 'colour') {
-      return <ColorsWrapper>{list}</ColorsWrapper>;
-    }
-
-    // subCategories
-
-    if (activeFilter === CATEGORY && categories?.id && subCategories) {
-      return (
-        <>
-          {resetToAllCategories()}
-          <SubCategoryName onClick={resetCategories}>
-            {categories?.name}
-          </SubCategoryName>
-          <CategoriesList>
-            <SubCategoryName
-              onClick={() => {
-                setSubCategories(undefined);
-                // updateFilter(subCategories.param, subCategories, false, subCategories.type);
-
-                updateFilter(
-                  categories.param,
-                  categories,
-                  false,
-                  categories.type
-                );
-              }}
-            >
-              {subCategories?.name}
-            </SubCategoryName>
-            {subCategories?.filter?.map(
-              (subCategory: IPlpFilter3Props, suCategoryIndex: number) => (
-                <SubCategoryFiltersList
-                  key={suCategoryIndex}
-                  active={subCategory.isSelected ? true : false}
-                  onClick={() => {
-                    updateFilter(
-                      subCategory.param,
-                      subCategory as unknown as IPlpFilter2Props,
-                      true
-                    );
-                  }}
-                >
-                  {subCategory.isSelected ? (
-                    <CheckBoxIconChecked icon={CheckBoxWhite} />
-                  ) : (
-                    <CheckBoxIcon />
-                  )}
-                  <CheckBoxLabelText>{subCategory.name}</CheckBoxLabelText>
-                </SubCategoryFiltersList>
-              )
-            )}
-          </CategoriesList>
-        </>
-      );
-    }
-
-    if (activeFilter === CATEGORY && categories?.id) {
-      return (
-        <>
-          {resetToAllCategories()}
-          <SubCategoryName onClick={resetCategories}>
-            {categories?.name}
-          </SubCategoryName>
-          <CategoriesList>
-            {categories?.filter?.map(
-              (category: IPlpFilter2Props, categoryIndex: number) => (
-                <SubCategoryNameList
-                  // onClick={() => {
-                  //   setSubCategories(category);
-                  //   debugger;
-                  //   updateFilter(category.param, category, false, category.type);
-                  // }}
-                  onClick={() => {
-                    // e.preventDefault();
-                    setSubCategories(undefined);
-                    updateFilter(
-                      category.param,
-                      category,
-                      false,
-                      category.type
-                    );
-                  }}
-                  key={categoryIndex}
-                >
-                  <SubCategoryName className="subCategory">
-                    {category.name}
-                  </SubCategoryName>
-                  <ToggleIcon
-                    className="toggleIcon"
-                    active={false}
-                    icon={IconAngleRight}
-                  />
-                </SubCategoryNameList>
-              )
-            )}
-          </CategoriesList>
-        </>
-      );
+    if (filterObject.uiType === 'pstGenderType') {
+      return <PstGenderWrapper key="pstGenderType">{list}</PstGenderWrapper>;
     }
     return list;
   };
@@ -305,14 +175,11 @@ export const Filters: FC<IPlpFilterProps> = ({
       {filterSection &&
         filterSection.map(
           (filterObject: IFilterSectionProps, index: number) => {
-            return filterObject.shouldHide ? (
+            return filterObject.shouldHide || filterObject.uiType === 'MSKU' ? (
               <></>
             ) : (
               <FilterSection key={index}>
                 <FilterListTitle
-                  isAccordionActive={
-                    activeFilter === filterObject.name ? true : false
-                  }
                   onClick={() => {
                     setActiveFilter(
                       filterObject.name === activeFilter

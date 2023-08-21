@@ -1,7 +1,8 @@
-
 export interface IPlpFilterProps {
   filterSection?: IFilterSectionProps[];
-  updateFilter: IPlpUpdateFilterProps;
+  selectedList?: any;
+  handleSelectedList?: (list?: Record<string, any>) => void;
+  //updateFilter?: IPlpUpdateFilterProps | undefined;
   clearFilters: () => void;
 }
 
@@ -32,7 +33,7 @@ export interface IPlpFilter1Props {
   filter?: IPlpFilter2Props[];
   type?: string;
   popularityCount?: number;
-  value: string;
+  value?: string;
   rectangelImgUrl?: string;
   ovalImgUrl?: string;
 }
@@ -76,38 +77,31 @@ export interface IPlpFilterEntityProps {
   selectedFilters: IFilterSectionProps[];
 }
 
-export interface IFilterSectionProps {
-  key: string;
-  param: string;
-  isSingleCategory: boolean;
-  isGenericFilter: boolean;
-  name: string;
-  shouldHide: boolean;
-  isMultiSelect: boolean;
-  showSearch: boolean;
-  filterList: IFilterListProps[];
-  uiType: string;
-  hasSelected: boolean;
-}
+// export interface IFilterSectionProps {
+//   key: string;
+//   param: string;
+//   isSingleCategory: boolean;
+//   isGenericFilter: boolean;
+//   name: string;
+//   shouldHide: boolean;
+//   isMultiSelect: boolean;
+//   showSearch: boolean;
+//   filterList: IFilterListProps[];
+//   uiType: string;
+//   hasSelected: boolean;
+// }
 
-export interface IFilterListProps {
-  filter: IPlpFilter1Props[];
-  name?: string;
-}
+// export interface IFilterListProps {
+//   filter: IPlpFilter1Props[];
+//   name?: string;
+// }
 
-
-
-export interface IPlpSeoDataProps {
-  id: number;
-  plpId: number;
-}
-
-export interface IPlpSortingOptionProps {
-  orderRule: number;
-  sortName: string;
-  eventSortName: string;
-  isSelected: boolean;
-}
+// export interface IPlpSortingOptionProps {
+//   orderRule: number;
+//   sortName: string;
+//   eventSortName: string;
+//   isSelected: boolean;
+// }
 
 export interface IPlpUpdateFilterProps {
   (
@@ -118,13 +112,13 @@ export interface IPlpUpdateFilterProps {
   ): void;
 }
 
-export interface IPlpSortingOptionsEntityProps {
-  orderRule: number;
-  sortName: string;
-  eventSortName: string;
-  isSelected: boolean;
-}
+// export interface IPlpSortingOptionsEntityProps {
+//   orderRule: number;
+//   sortName: string;
+//   eventSortName: string;
+//   isSelected: boolean;
+// }
 
-export interface IPlpUpdateSortParameters {
-  (index: number, option: IPlpSortingOptionsEntityProps): void;
-}
+// export interface IPlpUpdateSortParameters {
+//   (index: number, option: IPlpSortingOptionsEntityProps): void;
+// }
